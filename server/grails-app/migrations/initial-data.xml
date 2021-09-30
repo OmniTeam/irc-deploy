@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="victor" id="add_default_request_maps">
+        <sql>
+            INSERT INTO `request_map` VALUES ('6530b042f93f4681be6d09dd8f9a7854', null, 'permitAll', '/api/login');
+            INSERT INTO `request_map` VALUES ('801f9ef133ff43babba28abd13a30ecd', null, 'permitAll', '/**/images/**');
+            INSERT INTO `request_map` VALUES ('846b2c10556d4f22ad96289e496bb91e', null, 'ROLE_ADMIN,ROLE_SUPER_ADMIN', '/**');
+            INSERT INTO `request_map` VALUES ('98d402d802954ffd96037543bf63bd20', null, 'permitAll', '/**/js/**');
+            INSERT INTO `request_map` VALUES ('99124c07-b650-4ad7-8ec8-14ef27f8dd89', null, 'permitAll', '/');
+            INSERT INTO `request_map` VALUES ('ec16ca5a1a4611e9ab14d663bd873d93', null, 'permitAll', '/user/logout');
+            INSERT INTO `request_map` VALUES ('f4e3b862dec84db99fded02caff54a9f', null, 'permitAll', '/**/css/**');
+            INSERT INTO `request_map` VALUES ('fc9b6e5daca94555806a28485dddb8dc', null, 'permitAll', '/**/favicon.ico');
+            INSERT INTO `request_map` VALUES ('eeb653dc-8d26-42e6-a61e-216147a08ce2', null, 'ROLE_USER', '/api/v1/dashboard/**');
+            INSERT INTO `request_map` VALUES ('082a0a2f-18a9-4a42-8c1b-04b560791eab', null, 'permitAll', '/api/v1/guest/**');
+            INSERT INTO `request_map` VALUES ('9fef922f-04aa-4f75-b501-e4db74187229', NULL, 'ROLE_USER', '/api/**');
+        </sql>
+    </changeSet>
+    <changeSet author="vkakama@gmail.com" id="add_normal_user_role">
+        <sql>
+            INSERT INTO role (id, authority, date_created, last_updated)
+            VALUES ('c69e0c581f384d81912cf58310818f6a', 'ROLE_USER', now(), now());
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>
