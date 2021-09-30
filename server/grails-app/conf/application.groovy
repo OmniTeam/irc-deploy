@@ -20,6 +20,10 @@ grails.plugin.springsecurity.authority.className = 'com.kengamis.Role'
 grails.plugin.springsecurity.requestMap.className = 'com.kengamis.RequestMap'
 grails.plugin.springsecurity.securityConfigType = 'Requestmap'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/', access: ['permitAll']],
         [pattern: '/error', access: ['permitAll']],
@@ -49,6 +53,10 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 grails.gorm.default.mapping = {
     id generator: 'uuid2'
     version false
@@ -59,6 +67,7 @@ grails.gorm.default.constraints = {
     //Make all data imported with its floating points at least round off to 5 decimal places
     '*'(scale: 5)
 }
+<<<<<<< HEAD
 
 /*
 
@@ -101,10 +110,13 @@ grails.plugin.springsecurity.providerNames = [
         'rememberMeAuthenticationProvider'
 ]
 
+=======
+>>>>>>> origin/master
 environments {
     development {
         uploadFolder = "D:/uploads/"
         uploadDocsFolder = "D:/uploads/"
+<<<<<<< HEAD
 //        uploadFolder = "/Users/niwogabajoel/appdata/uploads/"
 //        uploadDocsFolder = "/Users/niwogabajoel/appdata/uploads/"
     }
@@ -112,6 +124,12 @@ environments {
         uploadFolder = "/appdata/"
         uploadDocsFolder = "/documents/"
         //fontsFolder = "/appdata/ultima/fonts"
+=======
+    }
+    production {
+        uploadFolder = "/appdata/ultima/uploads/ug/"
+        uploadDocsFolder = "/appdata/ultima/uploads/ug/documents/"
+>>>>>>> origin/master
 
 
     }

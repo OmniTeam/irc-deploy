@@ -78,6 +78,7 @@ grails:
 hibernate:
     cache:
         queries: false
+<<<<<<< HEAD
         use_second_level_cache: false
         use_query_cache: false
 dataSource:
@@ -86,12 +87,31 @@ dataSource:
     driverClassName: org.h2.Driver
     username: sa
     password: ''
+=======
+        use_second_level_cache: true
+        provider_class: net.sf.ehcache.hibernate.EhCacheProvider
+        region:
+            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+        use_query_cache: false
+dataSource:
+    dialect: org.hibernate.dialect.MySQLInnoDBDialect
+    pooled: true
+    jmxExport: true
+    driverClassName: com.mysql.jdbc.Driver
+    username: root
+    password:
+>>>>>>> origin/master
 
 environments:
     development:
         dataSource:
+<<<<<<< HEAD
             dbCreate: create-drop
             url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+=======
+#            dbCreate: create-drop
+            url: jdbc:mysql://localhost:3306/kengamis?verifyServerCertificate=false&useSSL=true&sessionVariables=sql_mode=''
+>>>>>>> origin/master
     test:
         dataSource:
             dbCreate: update
