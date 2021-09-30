@@ -3,11 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-<<<<<<< HEAD
-    "kenga_mis": {
-=======
     "kengamis": {
->>>>>>> origin/master
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,11 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-<<<<<<< HEAD
-            "outputPath": "dist/kenga_mis",
-=======
             "outputPath": "dist/kengamis",
->>>>>>> origin/master
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -69,16 +61,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-<<<<<<< HEAD
-            "browserTarget": "kenga_mis:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "kenga_mis:build:production"
-            },
-            "es5": {
-              "browserTarget": "kenga_mis:build:es5"
-=======
             "browserTarget": "kengamis:build"
           },
           "configurations": {
@@ -87,18 +69,13 @@
             },
             "es5": {
               "browserTarget": "kengamis:build:es5"
->>>>>>> origin/master
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-<<<<<<< HEAD
-            "browserTarget": "kenga_mis:build"
-=======
             "browserTarget": "kengamis:build"
->>>>>>> origin/master
           }
         },
         "test": {
@@ -141,19 +118,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-<<<<<<< HEAD
-            "devServerTarget": "kenga_mis:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "kenga_mis:serve:production"
-=======
             "devServerTarget": "kengamis:serve"
           },
           "configurations": {
             "production": {
               "devServerTarget": "kengamis:serve:production"
->>>>>>> origin/master
             }
           }
         },
@@ -169,9 +138,5 @@
       }
     }
   },
-<<<<<<< HEAD
-  "defaultProject": "kenga_mis"
-=======
   "defaultProject": "kengamis"
->>>>>>> origin/master
 }

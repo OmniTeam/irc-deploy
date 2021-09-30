@@ -20,10 +20,7 @@ grails.plugin.springsecurity.authority.className = 'com.kengamis.Role'
 grails.plugin.springsecurity.requestMap.className = 'com.kengamis.RequestMap'
 grails.plugin.springsecurity.securityConfigType = 'Requestmap'
 
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/', access: ['permitAll']],
         [pattern: '/error', access: ['permitAll']],
@@ -53,10 +50,7 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 grails.gorm.default.mapping = {
     id generator: 'uuid2'
     version false
@@ -67,69 +61,14 @@ grails.gorm.default.constraints = {
     //Make all data imported with its floating points at least round off to 5 decimal places
     '*'(scale: 5)
 }
-<<<<<<< HEAD
-
-/*
-
-grails {
-    plugin {
-        springsecurity {
-            rest {
-                token {
-                    validation {
-                        useBearerToken = false
-                        enableAnonymousAccess = true
-                    }
-                    storage {
-                        jwt {
-                            secret = 'qrD6h8K6S9503Q06Y6Rfk21TErImPYqa'
-                        }
-                    }
-                }
-                oauth {
-                    frontendCallbackUrl = { String tokenValue -> "http://localhost:8080/auth/success?token=${tokenValue}" }
-                    google {
-                        client = org.pac4j.oauth.client.Google2Client
-                        key = '${GOOGLE_KEY}'
-                        secret = '${GOOGLE_SECRET}'
-                        scope = org.pac4j.oauth.client.Google2Client.Google2Scope.EMAIL_AND_PROFILE
-                        defaultRoles = []
-                    }
-                }
-            }
-            providerNames = ['anonymousAuthenticationProvider']
-        }
-    }
-}
-
-*/
-
-grails.plugin.springsecurity.providerNames = [
-        'xenoAuthenticationProvider',
-        'anonymousAuthenticationProvider',
-        'rememberMeAuthenticationProvider'
-]
-
-=======
->>>>>>> origin/master
 environments {
     development {
         uploadFolder = "D:/uploads/"
         uploadDocsFolder = "D:/uploads/"
-<<<<<<< HEAD
-//        uploadFolder = "/Users/niwogabajoel/appdata/uploads/"
-//        uploadDocsFolder = "/Users/niwogabajoel/appdata/uploads/"
-    }
-    production {
-        uploadFolder = "/appdata/"
-        uploadDocsFolder = "/documents/"
-        //fontsFolder = "/appdata/ultima/fonts"
-=======
     }
     production {
         uploadFolder = "/appdata/ultima/uploads/ug/"
         uploadDocsFolder = "/appdata/ultima/uploads/ug/documents/"
->>>>>>> origin/master
 
 
     }

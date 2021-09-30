@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "kenga_mis",
-=======
   "name": "kengamis",
->>>>>>> origin/master
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
