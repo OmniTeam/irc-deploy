@@ -12,11 +12,6 @@
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="maven" />
-      <option name="name" value="maven" />
-      <option name="url" value="https://repo.grails.org/grails/core" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="maven4" />
       <option name="name" value="maven4" />
       <option name="url" value="http://jitpack.io" />
@@ -35,6 +30,11 @@
       <option name="id" value="maven3" />
       <option name="name" value="maven3" />
       <option name="url" value="http://omnitech.co.ug/m2/snapshots" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://repo.grails.org/grails/core" />
     </remote-repository>
   </component>
 </project>

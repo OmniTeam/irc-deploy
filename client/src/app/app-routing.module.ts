@@ -1,14 +1,95 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {IndexComponent} from "./index/index.component";
-
+import {CommonModule} from "@angular/common";
+import {BrowserModule} from "@angular/platform-browser";
+import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
+import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
+import {DashboardComponent} from './pages/dashboards/dashboard/dashboard.component';
 const routes: Routes = [
-  {path: '', redirectTo: 'index', pathMatch: 'full'},
-  {path: 'index', component: IndexComponent}
+  {
+    path: '',
+    redirectTo: 'dashboards/dashboard',
+    pathMatch: 'full'
+  },
+  {
+    path: 'presentation',
+    component: DashboardComponent
+  },
+
+  {
+    path: '',
+    component: AdminLayoutComponent,
+    children: [
+      {
+        path: 'project', canActivate: [],
+        loadChildren: () => import('./mis-components/project/project.module').then(m => m.ProjectModule)
+      },
+
+      {
+        path: 'project/create', canActivate: [],
+        loadChildren: () => import('./mis-components/project/project-create/project-create.module').then(m => m.ProjectCreateModule)
+      },
+      {
+        path: 'forms', canActivate: [],
+        loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
+      },
+      {
+        path: 'dashboards',
+        loadChildren: './pages/dashboards/dashboards.module#DashboardsModule'
+      },
+      {
+        path: 'components',
+        loadChildren: './pages/components/components.module#ComponentsModule'
+      },
+      {
+        path: 'tables',
+        loadChildren: './pages/tables/tables.module#TablesModule'
+      },
+      {
+        path: 'maps',
+        loadChildren: './pages/maps/maps.module#MapsModule'
+      },
+      {
+        path: 'widgets',
+        loadChildren: './pages/widgets/widgets.module#WidgetsModule'
+      },
+      {
+        path: 'charts',
+        loadChildren: './pages/charts/charts.module#ChartsModule'
+      },
+      {
+        path: 'calendar',
+        loadChildren: './pages/calendar/calendar.module#CalendarModule'
+      },
+      {
+        path: 'examples',
+        loadChildren: './pages/examples/examples.module#ExamplesModule'
+      }
+    ]
+  },
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: 'auth',
+        loadChildren:
+          './layouts/auth-layout/auth-layout.module#AuthLayoutModule'
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard'
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [ CommonModule,
+    BrowserModule,
+    RouterModule.forRoot(routes, {
+      useHash: true
+    })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

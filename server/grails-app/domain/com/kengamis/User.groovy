@@ -15,7 +15,6 @@ class User implements Serializable {
     String username
     String password
     boolean enabled = true
-    String socialProvider = "none"
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
@@ -37,7 +36,6 @@ class User implements Serializable {
 
     static mapping = {
         password column: '`password`'
-        socialProvider defaultValue: "none"
     }
 
     def roles() {
