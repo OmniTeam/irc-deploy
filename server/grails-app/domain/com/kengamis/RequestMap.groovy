@@ -11,8 +11,8 @@ import org.springframework.http.HttpMethod
 class RequestMap implements Serializable {
 
     private static final long   serialVersionUID = 1
-    String id
 
+    String id
     String     configAttribute
     HttpMethod httpMethod
     String     url

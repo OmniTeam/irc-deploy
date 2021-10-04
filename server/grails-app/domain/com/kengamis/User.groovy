@@ -6,26 +6,21 @@ import groovy.transform.ToString
 
 @EqualsAndHashCode(includes = 'username')
 @ToString(includes = 'username', includeNames = true, includePackage = false)
-class User implements Serializable {
+class User {
 
-    private static final long serialVersionUID = 1
+    transient springSecurityService
 
     String id
-//    as email on client
     String username
     String password
     boolean enabled = true
-    String socialProvider = "none"
-    boolean accountExpired
-    boolean accountLocked
-    boolean passwordExpired
+    boolean accountExpired = false
+    boolean accountLocked = false
+    boolean passwordExpired = false
     Date dateCreated
     Date lastUpdated
 
-
-    Set<Role> getAuthorities() {
-        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
-    }
+    static transients = ['springSecurityService']
 
     static hasMany = [userRoles: UserRole]
     static constraints = {
@@ -37,11 +32,28 @@ class User implements Serializable {
 
     static mapping = {
         password column: '`password`'
-        socialProvider defaultValue: "none"
+    }
+
+    Set<Role> getAuthorities() {
+        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
     }
 
     def roles() {
         return this.userRoles.collect { it.role }
+    }
+
+    def beforeInsert() {
+        encodePassword()
+    }
+
+    def beforeUpdate() {
+        if (isDirty('password')) {
+            encodePassword()
+        }
+    }
+
+    protected void encodePassword() {
+        password = springSecurityService.encodePassword(password)
     }
 
 }
