@@ -5,42 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e588d00d-a9af-4192-941c-5b57bf3054bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/gradle_wrapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/grails_wrapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/server_pathing_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileContent/fileContent.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileContent/fileContent.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ClojureProjectResolveSettings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/csv-plugin.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/server/kengamis.server.integrationTest.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/app-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/app.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/app.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/karma.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/karma.conf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/yarn.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/grails-app/conf/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/server/grails-app/conf/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/grails-app/domain/com/kengamis/RequestMap.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/server/grails-app/domain/com/kengamis/RequestMap.groovy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/grails-app/domain/com/kengamis/User.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/server/grails-app/domain/com/kengamis/User.groovy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/grails-app/migrations/create-tables.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/server/grails-app/migrations/create-tables.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/grails-app/init/com/kengamis/BootStrap.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/server/grails-app/init/com/kengamis/BootStrap.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/grails-app/migrations/initial-data.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/grails-app/migrations/initial-data.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +36,9 @@
         <task path="$PROJECT_DIR$/client">
           <activation />
         </task>
+        <task path="$PROJECT_DIR$/server">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -68,20 +49,20 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="kenga_mis" type="f1a62948:ProjectNode" />
-                <item name="client" type="2d1252cf:ModuleNode" />
+                <item name="server" type="2d1252cf:ModuleNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="kenga_mis" type="f1a62948:ProjectNode" />
-                <item name="client" type="2d1252cf:ModuleNode" />
+                <item name="server" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="kenga_mis" type="f1a62948:ProjectNode" />
-                <item name="client" type="2d1252cf:ModuleNode" />
+                <item name="server" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="application" type="c8890929:TasksNode$1" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -96,11 +77,15 @@
   <component name="JpbToolWindowState">
     <option name="myId2FirstActivated">
       <map>
+        <entry key="JPA Inspector" value="true" />
+        <entry key="JPA Palette" value="true" />
         <entry key="JPA Structure" value="true" />
       </map>
     </option>
     <option name="myId2Visible">
       <map>
+        <entry key="JPA Inspector" value="false" />
+        <entry key="JPA Palette" value="false" />
         <entry key="JPA Structure" value="false" />
       </map>
     </option>
@@ -111,18 +96,27 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="dynamic.classpath" value="true" />
+    <property name="grails.last.selected.app.url" value="file://$PROJECT_DIR$/server" />
+    <property name="nodejs.protractor.protractor_package" value="$PROJECT_DIR$/client/node_modules/protractor" />
     <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
     <property name="show.migrate.to.gradle.popup" value="false" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="npm.Angular: client">
+  <component name="RunManager" selected="Grails.Grails: server">
     <configuration name="Grails: server" type="GrailsRunConfigurationType" factoryName="Grails">
       <setting name="vmparams" value="" />
       <setting name="cmdLine" value="run-app" />
@@ -130,15 +124,40 @@
       <setting name="grailsApplicationRoot" value="$PROJECT_DIR$/server" />
       <setting name="launchBrowser" value="true" />
       <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Angular: client" type="js.build_tools.npm">
+    <configuration name="E2E Tests (foo-e2e)" type="JavaScriptTestRunnerProtractor">
+      <config-file value="$PROJECT_DIR$/client/e2e/protractor.conf.js" />
+      <node-interpreter value="project" />
+      <protractor-package value="$PROJECT_DIR$/client/node_modules/protractor" />
+      <protractor-options value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular Application (client)" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="build" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="build" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Angular CLI Server (client)" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/client/package.json" />
       <command value="run" />
       <scripts>
-        <script value="ng" />
+        <script value="start" />
       </scripts>
-      <arguments value="serve" />
       <node-interpreter value="project" />
       <package-manager value="npm" />
       <envs />
@@ -146,7 +165,9 @@
     </configuration>
     <list>
       <item itemvalue="Grails.Grails: server" />
-      <item itemvalue="npm.Angular: client" />
+      <item itemvalue="JavaScript Debug.Angular Application (client)" />
+      <item itemvalue="npm.Angular CLI Server (client)" />
+      <item itemvalue="Protractor.E2E Tests (foo-e2e)" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -157,7 +178,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1633108582209</updated>
-      <workItem from="1633108583602" duration="1233000" />
+      <workItem from="1633108583602" duration="1613000" />
+      <workItem from="1633110241165" duration="202000" />
+      <workItem from="1633110451328" duration="367000" />
+      <workItem from="1633181213877" duration="1757000" />
+      <workItem from="1633185634737" duration="4637000" />
+      <workItem from="1633329082317" duration="1949000" />
     </task>
     <servers />
   </component>
@@ -341,6 +367,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/grails-app/domain/com/kengamis/User.groovy</url>
+          <line>55</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
