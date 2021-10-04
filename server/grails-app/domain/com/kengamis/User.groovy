@@ -42,18 +42,4 @@ class User {
         return this.userRoles.collect { it.role }
     }
 
-    def beforeInsert() {
-        encodePassword()
-    }
-
-    def beforeUpdate() {
-        if (isDirty('password')) {
-            encodePassword()
-        }
-    }
-
-    protected void encodePassword() {
-        password = springSecurityService.encodePassword(password)
-    }
-
 }

@@ -14,7 +14,7 @@ import grails.gorm.transactions.Transactional
 class StudyController {
 
     StudyService studyService
-
+    CentralService centralService
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -25,6 +25,26 @@ class StudyController {
 
     def show(Long id) {
         respond studyService.get(id)
+    }
+
+    def create() {
+        def studies = []
+        try {
+            centralService.auth()
+        }
+        catch (Exception e) {
+            println("Exception: " + e.getMessage())
+        }
+        try {
+            def token = centralService.get()
+            def centralStudies = RestHelper.withCentral { listProjects(token) }
+            centralStudies.each {
+                studies << it
+            }
+        } catch (Exception ex) {
+
+        }
+        respond studies
     }
 
     @Transactional
