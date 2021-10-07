@@ -7,6 +7,7 @@ import {
   LocationStrategy,
   PathLocationStrategy
 } from "@angular/common";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: "app-navbar",
@@ -21,7 +22,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     location: Location,
     private element: ElementRef,
-    private router: Router
+    private router: Router,
+    public authService: AuthService,
   ) {
     this.location = location;
     this.router.events.subscribe((event: Event) => {
@@ -47,6 +49,11 @@ export class NavbarComponent implements OnInit {
        }
    });
 
+  }
+
+  logout() {
+    this.authService.doLogoutUser();
+    this.router.navigate(['/login']);
   }
 
   ngOnInit() {

@@ -5,15 +5,19 @@ import {BrowserModule} from "@angular/platform-browser";
 import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
 import {DashboardComponent} from './pages/dashboards/dashboard/dashboard.component';
+import {AuthGuard} from "./guards/auth.guard";
+import {LoggedInGuard} from "./guards/loggedin.guard";
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboards/dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
   },
   {
     path: 'presentation',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
   },
 
   {
@@ -21,21 +25,26 @@ const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
       {
-        path: 'project', canActivate: [],
+        path: 'login', canActivate: [LoggedInGuard],
+        loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+      },
+      {
+        path: 'project', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/project/project.module').then(m => m.ProjectModule)
       },
 
       {
-        path: 'project/create', canActivate: [],
+        path: 'project/create', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/project/project-create/project-create.module').then(m => m.ProjectCreateModule)
       },
       {
-        path: 'forms', canActivate: [],
+        path: 'forms', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
       },
       {
         path: 'dashboards',
-        loadChildren: './pages/dashboards/dashboards.module#DashboardsModule'
+        loadChildren: './pages/dashboards/dashboards.module#DashboardsModule',
+        canActivate: [AuthGuard]
       },
       {
         path: 'components',

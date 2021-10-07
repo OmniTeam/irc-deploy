@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-admin-layout',
@@ -8,7 +9,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 export class AdminLayoutComponent implements OnInit {
   isMobileResolution: boolean;
 
-  constructor() {
+  constructor( public authService: AuthService) {
     if (window.innerWidth < 1200) {
       this.isMobileResolution = true;
     } else {

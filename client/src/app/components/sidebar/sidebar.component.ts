@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AuthService} from "../../services/auth.service";
 
 let misc: any = {
     sidebar_mini_active: true
@@ -108,7 +109,7 @@ export class SidebarComponent implements OnInit {
     public menuItems: any[];
     public isCollapsed = true;
 
-    constructor(private router: Router) {
+    constructor(private router: Router, public authService: AuthService) {
     }
 
     ngOnInit() {

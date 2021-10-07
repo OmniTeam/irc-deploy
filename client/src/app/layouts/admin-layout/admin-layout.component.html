@@ -3,6 +3,7 @@
   <app-sidebar
     [ngClass]="{ 'sidenav fixed-left': isMobileResolution === false }"
   ></app-sidebar>
+  <div  [ngClass]="{ 'main-content': authService.isLoggedIn() }">
   <div class="main-content">
     <!-- Top navbar -->
     <app-navbar></app-navbar>
