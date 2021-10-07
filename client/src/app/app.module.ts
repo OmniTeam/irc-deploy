@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { PresentationModule } from './pages/presentation/presentation.module';
@@ -15,13 +15,15 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { TagInputModule } from 'ngx-chips';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import {TokenInterceptor} from "./helpers/token.interceptor";
+import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    AuthLayoutComponent,
+    AuthLayoutComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -38,7 +40,10 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     BrowserModule,
     NgxDatatableModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    fakeBackendProvider,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

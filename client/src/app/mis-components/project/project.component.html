@@ -1,4 +1,4 @@
-<div class=" header bg-danger pb-6">
+<div class=" header bg-success pb-6">
     <div class=" container-fluid">
         <div class=" header-body">
             <div class=" row align-items-center py-4">
@@ -7,7 +7,7 @@
                 </div>
 
                 <div class=" col-lg-6 col-5 text-right">
-                    <a class=" btn btn-primary" (click)="newProject()"> New Project </a>
+                    <a class=" btn btn-default" (click)="newProject()" style="color: #FFFFFF"> New Project </a>
 
                 </div>
             </div>
@@ -62,11 +62,11 @@
                             [footerHeight]="50"
                             [rowHeight]="'auto'"
                             [limit]="entries != -1 ? entries : undefined"
-                            [rows]="temp"
+                            [rows]="rows"
                             (activate)="onActivate($event)"
                     >
-                        <ngx-datatable-column name="Project ID" prop="projectId"></ngx-datatable-column>
-                        <ngx-datatable-column name="Project Name" prop="projectName"></ngx-datatable-column>
+                        <ngx-datatable-column name="Project ID" prop="id"></ngx-datatable-column>
+                        <ngx-datatable-column name="Project Name" prop="name"></ngx-datatable-column>
                         <ngx-datatable-column name="Oxd ID" prop="oxdId"></ngx-datatable-column>
                         <ngx-datatable-column name="Date Created" prop="dateCreated"></ngx-datatable-column>
                         <ngx-datatable-column name="Action"></ngx-datatable-column>

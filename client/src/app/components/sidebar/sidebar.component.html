@@ -1,15 +1,16 @@
 <nav
   class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white"
   id="sidenav-main"
+  *ngIf="authService.isLoggedIn()"
   (mouseover)="onMouseEnterSidenav()"
   (mouseout)="onMouseLeaveSidenav()"
 >
-<perfect-scrollbar>
+<perfect-scrollbar  *ngIf="authService.isLoggedIn()">
   <div class="scrollbar-inner">
     <div class="sidenav-header d-flex align-items-center">
       <a class="navbar-brand" [routerLink]="['/dashboards/dashboard']">
         <img
-          src="assets/img/brand/oaglogo.png"
+          src="assets/img/brand/crvpf_logo.png"
           class="navbar-brand-img"
           alt="..."
         />

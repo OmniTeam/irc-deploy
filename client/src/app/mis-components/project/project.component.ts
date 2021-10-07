@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-project',
@@ -11,45 +12,9 @@ export class ProjectComponent implements OnInit {
   selected: any[] = [];
   temp = [];
   activeRow: any;
-  rows: any = [
-    {
-      projectId: "789-90983",
-      projectName: "MIRP",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      projectId: "789-90983",
-      projectName: "MIRP",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      projectId: "789-90983",
-      projectName: "MIRP",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      projectId: "789-90983",
-      projectName: "Everflow",
-      oxdId: "3",
-      dateCreated: "2021/04/25",
-    },
-    {
-      projectId: "789-90983",
-      projectName: "SNV TIDE 2",
-      oxdId: "5",
-      dateCreated: "2021/04/26",
-    },
-  ];
-  constructor( private router: Router,) {
-    this.temp = this.rows.map((prop, key) => {
-      return {
-        ...prop,
-        id: key
-      };
-    });
+  rows: Object[];
+
+  constructor( private router: Router, private projectService: ProjectService) {
   }
 
   entriesChange($event) {
@@ -57,7 +22,7 @@ export class ProjectComponent implements OnInit {
   }
   filterTable($event) {
     let val = $event.target.value;
-    this.temp = this.rows.filter(function(d) {
+    this.rows = this.rows.filter(function(d) {
       for (var key in d) {
         if (d[key].toLowerCase().indexOf(val) !== -1) {
           return true;
@@ -78,7 +43,11 @@ export class ProjectComponent implements OnInit {
     this.router.navigate(['project/create']);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.projectService.getMisProjects().subscribe(data => {
+      this.rows = data;
+      console.log(this.rows);
+    }, error => console.log(error));
   }
 
 }
