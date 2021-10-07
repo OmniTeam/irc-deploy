@@ -284,4 +284,44 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "study_id", baseTableName: "form", constraintName: "FKl3mw5v1w4i5goeqd42v88srw3", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "study", validate: "true")
     }
 
+    changeSet(author: "Bryan (generated)", id: "1633595744454-1") {
+        createTable(tableName: "task_def") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "task_defPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "start_on_startup", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "extra_params", type: "VARCHAR(255)")
+
+            column(name: "cron_expression", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+
+            column(name: "task_class", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1633595744454-2") {
+        addUniqueConstraint(columnNames: "name", constraintName: "UC_TASK_DEFNAME_COL", tableName: "task_def")
+    }
+
 }
