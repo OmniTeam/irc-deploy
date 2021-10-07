@@ -4,19 +4,13 @@ import {CommonModule} from "@angular/common";
 import {BrowserModule} from "@angular/platform-browser";
 import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
-import {DashboardComponent} from './pages/dashboards/dashboard/dashboard.component';
 import {AuthGuard} from "./guards/auth.guard";
 import {LoggedInGuard} from "./guards/loggedin.guard";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboards/dashboard',
+    redirectTo: 'home',
     pathMatch: 'full',
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'presentation',
-    component: DashboardComponent,
     canActivate: [AuthGuard]
   },
 
@@ -40,6 +34,10 @@ const routes: Routes = [
       {
         path: 'forms', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
+      },
+      {
+        path: 'home', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
       },
       {
         path: 'dashboards',

@@ -35,9 +35,9 @@ export class NavbarComponent implements OnInit {
            // Hide loading indicator
 
            if (window.innerWidth < 1200) {
-             document.body.classList.remove("g-sidenav-pinned");
-             document.body.classList.add("g-sidenav-hidden");
-             this.sidenavOpen = false;
+             document.body.classList.add("g-sidenav-pinned");
+             document.body.classList.remove("g-sidenav-hidden");
+             this.sidenavOpen = true;
            }
        }
 
