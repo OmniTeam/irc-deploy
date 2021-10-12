@@ -7,9 +7,7 @@ import groovy.transform.ToString
 @GrailsCompileStatic
 @EqualsAndHashCode(includes = "name")
 @ToString(includes = 'displayName', includeNames = true, includePackage = false)
-class Form implements Serializable {
-
-    private static final long serialVersionUID = 1
+class Form {
 
     final static String TABLE_POSTFIX = 'xxx'
 
@@ -31,5 +29,18 @@ class Form implements Serializable {
         description nullable: true
         oxdId nullable: true
         displayName nullable: false
+    }
+
+    boolean hasViewableColumns() {
+        if (id == null)
+            return false
+
+        def settings = FormSetting.findByViewInTableAndForm(true, this)
+
+        if (settings) {
+            return true
+        } else {
+            return false
+        }
     }
 }

@@ -178,64 +178,6 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "Bryan (generated)", id: "1633107920236-3") {
-        createTable(tableName: "form_setting") {
-            column(name: "id", type: "VARCHAR(255)") {
-                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "form_settingPK")
-            }
-
-            column(name: "question_text", type: "VARCHAR(255)")
-
-            column(name: "date_created", type: "datetime") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "last_updated", type: "datetime") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "type_of_question", type: "VARCHAR(12)") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "parent_question", type: "VARCHAR(255)")
-
-            column(name: "filter_by_text", type: "BIT") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "xform_type", type: "VARCHAR(255)") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "display_name", type: "VARCHAR(255)")
-
-            column(name: "form_id", type: "VARCHAR(255)") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "order_of_display_in_table", type: "INT") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "view_on_map", type: "BIT") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "field", type: "VARCHAR(255)") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "add_to_filter", type: "BIT") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "view_in_table", type: "BIT") {
-                constraints(nullable: "false")
-            }
-        }
-    }
-
     changeSet(author: "Bryan (generated)", id: "1633107920236-4") {
         createTable(tableName: "study") {
             column(name: "id", type: "VARCHAR(255)") {
@@ -272,11 +214,69 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "Bryan (generated)", id: "1633713117909-3") {
+        createTable(tableName: "form_setting") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "form_settingPK")
+            }
+
+            column(name: "question_text", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "type_of_question", type: "VARCHAR(12)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "parent_question", type: "VARCHAR(255)")
+
+            column(name: "filter_by_text", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "xform_type", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "display_name", type: "LONGTEXT")
+
+            column(name: "form_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "order_of_display_in_table", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "view_on_map", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "field", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "add_to_filter", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "view_in_table", type: "BIT") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
     changeSet(author: "Bryan (generated)", id: "1633107920236-5") {
         addForeignKeyConstraint(baseColumnNames: "form_setting_id", baseTableName: "choice_option", constraintName: "FK6ulbwgetjfe77f1qg84bxm0qx", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "form_setting", validate: "true")
     }
 
-    changeSet(author: "Bryan (generated)", id: "1633107920236-6") {
+    changeSet(author: "Bryan (generated)", id: "1633713117909-17") {
         addForeignKeyConstraint(baseColumnNames: "form_id", baseTableName: "form_setting", constraintName: "FKiy86i2kxa61thdtihfuat58gs", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "form", validate: "true")
     }
 

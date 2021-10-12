@@ -1,8 +1,10 @@
 package com.kengamis
 
+import com.kengamis.tasks.DynamicJobRunner
 import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+import org.quartz.Job
 
 @GrailsCompileStatic
 @EqualsAndHashCode(includes = "name")
@@ -14,7 +16,7 @@ class TaskDef {
     String description
     boolean startOnStartup = true
     String cronExpression
-    String taskClass = 'com.kengamis.tasks.DynamicJobRunner'
+    String taskClass = DynamicJobRunner.class.name
     String extraParams
     Date dateCreated
     Date lastUpdated
@@ -25,5 +27,12 @@ class TaskDef {
         cronExpression nullable: false
         taskClass nullable: false
         extraParams nullable: true
+    }
+
+
+    Class<Job> getClassInstance() {
+        def job = Class.forName(getTaskClass())
+        AppHolder.autowire(job)
+        return job as Class<Job>;
     }
 }
