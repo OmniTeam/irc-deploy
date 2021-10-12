@@ -12,7 +12,7 @@ class Study implements Serializable {
     private static final long serialVersionUID = 1
 
     public static final SYNC_MODE_LEGACY = 'legacy'
-    public static final SYNC_MODE_NEW = 'new'
+    public static final SYNC_MODE_NEW = 'central'
 
     String id
     String name

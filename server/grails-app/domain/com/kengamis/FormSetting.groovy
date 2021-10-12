@@ -4,9 +4,7 @@ import grails.compiler.GrailsCompileStatic
 import org.openxdata.markup.XformType
 
 @GrailsCompileStatic
-class FormSetting implements Serializable {
-
-    private static final long serialVersionUID = 1
+class FormSetting {
 
     final static SETTING_TEXT = 'text'
     final static SETTING_MULT_SELECT = 'multi-select'
@@ -42,6 +40,8 @@ class FormSetting implements Serializable {
 
     static mapping = {
         sort 'displayName'
+        questionText type: 'text'
+        displayName type: 'text'
     }
 
     FormSetting addOptionIfAbsent(ChoiceOption choiceOption) {

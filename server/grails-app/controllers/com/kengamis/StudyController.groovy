@@ -30,12 +30,6 @@ class StudyController {
     def create() {
         def studies = []
         try {
-            centralService.auth()
-        }
-        catch (Exception e) {
-            println("Exception: " + e.getMessage())
-        }
-        try {
             def token = centralService.get()
             def centralStudies = RestHelper.withCentral { listProjects(token) }
             centralStudies.each {
