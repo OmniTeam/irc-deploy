@@ -100,7 +100,7 @@ class CentralDataImportJob extends Script {
                     .projectId(study.oxdId)
                     .formId(form.xmlFormId)
                     .mapToModel()
-            def data = withCentral { getDataDocument(token,study.oxdId,form.xmlFormId,'Submissions',0,1000,true) }
+            def data = withCentral { getDataDocument(token,study.oxdId,form.xmlFormId,'Submissions',0,10000,true) }
             def records = data.value
             records.each { record ->
                 def central_system_info = record['__system']
