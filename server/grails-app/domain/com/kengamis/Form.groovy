@@ -19,7 +19,7 @@ class Form {
     Date lastUpdated
     boolean enabled = true
     boolean syncMode = true
-    String oxdId
+    String centralId
 
     static hasMany = [formSettings: FormSetting]
     static belongsTo = [study: Study]
@@ -27,7 +27,7 @@ class Form {
     static constraints = {
         name nullable: false
         description nullable: true
-        oxdId nullable: true
+        centralId nullable: false
         displayName nullable: false
     }
 
@@ -43,4 +43,9 @@ class Form {
             return false
         }
     }
+
+    FormSetting findFormSetting(String questionId) {
+        formSettings.find { it.field == questionId }
+    }
+
 }

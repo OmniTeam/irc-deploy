@@ -1,6 +1,7 @@
 package com.kengamis
 
 import grails.compiler.GrailsCompileStatic
+import grails.gorm.transactions.Transactional
 import org.openxdata.markup.XformType
 
 @GrailsCompileStatic
@@ -42,13 +43,6 @@ class FormSetting {
         sort 'displayName'
         questionText type: 'text'
         displayName type: 'text'
-    }
-
-    FormSetting addOptionIfAbsent(ChoiceOption choiceOption) {
-        if (!choiceOptions.any { it.choiceId == choiceOption.choiceId }) {
-            addToChoiceOptions(choiceOption)
-        }
-        return this
     }
 
     ChoiceOption findChoiceOption(String bindValue) {

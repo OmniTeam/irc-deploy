@@ -5,16 +5,13 @@ import com.kengamis.CentralService
 import com.kengamis.ChoiceOption
 import com.kengamis.Form
 import com.kengamis.FormSetting
-import com.kengamis.RestHelper
 import com.kengamis.Study
-import com.kengamis.User
 import com.kengamis.Util
 import com.omnitech.odkodata2sql.DataInserter
 import com.omnitech.odkodata2sql.OdkOdataSlurper
 import com.omnitech.odkodata2sql.SqlSchemaGen
 import com.omnitech.odkodata2sql.model.OdkFormSource
 import com.omnitech.odkodata2sql.model.OdkTable
-import grails.gorm.transactions.Transactional
 import groovy.json.JsonOutput
 import groovy.util.logging.Log4j
 import groovy.xml.XmlUtil
@@ -27,7 +24,6 @@ import org.openxdata.markup.XformType
 import org.openxdata.markup.Form as markUpForm
 
 import static com.kengamis.RestHelper.*
-import static com.kengamis.RestHelper.withCentral
 
 @Log4j
 class CentralDataImportJob extends Script {
@@ -39,7 +35,7 @@ class CentralDataImportJob extends Script {
         try {
             centralService = AppHolder.bean('centralService')
             def token = centralService.get()
-            def study = Study.findByOxdId('7')
+            def study = Study.findByCentralId('6')
             syncCentralData(study, token)
         }
         catch (Exception e) {
@@ -50,18 +46,17 @@ class CentralDataImportJob extends Script {
     static def syncCentralData(Study study, def token) {
         try {
             log.info("===========SYNCING STUDY [$study.name]")
-            def forms = withCentral { listForms(study.oxdId, token) }
+            def forms = withCentral { listForms(study.centralId, token) }
             for (form in forms) {
                 try {
-                    Form.withNewSession {
+                    Form.withNewTransaction {
                         syncFormSetting(study, form, token)
-                        syncFormData(study, form, token)
                     }
-
                 }
                 catch (Exception ex) {
                     log.error("ERROR:::: Failed to synchronise [${form.name}] !!!", Util.sanitize(ex))
                 }
+                syncFormData(study, form, token)
             }
         }
         catch (Exception ex) {
@@ -74,39 +69,43 @@ class CentralDataImportJob extends Script {
     static def syncFormSetting(study, def form, token) {
         def tableName = deriveCentralFormName(form)
         def odkTableName = new OdkTable(name: tableName)
-        def postFix = deriveCentralFormPostFix(form.name)
+        def postFix = deriveCentralFormPostFix(form['name'].toString())
         def finalTableName = SqlSchemaGen.createTableName(odkTableName, postFix)
         log.info("  -> Derived table for form [$study.name -> $form.xmlFormId] = [[$finalTableName]]")
 
         def misForm = Form.findByName(finalTableName) ?: new Form(name: finalTableName, study: study,
-                oxdId: form.xmlFormId, displayName: form.name)
+                centralId: form.xmlFormId, displayName: form.name)
         Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
         log.info("  -> Done Saving form[$form]")
 
-        def versions = withCentral { getFormVersions(study.oxdId, form.xmlFormId, token) }
+        def versions = withCentral { getFormVersions(study.centralId, form.xmlFormId, token) }
         for (version in versions) {
             log.info(version)
             importVersion(study, misForm, '___', token)
         }
+
         log.info("  -> Done Importing form[$form] Settings...")
     }
 
     static def syncFormData(Study study, def form, token) {
         log.info("======= Syncing Form Data [$study.name -> $form.name] ===========================")
-        def misForm = Form.findByOxdId(form.xmlFormId)
+        def studyCentralId = study.centralId as String
+        def formCentralId = form['xmlFormId'] as String
+        def formName = form['name'] as String
+        def misForm = Form.findByCentralId(formCentralId)
         if (misForm != null && misForm.syncMode) {
-            def postFix = deriveCentralFormPostFix(form.name)
-            OdkFormSource formSource = new OdkOdataSlurper(getCentralRestClient(), token)
-                    .projectId(study.oxdId)
-                    .formId(form.xmlFormId)
-                    .mapToModel()
-            def data = withCentral { getDataDocument(token,study.oxdId,form.xmlFormId,'Submissions',0,10000,true) }
-            def records = data.value
+            def postFix = deriveCentralFormPostFix(formName)
+            def slurper = new OdkOdataSlurper(getCentralRestClient(), token)
+                    .projectId(studyCentralId)
+                    .formId(formCentralId)
+            OdkFormSource formSource = slurper.mapToModel()
+            def data = withCentral { getDataDocument(token, studyCentralId, formCentralId, 'Submissions', 0, 100000, true) }
+            def records = data['value']
             records.each { record ->
                 def central_system_info = record['__system']
                 def central_user_name = central_system_info['submitterName']
                 AppHolder.withMisSqlNonTx {
-                    new DataInserter(connection, JsonOutput.toJson(record), formSource,true)
+                    new DataInserter(connection, JsonOutput.toJson(record), formSource, true)
                             .setConfig([
                                     'central_user_name': central_user_name,
                             ])
@@ -114,8 +113,7 @@ class CentralDataImportJob extends Script {
                             .insert()
                 }
             }
-        }
-        else {
+        } else {
             log.info(" ======= The sync mode of form (${form.name}) is not enabled =======")
         }
     }
@@ -123,7 +121,7 @@ class CentralDataImportJob extends Script {
     static def importVersion(Study study, Form misForm, def versionName, def token) {
         log.info("        ->Importing version settings [$misForm]-[$versionName]")
         def hasViewableColumns = misForm.hasViewableColumns()
-        String formVersionXml = getXform(study.oxdId, misForm.oxdId, token)
+        String formVersionXml = getXform(study.centralId, misForm.centralId, token)
         def odkForm = Converter.odk2Form(formVersionXml)
         def flatten = isFlattenForm(odkForm)
         def allFirstLevelQns = flatten ? odkForm.allFirstLevelQuestionsNotInRepeat : odkForm.allFirstLevelQuestions
@@ -180,8 +178,8 @@ class CentralDataImportJob extends Script {
                 formSetting.typeOfQuestion = FormSetting.SETTING_REPEAT
                 formSetting.viewInTable = false
             }
-            formSetting.form = misForm
 
+            formSetting.form = misForm
             if (!misForm.formSettings.any { it.field == formSetting.field }) {
                 FormSetting.withNewTransaction { formSetting.save(failOnError: true, flush: true) }
             }
@@ -192,7 +190,7 @@ class CentralDataImportJob extends Script {
         }
     }
 
-    private static String getXform(def studyId, def formId, def token) {
+    static String getXform(def studyId, def formId, def token) {
         def formVersionXml = withCentral {
             def xmlResponse = getFormVersionXml(studyId, formId, '___', token)
             if (xmlResponse) {
@@ -204,15 +202,15 @@ class CentralDataImportJob extends Script {
         formVersionXml
     }
 
-    private static String deriveCentralFormName(def form) {
+    static String deriveCentralFormName(def form) {
         return "_${form.xmlFormId}".toLowerCase()
     }
 
-    private static String deriveCentralFormPostFix(String name) {
+    static String deriveCentralFormPostFix(String name) {
         return "${Form.TABLE_POSTFIX}_${createBindName(name)}".toLowerCase()
     }
 
-    private static String createBindName(String name) {
+    static String createBindName(String name) {
         return name.replaceAll(/[^A-Za-z0-9 ]/, '').replaceAll(/\s+/, '_').toLowerCase()
     }
 
@@ -225,11 +223,10 @@ class CentralDataImportJob extends Script {
                     choice.save(failOnError: true, flush: true)
                 }
             }
-
         }
     }
 
-    private static boolean isInRepeat(IFormElement element) {
+    static boolean isInRepeat(IFormElement element) {
         def parent = element.firstInstanceParent
         while (parent) {
             if (parent instanceof RepeatQuestion) return true
@@ -238,7 +235,7 @@ class CentralDataImportJob extends Script {
         return false
     }
 
-    private static boolean isFlattenForm(markUpForm xform) {
+    static boolean isFlattenForm(markUpForm xform) {
         return true
     }
 }

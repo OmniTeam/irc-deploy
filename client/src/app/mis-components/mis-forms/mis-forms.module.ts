@@ -4,10 +4,11 @@ import {MisFormsRoutingModule} from './mis-forms-routing.module';
 import {MisFormsComponent} from "./mis-forms.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {ReplacePipe} from "../../replace-pipe";
 
 
 @NgModule({
-    declarations: [MisFormsComponent],
+    declarations: [MisFormsComponent, ReplacePipe],
     imports: [
         CommonModule,
         MisFormsRoutingModule,

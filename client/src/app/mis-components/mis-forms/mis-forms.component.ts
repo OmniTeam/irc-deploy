@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {FormService} from "../../services/form.service";
 
 @Component({
   selector: 'app-mis-forms',
@@ -11,53 +12,15 @@ export class MisFormsComponent implements OnInit {
   selected: any[] = [];
   temp = [];
   activeRow: any;
-  rows: any = [
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "3",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "5",
-      dateCreated: "2021/04/26",
-    },
-  ];
-  constructor( private router: Router,) {
-    this.temp = this.rows.map((prop, key) => {
-      return {
-        ...prop,
-        id: key
-      };
-    });
-  }
+  rows: Object[];
+  constructor( private router: Router, private formService: FormService) { }
 
   entriesChange($event) {
     this.entries = $event.target.value;
   }
   filterTable($event) {
     let val = $event.target.value;
-    this.temp = this.rows.filter(function(d) {
+    this.rows = this.rows.filter(function(d) {
       for (var key in d) {
         if (d[key].toLowerCase().indexOf(val) !== -1) {
           return true;
@@ -75,6 +38,12 @@ export class MisFormsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.formService.getForms().subscribe(data => {
+      this.rows = data;
+    }, error => console.log(error));
   }
 
+  viewFormData(valObj: any) {
+    this.router.navigate(['forms/data', valObj['name']]);
+  }
 }

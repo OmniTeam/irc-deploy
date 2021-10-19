@@ -3,9 +3,7 @@ package com.kengamis
 import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
-class ChoiceOption implements Serializable {
-
-    private static final long serialVersionUID = 1
+class ChoiceOption {
 
     String id
     String choiceId
