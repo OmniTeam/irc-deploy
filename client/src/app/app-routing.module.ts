@@ -40,6 +40,10 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
       },
       {
+        path: 'forms/data/:formtable', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/form-data/form-data.module').then(m => m.FormDataModule)
+      },
+      {
         path: 'dashboards',
         loadChildren: './pages/dashboards/dashboards.module#DashboardsModule',
         canActivate: [AuthGuard]

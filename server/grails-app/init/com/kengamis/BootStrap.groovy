@@ -63,7 +63,7 @@ class BootStrap {
         TaskDef.findByName("Central Sync Job") ?: new TaskDef(
                 name: 'Central Sync Job',
                 description: 'Central Data import into MIS',
-                cronExpression: '0 0/5 * * * ?',
+                cronExpression: '0 0/40 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.CentralDataImportJob',
                 startOnStartup: true

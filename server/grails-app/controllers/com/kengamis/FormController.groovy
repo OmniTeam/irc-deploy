@@ -82,4 +82,12 @@ class FormController {
 
         render status: NO_CONTENT
     }
+
+    def getFormData() {
+        def formTable = (String) params.formtable
+        def data = AppHolder.withMisSqlNonTx {
+            rows("select * from ${formTable}".toString())
+        }
+        respond data
+    }
 }

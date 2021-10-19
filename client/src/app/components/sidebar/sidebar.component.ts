@@ -133,9 +133,7 @@ export class SidebarComponent implements OnInit {
     const sidenavToggler = document.getElementsByClassName(
       'sidenav-toggler'
     )[0];
-    console.log(sidenavToggler);
     const body = document.getElementsByTagName('body')[0];
-    console.log(body);
     if (body.classList.contains('g-sidenav-pinned')) {
       misc.sidebar_mini_active = true;
     } else {

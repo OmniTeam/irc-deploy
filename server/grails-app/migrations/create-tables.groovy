@@ -324,4 +324,28 @@ databaseChangeLog = {
         addUniqueConstraint(columnNames: "name", constraintName: "UC_TASK_DEFNAME_COL", tableName: "task_def")
     }
 
+    changeSet(author: "LENOVO (generated)", id: "1634280728497-1") {
+        addColumn(tableName: "form") {
+            column(name: "central_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1634280728497-2") {
+        addColumn(tableName: "study") {
+            column(name: "central_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1634280728497-3") {
+        dropColumn(columnName: "oxd_id", tableName: "form")
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1634280728497-4") {
+        dropColumn(columnName: "oxd_id", tableName: "study")
+    }
+
 }

@@ -46,7 +46,6 @@ export class ProjectComponent implements OnInit {
   ngOnInit() {
     this.projectService.getMisProjects().subscribe(data => {
       this.rows = data;
-      console.log(this.rows);
     }, error => console.log(error));
   }
 
