@@ -2,6 +2,8 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormService} from "../../services/form.service";
 import {HttpParams} from "@angular/common/http";
+import {SelectionType} from '@swimlane/ngx-datatable';
+import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-form-data',
@@ -9,17 +11,20 @@ import {HttpParams} from "@angular/common/http";
   styleUrls: ['./form-data.component.css']
 })
 export class FormDataComponent implements OnInit, AfterViewInit {
-  formtable;
+
   entries: number = 5;
   selected: any[] = [];
   temp = [];
   activeRow: any;
   rows: Object[];
   columns: any;
+  SelectionType = SelectionType;
+  closeModal: string;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private formService: FormService) {
+              private formService: FormService,
+              private modalService: NgbModal) {
   }
 
   entriesChange($event) {
@@ -48,17 +53,22 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.route.params.subscribe( params => {
+      this.getFormData(params.formtable);
+    });
   }
 
-  ngAfterViewInit(): void {
-    this.formtable = this.route.snapshot.params['formtable'];
+  getFormData(formtable: String) {
     const params = new HttpParams()
-      .set('formtable', `${this.formtable}`);
+      .set('formtable', `${formtable}`);
 
     this.formService.getFormData(params).subscribe((data) => {
       this.rows = data;
       this.columns = this.columnMappings(data);
     }, error => console.log(error));
+  }
+
+  ngAfterViewInit(): void {
   }
 
   getUniqueColumnsFromArray(array) {
@@ -71,13 +81,13 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   }
 
   columnMappings(array) {
-    let columns = []
+    let columns = [];
     let uniqueColumns = this.getUniqueColumnsFromArray(array);
     for (let column of uniqueColumns) {
       let columnProperties = {};
       columnProperties['prop'] = column;
       columnProperties['name'] = this.titleCaseWord(column.trim().replaceAll('_', ' '));
-      columns.push(columnProperties)
+      columns.push(columnProperties);
     }
     return columns;
   }
@@ -85,5 +95,25 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   titleCaseWord(word: string) {
     if (!word) return word;
     return word[0].toUpperCase() + word.substr(1);
+  }
+
+  viewRecord(modalDom, valObj: any) {
+    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeModal = `Closed with: ${result}`;
+      console.log(this.closeModal);
+    }, (reason) => {
+      this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
+      console.log(this.closeModal);
+    });
+  }
+
+  getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

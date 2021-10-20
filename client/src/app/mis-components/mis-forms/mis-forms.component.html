@@ -62,7 +62,7 @@
           >
             <ngx-datatable-column name="Form Name" prop="displayName">
               <ng-template let-value="value" let-expanded="expanded" let-row="row" ngx-datatable-cell-template>
-                <a class="nav-link" (click)="viewFormData(row)" style="text-transform: capitalize;">
+                <a class="nav-link" [routerLink]="['/forms/data', row.name]" style="text-transform: capitalize;">
                   {{ value | replace: '_' : ' ' }}
                 </a>
               </ng-template>
