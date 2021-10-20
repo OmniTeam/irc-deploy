@@ -1,10 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from "../../services/auth.service";
+import {FormService} from "../../services/form.service";
+import {ReplacePipe} from "../../replace-pipe";
 
 let misc: any = {
   sidebar_mini_active: true
 };
+
+let formsMenu: any = {
+  path: '/forms/data',
+  title: 'Forms',
+  type: 'sub',
+  icontype: 'ni-single-copy-04 text-pink',
+  isCollapsed: true,
+  children: []
+}
 
 export interface RouteInfo {
   path: string;
@@ -40,12 +51,7 @@ export const ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'fas fa-home',
   },
-  {
-    path: '/forms',
-    title: 'Forms',
-    type: 'link',
-    icontype: 'ni-single-copy-04 text-pink',
-  },
+  formsMenu,
   {
     path: '/project',
     title: 'Project',
@@ -59,8 +65,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-books text-pink',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Dashboard', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Farmer Report', type: 'link'},
+      {path: 'alternative', title: 'Trends', type: 'link'}
     ]
   },
   {
@@ -70,8 +76,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-badge text-default',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Dashboard', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Create Packages', type: 'link'},
+      {path: 'alternative', title: 'Assign Packages', type: 'link'}
     ]
   },
   {
@@ -81,8 +87,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-settings text-primary',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Dashboard', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Form Setting', type: 'link'},
+      {path: 'alternative', title: 'Scheduled Tasks', type: 'link'}
     ]
   },
   {
@@ -92,8 +98,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-single-02 text-green',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Reporters', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Roles', type: 'link'},
+      {path: 'alternative', title: 'Groups', type: 'link'}
     ]
   },
 ];
@@ -107,7 +113,7 @@ export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
 
-  constructor(private router: Router, public authService: AuthService) {
+  constructor(private router: Router, public authService: AuthService, private formService: FormService) {
   }
 
   ngOnInit() {
@@ -115,6 +121,15 @@ export class SidebarComponent implements OnInit {
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
+    this.formService.getForms().subscribe(data => {
+      for (let form of data) {
+        let formObject = {};
+        formObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+        formObject['path'] = form.name.toString();
+        formObject['type'] = 'link';
+        formsMenu.children.push(formObject);
+      }
+    }, error => console.log(error));
   }
 
   onMouseEnterSidenav() {
