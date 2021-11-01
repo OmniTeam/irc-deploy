@@ -25,7 +25,7 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/fullcalendar/main.min.css",
               "src/assets/vendor/nucleo/css/nucleo.css",
               "src/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css",
@@ -34,7 +34,10 @@
               "node_modules/@swimlane/ngx-datatable/index.css",
               "node_modules/@swimlane/ngx-datatable/assets/icons.css",
               "src/assets/scss/argon.scss",
-              "node_modules/@swimlane/ngx-datatable/themes/bootstrap.css"
+              "node_modules/@swimlane/ngx-datatable/themes/bootstrap.css",
+              "node_modules/@ng-select/ng-select/themes/default.theme.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/dc/dist/style/dc.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js"

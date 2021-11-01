@@ -26,15 +26,6 @@ const routes: Routes = [
         path: 'project', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/project/project.module').then(m => m.ProjectModule)
       },
-
-      {
-        path: 'project/create', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/project/project-create/project-create.module').then(m => m.ProjectCreateModule)
-      },
-      {
-        path: 'forms', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
-      },
       {
         path: 'home', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
