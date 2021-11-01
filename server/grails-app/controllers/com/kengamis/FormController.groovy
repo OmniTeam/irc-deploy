@@ -84,10 +84,14 @@ class FormController {
     }
 
     def getFormData() {
+        def formData = [:]
         def formTable = (String) params.formtable
         def data = AppHolder.withMisSqlNonTx {
             rows("select * from ${formTable}".toString())
         }
-        respond data
+        def formName = Form.findByName(formTable).displayName
+        formData['form_name'] = formName
+        formData['data'] = data
+        respond formData
     }
 }

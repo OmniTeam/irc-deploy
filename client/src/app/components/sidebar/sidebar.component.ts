@@ -16,6 +16,7 @@ let formsMenu: any = {
   isCollapsed: true,
   children: []
 }
+console.log(formsMenu);
 
 export interface RouteInfo {
   path: string;

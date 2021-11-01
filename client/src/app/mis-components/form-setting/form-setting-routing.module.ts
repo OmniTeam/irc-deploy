@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {MisFormsComponent} from "./mis-forms.component";
+import {FormSettingComponent} from "./form-setting.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: MisFormsComponent
+    component: FormSettingComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MisFormsRoutingModule { }
+export class FormSettingRoutingModule { }
