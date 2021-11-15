@@ -20,7 +20,8 @@ class FormController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond formService.list(params), model:[formCount: formService.count()]
+        def forms = Form.findAllByEnabled(true)
+        respond forms
     }
 
     def show(Long id) {
@@ -81,17 +82,5 @@ class FormController {
         formService.delete(id)
 
         render status: NO_CONTENT
-    }
-
-    def getFormData() {
-        def formData = [:]
-        def formTable = (String) params.formtable
-        def data = AppHolder.withMisSqlNonTx {
-            rows("select * from ${formTable}".toString())
-        }
-        def formName = Form.findByName(formTable).displayName
-        formData['form_name'] = formName
-        formData['data'] = data
-        respond formData
     }
 }

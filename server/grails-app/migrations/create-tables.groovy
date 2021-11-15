@@ -348,4 +348,140 @@ databaseChangeLog = {
         dropColumn(columnName: "oxd_id", tableName: "study")
     }
 
+    changeSet(author: "Bryan (generated)", id: "1636026717745-1") {
+        createTable(tableName: "group") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "groupPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-2") {
+        createTable(tableName: "user_form") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "user_formPK")
+            }
+
+            column(name: "form_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-3") {
+        createTable(tableName: "user_group") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "user_groupPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "group_role", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-4") {
+        createTable(tableName: "user_study") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "user_studyPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "study_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-5") {
+        addUniqueConstraint(columnNames: "name", constraintName: "UC_GROUPNAME_COL", tableName: "group")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-6") {
+        addUniqueConstraint(columnNames: "group_id, user_id", constraintName: "UK30e727c77fe15a65e4252a73b988", tableName: "user_group")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-7") {
+        addUniqueConstraint(columnNames: "study_id, user_id", constraintName: "UK9ecfee57007fc93135c5b06bf23a", tableName: "user_study")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-8") {
+        addUniqueConstraint(columnNames: "form_id, user_id", constraintName: "UKd512f11de5e919c52773dbc40494", tableName: "user_form")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-9") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_group", constraintName: "FK1c1dsw3q36679vaiqwvtv36a6", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-10") {
+        addForeignKeyConstraint(baseColumnNames: "study_id", baseTableName: "user_study", constraintName: "FK8g3qtmfhqft80t854j2n2gawm", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "study", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-11") {
+        addForeignKeyConstraint(baseColumnNames: "form_id", baseTableName: "user_form", constraintName: "FKet5bou1rejvasjlchtk95m0f", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "form", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-12") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_study", constraintName: "FKguhhymf5vvsah78agbjdgc3jp", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-13") {
+        addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "user_group", constraintName: "FKjonf4pqux3h1e687sd18dhcnj", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "group", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1636026717745-14") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_form", constraintName: "FKm04eqjlt7jll97dnmhk01dsh8", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
 }

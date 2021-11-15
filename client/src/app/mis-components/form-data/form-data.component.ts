@@ -105,9 +105,13 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', `${formtable}`);
 
     this.formService.getFormData(params).subscribe((data) => {
-      this.formName = new ReplacePipe().transform(data['form_name'], '_', ' ');
-      this.rows = data['data'];
-      this.columns = this.columnMappings(data['data']);
+      console.log(data);
+      this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
+      console.log(this.formName);
+      this.rows = data.resultList;
+      console.log(this.rows);
+      this.columns = this.columnMappings(data.headerList);
+      console.log(this.columns);
     }, error => console.log(error));
   }
 
@@ -308,11 +312,10 @@ export class FormDataComponent implements OnInit, AfterViewInit {
 
   columnMappings(array) {
     const columns = [];
-    const uniqueColumns = this.getUniqueColumnsFromArray(array);
-    for (const column of uniqueColumns) {
+    for (const column of array) {
       const columnProperties = {};
-      columnProperties['prop'] = column;
-      columnProperties['name'] = this.titleCaseWord(column.trim().replaceAll('_', ' '));
+      columnProperties['prop'] = column['field'];
+      columnProperties['name'] = column['displayName'];
       columns.push(columnProperties);
     }
     return columns;

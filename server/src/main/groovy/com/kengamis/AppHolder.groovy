@@ -4,13 +4,15 @@ import grails.plugin.springsecurity.SpringSecurityService
 import grails.util.Holders
 import groovy.sql.Sql
 import groovy.util.logging.Slf4j
+import org.jooq.DSLContext
+import org.jooq.impl.DSL
 import org.springframework.beans.factory.support.AbstractBeanDefinition
 
 import javax.sql.DataSource
 
 @Slf4j
 class AppHolder {
-    private static DataSource _ultimaDataSource
+    private static DataSource _misDataSource
 
     static def <T> T bean(Class<T> c) {
         return Holders.applicationContext.getBean(c)
@@ -39,7 +41,7 @@ class AppHolder {
     }
 
     static def <T> T withMisSql(@DelegatesTo(Sql) Closure<T> code) {
-        def sql = new Sql(_ultimaDataSource)
+        def sql = new Sql(_misDataSource)
         try {
             code.delegate = sql
             return code(sql)
@@ -55,6 +57,33 @@ class AppHolder {
             return code(sql)
         } finally {
             closeQuietly(sql)
+        }
+    }
+
+    static def <T> T withMisJooqNonTx(@DelegatesTo(DSLContext) Closure<T> code) {
+        withMisSqlNonTx {
+            def jooq = DSL.using(connection)
+            code.delegate = jooq
+            jooq.close()
+            return code(jooq)
+        }
+    }
+
+    static void setMisDataSource(misDataSource) {
+        _misDataSource = misDataSource
+    }
+
+    static <T> T withMysqlGeneral(String dbName,@DelegatesTo(Sql) Closure<T> code){
+        def url = "jdbc:mysql://localhost:3306/$dbName?create=true&autoReconnect=true&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull"
+        def sql = Sql.newInstance(url.toString(),
+                "${Holders.grailsApplication.config.dataSource.username}",
+                "${Holders.grailsApplication.config.dataSource.password}",
+                'com.mysql.jdbc.Driver')
+        try{
+            code.delegate = sql
+            return code(sql)
+        }finally {
+            sql.close()
         }
     }
 
