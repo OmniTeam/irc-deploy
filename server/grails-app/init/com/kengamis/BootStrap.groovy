@@ -4,9 +4,11 @@ import grails.gorm.transactions.Transactional
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 class BootStrap {
+    def dataSource
     def taskService
     CentralService centralService
     def init = { servletContext ->
+        AppHolder.misDataSource = dataSource
         authenticateCentral()
         initData()
         initSystemDefaultJobs()

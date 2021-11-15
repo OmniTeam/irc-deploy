@@ -42,4 +42,48 @@ class User {
         return this.userRoles.collect { it.role }
     }
 
+    boolean hasRole(Role r) {
+        if (r == null || id == null)
+            return false
+        return authorities.any { r.authority == it.authority }
+    }
+
+    boolean hasAnyRole(String... roleNames) {
+        roleNames.any { role -> authorities?.any { role == it.authority } }
+    }
+
+    boolean hasStudy(Study study) {
+        if (study == null || id == null)
+            return false
+        return studies.any { study.id == it.id }
+    }
+
+    boolean hasForm(Form form) {
+        if (form == null || id == null)
+            return false
+        return forms.any { form.id == it.id }
+    }
+
+    Set<Form> getForms() {
+        UserForm.findAllByUser(this).collect { it.form } as Set
+    }
+
+    Set<Study> getStudies() {
+        UserStudy.findAllByUser(this).collect { it.study } as Set
+    }
+
+    Set<Group> getGroups() {
+        UserGroup.findAllByUser(this).collect { it.group } as Set
+    }
+
+    Set<Group> getGroups(String role) {
+        UserGroup.findAllByUserAndGroupRole(this, role).collect { it.group } as Set
+    }
+
+    List<User> findFellowUsers() {
+        def groupIds = getGroups(Group.ROLE_SUPERVISOR).collect { it.id }
+        if (!groupIds) return [this]
+        return executeQuery("select distinct upg.user from UserGroup upg where upg.group.id in (:ids) ", [ids: groupIds])
+    }
+
 }

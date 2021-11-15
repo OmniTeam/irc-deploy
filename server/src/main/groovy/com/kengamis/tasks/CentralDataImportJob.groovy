@@ -35,7 +35,7 @@ class CentralDataImportJob extends Script {
         try {
             centralService = AppHolder.bean('centralService')
             def token = centralService.get()
-            def study = Study.findByCentralId('6')
+            def study = Study.findByCentralId('4')
             syncCentralData(study, token)
         }
         catch (Exception e) {
@@ -75,7 +75,7 @@ class CentralDataImportJob extends Script {
 
         def misForm = Form.findByName(finalTableName) ?: new Form(name: finalTableName, study: study,
                 centralId: form.xmlFormId, displayName: form.name)
-        Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
+        misForm.save(failOnError: true, flush: true)
         log.info("  -> Done Saving form[$form]")
 
         def versions = withCentral { getFormVersions(study.centralId, form.xmlFormId, token) }
@@ -88,7 +88,7 @@ class CentralDataImportJob extends Script {
     }
 
     static def syncFormData(Study study, def form, token) {
-        log.info("======= Syncing Form Data [$study.name -> $form.name] ===========================")
+        log.info("======= Syncing Form Data [$study.name -> $form.name] ========================")
         def studyCentralId = study.centralId as String
         def formCentralId = form['xmlFormId'] as String
         def formName = form['name'] as String
@@ -181,7 +181,7 @@ class CentralDataImportJob extends Script {
 
             formSetting.form = misForm
             if (!misForm.formSettings.any { it.field == formSetting.field }) {
-                FormSetting.withNewTransaction { formSetting.save(failOnError: true, flush: true) }
+                formSetting.save(failOnError: true, flush: true)
             }
 
             if (qn instanceof ISelectionQuestion) {
@@ -219,9 +219,7 @@ class CentralDataImportJob extends Script {
         choiceOptions.each { choice ->
             choice.formSetting = formSetting
             if (!formSetting.choiceOptions.any { it.choiceId == choice.choiceId }) {
-                ChoiceOption.withNewTransaction {
-                    choice.save(failOnError: true, flush: true)
-                }
+                choice.save(failOnError: true, flush: true)
             }
         }
     }

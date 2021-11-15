@@ -15,6 +15,6 @@ export class FormService {
   }
 
   getFormData(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/form/data`, { params });
+    return this.http.get(`${environment.serverUrl}/data`, { params });
   }
 }

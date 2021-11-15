@@ -1,12 +1,10 @@
 package com.kengamis
 
 import com.kengamis.tasks.DynamicJobRunner
-import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import org.quartz.Job
 
-@GrailsCompileStatic
 @EqualsAndHashCode(includes = "name")
 @ToString(includes = 'name', includeNames = true, includePackage = false)
 class TaskDef {

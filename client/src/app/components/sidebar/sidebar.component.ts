@@ -10,13 +10,21 @@ let misc: any = {
 
 let formsMenu: any = {
   path: '/forms/data',
-  title: 'Forms',
+  title: 'Data',
   type: 'sub',
   icontype: 'ni-single-copy-04 text-pink',
   isCollapsed: true,
   children: []
 }
-console.log(formsMenu);
+
+let formSettingsMenu: any = {
+  path: 'formSettings/form',
+  title: 'Form Settings',
+  type: 'sub',
+  isCollapsed: true,
+  children: []
+}
+console.log(formSettingsMenu);
 
 export interface RouteInfo {
   path: string;
@@ -82,14 +90,13 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
   {
-    path: '/widgets',
+    path: '/',
     title: 'Settings',
     type: 'sub',
     icontype: 'ni-settings text-primary',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Form Setting', type: 'link'},
-      {path: 'alternative', title: 'Scheduled Tasks', type: 'link'}
+      formSettingsMenu
     ]
   },
   {
@@ -125,10 +132,16 @@ export class SidebarComponent implements OnInit {
     this.formService.getForms().subscribe(data => {
       for (let form of data) {
         let formObject = {};
+        let formSettingObject = {};
         formObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
         formObject['path'] = form.name.toString();
         formObject['type'] = 'link';
         formsMenu.children.push(formObject);
+
+        formSettingObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+        formSettingObject['path'] = form.name.toString();
+        formSettingObject['type'] = 'link';
+        formSettingsMenu.children.push(formSettingObject);
       }
     }, error => console.log(error));
   }
