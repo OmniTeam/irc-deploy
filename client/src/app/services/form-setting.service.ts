@@ -14,7 +14,7 @@ export class FormSettingService {
     return this.http.get(`${environment.serverUrl}/formSetting`, { params });
   }
 
-  updateDisplayName(id, formData): Observable<any> {
+  updateFormSettings(id, formData): Observable<any> {
     return this.http.put(`${environment.serverUrl}/formSetting/${id}`, formData);
   }
 }

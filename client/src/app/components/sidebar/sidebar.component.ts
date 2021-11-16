@@ -24,7 +24,6 @@ let formSettingsMenu: any = {
   isCollapsed: true,
   children: []
 }
-console.log(formSettingsMenu);
 
 export interface RouteInfo {
   path: string;
@@ -62,12 +61,6 @@ export const ROUTES: RouteInfo[] = [
   },
   formsMenu,
   {
-    path: '/project',
-    title: 'Project',
-    type: 'link',
-    icontype: 'ni-chart-bar-32 text-info',
-  },
-  {
     path: '/widgets',
     title: 'Reports',
     type: 'sub',
@@ -96,7 +89,9 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-settings text-primary',
     isCollapsed: true,
     children: [
-      formSettingsMenu
+      {path: 'forms', title: 'Forms', type: 'link'},
+      formSettingsMenu,
+      {path: 'project', title: 'Project', type: 'link'},
     ]
   },
   {
@@ -129,7 +124,7 @@ export class SidebarComponent implements OnInit {
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
-    this.formService.getForms().subscribe(data => {
+    this.formService.getEnabledForms().subscribe(data => {
       for (let form of data) {
         let formObject = {};
         let formSettingObject = {};

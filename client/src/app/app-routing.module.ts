@@ -31,6 +31,10 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
       },
       {
+        path: 'forms', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
+      },
+      {
         path: 'forms/data/:formtable', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/form-data/form-data.module').then(m => m.FormDataModule)
       },

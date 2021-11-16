@@ -67,18 +67,24 @@ class CentralDataImportJob extends Script {
 
 
     static def syncFormSetting(study, def form, token) {
-        def tableName = deriveCentralFormName(form)
-        def odkTableName = new OdkTable(name: tableName)
+        def studyCentralId = study.centralId as String
+        def formCentralId = form['xmlFormId'] as String
         def postFix = deriveCentralFormPostFix(form['name'].toString())
+        def slurper = new OdkOdataSlurper(getCentralRestClient(), token)
+                .projectId(studyCentralId)
+                .formId(formCentralId)
+        OdkFormSource formSource = slurper.mapToModel()
+        def tableName = formSource.mainTable.name as String
+        def odkTableName = new OdkTable(name: tableName)
         def finalTableName = SqlSchemaGen.createTableName(odkTableName, postFix)
-        log.info("  -> Derived table for form [$study.name -> $form.xmlFormId] = [[$finalTableName]]")
+        log.info("  -> Derived table for form [$study.name -> $formCentralId] = [[$finalTableName]]")
 
         def misForm = Form.findByName(finalTableName) ?: new Form(name: finalTableName, study: study,
-                centralId: form.xmlFormId, displayName: form.name)
+                centralId: formCentralId, displayName: form.name)
         misForm.save(failOnError: true, flush: true)
         log.info("  -> Done Saving form[$form]")
 
-        def versions = withCentral { getFormVersions(study.centralId, form.xmlFormId, token) }
+        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
         for (version in versions) {
             log.info(version)
             importVersion(study, misForm, '___', token)
@@ -200,10 +206,6 @@ class CentralDataImportJob extends Script {
             return null
         }
         formVersionXml
-    }
-
-    static String deriveCentralFormName(def form) {
-        return "_${form.xmlFormId}".toLowerCase()
     }
 
     static String deriveCentralFormPostFix(String name) {
