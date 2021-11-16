@@ -71,9 +71,7 @@ export class FormSettingComponent implements OnInit {
     this.rows = [...this.rows];
     let settingId = this.rows[rowIndex]['id'];
     this.formData = this.rows[rowIndex];
-    console.log(settingId);
-    console.log(this.formData);
-    this.formSettingService.updateDisplayName(settingId, this.formData).subscribe((data) => {
+    this.formSettingService.updateFormSettings(settingId, this.formData).subscribe((data) => {
       console.log(data);
     }, error => console.log(error));
   }

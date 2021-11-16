@@ -39,10 +39,6 @@ export class ProjectComponent implements OnInit {
     this.activeRow = event.row;
   }
 
-  newProject(){
-    this.router.navigate(['project/create']);
-  }
-
   ngOnInit() {
     this.projectService.getMisProjects().subscribe(data => {
       this.rows = data;

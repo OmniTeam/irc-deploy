@@ -10,7 +10,7 @@ class UrlMappings {
         put "/$controller/$id(.$format)?"(action:"update")
         patch "/$controller/$id(.$format)?"(action:"patch")
         get "/$controller/central_projects(.$format)?"(action:"create")
-        get "/$controller/data(.$format)?"(action:"getFormData")
+        get "/$controller/enabled_forms(.$format)?"(action:"enabledForms")
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
