@@ -52,6 +52,7 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 grails.gorm.failOnError = false
+server.port = 8090
 
 
 grails.gorm.default.mapping = {
@@ -70,9 +71,6 @@ environments {
         uploadDocsFolder = "D:/uploads/"
     }
     production {
-        uploadFolder = "/appdata/ultima/uploads/ug/"
-        uploadDocsFolder = "/appdata/ultima/uploads/ug/documents/"
-
-
+        uploadFolder = "/opt/uploads/"
     }
 }
