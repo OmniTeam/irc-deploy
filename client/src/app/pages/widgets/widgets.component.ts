@@ -6,7 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: "app-widgets",
-  templateUrl: "widgets.component.html"
+  templateUrl: "./widgets.component.html"
 })
 export class WidgetsComponent implements OnInit, AfterViewInit {
 

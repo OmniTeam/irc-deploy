@@ -15,6 +15,7 @@ import com.omnitech.odkodata2sql.model.OdkTable
 import groovy.json.JsonOutput
 import groovy.util.logging.Log4j
 import groovy.xml.XmlUtil
+import org.apache.commons.validator.FormSet
 import org.openxdata.markup.Converter
 import org.openxdata.markup.IFormElement
 import org.openxdata.markup.ISelectionQuestion
@@ -22,6 +23,8 @@ import org.openxdata.markup.MultiSelectQuestion
 import org.openxdata.markup.RepeatQuestion
 import org.openxdata.markup.XformType
 import org.openxdata.markup.Form as markUpForm
+
+import javax.transaction.Transactional
 
 import static com.kengamis.RestHelper.*
 
@@ -66,7 +69,7 @@ class CentralDataImportJob extends Script {
     }
 
 
-    static def syncFormSetting(study, def form, token) {
+    static def syncFormSetting(Study study, Form form, def token) {
         def studyCentralId = study.centralId as String
         def formCentralId = form['xmlFormId'] as String
         def postFix = deriveCentralFormPostFix(form['name'].toString())
@@ -81,19 +84,19 @@ class CentralDataImportJob extends Script {
 
         def misForm = Form.findByName(finalTableName) ?: new Form(name: finalTableName, study: study,
                 centralId: formCentralId, displayName: form.name)
-        misForm.save(failOnError: true, flush: true)
+        Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
         log.info("  -> Done Saving form[$form]")
 
-        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
-        for (version in versions) {
-            log.info(version)
-            importVersion(study, misForm, '___', token)
-        }
-
+//        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
+//        for (version in versions) {
+//            log.info(version)
+//            importVersion(study, misForm, '___', token)
+//        }
+        importVersion(study, misForm, '___', token)
         log.info("  -> Done Importing form[$form] Settings...")
     }
 
-    static def syncFormData(Study study, def form, token) {
+    static def syncFormData(Study study, def form, def token) {
         log.info("======= Syncing Form Data [$study.name -> $form.name] ========================")
         def studyCentralId = study.centralId as String
         def formCentralId = form['xmlFormId'] as String
@@ -186,8 +189,9 @@ class CentralDataImportJob extends Script {
             }
 
             formSetting.form = misForm
-            if (!misForm.formSettings.any { it.field == formSetting.field }) {
-                formSetting.save(failOnError: true, flush: true)
+            def settingAlreadyExist = misForm.hasFormSetting(misForm, formSetting.field)
+            if (!settingAlreadyExist) {
+                FormSetting.withNewTransaction { formSetting.save(failOnError: true, flush: true) }
             }
 
             if (qn instanceof ISelectionQuestion) {
@@ -221,7 +225,7 @@ class CentralDataImportJob extends Script {
         choiceOptions.each { choice ->
             choice.formSetting = formSetting
             if (!formSetting.choiceOptions.any { it.choiceId == choice.choiceId }) {
-                choice.save(failOnError: true, flush: true)
+               ChoiceOption.withNewTransaction {  choice.save(failOnError: true, flush: true) }
             }
         }
     }

@@ -26,4 +26,12 @@ class DataService {
         }
         return formDataList
     }
+
+    static List<Form> listAllUserForms(User user) {
+        if (user.hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) {
+            return findAll()
+        }
+        def forms = UserForm.findAllByUser(user).form
+        return forms
+    }
 }
