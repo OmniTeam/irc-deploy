@@ -69,7 +69,7 @@ class CentralDataImportJob extends Script {
     }
 
 
-    static def syncFormSetting(Study study, Form form, def token) {
+    static def syncFormSetting(Study study, def form, def token) {
         def studyCentralId = study.centralId as String
         def formCentralId = form['xmlFormId'] as String
         def postFix = deriveCentralFormPostFix(form['name'].toString())
