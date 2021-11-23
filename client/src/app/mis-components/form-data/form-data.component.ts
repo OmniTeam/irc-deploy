@@ -107,11 +107,8 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     this.formService.getFormData(params).subscribe((data) => {
       console.log(data);
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
-      console.log(this.formName);
       this.rows = data.resultList;
-      console.log(this.rows);
       this.columns = this.columnMappings(data.headerList);
-      console.log(this.columns);
     }, error => console.log(error));
   }
 

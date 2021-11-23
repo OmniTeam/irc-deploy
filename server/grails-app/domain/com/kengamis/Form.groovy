@@ -42,16 +42,17 @@ class Form {
         }
     }
 
-    FormSetting findFormSetting(String questionId) {
-        formSettings.find { it.field == questionId }
-    }
+    boolean hasFormSetting(Form form, String field) {
+        if (id == null)
+            return false
 
-    static List<Form> listAllUserForms(User user) {
-        if (user.hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) {
-            return findAll()
+        def settings = FormSetting.findByFormAndField(form, field)
+
+        if (settings) {
+            return true
+        } else {
+            return false
         }
-        def forms = UserForm.findAllByUser(user).form
-        return forms
     }
 
     String getRepeatTablePrefix() {
@@ -61,15 +62,7 @@ class Form {
         return "${name}_"
     }
 
-
     String resolveGroupTableName(String repeatQnField) {
         return "$repeatTablePrefix$repeatQnField"
-    }
-
-    Form addFormSettingIfAbsent(FormSetting setting) {
-        if (!formSettings.any { it.field == setting.field }) {
-            addToFormSettings(setting)
-        }
-        return this
     }
 }
