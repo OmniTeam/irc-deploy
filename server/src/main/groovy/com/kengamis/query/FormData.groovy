@@ -42,7 +42,7 @@ class FormData {
 
     FormData load() {
         record = jooq.selectFrom(table(tableName))
-                .where(field('id').eq(id))
+                .where(field('__id').eq(id))
                 .fetchOneMap()
         return this
     }
@@ -51,7 +51,7 @@ class FormData {
         record = jooq.selectFrom(table(tableName))
                 .where(field('unique_id').eq(uniqueId))
                 .fetchOneMap()
-        this.setId(record.get('Id'))
+        this.setId(record.get('__id'))
         return this
     }
 
@@ -98,7 +98,7 @@ class FormData {
         } else {
             value = jooq.select(field(fieldName))
                     .from(table(form.name))
-                    .where(field('Id').eq(id))
+                    .where(field('__id').eq(id))
                     .fetchOne()
                     .value1()
         }
@@ -113,7 +113,7 @@ class FormData {
     void updateField(String fieldName, def value) {
         jooq.update(table(form.name))
                 .set(field(fieldName), value)
-                .where(field('Id').eq(id))
+                .where(field('__id').eq(id))
                 .execute()
     }
 

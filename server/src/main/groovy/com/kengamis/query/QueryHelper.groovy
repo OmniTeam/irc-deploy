@@ -23,6 +23,7 @@ class QueryHelper {
     public static final String IGNORE_FILTER = '_NONE_'
     Map params
     List<FormSetting> headers
+    List<FormSetting> formQuestions
     User currentUser
     String userBaseTable
     String dbPrefix
@@ -59,6 +60,7 @@ class QueryHelper {
         if (Config.LOAD_FORM_LABELS in config) {
             def form = getForm()
             headers = FormSetting.findAllByFormAndViewInTable(form, true, [sort: "orderOfDisplayInTable"])
+            formQuestions = FormSetting.findAllByForm(form)
             initBaseTable()
         }
         this.currentUser = currentUser
