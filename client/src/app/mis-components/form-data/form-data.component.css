@@ -94,8 +94,27 @@
 }
 
 #form-data-bar-chart.dc-chart {
-  float: none !important;;
-  text-align: center !important;;
-  /*font-size: 12px;*/
-  /*font-weight: 500;*/
+  float: none !important;
+  text-align: center !important;
+}
+
+#map .leaflet-popup-content-wrapper {
+  background:#2c3e50 !important;
+  color:#fff !important;
+  font-size:16px !important;
+  line-height:24px !important;
+}
+#map .leaflet-popup-tip-container {
+  width:30px !important;
+  height:15px !important;
+}
+#map  .leaflet-popup-content{
+  width: 450px !important;
+}
+#map  .leaflet-popup-tip {
+  background-color:#2c3e50 !important;
+}
+
+#map tr:nth-child(even) {
+  background-color: #dddddd !important;
 }

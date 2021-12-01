@@ -13,6 +13,21 @@ import * as d3Tip from 'd3-tip';
 import * as L from 'leaflet';
 import * as $ from 'jquery';
 
+const iconRetinaUrl = '../../../assets/leaflet/marker-icon-2x.png';
+const iconUrl = '../../../assets/leaflet/marker-icon.png';
+const shadowUrl = '../../../assets/leaflet/marker-shadow.png';
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
+L.Marker.prototype.options.icon = iconDefault;
+
 @Component({
   selector: 'app-form-data',
   templateUrl: './form-data.component.html',
@@ -60,6 +75,9 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   ];
   selectedUserGroup: any;
   selectedUser: any;
+  numberOfRecords: any;
+  numberOfQuestions: any;
+  coordinates: any[] = [];
   private map;
 
   constructor(private route: ActivatedRoute,
@@ -105,10 +123,20 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', `${formtable}`);
 
     this.formService.getFormData(params).subscribe((data) => {
-      console.log(data);
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
+      this.numberOfRecords = data.resultListCount;
+      this.numberOfQuestions = data.numberOfQuestions;
+      if (data['gpsCoordinates'].length === 0) {
+        document.getElementById("map_div").style.display = "none";
+      } else {
+        document.getElementById("map_div").style.display = "block";
+        this.coordinates = data['gpsCoordinates'];
+        if (this.coordinates.length > 0) {
+          this.makeMarkers(this.map, this.coordinates, formtable);
+        }
+      }
     }, error => console.log(error));
   }
 
@@ -270,7 +298,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     const userBarTip = d3Tip.default()
       .attr('class', 'd3-tip')
       .offset([-10, 0])
-      .html((d) =>  {
+      .html((d) => {
         return '<div style=" background: #03A9F4; border-radius: 8px; padding: 12px; font-weight: bold; color: cornsilk;"><span> User : ' + d.target.__data__.x + '</span> <br /> <span> Number of Records :  ' + d.target.__data__.y + '</span></div>';
       });
     const timeTip = d3Tip.default()
@@ -295,18 +323,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     dc.renderAll();
   }
 
-  getUniqueColumnsFromArray(array) {
-    const uniqueKeys = [];
-    for (let i = 0, l = array.length; i < l; i++) {
-      for (let x = 0, p = Object.keys(array[i]).length; x < p; x++) {
-        if (uniqueKeys.indexOf(Object.keys(array[i])[x]) === -1) {
-          uniqueKeys.push((Object.keys(array[i])[x]));
-        }
-      }
-    }
-    return uniqueKeys;
-  }
-
   columnMappings(array) {
     const columns = [];
     for (const column of array) {
@@ -316,13 +332,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       columns.push(columnProperties);
     }
     return columns;
-  }
-
-  titleCaseWord(word: string) {
-    if (!word) {
-      return word;
-    }
-    return word[0].toUpperCase() + word.substr(1);
   }
 
   viewRecord(modalDom, valObj: any) {
@@ -360,4 +369,38 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     };
   }
 
+  makeMarkers(map: L.map, coordinates: any, formtable: any): void {
+    for (const c of coordinates) {
+      const lon = parseFloat(c.point[0]);
+      const lat = parseFloat(c.point[1]);
+      const marker = L.marker([lat, lon]);
+      marker.bindPopup('Loading....');
+      marker.on('click', (e) => {
+        let popup = e.target.getPopup();
+        this.makePopUp(c['__id'], formtable, popup);
+      });
+      marker.addTo(map);
+    }
+  }
+
+  makePopUp(id: any, formtable: any, popup: any): void {
+    const params = new HttpParams()
+      .set('id', `${id}`)
+      .set('formtable', `${formtable}`);
+
+    this.formService.getPointDetails(params).subscribe((data) => {
+      if (Object.keys(data).length > 0) {
+        let pointDetails = data;
+        let html = "<table style='border-collapse: collapse; text-align: center !important; width: 100%;'>";
+        for (const [k, v] of Object.entries(pointDetails)) {
+          let value = (v === null) ? 'None' : v.toString();
+          html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + k.replace(/_/g, " ")
+            + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + value.replace(/_/g, " ") + "</td> </tr>";
+        }
+        html = html + "</table>";
+        popup.setContent(html);
+        popup.update();
+      }
+    }, error => console.log(error));
+  }
 }

@@ -5,6 +5,7 @@ import com.kengamis.query.QueryHelper
 import com.omnitech.oxd.jooq.tables.records.FormDataRecord
 import grails.gorm.transactions.Transactional
 import org.jooq.DSLContext
+import org.openxdata.markup.XformType
 
 import static com.kengamis.Form.*
 
@@ -27,11 +28,14 @@ class DataService {
         return formDataList
     }
 
-    static List<Form> listAllUserForms(User user) {
-        if (user.hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) {
-            return findAll()
+    def getGPSColumn(def formTable) {
+        def form = Form.findByName(formTable)
+        def formSetting = FormSetting.findByFormAndXformType(form, XformType.GPS.value)
+        if (formSetting) {
+            return formSetting.field
         }
-        def forms = UserForm.findAllByUser(user).form
-        return forms
+        else {
+            return ""
+        }
     }
 }
