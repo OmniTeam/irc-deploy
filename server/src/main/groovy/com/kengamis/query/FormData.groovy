@@ -57,7 +57,10 @@ class FormData {
 
     FormData lazyLoad() {
         def headers = FormSetting.findAllByFormAndViewInTable(form, true, [sort: "orderOfDisplayInTable"])
+        def groups = hasGroups(headers)
+        def otherHeaders = groups ? ["$tableName['__id'] as parentId"] : ['__id', 'submitterName', 'submissionDate']
         def selectFields = headers.collect { field(it.field) }
+        otherHeaders.each { selectFields << field(it) }
         record = jooq.select(selectFields)
                 .from(table(tableName))
                 .where(field('__id').eq(id))
@@ -166,6 +169,9 @@ class FormData {
         return Collections.EMPTY_LIST
     }
 
+    boolean hasGroups(def headers) {
+        return headers.any { it.parentFormSetting?.xformType in [XformType.GROUP.value, XformType.REPEAT.value] }
+    }
 }
 
 

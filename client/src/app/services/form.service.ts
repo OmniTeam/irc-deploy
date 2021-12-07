@@ -24,6 +24,10 @@ export class FormService {
     return this.http.get(`${environment.serverUrl}/data`, {params});
   }
 
+  getFormDataRecord(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/data/get_form_data_record`, {params});
+  }
+
   getPointDetails(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/data/get_point_details`, {params});
   }

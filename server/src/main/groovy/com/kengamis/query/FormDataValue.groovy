@@ -33,7 +33,7 @@ class FormDataValue {
     String getHumanReadableValue() {
         def finalValue
         if (formSetting.xformType in SELECT_TYPES) {
-            finalValue = getOptions()*.textValue.join(',')
+            finalValue = getOptions()*.textValue.join(', ')
             if (!finalValue) {
                 finalValue = Util.tryOxdUnEscape(value)
             }
@@ -43,6 +43,11 @@ class FormDataValue {
             finalValue = value
         }
         return finalValue
+    }
+
+    String getLabel() {
+        formSetting.questionText
+
     }
 
 
@@ -68,12 +73,9 @@ class FormDataValue {
 
     }
 
-    private final static META_COLUMN_NAMES = ['Id',
-                                              'openxdata_form_data_id',
-                                              'openxdata_user_id',
-                                              'openxdata_user_name',
-                                              'openxdata_form_data_date_created',
-                                              'parentId']*.toLowerCase()
+    private final static META_COLUMN_NAMES = ['__id',
+                                              'submitterName',
+                                              'submissionDate']*.toLowerCase()
 
     boolean isMetaColumn() {
         return META_COLUMN_NAMES.contains(field.toLowerCase())

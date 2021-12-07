@@ -1,6 +1,5 @@
 package com.kengamis
 
-import groovy.transform.CompileStatic
 import org.grails.exceptions.reporting.DefaultStackTraceFilterer
 import org.owasp.esapi.ESAPI
 import org.owasp.esapi.codecs.MySQLCodec
@@ -73,18 +72,15 @@ class Util {
         return s
     }
 
-    @CompileStatic
     static String escapeField(String field) {
         if (field.contains('`')) throw new IllegalArgumentException("Illegal table name [$field]")
         return "`$field`"
     }
 
-    @CompileStatic
     static String removeExtraSpace(String string) {
         string.toString().replaceAll(/\s+/, ' ').trim()
     }
 
-    @CompileStatic
     static Long extractId(Map params) {
         extractId(params, 'id')
     }
@@ -95,7 +91,6 @@ class Util {
 
     }
 
-    @CompileStatic
     static Long extractId(Map params, String idField) {
         Long id = -1
         try {
@@ -105,7 +100,6 @@ class Util {
         return id
     }
 
-    @CompileStatic
     static String escapeSql(String sqlParam) {
         def mySqlEncoder = new MySQLCodec(MySQLCodec.Mode.STANDARD)
         def encoded = ESAPI.encoder().encodeForSQL(mySqlEncoder, sqlParam)
@@ -113,7 +107,6 @@ class Util {
         return encoded
     }
 
-    @CompileStatic
     static <K, V> V getOrCreate(Map<K, V> map, K k, V defaultValue) {
         def value = map[k]
 

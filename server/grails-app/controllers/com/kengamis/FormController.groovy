@@ -19,7 +19,6 @@ class FormController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 100, 100)
         params.order = 'asc'
         params.sort = "displayName"
         respond formService.list(params), model:[formCount: formService.count()]
