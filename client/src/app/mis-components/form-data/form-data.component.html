@@ -21,7 +21,9 @@
                   <div class=" col-md-8 col-sm-8">
                     <div class=" row">
                       <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
-                        <input class="form-control datepicker" id="from_date" placeholder="Select date" name="from_date"
+                        <input class="form-control datepicker" [(ngModel)]="dateFrom"
+                               (ngModelChange)="dateFromFilter($event)" id="from_date" placeholder="Select date"
+                               name="from_date"
                                type="date"/>
                       </div>
                     </div>
@@ -36,7 +38,9 @@
                   <div class=" col-md-8 col-sm-8">
                     <div class=" row">
                       <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
-                        <input class="form-control datepicker" id="to_date" placeholder="Select date" name="from_date"
+                        <input class="form-control datepicker" [(ngModel)]="dateTo"
+                               (ngModelChange)="dateToFilter($event)" id="to_date" placeholder="Select date"
+                               name="from_date"
                                type="date"/>
                       </div>
                     </div>
@@ -63,7 +67,7 @@
 
               <div class=" col-sm-4 col-md-4">
                 <div class=" form-group row">
-                  <label class=" col-md-4 col-sm-4 col-form-label" style="font-size: 14px;"> Select User:  </label>
+                  <label class=" col-md-4 col-sm-4 col-form-label" style="font-size: 14px;"> Select User: </label>
                   <div class=" col-md-8 col-sm-8">
                     <div class=" row">
                       <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
@@ -107,6 +111,8 @@
                           type="search"
                           class="form-control form-control-sm"
                           placeholder="Search"
+                          (search)="onSearchFormData($event)"
+                          [(ngModel)]="searchValue"
                         />
                       </div>
                     </div>
@@ -278,11 +284,17 @@
                 <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Actions" sortable="false" prop="id" [width]="100">
+            <ngx-datatable-column name="Actions" sortable="false" prop="__id" [width]="100">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button (click)="viewRecord(formDataModal, row)" class="btn btn-default" style="padding: 1px 6px;">
+                <button (click)="viewRecord(formDataModal, value)" class="btn btn-default" style="padding: 1px 6px;">
                   <i class="fa fa-eye"></i>
                 </button>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="User" prop="submitterName"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Submitted" prop="submissionDate">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ value | date: 'yyyy-MM-dd h:mm a' }}
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name}}" prop="{{col.prop}}">
@@ -345,17 +357,34 @@
 </div>
 <ng-template #formDataModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Angular Bootstrap Modal Popup</h4>
+    <h4 class="modal-title w-100 text-center" id="modal-basic-title">{{ formName }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
   </div>
-  <div class="modal-body">
-    <p><strong>Are you sure you want to delete <span class="text-primary">"Agatha Harkness"</span> profile?</strong>
-    </p>
-
-    <p>All data related to west view profile will be removed permanently.
-    </p>
+  <div class="modal-body row" id="form-data-display" style="border: 1px solid #e9ecef;">
+    <div class="col-md-12">
+      <div class="row" *ngFor="let record of formDataRecord" style="border-bottom: 1px solid #e9ecef; padding: 15px !important; font-size: 0.9rem !important;">
+        <div class="col-md-6">
+          <span> {{ record.question }} </span>
+        </div>
+        <div class="col-md-6">
+          <span> {{ record.value }} </span>
+        </div>
+      </div>
+    </div>
+    <div class=" col-sm-12 col-md-12" id="inner_map_div">
+      <fieldset class="hm-fieldset">
+        <legend class="hm-legend">MAP</legend>
+        <div class=" col-sm-12 col-md-12 fieldset-body">
+          <div class="map-container">
+            <div class="map-frame">
+              <div id="inner_map"></div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>

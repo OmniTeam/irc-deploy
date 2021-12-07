@@ -118,3 +118,7 @@
 #map tr:nth-child(even) {
   background-color: #dddddd !important;
 }
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef !important;
+}

@@ -12,6 +12,7 @@ class UrlMappings {
         get "/$controller/central_projects(.$format)?"(action:"create")
         get "/$controller/enabled_forms(.$format)?"(action:"enabledForms")
         get "/$controller/get_point_details(.$format)?"(action:"getPointDetails")
+        get "/$controller/get_form_data_record(.$format)?"(action:"getFormDataRecord")
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')

@@ -11,7 +11,6 @@ import * as dc from 'dc';
 import * as crossfilter from 'crossfilter2/crossfilter';
 import * as d3Tip from 'd3-tip';
 import * as L from 'leaflet';
-import * as $ from 'jquery';
 
 const iconRetinaUrl = '../../../assets/leaflet/marker-icon-2x.png';
 const iconUrl = '../../../assets/leaflet/marker-icon.png';
@@ -78,7 +77,12 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   numberOfRecords: any;
   numberOfQuestions: any;
   coordinates: any[] = [];
+  formtable = '';
+  dateFrom = '';
+  dateTo = '';
+  searchValue = '';
   private map;
+  formDataRecord: any;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -114,13 +118,17 @@ export class FormDataComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.getFormData(params.formtable);
+      this.formtable = params.formtable;
+      this.getFormData();
     });
   }
 
-  getFormData(formtable: String) {
+  getFormData() {
     const params = new HttpParams()
-      .set('formtable', `${formtable}`);
+      .set('formtable', this.formtable)
+      .set('dateFrom', this.dateFrom)
+      .set('dateTo', this.dateTo)
+      .set('search', this.searchValue);
 
     this.formService.getFormData(params).subscribe((data) => {
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
@@ -134,7 +142,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
         document.getElementById("map_div").style.display = "block";
         this.coordinates = data['gpsCoordinates'];
         if (this.coordinates.length > 0) {
-          this.makeMarkers(this.map, this.coordinates, formtable);
+          this.makeMarkers(this.map, this.coordinates, this.formtable);
         }
       }
     }, error => console.log(error));
@@ -198,8 +206,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     const InitialBrush = [startDate, endDate];
 
     user_bar_chart
-      .width(barWidth)
-      .height(250)
       .dimension(user_dim)
       .group(count_per_user)
       .margins({top: 10, right: 0, bottom: 40, left: 50})
@@ -334,13 +340,24 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     return columns;
   }
 
-  viewRecord(modalDom, valObj: any) {
-    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  viewRecord(modalDom, id: any) {
+    const params = new HttpParams()
+      .set('formtable', this.formtable)
+      .set('id', id);
+    this.formService.getFormDataRecord(params).subscribe((data) => {
+      if (data !== null) {
+        document.getElementById("form-data-display").style.display = "block";
+        this.formDataRecord = data;
+      }
+      else {
+        document.getElementById("form-data-display").style.display = "none";
+        this.formDataRecord = [];
+      }
+    }, error => console.log(error));
+    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'xl'}).result.then((result) => {
       this.closeModal = `Closed with: ${result}`;
-      console.log(this.closeModal);
     }, (reason) => {
       this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log(this.closeModal);
     });
   }
 
@@ -402,5 +419,38 @@ export class FormDataComponent implements OnInit, AfterViewInit {
         popup.update();
       }
     }, error => console.log(error));
+  }
+
+  dateFromFilter(value): void {
+    if (!value)
+      this.dateFrom = ''
+    else {
+      this.dateFrom = value;
+    }
+    this.dateTo = new Date().toISOString().split('T')[0];
+    this.getFormData();
+  }
+
+  dateToFilter(value): void {
+    if (!value)
+      this.dateTo = ''
+    else {
+      this.dateTo = value;
+    }
+    let todayDate = new Date().toISOString().slice(0, 10);
+    let d = new Date(todayDate);
+    d.setMonth(d.getMonth() - 3);
+    this.dateFrom = d.toISOString().slice(0, 10);
+    this.getFormData();
+  }
+
+  onSearchFormData(event: any): void {
+    let value = event.target.value;
+    if (!value) {
+      this.searchValue = '';
+    } else {
+      this.searchValue = value;
+    }
+    this.getFormData();
   }
 }

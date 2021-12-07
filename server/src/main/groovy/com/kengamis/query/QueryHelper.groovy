@@ -195,7 +195,7 @@ class QueryHelper {
         if (headers && params.search) {
             String wildCard = getSqlWildCard(params.search as String)
             if (wildCard) {
-                def usernames = withMisSql { rows("SELECT username from user where names LIKE '${wildCard}' ".toString()) }
+                def usernames = withMisSql { rows("SELECT username from user where username LIKE '${wildCard}' ".toString()) }
                 if (usernames) {
                     def searchExpr = queryFields().collect { "${resolveFieldName it} LIKE '${wildCard}'" }.join(' or ')
                     return "($searchExpr or submitterName in (${usernames.collect { "'${escapeSql it['username'] as String}'" }.join(',')}))"
@@ -205,8 +205,6 @@ class QueryHelper {
                     return "($searchExpr)"
                 }
             }
-
-
         }
         return null
     }
@@ -230,7 +228,7 @@ class QueryHelper {
     }
 
     private String getDateRangeFilterExpr() {
-        if (params.dateFrom && params.dateTo) {
+        if (params.dateFrom != '' && params.dateTo != '') {
             if (userBaseTable)
                 return "(${escapeField userBaseTable}.submissionDate BETWEEN '${escapeSql params.dateFrom}' AND '${escapeSql params.dateTo}')"
             else
@@ -291,7 +289,7 @@ class QueryHelper {
     //todo  do not add fields whose columns do not exist
     List<String> queryFields() {
         def groups = hasGroups()
-        def rt = groups ? ["`$formTable`.`__id` as `parentId`"] : ['`__id`', '`submitterName`']
+        def rt = groups ? ["`$formTable`.`__id` as `parentId`"] : ['`__id`', '`submitterName`', '`submissionDate`']
         if(useDbPrefix()){
             rt = rt.collect {addDbPrefixToField(it)}
         }
