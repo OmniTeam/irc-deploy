@@ -43,6 +43,10 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
       },
       {
+        path: 'entities', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
+      },
+      {
         path: 'dashboards',
         loadChildren: './pages/dashboards/dashboards.module#DashboardsModule',
         canActivate: [AuthGuard]

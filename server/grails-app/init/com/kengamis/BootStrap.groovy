@@ -28,17 +28,26 @@ class BootStrap {
     }
     @Transactional
     def initData() {
+        //Initial Study
+        def study = Study.findByCentralId('4') ?: new Study(name: 'SNV TIDE II', centralId: '4')
+        study.save(failOnError: true, flush: true)
+
+        // Initial User and Roles
         def superAdminRole = Role.findByAuthority('ROLE_SUPER_ADMIN') ?: new Role(authority: 'ROLE_SUPER_ADMIN')
         superAdminRole.save(failOnError: true, flush: true)
         def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
         adminRole.save(failOnError: true, flush: true)
 
         def superAdminUser = User.findByUsername('super') ?: new User(
+                names: "Super User",
+                email: "super@gmail.com",
                 username: 'super',
                 password: 'pass',
                 enabled: true).save(failOnError: true)
 
         def adminUser = User.findByUsername('root') ?: new User(
+                names: "Root User",
+                email: "root@gmail.com",
                 username: 'root',
                 password: 'pass',
                 enabled: true).save(failOnError: true)

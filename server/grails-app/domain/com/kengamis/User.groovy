@@ -11,6 +11,8 @@ class User {
     transient springSecurityService
 
     String id
+    String names
+    String email
     String username
     String password
     boolean enabled = true
