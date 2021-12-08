@@ -92,6 +92,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'forms', title: 'Forms', type: 'link'},
       formSettingsMenu,
       {path: 'project', title: 'Project', type: 'link'},
+      {path: 'entities', title: 'Entities', type: 'link'},
     ]
   },
   {
