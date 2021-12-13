@@ -47,6 +47,10 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
       {
+        path: 'createentities', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
+      },
+      {
         path: 'dashboards',
         loadChildren: './pages/dashboards/dashboards.module#DashboardsModule',
         canActivate: [AuthGuard]

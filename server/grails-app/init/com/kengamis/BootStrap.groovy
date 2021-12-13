@@ -29,7 +29,7 @@ class BootStrap {
     @Transactional
     def initData() {
         //Initial Study
-        def study = Study.findByCentralId('4') ?: new Study(name: 'SNV TIDE II', centralId: '4')
+        def study = Study.findByCentralId('8') ?: new Study(name: 'CRVPF', centralId: '8')
         study.save(failOnError: true, flush: true)
 
         // Initial User and Roles
