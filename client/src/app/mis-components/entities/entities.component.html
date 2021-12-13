@@ -50,6 +50,14 @@
             </div>
           </div>
 
+          <div class="row" style="padding: 11px;">
+            <div class="col-lg-12 col-5 text-right">
+              <a class=" btn btn-default" (click)="linkToForm()" style="color: white" *ngIf="enableLinkToForm == true"> Link to Form </a>
+              <a class=" btn btn-default" (click)="createNewView()" style="color: white" *ngIf="enableAddNewView == true"> Add new View </a>
+              <a class=" btn btn-default" (click)="createNewEntity()" style="color: white"> Add Entity </a>
+            </div>
+          </div>
+
           <ngx-datatable
             class="bootstrap selection-cell"
             [columnMode]="'force'"
@@ -61,7 +69,12 @@
             (activate)="onActivate($event)"
           >
             <ngx-datatable-column name="Entity Name" prop="name"></ngx-datatable-column>
-            <ngx-datatable-column name="Date Created" prop="dateCreated"></ngx-datatable-column>
+            <ngx-datatable-column name="Database Name" prop="tableName"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Created" prop="dateCreated">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{ value | date: 'shortDate' }}
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Entity Views" prop="entityViews"></ngx-datatable-column>
             <ngx-datatable-column name="Linked Forms" prop="linkedForms"></ngx-datatable-column>
             <ngx-datatable-column name="Action"></ngx-datatable-column>
