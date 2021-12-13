@@ -93,6 +93,7 @@ export const ROUTES: RouteInfo[] = [
       formSettingsMenu,
       {path: 'project', title: 'Project', type: 'link'},
       {path: 'entities', title: 'Entities', type: 'link'},
+      {path: 'tasklist', title: 'TaskList', type: 'link'},
     ]
   },
   {
