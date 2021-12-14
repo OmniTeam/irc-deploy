@@ -20,7 +20,7 @@
 <!--    <changeSet author="vkakama@gmail.com" id="add_normal_user_role">-->
 <!--        <sql>-->
 <!--            INSERT INTO role (id, authority, date_created, last_updated)-->
-<!--            VALUES ('c69e0c581f384d81912cf58310818f6a', 'ROLE_USER', now(), now());-->
+<!--            VALUES ('c', 'ROLE_USER', now(), now());-->
 <!--        </sql>-->
 <!--    </changeSet>-->
 
