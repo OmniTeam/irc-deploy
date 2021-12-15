@@ -1,5 +1,6 @@
 package com.kengamis
 
+import com.kengamis.query.EntityQueryHelper
 import grails.validation.ValidationException
 import groovy.util.logging.Log4j
 
@@ -18,6 +19,7 @@ import grails.gorm.transactions.Transactional
 class MisEntityController {
 
     MisEntityService misEntityService
+    def springSecurityService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -90,7 +92,7 @@ class MisEntityController {
 
     def createEntityTable(MisEntity misEntity) {
         try {
-            def query = "CREATE TABLE IF NOT EXISTS ${escapeField misEntity.tableName}( uid varchar(255) primary key,submitterName varchar(255), date_created datetime, unique_id varchar(255)"
+            def query = "CREATE TABLE IF NOT EXISTS ${escapeField misEntity.tableName}( id varchar(255) primary key,submitterName varchar(255), date_created datetime, unique_id varchar(255)"
             def defaultFields = ['uid', 'submitterName', 'date_created', 'unique_id']
             misEntity.entityFields.eachWithIndex { entry, idx ->
                 if (!defaultFields.contains(entry.fieldName)) {
@@ -107,5 +109,26 @@ class MisEntityController {
         catch (Exception ex) {
             ex.printStackTrace()
         }
+    }
+
+    def getEntityData() {
+        def entityData = []
+        try {
+            def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
+            entityData = [headerList: q.headers, resultList: q.data, resultListCount: q.count, entity: q.misEntity]
+        }
+        catch (Exception e) {
+            flash.error = "Data Might Not Be Available For This entity."
+            log.error("Error fetching data", e)
+            entityData = [headerList: [], resultList: [], resultListCount: 0, entity: MisEntity.findById(params.id)]
+        }
+        respond entityData
+    }
+
+    @Transactional
+    def insertEntityRecord(def entityRecord) {
+        println(entityRecord)
+        def message = ["Entity Record Inserted"]
+        respond message
     }
 }

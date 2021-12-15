@@ -17,4 +17,12 @@ export class EntityService {
   createEntity(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/misEntity`, formData);
   }
+
+  getEntityData(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/misEntity/get_entity_data`, {params});
+  }
+
+  addNewEntityRecord(entityRecord): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/misEntity/insert_entity_record`, entityRecord);
+  }
 }

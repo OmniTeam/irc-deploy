@@ -27,4 +27,9 @@ class EntityFields {
         dataType nullable: false,inList: ['String','Date','Number', 'Boolean', 'Float'],size: 1..255
         sqlDataType nullable: false,inList: ['text','datetime','int', 'bit', 'double'],size: 1..255
     }
+
+
+    String getFieldName() {
+        return fieldName
+    }
 }
