@@ -118,9 +118,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-3" style="padding-top: 10px;">
+                    <div class="col-md-4" style="padding-top: 10px;">
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <label [ngClass]="{ 'is-invalid': submitFields && fFields.mandatory.errors }">Mandatory <span
                             class="required-indicator">*</span></label>
                         </div>
@@ -143,10 +143,71 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-1 text-left">
-                      <button class=" btn" type="submit">
-                        <i class="fa fa-plus-circle" style="font-size: 1.5rem"></i>
-                      </button>
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-4" style="padding-top: 10px;">
+                          <label>
+                            Field Type
+                            <span class="required-indicator">*</span>
+                          </label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder=" Field Type"
+                                         formControlName="fieldType"
+                                         [ngClass]="{ 'is-invalid': submitFields && fFields.fieldType.errors }"
+                                         [searchable]="true"
+                                         [clearable]="true">
+                                <ng-option [value]="item.value" *ngFor="let item of fieldTypes">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                              <div *ngIf="submitFields && fFields.fieldType.errors" class="invalid-feedback">
+                                <div *ngIf="fFields.fieldType.errors.required">Field Type is required</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-4" style="padding-top: 10px;">
+                          <label>
+                            Display Order
+                            <span class="required-indicator">*</span>
+                          </label>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Display Order"
+                                type="number"
+                                style="padding-left: 10px;"
+                                formControlName="orderOfDisplay"
+                                [ngClass]="{ 'is-invalid': submitFields && fFields.orderOfDisplay.errors }"
+                              >
+                              <div *ngIf="submitFields && fFields.orderOfDisplay.errors" class="invalid-feedback">
+                                <div *ngIf="fFields.orderOfDisplay.errors.required">Display Order is required</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 text-left">
+                      <button class=" btn btn-default" type="submit">Add Field</button>
+<!--                      <button class=" btn" type="submit">-->
+<!--                        <i class="fa fa-plus" style="font-size: 1.5rem"></i>-->
+<!--                        Add Field-->
+<!--                      </button>-->
                     </div>
                   </div>
                 </form>

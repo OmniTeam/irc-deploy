@@ -362,7 +362,7 @@
       <span aria-hidden="true">×</span>
     </button>
   </div>
-  <div class="modal-body row" id="form-data-display" style="border: 1px solid #e9ecef;">
+  <div class="modal-body" id="form-data-display" style="border: 1px solid #e9ecef;">
     <div class="col-md-12">
       <div class="row" *ngFor="let record of formDataRecord" style="border-bottom: 1px solid #e9ecef; padding: 15px !important; font-size: 0.9rem !important;">
         <div class="col-md-6">
@@ -373,18 +373,18 @@
         </div>
       </div>
     </div>
-    <div class=" col-sm-12 col-md-12" id="inner_map_div">
-      <fieldset class="hm-fieldset">
-        <legend class="hm-legend">MAP</legend>
-        <div class=" col-sm-12 col-md-12 fieldset-body">
-          <div class="map-container">
-            <div class="map-frame">
-              <div id="inner_map"></div>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </div>
+<!--    <div class=" col-sm-12 col-md-12" id="inner_map_div">-->
+<!--      <fieldset class="hm-fieldset">-->
+<!--        <legend class="hm-legend">MAP</legend>-->
+<!--        <div class=" col-sm-12 col-md-12 fieldset-body">-->
+<!--          <div class="map-container">-->
+<!--            <div class="map-frame">-->
+<!--              <div id="inner_map"></div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </fieldset>-->
+<!--    </div>-->
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>

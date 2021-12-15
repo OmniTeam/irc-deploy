@@ -22,7 +22,13 @@ export class CreateEntitiesComponent implements OnInit {
     {'name': "Date", 'value': "Date"},
     {'name': "Float", 'value': "Float"},
     {'name': "Boolean", 'value': "Boolean"},
-  ]
+  ];
+  fieldTypes = [
+    {'name': "Display Field", 'value': "Display Field"},
+    {'name': "Filter Field", 'value': "Filter Field"},
+    {'name': "Key Field", 'value': "Key Field"},
+    {'name': "Other", 'value': "Other"}
+  ];
   entries: number = 10;
   selected: any[] = [];
   activeRow: any;
@@ -64,7 +70,9 @@ export class CreateEntitiesComponent implements OnInit {
     this.formGroupField = this.formBuilder.group({
       displayName: ['', [Validators.required]],
       dataType: ['', [Validators.required]],
-      mandatory: ['Yes', [Validators.required]]
+      mandatory: ['Yes', [Validators.required]],
+      fieldType: ['', [Validators.required]],
+      orderOfDisplay: [1, [Validators.required]],
     })
     this.formGroup = this.formBuilder.group({
       name: ['', [Validators.required]]
@@ -92,7 +100,6 @@ export class CreateEntitiesComponent implements OnInit {
       this.formData = Object.assign(this.formData, entityFields);
       this.formData = Object.assign(this.formData, tableName);
       this.entityService.createEntity(this.formData).subscribe((data) => {
-        console.log(data);
         this.router.navigate(['/entities']);
       }, error => console.log(error));
     }

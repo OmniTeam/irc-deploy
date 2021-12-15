@@ -18,7 +18,7 @@ class DataController {
     GrailsApplication grailsApplication
 
     def index(Integer max) {
-        def formData
+        def formData = []
         try {
             def dataList = dataService.listAll(params)
             def q = new QueryHelper(params, springSecurityService.currentUser as User)

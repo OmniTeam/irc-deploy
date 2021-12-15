@@ -11,5 +11,7 @@ class EntityFormFieldMap {
     static	belongsTo	= [entityForm: EntityForm]
 
     static constraints = {
+        formField nullable: false
+        entityField nullable: false
     }
 }
