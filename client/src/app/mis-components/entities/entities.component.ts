@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {EntityService} from "../../services/entity.service";
 
 @Component({
   selector: 'app-entities',
@@ -12,8 +13,10 @@ export class EntitiesComponent implements OnInit {
   selected: any[] = [];
   activeRow: any;
   rows: Object[];
+  enableLinkToForm = false;
+  enableAddNewView = false;
 
-  constructor( private router: Router,) { }
+  constructor( private router: Router, private entityService: EntityService) { }
 
   entriesChange($event) {
     this.entries = $event.target.value;
@@ -37,7 +40,21 @@ export class EntitiesComponent implements OnInit {
     this.activeRow = event.row;
   }
   ngOnInit(): void {
-    this.rows = [];
+    this.entityService.getEntities().subscribe((data) => {
+      this.rows = data;
+    }, error => console.log(error));
+  }
+
+  createNewEntity() {
+    this.router.navigate(['/createentities']);
+  }
+
+  linkToForm() {
+
+  }
+
+  createNewView() {
+
   }
 
 }

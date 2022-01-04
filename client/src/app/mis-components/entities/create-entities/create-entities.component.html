@@ -1,0 +1,278 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Create Entity</h6>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+        </div>
+        <div class=" col-lg-6 col-5 text-right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row justify-content-center">
+    <div class=" col-lg-10 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Entity</h3>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem;">
+          <form [formGroup]="formGroup" (ngSubmit)="createEntity()" *ngIf="formGroup">
+            <div class="row">
+              <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                <div class="row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Entity Name
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Entity Name"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="name"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                          >
+                          <div *ngIf="submitted && f.name.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.name.errors.required">Entity Name is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <form [formGroup]="formGroupField" (ngSubmit)="addField()" *ngIf="formGroupField">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-5" style="padding-top: 10px;">
+                          <label>
+                            Display Name
+                            <span class="required-indicator">*</span>
+                          </label>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Display Name"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="displayName"
+                                [ngClass]="{ 'is-invalid': submitFields && fFields.displayName.errors }"
+                              >
+                              <div *ngIf="submitFields && fFields.displayName.errors"
+                                   class="invalid-feedback">
+                                <div *ngIf="fFields.displayName.errors.required">Display Name is
+                                  required
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-4" style="padding-top: 10px;">
+                          <label>
+                            Data Type
+                            <span class="required-indicator">*</span>
+                          </label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Type......"
+                                         formControlName="dataType"
+                                         [ngClass]="{ 'is-invalid': submitFields && fFields.dataType.errors }"
+                                         [searchable]="true"
+                                         [clearable]="true">
+                                <ng-option [value]="item.value" *ngFor="let item of dataTypes">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                              <div *ngIf="submitFields && fFields.dataType.errors" class="invalid-feedback">
+                                <div *ngIf="fFields.dataType.errors.required">Data Type is required</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4" style="padding-top: 10px;">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label [ngClass]="{ 'is-invalid': submitFields && fFields.mandatory.errors }">Mandatory <span
+                            class="required-indicator">*</span></label>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="radio">
+                            <label style="margin-right: 7px;">
+                              <input type="radio" value="Yes" formControlName="mandatory" name="mandatory"/>
+                              <span style="margin-left: 5px;">Yes</span>
+                            </label>
+                          </div>
+                          <div class="radio">
+                            <label>
+                              <input type="radio" value="No" formControlName="mandatory" name="mandatory"/>
+                              <span style="margin-left: 5px;">No</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div *ngIf="submitFields && fFields.mandatory.errors" class="invalid-feedback">
+                          <div *ngIf="fFields.mandatory.errors.required">Mandatory is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-4" style="padding-top: 10px;">
+                          <label>
+                            Field Type
+                            <span class="required-indicator">*</span>
+                          </label>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder=" Field Type"
+                                         formControlName="fieldType"
+                                         [ngClass]="{ 'is-invalid': submitFields && fFields.fieldType.errors }"
+                                         [searchable]="true"
+                                         [clearable]="true">
+                                <ng-option [value]="item.value" *ngFor="let item of fieldTypes">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                              <div *ngIf="submitFields && fFields.fieldType.errors" class="invalid-feedback">
+                                <div *ngIf="fFields.fieldType.errors.required">Field Type is required</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-4" style="padding-top: 10px;">
+                          <label>
+                            Display Order
+                            <span class="required-indicator">*</span>
+                          </label>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Display Order"
+                                type="number"
+                                style="padding-left: 10px;"
+                                formControlName="orderOfDisplay"
+                                [ngClass]="{ 'is-invalid': submitFields && fFields.orderOfDisplay.errors }"
+                              >
+                              <div *ngIf="submitFields && fFields.orderOfDisplay.errors" class="invalid-feedback">
+                                <div *ngIf="fFields.orderOfDisplay.errors.required">Display Order is required</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 text-left">
+                      <button class=" btn btn-default" type="submit">Add Field</button>
+<!--                      <button class=" btn" type="submit">-->
+<!--                        <i class="fa fa-plus" style="font-size: 1.5rem"></i>-->
+<!--                        Add Field-->
+<!--                      </button>-->
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row" style="padding: 11px;">
+                  <div class="col-lg-12 col-5 text-right">
+                    <a class=" btn btn-default" (click)="editField()" style="color: white"> Edit </a>
+                    <a class=" btn btn-default" (click)="deleteField()" style="color: white"> Delete </a>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <ngx-datatable
+                      class="bootstrap selection-cell"
+                      [columnMode]="'force'"
+                      [headerHeight]="50"
+                      [footerHeight]="50"
+                      [rowHeight]="'auto'"
+                      [limit]="entries != -1 ? entries : undefined"
+                      [rows]="rows"
+                      (activate)="onActivate($event)"
+                    >
+                      <ngx-datatable-column name="Display Name" prop="displayName"></ngx-datatable-column>
+                      <ngx-datatable-column name="Data Type" prop="dataType"></ngx-datatable-column>
+                      <ngx-datatable-column name="Mandatory" prop="mandatory"></ngx-datatable-column>
+                      <ngx-datatable-column name="Field Type" prop="fieldType">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                     let-value="value">
+                            <span
+                              title="Double click to edit"
+                              (dblclick)="editing[rowIndex + '-fieldType'] = true"
+                              *ngIf="!editing[rowIndex + '-fieldType']"
+                            >
+                                       {{ value }}
+                            </span>
+                          <select
+                            *ngIf="editing[rowIndex + '-fieldType']"
+                            (blur)="editing[rowIndex + '-fieldType'] = false"
+                            (change)="updateValue($event, 'fieldType', rowIndex)"
+                            [value]="value"
+                          >
+                            <option value="Display Field">Display Field</option>
+                            <option value="Filter Field">Filter Field</option>
+                            <option value="Key Field">Key Field</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Action"></ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+                <button class=" btn btn-default" type="submit">Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

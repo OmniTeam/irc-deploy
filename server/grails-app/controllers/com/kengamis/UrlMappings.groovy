@@ -13,6 +13,8 @@ class UrlMappings {
         get "/$controller/enabled_forms(.$format)?"(action:"enabledForms")
         get "/$controller/get_point_details(.$format)?"(action:"getPointDetails")
         get "/$controller/get_form_data_record(.$format)?"(action:"getFormDataRecord")
+        get "/$controller/get_entity_data(.$format)?"(action:"getEntityData")
+        post "/$controller/insert_entity_record(.$format)?"(action:"insertEntityRecord")
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
