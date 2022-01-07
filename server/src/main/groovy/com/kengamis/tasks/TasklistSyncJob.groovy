@@ -1,18 +1,12 @@
 package com.kengamis.tasks
 
-import com.kengamis.AppHolder
-import com.kengamis.Form
+
 import com.kengamis.TaskList
-import grails.converters.JSON
 import groovy.json.JsonBuilder
-import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
-
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
 
 class TasklistSyncJob extends Script {
     Sql sql = sql
