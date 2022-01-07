@@ -677,4 +677,16 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "BrunoJay (generated)", id: "1641553977460-1") {
+        addColumn(tableName: "task_list") {
+            column(name: "task_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "BrunoJay (generated)", id: "1641554948339-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "form_id", tableName: "task_list")
+    }
+
 }

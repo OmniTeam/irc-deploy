@@ -3,6 +3,7 @@ package com.kengamis
 class TaskList {
 
     String id
+    String taskId
     String inputVariables
     String outputVariables
     String status
@@ -18,6 +19,6 @@ class TaskList {
     Date lastUpdated
 
     static constraints = {
-        formId nullable: false
+        formId nullable: true
     }
 }

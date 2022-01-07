@@ -60,9 +60,10 @@
             [rows]="rows"
             (activate)="onActivate($event)"
           >
-            <ngx-datatable-column name="Task" prop="inputVariables"></ngx-datatable-column>
+            <ngx-datatable-column name="Task" prop="taskName"></ngx-datatable-column>
             <ngx-datatable-column name="Description" prop="outputVariables"></ngx-datatable-column>
             <ngx-datatable-column name="Date Created" prop="dateCreated"></ngx-datatable-column>
+            <ngx-datatable-column name="Status" prop="status"></ngx-datatable-column>
             <ngx-datatable-column name="Action"></ngx-datatable-column>
           </ngx-datatable>
         </div>
