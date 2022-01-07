@@ -2,7 +2,7 @@ package com.kengamis
 
 class TaskList {
 
-    String taskId
+    String id
     String inputVariables
     String outputVariables
     String status
