@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
-import {TasklistService} from "../../services/tasklist.service";
+import {TaskListService} from "../../services/task-list.service";
 
 @Component({
   selector: 'app-tasklist',
-  templateUrl: './tasklist.component.html',
-  styleUrls: ['./tasklist.component.css']
+  templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.css']
 })
-export class TasklistComponent implements OnInit {
+export class TaskListComponent implements OnInit {
   entries: number = 10;
   selected: any[] = [];
   temp = [];
   activeRow: any;
   rows: Object[];
 
-  constructor( private router: Router, private tasklistService: TasklistService) {
+  constructor( private router: Router, private taskListService: TaskListService) {
   }
 
   entriesChange($event) {
@@ -40,7 +40,7 @@ export class TasklistComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tasklistService.getTaskList().subscribe(data => {
+    this.taskListService.getTaskList().subscribe(data => {
       this.rows = data;
     }, error => console.log(error));
   }

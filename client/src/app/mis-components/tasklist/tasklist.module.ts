@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TasklistComponent } from './tasklist.component';
-import { TasklistRoutingModule } from './tasklist-routing.module';
+import { TaskListComponent } from './task-list.component';
+import { TaskListRoutingModule } from './task-list-routing.module';
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
 
 @NgModule({
-  declarations: [TasklistComponent],
+  declarations: [TaskListComponent],
   imports: [
     CommonModule,
-    TasklistRoutingModule,
+    TaskListRoutingModule,
     FormsModule,
     NgxDatatableModule,
     ComponentsModule,

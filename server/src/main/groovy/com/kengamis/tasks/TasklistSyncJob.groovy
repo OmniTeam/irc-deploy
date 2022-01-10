@@ -100,7 +100,7 @@ class TasklistSyncJob extends Script {
         println("$processInstanceId, $taskDefKey")
         def taskListRecord = new TaskList()
 
-        def existingTaskInTaskList = TaskList.where {processInstanceId == _processInstanceId && taskDefKey == _taskDefKey}.get()
+        def existingTaskInTaskList = TaskList.where {processInstanceId == _processInstanceId && taskDefinitionKey == _taskDefKey}.get()
 
         if (existingTaskInTaskList) {
             taskListRecord = existingTaskInTaskList

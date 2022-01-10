@@ -16,7 +16,7 @@ class StartCamundaInstancesJob extends Script {
     Object run() {
         boolean started = startProcessInstance([
                 Start_date : "12-20-2021",
-                Report_id : UUID.randomUUID().toString(),
+                Report_id : "ididididididid" /*UUID.randomUUID().toString()*/,
                 Report_Name :  "Test Report",
                 Report_Assigne : "Makwasis Cris"
         ], CIIF_MANAGEMENT_KEY)
