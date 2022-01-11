@@ -9,7 +9,7 @@ class MisEntity {
     Date lastUpdated
     boolean ignoreUserContext = false
 
-    static hasMany = [entityFields: EntityFields, entityForms: EntityForm]
+    static hasMany = [entityFields: EntityFields, entityForms: EntityForm, entityViews: EntityView]
 
     static constraints = {
         name nullable: false

@@ -5,9 +5,10 @@ import groovy.transform.ToString
 
 @EqualsAndHashCode(includes='authority')
 @ToString(includes='authority', includeNames=true, includePackage=false)
-class Role implements Serializable {
+class Role {
 
-	private static final long serialVersionUID = 1
+	static String ROLE_ADMIN = 'ROLE_ADMIN'
+	static String ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN'
 
 	String id
 	String authority

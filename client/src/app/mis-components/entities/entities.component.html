@@ -67,8 +67,11 @@
             [footerHeight]="50"
             [rowHeight]="'auto'"
             [limit]="entries != -1 ? entries : undefined"
+            [selected]="selected"
+            [selectionType]="SelectionType.single"
             [rows]="rows"
             (activate)="onActivate($event)"
+            (select)="onSelect($event)"
           >
             <ngx-datatable-column name="Entity Name" prop="name">
               <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
@@ -83,7 +86,16 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Entity Views" prop="entityViews"></ngx-datatable-column>
             <ngx-datatable-column name="Linked Forms" prop="linkedForms"></ngx-datatable-column>
-            <ngx-datatable-column name="Action"></ngx-datatable-column>
+            <ngx-datatable-column name="Action" prop="id" [width]="30">
+              <ng-template
+                ngx-datatable-cell-template
+                let-value="value"
+                let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn"
+              >
+                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+              </ng-template>
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

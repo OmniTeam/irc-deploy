@@ -616,4 +616,104 @@ databaseChangeLog = {
     changeSet(author: "Bryan (generated)", id: "1639378731012-8") {
         addForeignKeyConstraint(baseColumnNames: "form_id", baseTableName: "entity_form", constraintName: "FKso5r8nh2ph67ufqlmdyhe7yjq", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "form", validate: "true")
     }
+
+    changeSet(author: "Bryan (generated)", id: "1641206080681-1") {
+        addColumn(tableName: "entity_form_field_map") {
+            column(name: "entity_field_type", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1641206080681-2") {
+        addColumn(tableName: "entity_form_field_map") {
+            column(name: "form_field_type", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1641561324661-1") {
+        createTable(tableName: "entity_view") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "entity_viewPK")
+            }
+
+            column(name: "view_query", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "table_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "ignore_user_context", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+
+            column(name: "mis_entity_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1641561324661-2") {
+        createTable(tableName: "entity_view_fields") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "entity_view_fieldsPK")
+            }
+
+            column(name: "datatype", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "field_type", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "entity_view_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "order_of_display", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "filter_order", type: "INT") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1641561324661-3") {
+        addForeignKeyConstraint(baseColumnNames: "mis_entity_id", baseTableName: "entity_view", constraintName: "FK1ntgwta5w3svsh0yhy2f035xk", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "mis_entity", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1641561324661-4") {
+        addForeignKeyConstraint(baseColumnNames: "entity_view_id", baseTableName: "entity_view_fields", constraintName: "FKio7hqe8r4oyua9qfs7g5sbmar", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view", validate: "true")
+    }
 }

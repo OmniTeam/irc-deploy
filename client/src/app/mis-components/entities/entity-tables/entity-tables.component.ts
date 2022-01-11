@@ -74,7 +74,6 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', this.entityId);
     this.entityService.getEntityData(params).subscribe((data) => {
-      console.log(data);
       this.entityName = new ReplacePipe().transform(data.entity['name'], '_', ' ');
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
@@ -108,14 +107,18 @@ export class EntityTablesComponent implements OnInit {
   }
 
   addNewEntityRecord() {
+    const params = new HttpParams()
+      .set('id', this.entityId);
+
     this.submitted = true;
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;
     }
+
     const newEntityRecord = this.formGroup.value;
-    this.entityService.addNewEntityRecord(newEntityRecord).subscribe((data) => {
-      console.log(data);
+    this.entityService.addNewEntityRecord(newEntityRecord, params).subscribe((data) => {
+      window.location.reload();
     }, error => { console.log(error)})
   }
 

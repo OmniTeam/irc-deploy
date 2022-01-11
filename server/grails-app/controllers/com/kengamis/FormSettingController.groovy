@@ -24,16 +24,13 @@ class FormSettingController {
         params.sort = 'orderOfDisplayInTable'
         params.order = 'asc'
         def formSettings
-        def totalForms
         def formName
         if (params.formtable) {
             def form = Form.findByName(params.formtable)
             formSettings = FormSetting.findAllByForm(form, params)
-            totalForms = FormSetting.countByForm(form)
             formName = form.displayName
         } else {
             formSettings = FormSetting.list(params)
-            totalForms = FormSetting.count()
             formName = ''
         }
         formSettingsData['data'] = formSettings
