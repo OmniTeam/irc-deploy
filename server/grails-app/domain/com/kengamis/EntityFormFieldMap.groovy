@@ -4,7 +4,9 @@ class EntityFormFieldMap {
 
     String id
     String formField
+    String formFieldType
     String entityField
+    String entityFieldType
     Date	dateCreated
     Date	lastUpdated
 

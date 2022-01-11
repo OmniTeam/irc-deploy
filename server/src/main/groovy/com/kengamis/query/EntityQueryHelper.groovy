@@ -26,7 +26,7 @@ class EntityQueryHelper {
         this.params = params
         this.currentUser = currentUser
         def misEntity = getMisEntity()
-        headers = EntityFields.findAllByMisEntity(misEntity, [sort: "orderOfDisplay"])
+        headers = EntityFields.findAllByMisEntity(misEntity, [sort: "orderOfDisplay", order: "asc"])
         entityTable = misEntity.tableName
 
     }

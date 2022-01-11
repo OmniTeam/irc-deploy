@@ -100,7 +100,7 @@ export class CreateEntitiesComponent implements OnInit {
       this.formData = Object.assign(this.formData, entityFields);
       this.formData = Object.assign(this.formData, tableName);
       this.entityService.createEntity(this.formData).subscribe((data) => {
-        this.router.navigate(['/entities']);
+        this.router.navigate(['/entity']);
       }, error => console.log(error));
     }
   }
