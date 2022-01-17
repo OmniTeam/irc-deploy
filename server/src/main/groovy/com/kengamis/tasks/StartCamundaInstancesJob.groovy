@@ -8,7 +8,8 @@ import groovyx.net.http.Method
 import java.text.SimpleDateFormat
 
 class StartCamundaInstancesJob extends Script {
-    static String camundaApiUrl = "http://localhost:8080/mis/rest"
+    static String camundaApiUrl = "https://snvdata.org/ciif/mis/rest"
+    //    static String camundaApiUrl = "http://localhost:8080/ciif/mis/rest"
     static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
     static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -16,7 +17,7 @@ class StartCamundaInstancesJob extends Script {
     Object run() {
         boolean started = startProcessInstance([
                 Start_date : "12-20-2021",
-                Report_id : "ididididididid" /*UUID.randomUUID().toString()*/,
+                Report_id : UUID.randomUUID().toString(),
                 Report_Name :  "Test Report",
                 Report_Assigne : "Makwasis Cris"
         ], CIIF_MANAGEMENT_KEY)

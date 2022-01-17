@@ -1,17 +1,12 @@
 package com.kengamis
 
-import com.google.gson.JsonObject
-import grails.validation.ValidationException
-import groovy.json.JsonBuilder
-import groovy.json.JsonSlurper
-
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
 
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+import groovy.json.JsonSlurper
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class TaskListController {
@@ -28,18 +23,16 @@ class TaskListController {
         def tasks = []
 
         taskListMapList.each{TaskList task_list ->
-            def status = (task_list.status.replace("_"," ")).capitalize()
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task_list.outputVariables)
 
             def description = (variables['data'].value.toString()).replaceAll("\\[", "").replaceAll("\\]","")
-            String newDate = task_list.dateCreated.format( 'dd-MM-yyyy' )
 
             tasks << [id: task_list.id,
                     taskName : task_list.taskName,
                     description : description,
-                    dateCreated: newDate,
-                    status: status]
+                    dateCreated: task_list.dateCreated,
+                    status: task_list.status]
         }
         respond tasks
     }

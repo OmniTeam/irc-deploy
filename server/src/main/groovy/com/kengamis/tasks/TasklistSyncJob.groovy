@@ -10,8 +10,8 @@ import groovyx.net.http.Method
 
 class TasklistSyncJob extends Script {
     Sql sql = sql
-    static def url = 'http://localhost:8080'
-    static def path = '/mis/rest/get-tasks/CRVPF_REPORTING/'
+    static def url = StartCamundaInstancesJob.camundaApiUrl
+    static def path = '/get-tasks/CRVPF_REPORTING/'
 
     @Override
     Object run() {

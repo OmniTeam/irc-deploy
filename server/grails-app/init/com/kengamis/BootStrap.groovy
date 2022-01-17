@@ -83,7 +83,7 @@ class BootStrap {
         TaskDef.findByName("Start Camunda Instances Job") ?: new TaskDef(
                 name: 'Start Camunda Instances Job',
                 description: 'Starts Camunda Instances',
-                cronExpression: '0 0/30 * * * ?',
+                cronExpression: '0 0/60 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.StartCamundaInstancesJob',
                 startOnStartup: true
