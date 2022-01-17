@@ -69,6 +69,13 @@ export class EntitiesComponent implements OnInit {
             this.createNewView(entityId);
           }
         },
+
+        {
+          text: 'Create Entity',
+          action: ( e, dt, button, config ) => {
+            this.createNewEntity();
+          }
+        },
         {
           text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
           extend: 'csvHtml5',
