@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serverUrl: 'http://192.168.1.5:7000/crvpf'
+  serverUrl: 'http://157.230.227.3/:7000/crvpf'
 };
