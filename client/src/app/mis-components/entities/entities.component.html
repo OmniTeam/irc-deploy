@@ -35,7 +35,7 @@
                     <tbody>
                     <tr *ngFor="let row of rows">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'><a routerLink="/entityView/{{row.id}}"> {{ row.name }} </a></td>
+                      <td class='text-center'><a routerLink="/entity/{{row.id}}"> {{ row.name }} </a></td>
                       <td class='text-center'>{{ row.tableName }}</td>
                       <td class='text-center'>{{ row.dateCreated | date: 'mediumDate' }}</td>
                       <td class='text-center'>{{ row.entityViews }}</td>

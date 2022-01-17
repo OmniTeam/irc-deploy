@@ -120,6 +120,13 @@ export class CreateEntitiesComponent implements OnInit {
       this.rows.push(this.formDataField);
       this.rows = [...this.rows];
     }
+
+    if (this.formGroupField.valid) {
+      setTimeout(() => {
+        this.formGroupField.reset();
+        this.submitFields = false;
+      }, 100);
+    }
   }
 
   editField() {
@@ -161,6 +168,11 @@ export class CreateEntitiesComponent implements OnInit {
     this.rows[rowIndex][cell] = event.target.value;
     this.rows = [...this.rows];
     this.formData = this.rows[rowIndex];
+  }
+
+  onReset() {
+    this.formGroup.reset();
+    this.formGroupField.reset();
   }
 
 }

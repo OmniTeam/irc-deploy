@@ -5,16 +5,15 @@ import { EntityViewTableRoutingModule } from './entity-view-table-routing.module
 import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableComponent} from "./entity-view-table.component";
 import {ReplacePipe} from "../../../replace-pipe";
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 
 @NgModule({
     declarations: [EntityViewTableComponent, ReplacePipe],
-    exports: [
-        ReplacePipe
-    ],
     imports: [
         CommonModule,
         EntityViewTableRoutingModule,
+        NgxDatatableModule,
         DataTablesModule
     ]
 })

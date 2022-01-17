@@ -6,10 +6,11 @@ import {EntityTablesComponent} from "./entity-tables.component";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {ReplacePipe} from "../../../replace-pipe";
 
 
 @NgModule({
-  declarations: [EntityTablesComponent],
+  declarations: [EntityTablesComponent, ReplacePipe],
   imports: [
     CommonModule,
     EntityTablesRoutingModule,
