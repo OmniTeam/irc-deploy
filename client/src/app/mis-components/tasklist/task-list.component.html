@@ -34,7 +34,7 @@
                     <tbody>
                     <tr *ngFor="let row of rows">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'><a routerLink="/entityView/{{row.id}}"> {{ row.taskName }} </a></td>
+                      <td class='text-center'>{{ row.taskName }}</td>
                       <td class='text-center'>{{ row.description }}</td>
                       <td class='text-center'>{{ row.dateCreated  | date: 'medium' }}</td>
                       <td class='text-center'>{{ row.status | replace: '_' : ' ' | titlecase }}</td>
