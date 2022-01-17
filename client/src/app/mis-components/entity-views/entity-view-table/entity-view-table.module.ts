@@ -8,11 +8,14 @@ import {ReplacePipe} from "../../../replace-pipe";
 
 
 @NgModule({
-  declarations: [EntityViewTableComponent, ReplacePipe],
-  imports: [
-    CommonModule,
-    EntityViewTableRoutingModule,
-    DataTablesModule
-  ]
+    declarations: [EntityViewTableComponent, ReplacePipe],
+    exports: [
+        ReplacePipe
+    ],
+    imports: [
+        CommonModule,
+        EntityViewTableRoutingModule,
+        DataTablesModule
+    ]
 })
 export class EntityViewTableModule { }
