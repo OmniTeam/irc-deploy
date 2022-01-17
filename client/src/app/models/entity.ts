@@ -1,3 +1,12 @@
+export class Entity {
+  id: string;
+  name: string;
+  tableName: string;
+  dateCreated: Date;
+  entityViews: string;
+  linkedForms: string;
+}
+
 export class EntityFormFieldMap {
   entityField: string;
   entityFieldType: string;

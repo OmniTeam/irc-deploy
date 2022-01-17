@@ -6,6 +6,7 @@ import {EntitiesComponent} from "./entities.component";
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
+import {DataTablesModule} from "angular-datatables";
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import {ComponentsModule} from "../../components/components.module";
     FormsModule,
     NgxDatatableModule,
     ComponentsModule,
+    DataTablesModule
   ]
 })
 export class EntitiesModule { }

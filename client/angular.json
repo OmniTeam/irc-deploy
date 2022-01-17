@@ -44,7 +44,8 @@
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/dc/dist/style/dc.css",
               "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.css",
-              "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css"
+              "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css",
+              "node_modules/datatables.net-select-dt/css/select.dataTables.css"
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js",
@@ -56,7 +57,9 @@
               "node_modules/pdfmake/build/vfs_fonts.js",
               "node_modules/datatables.net-buttons/js/dataTables.buttons.js",
               "node_modules/datatables.net-buttons/js/buttons.html5.js",
-              "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"
+              "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js",
+              "node_modules/datatables.net-select/js/dataTables.select.js",
+              "src/assets/js/dataTables.cellEdit.js"
             ]
           },
           "configurations": {

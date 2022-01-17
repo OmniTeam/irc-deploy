@@ -1376,6 +1376,14 @@
     "@types/datatables.net" "*"
     "@types/jquery" "*"
 
+"@types/datatables.net-select@^1.2.7":
+  "integrity" "sha512-a3OTZsR5q6UNh+326Mo189EgOh1VYKS/1wTxbq7yW/NMJ/hj6V7mqvA7NHbIPbUMcJMVTaaJCRNJv3KCjdoQmA=="
+  "resolved" "https://registry.npmjs.org/@types/datatables.net-select/-/datatables.net-select-1.2.7.tgz"
+  "version" "1.2.7"
+  dependencies:
+    "@types/datatables.net" "*"
+    "@types/jquery" "*"
+
 "@types/datatables.net@*", "@types/datatables.net@^1.10.21":
   "integrity" "sha512-fXtWlm70PUEv0k5NfpI+BmHTTHxU6XMkKF0B2G3ly2g64EUYJc2SuNI9hZ7l/+aComO0IpLv0eLAOHGEfzMFiQ=="
   "resolved" "https://registry.npmjs.org/@types/datatables.net/-/datatables.net-1.10.21.tgz"
@@ -4327,6 +4335,23 @@
     "datatables.net" ">=1.10.25"
     "jquery" ">=1.7"
 
+"datatables.net-select-dt@^1.3.4":
+  "integrity" "sha512-V+4GSomZJzjSCBBPTN0XwofadrpLdZym0ZPuTVJPfPp+Y30Hb4JXyfoSUlNpob97u0dpfeI8ZxC2BJBmAWNHyA=="
+  "resolved" "https://registry.npmjs.org/datatables.net-select-dt/-/datatables.net-select-dt-1.3.4.tgz"
+  "version" "1.3.4"
+  dependencies:
+    "datatables.net-dt" ">=1.11.3"
+    "datatables.net-select" ">=1.3.3"
+    "jquery" ">=1.7"
+
+"datatables.net-select@^1.3.4", "datatables.net-select@>=1.3.3":
+  "integrity" "sha512-iQ/dBHIWkhfCBxzNdtef79seCNO1ZsA5zU0Uiw3R2mlwmjcJM1xn6pFNajke6SX7VnlzndGDHGqzzEljSqz4pA=="
+  "resolved" "https://registry.npmjs.org/datatables.net-select/-/datatables.net-select-1.3.4.tgz"
+  "version" "1.3.4"
+  dependencies:
+    "datatables.net" ">=1.11.3"
+    "jquery" ">=1.7"
+
 "datatables.net@^1.11.3", "datatables.net@>=1.10.25", "datatables.net@>=1.11.3":
   "integrity" "sha512-VMj5qEaTebpNurySkM6jy6sGpl+s6onPK8xJhYr296R/vUBnz1+id16NVqNf9z5aR076OGcpGHCuiTuy4E05oQ=="
   "resolved" "https://registry.npmjs.org/datatables.net/-/datatables.net-1.11.3.tgz"
@@ -5528,9 +5553,9 @@
     "readable-stream" "^2.3.6"
 
 "follow-redirects@^1.0.0":
-  "integrity" "sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg=="
-  "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.1.tgz"
-  "version" "1.14.1"
+  "integrity" "sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ=="
+  "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.7.tgz"
+  "version" "1.14.7"
 
 "for-in@^1.0.2":
   "integrity" "sha1-gQaNKVqBQuwKxybG4iAMMPttXoA="
@@ -9050,6 +9075,11 @@
   "resolved" "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz"
   "version" "2.1.0"
 
+"picocolors@^0.2.1":
+  "integrity" "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA=="
+  "resolved" "https://registry.npmjs.org/picocolors/-/picocolors-0.2.1.tgz"
+  "version" "0.2.1"
+
 "picomatch@^2.0.4", "picomatch@^2.2.1":
   "integrity" "sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw=="
   "resolved" "https://registry.npmjs.org/picomatch/-/picomatch-2.3.0.tgz"
@@ -9446,13 +9476,12 @@
     "supports-color" "^6.1.0"
 
 "postcss@^7.0.27":
-  "integrity" "sha512-BebJSIUMwJHRH0HAQoxN4u1CN86glsrwsW0q7T+/m44eXOUAxSNdHRkNZPYz5vVUbg17hFgOQDE7fZk7li3pZw=="
-  "resolved" "https://registry.npmjs.org/postcss/-/postcss-7.0.36.tgz"
-  "version" "7.0.36"
+  "integrity" "sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA=="
+  "resolved" "https://registry.npmjs.org/postcss/-/postcss-7.0.39.tgz"
+  "version" "7.0.39"
   dependencies:
-    "chalk" "^2.4.2"
+    "picocolors" "^0.2.1"
     "source-map" "^0.6.1"
-    "supports-color" "^6.1.0"
 
 "preact@^10.0.5":
   "integrity" "sha512-KojoltCrshZ099ksUZ2OQKfbH66uquFoxHSbnwKbTJHeQNvx42EmC7wQVWNuDt6vC5s3nudRHFtKbpY4ijKlaQ=="
@@ -10399,9 +10428,9 @@
     "xml2js" "^0.4.17"
 
 "selfsigned@^1.10.7":
-  "integrity" "sha512-aVmbPOfViZqOZPgRBT0+3u4yZFHpmnIghLMlAcb5/xhp5ZtB/RVnKhz5vl2M32CLXAqR4kha9zfhNg0Lf/sxKA=="
-  "resolved" "https://registry.npmjs.org/selfsigned/-/selfsigned-1.10.11.tgz"
-  "version" "1.10.11"
+  "integrity" "sha512-lkjaiAye+wBZDCBsu5BGi0XiLRxeUlsGod5ZP924CRSEoGuZAw/f7y9RKu28rwTfiHVhdavhB0qH0INV6P1lEA=="
+  "resolved" "https://registry.npmjs.org/selfsigned/-/selfsigned-1.10.14.tgz"
+  "version" "1.10.14"
   dependencies:
     "node-forge" "^0.10.0"
 

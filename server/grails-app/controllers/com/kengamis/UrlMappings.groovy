@@ -23,6 +23,8 @@ class UrlMappings {
         '/odxRest/getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')
         '/odxRest/getPreloadEntities'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getPreloadEntities')
         '/odxRest/getFilters'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilters')
+        '/odxRest/getFilteredEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityData')
+        '/odxRest/getFilteredEntityDataMap'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityDataMap')
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')

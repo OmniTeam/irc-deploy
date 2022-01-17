@@ -41,6 +41,7 @@ export class CreateEntityViewsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
     });
+    console.log(this.entityId);
     const params = new HttpParams()
       .set('id', this.entityId);
     this.entityService.getEntityRecord(params).subscribe((data) => {
@@ -115,7 +116,7 @@ export class CreateEntityViewsComponent implements OnInit {
     return this.formGroupField.controls;
   }
 
-  onReset(){
+  onReset() {
     this.formGroup.reset();
     this.formGroupField.reset();
   }

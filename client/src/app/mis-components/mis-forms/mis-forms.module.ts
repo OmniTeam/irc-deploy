@@ -5,6 +5,7 @@ import { MisFormsRoutingModule } from './mis-forms-routing.module';
 import {MisFormsComponent} from "./mis-forms.component";
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {DataTablesModule} from "angular-datatables";
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
     CommonModule,
     MisFormsRoutingModule,
     FormsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    DataTablesModule
   ]
 })
 export class MisFormsModule { }
