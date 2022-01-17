@@ -38,7 +38,7 @@
                       <td class='text-center'>{{ row.description }}</td>
                       <td class='text-center'>{{ row.dateCreated  | date: 'medium' }}</td>
                       <td class='text-center'>{{ row.status | replace: '_' : ' ' | titlecase }}</td>
-                      <td class='text-center'></td>
+                      <td class='text-center'><a routerLink="/formView/{{row.id}}" style="font-size:20px;" class="text fas fa-external-link-square-alt"></a></td>
                     </tr>
                     </tbody>
                   </table>
