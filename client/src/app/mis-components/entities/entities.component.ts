@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {EntityService} from "../../services/entity.service";
-import {SelectionType} from '@swimlane/ngx-datatable';
+import {Entity} from "../../models/entity";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-entities',
@@ -10,42 +11,14 @@ import {SelectionType} from '@swimlane/ngx-datatable';
 })
 export class EntitiesComponent implements OnInit {
 
-  entries: number = 10;
-  selected: any[] = [];
-  activeRow: any;
-  rows: Object[];
+  rows: Entity[] = [];
   enableLinkToForm = false;
   enableAddNewView = false;
-  SelectionType = SelectionType;
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private router: Router, private entityService: EntityService) {
-  }
-
-  entriesChange($event) {
-    this.entries = $event.target.value;
-  }
-
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
-      for (let key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-
-  onSelect({selected}) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-    this.enableLinkToForm = true;
-    this.enableAddNewView = true;
-  }
-
-  onActivate(event) {
-    this.activeRow = event.row;
+  constructor(private router: Router,
+              private entityService: EntityService) {
   }
 
   ngOnInit(): void {
@@ -62,27 +35,70 @@ export class EntitiesComponent implements OnInit {
         rowData.push(rowRecord);
       }
       this.rows = rowData;
+      this.dtTrigger.next();
     }, error => console.log(error));
+
+    this.dtOptions = {
+      pagingType: "numbers",
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      processing: true,
+      responsive: true,
+      dom: 'lfBrtip',
+      columnDefs: [{
+        orderable: false,
+        className: 'select-checkbox',
+        targets: 6
+      }],
+      select: {
+        style: 'os',
+      },
+      buttons: [
+        {
+          extend: 'selectedSingle',
+          text: 'Link To Form',
+          action: ( e, dt, button, config ) => {
+            let entityId = dt.row( { selected: true } ).data()[0];
+            this.linkToForm(entityId);
+          }
+        },
+        {
+          extend: 'selectedSingle',
+          text: 'Add New View',
+          action: ( e, dt, button, config ) => {
+            let entityId = dt.row( { selected: true } ).data()[0];
+            this.createNewView(entityId);
+          }
+        },
+        {
+          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
+          extend: 'csvHtml5',
+          title: 'Entity'
+        },
+        {
+          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
+          extend: 'excelHtml5',
+          title: 'Entity'
+        }
+      ]
+    };
   }
 
   createNewEntity() {
     this.router.navigate(['/createEntity']);
   }
 
-  linkToForm() {
-    let entityId = this.selected[0].id;
+  linkToForm(entityId: any) {
     this.router.navigate(['/linkForm', entityId]);
   }
 
-  createNewView() {
-    let entityId = this.selected[0].id;
+  createNewView(entityId: any) {
     this.router.navigate(['/createEntityView', entityId]);
   }
 
   getGroupEntityViews(entityViews): string {
     let d = [];
     for (let view of entityViews) {
-      let viewName = '<a routerLink="/entityView/' + view.id + '">' + view.name + '</a>';
+      let viewName = view.name;
       d.push(viewName);
     }
     return d.join(", ");

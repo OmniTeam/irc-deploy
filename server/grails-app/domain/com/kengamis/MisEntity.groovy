@@ -2,6 +2,7 @@ package com.kengamis
 
 class MisEntity {
 
+    static String DEFAULT_QUERY = """sqlFilter.getProcessedSql("SELECT \$keyField as keyField \$otherFields  FROM \$tableName where 1 and #where# ")"""
     String id
     String name
     String tableName

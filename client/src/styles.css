@@ -1,11 +1,13 @@
 .dataTables_wrapper {
   margin-top: 40px !important;
 }
+
 .dataTables_wrapper .dataTables_filter {
   float: left !important;
   margin-left: 50px !important;
   text-align: right !important;
 }
+
 .dataTables_wrapper .dataTables_length {
   float: left !important;
   display: inline-block !important;
@@ -15,6 +17,7 @@
   float: right !important;
   display: inline-block !important;
 }
+
 .dataTables_wrapper .dataTables_info {
   display: inline-block !important;
 }
@@ -29,11 +32,18 @@ table tr th.select-checkbox.selected::after {
 
 .dt-buttons {
   float: right !important;
+  font-size: 1.1em !important;
 }
+
 .dt-button:hover:not(.disabled), div.dt-button:hover:not(.disabled), a.dt-button:hover:not(.disabled) {
   background-image: none !important;
 }
+
 .dt-button, div.dt-button, a.dt-button {
   background-image: none !important;
   border-radius: 8px !important;
+}
+
+table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before {
+  margin-top: 3px !important;
 }

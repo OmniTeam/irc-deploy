@@ -3,7 +3,7 @@ package com.kengamis
 import com.kengamis.query.QueryHelper
 import filterreport.Filter
 import filterreport.SqlFilterReport
-import grails.rest.*
+import grails.core.GrailsApplication
 import grails.converters.*
 import org.apache.commons.lang.StringEscapeUtils
 import org.springframework.util.Assert
@@ -12,6 +12,9 @@ import sun.misc.BASE64Decoder
 class KengaMobileRestController {
     static namespace = 'rest'
     static responseFormats = ['json', 'xml']
+    GrailsApplication grailsApplication
+    def springSecurityService
+    def scriptService
 
     def index() {}
 
@@ -32,7 +35,111 @@ class KengaMobileRestController {
                 viewToJSON(viewFields, entityView)
             }
         }
-        render entityViews
+        render entityViews as JSON
+    }
+
+    def getFilteredEntityData() {
+        User user = getUserFromRequest()
+
+        Assert.notNull(user, "Username cannot be null")
+
+        def entityRequest = request.JSON as Map
+        def tableName = entityRequest.tableName
+
+        def keyField = entityRequest.keyField
+        def displayField = entityRequest.displayField
+        def prefillFilterList = entityRequest.prefillFilterList
+
+        def entity = MisEntity.findByTableName(tableName)
+
+        QueryHelper q = new QueryHelper(params, user)
+
+        def results = AppHolder.withMisSql {
+            def sqlFilter = new SqlFilterReport(sql: it)
+            sqlFilter.tableNames = [tableName]
+            sqlFilter.filters = []
+            if (prefillFilterList) {
+                def filtersFromClient = addFilters(prefillFilterList)
+                sqlFilter.filters.addAll(filtersFromClient)
+            }
+            def displayFieldQuery = generateDisplayFieldQuery(displayField, tableName)
+            def tmpBinding = [
+                    keyField         : keyField,
+                    tableName        : tableName,
+                    displayFieldQuery: displayFieldQuery,
+                    q                : q,
+                    sqlFilter        : sqlFilter
+            ]
+
+            def query = ""
+            if (entity) {
+                query = scriptService.evaluate(entity.query, tmpBinding)
+            } else {
+                query = scriptService.evaluate(MisEntity.DEFAULT_QUERY, tmpBinding)
+            }
+            log.info(query)
+
+            def data = rows(query).collect {
+                ["keyField": it.keyField, "displayField": it.displayField]
+            }
+            return data
+        }
+        render results as JSON
+    }
+
+    def getFilteredEntityDataMap() {
+        User user = getUserFromRequest()
+        Assert.notNull(user, "Username cannot be null")
+
+        def entityRequest = request.JSON as Map
+        String tableName = entityRequest.tableName
+
+        def keyField = entityRequest.keyField
+        def prefillFilterList = entityRequest.prefillFilterList
+
+        def entity = null
+        if(tableName.endsWith('view')){
+            entity = EntityView.findByTableName(tableName)
+        }else{
+            entity = MisEntity.findByTableName(tableName)
+        }
+
+        QueryHelper q = new QueryHelper(params, user)
+
+        def results = AppHolder.withMisSql {
+            def sqlFilter = new SqlFilterReport(sql: it)
+            sqlFilter.tableNames = [tableName]
+            sqlFilter.filters = []
+            if (prefillFilterList) {
+                def filtersFromClient = addFilters(prefillFilterList)
+                sqlFilter.filters.addAll(filtersFromClient)
+            }
+            def otherFields = generateOtherFieldsQuery(entity)
+
+            def tmpBinding = [
+                    keyField   : keyField,
+                    tableName  : tableName,
+                    otherFields: otherFields,
+                    q          : q,
+                    sqlFilter  : sqlFilter
+            ]
+
+            def query = ""
+            if(entity && entity instanceof EntityView){
+                query = scriptService.evaluate(EntityView.DEFAULT_QUERY,tmpBinding)
+            }  else {
+                query = scriptService.evaluate(MisEntity.DEFAULT_QUERY, tmpBinding)
+            }
+            def data = rows(query.toString()).collect {
+                def otherFldsMap = [:]
+                otherFieldsToList(otherFields).each { fld ->
+                    otherFldsMap << ["$fld": it."$fld"]
+                }
+                ["keyField": it.keyField, "otherFields": otherFldsMap]
+            }
+            return data
+        }
+        render results as JSON
     }
 
     def getFilters() {
@@ -54,21 +161,23 @@ class KengaMobileRestController {
         }
         nextfilter = getNextFilter(filters.size() == 1 ? [] : filters, tableAttr, true)
         def results = AppHolder.withMisSql {
-            def sqlFilter = new SqlFilterReport(definedFilters: tableAttr, sql: it)
-            sqlFilter.tableNames = tableNames
-            sqlFilter.filters = []
-            def fellowUsers = user.findFellowUsers()
-            if (!fellowUsers.isEmpty() && !preLoadEntity.ignoreUserContext) {
-                sqlFilter.filters << new Filter('openxdata_user_name', user.findFellowUsers().collect { it.username })
+            try {
+                def sqlFilter = new SqlFilterReport(definedFilters: tableAttr, sql: it)
+                sqlFilter.tableNames = tableNames
+                sqlFilter.filters = []
+                if (filters) {
+                    def filtersFromClient = addFilters(filters)
+                    sqlFilter.filters.addAll(filtersFromClient)
+                }
+                return sqlFilter.getFilterData(Util.escapeSql(nextfilter))
             }
-            if (filters) {
-                def filtersFromClient = addFilters(filters)
-                sqlFilter.filters.addAll(filtersFromClient)
+            catch (Exception e) {
+                log.error("Error", e)
+                return []
             }
-            return sqlFilter.getFilterData(Util.escapeSql(nextfilter))
         }
         def data = [field: nextfilter, value: '', filterNumber: tableAttr.size(), tableName: preLoadEntity.tableName, dataList: results.collect {
-            [value: it]
+            [value: OmniUtils.cleanOxdData(it)]
         }]
         render data as JSON
     }
@@ -108,7 +217,7 @@ class KengaMobileRestController {
         }
         def keyField = viewFields.find { it.fieldType.contains(EntityViewFields.TYPE_KEY_FIELD) }
         def otherFlds = viewFields.findAll { it != keyField && !displayFlds.contains(it) }.collect { it.name }
-        return [name: ent.name, tableName: ent.tableName, displayField: displayFlds.join(","), keyField: keyField?.name ?: 'id', otherFields: otherFlds]
+        return [name: ent.name, tableName: ent.tableName, displayField: displayFlds.join(","), keyField: keyField?.name ?: '', otherFields: otherFlds]
     }
 
 
@@ -150,7 +259,6 @@ class KengaMobileRestController {
 
     def getNextFilter(def filters, def tableAttrs, boolean isNewMode) {
         def keys = filters.collect { it.field }
-        log.info("Size of Filters:${keys.size()} ;size of attributes:${tableAttrs.size()}")
         if (keys.size() == 0) return tableAttrs.get(0)
         if (keys.size() > 0 && (keys.size() <= tableAttrs.size())) {
             if (isNewMode) return tableAttrs.get(keys.size() - 1)
@@ -167,12 +275,37 @@ class KengaMobileRestController {
             }
             if (it.value.split(',').size() > 1) {
                 filters << new Filter(it.field, it.value.split(',').toList().collect {
-                    StringEscapeUtils.escapeSql(it)
+                    StringEscapeUtils.escapeSql(OmniUtils.reconstructOxdData(it))
                 })
             } else {
-                filters << new Filter(it.field,StringEscapeUtils.escapeSql(it))
+                filters << new Filter(it.field, StringEscapeUtils.escapeSql(OmniUtils.reconstructOxdData(it.value)))
             }
         }
         return filters
+    }
+
+    String generateDisplayFieldQuery(String displayField, String tableName) {
+        return "CONCAT(${displayField.split(",").collect { tableName + "." + it }.join(",',',")}) as displayField".toString()
+    }
+
+    String generateOtherFieldsQuery(def entity) {
+        def otherFields = []
+        if(entity instanceof EntityView){
+            otherFields = entity.viewFields.findAll { !it.fieldType.contains(EntityViewFields.TYPE_KEY_FIELD) }
+        }
+        if (otherFields.isEmpty()) {
+            return ""
+        } else {
+            return ",${otherFields.collect { it.name }.join(",")}"
+        }
+    }
+
+    def otherFieldsToList(String otherFields) {
+        if (otherFields.isEmpty()) return []
+        return otherFields.drop(1).split(",")
+    }
+
+    def beforeInterceptor = {
+        session?.setMaxInactiveInterval(5)
     }
 }

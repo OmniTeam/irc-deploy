@@ -23,4 +23,12 @@ class EntityViewFields {
         name nullable: false, validator: { value, object -> object.entityView.viewQuery.contains(value) ?: 'validation.entityView.missingViewColumn' }
         datatype nullable: false, inList: ['Text', 'Date', 'Number'], size: 1..255
     }
+
+    /*
+     * Methods of the Domain Class
+     */
+    @Override	// Override toString for a nicer / more descriptive UI
+    public String toString() {
+        return "${name}"
+    }
 }

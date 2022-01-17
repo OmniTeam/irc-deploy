@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://localhost:8090/crvpf'
+  serverUrl: 'http://localhost:7000/crvpf'
 };
 
 /*
