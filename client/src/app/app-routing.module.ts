@@ -48,7 +48,11 @@ const routes: Routes = [
       },
       {
         path: 'tasklist', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/tasklist/tasklist.module').then(m => m.TaskListModule)
+        loadChildren: () => import('./mis-components/tasklist/task-list.module').then(m => m.TaskListModule)
+      },
+      {
+        path: 'formView', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/form-view/form-view.module').then(m => m.FormViewModule)
       },
       {
         path: 'createEntity', canActivate: [AuthGuard],
