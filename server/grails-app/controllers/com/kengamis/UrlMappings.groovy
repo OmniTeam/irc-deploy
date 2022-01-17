@@ -15,6 +15,16 @@ class UrlMappings {
         get "/$controller/get_form_data_record(.$format)?"(action:"getFormDataRecord")
         get "/$controller/get_entity_data(.$format)?"(action:"getEntityData")
         post "/$controller/insert_entity_record(.$format)?"(action:"insertEntityRecord")
+        get "/$controller/get_entity_fields(.$format)?"(action:"getEntityFields")
+        get "/$controller/get_entity_record(.$format)?"(action:"getEntityRecord")
+        get "/$controller/view_data(.$format)?"(action:"viewData")
+
+        '/odxRest/getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
+        '/odxRest/getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')
+        '/odxRest/getPreloadEntities'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getPreloadEntities')
+        '/odxRest/getFilters'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilters')
+        '/odxRest/getFilteredEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityData')
+        '/odxRest/getFilteredEntityDataMap'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityDataMap')
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')

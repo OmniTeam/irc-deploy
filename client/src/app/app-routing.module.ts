@@ -43,7 +43,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
       },
       {
-        path: 'entities', canActivate: [AuthGuard],
+        path: 'entity', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
       {
@@ -51,12 +51,28 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/tasklist/tasklist.module').then(m => m.TaskListModule)
       },
       {
-        path: 'createentities', canActivate: [AuthGuard],
+        path: 'createEntity', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
       },
       {
-        path: 'entities/:id', canActivate: [AuthGuard],
+        path: 'entity/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
+      },
+      {
+        path: 'linkForm/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/link-form/link-form.module').then(m => m.LinkFormModule)
+      },
+      {
+        path: 'entityView', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/entity-views.module').then(m => m.EntityViewsModule)
+      },
+      {
+        path: 'createEntityView/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/create-entity-views/create-entity-views.module').then(m => m.CreateEntityViewsModule)
+      },
+      {
+        path: 'entityView/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/entity-view-table/entity-view-table.module').then(m => m.EntityViewTableModule)
       },
       {
         path: 'dashboards',

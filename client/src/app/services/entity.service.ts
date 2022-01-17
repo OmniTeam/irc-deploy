@@ -14,6 +14,10 @@ export class EntityService {
     return this.http.get(`${environment.serverUrl}/misEntity`);
   }
 
+  getEntityRecord(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/misEntity/get_entity_record`, {params});
+  }
+
   createEntity(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/misEntity`, formData);
   }
@@ -22,7 +26,23 @@ export class EntityService {
     return this.http.get(`${environment.serverUrl}/misEntity/get_entity_data`, {params});
   }
 
-  addNewEntityRecord(entityRecord): Observable<any> {
-    return this.http.post(`${environment.serverUrl}/misEntity/insert_entity_record`, entityRecord);
+  addNewEntityRecord(entityRecord, params): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/misEntity/insert_entity_record`, entityRecord, {params});
+  }
+
+  getEntityFields(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/misEntity/get_entity_fields`, {params});
+  }
+
+  getEntityViews(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/entityView`);
+  }
+
+  createEntityView(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/entityView`, formData);
+  }
+
+  getEntityViewData(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/entityView/view_data`, {params});
   }
 }

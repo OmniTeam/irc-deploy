@@ -2,6 +2,7 @@ package com.kengamis
 
 class MisEntity {
 
+    static String DEFAULT_QUERY = """sqlFilter.getProcessedSql("SELECT \$keyField as keyField \$otherFields  FROM \$tableName where 1 and #where# ")"""
     String id
     String name
     String tableName
@@ -9,7 +10,7 @@ class MisEntity {
     Date lastUpdated
     boolean ignoreUserContext = false
 
-    static hasMany = [entityFields: EntityFields, entityForms: EntityForm]
+    static hasMany = [entityFields: EntityFields, entityForms: EntityForm, entityViews: EntityView]
 
     static constraints = {
         name nullable: false
