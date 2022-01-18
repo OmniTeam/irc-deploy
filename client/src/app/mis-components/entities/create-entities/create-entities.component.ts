@@ -138,7 +138,7 @@ export class CreateEntitiesComponent implements OnInit {
   }
 
   generateEntityTableName(entityName: string): string {
-    return entityName.toLowerCase().replace(' ', '_');
+    return this.replaceAll(entityName.toLowerCase(),' ', '_');
   }
 
   generateSqlDataType(dataType: string): string {
@@ -160,7 +160,7 @@ export class CreateEntitiesComponent implements OnInit {
   }
 
   generateFieldName(displayName: string): string {
-    return displayName.toLowerCase().replace(' ', '_');
+    return this.replaceAll(displayName.toLowerCase(),' ', '_');
   }
 
   updateValue(event, cell, rowIndex) {
@@ -173,6 +173,10 @@ export class CreateEntitiesComponent implements OnInit {
   onReset() {
     this.formGroup.reset();
     this.formGroupField.reset();
+  }
+
+  replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
   }
 
 }
