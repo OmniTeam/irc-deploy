@@ -1,0 +1,14 @@
+th.text-left {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: inherit;
+}
+
+label.control-label.col-sm-4 {
+  font-size: 15px;
+}
+
+.col > .card, .container {
+  padding: 20px;
+  margin: 20px;
+}
