@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
+import {FormViewService} from "../../services/form-view.service";
 
 @Component({
   selector: 'app-form-view',
@@ -9,9 +10,20 @@ import {Subject} from "rxjs";
 })
 export class FormViewComponent implements OnInit {
 
-  constructor() { }
+  rows: Object[];
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
+  constructor( private router: Router, private formViewService: FormViewService) { }
 
   ngOnInit(): void {
+    this.formViewService.getForms().subscribe(data => {
+      console.log(data);
+      this.rows = data;
+      this.dtTrigger.next();
+    }, error => console.log(error));
+
+    this.dtOptions = { };
   }
 
 }
