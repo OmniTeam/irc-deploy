@@ -23,7 +23,14 @@ export class FormViewComponent implements OnInit {
       this.dtTrigger.next();
     }, error => console.log(error));
 
-    this.dtOptions = { };
+    this.dtOptions = {
+      pagingType: "numbers",
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      processing: true,
+      responsive: true,
+      dom: 'lfBrtip',
+      buttons: []
+    };
   }
 
 }
