@@ -71,9 +71,12 @@
       // Icon
 
       > i {
-        min-width: $navbar-icon-min-width;
+       /* min-width: $navbar-icon-min-width;
         font-size: 0.9375rem;
-        line-height: ($font-size-base * $line-height-base);
+        line-height: ($font-size-base * $line-height-base);*/
+        min-width: 2.3rem;
+        font-size: 1.2rem;
+        line-height: 2rem;
       }
 
       // Dropdown
