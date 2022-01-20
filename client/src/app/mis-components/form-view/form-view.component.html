@@ -21,39 +21,55 @@
 
                 <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
                   <div class="card">
-                    <table class="table-borderless" style="margin: 20px;">
-                      <tr><th class='text-left'>Program:</th>
-                        <th class='text-left'>Physical Address:</th></tr>
-                      <tr><th class='text-left'>Name of the Lead Cluster Organization:</th>
-                        <th class='text-left'>Postal Address:</th></tr>
-                      <tr><th class='text-left'>Acronym Name:</th>
-                        <th class='text-left'>Email:</th></tr>
-                      <tr><th class='text-left'>Type of Organisation:</th>
-                        <th class='text-left'>Website:</th></tr>
-                      <tr><th class='text-left'>Legal Status:</th>
-                        <th class='text-left'>Country:</th></tr>
-                      <tr><th class='text-left'>Name of Contact Person:</th>
-                        <th class='text-left'>City:</th></tr>
-                    </table>
+                    <div class="row" style="margin: 20px;">
+                      <div class="col-sm-6">
+                        <ul>
+                          <li>Program:</li>
+                          <li>Physical Address:</li>
+                          <li>Name of the Lead Cluster Organization:</li>
+                          <li>Postal Address:</li>
+                          <li>Acronym Name:</li>
+                          <li>Email:</li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-6">
+                        <ul>
+                          <li>Type of Organisation:</li>
+                          <li>Website:</li>
+                          <li>Legal Status:</li>
+                          <li>Country:</li>
+                          <li>Name of Contact Person:</li>
+                          <li>City:</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
 
                 <h3 style="margin-left: 40px;">PROJECT OVERVIEW</h3>
                 <div class="card">
-                  <table class="table-borderless" style="margin: 20px;">
-                    <tr><th class='text-left'>Reporting Period:</th>
-                      <th class='text-left'>Total Grant Amount:</th></tr>
-                    <tr><th class='text-left'>Grant Start Date:</th>
-                      <th class='text-left'>Amount Transferred in the reporting period:</th></tr>
-                    <tr><th class='text-left'>Grant End Date:</th>
-                      <th class='text-left'>Amount Utilized in the period:</th></tr>
-                    <tr><th class='text-left'>Balance Spent/Overspent:</th></tr>
-                  </table>
+                  <div class="row" style="margin: 20px;">
+                    <div class="col-sm-6">
+                      <ul>
+                        <li>Reporting Period:</li>
+                        <li>Grant Start Date:</li>
+                        <li>Grant End Date:</li>
+                      </ul>
+                    </div>
+                    <div class="col-sm-6">
+                      <ul>
+                        <li>Total Grant Amount:</li>
+                        <li>Amount Transferred in the reporting period:</li>
+                        <li>Amount Utilized in the period:</li>
+                        <li>Balance Spent/Overspent:</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
                 <h3 style="margin-left: 40px;">SUMMARY OF PERFORMANCE FOR THE REPORTING PERIOD</h3>
                 <div class="card">
                   <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                         class="table table-striped table-bordered">
+                         class="table table-striped table-bordered" id="summary">
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
@@ -73,7 +89,7 @@
                 <h3 style="margin-left: 40px;">FINANCIAL PERIOD</h3>
                 <div class="card">
                   <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                         class="table table-striped table-bordered">
+                         class="table table-striped table-bordered" id="financial">
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
@@ -90,21 +106,41 @@
                   </table>
                 </div>
 
-                <div class="container">
-                  <form class="form-horizontal" style="margin: 20px;">
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="attachment1">Attach narrative to the program report</label>
-                        <input class="form-control col-sm-8" id="attachment1" placeholder="upload document" type="text" />
+                <div class="card" id="attach_files">
+                  <form style="margin: 20px;">
+                    <div class="form-group row">
+                        <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label></div>
+                        <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document" type="file" /></div>
+                        <div class="col-sm-3"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-5" for="attachment2">Attach narrative duly signed financial report</label>
-                        <input class="form-control col-sm-7" id="attachment2" placeholder="upload document" type="text" />
+                    <div class="form-group row">
+                        <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial report:</label></div>
+                        <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document" type="file" /></div>
+                        <div class="col-sm-3"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-4" for="attachment3">Attach narrative to the program report</label>
-                        <input class="form-control col-sm-8" id="attachment3" placeholder="upload document" type="text" />
+                    <div class="form-group row">
+                        <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label></div>
+                        <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document" type="file" /></div>
+                        <div class="col-sm-3"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
                     </div>
                   </form>
+                </div>
+
+                <div class="card" id="attached_files">
+                  <div class="container" style="margin: 20px;">
+                    <div class="row">
+                      <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-6"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
+                      <div class="col-sm-6"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-6"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="container">
