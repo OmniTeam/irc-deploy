@@ -12,3 +12,14 @@ label.control-label.col-sm-4 {
   padding: 20px;
   margin: 20px;
 }
+
+.card > div, form {
+  margin: 20px;
+}
+
+.comment_btn {
+  height: 25px;
+  width: max-content;
+  padding: revert;
+  font-size: 12px;
+}

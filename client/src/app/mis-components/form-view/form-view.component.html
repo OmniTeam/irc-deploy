@@ -3,7 +3,9 @@
     <div class="header-body">
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
-          <h6 class="h2 text-white d-inline-block mb-0">SUBMIT PROGRESS REPORT</h6>
+          <h6 class="h2 text-white d-inline-block mb-0" id="submit_progress_report">SUBMIT PROGRESS REPORT</h6>
+          <h6 class="h2 text-white d-inline-block mb-0" id="review_progress_report">REVIEW PROGRESS REPORT</h6>
+          <h6 class="h2 text-white d-inline-block mb-0" id="approve_progress_report">APPROVE PROGRESS REPORT</h6>
         </div>
       </div>
     </div>
@@ -20,30 +22,30 @@
               <div class=" col">
 
                 <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
-                  <div class="card">
-                    <div class="row" style="margin: 20px;">
-                      <div class="col-sm-6">
-                        <ul>
-                          <li>Program:</li>
-                          <li>Physical Address:</li>
-                          <li>Name of the Lead Cluster Organization:</li>
-                          <li>Postal Address:</li>
-                          <li>Acronym Name:</li>
-                          <li>Email:</li>
-                        </ul>
-                      </div>
-                      <div class="col-sm-6">
-                        <ul>
-                          <li>Type of Organisation:</li>
-                          <li>Website:</li>
-                          <li>Legal Status:</li>
-                          <li>Country:</li>
-                          <li>Name of Contact Person:</li>
-                          <li>City:</li>
-                        </ul>
-                      </div>
+                <div class="card">
+                  <div class="row" style="margin: 20px;">
+                    <div class="col-sm-6">
+                      <ul>
+                        <li>Program:</li>
+                        <li>Physical Address:</li>
+                        <li>Name of the Lead Cluster Organization:</li>
+                        <li>Postal Address:</li>
+                        <li>Acronym Name:</li>
+                        <li>Email:</li>
+                      </ul>
+                    </div>
+                    <div class="col-sm-6">
+                      <ul>
+                        <li>Type of Organisation:</li>
+                        <li>Website:</li>
+                        <li>Legal Status:</li>
+                        <li>Country:</li>
+                        <li>Name of Contact Person:</li>
+                        <li>City:</li>
+                      </ul>
                     </div>
                   </div>
+                </div>
 
                 <h3 style="margin-left: 40px;">PROJECT OVERVIEW</h3>
                 <div class="card">
@@ -106,49 +108,240 @@
                   </table>
                 </div>
 
-                <div class="card" id="attach_files">
-                  <form style="margin: 20px;">
+                <div class="card" id="submit_attach_files">
+                  <form>
                     <div class="form-group row">
-                        <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label></div>
-                        <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document" type="file" /></div>
-                        <div class="col-sm-3"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label>
+                      </div>
+                      <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
+                                                   type="file"/></div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                        class="text fas fa-file-download"></a> Download Template
+                        </button>
+                      </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial report:</label></div>
-                        <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document" type="file" /></div>
-                        <div class="col-sm-3"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                      <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
+                        report:</label></div>
+                      <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
+                                                   type="file"/></div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                        class="text fas fa-file-download"></a> Download Template
+                        </button>
+                      </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label></div>
-                        <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document" type="file" /></div>
-                        <div class="col-sm-3"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label>
+                      </div>
+                      <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
+                                                   type="file"/></div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                        class="text fas fa-file-download"></a> Download Template
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </div>
 
-                <div class="card" id="attached_files">
-                  <div class="container" style="margin: 20px;">
+                <div class="card" id="review_attach_files">
+                  <div class="container">
                     <div class="row">
                       <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-6"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                      <div class="col-sm-6">
+                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                        class="text fas fa-file-download"></a> Download Template
+                        </button>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
-                      <div class="col-sm-6"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                      <div class="col-sm-6">
+                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                        class="text fas fa-file-download"></a> Download Template
+                        </button>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-6"><button class="btn btn-link"><a routerLink="#" style="font-size:15px;" class="text fas fa-file-download"></a>  Download Template</button></div>
+                      <div class="col-sm-6">
+                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                        class="text fas fa-file-download"></a> Download Template
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="container">
+                <h3 style="margin-left: 40px;">GROUP NAME</h3>
+                <div class="card" id="approve_attach_files">
                   <div class="row">
-                    <div class=" col-lg-12" style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger">Cancel</button>
-                    <button class="btn btn-success">Submit</button>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
+                        <div class="col-sm-6">
+                          <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                          class="text fas fa-file-download"></a> Download Template
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
+                        <div class="col-sm-6">
+                          <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                          class="text fas fa-file-download"></a> Download Template
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
+                        <div class="col-sm-6">
+                          <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
+                                                          class="text fas fa-file-download"></a> Download Template
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <p>Balance brought forward from previous period: </p>
+                      <p>Total funds received during reporting period: </p>
+                      <p>Actual expenditure for current reporting period: </p>
+                      <p>Funds available at end of current reporting period: </p>
+                      <p>Disbursement cycle due: Cycle - Q4: Amount - </p>
+                    </div>
                   </div>
+                </div>
+
+                <h3 style="margin-left: 40px;">REVIEWER INFORMATION</h3>
+                <div class="card" id="review_reviewer_information">
+                  <div class="row">
+                    <div class="col">
+                      <div style="margin-bottom: 30px;">
+                        <p>Are the expenses realistic?</p>
+                        <input type="radio" value="yes" name="expenses_realistic" ngModel> Yes
+                        <input type="radio" value="no" name="expenses_realistic" ngModel> No
+                      </div>
+                      <div style="margin-bottom: 30px;">
+                        <p>Have the attachments been verified?</p>
+                        <input type="radio" value="yes" name="attachments_verified" ngModel> Yes
+                        <input type="radio" value="no" name="attachments_verified" ngModel> No
+                      </div>
+                      <div>
+                        <p>Are the figures provided realistic?</p>
+                        <input type="radio" value="yes" name="figures_realistic" ngModel> Yes
+                        <input type="radio" value="no" name="figures_realistic" ngModel> No
+                      </div>
+                    </div>
+
+                    <div class="col">
+                      <div style="margin-bottom: 30px;">
+                        <p>Does the narrative align with the objectives of the project?</p>
+                        <input type="radio" value="yes" name="narrative_align" ngModel> Yes
+                        <input type="radio" value="no" name="narrative_align" ngModel> No
+                      </div>
+                      <div style="margin-bottom: 30px;">
+                        <p>Are they in line with the targets?</p>
+                        <input type="radio" value="yes" name="inline_with_targets" ngModel> Yes
+                        <input type="radio" value="no" name="inline_with_targets" ngModel> No
+                      </div>
+                      <div>
+                        <p>Is the evidence of the activities satisfactory?</p>
+                        <input type="radio" value="yes" name="evidence_satisfactory" ngModel> Yes
+                        <input type="radio" value="no" name="evidence_satisfactory" ngModel> No
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <p>Comments (Partner)</p>
+                      <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="col">
+                      <p>Recommendations (Internal)</p>
+                      <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card" id="approve_reviewer_information">
+                  <div class="row">
+                    <div class="col-sm-9">
+                      <div class="row">
+                        <div class="col-sm-8"><p>Has the partner satisfactorily affected the suggested changes?</p></div>
+                        <div class="col-sm-4" style="margin-bottom: 30px;">
+                          <input type="radio" value="yes" name="suggested_changes_satisfactory" ngModel> Yes
+                          <input type="radio" value="no" name="suggested_changes_satisfactory" ngModel> No
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-8"><p>Are the financial, performance and narrative reports well aligned?</p></div>
+                        <div class="col-sm-4" style="margin-bottom: 30px;">
+                          <input type="radio" value="yes" name="reports_well_aligned" ngModel> Yes
+                          <input type="radio" value="no" name="reports_well_aligned" ngModel> No
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-8"><p>Do you recommend for further fund disbursement?</p></div>
+                        <div class="col-sm-4" style="margin-bottom: 30px;">
+                          <input type="radio" value="yes" name="recommend_fund" ngModel> Yes
+                          <input type="radio" value="no" name="recommend_fund" ngModel> No
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-8"><p>Is this the end of this partnership?</p></div>
+                        <div class="col-sm-4" style="margin-bottom: 30px;">
+                          <input type="radio" value="yes" name="recommend_fund" ngModel> Yes
+                          <input type="radio" value="no" name="recommend_fund" ngModel> No
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                      <div>
+                        <button class="btn btn-success comment_btn">View Recommendations</button>
+                        <br><br>
+                        <button class="btn btn-success comment_btn">View Comments</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                    <div class="col"><p>Amount of Funds to be disbursed:</p></div>
+                    <div class="col text-left"><input type="text" class="form-control"/><br></div>
+                  </div>
+                  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                    <div class="col"><p>Provide any recommendations (Internal):</p></div>
+                    <div class="col text-left"><textarea class="form-control"></textarea></div>
+                  </div>
+                </div>
+
+
+                <div class="container">
+                  <div class="row" id="submit_report_buttons">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger">Cancel</button>
+                      <button class="btn btn-success">Submit</button>
+                    </div>
+                  </div>
+                  <div class="row" id="review_information_buttons">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger">Ask for Revisions</button>
+                      <button class="btn btn-success">Approve Report</button>
+                    </div>
+                  </div>
+                  <div class="row" id="approve_information_buttons">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger">Cancel</button>
+                      <button class="btn btn-success">Approve Report</button>
+                    </div>
                   </div>
                 </div>
 
