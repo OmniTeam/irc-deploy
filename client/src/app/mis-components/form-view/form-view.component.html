@@ -48,25 +48,25 @@
 
                 <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
                 <div class="card">
-                  <div class="row" style="margin: 20px;">
+                  <div class="row" style="margin: 10px;">
                     <div class="col-sm-6">
-                      <ul>
-                        <li>Program:</li>
-                        <li>Physical Address:</li>
-                        <li>Name of the Lead Cluster Organization:</li>
-                        <li>Postal Address:</li>
-                        <li>Acronym Name:</li>
-                        <li>Email:</li>
+                      <ul style="list-style: none; font-size: 15px">
+                        <li>Program: <b>{{organisationalInfo.program}}</b></li>
+                        <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
+                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b></li>
+                        <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
+                        <li>Acronym Name: <b>{{organisationalInfo.acronym_name}}</b></li>
+                        <li>Email: <b>{{organisationalInfo.email}}</b></li>
                       </ul>
                     </div>
                     <div class="col-sm-6">
-                      <ul>
-                        <li>Type of Organisation:</li>
-                        <li>Website:</li>
-                        <li>Legal Status:</li>
-                        <li>Country:</li>
-                        <li>Name of Contact Person:</li>
-                        <li>City:</li>
+                      <ul style="list-style: none; font-size: 15px">
+                        <li>Type of Organisation: <b>{{organisationalInfo.organization_type}}</b></li>
+                        <li>Website: <b>{{organisationalInfo.website}}</b></li>
+                        <li>Legal Status: <b>{{organisationalInfo.legal_status}}</b></li>
+                        <li>Country: <b>{{organisationalInfo.country}}</b></li>
+                        <li>Name of Contact Person: <b>{{organisationalInfo.contact_person}}</b></li>
+                        <li>City: <b>{{organisationalInfo.city}}</b></li>
                       </ul>
                     </div>
                   </div>
@@ -76,18 +76,18 @@
                 <div class="card">
                   <div class="row" style="margin: 20px;">
                     <div class="col-sm-6">
-                      <ul>
-                        <li>Reporting Period:</li>
-                        <li>Grant Start Date:</li>
-                        <li>Grant End Date:</li>
+                      <ul style="list-style: none; font-size: 15px">
+                        <li>Reporting Period: <b>{{projectInfo.reporting_period}}</b></li>
+                        <li>Grant Start Date: <b>{{projectInfo.grant_start_date}}</b></li>
+                        <li>Grant End Date: <b>{{projectInfo.grant_end_date}}</b></li>
                       </ul>
                     </div>
                     <div class="col-sm-6">
-                      <ul>
-                        <li>Total Grant Amount:</li>
-                        <li>Amount Transferred in the reporting period:</li>
-                        <li>Amount Utilized in the period:</li>
-                        <li>Balance Spent/Overspent:</li>
+                      <ul style="list-style: none; font-size: 15px">
+                        <li>Total Grant Amount: <b>{{projectInfo.total_grant_amount}}</b></li>
+                        <li>Amount Transferred in the reporting period: <b>{{projectInfo.amount_transferred}}</b></li>
+                        <li>Amount Utilized in the period: <b>{{projectInfo.amount_utilized}}</b></li>
+                        <li>Balance Spent/Overspent: <b>{{projectInfo.balance_spent_overspend}}</b></li>
                       </ul>
                     </div>
                   </div>
@@ -109,7 +109,18 @@
                       <th class='text-center'>Comment</th>
                     </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                    <tr *ngFor="let row of performance">
+                      <td class='text-center' style="display: none;">{{row.id}}</td>
+                      <td class='text-center'>{{ row.output_indicators }}</td>
+                      <td class='text-center'>{{ row.overall_target }}</td>
+                      <td class='text-center'>{{ row.cumulative_achievement }}</td>
+                      <td class='text-center'>{{ row.quarter_target }}</td>
+                      <td class='text-center'>{{ row.quarter_achievement }}</td>
+                      <td class='text-center'>{{ row.percentage_achievement }}</td>
+                      <td class='text-center'></td>
+                    </tr>
+                    </tbody>
                   </table>
                 </div>
 
@@ -129,7 +140,18 @@
                       <th class='text-center'>Reason for Variance</th>
                     </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                    <tr *ngFor="let row of financialReport">
+                      <td class='text-center' style="display: none;">{{row.id}}</td>
+                      <td class='text-center'>{{ row.budget_line }}</td>
+                      <td class='text-center'>{{ row.approved_budget }}</td>
+                      <td class='text-center'>{{ row.total_advanced }}</td>
+                      <td class='text-center'>{{ row.expense_to_date }}</td>
+                      <td class='text-center'></td>
+                      <td class='text-center'></td>
+                      <td class='text-center'></td>
+                    </tr>
+                    </tbody>
                   </table>
                 </div>
 
