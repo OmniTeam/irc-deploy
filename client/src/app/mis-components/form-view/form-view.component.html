@@ -3,9 +3,12 @@
     <div class="header-body">
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
-          <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0" >SUBMIT PROGRESS REPORT</h6></div>
-          <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0" >REVIEW PROGRESS REPORT</h6></div>
-          <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0" >APPROVE PROGRESS REPORT</h6></div>
+          <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">SUBMIT
+            PROGRESS REPORT</h6></div>
+          <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">REVIEW
+            PROGRESS REPORT</h6></div>
+          <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
+            APPROVE PROGRESS REPORT</h6></div>
         </div>
       </div>
     </div>
@@ -17,6 +20,28 @@
     <div class=" col">
       <div class=" card">
         <div class="row">
+          <div class="col-sm-12 justify-center">
+            <div class="col-sm-3 justify-center">
+              <button class="btn btn-light"
+                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'"
+                      (click)="changeForm('Submit')">Submit Report
+              </button>
+            </div>
+            <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
+            <div class="col-sm-3 justify-center">
+              <button class="btn btn-light"
+                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'"
+                      (click)="changeForm('Review')">Review Report
+              </button>
+            </div>
+            <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
+            <div class="col-sm-3 justify-center">
+              <button class="btn btn-light"
+                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'"
+                      (click)="changeForm('Approve')">Approve Report
+              </button>
+            </div>
+          </div>
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
               <div class=" col">
@@ -214,7 +239,8 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;" [style.display]="isReviewVisible ? 'block' : 'none'">REVIEWER INFORMATION</h3>
+                <h3 style="margin-left: 40px;" [style.display]="isReviewVisible ? 'block' : 'none'">REVIEWER
+                  INFORMATION</h3>
                 <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="row">
                     <div class="col">
@@ -271,14 +297,16 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
-                        <div class="col-sm-8"><p>Has the partner satisfactorily affected the suggested changes?</p></div>
+                        <div class="col-sm-8"><p>Has the partner satisfactorily affected the suggested changes?</p>
+                        </div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
                           <input type="radio" value="yes" name="suggested_changes_satisfactory" ngModel> Yes
                           <input type="radio" value="no" name="suggested_changes_satisfactory" ngModel> No
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-8"><p>Are the financial, performance and narrative reports well aligned?</p></div>
+                        <div class="col-sm-8"><p>Are the financial, performance and narrative reports well aligned?</p>
+                        </div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
                           <input type="radio" value="yes" name="reports_well_aligned" ngModel> Yes
                           <input type="radio" value="no" name="reports_well_aligned" ngModel> No
@@ -333,7 +361,7 @@
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                       <button class="btn btn-danger">Ask for Revisions</button>
-                      <button class="btn btn-success"  (click)="changeForm('Approve')">Approve Report</button>
+                      <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
                     </div>
                   </div>
                   <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">

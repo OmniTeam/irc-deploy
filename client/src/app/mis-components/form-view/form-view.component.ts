@@ -47,6 +47,7 @@ export class FormViewComponent implements OnInit {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
+    if(formName=='Submit') this.isSubmitVisible = true;
     if(formName=='Review') this.isReviewVisible = true;
     if(formName=='Approve') this.isApproveVisible = true;
     window.scroll(0,0);
