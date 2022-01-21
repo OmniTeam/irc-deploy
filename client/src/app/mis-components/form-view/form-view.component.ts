@@ -13,6 +13,9 @@ export class FormViewComponent implements OnInit {
   rows: Object[];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  isSubmitVisible: boolean;
+  isReviewVisible: boolean;
+  isApproveVisible: boolean;
 
   constructor( private router: Router, private formViewService: FormViewService) { }
 
@@ -20,6 +23,9 @@ export class FormViewComponent implements OnInit {
     this.formViewService.getForms().subscribe(data => {
       console.log(data);
       this.rows = data;
+      this.isSubmitVisible = true;
+      this.isReviewVisible = false;
+      this.isApproveVisible = false;
       this.dtTrigger.next();
     }, error => console.log(error));
 
@@ -37,4 +43,12 @@ export class FormViewComponent implements OnInit {
     } );
   }
 
+  changeForm(formName) {
+    this.isSubmitVisible = false;
+    this.isReviewVisible = false;
+    this.isApproveVisible = false;
+    if(formName=='Review') this.isReviewVisible = true;
+    if(formName=='Approve') this.isApproveVisible = true;
+    window.scroll(0,0);
+  }
 }

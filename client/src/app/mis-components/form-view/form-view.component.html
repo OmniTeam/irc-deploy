@@ -3,9 +3,9 @@
     <div class="header-body">
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
-          <h6 class="h2 text-white d-inline-block mb-0" id="submit_progress_report">SUBMIT PROGRESS REPORT</h6>
-          <h6 class="h2 text-white d-inline-block mb-0" id="review_progress_report">REVIEW PROGRESS REPORT</h6>
-          <h6 class="h2 text-white d-inline-block mb-0" id="approve_progress_report">APPROVE PROGRESS REPORT</h6>
+          <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0" >SUBMIT PROGRESS REPORT</h6></div>
+          <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0" >REVIEW PROGRESS REPORT</h6></div>
+          <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0" >APPROVE PROGRESS REPORT</h6></div>
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@
                   </table>
                 </div>
 
-                <h3 style="margin-left: 40px;">FINANCIAL PERIOD</h3>
+                <h3 style="margin-left: 40px;">FINANCIAL REPORT</h3>
                 <div class="card">
                   <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
                          class="table table-striped table-bordered" id="financial">
@@ -108,7 +108,7 @@
                   </table>
                 </div>
 
-                <div class="card" id="submit_attach_files">
+                <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
                       <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label>
@@ -146,7 +146,7 @@
                   </form>
                 </div>
 
-                <div class="card" id="review_attach_files">
+                <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
                       <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
@@ -175,8 +175,8 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;">GROUP NAME</h3>
-                <div class="card" id="approve_attach_files">
+                <h3 style="margin-left: 40px;" [style.display]="isApproveVisible ? 'block' : 'none'">GROUP NAME</h3>
+                <div class="card" [style.display]="isApproveVisible ? 'block' : 'none'">
                   <div class="row">
                     <div class="col">
                       <div class="row">
@@ -214,8 +214,8 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;">REVIEWER INFORMATION</h3>
-                <div class="card" id="review_reviewer_information">
+                <h3 style="margin-left: 40px;" [style.display]="isReviewVisible ? 'block' : 'none'">REVIEWER INFORMATION</h3>
+                <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="row">
                     <div class="col">
                       <div style="margin-bottom: 30px;">
@@ -267,7 +267,7 @@
                   </div>
                 </div>
 
-                <div class="card" id="approve_reviewer_information">
+                <div class="card" [style.display]="isApproveVisible ? 'block' : 'none'">
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
@@ -294,8 +294,8 @@
                       <div class="row">
                         <div class="col-sm-8"><p>Is this the end of this partnership?</p></div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="recommend_fund" ngModel> Yes
-                          <input type="radio" value="no" name="recommend_fund" ngModel> No
+                          <input type="radio" value="yes" name="end_of_partnership" ngModel> Yes
+                          <input type="radio" value="no" name="end_of_partnership" ngModel> No
                         </div>
                       </div>
                     </div>
@@ -322,21 +322,21 @@
 
 
                 <div class="container">
-                  <div class="row" id="submit_report_buttons">
+                  <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                       <button class="btn btn-danger">Cancel</button>
-                      <button class="btn btn-success">Submit</button>
+                      <button class="btn btn-success" (click)="changeForm('Review')">Submit Report</button>
                     </div>
                   </div>
-                  <div class="row" id="review_information_buttons">
+                  <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                       <button class="btn btn-danger">Ask for Revisions</button>
-                      <button class="btn btn-success">Approve Report</button>
+                      <button class="btn btn-success"  (click)="changeForm('Approve')">Approve Report</button>
                     </div>
                   </div>
-                  <div class="row" id="approve_information_buttons">
+                  <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                       <button class="btn btn-danger">Cancel</button>
