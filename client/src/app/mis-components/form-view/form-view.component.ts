@@ -106,10 +106,6 @@ export class FormViewComponent implements OnInit {
       dom: 'lfBrtip',
       buttons: []
     };
-
-    $.fn['summary'].DataTable( {
-      "scrollX": true
-    } );
   }
 
   changeForm(formName) {
