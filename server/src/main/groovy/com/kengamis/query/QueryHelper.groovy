@@ -183,7 +183,7 @@ class QueryHelper {
     String getWhereClause(def defaultValue = "") {
         def searchFilter = getSearchFilterExpr()
         def fieldFilter = getFieldFilterExpr()
-        def userFilter = getUserFilterExpr()
+        def userFilter = getUserFilter()
         def dateRangeFilter = getDateRangeFilterExpr()
         def finalWhereClause = [searchFilter, fieldFilter, userFilter, dateRangeFilter].findAll().join(' AND ')?.trim()
 
@@ -225,6 +225,16 @@ class QueryHelper {
         if (hasGroups())
             return "(${resolveFieldName(escapeField(userBaseTable))}.`submitterName` in (${userNames.collect { "'${escapeSql it}'" }.join(',')}))"
         return "(${resolveFieldName("`submitterName`")} in (${userNames.collect { "'${escapeSql it}'" }.join(',')}))"
+    }
+
+    private String getUserFilter() {
+        if (params.userFilter != '') {
+            if (userBaseTable)
+                return "(${escapeField userBaseTable}.submitterName = '${escapeSql params.userFilter}')"
+            else
+                return "(submitterName = '${escapeSql params.userFilter}')"
+        }
+        return null
     }
 
     private String getDateRangeFilterExpr() {
@@ -340,6 +350,12 @@ class QueryHelper {
     List<Map> getData() {
         log.trace("Query: Fetching Data: [$query]")
         withMisSqlNonTx { rows("$query  limit $maxRows offset $offset".toString()) }
+    }
+
+    List<Map> getFormDataCollectors() {
+        def userQuery = "select distinct submitterName from $formTable order by submitterName asc"
+        log.trace("Query: Fetching User Data: [$userQuery]")
+        withMisSqlNonTx { rows("$userQuery".toString()) }
     }
 
     static enum Config {

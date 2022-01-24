@@ -50,8 +50,6 @@
           <div class="row" style="padding: 11px;">
             <div class="col-lg-12 col-5 text-right">
               <a class=" btn btn-default" (click)="openFormModal(entityRecordModal)" style="color: white"> Form </a>
-              <a class=" btn btn-default" (click)="deleteRecord()" style="color: white"> Delete </a>
-              <a class=" btn btn-default" (click)="exportToExcel()" style="color: white"> Export Excel </a>
             </div>
           </div>
           <ngx-datatable
@@ -92,7 +90,7 @@
                 <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name}}" prop="{{col.prop}}">
+            <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name | replace: '_' : ' '}}" prop="{{col.prop}}">
             </ngx-datatable-column>
           </ngx-datatable>
         </div>
@@ -114,17 +112,17 @@
         <div class="col-md-12">
           <div class="form">
             <div class="row" style="padding-bottom: 15px">
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <label class=" form-control-label">
-                  {{ formInput.label }}
+                  {{ formInput.label | replace: '_' : ' ' | titlecase}}
                 </label>
               </div>
-              <div class="col-md-9">
+              <div class="col-md-8">
                 <input
                   type="{{ formInput['type'] }}"
                   id="{{ formInput['controlName'] }}"
                   class="form-control form-control-sm"
-                  placeholder="{{ formInput.label }}"
+                  placeholder="{{ formInput.label | replace: '_' : ' ' | titlecase}}"
                   formControlName="{{ formInput['controlName'] }}"
                   [ngClass]="{ 'is-invalid': submitted && f[formInput['controlName']].errors }"
                   required="required"

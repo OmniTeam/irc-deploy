@@ -39,6 +39,7 @@ export class EntityService {
   }
 
   createEntityView(formData): Observable<any> {
+    console.log(formData);
     return this.http.post(`${environment.serverUrl}/entityView`, formData);
   }
 

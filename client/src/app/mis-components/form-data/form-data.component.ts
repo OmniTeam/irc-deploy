@@ -5,7 +5,6 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {ModalDismissReasons, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ReplacePipe} from '../../replace-pipe';
-import {FormGroup} from '@angular/forms';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 import * as crossfilter from 'crossfilter2/crossfilter';
@@ -43,7 +42,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   SelectionType = SelectionType;
   closeModal: string;
   formName: String;
-  formGroup: FormGroup;
   userGroups = [
     {
       id: '745j4u45u6564',
@@ -58,28 +56,16 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       name: 'IMCOS'
     }
   ];
-  users = [
-    {
-      id: '745j4u45u694564',
-      name: 'Bryan'
-    },
-    {
-      id: '745j4u45u6947775678898564',
-      name: 'Angel'
-    },
-    {
-      id: '745j4u45u57794564',
-      name: 'Victor'
-    }
-  ];
+  users: any[] = [];
   selectedUserGroup: any;
-  selectedUser: any;
+  selectedUser = '';
   numberOfRecords: any;
   numberOfQuestions: any;
   coordinates: any[] = [];
   formtable = '';
   dateFrom = '';
   dateTo = '';
+  userFilter = '';
   searchValue = '';
   private map;
   formDataRecord: any;
@@ -95,18 +81,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     this.entries = $event.target.value;
   }
 
-  filterTable($event) {
-    const val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
-      for (const key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-
   onSelect({selected}) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
@@ -119,6 +93,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.formtable = params.formtable;
+      this.resetInputs();
       this.getFormData();
     });
   }
@@ -128,14 +103,18 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', this.formtable)
       .set('dateFrom', this.dateFrom)
       .set('dateTo', this.dateTo)
+      .set('userFilter', this.selectedUser)
       .set('search', this.searchValue);
+
 
     this.formService.getFormData(params).subscribe((data) => {
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
+      this.users = this.userMappings(data.formDataCollectors);
       this.numberOfRecords = data.resultListCount;
       this.numberOfQuestions = data.numberOfQuestions;
+      this.initCharts(data.formGraphData);
       if (data['gpsCoordinates'].length === 0) {
         document.getElementById("map_div").style.display = "none";
       } else {
@@ -148,11 +127,14 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }, error => console.log(error));
   }
 
+  resetInputs() {
+    this.dateTo = '';
+    this.dateFrom = '';
+    this.searchValue = '';
+    this.selectedUser = '';
+  }
+
   ngAfterViewInit(): void {
-    this.http.get('assets/data/users.csv', {responseType: 'text'}).subscribe(data => {
-      const formData = d3.csvParse(data);
-      this.initCharts(formData);
-    });
     this.initMap();
   }
 
@@ -164,18 +146,17 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       minZoom: 7,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
     });
     tiles.addTo(this.map);
   }
 
   private initCharts(formData): void {
-    const dateFormat2 = d3.utcParse('%Y-%m-%d %H:%M:%S.%L');
+    const dateFormat2 = d3.utcParse("%Y-%m-%dT%H:%M:%SZ");
     const dateFormat = d3.timeFormat('%a %e %b %Y');
     const numberFormat = d3.format('.2f');
     const user_bar_chart = dc.barChart('#form-data-bar-chart');
     const time_chart = dc.lineChart('#form-data-line-chart');
-    const barWidth = document.getElementById('form-data-bar-chart').offsetWidth;
     const lineWidth = document.getElementById('form-data-line-chart').offsetWidth;
 
     formData.forEach(d => {
@@ -183,7 +164,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       d.count = +d.count;
     });
     const ndx = crossfilter(formData);
-    const all = ndx.groupAll();
     const user_dim = ndx.dimension(d => {
       return d.user;
     });
@@ -340,6 +320,20 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     return columns;
   }
 
+  userMappings(array) {
+    if(array.length > 0) {
+      const users = [];
+      for (const user of array) {
+        const userProperties = {};
+        userProperties['id'] = user['submitterName'];
+        userProperties['name'] = user['submitterName'];
+        users.push(userProperties);
+      }
+      return users;
+    }
+    return [];
+  }
+
   viewRecord(modalDom, id: any) {
     const params = new HttpParams()
       .set('formtable', this.formtable)
@@ -348,8 +342,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       if (data !== null) {
         document.getElementById("form-data-display").style.display = "block";
         this.formDataRecord = data;
-      }
-      else {
+      } else {
         document.getElementById("form-data-display").style.display = "none";
         this.formDataRecord = [];
       }
@@ -369,11 +362,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     } else {
       return `with: ${reason}`;
     }
-  }
-
-  fetchFilteredData() {
-    const filters = this.formGroup.value;
-    console.log(filters);
   }
 
   remove_empty_bins(source_group) {
@@ -450,6 +438,13 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       this.searchValue = '';
     } else {
       this.searchValue = value;
+    }
+    this.getFormData();
+  }
+
+  onChangeUser(): void {
+    if (this.selectedUser === null) {
+      this.selectedUser = '';
     }
     this.getFormData();
   }
