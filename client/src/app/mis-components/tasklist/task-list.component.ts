@@ -35,12 +35,12 @@ export class TaskListComponent implements OnInit {
         {
           text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
           extend: 'csvHtml5',
-          title: 'Task'
+          title: 'TaskList'
         },
         {
           text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
           extend: 'excelHtml5',
-          title: 'Task'
+          title: 'TaskList'
         }
       ]
     };
