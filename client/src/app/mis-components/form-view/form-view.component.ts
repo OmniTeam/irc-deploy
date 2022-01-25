@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
+import {CommentNode} from '../comments/comments.component'
 
 @Component({
   selector: 'app-form-view',
@@ -13,9 +14,11 @@ export class FormViewComponent implements OnInit {
   rows: Object[];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  comments:Array<CommentNode> = [];
   isSubmitVisible: boolean;
   isReviewVisible: boolean;
   isApproveVisible: boolean;
+  openCommentsPopup: boolean;
   organisationalInfo = {
       id: 'asdaasrsgsdgfssgs',
       program: 'Adolescent Girl Power Program',
@@ -86,7 +89,9 @@ export class FormViewComponent implements OnInit {
     }
   ];
 
-  constructor( private router: Router, private formViewService: FormViewService) { }
+  constructor( private router: Router, private formViewService: FormViewService) {
+    this.comments =  [new CommentNode("This is my comment", "Mr.Rwele")]
+  }
 
   ngOnInit(): void {
     this.formViewService.getForms().subscribe(data => {
@@ -116,5 +121,9 @@ export class FormViewComponent implements OnInit {
     if(formName=='Review') this.isReviewVisible = true;
     if(formName=='Approve') this.isApproveVisible = true;
     window.scroll(0,0);
+  }
+
+  viewComments(): void {
+    this.openCommentsPopup = !this.openCommentsPopup;
   }
 }

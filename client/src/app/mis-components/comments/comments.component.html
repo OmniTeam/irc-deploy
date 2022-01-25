@@ -1,0 +1,13 @@
+<div id="mainDiv" *ngFor="let comment of comments.reverse()">
+  <label><i class="fas fa-user"></i>&nbsp;&nbsp;{{comment.user}}</label>
+  <p style="margin: 0px 0px 0px 20px;">{{comment.text}}</p>
+  <button class="btn btn-link" (click)="openCommentText(comment)">Reply</button>
+  <div *ngIf="comment.isOpen">
+    <textarea class="form-control" [(ngModel)]="text" cols="50" rows="3"></textarea>
+    <br>
+    <button class="btn btn-success comment_btn" (click)="addComment(comment)">Send</button>
+  </div>
+  <hr/>
+  <app-comments [comments]="comment.answers">
+  </app-comments>
+</div>
