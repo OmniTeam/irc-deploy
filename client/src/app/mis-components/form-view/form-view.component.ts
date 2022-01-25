@@ -19,6 +19,8 @@ export class FormViewComponent implements OnInit {
   isReviewVisible: boolean;
   isApproveVisible: boolean;
   openCommentsPopup: boolean;
+  openRecommendationsPopup: boolean;
+  openPopup: boolean;
   organisationalInfo = {
       id: 'asdaasrsgsdgfssgs',
       program: 'Adolescent Girl Power Program',
@@ -125,5 +127,11 @@ export class FormViewComponent implements OnInit {
 
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
+    this.openPopup = this.openCommentsPopup;
+  }
+
+  viewRecommendations(): void {
+    this.openRecommendationsPopup = !this.openRecommendationsPopup;
+    this.openPopup = this.openRecommendationsPopup;
   }
 }
