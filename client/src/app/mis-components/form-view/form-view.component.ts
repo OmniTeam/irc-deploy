@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
-import {CommentNode} from '../comments/comments.component'
+import {CommentNode} from '../comments/comments.component';
 
 @Component({
   selector: 'app-form-view',
   templateUrl: './form-view.component.html',
   styleUrls: ['./form-view.component.css']
 })
+
 export class FormViewComponent implements OnInit {
 
   rows: Object[];
@@ -113,6 +114,55 @@ export class FormViewComponent implements OnInit {
       dom: 'lfBrtip',
       buttons: []
     };
+
+    (function (jQuery) {
+
+      var table = jQuery('#financial').DataTable();
+
+      function  myCallbackFunction(updatedCell, updatedRow, oldValue) {
+        console.log("The new value for the cell is: " + updatedCell.data());
+        console.log("The old value for that cell was: " + oldValue);
+        console.log("The values for each cell in that row are: " + updatedRow.data());
+      }
+
+      // @ts-ignore
+     /* table.MakeCellsEditable({
+        "onUpdate": myCallbackFunction,
+        "inputCss":'my-input-class',
+        "columns": [0,1,2],
+        "allowNulls": {
+          "columns": [1],
+          "errorClass": 'error'
+        },
+        "confirmationButton": {
+          "confirmCss": 'my-confirm-class',
+          "cancelCss": 'my-cancel-class'
+        },
+        "inputTypes": [
+          {
+            "column":0,
+            "type":"text",
+            "options":null
+          },
+          {
+            "column":1,
+            "type": "list",
+            "options":[
+              { "value": "1", "display": "Beaty" },
+              { "value": "2", "display": "Doe" },
+              { "value": "3", "display": "Dirt" }
+            ]
+          },
+        ]
+      });
+*/
+    })(jQuery);
+  }
+
+  submitReport() {
+    ///TODO
+
+    this.changeForm('Review');
   }
 
   changeForm(formName) {
