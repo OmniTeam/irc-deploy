@@ -59,3 +59,10 @@ label.control-label.col-sm-4 {
   background-color: rgba(22,22,22,0.12); /* complimenting your modal colors */
   z-index: 10000;
 }
+
+.in-line-cell {
+  min-height: 35px;
+  margin: auto;
+  width: auto;
+  height: auto;
+}

@@ -143,7 +143,9 @@
                       <td class='text-center'>{{ row.quarter_target }}</td>
                       <td class='text-center'>{{ row.quarter_achievement }}</td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
-                      <td class='text-center'></td>
+                      <td class='text-center'>
+                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="comment" (keyup)="onKey($event)" name="summaryComment"/>
+                      </td>
                     </tr>
                     </tbody>
                   </table>
@@ -172,9 +174,15 @@
                       <td class='text-center'>{{ row.approved_budget }}</td>
                       <td class='text-center'>{{ row.total_advanced }}</td>
                       <td class='text-center'>{{ row.expense_to_date }}</td>
-                      <td class='text-center'></td>
-                      <td class='text-center'></td>
-                      <td class='text-center'></td>
+                      <td class='text-center'>
+                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="UGX" name="quarter_expense"/>
+                      </td>
+                      <td class='text-center'>
+                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="variance" name="variance"/>
+                      </td>
+                      <td class='text-center'>
+                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="reason" name="reason_for_variance"/>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

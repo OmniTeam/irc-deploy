@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-form-view',
@@ -115,34 +116,26 @@ export class FormViewComponent implements OnInit {
       buttons: []
     };
 
-    (function (jQuery) {
-
-      var table = jQuery('#financial').DataTable();
-
-      function  myCallbackFunction(updatedCell, updatedRow, oldValue) {
-        console.log("The new value for the cell is: " + updatedCell.data());
-        console.log("The old value for that cell was: " + oldValue);
-        console.log("The values for each cell in that row are: " + updatedRow.data());
-      }
-
-      // @ts-ignore
-     /* table.MakeCellsEditable({
+    var table;
+    $(document).ready(function () {
+      table = $('#financial').DataTable();
+      table.MakeCellsEditable({
         "onUpdate": myCallbackFunction,
-        "inputCss":'my-input-class',
-        "columns": [0,1,2],
+        "inputCss":'form-control',
+        "columns": [0,1,2,3],
         "allowNulls": {
-          "columns": [1],
+          "columns": [3],
           "errorClass": 'error'
         },
-        "confirmationButton": {
-          "confirmCss": 'my-confirm-class',
-          "cancelCss": 'my-cancel-class'
+        "confirmationButton": { // could also be true
+          "confirmCss": 'btn btn-success',
+          "cancelCss": 'btn btn-danger'
         },
         "inputTypes": [
           {
-            "column":0,
-            "type":"text",
-            "options":null
+            "column": 0,
+            "type": "text",
+            "options": null
           },
           {
             "column":1,
@@ -155,12 +148,69 @@ export class FormViewComponent implements OnInit {
           },
         ]
       });
-*/
-    })(jQuery);
+
+    });
+
+    function myCallbackFunction (updatedCell, updatedRow, oldValue) {
+      console.log("The new value for the cell is: " + updatedCell.data());
+      console.log("The old value for that cell was: " + oldValue);
+      console.log("The values for each cell in that row are: " + updatedRow.data());
+    }
+
+    function destroyTable() {
+      if ($.fn.dataTable.isDataTable('#myAdvancedTable')) {
+        table.destroy();
+        table.MakeCellsEditable("destroy");
+      }
+    }
+
+  }
+
+  summaryComments = [];
+  quarterExpenses = [];
+  variance = [];
+  reasonForVariance = [];
+  item = {};
+
+  onKey(event) {
+    this.item = {
+      id: event.target.id,
+      value: event.target.value
+    }
+
+    switch (event.target.name) {
+      case "summaryComment":
+        this.checkReplace(this.summaryComments ,this.item)
+        break;
+      case "quarter_expense":
+        this.quarterExpenses.push(this.item);
+        break;
+      case "variance":
+        this.variance.push(this.item);
+        break;
+      case "reason_for_variance":
+        this.reasonForVariance.push(this.item);
+        break;
+    }
+  }
+
+  checkReplace(list, item) {
+    if(list.length!==0) {
+      console.log("includes:  ", list.some(x=>x.id===item.id));
+      if (list.some(x=>x.id===item.id)) {
+        list.forEach(function (comment) {
+          if (comment.id === item.id) comment.value = item.value
+        });
+      } else list.push(item);
+    } else list.push(item);
   }
 
   submitReport() {
-    ///TODO
+
+    console.log("summaryComments: ", this.summaryComments);
+    this.summaryComments.forEach(function (comment) {
+      console.log("Comment: " + comment.value);
+    });
 
     this.changeForm('Review');
   }
