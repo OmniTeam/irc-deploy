@@ -78,7 +78,8 @@
                       <ul style="list-style: none; font-size: 15px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
                         <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b></li>
+                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b>
+                        </li>
                         <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
                         <li>Acronym Name: <b>{{organisationalInfo.acronym_name}}</b></li>
                         <li>Email: <b>{{organisationalInfo.email}}</b></li>
@@ -143,8 +144,15 @@
                       <td class='text-center'>{{ row.quarter_target }}</td>
                       <td class='text-center'>{{ row.quarter_achievement }}</td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
-                      <td class='text-center'>
-                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="comment" (keyup)="onKey($event)" name="summaryComment"/>
+                      <td class='text-center'>{{ row.comment_on_result }}
+                        <button class="btn btn-link"><i class="fas fa-pencil-alt"></i></button>
+                      </td>
+                      <td class='text-center'><input class="form-control in-line-cell" type="text"
+                                                     [value]="row.comment_on_result"
+                                                     [id]="row.id" placeholder="comment" (keyup)="onKey($event)"
+                                                     name="summaryComment"/>
+                        <button class="btn btn-link"><i class="fas fa-check"></i></button>
+                        <button class="btn btn-link"><i class="fas fa-times"></i></button>
                       </td>
                     </tr>
                     </tbody>
@@ -175,13 +183,16 @@
                       <td class='text-center'>{{ row.total_advanced }}</td>
                       <td class='text-center'>{{ row.expense_to_date }}</td>
                       <td class='text-center'>
-                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="UGX" name="quarter_expense"/>
+                        <input class="form-control in-line-cell" type="number" [value]="row.quarter_expenses"
+                               [id]="row.id" placeholder="UGX" (keyup)="onKey($event)" name="quarter_expense"/>
                       </td>
                       <td class='text-center'>
-                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="variance" name="variance"/>
+                        <input class="form-control in-line-cell" type="number" [value]="row.variance" [id]="row.id"
+                               placeholder="variance" (keyup)="onKey($event)" name="variance"/>
                       </td>
                       <td class='text-center'>
-                        <input class="form-control in-line-cell" type="text" [id]="row.id" placeholder="reason" name="reason_for_variance"/>
+                        <input class="form-control in-line-cell" type="text" [value]="row.reason_for_variance"
+                               [id]="row.id" placeholder="reason" (keyup)="onKey($event)" name="reason_for_variance"/>
                       </td>
                     </tr>
                     </tbody>
@@ -385,7 +396,9 @@
 
                     <div class="col-sm-3">
                       <div>
-                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View Recommendations</button>
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View
+                          Recommendations
+                        </button>
                         <br><br>
                         <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
                       </div>
@@ -403,27 +416,27 @@
                   </div>
                 </div>
 
-                  <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
-                    <div class="col-lg-12 bottom_buttons_row"
-                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger">Cancel</button>
-                      <button class="btn btn-success" (click)="submitReport()">Submit Report</button>
-                    </div>
+                <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Cancel</button>
+                    <button class="btn btn-success" (click)="submitReport()">Submit Report</button>
                   </div>
-                  <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
-                    <div class="col-lg-12 bottom_buttons_row"
-                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger">Ask for Revisions</button>
-                      <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
-                    </div>
+                </div>
+                <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Ask for Revisions</button>
+                    <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
                   </div>
-                  <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
-                    <div class="col-lg-12 bottom_buttons_row"
-                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger">Cancel</button>
-                      <button class="btn btn-success">Approve Report</button>
-                    </div>
+                </div>
+                <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Cancel</button>
+                    <button class="btn btn-success">Approve Report</button>
                   </div>
+                </div>
 
               </div>
             </div>
@@ -433,4 +446,3 @@
     </div>
   </div>
 </div>
-

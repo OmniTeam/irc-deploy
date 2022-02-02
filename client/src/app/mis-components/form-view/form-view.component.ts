@@ -3,7 +3,8 @@ import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
-import * as $ from "jquery";
+import 'datatables.net';
+// import * as $ from "jquery";
 
 @Component({
   selector: 'app-form-view',
@@ -16,7 +17,7 @@ export class FormViewComponent implements OnInit {
   rows: Object[];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  comments:Array<CommentNode> = [];
+  comments: Array<CommentNode> = [];
   isSubmitVisible: boolean;
   isReviewVisible: boolean;
   isApproveVisible: boolean;
@@ -24,20 +25,20 @@ export class FormViewComponent implements OnInit {
   openRecommendationsPopup: boolean;
   openPopup: boolean;
   organisationalInfo = {
-      id: 'asdaasrsgsdgfssgs',
-      program: 'Adolescent Girl Power Program',
-      cluster_organization: 'Empowered Gals of Busano',
-      acronym_name: 'EGB',
-      organization_type: 'CBO',
-      legal_status: 'Registered NGO',
-      contact_person: 'Musamali Jacob',
-      physical_address: 'Khatwelatwela, Nyondo Parish',
-      postal_address: 'None',
-      email: 'egb@gmail.com',
-      website: 'https://empoweredbusano.org/',
-      country: 'Uganda',
-      city: 'Mbale'
-    };
+    id: 'asdaasrsgsdgfssgs',
+    program: 'Adolescent Girl Power Program',
+    cluster_organization: 'Empowered Gals of Busano',
+    acronym_name: 'EGB',
+    organization_type: 'CBO',
+    legal_status: 'Registered NGO',
+    contact_person: 'Musamali Jacob',
+    physical_address: 'Khatwelatwela, Nyondo Parish',
+    postal_address: 'None',
+    email: 'egb@gmail.com',
+    website: 'https://empoweredbusano.org/',
+    country: 'Uganda',
+    city: 'Mbale'
+  };
   projectInfo = {
     id: 'akhfbkabsdkfjbsjf',
     reporting_period: '22 June 2022 to 21 Sep 2022',
@@ -93,8 +94,8 @@ export class FormViewComponent implements OnInit {
     }
   ];
 
-  constructor( private router: Router, private formViewService: FormViewService) {
-    this.comments =  [new CommentNode("This is my comment", "Mr.Rwele")]
+  constructor(private router: Router, private formViewService: FormViewService) {
+    this.comments = [new CommentNode("This is my comment", "Mr.Rwele")]
   }
 
   ngOnInit(): void {
@@ -116,13 +117,14 @@ export class FormViewComponent implements OnInit {
       buttons: []
     };
 
-    var table;
-    $(document).ready(function () {
-      table = $('#financial').DataTable();
-      table.MakeCellsEditable({
+    (function (jQuery) {
+
+      //var table = jQuery('#financial').DataTable();
+
+      /*table.MakeCellsEditable({
         "onUpdate": myCallbackFunction,
-        "inputCss":'form-control',
-        "columns": [0,1,2,3],
+        "inputCss": 'form-control',
+        "columns": [0, 1, 2, 3],
         "allowNulls": {
           "columns": [3],
           "errorClass": 'error'
@@ -138,79 +140,70 @@ export class FormViewComponent implements OnInit {
             "options": null
           },
           {
-            "column":1,
+            "column": 1,
             "type": "list",
-            "options":[
-              { "value": "1", "display": "Beaty" },
-              { "value": "2", "display": "Doe" },
-              { "value": "3", "display": "Dirt" }
+            "options": [
+              {"value": "1", "display": "Beaty"},
+              {"value": "2", "display": "Doe"},
+              {"value": "3", "display": "Dirt"}
             ]
           },
         ]
-      });
+      });*/
 
-    });
 
-    function myCallbackFunction (updatedCell, updatedRow, oldValue) {
-      console.log("The new value for the cell is: " + updatedCell.data());
-      console.log("The old value for that cell was: " + oldValue);
-      console.log("The values for each cell in that row are: " + updatedRow.data());
-    }
-
-    function destroyTable() {
-      if ($.fn.dataTable.isDataTable('#myAdvancedTable')) {
-        table.destroy();
-        table.MakeCellsEditable("destroy");
+      function myCallbackFunction(updatedCell, updatedRow, oldValue) {
+        console.log("The new value for the cell is: " + updatedCell.data());
+        console.log("The old value for that cell was: " + oldValue);
+        console.log("The values for each cell in that row are: " + updatedRow.data());
       }
-    }
 
+      function destroyTable() {
+        if (jQuery.fn.dataTable.isDataTable('#financial')) {
+          //table.destroy();
+          //table.MakeCellsEditable("destroy");
+        }
+      }
+
+    })(jQuery);
   }
-
-  summaryComments = [];
-  quarterExpenses = [];
-  variance = [];
-  reasonForVariance = [];
-  item = {};
 
   onKey(event) {
-    this.item = {
-      id: event.target.id,
-      value: event.target.value
-    }
-
     switch (event.target.name) {
       case "summaryComment":
-        this.checkReplace(this.summaryComments ,this.item)
+        if (this.performance.some(x => x.id === event.target.id)) {
+          this.performance.forEach(function (comment) {
+            if (comment.id === event.target.id) comment.comment_on_result = event.target.value
+          });
+        }
         break;
       case "quarter_expense":
-        this.quarterExpenses.push(this.item);
+        if (this.financialReport.some(x => x.id === event.target.id)) {
+          this.financialReport.forEach(function (item) {
+            if (item.id === event.target.id) item.quarter_expenses = event.target.value
+          });
+        }
         break;
       case "variance":
-        this.variance.push(this.item);
+        if (this.financialReport.some(x => x.id === event.target.id)) {
+          this.financialReport.forEach(function (item) {
+            if (item.id === event.target.id) item.variance = event.target.value
+          });
+        }
         break;
       case "reason_for_variance":
-        this.reasonForVariance.push(this.item);
+        if (this.financialReport.some(x => x.id === event.target.id)) {
+          this.financialReport.forEach(function (item) {
+            if (item.id === event.target.id) item.reason_for_variance = event.target.value
+          });
+        }
         break;
     }
-  }
-
-  checkReplace(list, item) {
-    if(list.length!==0) {
-      console.log("includes:  ", list.some(x=>x.id===item.id));
-      if (list.some(x=>x.id===item.id)) {
-        list.forEach(function (comment) {
-          if (comment.id === item.id) comment.value = item.value
-        });
-      } else list.push(item);
-    } else list.push(item);
   }
 
   submitReport() {
-
-    console.log("summaryComments: ", this.summaryComments);
-    this.summaryComments.forEach(function (comment) {
-      console.log("Comment: " + comment.value);
-    });
+    console.log("performanceSummaryComments: ", this.performance);
+    console.log("financialReport: ", this.financialReport);
 
     this.changeForm('Review');
   }
@@ -219,10 +212,10 @@ export class FormViewComponent implements OnInit {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
-    if(formName=='Submit') this.isSubmitVisible = true;
-    if(formName=='Review') this.isReviewVisible = true;
-    if(formName=='Approve') this.isApproveVisible = true;
-    window.scroll(0,0);
+    if (formName == 'Submit') this.isSubmitVisible = true;
+    if (formName == 'Review') this.isReviewVisible = true;
+    if (formName == 'Approve') this.isApproveVisible = true;
+    window.scroll(0, 0);
   }
 
   viewComments(): void {
