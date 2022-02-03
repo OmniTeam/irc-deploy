@@ -144,15 +144,10 @@
                       <td class='text-center'>{{ row.quarter_target }}</td>
                       <td class='text-center'>{{ row.quarter_achievement }}</td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
-                      <td class='text-center'>{{ row.comment_on_result }}
-                        <button class="btn btn-link"><i class="fas fa-pencil-alt"></i></button>
-                      </td>
-                      <td class='text-center'><input class="form-control in-line-cell" type="text"
-                                                     [value]="row.comment_on_result"
-                                                     [id]="row.id" placeholder="comment" (keyup)="onKey($event)"
-                                                     name="summaryComment"/>
-                        <button class="btn btn-link"><i class="fas fa-check"></i></button>
-                        <button class="btn btn-link"><i class="fas fa-times"></i></button>
+                      <td class='text-center' id="0-{{row.id}}">
+                        <div>{{ row.comment_on_result }}
+                        <button class="btn btn-link" (click)="cellEdit(row, '0-'+row.id, 'summaryComment')"><i class="fas fa-pencil-alt"></i></button>
+                        </div>
                       </td>
                     </tr>
                     </tbody>
@@ -182,17 +177,20 @@
                       <td class='text-center'>{{ row.approved_budget }}</td>
                       <td class='text-center'>{{ row.total_advanced }}</td>
                       <td class='text-center'>{{ row.expense_to_date }}</td>
-                      <td class='text-center'>
-                        <input class="form-control in-line-cell" type="number" [value]="row.quarter_expenses"
-                               [id]="row.id" placeholder="UGX" (keyup)="onKey($event)" name="quarter_expense"/>
+                      <td class='text-center' id="0-{{row.id}}">
+                        <div>{{ row.quarter_expenses }}
+                          <button class="btn btn-link" (click)="cellEdit(row,'0-'+row.id, 'quarterExpense')"><i class="fas fa-pencil-alt"></i></button>
+                        </div>
                       </td>
-                      <td class='text-center'>
-                        <input class="form-control in-line-cell" type="number" [value]="row.variance" [id]="row.id"
-                               placeholder="variance" (keyup)="onKey($event)" name="variance"/>
+                      <td class='text-center' id="1-{{row.id}}">
+                        <div>{{ row.variance }}
+                          <button class="btn btn-link" (click)="cellEdit(row,'1-'+row.id, 'variance')"><i class="fas fa-pencil-alt"></i></button>
+                        </div>
                       </td>
-                      <td class='text-center'>
-                        <input class="form-control in-line-cell" type="text" [value]="row.reason_for_variance"
-                               [id]="row.id" placeholder="reason" (keyup)="onKey($event)" name="reason_for_variance"/>
+                      <td class='text-center' id="2-{{row.id}}">
+                        <div>{{ row.reason_for_variance }}
+                          <button class="btn btn-link" (click)="cellEdit(row,'2-'+row.id, 'reason_for_variance')"><i class="fas fa-pencil-alt"></i></button>
+                        </div>
                       </td>
                     </tr>
                     </tbody>

@@ -3,8 +3,8 @@ import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
+import {CellEdit} from '../../utilities/cell_edit';
 import 'datatables.net';
-// import * as $ from "jquery";
 
 @Component({
   selector: 'app-form-view',
@@ -24,6 +24,8 @@ export class FormViewComponent implements OnInit {
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
   openPopup: boolean;
+  editCommentPerformanceCell: boolean;
+
   organisationalInfo = {
     id: 'asdaasrsgsdgfssgs',
     program: 'Adolescent Girl Power Program',
@@ -116,85 +118,35 @@ export class FormViewComponent implements OnInit {
       dom: 'lfBrtip',
       buttons: []
     };
+ }
 
-    (function (jQuery) {
-
-      //var table = jQuery('#financial').DataTable();
-
-      /*table.MakeCellsEditable({
-        "onUpdate": myCallbackFunction,
-        "inputCss": 'form-control',
-        "columns": [0, 1, 2, 3],
-        "allowNulls": {
-          "columns": [3],
-          "errorClass": 'error'
-        },
-        "confirmationButton": { // could also be true
-          "confirmCss": 'btn btn-success',
-          "cancelCss": 'btn btn-danger'
-        },
-        "inputTypes": [
-          {
-            "column": 0,
-            "type": "text",
-            "options": null
-          },
-          {
-            "column": 1,
-            "type": "list",
-            "options": [
-              {"value": "1", "display": "Beaty"},
-              {"value": "2", "display": "Doe"},
-              {"value": "3", "display": "Dirt"}
-            ]
-          },
-        ]
-      });*/
-
-
-      function myCallbackFunction(updatedCell, updatedRow, oldValue) {
-        console.log("The new value for the cell is: " + updatedCell.data());
-        console.log("The old value for that cell was: " + oldValue);
-        console.log("The values for each cell in that row are: " + updatedRow.data());
-      }
-
-      function destroyTable() {
-        if (jQuery.fn.dataTable.isDataTable('#financial')) {
-          //table.destroy();
-          //table.MakeCellsEditable("destroy");
-        }
-      }
-
-    })(jQuery);
-  }
-
-  onKey(event) {
-    switch (event.target.name) {
+  onSaveValue(type:string, id:string, value:string) {
+    switch (type) {
       case "summaryComment":
-        if (this.performance.some(x => x.id === event.target.id)) {
+        if (this.performance.some(x => x.id === id)) {
           this.performance.forEach(function (comment) {
-            if (comment.id === event.target.id) comment.comment_on_result = event.target.value
+            if (comment.id === id) comment.comment_on_result = value
           });
         }
         break;
       case "quarter_expense":
-        if (this.financialReport.some(x => x.id === event.target.id)) {
+        if (this.financialReport.some(x => x.id === id)) {
           this.financialReport.forEach(function (item) {
-            if (item.id === event.target.id) item.quarter_expenses = event.target.value
+            if (item.id === id) item.quarter_expenses = value
           });
         }
         break;
       case "variance":
-        if (this.financialReport.some(x => x.id === event.target.id)) {
+        if (this.financialReport.some(x => x.id === id)) {
           this.financialReport.forEach(function (item) {
-            if (item.id === event.target.id) item.variance = event.target.value
+            if (item.id === id) item.variance = value
           });
         }
         break;
       case "reason_for_variance":
-        if (this.financialReport.some(x => x.id === event.target.id)) {
+        if (this.financialReport.some(x => x.id === id)) {
           this.financialReport.forEach(function (item) {
-            if (item.id === event.target.id) item.reason_for_variance = event.target.value
+            if (item.id === id) item.reason_for_variance = value
           });
         }
         break;
@@ -226,5 +178,21 @@ export class FormViewComponent implements OnInit {
   viewRecommendations(): void {
     this.openRecommendationsPopup = !this.openRecommendationsPopup;
     this.openPopup = this.openRecommendationsPopup;
+  }
+
+  cellEdit(row, td_id, type:string) {
+    this.editCommentPerformanceCell = CellEdit.cellEdit(td_id,'', this.editCommentPerformanceCell);
+
+    if (document.getElementById("edit-cell-" + td_id) !== null) {
+      let input = document.getElementById("input-" + td_id);
+
+      ///TODO: Variable
+      input.setAttribute('value', row.comment_on_result);
+      input.setAttribute('placeholder', 'comment');
+      input.setAttribute('name', 'summaryComment');
+
+      //save
+      this.onSaveValue(type, row.id, (input as HTMLTextAreaElement).value);
+    }
   }
 }
