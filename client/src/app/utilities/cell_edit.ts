@@ -22,6 +22,9 @@ export class CellEdit {
     const td = document.getElementById(td_id);
     const container1 = td.firstElementChild as HTMLElement;
 
+    if(condition) container1.style.display = 'none';
+    else container1.style.display = 'block';
+
     if (status === "save") condition = false;
     else if (status === "cancel") {
       (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = "";

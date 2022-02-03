@@ -24,7 +24,7 @@ export class FormViewComponent implements OnInit {
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
   openPopup: boolean;
-  editCommentPerformanceCell: boolean;
+  editCommentPerformanceCell: boolean = false;
 
   organisationalInfo = {
     id: 'asdaasrsgsdgfssgs',
@@ -91,7 +91,7 @@ export class FormViewComponent implements OnInit {
       total_advanced: '20000',
       expense_to_date: '15000',
       quarter_expenses: '',
-      variance: '25%%',
+      variance: '25%',
       reason_for_variance: ''
     }
   ];
@@ -186,10 +186,28 @@ export class FormViewComponent implements OnInit {
     if (document.getElementById("edit-cell-" + td_id) !== null) {
       let input = document.getElementById("input-" + td_id);
 
-      ///TODO: Variable
-      input.setAttribute('value', row.comment_on_result);
-      input.setAttribute('placeholder', 'comment');
-      input.setAttribute('name', 'summaryComment');
+      switch (type) {
+        case "summaryComment":
+          input.setAttribute('value', row.comment_on_result);
+          input.setAttribute('placeholder', 'comment');
+          input.setAttribute('name', 'summaryComment');
+          break;
+        case "quarter_expense":
+          input.setAttribute('value', row.quarter_expenses);
+          input.setAttribute('placeholder', 'expense');
+          input.setAttribute('name', 'quarterExpense');
+          break;
+        case "variance":
+          input.setAttribute('value', row.variance);
+          input.setAttribute('placeholder', 'variance');
+          input.setAttribute('name', 'variance');
+          break;
+        case "reason_for_variance":
+          input.setAttribute('value', row.reason_for_variance);
+          input.setAttribute('placeholder', 'reason');
+          input.setAttribute('name', 'reason_for_variance');
+          break;
+      }
 
       //save
       this.onSaveValue(type, row.id, (input as HTMLTextAreaElement).value);
