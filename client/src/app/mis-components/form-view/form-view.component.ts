@@ -3,8 +3,9 @@ import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
-import {CellEdit} from '../../utilities/cell_edit';
+import {CellEdit, CellEditor} from '../../utilities/cell_edit';
 import 'datatables.net';
+import {Form} from "../../models/form";
 
 @Component({
   selector: 'app-form-view',
@@ -50,7 +51,7 @@ export class FormViewComponent implements OnInit {
     amount_utilized: '',
     balance_spent_overspend: ''
   };
-  performance = [
+  static performanceReport = [
     {
       id: 'adaggfdfgsgsfgsfsd',
       output_indicators: 'No of safe spaces established within the community',
@@ -72,7 +73,7 @@ export class FormViewComponent implements OnInit {
       comment_on_result: ''
     }
   ];
-  financialReport = [
+  static financialReport = [
     {
       id: 'fdadasdasdasd',
       budget_line: 'Staff salaries and related charges',
@@ -117,44 +118,11 @@ export class FormViewComponent implements OnInit {
       dom: 'lfBrtip',
       buttons: []
     };
- }
-
-  onSaveValue(type:string, id:string, value:string) {
-    switch (type) {
-      case "summaryComment":
-        if (this.performance.some(x => x.id === id)) {
-          this.performance.forEach(function (comment) {
-            if (comment.id === id) comment.comment_on_result = value
-          });
-        }
-        break;
-      case "quarter_expense":
-        if (this.financialReport.some(x => x.id === id)) {
-          this.financialReport.forEach(function (item) {
-            if (item.id === id) item.quarter_expenses = value
-          });
-        }
-        break;
-      case "variance":
-        if (this.financialReport.some(x => x.id === id)) {
-          this.financialReport.forEach(function (item) {
-            if (item.id === id) item.variance = value
-          });
-        }
-        break;
-      case "reason_for_variance":
-        if (this.financialReport.some(x => x.id === id)) {
-          this.financialReport.forEach(function (item) {
-            if (item.id === id) item.reason_for_variance = value
-          });
-        }
-        break;
-    }
   }
 
   submitReport() {
-    console.log("performanceSummaryComments: ", this.performance);
-    console.log("financialReport: ", this.financialReport);
+    //console.log("performanceSummaryComments: ", this.performance);
+    //console.log("financialReport: ", this.financialReport);
 
     this.changeForm('Review');
   }
@@ -179,12 +147,51 @@ export class FormViewComponent implements OnInit {
     this.openPopup = this.openRecommendationsPopup;
   }
 
-  cellEdit(row, td_id, type:string, value) {
-    CellEdit.cellEdit(td_id,'', value, type);
+  get performance() {
+    return FormViewComponent.performanceReport;
+  }
 
-    if (CellEdit.isEditing(td_id)) {
-      let input = CellEdit.getInput(td_id);
-      this.onSaveValue(type, row.id, (input as HTMLTextAreaElement).value);
-    }
+  get financial() {
+    return FormViewComponent.financialReport;
+  }
+
+  cellEditor(row, td_id, type: string, oldValue) {
+    new CellEdit().cellEdit(row.id, td_id, '', oldValue, type);
+  }
+
+  static saveCellValues(newValue:string, type:string, row_id) {
+    //save
+    console.log("newValue", newValue);
+    if (newValue !== null && newValue !== undefined)
+      switch (type) {
+        case "summaryComment":
+          if (this.performanceReport.some(x => x.id === row_id)) {
+            this.performanceReport.forEach(function (comment) {
+              if (comment.id === row_id) comment.comment_on_result = newValue
+            });
+          }
+          break;
+        case "quarter_expense":
+          if (this.financialReport.some(x => x.id === row_id)) {
+            this.financialReport.forEach(function (item) {
+              if (item.id === row_id) item.quarter_expenses = newValue
+            });
+          }
+          break;
+        case "variance":
+          if (this.financialReport.some(x => x.id === row_id)) {
+            this.financialReport.forEach(function (item) {
+              if (item.id === row_id) item.variance = newValue
+            });
+          }
+          break;
+        case "reason_for_variance":
+          if (this.financialReport.some(x => x.id === row_id)) {
+            this.financialReport.forEach(function (item) {
+              if (item.id === row_id) item.reason_for_variance = newValue
+            });
+          }
+          break;
+      }
   }
 }
