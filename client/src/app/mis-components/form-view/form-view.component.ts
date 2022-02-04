@@ -1,11 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, NgModule } from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
 import {CellEdit, CellEditor} from '../../utilities/cell_edit';
 import 'datatables.net';
-import {Form} from "../../models/form";
 
 @Component({
   selector: 'app-form-view',
@@ -26,6 +25,9 @@ export class FormViewComponent implements OnInit {
   openRecommendationsPopup: boolean;
   openPopup: boolean;
 
+  attachment1: string;
+  attachment2: string;
+  attachment3: string;
   organisationalInfo = {
     id: 'asdaasrsgsdgfssgs',
     program: 'Adolescent Girl Power Program',
@@ -121,10 +123,15 @@ export class FormViewComponent implements OnInit {
   }
 
   submitReport() {
-    //console.log("performanceSummaryComments: ", this.performance);
-    //console.log("financialReport: ", this.financialReport);
-
     this.changeForm('Review');
+  }
+
+  handleFileInput(event) {
+    let files: FileList = event.target.files;
+    console.log("iddd ", event.target.id);
+    if (event.target.id === "attachment1") this.attachment1 = files.item(0).name;
+    if (event.target.id === "attachment2") this.attachment2 = files.item(0).name;
+    if (event.target.id === "attachment3") this.attachment3 = files.item(0).name;
   }
 
   changeForm(formName) {
@@ -171,7 +178,7 @@ export class FormViewComponent implements OnInit {
             });
           }
           break;
-        case "quarter_expense":
+        case "quarterExpense":
           if (this.financialReport.some(x => x.id === row_id)) {
             this.financialReport.forEach(function (item) {
               if (item.id === row_id) item.quarter_expenses = newValue

@@ -203,7 +203,7 @@
                       <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
-                                                   type="file"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/></div>
                       <div class="col-sm-3">
                         <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
                                                         class="text fas fa-file-download"></a> Download Template
@@ -214,7 +214,7 @@
                       <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
                         report:</label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
-                                                   type="file"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/></div>
                       <div class="col-sm-3">
                         <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
                                                         class="text fas fa-file-download"></a> Download Template
@@ -225,7 +225,7 @@
                       <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/></div>
                       <div class="col-sm-3">
                         <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
                                                         class="text fas fa-file-download"></a> Download Template
@@ -238,24 +238,27 @@
                 <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
-                      <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-4">{{attachment1}}</div>
+                      <div class="col-sm-4">
                         <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
                                                         class="text fas fa-file-download"></a> Download Template
                         </button>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>
+                      <div class="col-sm-4">{{attachment2}}</div>
+                      <div class="col-sm-4">
                         <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
                                                         class="text fas fa-file-download"></a> Download Template
                         </button>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-4">{{attachment3}}</div>
+                      <div class="col-sm-4">
                         <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
                                                         class="text fas fa-file-download"></a> Download Template
                         </button>
@@ -310,36 +313,36 @@
                     <div class="col">
                       <div style="margin-bottom: 30px;">
                         <p>Are the expenses realistic?</p>
-                        <input type="radio" value="yes" name="expenses_realistic" ngModel> Yes
-                        <input type="radio" value="no" name="expenses_realistic" ngModel> No
+                        <input type="radio" value="yes" name="expenses_realistic" ngModel/> Yes
+                        <input type="radio" value="no" name="expenses_realistic" ngModel/> No
                       </div>
                       <div style="margin-bottom: 30px;">
                         <p>Have the attachments been verified?</p>
-                        <input type="radio" value="yes" name="attachments_verified" ngModel> Yes
-                        <input type="radio" value="no" name="attachments_verified" ngModel> No
+                        <input type="radio" value="yes" name="attachments_verified" ngModel/> Yes
+                        <input type="radio" value="no" name="attachments_verified" ngModel/> No
                       </div>
                       <div>
                         <p>Are the figures provided realistic?</p>
-                        <input type="radio" value="yes" name="figures_realistic" ngModel> Yes
-                        <input type="radio" value="no" name="figures_realistic" ngModel> No
+                        <input type="radio" value="yes" name="figures_realistic" ngModel/> Yes
+                        <input type="radio" value="no" name="figures_realistic" ngModel/> No
                       </div>
                     </div>
 
                     <div class="col">
                       <div style="margin-bottom: 30px;">
                         <p>Does the narrative align with the objectives of the project?</p>
-                        <input type="radio" value="yes" name="narrative_align" ngModel> Yes
-                        <input type="radio" value="no" name="narrative_align" ngModel> No
+                        <input type="radio" value="yes" name="narrative_align" ngModel/> Yes
+                        <input type="radio" value="no" name="narrative_align" ngModel/> No
                       </div>
                       <div style="margin-bottom: 30px;">
                         <p>Are they in line with the targets?</p>
-                        <input type="radio" value="yes" name="inline_with_targets" ngModel> Yes
-                        <input type="radio" value="no" name="inline_with_targets" ngModel> No
+                        <input type="radio" value="yes" name="inline_with_targets" ngModel/> Yes
+                        <input type="radio" value="no" name="inline_with_targets" ngModel/> No
                       </div>
                       <div>
                         <p>Is the evidence of the activities satisfactory?</p>
-                        <input type="radio" value="yes" name="evidence_satisfactory" ngModel> Yes
-                        <input type="radio" value="no" name="evidence_satisfactory" ngModel> No
+                        <input type="radio" value="yes" name="evidence_satisfactory" ngModel/> Yes
+                        <input type="radio" value="no" name="evidence_satisfactory" ngModel/> No
                       </div>
                     </div>
 
