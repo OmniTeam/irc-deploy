@@ -1,12 +1,11 @@
-import {FormViewComponent} from "../mis-components/form-view/form-view.component";
-
 export class CellEdit {
+  static condition: boolean;
 
   static createEditableCell(td_id: string, condition: boolean, cellValue: string) {
     const comment_performance_cell = document.getElementById(td_id);
     console.log("comment_performance_cell", comment_performance_cell);
     const edit_button = document.createElement("button");
-    edit_button.addEventListener("click", (e: Event) => this.cellEdit(td_id,"", condition));
+    edit_button.addEventListener("click", (e: Event) => this.cellEdit(td_id, "", "", ""));
     const icon_pencil = document.createElement('i');
     icon_pencil.classList.add('fas', 'fa-pencil-alt');
     const container = document.createElement('div');
@@ -18,31 +17,33 @@ export class CellEdit {
     comment_performance_cell.appendChild(container);
   }
 
-  static cellEdit(td_id:string, status: string, condition: boolean) : boolean {
+  static cellEdit(td_id: string, status: string, value: string, name: string) {
     const td = document.getElementById(td_id);
     const container1 = td.firstElementChild as HTMLElement;
 
-    if(condition) container1.style.display = 'none';
+    if (this.condition) container1.style.display = 'none';
     else container1.style.display = 'block';
 
-    if (status === "save") condition = false;
+    if (status === "save") this.condition = false;
     else if (status === "cancel") {
       (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = "";
-      condition = false;
-    } else condition = !condition;
+      this.condition = false;
+    } else this.condition = !this.condition;
 
-    if(condition) container1.style.display = 'none';
+    if (this.condition) container1.style.display = 'none';
     else container1.style.display = 'block';
 
-    if (document.getElementById("edit-cell-" + td_id) === null) {
+    if (this.isNotEditing(td_id)) {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
-      saveButton.addEventListener("click", (e: Event) => this.cellEdit(td_id, "save", condition));
+      saveButton.addEventListener("click", (e: Event) => this.cellEdit(td_id, "save", value, name));
+      saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
-      cancelButton.addEventListener("click", (e: Event) => this.cellEdit(td_id, "cancel", condition));
+      cancelButton.addEventListener("click", (e: Event) => this.cellEdit(td_id, "cancel", value, name));
+      cancelButton.id = "cancel_button" + td_id;
 
       const icon_check = document.createElement('i');
       icon_check.classList.add('fas', 'fa-check');
@@ -55,7 +56,10 @@ export class CellEdit {
       const input = document.createElement('input');
       input.type = 'text';
       input.classList.add('form-control', 'in-line-cell');
-      input.id = "input-"+td_id;
+      input.setAttribute('placeholder', 'edit');
+      input.id = "input-" + td_id;
+      input.setAttribute('value', value);
+      input.setAttribute('name', name);
 
       saveButton.appendChild(icon_check);
       cancelButton.appendChild(icon_times);
@@ -65,13 +69,23 @@ export class CellEdit {
       td.appendChild(container);
     } else {
       const container2 = document.getElementById("edit-cell-" + td_id);
-      if(condition) container2.style.display = 'block';
+      if (this.condition) container2.style.display = 'block';
       else container2.style.display = 'none';
 
-      if(condition) container1.style.display = 'none';
+      if (this.condition) container1.style.display = 'none';
       else container1.style.display = 'block';
     }
+  }
 
-    return condition;
+  static getInput(td_id: string) {
+    return document.getElementById("input-" + td_id);
+  }
+
+  static isEditing(td_id: string) {
+    return document.getElementById("edit-cell-" + td_id) !== null;
+  }
+
+  static isNotEditing(td_id: string) {
+    return document.getElementById("edit-cell-" + td_id) === null;
   }
 }
