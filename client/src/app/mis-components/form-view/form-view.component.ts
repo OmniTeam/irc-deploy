@@ -1,9 +1,10 @@
-import {Component, OnInit, NgModule } from '@angular/core';
+import {Component, OnInit, NgModule} from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
 import {CellEdit, CellEditor} from '../../utilities/cell_edit';
+import {FileUploadService} from '../../services/file-upload.service';
 import 'datatables.net';
 
 @Component({
@@ -24,7 +25,11 @@ export class FormViewComponent implements OnInit {
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
   openPopup: boolean;
+  loading: boolean = false;
 
+  shortLink1: string = "";
+  shortLink2: string = "";
+  shortLink3: string = "";
   attachment1: string;
   attachment2: string;
   attachment3: string;
@@ -98,7 +103,7 @@ export class FormViewComponent implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private formViewService: FormViewService) {
+  constructor(private router: Router, private formViewService: FormViewService, private fileUploadService: FileUploadService) {
     this.comments = [new CommentNode("This is my comment", "Mr.Rwele")]
   }
 
@@ -132,6 +137,25 @@ export class FormViewComponent implements OnInit {
     if (event.target.id === "attachment1") this.attachment1 = files.item(0).name;
     if (event.target.id === "attachment2") this.attachment2 = files.item(0).name;
     if (event.target.id === "attachment3") this.attachment3 = files.item(0).name;
+    this.uploadFile(files.item(0), event.target.id);
+  }
+
+  uploadFile(file, id) {
+    this.loading = !this.loading;
+    console.log(file);
+    this.fileUploadService.upload(file).subscribe(
+      (event: any) => {
+        if (typeof (event) === 'object') {
+
+          // Short link via api response
+          if (id === "attachment1") this.shortLink1 = event.link;
+          if (id === "attachment2") this.shortLink2 = event.link;
+          if (id === "attachment3") this.shortLink3 = event.link;
+
+          this.loading = false; // Flag variable
+        }
+      }
+    );
   }
 
   changeForm(formName) {
@@ -166,7 +190,7 @@ export class FormViewComponent implements OnInit {
     new CellEdit().cellEdit(row.id, td_id, '', oldValue, type);
   }
 
-  static saveCellValues(newValue:string, type:string, row_id) {
+  static saveCellValues(newValue: string, type: string, row_id) {
     //save
     console.log("newValue", newValue);
     if (newValue !== null && newValue !== undefined)
@@ -201,4 +225,5 @@ export class FormViewComponent implements OnInit {
           break;
       }
   }
+
 }
