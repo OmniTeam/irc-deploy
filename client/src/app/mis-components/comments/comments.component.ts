@@ -10,11 +10,12 @@ export class CommentNode {
   dateTimeCreated: Date;
   answers:CommentNode[] = [];
   isOpen:false;
-  constructor(id: string, text:string, user:string, likes: Array<string>, dateTimeCreated:Date){
+  constructor(id: string, text:string, user:string, likes: Array<string>, answers: CommentNode[], dateTimeCreated:Date){
     this.id = id;
     this.text = text;
     this.user = user;
     this.likes = likes;
+    this.answers = answers;
     this.dateTimeCreated = dateTimeCreated;
   }
 
@@ -49,7 +50,7 @@ export class CommentsComponent implements OnInit {
   }
 
   addComment(comment:CommentNode){
-    comment.addAnswer(new CommentNode(uuid(), this.text, this.authService.getLoggedInUsername(),[], new Date()));
+    comment.addAnswer(new CommentNode(uuid(), this.text, this.authService.getLoggedInUsername(),[], [], new Date()));
     comment.isOpen = false;
     this.text="";
     console.log(this.comments);

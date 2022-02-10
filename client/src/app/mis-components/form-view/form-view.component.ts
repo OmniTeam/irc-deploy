@@ -5,7 +5,7 @@ import {FormViewService} from "../../services/form-view.service";
 import {CommentNode, CommentsComponent} from '../comments/comments.component';
 import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 
 @Component({
@@ -115,13 +115,33 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       text: 'Hey hey how are you',
       user: 'Mr.Rwele',
       likes: ['super'],
-      datetimeCreated: '04/01/2022 09:12:21'
+      answers: [],
+      datetimeCreated: '04/07/2022 06:12:21'
     },
     {
       id: 'asdsafsadfgsgasgfds',
       text: 'I do not like this report',
       user: 'Kasiga Balinda',
       likes: [],
+      answers: [
+        {
+          id: "restrydrshdgdhhdshdfg",
+          text: 'Okay, I agree with this',
+          user: 'Mr.Rwele',
+          likes: ['super'],
+          answers: [
+            {
+              id: "fdadasddsfasdasdfdd",
+              text: 'Hey hey how are you',
+              user: 'Mr.Rwele',
+              likes: [],
+              answers: [],
+              datetimeCreated: '04/07/2022 06:12:21'
+            }
+          ],
+          datetimeCreated: '05/01/2022 19:12:21'
+        }
+      ],
       datetimeCreated: '04/01/2022 09:12:21'
     }
   ];
@@ -149,8 +169,16 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
     };
 
     this.listOfComments.forEach((commentNode) => {
-      this.comments.push(new CommentNode(commentNode.id, commentNode.text, commentNode.user, commentNode.likes, new Date(commentNode.datetimeCreated)));
+      this.comments.push(new CommentNode(commentNode.id, commentNode.text, commentNode.user, commentNode.likes, this.getAnswersToComments(commentNode.answers), new Date(commentNode.datetimeCreated)));
     });
+  }
+
+  getAnswersToComments(list) {
+    let answers = [];
+    list.forEach((answer) => {
+      answers.push(new CommentNode(answer.id, answer.text, answer.user, answer.likes, this.getAnswersToComments(answer.answers), new Date(answer.datetimeCreated)));
+    });
+    return answers;
   }
 
   submitReport() {
@@ -200,8 +228,8 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
 
   addComment() {
     let text = (document.getElementById("addComment") as HTMLTextAreaElement);
-    if(text.value!=="") {
-      this.comments.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], new Date()));
+    if (text.value !== "") {
+      this.comments.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], [], new Date()));
       text.value = "";
     }
   }
