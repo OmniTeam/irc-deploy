@@ -26,7 +26,8 @@
       <div class="col-sm-11">
         <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
         <div style="text-align: end;">
-          <button class="btn btn-link" (click)="addComment()"><i class="fas fa-paper-plane" style="font-size: 28px;"></i></button>
+          <button class="btn btn-link" (click)="addComment()"><i class="fas fa-paper-plane"
+                                                                 style="font-size: 28px;"></i></button>
         </div>
       </div>
     </div>
@@ -353,36 +354,66 @@
                     <div class="col">
                       <div style="margin-bottom: 30px;">
                         <p>Are the expenses realistic?</p>
-                        <input type="radio" value="yes" name="expenses_realistic" ngModel/> Yes
-                        <input type="radio" value="no" name="expenses_realistic" ngModel/> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="expenses_realistic" [(ngModel)]="radioExpensesRealistic"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div style="margin-bottom: 30px;">
                         <p>Have the attachments been verified?</p>
-                        <input type="radio" value="yes" name="attachments_verified" ngModel/> Yes
-                        <input type="radio" value="no" name="attachments_verified" ngModel/> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="attachments_verified" [(ngModel)]="radioAttachmentsVerified"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div>
                         <p>Are the figures provided realistic?</p>
-                        <input type="radio" value="yes" name="figures_realistic" ngModel/> Yes
-                        <input type="radio" value="no" name="figures_realistic" ngModel/> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="figures_realistic" [(ngModel)]="radioFiguresRealistic"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                     </div>
 
                     <div class="col">
                       <div style="margin-bottom: 30px;">
                         <p>Does the narrative align with the objectives of the project?</p>
-                        <input type="radio" value="yes" name="narrative_align" ngModel/> Yes
-                        <input type="radio" value="no" name="narrative_align" ngModel/> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="narrative_align" [(ngModel)]="radioNarrativeAlign"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div style="margin-bottom: 30px;">
                         <p>Are they in line with the targets?</p>
-                        <input type="radio" value="yes" name="inline_with_targets" ngModel/> Yes
-                        <input type="radio" value="no" name="inline_with_targets" ngModel/> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="inline_with_targets" [(ngModel)]="radioInlineWithTargets"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div>
                         <p>Is the evidence of the activities satisfactory?</p>
-                        <input type="radio" value="yes" name="evidence_satisfactory" ngModel/> Yes
-                        <input type="radio" value="no" name="evidence_satisfactory" ngModel/> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="evidence_satisfactory" [(ngModel)]="radioEvidenceSatisfactory"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                     </div>
 
@@ -407,30 +438,50 @@
                         <div class="col-sm-8"><p>Has the partner satisfactorily affected the suggested changes?</p>
                         </div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="suggested_changes_satisfactory" ngModel> Yes
-                          <input type="radio" value="no" name="suggested_changes_satisfactory" ngModel> No
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioSuggestedChangesSatisfactory"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-8"><p>Are the financial, performance and narrative reports well aligned?</p>
                         </div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="reports_well_aligned" ngModel> Yes
-                          <input type="radio" value="no" name="reports_well_aligned" ngModel> No
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="reports_well_aligned" [(ngModel)]="radioReportsWellAligned"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-8"><p>Do you recommend for further fund disbursement?</p></div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="recommend_fund" ngModel> Yes
-                          <input type="radio" value="no" name="recommend_fund" ngModel> No
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommedFund"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-8"><p>Is this the end of this partnership?</p></div>
                         <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="end_of_partnership" ngModel> Yes
-                          <input type="radio" value="no" name="end_of_partnership" ngModel> No
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="end_of_partnership" [(ngModel)]="radioEndOfPartnership"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>

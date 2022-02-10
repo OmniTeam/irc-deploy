@@ -30,6 +30,19 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   openPopup: boolean;
   loading: boolean = false;
 
+  radioSel:any;
+  radioExpensesRealistic:string;
+  radioAttachmentsVerified:string;
+  radioFiguresRealistic:string;
+  radioNarrativeAlign:string;
+  radioInlineWithTargets:string;
+  radioEvidenceSatisfactory:string;
+  radioSuggestedChangesSatisfactory:string;
+  radioReportsWellAligned:string;
+  radioSelectedString:string;
+  radioRecommedFund:string;
+  radioEndOfPartnership:string;
+
   shortLink1: string = "";
   shortLink2: string = "";
   shortLink3: string = "";
@@ -209,6 +222,13 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
         }
       }
     );
+  }
+
+  onItemChange(event){
+    console.log("event name",event.target.name);
+    this.radioSel = this.items.find(Item => Item.value === this.radioExpensesRealistic);
+    this.radioSelectedString = JSON.stringify(this.radioSel);
+    console.log("radioSelectedString",this.radioSelectedString);
   }
 
   changeForm(formName) {
