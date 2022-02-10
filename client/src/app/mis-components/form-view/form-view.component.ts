@@ -2,10 +2,11 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
-import {CommentNode} from '../comments/comments.component';
+import {CommentNode, CommentsComponent} from '../comments/comments.component';
 import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
-import 'datatables.net';
+import { v4 as uuid } from 'uuid';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-form-view',
@@ -108,9 +109,24 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       reason_for_variance: ''
     }
   ];
+  listOfComments = [
+    {
+      id: "fdadasddsfasdasdfdd",
+      text: 'Hey hey how are you',
+      user: 'Mr.Rwele',
+      likes: ['super'],
+      datetimeCreated: '04/01/2022 09:12:21'
+    },
+    {
+      id: 'asdsafsadfgsgasgfds',
+      text: 'I do not like this report',
+      user: 'Kasiga Balinda',
+      likes: [],
+      datetimeCreated: '04/01/2022 09:12:21'
+    }
+  ];
 
-  constructor(private router: Router, private formViewService: FormViewService, private fileUploadService: FileUploadService) {
-    this.comments = [new CommentNode("This is my comment", "Mr.Rwele")]
+  constructor(private router: Router, private formViewService: FormViewService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -131,6 +147,10 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       dom: 'lfBrtip',
       buttons: []
     };
+
+    this.listOfComments.forEach((commentNode) => {
+      this.comments.push(new CommentNode(commentNode.id, commentNode.text, commentNode.user, commentNode.likes, new Date(commentNode.datetimeCreated)));
+    });
   }
 
   submitReport() {
@@ -139,7 +159,6 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
-    console.log("iddd ", event.target.id);
     if (event.target.id === "attachment1") this.attachment1 = files.item(0).name;
     if (event.target.id === "attachment2") this.attachment2 = files.item(0).name;
     if (event.target.id === "attachment3") this.attachment3 = files.item(0).name;
@@ -177,6 +196,14 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
     this.openPopup = this.openCommentsPopup;
+  }
+
+  addComment() {
+    let text = (document.getElementById("addComment") as HTMLTextAreaElement);
+    if(text.value!=="") {
+      this.comments.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], new Date()));
+      text.value = "";
+    }
   }
 
   viewRecommendations(): void {

@@ -1,12 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {AuthService} from "../../services/auth.service";
+import { v4 as uuid } from 'uuid';
+
 export class CommentNode {
+  id:string = '';
   text:string ='';
   user:string ='';
+  likes: Array<string> = [];
+  dateTimeCreated: Date;
   answers:CommentNode[] = [];
   isOpen:false;
-  constructor(text:string, user:string){
+  constructor(id: string, text:string, user:string, likes: Array<string>, dateTimeCreated:Date){
+    this.id = id;
     this.text = text;
     this.user = user;
+    this.likes = likes;
+    this.dateTimeCreated = dateTimeCreated;
   }
 
   addAnswer(newComment:CommentNode){
@@ -31,15 +40,16 @@ export class CommentsComponent implements OnInit {
   @Input()
   comments:CommentNode[] = [];
   text:string;
+  numberOfLikes:number;
 
-  constructor() { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    console.log(this.comments);
+    console.log("Comments", this.comments);
   }
 
   addComment(comment:CommentNode){
-    comment.addAnswer(new CommentNode(this.text, "Kasiga Balinda"));
+    comment.addAnswer(new CommentNode(uuid(), this.text, this.authService.getLoggedInUsername(),[], new Date()));
     comment.isOpen = false;
     this.text="";
     console.log(this.comments);
@@ -50,9 +60,36 @@ export class CommentsComponent implements OnInit {
     comment.isOpen = !comment.isOpen;
   }
 
-  remove(comment:CommentNode){
+  deleteComment(comment:CommentNode){
     let index = this.comments.indexOf(comment);
     this.comments = this.comments.splice(index,1);
+  }
+
+  isLiked(comment:CommentNode) : boolean {
+    console.log(comment.likes.includes(this.authService.getLoggedInUsername()));
+    return comment.likes.includes(this.authService.getLoggedInUsername());
+  }
+
+  addLike(comment:CommentNode) {
+    let oldComment = comment;
+    comment.likes.push(this.authService.getLoggedInUsername());
+    this.updateComment(oldComment, comment);
+  }
+
+  removeLike(comment:CommentNode) {
+    let oldComment = comment;
+    const index = comment.likes.indexOf(this.authService.getLoggedInUsername(), 0);
+    if (index > -1) {
+      comment.likes.splice(index, 1);
+    }
+    this.updateComment(oldComment, comment);
+  }
+
+  updateComment(oldComment:CommentNode, newComment:CommentNode) {
+    const index: number = this.comments.indexOf(oldComment);
+    if (index !== -1) {
+      this.comments[index] = newComment;
+    }
   }
 
 }

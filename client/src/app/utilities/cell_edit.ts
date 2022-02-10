@@ -56,13 +56,13 @@ export class CellEdit {
       const container = document.createElement('div');
       container.id = "edit-cell-" + td_id;
 
-      const input = document.createElement('input');
-      input.type = 'text';
+      const input = document.createElement('textarea');
       input.classList.add('form-control', 'in-line-cell');
       input.setAttribute('placeholder', 'edit');
       input.id = "input-" + td_id;
       input.setAttribute('value', oldValue);
       input.setAttribute('name', key);
+      input.setAttribute('rows', '1');
 
       saveButton.appendChild(icon_check);
       cancelButton.appendChild(icon_times);
