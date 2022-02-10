@@ -1,5 +1,3 @@
-import {FormViewComponent} from "../mis-components/form-view/form-view.component";
-
 export class CellEdit {
   condition: boolean;
 
@@ -7,7 +5,7 @@ export class CellEdit {
     const comment_performance_cell = document.getElementById(td_id);
     console.log("comment_performance_cell", comment_performance_cell);
     const edit_button = document.createElement("button");
-    edit_button.addEventListener("click", (e: Event) => this.cellEdit("", td_id, "", "", ""));
+    edit_button.addEventListener("click", (e: Event) => this.edit("", td_id, "", "", "", () => void {}));
     const icon_pencil = document.createElement('i');
     icon_pencil.classList.add('fas', 'fa-pencil-alt');
     const container = document.createElement('div');
@@ -19,17 +17,16 @@ export class CellEdit {
     comment_performance_cell.appendChild(container);
   }
 
-  cellEdit(row_id, td_id: string, status: string, oldValue: string, name: string) {
+  edit(row_id, td_id: string, status: string, oldValue: string, key: string, save: (newValue: string, key: string, row_id) => void) {
     const td = document.getElementById(td_id);
     const container1 = td.firstElementChild as HTMLElement;
-    let newValue;
 
     if (this.condition) container1.style.display = 'none';
     else container1.style.display = 'block';
 
     if (status === "save") {
-      newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
-      FormViewComponent.saveCellValues(newValue, name, row_id);
+      let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
+      save(newValue, key, row_id);
       this.condition = false;
     } else if (status === "cancel") {
       (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = oldValue;
@@ -43,12 +40,12 @@ export class CellEdit {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
-      saveButton.addEventListener("click", (e: Event) => this.cellEdit(row_id, td_id, "save", oldValue, name));
+      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, "save", oldValue, key, save));
       saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
-      cancelButton.addEventListener("click", (e: Event) => this.cellEdit(row_id, td_id, "cancel", oldValue, name));
+      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, "cancel", oldValue, key, save));
       cancelButton.id = "cancel_button" + td_id;
 
       const icon_check = document.createElement('i');
@@ -65,7 +62,7 @@ export class CellEdit {
       input.setAttribute('placeholder', 'edit');
       input.id = "input-" + td_id;
       input.setAttribute('value', oldValue);
-      input.setAttribute('name', name);
+      input.setAttribute('name', key);
 
       saveButton.appendChild(icon_check);
       cancelButton.appendChild(icon_times);
@@ -104,8 +101,8 @@ export class CellEdit {
   }
 }
 
-export abstract class CellEditor {
-  abstract saveCellValues(newValue:string, type:string, row_id) : void;
+export abstract class OnUpdateCell {
+  abstract saveCellValue = (value: string, key: string, rowId) => void {};
 }
 
 

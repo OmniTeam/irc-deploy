@@ -1,9 +1,9 @@
-import {Component, OnInit, NgModule} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode} from '../comments/comments.component';
-import {CellEdit, CellEditor} from '../../utilities/cell_edit';
+import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
 import 'datatables.net';
 
@@ -13,7 +13,9 @@ import 'datatables.net';
   styleUrls: ['./form-view.component.css']
 })
 
-export class FormViewComponent implements OnInit {
+export class FormViewComponent implements OnInit, OnUpdateCell {
+
+  @ViewChild(CellEdit) cellEdit;
 
   rows: Object[];
   dtOptions: any = {};
@@ -33,10 +35,14 @@ export class FormViewComponent implements OnInit {
   attachment1: string;
   attachment2: string;
   attachment3: string;
+  items = [
+    {name: 'Yes', value: 'yes'},
+    {name: 'No', value: 'no'}
+  ];
   organisationalInfo = {
     id: 'asdaasrsgsdgfssgs',
     program: 'Adolescent Girl Power Program',
-    cluster_organization: 'Empowered Gals of Busano',
+    cluster_organization: 'Empowered Girls of Busano',
     acronym_name: 'EGB',
     organization_type: 'CBO',
     legal_status: 'Registered NGO',
@@ -58,7 +64,7 @@ export class FormViewComponent implements OnInit {
     amount_utilized: '',
     balance_spent_overspend: ''
   };
-  static performanceReport = [
+  performanceReport = [
     {
       id: 'adaggfdfgsgsfgsfsd',
       output_indicators: 'No of safe spaces established within the community',
@@ -80,7 +86,7 @@ export class FormViewComponent implements OnInit {
       comment_on_result: ''
     }
   ];
-  static financialReport = [
+  financialReport = [
     {
       id: 'fdadasdasdasd',
       budget_line: 'Staff salaries and related charges',
@@ -179,51 +185,51 @@ export class FormViewComponent implements OnInit {
   }
 
   get performance() {
-    return FormViewComponent.performanceReport;
+    return this.performanceReport;
   }
 
   get financial() {
-    return FormViewComponent.financialReport;
+    return this.financialReport;
   }
 
-  cellEditor(row, td_id, type: string, oldValue) {
-    new CellEdit().cellEdit(row.id, td_id, '', oldValue, type);
-  }
-
-  static saveCellValues(newValue: string, type: string, row_id) {
+  saveCellValue = (value: string, key: string, rowId): void => {
     //save
-    console.log("newValue", newValue);
-    if (newValue !== null && newValue !== undefined)
-      switch (type) {
+    console.log("newValue", value);
+    if (value !== null && value !== undefined)
+      switch (key) {
         case "summaryComment":
-          if (this.performanceReport.some(x => x.id === row_id)) {
+          if (this.performanceReport.some(x => x.id === rowId)) {
             this.performanceReport.forEach(function (comment) {
-              if (comment.id === row_id) comment.comment_on_result = newValue
+              if (comment.id === rowId) comment.comment_on_result = value
             });
           }
           break;
         case "quarterExpense":
-          if (this.financialReport.some(x => x.id === row_id)) {
+          if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
-              if (item.id === row_id) item.quarter_expenses = newValue
+              if (item.id === rowId) item.quarter_expenses = value
             });
           }
           break;
         case "variance":
-          if (this.financialReport.some(x => x.id === row_id)) {
+          if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
-              if (item.id === row_id) item.variance = newValue
+              if (item.id === rowId) item.variance = value
             });
           }
           break;
         case "reason_for_variance":
-          if (this.financialReport.some(x => x.id === row_id)) {
+          if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
-              if (item.id === row_id) item.reason_for_variance = newValue
+              if (item.id === rowId) item.reason_for_variance = value
             });
           }
           break;
       }
+  }
+
+  cellEditor(row, td_id, key: string, oldValue) {
+    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
   }
 
 }
