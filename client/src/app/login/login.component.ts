@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
@@ -13,8 +13,11 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   submitted = false;
+  showSpinner = false;
+  fieldTextType: boolean;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -23,9 +26,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
-  onSubmit() {
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+
+  login() {
     this.submitted = true;
     if (this.loginForm.invalid) {
       return;
@@ -40,8 +49,12 @@ export class LoginComponent implements OnInit {
     )
       .subscribe(success => {
         if (success) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/']).then(() => {
+            window.location.reload();
+          })
         }
+      }, error => {
+        console.log(error.status)
       });
   }
 }

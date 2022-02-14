@@ -75,10 +75,10 @@ grails:
     cors:
         enabled: true
 
----
-server:
-    servlet:
-        context-path: /crvpf
+#---
+#server:
+#    servlet:
+#        context-path: /crvpf
 ---
 hibernate:
     cache:
@@ -94,7 +94,7 @@ dataSource:
     jmxExport: true
     driverClassName: com.mysql.jdbc.Driver
     username: root
-    password:
+    password: omnitech2020!A
 #omnitech2020!A
 environments:
     development:

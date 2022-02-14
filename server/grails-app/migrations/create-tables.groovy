@@ -789,4 +789,53 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "form_id", tableName: "task_list")
     }
 
+    changeSet(author: "Bryan (generated)", id: "1644499803165-1") {
+        createTable(tableName: "tag") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tagPK")
+            }
+
+            column(name: "tag_type_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644499803165-2") {
+        createTable(tableName: "tag_type") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tag_typePK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644499803165-3") {
+        addForeignKeyConstraint(baseColumnNames: "tag_type_id", baseTableName: "tag", constraintName: "FK4dal6a59cl5t8omhsi2yrtk0g", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "tag_type", validate: "true")
+    }
+
+
 }
