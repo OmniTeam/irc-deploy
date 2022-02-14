@@ -1,0 +1,17 @@
+<div id="mainDiv" *ngFor="let comment of comments.reverse()" xmlns="http://www.w3.org/1999/html">
+  <label><i class="fas fa-user"></i>&nbsp;&nbsp;{{comment.user}}</label>
+  <p style="margin: 0px 0px 0px 20px;">{{comment.text}}</p>
+  <p style="margin: 0px 0px 0px 20px; font-size: 12px;">{{comment.dateTimeCreated | date: 'short'}}</p>
+  <button class="btn btn-link" (click)="openCommentText(comment)">Reply</button>
+  <!--<button class="btn btn-link" style="color:red;" (click)="deleteComment(comment)">Delete</button>-->
+  <button class="btn btn-link" *ngIf="isLiked(comment)" (click)="addLike(comment)"><i class="fas fa-heart" style="color: red;"></i></button>
+  <button class="btn btn-link" *ngIf="!isLiked(comment)" (click)="removeLike(comment)"><i class="far fa-heart"></i></button>
+  <div *ngIf="comment.isOpen">
+    <textarea class="form-control" [(ngModel)]="text" cols="50" rows="3"></textarea>
+    <br>
+    <button class="btn btn-success comment_btn" (click)="addComment(comment)">Send</button>
+  </div>
+  <hr/>
+  <app-comments [comments]="comment.answers">
+  </app-comments>
+</div>

@@ -259,6 +259,7 @@
                           </select>
                         </ng-template>
                       </ngx-datatable-column>
+                      <ngx-datatable-column name="Display Order" prop="orderOfDisplay"></ngx-datatable-column>
                       <ngx-datatable-column name="Action"></ngx-datatable-column>
                     </ngx-datatable>
                   </div>
@@ -268,6 +269,7 @@
             <div class="row">
               <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
                 <button class=" btn btn-default" type="submit">Save</button>
+                <button class=" btn btn-danger" type="reset" (click)="onReset()">Reset</button>
               </div>
             </div>
           </form>

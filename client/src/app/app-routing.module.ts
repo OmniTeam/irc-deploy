@@ -47,6 +47,14 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
       {
+        path: 'tasklist', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tasklist/task-list.module').then(m => m.TaskListModule)
+      },
+      {
+        path: 'formView', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/form-view/form-view.module').then(m => m.FormViewModule)
+      },
+      {
         path: 'createEntity', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
       },
@@ -69,6 +77,14 @@ const routes: Routes = [
       {
         path: 'entityView/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entity-views/entity-view-table/entity-view-table.module').then(m => m.EntityViewTableModule)
+      },
+      {
+        path: 'tags', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tags/tags.module').then(m => m.TagsModule)
+      },
+      {
+        path: 'tagType', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tag-type/tag-type.module').then(m => m.TagTypeModule)
       },
       {
         path: 'dashboards',

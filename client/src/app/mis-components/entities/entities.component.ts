@@ -71,7 +71,7 @@ export class EntitiesComponent implements OnInit {
         },
 
         {
-          text: 'Create Entity',
+          text: 'Create New Entity',
           action: ( e, dt, button, config ) => {
             this.createNewEntity();
           }

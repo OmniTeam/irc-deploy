@@ -6,9 +6,12 @@ import com.kengamis.query.QueryHelper
 import grails.core.GrailsApplication
 import grails.rest.*
 import grails.converters.*
+import groovy.sql.Sql
 
 import static com.kengamis.AppHolder.withMisSql
+import static com.kengamis.Util.constructFormTable
 import static com.kengamis.Util.escapeField
+import static fuzzycsv.FuzzyCSVTable.toCSV
 
 class DataController {
     static responseFormats = ['json', 'xml']
@@ -30,12 +33,16 @@ class DataController {
                 resultList << record
             }
             def gpsCoordinates = getGpsPoints(params)
-            formData = [headerList: q.headers, resultList: resultList, resultListCount: q.count, formtable: q.formTable,
-                        filters   : q.filters, form: q.form, numberOfQuestions: q.formQuestions.size(), gpsCoordinates: gpsCoordinates]
+            def formGraphData = getFormGraphData(params)
+            formData = [headerList    : q.headers, resultList: resultList, resultListCount: q.count, formtable: q.formTable,
+                        filters       : q.filters, form: q.form, numberOfQuestions: q.formQuestions.size(),
+                        gpsCoordinates: gpsCoordinates, formDataCollectors: q.formDataCollectors, formGraphData: formGraphData]
         } catch (Exception e) {
             flash.error = "Data Might Not Be Available For This Form."
             log.error("Error fetching data", e)
-            formData = [headerList: [], resultList: [], resultListCount: 0, formtable: params.formtable, filters: [], form: Form.findByName(params.formtable)]
+            formData = [headerList: [], resultList: [], resultListCount: 0, formtable: params.formtable,
+                        filters: [], form: Form.findByName(params.formtable), gpsCoordinates: [], formDataCollectors: [],
+                        formGraphData: []]
         }
         respond formData
     }
@@ -93,5 +100,20 @@ class DataController {
             data[mf.displayName] = fd.getDataFor(mf.field).humanReadableValue
         }
         respond data
+    }
+
+    def getFormGraphData(params) {
+        def formTableName = params.formtable as String
+        Form form = Form.findByName(formTableName)
+        def qh = new QueryHelper(EnumSet.noneOf(QueryHelper.Config), params, springSecurityService.currentUser as User)
+        def query = """
+                SELECT submitterName as 'user',
+                     COUNT(submitterName) as 'count',
+                     submissionDate as 'date'
+                from ${escapeField(constructFormTable(form.name))}
+                WHERE ${qh.getWhereClause('1')}
+                GROUP BY submitterName,submissionDate """.toString()
+        def records = withMisSql { rows(query) }
+        return records
     }
 }

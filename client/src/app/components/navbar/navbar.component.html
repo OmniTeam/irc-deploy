@@ -35,7 +35,7 @@
                 />
               </span>
               <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm  font-weight-bold">Angel Nerima</span>
+                <span class="mb-0 text-sm  font-weight-bold">{{authService.getLoggedInUsername() | titlecase}}</span>
               </div>
             </div>
           </a>
@@ -47,8 +47,8 @@
               <h6 class="text-overflow m-0">Welcome!</h6>
             </div>
             <div class="dropdown-divider"></div>
-            <a (click)="logout()" class="dropdown-item">
-              <i class="ni ni-user-run"></i> <span>Logout</span>
+            <a (click)="logout()" class="dropdown-item" style="cursor: pointer;">
+              <i class="fa fa-sign-out-alt"></i> <span>Logout</span>
             </a>
           </div>
         </li>
