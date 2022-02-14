@@ -1,10 +1,8 @@
 package com.kengamis
 
-import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-@GrailsCompileStatic
 @EqualsAndHashCode(includes = "name")
 @ToString(includes = 'displayName', includeNames = true, includePackage = false)
 class Form {
@@ -19,7 +17,7 @@ class Form {
     Date lastUpdated
     boolean enabled = true
     boolean syncMode = true
-    String oxdId
+    String centralId
 
     static hasMany = [formSettings: FormSetting]
     static belongsTo = [study: Study]
@@ -27,7 +25,7 @@ class Form {
     static constraints = {
         name nullable: false
         description nullable: true
-        oxdId nullable: true
+        centralId nullable: false
         displayName nullable: false
     }
 
@@ -42,5 +40,42 @@ class Form {
         } else {
             return false
         }
+    }
+
+    boolean hasFormSetting(Form form, String field) {
+        if (id == null)
+            return false
+
+        def settings = FormSetting.findByFormAndField(form, field)
+
+        if (settings) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    String getRepeatTablePrefix() {
+        if ((study.syncMode == Study.SYNC_MODE_NEW) || (study.syncMode == Study.SYNC_MODE_LEGACY)) {
+            return "_${centralId}_"
+        }
+        return "${name}_"
+    }
+
+    FormSetting findFormSetting(String questionId) {
+        formSettings.find { it.field == questionId }
+    }
+
+
+    String resolveGroupTableName(String repeatQnField) {
+        return "$repeatTablePrefix$repeatQnField"
+    }
+
+    static List<Form> listAllUserForms(User user) {
+        if (user.hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) {
+            return findAll()
+        }
+        def forms = UserForm.findAllByUser(user).form
+        return forms
     }
 }

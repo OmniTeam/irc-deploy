@@ -19,8 +19,23 @@ class FormSettingController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond formSettingService.list(params), model:[formSettingCount: formSettingService.count()]
+        def formSettingsData = [:]
+        params.max = Math.min(max ?: 200, 200)
+        params.sort = 'orderOfDisplayInTable'
+        params.order = 'asc'
+        def formSettings
+        def formName
+        if (params.formtable) {
+            def form = Form.findByName(params.formtable)
+            formSettings = FormSetting.findAllByForm(form, params)
+            formName = form.displayName
+        } else {
+            formSettings = FormSetting.list(params)
+            formName = ''
+        }
+        formSettingsData['data'] = formSettings
+        formSettingsData['form_name'] = formName
+        respond formSettingsData
     }
 
     def show(Long id) {

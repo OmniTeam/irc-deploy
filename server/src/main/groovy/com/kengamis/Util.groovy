@@ -1,6 +1,8 @@
 package com.kengamis
 
 import org.grails.exceptions.reporting.DefaultStackTraceFilterer
+import org.owasp.esapi.ESAPI
+import org.owasp.esapi.codecs.MySQLCodec
 
 class Util {
 
@@ -68,5 +70,49 @@ class Util {
         }
         s = s.replaceAll('_', ' ')
         return s
+    }
+
+    static String escapeField(String field) {
+        if (field.contains('`')) throw new IllegalArgumentException("Illegal table name [$field]")
+        return "`$field`"
+    }
+
+    static String removeExtraSpace(String string) {
+        string.toString().replaceAll(/\s+/, ' ').trim()
+    }
+
+    static Long extractId(Map params) {
+        extractId(params, 'id')
+    }
+
+    static String getSqlWildCard(String search) {
+        search = search.split(/\s+/).collect { String s -> "${escapeSql(s)}" }.join('%')
+        return "%$search%"
+
+    }
+
+    static Long extractId(Map params, String idField) {
+        Long id = -1
+        try {
+            id = (params[idField] as Long) ?: -1
+        } catch (Exception x) {
+        }
+        return id
+    }
+
+    static String escapeSql(String sqlParam) {
+        def mySqlEncoder = new MySQLCodec(MySQLCodec.Mode.STANDARD)
+        def encoded = ESAPI.encoder().encodeForSQL(mySqlEncoder, sqlParam)
+        encoded = encoded.replaceAll(/\\_/, "_")
+        return encoded
+    }
+
+    static <K, V> V getOrCreate(Map<K, V> map, K k, V defaultValue) {
+        def value = map[k]
+
+        if (value) return value
+
+        map[k] = defaultValue
+        return defaultValue
     }
 }

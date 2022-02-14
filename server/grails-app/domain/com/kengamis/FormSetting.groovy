@@ -1,9 +1,11 @@
 package com.kengamis
 
-import grails.compiler.GrailsCompileStatic
+import com.omnitech.odkodata2sql.SqlSchemaGen
+import grails.gorm.transactions.Transactional
+import groovy.transform.ToString
 import org.openxdata.markup.XformType
 
-@GrailsCompileStatic
+@ToString(includes = 'displayName', includeNames = true, includePackage = false)
 class FormSetting {
 
     final static SETTING_TEXT = 'text'
@@ -44,14 +46,46 @@ class FormSetting {
         displayName type: 'text'
     }
 
+    ChoiceOption findChoiceOption(String bindValue) {
+        return choiceOptions?.find { it.choiceId == bindValue }
+    }
+
+    String getTableName() { form.resolveGroupTableName(field) }
+
+    String getTruncatedTableName() { SqlSchemaGen.truncateForSql(getTableName()) }
+
+    FormSetting getParentFormSetting() {
+        if (!parentQuestion) return null
+        return form.findFormSetting(parentQuestion)
+    }
+
+    String resolveParentTableName() {
+        def setting = parentFormSetting
+        if (!setting) return form.name
+        return setting.tableName
+    }
+
+    String resolveTruncatedParentTableName() {
+        SqlSchemaGen.truncateForSql(resolveParentTableName())
+    }
+
+    String truncatedColumnName() {
+        return SqlSchemaGen.truncateForSql(field)
+    }
+
+    String getSqlQualifiedColumnName() {
+        return "${Util.escapeField resolveTruncatedParentTableName()}.${Util.escapeField truncatedColumnName()}"
+    }
+
+    String getSqlQualifiedColumnNameWithoutTruncating(){
+        return "${Util.escapeField resolveParentTableName()}.${Util.escapeField truncatedColumnName()}"
+    }
+
+
     FormSetting addOptionIfAbsent(ChoiceOption choiceOption) {
         if (!choiceOptions.any { it.choiceId == choiceOption.choiceId }) {
             addToChoiceOptions(choiceOption)
         }
         return this
-    }
-
-    ChoiceOption findChoiceOption(String bindValue) {
-        return choiceOptions?.find { it.choiceId == bindValue }
     }
 }

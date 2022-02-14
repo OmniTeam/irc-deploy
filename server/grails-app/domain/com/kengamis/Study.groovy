@@ -1,10 +1,8 @@
 package com.kengamis
 
-import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-@GrailsCompileStatic
 @EqualsAndHashCode(includes = "name")
 @ToString(includes = 'name', includeNames = true, includePackage = false)
 class Study implements Serializable {
@@ -16,16 +14,16 @@ class Study implements Serializable {
 
     String id
     String name
-    String oxdId
+    String centralId
     String syncMode = SYNC_MODE_NEW
     Date dateCreated
     Date lastUpdated
     boolean syncToMetabase = false
     boolean archiveStudy = false
 
-    static hasMany = [forms:Form]
+    static hasMany = [forms: Form]
 
     static constraints = {
-        oxdId nullable: false
+        centralId nullable: false
     }
 }

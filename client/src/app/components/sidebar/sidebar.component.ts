@@ -1,10 +1,29 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from "../../services/auth.service";
+import {FormService} from "../../services/form.service";
+import {ReplacePipe} from "../../replace-pipe";
 
 let misc: any = {
   sidebar_mini_active: true
 };
+
+let formsMenu: any = {
+  path: '/forms/data',
+  title: 'Data',
+  type: 'sub',
+  icontype: 'ni-single-copy-04 text-pink',
+  isCollapsed: true,
+  children: []
+}
+
+let formSettingsMenu: any = {
+  path: 'formSettings/form',
+  title: 'Form Settings',
+  type: 'sub',
+  isCollapsed: true,
+  children: []
+}
 
 export interface RouteInfo {
   path: string;
@@ -40,18 +59,7 @@ export const ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'fas fa-home',
   },
-  {
-    path: '/forms',
-    title: 'Forms',
-    type: 'link',
-    icontype: 'ni-single-copy-04 text-pink',
-  },
-  {
-    path: '/project',
-    title: 'Project',
-    type: 'link',
-    icontype: 'ni-chart-bar-32 text-info',
-  },
+  formsMenu,
   {
     path: '/widgets',
     title: 'Reports',
@@ -59,8 +67,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-books text-pink',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Dashboard', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Farmer Report', type: 'link'},
+      {path: 'alternative', title: 'Trends', type: 'link'}
     ]
   },
   {
@@ -70,19 +78,22 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-badge text-default',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Dashboard', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Create Packages', type: 'link'},
+      {path: 'alternative', title: 'Assign Packages', type: 'link'}
     ]
   },
   {
-    path: '/widgets',
+    path: '/',
     title: 'Settings',
     type: 'sub',
     icontype: 'ni-settings text-primary',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Dashboard', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'forms', title: 'Forms', type: 'link'},
+      formSettingsMenu,
+      {path: 'project', title: 'Project', type: 'link'},
+      {path: 'entity', title: 'Entities', type: 'link'},
+      {path: 'entityView', title: 'Entity Views', type: 'link'},
     ]
   },
   {
@@ -92,8 +103,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-single-02 text-green',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Reporters', type: 'link'},
-      {path: 'alternative', title: 'Alternative', type: 'link'}
+      {path: 'dashboard', title: 'Roles', type: 'link'},
+      {path: 'alternative', title: 'Groups', type: 'link'}
     ]
   },
 ];
@@ -107,7 +118,7 @@ export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
 
-  constructor(private router: Router, public authService: AuthService) {
+  constructor(private router: Router, public authService: AuthService, private formService: FormService) {
   }
 
   ngOnInit() {
@@ -115,6 +126,21 @@ export class SidebarComponent implements OnInit {
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
+    this.formService.getEnabledForms().subscribe(data => {
+      for (let form of data) {
+        let formObject = {};
+        let formSettingObject = {};
+        formObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+        formObject['path'] = form.name.toString();
+        formObject['type'] = 'link';
+        formsMenu.children.push(formObject);
+
+        formSettingObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+        formSettingObject['path'] = form.name.toString();
+        formSettingObject['type'] = 'link';
+        formSettingsMenu.children.push(formSettingObject);
+      }
+    }, error => console.log(error));
   }
 
   onMouseEnterSidenav() {
@@ -133,9 +159,7 @@ export class SidebarComponent implements OnInit {
     const sidenavToggler = document.getElementsByClassName(
       'sidenav-toggler'
     )[0];
-    console.log(sidenavToggler);
     const body = document.getElementsByTagName('body')[0];
-    console.log(body);
     if (body.classList.contains('g-sidenav-pinned')) {
       misc.sidebar_mini_active = true;
     } else {

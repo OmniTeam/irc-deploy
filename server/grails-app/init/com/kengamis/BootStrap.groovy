@@ -4,9 +4,11 @@ import grails.gorm.transactions.Transactional
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 class BootStrap {
+    def dataSource
     def taskService
     CentralService centralService
     def init = { servletContext ->
+        AppHolder.misDataSource = dataSource
         authenticateCentral()
         initData()
         initSystemDefaultJobs()
@@ -26,17 +28,26 @@ class BootStrap {
     }
     @Transactional
     def initData() {
+        //Initial Study
+        def study = Study.findByCentralId('8') ?: new Study(name: 'CRVPF', centralId: '8')
+        study.save(failOnError: true, flush: true)
+
+        // Initial User and Roles
         def superAdminRole = Role.findByAuthority('ROLE_SUPER_ADMIN') ?: new Role(authority: 'ROLE_SUPER_ADMIN')
         superAdminRole.save(failOnError: true, flush: true)
         def adminRole = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
         adminRole.save(failOnError: true, flush: true)
 
         def superAdminUser = User.findByUsername('super') ?: new User(
+                names: "Super User",
+                email: "super@gmail.com",
                 username: 'super',
                 password: 'pass',
                 enabled: true).save(failOnError: true)
 
         def adminUser = User.findByUsername('root') ?: new User(
+                names: "Root User",
+                email: "root@gmail.com",
                 username: 'root',
                 password: 'pass',
                 enabled: true).save(failOnError: true)
@@ -63,7 +74,7 @@ class BootStrap {
         TaskDef.findByName("Central Sync Job") ?: new TaskDef(
                 name: 'Central Sync Job',
                 description: 'Central Data import into MIS',
-                cronExpression: '0 0/5 * * * ?',
+                cronExpression: '0 0/40 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.CentralDataImportJob',
                 startOnStartup: true

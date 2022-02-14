@@ -26,18 +26,49 @@ const routes: Routes = [
         path: 'project', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/project/project.module').then(m => m.ProjectModule)
       },
-
       {
-        path: 'project/create', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/project/project-create/project-create.module').then(m => m.ProjectCreateModule)
+        path: 'home', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
       },
       {
         path: 'forms', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
       },
       {
-        path: 'home', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
+        path: 'forms/data/:formtable', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/form-data/form-data.module').then(m => m.FormDataModule)
+      },
+      {
+        path: 'formSettings/form/:formtable', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
+      },
+      {
+        path: 'entity', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
+      },
+      {
+        path: 'createEntity', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
+      },
+      {
+        path: 'entity/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
+      },
+      {
+        path: 'linkForm/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/link-form/link-form.module').then(m => m.LinkFormModule)
+      },
+      {
+        path: 'entityView', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/entity-views.module').then(m => m.EntityViewsModule)
+      },
+      {
+        path: 'createEntityView/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/create-entity-views/create-entity-views.module').then(m => m.CreateEntityViewsModule)
+      },
+      {
+        path: 'entityView/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/entity-view-table/entity-view-table.module').then(m => m.EntityViewTableModule)
       },
       {
         path: 'dashboards',

@@ -5,7 +5,7 @@ import {MisFormsComponent} from "./mis-forms.component";
 const routes: Routes = [
   {
     path: '',
-    component: MisFormsComponent
+    component: MisFormsComponent,
   }
 ];
 

@@ -1,0 +1,393 @@
+<div class=" col-sm-12 col-md-12 bg-success">
+  <div class="row">
+    <div class="col-sm-12">
+      <h4 class="text-center" style="font-size: 2em; text-transform: capitalize;">
+        <span>Form: </span><span> {{formName}}</span></h4>
+    </div>
+  </div>
+</div>
+<div class=" col-md-12 col-sm-12" style="margin-top: 5px;">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <fieldset class="hm-fieldset">
+          <legend class="hm-legend">Filters</legend>
+          <div class=" col-sm-12 col-md-12 fieldset-body">
+            <div class=" row">
+              <div class=" col-sm-4 col-md-4">
+                <div class=" form-group row">
+                  <label class=" col-md-4 col-sm-4 col-form-label" for="from_date" style="font-size: 14px;"> From
+                    Date :</label>
+                  <div class=" col-md-8 col-sm-8">
+                    <div class=" row">
+                      <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
+                        <input class="form-control datepicker" [(ngModel)]="dateFrom"
+                               (ngModelChange)="dateFromFilter($event)" id="from_date" placeholder="Select date"
+                               name="from_date"
+                               type="date"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-sm-4 col-md-4">
+                <div class=" form-group row">
+                  <label class=" col-md-4 col-sm-4 col-form-label" for="to_date" style="font-size: 14px;"> To
+                    Date :</label>
+                  <div class=" col-md-8 col-sm-8">
+                    <div class=" row">
+                      <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
+                        <input class="form-control datepicker" [(ngModel)]="dateTo"
+                               (ngModelChange)="dateToFilter($event)" id="to_date" placeholder="Select date"
+                               name="from_date"
+                               type="date"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-sm-4 col-md-4">
+                <div class=" form-group row">
+                  <label class=" col-md-4 col-sm-4 col-form-label" style="font-size: 14px;"> Select Group: </label>
+                  <div class=" col-md-8 col-sm-8">
+                    <div class=" row">
+                      <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
+                        <ng-select [items]="userGroups"
+                                   bindLabel="name"
+                                   placeholder="Group .."
+                                   [(ngModel)]="selectedUserGroup">
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-sm-4 col-md-4">
+                <div class=" form-group row">
+                  <label class=" col-md-4 col-sm-4 col-form-label" style="font-size: 14px;"> Select User: </label>
+                  <div class=" col-md-8 col-sm-8">
+                    <div class=" row">
+                      <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
+                        <ng-select [items]="users"
+                                   bindLabel="name"
+                                   placeholder="User .."
+                                   [(ngModel)]="selectedUser">
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-sm-4 col-md-4">
+                <div class=" form-group row">
+                  <label class=" col-md-4 col-sm-4 col-form-label" style="font-size: 14px;"> Reviewed: </label>
+                  <div class=" col-md-8 col-sm-8">
+                    <div class=" row">
+                      <div class=" col-md-2 col-sm-2" style="padding-right: 0 !important; margin-top: 10px !important;">
+                        <label class=" custom-toggle custom-toggle-success mr-1">
+                          <input checked="checked" type="checkbox"/>
+                          <span
+                            class=" custom-toggle-slider rounded-circle"
+                            data-label-off="No"
+                            data-label-on="Yes"
+                          ></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-sm-4 col-md-4">
+                <div class=" form-group row">
+                  <div class=" col-md-12 col-sm-12">
+                    <div class=" row">
+                      <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
+                        <input
+                          type="search"
+                          class="form-control form-control-sm"
+                          placeholder="Search"
+                          (search)="onSearchFormData($event)"
+                          [(ngModel)]="searchValue"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+<div class=" col-md-12 col-sm-12" style="margin-top: 5px;">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <fieldset class="hm-fieldset">
+          <legend class="hm-legend">Key Stats</legend>
+          <div class=" col-sm-12 col-md-12 fieldset-body">
+            <div class=" row">
+              <div class=" col-sm-3 col-md-3">
+                <div class=" card card-stats" style="background: lightblue !important;">
+                  <div class=" card-body">
+                    <div class=" row">
+                      <div class=" col">
+                        <span class=" h2 font-weight-bold mb-0"> {{ numberOfRecords }} </span>
+                      </div>
+                      <div class=" col-auto">
+                        <h5 class=" card-title text-uppercase mb-0 h2 font-weight-bold">
+                          Records
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class=" col-sm-3 col-md-3">
+                <div class=" card card-stats" style="background: lightblue !important;">
+                  <div class=" card-body">
+                    <div class=" row">
+                      <div class=" col">
+                        <span class=" h2 font-weight-bold mb-0"> {{ numberOfQuestions }} </span>
+                      </div>
+                      <div class=" col-auto">
+                        <h5 class=" card-title text-uppercase mb-0 h2 font-weight-bold">
+                          Questions
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class=" col-sm-3 col-md-3">
+                <div class=" card card-stats" style="background: lightblue !important;">
+                  <div class=" card-body">
+                    <div class=" row">
+                      <div class=" col">
+                        <span class=" h2 font-weight-bold mb-0"> 4 </span>
+                      </div>
+                      <div class=" col-auto">
+                        <h5 class=" card-title text-uppercase mb-0 h2 font-weight-bold">
+                          Users
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class=" col-sm-3 col-md-3">
+                <div class=" card card-stats" style="background: lightblue !important;">
+                  <div class=" card-body">
+                    <div class=" row">
+                      <div class=" col">
+                        <span class=" h2 font-weight-bold mb-0"> 16 </span>
+                      </div>
+                      <div class=" col-auto">
+                        <h5 class=" card-title text-uppercase mb-0 h2 font-weight-bold">
+                          Farmers
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+<div class=" col-md-12 col-sm-12" style="margin-top: 5px;">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class="dataTables_wrapper py-4">
+          <div class="row">
+            <div class="col-sm-12 col-md-2">
+              <div class="dataTables_length" id="datatable_length">
+                <label>
+                  Show
+                  <select
+                    name="datatable_length"
+                    aria-controls="datatable"
+                    class="form-control form-control-sm"
+                    (change)="entriesChange($event)"
+                  >
+                    <option value="5" [selected]="entries == 5">5</option>
+                    <option value="10" [selected]="entries == 10">10</option>
+                    <option value="25" [selected]="entries == 25">25</option>
+                    <option value="50" [selected]="entries == 50">50</option>
+                    <option value="-1" [selected]="entries == -1">All</option>
+                  </select>
+                  entries
+                </label>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <div id="datatable_filter" class="dataTables_filter">
+                <label>
+                  <input
+                    type="search"
+                    class="form-control form-control-sm"
+                    placeholder="Search data"
+                    aria-controls="datatable"
+                    (keyup)="filterTable($event)"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <ngx-datatable
+            class="bootstrap selection-cell"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [limit]="entries != -1 ? entries : undefined"
+            [rows]="rows"
+            [scrollbarH]="true"
+            [selected]="selected"
+            [selectionType]="SelectionType.checkbox"
+            (activate)="onActivate($event)"
+            (select)="onSelect($event)"
+          >
+            <ngx-datatable-column
+              [width]="50"
+              [sortable]="false"
+              [canAutoResize]="false"
+              [draggable]="false"
+              [resizeable]="false"
+            >
+              <ng-template
+                ngx-datatable-header-template
+                let-value="value"
+                let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn"
+              >
+                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+              </ng-template>
+              <ng-template
+                ngx-datatable-cell-template
+                let-value="value"
+                let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn"
+              >
+                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Actions" sortable="false" prop="__id" [width]="100">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <button (click)="viewRecord(formDataModal, value)" class="btn btn-default" style="padding: 1px 6px;">
+                  <i class="fa fa-eye"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="User" prop="submitterName"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Submitted" prop="submissionDate">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ value | date: 'yyyy-MM-dd h:mm a' }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name}}" prop="{{col.prop}}">
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class=" col-md-12 col-sm-12" style="margin-top: 5px;">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class=" row">
+          <div class=" col-sm-12 col-md-12">
+            <div class="row">
+              <div class=" col-sm-12 col-md-12">
+                <fieldset class="hm-fieldset">
+                  <legend class="hm-legend">Users / Groups</legend>
+                  <div class=" col-sm-12 col-md-12 fieldset-body">
+                    <div class=" bar-chart-container">
+                      <div class="bar-chart-frame">
+                        <div id="form-data-bar-chart"></div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+              <div class=" col-sm-12 col-md-12">
+                <fieldset class="hm-fieldset">
+                  <legend class="hm-legend">Timeline</legend>
+                  <div class=" col-sm-12 col-md-12 fieldset-body">
+                    <div class=" line-chart-container">
+                      <div class="line-chart-frame">
+                        <div id="form-data-line-chart"></div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+          <div class=" col-sm-12 col-md-12" id="map_div">
+            <fieldset class="hm-fieldset">
+              <legend class="hm-legend">MAP</legend>
+              <div class=" col-sm-12 col-md-12 fieldset-body">
+                <div class="map-container">
+                  <div class="map-frame">
+                    <div id="map"></div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #formDataModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title w-100 text-center" id="modal-basic-title">{{ formName }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body" id="form-data-display" style="border: 1px solid #e9ecef;">
+    <div class="col-md-12">
+      <div class="row" *ngFor="let record of formDataRecord" style="border-bottom: 1px solid #e9ecef; padding: 15px !important; font-size: 0.9rem !important;">
+        <div class="col-md-6">
+          <span> {{ record.question }} </span>
+        </div>
+        <div class="col-md-6">
+          <span> {{ record.value }} </span>
+        </div>
+      </div>
+    </div>
+<!--    <div class=" col-sm-12 col-md-12" id="inner_map_div">-->
+<!--      <fieldset class="hm-fieldset">-->
+<!--        <legend class="hm-legend">MAP</legend>-->
+<!--        <div class=" col-sm-12 col-md-12 fieldset-body">-->
+<!--          <div class="map-container">-->
+<!--            <div class="map-frame">-->
+<!--              <div id="inner_map"></div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </fieldset>-->
+<!--    </div>-->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+  </div>
+</ng-template>
+

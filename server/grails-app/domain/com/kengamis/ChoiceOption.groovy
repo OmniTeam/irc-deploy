@@ -1,11 +1,10 @@
 package com.kengamis
 
-import grails.compiler.GrailsCompileStatic
+import groovy.transform.ToString
 
-@GrailsCompileStatic
-class ChoiceOption implements Serializable {
 
-    private static final long serialVersionUID = 1
+@ToString(cache=true, includeNames=true, includePackage=false)
+class ChoiceOption {
 
     String id
     String choiceId

@@ -1,11 +1,9 @@
 package com.kengamis
 
-import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import org.springframework.http.HttpMethod
 
-@GrailsCompileStatic
 @EqualsAndHashCode(includes = ['configAttribute', 'httpMethod', 'url'])
 @ToString(includes = ['configAttribute', 'httpMethod', 'url'], cache = true, includeNames = true, includePackage = false)
 class RequestMap implements Serializable {

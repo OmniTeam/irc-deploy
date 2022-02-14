@@ -18,9 +18,6 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(user: { username: string, password: string }): Observable<any> {
-    let loginUrl = `${environment.serverUrl}/api/login`;
-    console.log(loginUrl);
-    console.log(user);
     return this.http.post<any>(`${environment.serverUrl}/api/login`, user)
       .pipe(
         tap(tokens => this.doLoginUser(user.username, tokens)),
@@ -53,8 +50,6 @@ export class AuthService {
   }
 
   private doLoginUser(username: string, tokens: Tokens) {
-    console.log(username);
-    console.log(tokens);
     this.loggedUser = username;
     this.storeTokens(tokens);
   }

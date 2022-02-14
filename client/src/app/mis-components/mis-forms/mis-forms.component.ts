@@ -1,80 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {FormService} from "../../services/form.service";
+import {Project} from "../../models/project";
+import {Subject} from "rxjs";
+import {Form} from "../../models/form";
 
 @Component({
   selector: 'app-mis-forms',
   templateUrl: './mis-forms.component.html',
-  styleUrls: ['./mis-forms.component.scss']
+  styleUrls: ['./mis-forms.component.css']
 })
 export class MisFormsComponent implements OnInit {
-  entries: number = 10;
-  selected: any[] = [];
-  temp = [];
-  activeRow: any;
-  rows: any = [
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "4",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "3",
-      dateCreated: "2021/04/25",
-    },
-    {
-      formId: "789-90983",
-      formName: "Farmer Suvery Form",
-      oxdId: "5",
-      dateCreated: "2021/04/26",
-    },
-  ];
-  constructor( private router: Router,) {
-    this.temp = this.rows.map((prop, key) => {
-      return {
-        ...prop,
-        id: key
-      };
-    });
+
+  rows: Form[] = [];
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
+  constructor(private router: Router, private formService: FormService) {
   }
 
-  entriesChange($event) {
-    this.entries = $event.target.value;
-  }
-  filterTable($event) {
-    let val = $event.target.value;
-    this.temp = this.rows.filter(function(d) {
-      for (var key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-  onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-  }
-  onActivate(event) {
-    this.activeRow = event.row;
+  ngOnInit() {
+    this.formService.getForms().subscribe(data => {
+      this.rows = data;
+      this.dtTrigger.next();
+    }, error => console.log(error));
+
+
+    this.dtOptions = {
+      pagingType: "numbers",
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      processing: true,
+      responsive: true,
+      dom: 'lfrtip'
+    };
   }
 
-  ngOnInit(): void {
-  }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
 }

@@ -3,9 +3,7 @@ import { ROUTES } from "../sidebar/sidebar.component";
 import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 
 import {
-  Location,
-  LocationStrategy,
-  PathLocationStrategy
+  Location
 } from "@angular/common";
 import {AuthService} from "../../services/auth.service";
 
@@ -19,6 +17,7 @@ export class NavbarComponent implements OnInit {
   public listTitles: any[];
   public location: Location;
   sidenavOpen: boolean = true;
+  showNavBar: boolean = true;
   constructor(
     location: Location,
     private element: ElementRef,
@@ -38,6 +37,7 @@ export class NavbarComponent implements OnInit {
              document.body.classList.add("g-sidenav-pinned");
              document.body.classList.remove("g-sidenav-hidden");
              this.sidenavOpen = true;
+             this.showNavBar = true;
            }
        }
 

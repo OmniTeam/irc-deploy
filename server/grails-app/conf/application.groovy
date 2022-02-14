@@ -19,6 +19,8 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.kengamis.U
 grails.plugin.springsecurity.authority.className = 'com.kengamis.Role'
 grails.plugin.springsecurity.requestMap.className = 'com.kengamis.RequestMap'
 grails.plugin.springsecurity.securityConfigType = 'Requestmap'
+grails.plugin.springsecurity.logout.postOnly = false
+grails.plugin.springsecurity.useBasicAuth = true
 
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
@@ -49,6 +51,8 @@ grails.plugin.databasemigration.changelogFileName = 'changelog.groovy'
 grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
+grails.gorm.failOnError = false
+server.port = 7000
 
 
 grails.gorm.default.mapping = {
@@ -67,9 +71,6 @@ environments {
         uploadDocsFolder = "D:/uploads/"
     }
     production {
-        uploadFolder = "/appdata/ultima/uploads/ug/"
-        uploadDocsFolder = "/appdata/ultima/uploads/ug/documents/"
-
-
+        uploadFolder = "/opt/uploads/"
     }
 }
