@@ -79,6 +79,14 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entity-views/entity-view-table/entity-view-table.module').then(m => m.EntityViewTableModule)
       },
       {
+        path: 'tags', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tags/tags.module').then(m => m.TagsModule)
+      },
+      {
+        path: 'tagType', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tag-type/tag-type.module').then(m => m.TagTypeModule)
+      },
+      {
         path: 'dashboards',
         loadChildren: './pages/dashboards/dashboards.module#DashboardsModule',
         canActivate: [AuthGuard]

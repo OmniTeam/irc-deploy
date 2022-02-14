@@ -72,14 +72,14 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
   {
-    path: '/widgets',
+    path: '/',
     title: 'Admin',
     type: 'sub',
     icontype: 'ni-badge text-default',
     isCollapsed: true,
     children: [
-      {path: 'dashboard', title: 'Create Packages', type: 'link'},
-      {path: 'alternative', title: 'Assign Packages', type: 'link'}
+      {path: 'tags', title: 'Tags', type: 'link'},
+      {path: 'tagType', title: 'Tag Type', type: 'link'}
     ]
   },
   {
@@ -127,21 +127,23 @@ export class SidebarComponent implements OnInit {
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
-    this.formService.getEnabledForms().subscribe(data => {
-      for (let form of data) {
-        let formObject = {};
-        let formSettingObject = {};
-        formObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
-        formObject['path'] = form.name.toString();
-        formObject['type'] = 'link';
-        formsMenu.children.push(formObject);
+    if (this.authService.isLoggedIn()) {
+      this.formService.getEnabledForms().subscribe(data => {
+        for (let form of data) {
+          let formObject = {};
+          let formSettingObject = {};
+          formObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+          formObject['path'] = form.name.toString();
+          formObject['type'] = 'link';
+          formsMenu.children.push(formObject);
 
-        formSettingObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
-        formSettingObject['path'] = form.name.toString();
-        formSettingObject['type'] = 'link';
-        formSettingsMenu.children.push(formSettingObject);
-      }
-    }, error => console.log(error));
+          formSettingObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+          formSettingObject['path'] = form.name.toString();
+          formSettingObject['type'] = 'link';
+          formSettingsMenu.children.push(formSettingObject);
+        }
+      }, error => console.log(error));
+    }
   }
 
   onMouseEnterSidenav() {
