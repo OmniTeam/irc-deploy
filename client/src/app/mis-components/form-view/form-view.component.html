@@ -15,6 +15,42 @@
   </div>
 </div>
 
+<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
+<div *ngIf="openCommentsPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Comments</h3>
+  </div>
+  <div class="card-body d-flex flex-column">
+    <div class="row">
+      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
+      <div class="col-sm-11">
+        <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
+        <div style="text-align: end;">
+          <button class="btn btn-link" (click)="addComment()"><i class="fas fa-paper-plane"
+                                                                 style="font-size: 28px;"></i></button>
+        </div>
+      </div>
+    </div>
+    <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
+    <app-comments [comments]="comments"></app-comments>
+  </div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>
+  </div>
+</div>
+
+<div *ngIf="openRecommendationsPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Recommendations</h3>
+  </div>
+  <div class="card-body d-flex flex-column">
+    <div>TODO</div>
+  </div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="viewRecommendations()">Close</button>
+  </div>
+</div>
+
 <div class=" container-fluid mt--6">
   <div class=" row">
     <div class=" col">
@@ -53,7 +89,8 @@
                       <ul style="list-style: none; font-size: 15px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
                         <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b></li>
+                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b>
+                        </li>
                         <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
                         <li>Acronym Name: <b>{{organisationalInfo.acronym_name}}</b></li>
                         <li>Email: <b>{{organisationalInfo.email}}</b></li>
@@ -118,7 +155,13 @@
                       <td class='text-center'>{{ row.quarter_target }}</td>
                       <td class='text-center'>{{ row.quarter_achievement }}</td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
-                      <td class='text-center'></td>
+                      <td class='text-center' id="0-{{row.id}}">
+                        <div>{{ row.comment_on_result }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.comment_on_result)"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
                     </tr>
                     </tbody>
                   </table>
@@ -141,15 +184,32 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let row of financialReport">
+                    <tr *ngFor="let row of financial">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.budget_line }}</td>
                       <td class='text-center'>{{ row.approved_budget }}</td>
                       <td class='text-center'>{{ row.total_advanced }}</td>
                       <td class='text-center'>{{ row.expense_to_date }}</td>
-                      <td class='text-center'></td>
-                      <td class='text-center'></td>
-                      <td class='text-center'></td>
+                      <td class='text-center' id="0-{{row.id}}">
+                        <div>{{ row.quarter_expenses }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row,'0-'+row.id, 'quarterExpense', row.quarter_expenses)"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' id="1-{{row.id}}">
+                        <div>{{ row.variance }}
+                          <button class="btn btn-link" (click)="cellEditor(row,'1-'+row.id, 'variance', row.variance)">
+                            <i class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' id="2-{{row.id}}">
+                        <div>{{ row.reason_for_variance }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row,'2-'+row.id, 'reason_for_variance',row.reason_for_variance)">
+                            <i class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
                     </tr>
                     </tbody>
                   </table>
@@ -161,10 +221,11 @@
                       <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
-                                                   type="file"/></div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                        class="text fas fa-file-download"></a> Download Template
+                                                   type="file" (change)="handleFileInput($event)"/></div>
+                      <div class="col-sm-3" *ngIf="shortLink1">
+                        <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
+                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
+                          Template</a>
                         </button>
                       </div>
                     </div>
@@ -172,10 +233,11 @@
                       <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
                         report:</label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
-                                                   type="file"/></div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                        class="text fas fa-file-download"></a> Download Template
+                                                   type="file" (change)="handleFileInput($event)"/></div>
+                      <div class="col-sm-3" *ngIf="shortLink2">
+                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
+                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
+                          Template</a>
                         </button>
                       </div>
                     </div>
@@ -183,39 +245,54 @@
                       <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file"/></div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                        class="text fas fa-file-download"></a> Download Template
+                                                   type="file" (change)="handleFileInput($event)"/></div>
+                      <div class="col-sm-3" *ngIf="shortLink3">
+                        <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
+                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
+                          Template</a>
                         </button>
                       </div>
                     </div>
                   </form>
+
+                  <!--Flag variable is used here-->
+                  <div class="container" *ngIf="loading">
+                    <h3>Loading ...</h3>
+                  </div>
                 </div>
 
                 <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
-                      <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-6">
-                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                        class="text fas fa-file-download"></a> Download Template
+                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-4">{{attachment1}}</div>
+                      <div class="col-sm-4">
+                        <button class="btn btn-link" *ngIf="shortLink1"><a href="{{shortLink1}}" style="font-size:15px;"
+                                                                           class="text fas fa-file-download"
+                                                                           target="_blank" download>&nbsp;&nbsp;Download
+                          Template</a>
                         </button>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
-                      <div class="col-sm-6">
-                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                        class="text fas fa-file-download"></a> Download Template
+                      <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>
+                      <div class="col-sm-4">{{attachment2}}</div>
+                      <div class="col-sm-4">
+                        <button class="btn btn-link" *ngIf="shortLink2"><a href="{{shortLink2}}" style="font-size:15px;"
+                                                                           class="text fas fa-file-download"
+                                                                           target="_blank" download>&nbsp;&nbsp;Download
+                          Template</a>
                         </button>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-6">
-                        <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                        class="text fas fa-file-download"></a> Download Template
+                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-4">{{attachment3}}</div>
+                      <div class="col-sm-4">
+                        <button class="btn btn-link" *ngIf="shortLink3"><a href="{{shortLink3}}" style="font-size:15px;"
+                                                                           class="text fas fa-file-download"
+                                                                           target="_blank" download>&nbsp;&nbsp;Download
+                          Template</a>
                         </button>
                       </div>
                     </div>
@@ -229,24 +306,33 @@
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                          class="text fas fa-file-download"></a> Download Template
+                          <button class="btn btn-link" *ngIf="shortLink1"><a href="{{shortLink1}}"
+                                                                             style="font-size:15px;"
+                                                                             class="text fas fa-file-download"
+                                                                             target="_blank" download>&nbsp;&nbsp;Download
+                            Template</a>
                           </button>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                          class="text fas fa-file-download"></a> Download Template
+                          <button class="btn btn-link" *ngIf="shortLink2"><a href="{{shortLink2}}"
+                                                                             style="font-size:15px;"
+                                                                             class="text fas fa-file-download"
+                                                                             target="_blank" download>&nbsp;&nbsp;Download
+                            Template</a>
                           </button>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link"><a routerLink="#" style="font-size:15px;"
-                                                          class="text fas fa-file-download"></a> Download Template
+                          <button class="btn btn-link" *ngIf="shortLink3"><a href="{{shortLink3}}"
+                                                                             style="font-size:15px;"
+                                                                             class="text fas fa-file-download"
+                                                                             target="_blank" download>&nbsp;&nbsp;Download
+                            Template</a>
                           </button>
                         </div>
                       </div>
@@ -268,36 +354,66 @@
                     <div class="col">
                       <div style="margin-bottom: 30px;">
                         <p>Are the expenses realistic?</p>
-                        <input type="radio" value="yes" name="expenses_realistic" ngModel> Yes
-                        <input type="radio" value="no" name="expenses_realistic" ngModel> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="expenses_realistic" [(ngModel)]="radioExpensesRealistic"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div style="margin-bottom: 30px;">
                         <p>Have the attachments been verified?</p>
-                        <input type="radio" value="yes" name="attachments_verified" ngModel> Yes
-                        <input type="radio" value="no" name="attachments_verified" ngModel> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="attachments_verified" [(ngModel)]="radioAttachmentsVerified"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div>
                         <p>Are the figures provided realistic?</p>
-                        <input type="radio" value="yes" name="figures_realistic" ngModel> Yes
-                        <input type="radio" value="no" name="figures_realistic" ngModel> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="figures_realistic" [(ngModel)]="radioFiguresRealistic"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                     </div>
 
                     <div class="col">
                       <div style="margin-bottom: 30px;">
                         <p>Does the narrative align with the objectives of the project?</p>
-                        <input type="radio" value="yes" name="narrative_align" ngModel> Yes
-                        <input type="radio" value="no" name="narrative_align" ngModel> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="narrative_align" [(ngModel)]="radioNarrativeAlign"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div style="margin-bottom: 30px;">
                         <p>Are they in line with the targets?</p>
-                        <input type="radio" value="yes" name="inline_with_targets" ngModel> Yes
-                        <input type="radio" value="no" name="inline_with_targets" ngModel> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="inline_with_targets" [(ngModel)]="radioInlineWithTargets"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                       <div>
                         <p>Is the evidence of the activities satisfactory?</p>
-                        <input type="radio" value="yes" name="evidence_satisfactory" ngModel> Yes
-                        <input type="radio" value="no" name="evidence_satisfactory" ngModel> No
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of items">
+                            <input type="radio" name="evidence_satisfactory" [(ngModel)]="radioEvidenceSatisfactory"
+                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                            {{item.name}}
+                          </li>
+                        </ul>
                       </div>
                     </div>
 
@@ -319,42 +435,58 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
-                        <div class="col-sm-8"><p>Has the partner satisfactorily affected the suggested changes?</p>
-                        </div>
-                        <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="suggested_changes_satisfactory" ngModel> Yes
-                          <input type="radio" value="no" name="suggested_changes_satisfactory" ngModel> No
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-8"><p>Are the financial, performance and narrative reports well aligned?</p>
-                        </div>
-                        <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="reports_well_aligned" ngModel> Yes
-                          <input type="radio" value="no" name="reports_well_aligned" ngModel> No
+                        <div class="col-sm-12"><p>Has the partner satisfactorily affected the suggested changes?</p>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioSuggestedChangesSatisfactory"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-8"><p>Do you recommend for further fund disbursement?</p></div>
-                        <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="recommend_fund" ngModel> Yes
-                          <input type="radio" value="no" name="recommend_fund" ngModel> No
+                        <div class="col-sm-12"><p>Are the financial, performance and narrative reports well aligned?</p>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="reports_well_aligned" [(ngModel)]="radioReportsWellAligned"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-8"><p>Is this the end of this partnership?</p></div>
-                        <div class="col-sm-4" style="margin-bottom: 30px;">
-                          <input type="radio" value="yes" name="end_of_partnership" ngModel> Yes
-                          <input type="radio" value="no" name="end_of_partnership" ngModel> No
+                        <div class="col-sm-12"><p>Do you recommend for further fund disbursement?</p>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommedFund"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12"><p>Is this the end of this partnership?</p>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="end_of_partnership" [(ngModel)]="radioEndOfPartnership"
+                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>
 
                     <div class="col-sm-3">
                       <div>
-                        <button class="btn btn-success comment_btn">View Recommendations</button>
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View
+                          Recommendations
+                        </button>
                         <br><br>
-                        <button class="btn btn-success comment_btn">View Comments</button>
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
                       </div>
                     </div>
 
@@ -370,28 +502,25 @@
                   </div>
                 </div>
 
-
-                <div class="container">
-                  <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
-                    <div class="col-lg-12 bottom_buttons_row"
-                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger">Cancel</button>
-                      <button class="btn btn-success" (click)="changeForm('Review')">Submit Report</button>
-                    </div>
+                <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Cancel</button>
+                    <button class="btn btn-success" (click)="submitReport()">Submit Report</button>
                   </div>
-                  <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
-                    <div class="col-lg-12 bottom_buttons_row"
-                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger">Ask for Revisions</button>
-                      <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
-                    </div>
+                </div>
+                <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Ask for Revisions</button>
+                    <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
                   </div>
-                  <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
-                    <div class="col-lg-12 bottom_buttons_row"
-                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger">Cancel</button>
-                      <button class="btn btn-success">Approve Report</button>
-                    </div>
+                </div>
+                <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Cancel</button>
+                    <button class="btn btn-success">Approve Report</button>
                   </div>
                 </div>
 
@@ -403,4 +532,3 @@
     </div>
   </div>
 </div>
-
