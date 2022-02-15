@@ -7,6 +7,7 @@ class TagType {
     Date dateCreated
     Date lastUpdated
 
+    static belongsTo = [misEntity: MisEntity]
     static hasMany = [tags: Tag]
     static constraints = {
     }

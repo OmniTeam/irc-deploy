@@ -24,7 +24,7 @@
           <form [formGroup]="formGroup" (ngSubmit)="createEntity()" *ngIf="formGroup">
             <div class="row">
               <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
-                <div class="row">
+                <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Entity Name
@@ -49,6 +49,53 @@
                               required
                             </div>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Prefix
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Prefix"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="prefix"
+                            [ngClass]="{ 'is-invalid': submitted && f.prefix.errors }"
+                          >
+                          <div *ngIf="submitted && f.prefix.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.prefix.errors.required">Prefix is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Enable Tagging
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ui-switch formControlName="enableTagging" checkedLabel="on" uncheckedLabel="off"></ui-switch>
                         </div>
                       </div>
                     </div>

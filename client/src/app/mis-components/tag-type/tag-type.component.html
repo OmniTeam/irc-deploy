@@ -66,6 +66,7 @@
             (activate)="onActivate($event)"
           >
             <ngx-datatable-column name="Name" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Entity" prop="misEntityName"></ngx-datatable-column>
             <ngx-datatable-column name="Date Created" prop="dateCreated">
               <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
                 {{ value | date }}
@@ -104,7 +105,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form ">
-            <div class="row" style="padding-bottom: 15px">
+            <div class="form-row" style="padding-bottom: 15px">
               <div class="col-md-3">
                 <label class=" form-control-label" for="name">
                   Tag Type
@@ -115,13 +116,40 @@
                 <input
                   type="text"
                   id="name"
-                  class="form-control form-control-sm"
+                  class="form-control"
+                  placeholder=" Tag Type"
                   formControlName="name"
                   [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
                   required="required"
                 />
                 <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                   <div *ngIf="f.name.errors.required" class="input-error">Name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label class=" form-control-label" for="misEntity">
+                  Entity
+                </label>
+              </div>
+              <div class="col-md-9">
+                <ng-select class="form-control"
+                           aria-controls="datatable"
+                           style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                           id="misEntity"
+                           [multiple]="false"
+                           placeholder=" Entity"
+                           formControlName="misEntity"
+                           [ngClass]="{ 'is-invalid': submitted && f.misEntity.errors }"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of misEntities">
+                    {{item.name}}
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="submitted && f.misEntity.errors" class="invalid-feedback">
+                  <div *ngIf="f.misEntity.errors.required">Entity is required</div>
                 </div>
               </div>
             </div>

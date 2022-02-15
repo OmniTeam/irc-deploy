@@ -20,7 +20,20 @@ class TagTypeController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond tagTypeService.list(params), model:[tagTypeCount: tagTypeService.count()]
+        def tagTypes = []
+        tagTypeService.list(params).each { tagType ->
+            def newTagTypeObject = [:]
+            def misEntityId = tagType.misEntity.id
+            def misEntity = MisEntity.findById(misEntityId)
+            newTagTypeObject['id'] = tagType.id
+            newTagTypeObject['name'] = tagType.name
+            newTagTypeObject['misEntity'] = misEntityId
+            newTagTypeObject['dateCreated'] = tagType.dateCreated
+            newTagTypeObject['lastUpdated'] = tagType.lastUpdated
+            newTagTypeObject['misEntityName'] = misEntity.name
+            tagTypes << newTagTypeObject
+        }
+        respond tagTypes
     }
 
     def show(Long id) {

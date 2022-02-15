@@ -73,6 +73,13 @@ export class TagsComponent implements OnInit {
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/tags']);
+
+    if (this.formGroup.valid) {
+      setTimeout(() => {
+        this.formGroup.reset();
+        this.submitted = false;
+      }, 100);
+    }
   }
 
   editTag(row) {

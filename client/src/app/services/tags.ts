@@ -41,4 +41,16 @@ export class TagService {
     return this.http.delete(`${environment.serverUrl}/tagType/${deletedRow}`);
   }
 
+  getTagsByTagType(params): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/tag/getAllTagsByTagType`, {params});
+  }
+
+  addEntityTagRecord(entityTagRecord, params): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/tag/tagEntityRecord`, entityTagRecord, {params});
+  }
+
+  removeEntityTagRecord(entityTagRecord, params): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/tag/removeTagEntityRecord`, entityTagRecord, {params});
+  }
+
 }

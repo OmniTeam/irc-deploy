@@ -1,6 +1,11 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+
+import static com.kengamis.Util.escapeField
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -94,5 +99,87 @@ class TagController {
         tagService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getAllTagsByTagType() {
+        def id = params.id as String
+        def tagType = TagType.get(id)
+        def tags = Tag.findAllByTagType(tagType)
+        respond tags
+    }
+
+    @Transactional
+    def tagEntityRecord() {
+        def message = ["Entity record tagged successfully"]
+        def id = UUID.randomUUID() as String
+        def misEntityId = params.id as String
+        def record = request.JSON
+        def recordId = record['record_id'] as String
+        def tagTypeId = record['tag_type_id'] as String
+        def tagId = record['tag_id'] as String
+        def simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        def dateCreated = Timestamp.valueOf(simpleDateFormat.format(new Date()))
+
+        def misEntity = MisEntity.get(misEntityId)
+
+        //Insert into Tag Table
+        def queryInsertTag = "INSERT IGNORE INTO ${escapeField misEntity.entityTagTable} (id, mis_entity_id, record_id, tag_type_id, tag_id, date_created) values ('${id}', '${misEntityId}', '${recordId}', '${tagTypeId}', '${tagId}', '${dateCreated}')"
+        log.trace(queryInsertTag)
+        def result = AppHolder.withMisSql { execute(queryInsertTag.toString()) }
+        if (!result) {
+            log.info("Entity Tag Table ${misEntity.entityTagTable} successfully inserted a record")
+        }
+
+        def recordTags = getRecordTags(misEntity, recordId)
+
+        def updateQuery = "update ${escapeField misEntity.tableName} set _tag = '${recordTags}' where id = '${recordId}'".toString()
+        log.trace(updateQuery)
+        def resultUpdate = AppHolder.withMisSql { execute(updateQuery.toString()) }
+        if (!resultUpdate) {
+            log.info("Table ${misEntity.tableName} successfully updated a record")
+        }
+        respond message
+    }
+
+    def getRecordTags(MisEntity misEntity, def recordId) {
+        def tagNames = []
+        def queryTagIds = "select tag_id from ${escapeField misEntity.entityTagTable} where record_id = '${recordId}'".toString()
+        log.trace(queryTagIds)
+        def resultTagIds = AppHolder.withMisSql { rows(queryTagIds.toString()) }
+        if (resultTagIds.size() > 0) {
+            resultTagIds.each {
+                def tag = Tag.findById(it['tag_id'].toString())
+                tagNames << tag.name
+            }
+            return tagNames.join(", ")
+        }
+        return ''
+    }
+
+    @Transactional
+    def removeTagEntityRecord() {
+        def misEntityId = params.id as String
+        def record = request.JSON
+        def recordId = record['record_id'] as String
+        def tagId = record['tag_id'] as String
+        def misEntity = MisEntity.get(misEntityId)
+
+        def removeQuery = "delete from ${escapeField misEntity.entityTagTable} where tag_id = '${tagId}' and record_id = '${recordId}'".toString()
+        log.trace(removeQuery)
+        def resultDelete = AppHolder.withMisSql { execute(removeQuery.toString()) }
+        if (!resultDelete) {
+            log.info("Table ${misEntity.tableName} successfully removed a record")
+        }
+
+        def recordTags = getRecordTags(misEntity, recordId)
+
+        def updateQuery = "update ${escapeField misEntity.tableName} set _tag = '${recordTags}' where id = '${recordId}'".toString()
+        log.trace(updateQuery)
+        def resultUpdate = AppHolder.withMisSql { execute(updateQuery.toString()) }
+        if (!resultUpdate) {
+            log.info("Table ${misEntity.tableName} successfully updated a record")
+        }
+        def message = ["Entity tag Record remove successfully"]
+        respond message
     }
 }

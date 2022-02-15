@@ -30,9 +30,9 @@ class MisEntityController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 100, 100)
-        def misEntity = MisEntity.findAll().collect {entity ->
+        def misEntity = MisEntity.findAll().collect { entity ->
             def entityViews = entity.entityViews.collect { [id: it.id, name: it.name] }
-            [id: entity.id, name: entity.name, tableName: entity.tableName, dateCreated: entity.dateCreated, entityViews: entityViews]
+            [id: entity.id, name: entity.name, tableName: entity.tableName, prefix: entity.prefix, dateCreated: entity.dateCreated, entityViews: entityViews]
         }
         respond misEntity
     }
@@ -61,12 +61,14 @@ class MisEntityController {
         try {
             misEntityService.save(misEntity)
             createEntityTable(misEntity)
+            createEntityPrefixTable(misEntity)
+            createEntityTagTable(misEntity)
         } catch (ValidationException e) {
             respond misEntity.errors
             return
         }
 
-        respond misEntity, [status: CREATED, view:"show"]
+        respond misEntity, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -88,7 +90,7 @@ class MisEntityController {
             return
         }
 
-        respond misEntity, [status: OK, view:"show"]
+        respond misEntity, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -124,16 +126,48 @@ class MisEntityController {
         }
     }
 
+    def createEntityPrefixTable(MisEntity misEntity) {
+        try {
+            def query = "CREATE TABLE IF NOT EXISTS ${escapeField misEntity.prefixIncrementTable}( id varchar(255) primary key, mis_entity_id varchar(255), record_id varchar(255), prefix varchar(255), increment_value int not null, code varchar(255), date_created datetime"
+            query = query + ")"
+            log.trace(query)
+            def result = AppHolder.withMisSql { execute(query.toString()) }
+            if (!result) {
+                log.info("Table ${misEntity.prefixIncrementTable} successfully created")
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace()
+        }
+    }
+
+    def createEntityTagTable(MisEntity misEntity) {
+        try {
+            def query = "CREATE TABLE IF NOT EXISTS ${escapeField misEntity.entityTagTable}( id varchar(255) primary key, mis_entity_id varchar(255), record_id varchar(255), tag_type_id varchar(255), tag_id varchar(255), date_created datetime"
+            query = query + ")"
+            log.trace(query)
+            def result = AppHolder.withMisSql { execute(query.toString()) }
+            if (!result) {
+                log.info("Entity Tag Table ${misEntity.entityTagTable} successfully created")
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace()
+        }
+    }
+
     def getEntityData() {
         def entityData = []
         try {
             def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
-            entityData = [headerList: q.headers, resultList: q.data, resultListCount: q.count, entity: q.misEntity]
+            entityData = [headerList : q.headers, resultList: q.data, resultListCount: q.count, entity: q.misEntity,
+                          tagTypeList: q.tagTypes, enableTagging: q.misEntity.enableTagging]
         }
         catch (Exception e) {
             flash.error = "Data Might Not Be Available For This entity."
             log.error("Error fetching data", e)
-            entityData = [headerList: [], resultList: [], resultListCount: 0, entity: MisEntity.findById(params.id)]
+            entityData = [headerList : [], resultList: [], resultListCount: 0, entity: MisEntity.findById(params.id),
+                          tagTypeList: []]
         }
         respond entityData
     }
@@ -151,10 +185,31 @@ class MisEntityController {
             def uniqueId = "uuid:" + UUID.randomUUID() as String
             def columns = []
             def values = []
+
+            // Use the prefix and entity to generate the unique code
+            def prefix = misEntity.prefix
+            def nextIncrementValue = getNextIncrementValueFromPrefixTable(misEntity)
+            def code = generateCode(prefix, nextIncrementValue)
+
+            // Split submitted data into columns and values
             postRequest.each { key, value ->
                 columns << key
                 values << "'${value}'"
             }
+
+            // Add code and its value as a data to be inserted in the entity table
+            columns << '_code'
+            values << "'${code}'"
+
+            //Insert into prefix Table
+            def queryInsertPrefixIncrement = "INSERT IGNORE INTO ${escapeField misEntity.prefixIncrementTable} (id, mis_entity_id, record_id, prefix, increment_value, code, date_created) values ('${UUID.randomUUID() as String}', '${misEntity.id}', '${id}', '${prefix}', '${nextIncrementValue}', '${code}',  '${dateCreated}')"
+            log.trace(queryInsertPrefixIncrement)
+            def resultIncrement = AppHolder.withMisSql { execute(queryInsertPrefixIncrement.toString()) }
+            if (!resultIncrement) {
+                log.info("Table ${misEntity.prefixIncrementTable} successfully inserted a record")
+            }
+
+            // Insert into Entity Table
             def query = "INSERT IGNORE INTO ${escapeField misEntity.tableName} (id, submitterName, date_created, unique_id, ${columns.join(", ")}) values ('${id}', '${submitterName.username}', '${dateCreated}', '${uniqueId}', ${values.join(", ")})"
             log.trace(query)
             def result = AppHolder.withMisSql { execute(query.toString()) }
@@ -182,5 +237,31 @@ class MisEntityController {
             entityFields = [entity: [], entityFields: [], forms: []]
         }
         respond entityFields
+    }
+
+    def generateCode(def prefix, def increment_value) {
+        def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
+        def code = prefix.toString() + '/' + actualIncrementValue.toString()
+        return code
+    }
+
+    def getNextIncrementValueFromPrefixTable(MisEntity misEntity) {
+        def query = "select max(increment_value) as max_value from ${escapeField misEntity.prefixIncrementTable}"
+        def result = AppHolder.withMisSql { rows(query.toString()) }
+        if (!result.first()['max_value']) {
+            return 1
+        } else {
+            return result.first()['max_value'] + 1
+        }
+    }
+
+    def addingLeadingZerosToIncrement(def increment_value) {
+        def stringLength = 6
+        def incrementValueLen = increment_value.toString().size()
+        def expectedLen = stringLength.toInteger() - incrementValueLen.toInteger()
+        for (def i = 0; i <= expectedLen - 1; i++) {
+            increment_value = "0" + increment_value
+        }
+        return increment_value
     }
 }

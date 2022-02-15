@@ -2,6 +2,7 @@ export class Entity {
   id: string;
   name: string;
   tableName: string;
+  prefix: string;
   dateCreated: Date;
   entityViews: string;
   linkedForms: string;
