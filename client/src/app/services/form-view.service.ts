@@ -11,6 +11,14 @@ export class FormViewService {
   constructor(private http: HttpClient) { }
 
   getForms(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/form`);
+    return this.http.get(`${environment.serverUrl}/reportForm`);
+  }
+
+  createReport(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportForm`, formData);
+  }
+
+  updateReport(formData, params): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportForm`, formData, {params});
   }
 }

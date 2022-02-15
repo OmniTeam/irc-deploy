@@ -14,4 +14,8 @@ export class TaskListService {
     return this.http.get(`${environment.serverUrl}/taskList`);
   }
 
+  getTaskRecord(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/taskList/get_task_record`, {params});
+  }
+
 }

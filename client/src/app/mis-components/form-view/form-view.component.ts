@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {FormViewService} from "../../services/form-view.service";
 import {CommentNode, CommentsComponent} from '../comments/comments.component';
@@ -7,6 +7,8 @@ import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
+import {TaskListService} from "../../services/task-list.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-form-view',
@@ -40,8 +42,11 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   radioSuggestedChangesSatisfactory:string;
   radioReportsWellAligned:string;
   radioSelectedString:string;
-  radioRecommedFund:string;
+  radioRecommendFund:string;
   radioEndOfPartnership:string;
+
+  taskRecord: any;
+  reportValues: [];
 
   shortLink1: string = "";
   shortLink2: string = "";
@@ -122,6 +127,24 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       reason_for_variance: ''
     }
   ];
+  listOfRecommendations = [
+    {
+      id: "fdadasddsfasdasdfdd",
+      text: 'Hey hey how are you',
+      user: 'Mr.Rwele',
+      likes: ['super'],
+      answers: [],
+      datetimeCreated: '04/07/2022 06:12:21'
+    },
+    {
+      id: 'asdsafsadfgsgasgfds',
+      text: 'I do not like this report',
+      user: 'Kasiga Balinda',
+      likes: [],
+      answers: [],
+      datetimeCreated: '04/01/2022 09:12:21'
+    }
+  ];
   listOfComments = [
     {
       id: "fdadasddsfasdasdfdd",
@@ -159,7 +182,7 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
     }
   ];
 
-  constructor(private router: Router, private formViewService: FormViewService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private formViewService: FormViewService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -184,6 +207,14 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
     this.listOfComments.forEach((commentNode) => {
       this.comments.push(new CommentNode(commentNode.id, commentNode.text, commentNode.user, commentNode.likes, this.getAnswersToComments(commentNode.answers), new Date(commentNode.datetimeCreated)));
     });
+
+    this.route.params
+      .subscribe(p => {
+        const params = new HttpParams().set('id', p['id']);
+        this.taskListService.getTaskRecord(params).subscribe((data) => {
+          this.taskRecord = data;
+        }, error => console.log(error));
+      });
   }
 
   getAnswersToComments(list) {
@@ -195,7 +226,114 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   }
 
   submitReport() {
+    let reportValues: {[key: string]: string} = {
+      financialReport: this.financialReport.toString(),
+      performanceReport: this.performanceReport.toString(),
+    }
+
+    let fileRecord: {[key: string]: string} = {
+      task_id: this.taskRecord.id,
+      process_id: this.taskRecord.process_id,
+      user_id: this.authService.getLoggedInUsername(),
+      group_id: this.taskRecord.group_id,
+      task_definition_key: this.taskRecord.task_definition_key,
+      path: this.attachment1,
+    }
+
+    this.listOfComments.forEach((comment) => {
+      let commentsRecord: {[key: string]: string} = {
+        task_id: this.taskRecord.id,
+        process_id: this.taskRecord.process_id,
+        user_id: comment.user,
+        group_id: this.taskRecord.group_id,
+        task_definition_key: this.taskRecord.task_definition_key,
+        content: comment.text,
+        children: comment.answers.toString(),
+      }
+    });
+
+    this.listOfRecommendations.forEach((recommendation) => {
+      let recommendationsRecord: {[key: string]: string} = {
+        task_id: this.taskRecord.id,
+        process_id: this.taskRecord.process_id,
+        user_id: recommendation.user,
+        group_id: this.taskRecord.group_id,
+        task_definition_key: this.taskRecord.task_definition_key,
+        content: recommendation.text,
+      }
+    });
+
+    let reportRecord: {[key: string]: string} = {
+      task_id: this.taskRecord.id,
+      process_id: this.taskRecord.process_id,
+      user_id: this.taskRecord.user_id,
+      group_id: this.taskRecord.group_id,
+      task_definition_key: this.taskRecord.task_definition_key,
+      report_values: reportValues.toString(),
+      status: 'In Progress'
+    }
+
+    this.formViewService.createReport(reportRecord).subscribe((data) => {
+      console.log('data save', data);
+    }, error => console.log(error));
+
     this.changeForm('Review');
+  }
+
+  reviewReport() {
+    //financial
+      //this.financialReport
+
+    //performance
+      //this.performanceReport
+
+    //files
+      //this.attachments1
+      //this.attachments2
+      //this.attachments3
+
+    //comments
+      //listOfComments
+
+    //recommendations
+      //listOfRecommendations
+
+    //radio_buttons
+      //radioExpensesRealistic:string
+      //radioAttachmentsVerified:string
+      //radioFiguresRealistic:string
+      //radioNarrativeAlign:string
+      //radioInlineWithTargets:string
+      //radioEvidenceSatisfactory:string
+
+
+    this.changeForm('Approve');
+  }
+
+  approveReport() {
+    //financial
+      //this.financialReport
+
+    //performance
+      //this.performanceReport
+
+    //files
+      //this.attachments1
+      //this.attachments2
+      //this.attachments3
+
+    //comments
+      //listOfComments
+
+    //recommendations
+      //listOfRecommendations
+
+    //radio_buttons
+      //radioSuggestedChangesSatisfactory:string
+      //radioReportsWellAligned:string
+      //radioSelectedString:string
+      //radioRecommedFund:string
+      //radioEndOfPartnership:string
   }
 
   handleFileInput(event) {

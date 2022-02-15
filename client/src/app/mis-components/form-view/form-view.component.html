@@ -460,7 +460,7 @@
                         <div class="col-sm-12"><p>Do you recommend for further fund disbursement?</p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommedFund"
+                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommendFund"
                                      value="{{item.value}}" (change)="onItemChange($event)"/>
                               {{item.name}}
                             </li>
@@ -513,14 +513,14 @@
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-danger">Ask for Revisions</button>
-                    <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
+                    <button class="btn btn-success" (click)="reviewReport()">Approve Report</button>
                   </div>
                 </div>
                 <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-danger">Cancel</button>
-                    <button class="btn btn-success">Approve Report</button>
+                    <button class="btn btn-success" (click)="approveReport()">Approve Report</button>
                   </div>
                 </div>
 

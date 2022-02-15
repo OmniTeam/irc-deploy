@@ -51,7 +51,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/tasklist/task-list.module').then(m => m.TaskListModule)
       },
       {
-        path: 'formView', canActivate: [AuthGuard],
+        path: 'formView/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/form-view/form-view.module').then(m => m.FormViewModule)
       },
       {
