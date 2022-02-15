@@ -24,6 +24,8 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   comments: Array<CommentNode> = [];
+  errorMessage: boolean;
+  successMessage: boolean;
   isSubmitVisible: boolean;
   isReviewVisible: boolean;
   isApproveVisible: boolean;
@@ -226,58 +228,66 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   }
 
   submitReport() {
+    this.errorMessage = false;
+    this.successMessage = false;
     let reportValues: {[key: string]: string} = {
-      financialReport: this.financialReport.toString(),
-      performanceReport: this.performanceReport.toString(),
+      financialReport: JSON.stringify(this.financialReport),
+      performanceReport: JSON.stringify(this.performanceReport),
     }
 
     let fileRecord: {[key: string]: string} = {
-      task_id: this.taskRecord.id,
-      process_id: this.taskRecord.process_id,
-      user_id: this.authService.getLoggedInUsername(),
-      group_id: this.taskRecord.group_id,
-      task_definition_key: this.taskRecord.task_definition_key,
+      taskId: this.taskRecord.id,
+      processId: this.taskRecord.process_id,
+      userId: this.authService.getLoggedInUsername(),
+      groupId: this.taskRecord.group_id,
+      taskDefinitionKey: this.taskRecord.task_definition_key,
       path: this.attachment1,
     }
 
     this.listOfComments.forEach((comment) => {
       let commentsRecord: {[key: string]: string} = {
-        task_id: this.taskRecord.id,
-        process_id: this.taskRecord.process_id,
-        user_id: comment.user,
-        group_id: this.taskRecord.group_id,
-        task_definition_key: this.taskRecord.task_definition_key,
+        taskId: this.taskRecord.id,
+        processId: this.taskRecord.process_id,
+        userId: comment.user,
+        groupId: this.taskRecord.group_id,
+        taskDefinitionKey: this.taskRecord.task_definition_key,
         content: comment.text,
-        children: comment.answers.toString(),
+        children: JSON.stringify(comment.answers),
       }
     });
 
     this.listOfRecommendations.forEach((recommendation) => {
       let recommendationsRecord: {[key: string]: string} = {
-        task_id: this.taskRecord.id,
-        process_id: this.taskRecord.process_id,
-        user_id: recommendation.user,
-        group_id: this.taskRecord.group_id,
-        task_definition_key: this.taskRecord.task_definition_key,
+        taskId: this.taskRecord.id,
+        processId: this.taskRecord.process_id,
+        userId: recommendation.user,
+        groupId: this.taskRecord.group_id,
+        taskDefinitionKey: this.taskRecord.task_definition_key,
         content: recommendation.text,
       }
     });
 
     let reportRecord: {[key: string]: string} = {
-      task_id: this.taskRecord.id,
-      process_id: this.taskRecord.process_id,
-      user_id: this.taskRecord.user_id,
-      group_id: this.taskRecord.group_id,
-      task_definition_key: this.taskRecord.task_definition_key,
-      report_values: reportValues.toString(),
+      taskId: this.taskRecord.id,
+      processId: this.taskRecord.processInstanceId,
+      userId: this.authService.getLoggedInUsername(),
+      groupId: this.taskRecord.groupId,
+      taskDefinitionKey: this.taskRecord.taskDefinitionKey,
+      reportValues: JSON.stringify(reportValues),
       status: 'In Progress'
     }
 
     this.formViewService.createReport(reportRecord).subscribe((data) => {
-      console.log('data save', data);
-    }, error => console.log(error));
+      this.errorMessage = false;
+      this.successMessage = true;
+      this.changeForm('Review');
+    }, error => {
+      this.errorMessage = true;
+      this.successMessage = false;
+      console.log(error);
+    });
 
-    this.changeForm('Review');
+
   }
 
   reviewReport() {
@@ -332,7 +342,7 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       //radioSuggestedChangesSatisfactory:string
       //radioReportsWellAligned:string
       //radioSelectedString:string
-      //radioRecommedFund:string
+      //radioRecommendFund:string
       //radioEndOfPartnership:string
   }
 
@@ -377,6 +387,7 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
     if (formName == 'Review') this.isReviewVisible = true;
     if (formName == 'Approve') this.isApproveVisible = true;
     window.scroll(0, 0);
+    this.successMessage = false;
   }
 
   viewComments(): void {

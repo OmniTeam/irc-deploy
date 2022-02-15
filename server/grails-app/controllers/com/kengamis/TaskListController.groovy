@@ -31,6 +31,9 @@ class TaskListController {
             tasks << [id: task.id,
                     taskName : task.taskName,
                     description : description,
+                    processInstanceId : task.processInstanceId,
+                    taskDefinitionKey : task.taskDefinitionKey,
+                    groupId : task.groupId,
                     dateCreated: task.dateCreated,
                     status: task.status]
         }
