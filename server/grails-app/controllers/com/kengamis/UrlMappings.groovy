@@ -18,6 +18,9 @@ class UrlMappings {
         get "/$controller/get_entity_fields(.$format)?"(action:"getEntityFields")
         get "/$controller/get_entity_record(.$format)?"(action:"getEntityRecord")
         get "/$controller/view_data(.$format)?"(action:"viewData")
+        get "/$controller/getAllTagsByTagType(.$format)?"(action:"getAllTagsByTagType")
+        post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
+        post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
 
         '/odxRest/getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
         '/odxRest/getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')

@@ -6,16 +6,18 @@ import {DataTablesModule} from "angular-datatables";
 import {TagTypeComponent} from "./tag-type.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
   declarations: [TagTypeComponent],
-  imports: [
-    CommonModule,
-    TagTypeRoutingModule,
-    DataTablesModule,
-    ReactiveFormsModule,
-    NgxDatatableModule
-  ]
+    imports: [
+        CommonModule,
+        TagTypeRoutingModule,
+        DataTablesModule,
+        ReactiveFormsModule,
+        NgxDatatableModule,
+        NgSelectModule
+    ]
 })
 export class TagTypeModule { }

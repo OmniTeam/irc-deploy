@@ -6,15 +6,20 @@ class MisEntity {
     String id
     String name
     String tableName
+    String prefix
+    String prefixIncrementTable
+    boolean enableTagging = false
+    String entityTagTable
     Date dateCreated
     Date lastUpdated
     boolean ignoreUserContext = false
 
-    static hasMany = [entityFields: EntityFields, entityForms: EntityForm, entityViews: EntityView]
+    static hasMany = [entityFields: EntityFields, entityForms: EntityForm, entityViews: EntityView, tagTypes: TagType]
 
     static constraints = {
         name nullable: false
         tableName nullable: false
+        entityTagTable nullable: true
     }
 
     static mapping = {

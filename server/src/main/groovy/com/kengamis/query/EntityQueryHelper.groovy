@@ -2,6 +2,7 @@ package com.kengamis.query
 
 import com.kengamis.EntityFields
 import com.kengamis.MisEntity
+import com.kengamis.TagType
 import com.kengamis.User
 import groovy.util.logging.Log4j
 
@@ -16,6 +17,7 @@ class EntityQueryHelper {
     Map params
     List<EntityFields> headers
     User currentUser
+    List<TagType> tagTypes
     String entityTable
 
     EntityQueryHelper(Map params, User currentUser) {
@@ -27,6 +29,7 @@ class EntityQueryHelper {
         this.currentUser = currentUser
         def misEntity = getMisEntity()
         headers = EntityFields.findAllByMisEntity(misEntity, [sort: "orderOfDisplay", order: "asc"])
+        tagTypes = TagType.findAllByMisEntity(misEntity)
         entityTable = misEntity.tableName
 
     }

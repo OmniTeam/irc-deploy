@@ -49,7 +49,11 @@
           </div>
           <div class="row" style="padding: 11px;">
             <div class="col-lg-12 col-5 text-right">
-              <a class=" btn btn-default" (click)="openFormModal(entityRecordModal)" style="color: white"> Form </a>
+              <a class=" btn btn-default" (click)="openFormModal(entityRecordModal)" style="color: white; margin-right: 10px"> Form </a>
+              <a class=" btn btn-default" *ngIf="enableTagButton === true" (click)="openFormModal(addTagModal)"
+                 style="color: white"> Add Tag </a>
+              <a class=" btn btn-default" *ngIf="enableRemoveTagButton === true" (click)="openFormModal(removeTagModal)"
+                 style="color: white"> Remove Tag </a>
             </div>
           </div>
           <ngx-datatable
@@ -61,8 +65,7 @@
             [limit]="entries != -1 ? entries : undefined"
             [rows]="rows"
             [scrollbarH]="true"
-            [selected]="selected"
-            [selectionType]="SelectionType.checkbox"
+            [selectionType]="SelectionType.single"
             (activate)="onActivate($event)"
             (select)="onSelect($event)"
           >
@@ -84,13 +87,14 @@
               <ng-template
                 ngx-datatable-cell-template
                 let-value="value"
+                let-row="row"
                 let-isSelected="isSelected"
-                let-onCheckboxChangeFn="onCheckboxChangeFn"
               >
                 <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name | replace: '_' : ' '}}" prop="{{col.prop}}">
+            <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name | replace: '_' : ' '}}"
+                                  prop="{{col.prop}}">
             </ngx-datatable-column>
           </ngx-datatable>
         </div>
@@ -121,14 +125,167 @@
                 <input
                   type="{{ formInput['type'] }}"
                   id="{{ formInput['controlName'] }}"
-                  class="form-control form-control-sm"
+                  class="form-control"
                   placeholder="{{ formInput.label | replace: '_' : ' ' | titlecase}}"
                   formControlName="{{ formInput['controlName'] }}"
                   [ngClass]="{ 'is-invalid': submitted && f[formInput['controlName']].errors }"
-                  required="required"
                 />
                 <div *ngIf="submitted && f[formInput['controlName']].errors" class="invalid-feedback">
                   <div *ngIf="f[formInput['controlName']].errors.required">{{ formInput.label }} is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close('Close click')">
+        Close
+      </button>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #addTagModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title w-100 text-center">Add Tag</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="tagFormGroup" (ngSubmit)="addTagToRecord()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form">
+            <div class="form-row" style="padding-bottom: 25px">
+              <div class="col-md-3">
+                <label class=" form-control-label" for="tagType">
+                  Tag Type
+                </label>
+              </div>
+              <div class="col-md-9">
+                <ng-select class="form-control"
+                           aria-controls="datatable"
+                           style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                           id="tagType"
+                           [multiple]="false"
+                           placeholder=" Tag Type"
+                           formControlName="tagType"
+                           (change)="getTags($event)"
+                           [ngClass]="{ 'is-invalid': submitted && fTag.tagType.errors }"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of tagTypes">
+                    {{item.name}}
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="submitted && fTag.tagType.errors" class="invalid-feedback">
+                  <div *ngIf="fTag.tagType.errors.required">Tag Type is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label class=" form-control-label" for="tagType">
+                  Tag
+                </label>
+              </div>
+              <div class="col-md-9">
+                <ng-select class="form-control"
+                           aria-controls="datatable"
+                           style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                           id="tag"
+                           [multiple]="false"
+                           placeholder=" Tags"
+                           formControlName="tag"
+                           [ngClass]="{ 'is-invalid': submitted && fTag.tag.errors }"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of tags">
+                    {{item.name}}
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="submitted && fTag.tag.errors" class="invalid-feedback">
+                  <div *ngIf="fTag.tag.errors.required">Tag is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close('Close click')">
+        Close
+      </button>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #removeTagModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title w-100 text-center">Remove Tag</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="tagFormGroup" (ngSubmit)="removeTagToRecord()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form">
+            <div class="form-row" style="padding-bottom: 25px">
+              <div class="col-md-3">
+                <label class=" form-control-label">
+                  Tag Type
+                </label>
+              </div>
+              <div class="col-md-9">
+                <ng-select class="form-control"
+                           aria-controls="datatable"
+                           style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                           [multiple]="false"
+                           placeholder=" Tag Type"
+                           formControlName="tagType"
+                           (change)="getTags($event)"
+                           [ngClass]="{ 'is-invalid': submitted && fTag.tagType.errors }"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of tagTypes">
+                    {{item.name}}
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="submitted && fTag.tagType.errors" class="invalid-feedback">
+                  <div *ngIf="fTag.tagType.errors.required">Tag Type is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label class=" form-control-label">
+                  Tag
+                </label>
+              </div>
+              <div class="col-md-9">
+                <ng-select class="form-control"
+                           aria-controls="datatable"
+                           style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                           [multiple]="false"
+                           placeholder=" Tags"
+                           formControlName="tag"
+                           [ngClass]="{ 'is-invalid': submitted && fTag.tag.errors }"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of tags">
+                    {{item.name}}
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="submitted && fTag.tag.errors" class="invalid-feedback">
+                  <div *ngIf="fTag.tag.errors.required">Tag is required</div>
                 </div>
               </div>
             </div>
