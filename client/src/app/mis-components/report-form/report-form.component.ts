@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subject} from "rxjs";
-import {FormViewService} from "../../services/form-view.service";
+import {ReportFormService} from "../../services/report-form.service";
 import {CommentNode, CommentsComponent} from '../comments/comments.component';
 import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
@@ -12,12 +12,12 @@ import {HttpParams} from "@angular/common/http";
 import {DummyData} from "../../utilities/dummy-data";
 
 @Component({
-  selector: 'app-form-view',
-  templateUrl: './form-view.component.html',
-  styleUrls: ['./form-view.component.css']
+  selector: 'app-report-form',
+  templateUrl: './report-form.component.html',
+  styleUrls: ['./report-form.component.css']
 })
 
-export class FormViewComponent implements OnInit, OnUpdateCell {
+export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   @ViewChild(CellEdit) cellEdit;
 
@@ -70,7 +70,7 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private formViewService: FormViewService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private formViewService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {

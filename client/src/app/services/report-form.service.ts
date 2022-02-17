@@ -6,7 +6,7 @@ import {environment} from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class FormViewService {
+export class ReportFormService {
 
   constructor(private http: HttpClient) { }
 
