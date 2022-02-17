@@ -160,7 +160,7 @@ export class EntityTablesComponent implements OnInit {
       this.getEntityData();
       this.alertService.success(`New record has been successfully inserted `);
     }, error => {
-      this.alertService.success(`New record has not been successfully inserted `);
+      this.alertService.error(`New record has not been successfully inserted `);
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/entity/' + this.entityId]);
@@ -188,7 +188,7 @@ export class EntityTablesComponent implements OnInit {
       this.getEntityData();
       this.alertService.success(`Record has been tagged successfully`);
     }, error => {
-      this.alertService.success(`Record has not been tagged`);
+      this.alertService.error(`Record has not been tagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/entity/' + this.entityId]);
@@ -215,7 +215,7 @@ export class EntityTablesComponent implements OnInit {
       this.getEntityData();
       this.alertService.success(`Record has been untagged successfully`);
     }, error => {
-      this.alertService.success(`Record has not been untagged`);
+      this.alertService.error(`Record has not been untagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/entity/' + this.entityId]);

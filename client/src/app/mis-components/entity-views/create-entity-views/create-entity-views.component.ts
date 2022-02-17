@@ -4,6 +4,7 @@ import {EntityService} from "../../../services/entity.service";
 import {Subject} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
+import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'app-create-entity-views',
@@ -34,7 +35,8 @@ export class CreateEntityViewsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private formBuilder: FormBuilder,
-              private entityService: EntityService) {
+              private entityService: EntityService,
+              private alertService: AlertService) {
   }
 
   ngOnInit(): void {
@@ -82,8 +84,11 @@ export class CreateEntityViewsComponent implements OnInit {
       this.formData = Object.assign(this.formData, entityViewFields);
       this.formData = Object.assign(this.formData, entity);
       this.entityService.createEntityView(this.formData).subscribe((data) => {
+        this.alertService.success(`New Entity View has been successfully created `);
         this.router.navigate(['/entityView']);
-      }, error => console.log(error));
+      }, error => {
+        this.alertService.error(`Entity View has not been successfully created `);
+      });
     }
   }
 
