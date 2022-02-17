@@ -6,7 +6,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss', './util.css']
+  styleUrls: ['./login.component.css', './util.css']
 })
 export class LoginComponent implements OnInit {
 
