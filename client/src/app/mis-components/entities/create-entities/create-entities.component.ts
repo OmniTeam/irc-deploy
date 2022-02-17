@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {EntityService} from "../../../services/entity.service";
+import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'app-create-entities',
@@ -63,7 +64,8 @@ export class CreateEntitiesComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
-              private entityService: EntityService) {
+              private entityService: EntityService,
+              private alertService: AlertService) {
   }
 
   ngOnInit(): void {
@@ -128,9 +130,11 @@ export class CreateEntitiesComponent implements OnInit {
       this.formData = Object.assign(this.formData, tableName);
       this.formData = Object.assign(this.formData, prefixIncrementTable);
       this.entityService.createEntity(this.formData).subscribe((data) => {
-        console.log(data);
+        this.alertService.success(`Entity record has been created successfully`);
         this.router.navigate(['/entity']);
-      }, error => console.log(error));
+      }, error => {
+        this.alertService.error(`Entity record has not been successfully created`);
+      });
     }
   }
 
