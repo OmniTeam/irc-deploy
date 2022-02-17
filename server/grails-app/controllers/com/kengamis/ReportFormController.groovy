@@ -1,5 +1,6 @@
 package com.kengamis
 
+import com.kengamis.query.EntityQueryHelper
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -52,6 +53,7 @@ class ReportFormController {
 
     @Transactional
     def update(ReportForm reportForm) {
+        print "Report Errors: ${reportForm.errors}"
         if (reportForm == null) {
             render status: NOT_FOUND
             return
@@ -82,5 +84,10 @@ class ReportFormController {
         reportFormService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getReportForTask() {
+        def reportData = [report: ReportForm.findByTaskId(params.taskId)]
+        respond reportData
     }
 }

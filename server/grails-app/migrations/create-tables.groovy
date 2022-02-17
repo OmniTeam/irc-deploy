@@ -859,7 +859,7 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
-            column(name: "report_values", type: "VARCHAR(255)") {
+            column(name: "report_values", type: "text") {
                 constraints(nullable: "false")
             }
 

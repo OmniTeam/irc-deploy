@@ -9,6 +9,7 @@ import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
+import {DummyData} from "../../utilities/dummy-data";
 
 @Component({
   selector: 'app-form-view',
@@ -20,7 +21,6 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
 
   @ViewChild(CellEdit) cellEdit;
 
-  rows: Object[];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   comments: Array<CommentNode> = [];
@@ -33,6 +33,7 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   openRecommendationsPopup: boolean;
   openPopup: boolean;
   loading: boolean = false;
+  report: any;
 
   radioSel:any;
   radioExpensesRealistic:string;
@@ -47,6 +48,7 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   radioRecommendFund:string;
   radioEndOfPartnership:string;
 
+  taskId: string;
   taskRecord: any;
   reportValues: [];
 
@@ -56,146 +58,60 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   attachment1: string;
   attachment2: string;
   attachment3: string;
+
+  organisationalInfo: any;
+  projectInfo: any;
+  performanceReport = [];
+  financialReport = [];
+  listOfRecommendations = [];
+  listOfComments = [];
   items = [
     {name: 'Yes', value: 'yes'},
     {name: 'No', value: 'no'}
-  ];
-  organisationalInfo = {
-    id: 'asdaasrsgsdgfssgs',
-    program: 'Adolescent Girl Power Program',
-    cluster_organization: 'Empowered Girls of Busano',
-    acronym_name: 'EGB',
-    organization_type: 'CBO',
-    legal_status: 'Registered NGO',
-    contact_person: 'Musamali Jacob',
-    physical_address: 'Khatwelatwela, Nyondo Parish',
-    postal_address: 'None',
-    email: 'egb@gmail.com',
-    website: 'https://empoweredbusano.org/',
-    country: 'Uganda',
-    city: 'Mbale'
-  };
-  projectInfo = {
-    id: 'akhfbkabsdkfjbsjf',
-    reporting_period: '22 June 2022 to 21 Sep 2022',
-    grant_start_date: '21/Mar/2022',
-    grant_end_date: '21/Mar/2022',
-    total_grant_amount: '45,000 USD',
-    amount_transferred: '12,000',
-    amount_utilized: '',
-    balance_spent_overspend: ''
-  };
-  performanceReport = [
-    {
-      id: 'adaggfdfgsgsfgsfsd',
-      output_indicators: 'No of safe spaces established within the community',
-      overall_target: '500',
-      cumulative_achievement: '200',
-      quarter_target: '40',
-      quarter_achievement: '32',
-      percentage_achievement: '67%',
-      comment_on_result: ''
-    },
-    {
-      id: 'gddagdyrtaegssag',
-      output_indicators: 'No of Adolescent girls utilising safe spaces',
-      overall_target: '400',
-      cumulative_achievement: '120',
-      quarter_target: '50',
-      quarter_achievement: '22',
-      percentage_achievement: '70%',
-      comment_on_result: ''
-    }
-  ];
-  financialReport = [
-    {
-      id: 'fdadasdasdasd',
-      budget_line: 'Staff salaries and related charges',
-      approved_budget: '30000',
-      total_advanced: '20000',
-      expense_to_date: '15000',
-      quarter_expenses: '',
-      variance: '4%',
-      reason_for_variance: ''
-    },
-    {
-      id: 'asdsafsagsgasgfds',
-      budget_line: 'Direct support to target population',
-      approved_budget: '30000',
-      total_advanced: '20000',
-      expense_to_date: '15000',
-      quarter_expenses: '',
-      variance: '25%',
-      reason_for_variance: ''
-    }
-  ];
-  listOfRecommendations = [
-    {
-      id: "fdadasddsfasdasdfdd",
-      text: 'Hey hey how are you',
-      user: 'Mr.Rwele',
-      likes: ['super'],
-      answers: [],
-      datetimeCreated: '04/07/2022 06:12:21'
-    },
-    {
-      id: 'asdsafsadfgsgasgfds',
-      text: 'I do not like this report',
-      user: 'Kasiga Balinda',
-      likes: [],
-      answers: [],
-      datetimeCreated: '04/01/2022 09:12:21'
-    }
-  ];
-  listOfComments = [
-    {
-      id: "fdadasddsfasdasdfdd",
-      text: 'Hey hey how are you',
-      user: 'Mr.Rwele',
-      likes: ['super'],
-      answers: [],
-      datetimeCreated: '04/07/2022 06:12:21'
-    },
-    {
-      id: 'asdsafsadfgsgasgfds',
-      text: 'I do not like this report',
-      user: 'Kasiga Balinda',
-      likes: [],
-      answers: [
-        {
-          id: "restrydrshdgdhhdshdfg",
-          text: 'Okay, I agree with this',
-          user: 'Mr.Rwele',
-          likes: ['super'],
-          answers: [
-            {
-              id: "fdadasddsfasdasdfdd",
-              text: 'Hey hey how are you',
-              user: 'Mr.Rwele',
-              likes: [],
-              answers: [],
-              datetimeCreated: '04/07/2022 06:12:21'
-            }
-          ],
-          datetimeCreated: '05/01/2022 19:12:21'
-        }
-      ],
-      datetimeCreated: '04/01/2022 09:12:21'
-    }
   ];
 
   constructor(private router: Router, private route: ActivatedRoute, private formViewService: FormViewService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.formViewService.getForms().subscribe(data => {
-      console.log(data);
-      this.rows = data;
+    this.listOfComments.forEach((commentNode) => {
+      this.comments.push(new CommentNode(commentNode.id, commentNode.text, commentNode.user, commentNode.likes, this.getAnswersToComments(commentNode.answers), new Date(commentNode.datetimeCreated)));
+    });
+
+    this.route.params
+      .subscribe(p => {
+        this.taskId = p['id'];
+        const params = new HttpParams().set('id', this.taskId);
+        this.taskListService.getTaskRecord(params).subscribe((data) => {
+          this.taskRecord = data;
+        }, error => console.log(error));
+      });
+
+    const params = new HttpParams()
+      .set('taskId', this.taskId);
+    this.formViewService.getReportForTask(params).subscribe(data => {
+      if(data.report!=null) {
+        this.report = data.report;
+        let reports = JSON.parse(data.report.reportValues);
+        console.log("reports", reports);
+        this.financialReport = JSON.parse(reports.financialReport);
+        this.performanceReport = JSON.parse(reports.performanceReport);
+      } else {
+        this.financialReport = DummyData.financialReport;
+        this.performanceReport = DummyData.performanceReport;
+      }
+
+      this.organisationalInfo = DummyData.organisationalInfo;
+      this.projectInfo = DummyData.projectInfo;
+      this.listOfComments = DummyData.listOfComments;
+      this.listOfRecommendations = DummyData.listOfRecommendations;
+
+
       this.isSubmitVisible = true;
       this.isReviewVisible = false;
       this.isApproveVisible = false;
       this.dtTrigger.next();
-    }, error => console.log(error));
+    }, error => console.log("Error getting task",error));
 
     this.dtOptions = {
       pagingType: "numbers",
@@ -205,18 +121,6 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       dom: 'lfBrtip',
       buttons: []
     };
-
-    this.listOfComments.forEach((commentNode) => {
-      this.comments.push(new CommentNode(commentNode.id, commentNode.text, commentNode.user, commentNode.likes, this.getAnswersToComments(commentNode.answers), new Date(commentNode.datetimeCreated)));
-    });
-
-    this.route.params
-      .subscribe(p => {
-        const params = new HttpParams().set('id', p['id']);
-        this.taskListService.getTaskRecord(params).subscribe((data) => {
-          this.taskRecord = data;
-        }, error => console.log(error));
-      });
   }
 
   getAnswersToComments(list) {
@@ -230,44 +134,46 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
   submitReport() {
     this.errorMessage = false;
     this.successMessage = false;
-    let reportValues: {[key: string]: string} = {
+    let reportValues: { [key: string]: string } = {
       financialReport: JSON.stringify(this.financialReport),
       performanceReport: JSON.stringify(this.performanceReport),
     }
 
-    let fileRecord: {[key: string]: string} = {
+    let fileRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
-      processId: this.taskRecord.process_id,
+      processId: this.taskRecord.processInstanceId,
       userId: this.authService.getLoggedInUsername(),
-      groupId: this.taskRecord.group_id,
-      taskDefinitionKey: this.taskRecord.task_definition_key,
+      groupId: this.taskRecord.groupId,
+      taskDefinitionKey: this.taskRecord.taskDefinitionKey,
       path: this.attachment1,
     }
 
     this.listOfComments.forEach((comment) => {
-      let commentsRecord: {[key: string]: string} = {
+      let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.process_id,
+        processId: this.taskRecord.processInstanceId,
         userId: comment.user,
-        groupId: this.taskRecord.group_id,
-        taskDefinitionKey: this.taskRecord.task_definition_key,
+        groupId: this.taskRecord.groupId,
+        taskDefinitionKey: this.taskRecord.taskDefinitionKey,
         content: comment.text,
         children: JSON.stringify(comment.answers),
       }
     });
 
     this.listOfRecommendations.forEach((recommendation) => {
-      let recommendationsRecord: {[key: string]: string} = {
+      let recommendationsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.process_id,
+        processId: this.taskRecord.processInstanceId,
         userId: recommendation.user,
-        groupId: this.taskRecord.group_id,
-        taskDefinitionKey: this.taskRecord.task_definition_key,
+        groupId: this.taskRecord.groupId,
+        taskDefinitionKey: this.taskRecord.taskDefinitionKey,
         content: recommendation.text,
       }
+
+
     });
 
-    let reportRecord: {[key: string]: string} = {
+    let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processId: this.taskRecord.processInstanceId,
       userId: this.authService.getLoggedInUsername(),
@@ -277,16 +183,27 @@ export class FormViewComponent implements OnInit, OnUpdateCell {
       status: 'In Progress'
     }
 
-    this.formViewService.createReport(reportRecord).subscribe((data) => {
-      this.errorMessage = false;
-      this.successMessage = true;
-      this.changeForm('Review');
-    }, error => {
-      this.errorMessage = true;
-      this.successMessage = false;
-      console.log(error);
-    });
-
+    if (this.report) {
+      this.formViewService.updateReport(reportRecord, this.report.id).subscribe((data) => {
+        this.errorMessage = false;
+        this.successMessage = true;
+        this.changeForm('Review');
+      }, error => {
+        this.errorMessage = true;
+        this.successMessage = false;
+        console.log(error);
+      });
+    } else {
+      this.formViewService.createReport(reportRecord).subscribe((data) => {
+        this.errorMessage = false;
+        this.successMessage = true;
+        this.changeForm('Review');
+      }, error => {
+        this.errorMessage = true;
+        this.successMessage = false;
+        console.log(error);
+      });
+    }
 
   }
 

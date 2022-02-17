@@ -10,15 +10,19 @@ export class FormViewService {
 
   constructor(private http: HttpClient) { }
 
-  getForms(): Observable<any> {
+  getAllReports(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/reportForm`);
+  }
+
+  getReportForTask(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportForm/get_report_for_task`, {params});
   }
 
   createReport(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/reportForm`, formData);
   }
 
-  updateReport(formData, params): Observable<any> {
-    return this.http.post(`${environment.serverUrl}/reportForm`, formData, {params});
+  updateReport(formData, id): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/reportForm/${id}`, formData);
   }
 }
