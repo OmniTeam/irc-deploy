@@ -20,6 +20,8 @@ class UrlMappings {
         get "/$controller/view_data(.$format)?"(action:"viewData")
         get "/$controller/get_task_record(.$format)?"(action:"getTaskRecord")
         get "/$controller/get_report_for_task(.$format)?"(action:"getReportForTask")
+        get "/$controller/get_file_by_task_and_name(.$format)?"(action:"getFileByTaskAndName")
+        get "/$controller/get_files_for_task(.$format)?"(action:"getFilesForTask")
 
         '/odxRest/getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
         '/odxRest/getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')

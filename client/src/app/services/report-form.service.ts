@@ -25,4 +25,28 @@ export class ReportFormService {
   updateReport(formData, id): Observable<any> {
     return this.http.put(`${environment.serverUrl}/reportForm/${id}`, formData);
   }
+
+  getAttachmentsForTask(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormFiles/get_files_for_task`, {params});
+  }
+
+  saveFile(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportFormFiles`, formData);
+  }
+
+  updateFile(formData, id): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/reportFormFiles/${id}`, formData);
+  }
+
+  getFileByTaskAndName(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormFiles/get_file_by_task_and_name`,{params});
+  }
+
+  saveComment(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportFormComments`, formData);
+  }
+
+  saveRecommendation(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportFormRecommendations`, formData);
+  }
 }

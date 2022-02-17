@@ -947,6 +947,10 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
             column(name: "task_id", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }

@@ -9,6 +9,7 @@ class ReportFormFiles {
     String taskDefinitionKey
     String userId
     String path
+    String name
     Date dateCreated
 
     static constraints = {
