@@ -22,19 +22,27 @@ class TaskListController {
         def taskListMapList = taskListService.list(params)
         def tasks = []
 
-        taskListMapList.each{TaskList task_list ->
+        taskListMapList.each{TaskList task ->
             def slurper = new JsonSlurper()
-            def variables = slurper.parseText(task_list.outputVariables)
+            def variables = slurper.parseText(task.outputVariables)
 
             def description = (variables['data'].value.toString()).replaceAll("\\[", "").replaceAll("\\]","")
 
-            tasks << [id: task_list.id,
-                    taskName : task_list.taskName,
+            tasks << [id: task.id,
+                    taskName : task.taskName,
                     description : description,
-                    dateCreated: task_list.dateCreated,
-                    status: task_list.status]
+                    processInstanceId : task.processInstanceId,
+                    taskDefinitionKey : task.taskDefinitionKey,
+                    groupId : task.groupId,
+                    dateCreated: task.dateCreated,
+                    status: task.status]
         }
         respond tasks
+    }
+
+    def getTaskRecord() {
+        def task = TaskList.get(params.id)
+        respond task
     }
 
     def show(Long id) {

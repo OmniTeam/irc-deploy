@@ -1,6 +1,16 @@
+
+
 <div class="header bg-success pb-6">
   <div class="container-fluid">
     <div class="header-body">
+      <div *ngIf="error || success" class="row align-items-center text-center" style="display: flex; justify-content: center;">
+        <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+          <strong>Error:</strong> {{errorMessage}}
+        </div>
+        <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+          <strong>Success:</strong> {{successMessage}}
+        </div>
+      </div>
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
           <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">SUBMIT
@@ -25,14 +35,13 @@
       <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
       <div class="col-sm-11">
         <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
-        <div style="text-align: end;">
-          <button class="btn btn-link" (click)="addComment()"><i class="fas fa-paper-plane"
-                                                                 style="font-size: 28px;"></i></button>
+        <div style="display: flex;justify-content: end;">
+          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addComment()">Send</button>
         </div>
       </div>
     </div>
     <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
-    <app-comments [comments]="comments"></app-comments>
+    <app-comments [comments]="comments" (commentsChanged)="commentsChangedHandler($event)"></app-comments>
   </div>
   <div class="card-footer" style="text-align: end">
     <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>
@@ -44,7 +53,17 @@
     <h3>Recommendations</h3>
   </div>
   <div class="card-body d-flex flex-column">
-    <div>TODO</div>
+    <div class="row">
+      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
+      <div class="col-sm-11">
+        <textarea class="form-control" id="addRecommendation" placeholder="Add a recommendation" cols="50" rows="3"></textarea>
+        <div style="display: flex; justify-content: end;">
+          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addRecommendation()">Send</button>
+        </div>
+      </div>
+    </div>
+    <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
+    <app-comments [comments]="recommendations" (commentsChanged)="recommendationsChangedHandler($event)" [isRecommendation]=true></app-comments>
   </div>
   <div class="card-footer" style="text-align: end">
     <button class="btn btn-dark comment_btn" (click)="viewRecommendations()">Close</button>
@@ -60,21 +79,21 @@
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
                       [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'"
-                      (click)="changeForm('Submit')">Submit Report
+                      (click)="changeForm('Submit')" [disabled]="!isSubmitVisible">Submit Report
               </button>
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
                       [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'"
-                      (click)="changeForm('Review')">Review Report
+                      (click)="changeForm('Review')" [disabled]="!isReviewVisible">Review Report
               </button>
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
                       [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'"
-                      (click)="changeForm('Approve')">Approve Report
+                      (click)="changeForm('Approve')" [disabled]="!isApproveVisible">Approve Report
               </button>
             </div>
           </div>
@@ -245,7 +264,7 @@
                       <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)" /></div>
                       <div class="col-sm-3" *ngIf="shortLink3">
                         <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
@@ -357,7 +376,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="expenses_realistic" [(ngModel)]="radioExpensesRealistic"
-                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                                   value="{{item.value}}" />
                             {{item.name}}
                           </li>
                         </ul>
@@ -367,7 +386,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="attachments_verified" [(ngModel)]="radioAttachmentsVerified"
-                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                                   value="{{item.value}}" />
                             {{item.name}}
                           </li>
                         </ul>
@@ -377,7 +396,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="figures_realistic" [(ngModel)]="radioFiguresRealistic"
-                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                                   value="{{item.value}}" />
                             {{item.name}}
                           </li>
                         </ul>
@@ -390,7 +409,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="narrative_align" [(ngModel)]="radioNarrativeAlign"
-                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                                   value="{{item.value}}" />
                             {{item.name}}
                           </li>
                         </ul>
@@ -400,7 +419,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="inline_with_targets" [(ngModel)]="radioInlineWithTargets"
-                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                                   value="{{item.value}}" />
                             {{item.name}}
                           </li>
                         </ul>
@@ -410,7 +429,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="evidence_satisfactory" [(ngModel)]="radioEvidenceSatisfactory"
-                                   value="{{item.value}}" (change)="onItemChange($event)"/>
+                                   value="{{item.value}}" />
                             {{item.name}}
                           </li>
                         </ul>
@@ -422,11 +441,11 @@
                   <div class="row">
                     <div class="col">
                       <p>Comments (Partner)</p>
-                      <textarea class="form-control" rows="3"></textarea>
+                      <textarea class="form-control" rows="3" [(ngModel)]="reviewerComments"></textarea>
                     </div>
                     <div class="col">
                       <p>Recommendations (Internal)</p>
-                      <textarea class="form-control" rows="3"></textarea>
+                      <textarea class="form-control" rows="3" [(ngModel)]="reviewerRecommendations"></textarea>
                     </div>
                   </div>
                 </div>
@@ -439,7 +458,7 @@
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
                               <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioSuggestedChangesSatisfactory"
-                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                                     value="{{item.value}}"/>
                               {{item.name}}
                             </li>
                           </ul>
@@ -450,7 +469,7 @@
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
                               <input type="radio" name="reports_well_aligned" [(ngModel)]="radioReportsWellAligned"
-                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                                     value="{{item.value}}"/>
                               {{item.name}}
                             </li>
                           </ul>
@@ -460,8 +479,8 @@
                         <div class="col-sm-12"><p>Do you recommend for further fund disbursement?</p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommedFund"
-                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommendFund"
+                                     value="{{item.value}}"/>
                               {{item.name}}
                             </li>
                           </ul>
@@ -472,7 +491,7 @@
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
                               <input type="radio" name="end_of_partnership" [(ngModel)]="radioEndOfPartnership"
-                                     value="{{item.value}}" (change)="onItemChange($event)"/>
+                                     value="{{item.value}}" />
                               {{item.name}}
                             </li>
                           </ul>
@@ -494,33 +513,34 @@
 
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                     <div class="col"><p>Amount of Funds to be disbursed:</p></div>
-                    <div class="col text-left"><input type="text" class="form-control"/><br></div>
+                    <div class="col text-left"><input type="text" class="form-control" [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                   </div>
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                     <div class="col"><p>Provide any recommendations (Internal):</p></div>
-                    <div class="col text-left"><textarea class="form-control"></textarea></div>
+                    <div class="col text-left"><textarea class="form-control" [(ngModel)]="provideAnyRecommendations"></textarea></div>
                   </div>
                 </div>
 
                 <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger">Cancel</button>
-                    <button class="btn btn-success" (click)="submitReport()">Submit Report</button>
+                    <button class="btn btn-danger" (click)="location.back();">Cancel</button>
+                    <button class="btn btn-warning" (click)="submitReport('save')">Save For Later</button>
+                    <button class="btn btn-success" (click)="submitReport('submit')">Submit Report</button>
                   </div>
                 </div>
                 <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger">Ask for Revisions</button>
-                    <button class="btn btn-success" (click)="changeForm('Approve')">Approve Report</button>
+                    <button class="btn btn-danger" (click)="reviewReport('revise')">Ask for Revisions</button>
+                    <button class="btn btn-success" (click)="reviewReport('submit')">Approve Report</button>
                   </div>
                 </div>
                 <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger">Cancel</button>
-                    <button class="btn btn-success">Approve Report</button>
+                    <button class="btn btn-danger" (click)="location.back();">Cancel</button>
+                    <button class="btn btn-success" (click)="approveReport()">Approve Report</button>
                   </div>
                 </div>
 
