@@ -26,7 +26,9 @@ class UrlMappings {
         get "/$controller/get_recommendations_for_task(.$format)?"(action:"getRecommendationsForTask")
         get "/$controller/get_recommendation(.$format)?"(action:"getRecommendationById")
         get "/$controller/get_comment(.$format)?"(action:"getCommentById")
-
+        get "/$controller/getAllTagsByTagType(.$format)?"(action:"getAllTagsByTagType")
+        post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
+        post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
 
         '/odxRest/getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
         '/odxRest/getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')

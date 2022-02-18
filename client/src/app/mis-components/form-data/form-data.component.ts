@@ -34,7 +34,7 @@ L.Marker.prototype.options.icon = iconDefault;
 export class FormDataComponent implements OnInit, AfterViewInit {
   $: any;
   model: NgbDateStruct;
-  entries = 5;
+  entries = 50;
   selected: any[] = [];
   activeRow: any;
   rows: Object[];
@@ -61,6 +61,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   selectedUser = '';
   numberOfRecords: any;
   numberOfQuestions: any;
+  numberOfDataCollectors: any;
   coordinates: any[] = [];
   formtable = '';
   dateFrom = '';
@@ -114,6 +115,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       this.users = this.userMappings(data.formDataCollectors);
       this.numberOfRecords = data.resultListCount;
       this.numberOfQuestions = data.numberOfQuestions;
+      this.numberOfDataCollectors = (data.formDataCollectors ? data.formDataCollectors.length : 0);
       this.initCharts(data.formGraphData);
       if (data['gpsCoordinates'].length === 0) {
         document.getElementById("map_div").style.display = "none";

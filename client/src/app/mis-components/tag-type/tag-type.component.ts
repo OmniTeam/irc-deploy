@@ -5,6 +5,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {HttpParams} from "@angular/common/http";
 import {AlertService} from "../../services/alert";
 import {TagService} from "../../services/tags";
+import {EntityService} from "../../services/entity.service";
 
 @Component({
   selector: 'app-tag-type',
@@ -32,19 +33,25 @@ export class TagTypeComponent implements OnInit {
   formGp: FormGroup;
   rowData: any;
   submitted = false;
+  misEntities = [];
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
               private modalService: NgbModal,
-              private tagService: TagService) {
+              private tagService: TagService,
+              private entityService: EntityService) {
   }
 
   ngOnInit(): void {
     this.pageCallback({offset: 50});
     this.formGroup = this.formBuilder.group({
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      misEntity: ['', Validators.required]
+    });
+    this.entityService.getEntities().subscribe((data) => {
+      this.misEntities = data;
     });
   }
 
@@ -62,11 +69,19 @@ export class TagTypeComponent implements OnInit {
     this.tagService.addNewTagType(newTagType).subscribe(results => {
       this.alertService.success(`Tag Type: ${results.name} has been successfully created `);
       this.reloadTable();
+      this.formGroup.reset();
     }, error => {
       this.alertService.error(`Tag Type: ${this.formGroup.controls.name.value} could not be created`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/tagType']);
+
+    if (this.formGroup.valid) {
+      setTimeout(() => {
+        this.formGroup.reset();
+        this.submitted = false;
+      }, 100);
+    }
   }
 
   editTagType(row) {

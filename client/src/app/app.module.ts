@@ -7,8 +7,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { PresentationModule } from './pages/presentation/presentation.module';
 import { ComponentsModule } from './components/components.module';
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -21,8 +19,7 @@ import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
 @NgModule({
   declarations: [
     AppComponent,
-    AdminLayoutComponent,
-    AuthLayoutComponent
+    AdminLayoutComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -35,7 +32,6 @@ import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
     ToastrModule.forRoot(),
     CollapseModule.forRoot(),
     TagInputModule,
-    PresentationModule,
     BrowserModule,
     NgxDatatableModule
   ],

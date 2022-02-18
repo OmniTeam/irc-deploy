@@ -997,5 +997,47 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "Bryan (generated)", id: "1644824111661-1") {
+        addColumn(tableName: "tag_type") {
+            column(name: "mis_entity_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644824111661-2") {
+        addForeignKeyConstraint(baseColumnNames: "mis_entity_id", baseTableName: "tag_type", constraintName: "FK2yamjvvmhg3koumfynkxt9ail", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "mis_entity", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644832502002-1") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "enable_tagging", type: "bit") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644832502002-2") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "prefix", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644847113497-1") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "prefix_increment_table", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644911791342-1") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "entity_tag_table", type: "varchar(255)")
+        }
+    }
+
 
 }

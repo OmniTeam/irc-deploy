@@ -9,12 +9,12 @@
 
 body, html {
   height: 100%;
-  font-family: Raleway-Regular, sans-serif;
+  font-family: Open Sans, sans-serif;
 }
 
 /*---------------------------------------------*/
 a {
-  font-family: Raleway-Regular, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 14px;
   line-height: 1.7;
   color: white;
@@ -40,7 +40,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 p {
-  font-family: Raleway-Regular, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 14px;
   line-height: 1.7;
   color: #666666;
@@ -112,7 +112,7 @@ iframe {
 /*//////////////////////////////////////////////////////////////////
 [ Utility ]*/
 .txt1 {
-  font-family: Raleway-SemiBold, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 13px;
   color: #555555;
   line-height: 1.4;
@@ -120,14 +120,14 @@ iframe {
 }
 
 .txt2 {
-  font-family: Raleway-Regular, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 13px;
   color: #999999;
   line-height: 1.4;
 }
 
 .txt3 {
-  font-family: Raleway-Regular, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 13px;
   color: #555555;
   line-height: 1.4;
@@ -160,10 +160,11 @@ iframe {
 
 
 .wrap-login100 {
-  width: 560px;
+  width: 35%;
   background: #fff;
   border-radius: 10px;
   position: relative;
+  padding: 30px;
 }
 
 
@@ -175,7 +176,7 @@ iframe {
 }
 
 .login100-form-title {
-  font-family: Raleway-Medium, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 30px;
   font-weight: bold;
   color: #555555;
@@ -203,7 +204,7 @@ iframe {
 
 /*---------------------------------------------*/
 .input100 {
-  font-family: Raleway-Medium, serif;
+  font-family: Open Sans, sans-serif;
   color: #555555;
   line-height: 1.2;
   font-size: 18px;
@@ -304,7 +305,7 @@ iframe {
 }
 
 .label-checkbox100 {
-  font-family: Raleway-Regular, serif;
+  font-family: Open Sans, sans-serif;
   font-size: 13px;
   color: #999999;
   line-height: 1.4;
@@ -362,7 +363,7 @@ iframe {
 }
 
 .login100-form-btn {
-  font-family: Raleway-Bold, serif;
+  font-family: Open Sans, sans-serif;
   font-size: 16px;
   color: #fff;
   line-height: 1.2;
@@ -378,7 +379,7 @@ iframe {
   min-width: 150px;
   height: 45px;
   background-color: #2999ff;
-  margin-left: 30%;
+  margin-left: 35%;
   border-radius: 16px;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
@@ -419,7 +420,7 @@ iframe {
   right: 12px;
   pointer-events: none;
 
-  font-family: Raleway-Medium, serif;
+  font-family: Open Sans, sans-serif;
   color: #c80000;
   font-size: 14px;
   line-height: 1.4;
