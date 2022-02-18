@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {ReportFormService} from "../../services/report-form.service";
-import {CommentNode, CommentsComponent} from '../comments/comments.component';
+import {CommentNode} from '../comments/comments.component';
+import {Location} from '@angular/common';
 import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
@@ -25,8 +26,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   dtTrigger: Subject<any> = new Subject<any>();
   comments: Array<CommentNode> = [];
   recommendations: Array<CommentNode> = [];
-  errorMessage: boolean;
-  successMessage: boolean;
+
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
+
   isSubmitVisible: boolean;
   isReviewVisible: boolean;
   isApproveVisible: boolean;
@@ -75,7 +80,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private formViewService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private _location: Location, private formViewService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -92,9 +97,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey==="Submit_Report") this.isSubmitVisible = true;
-          if (this.taskRecord.taskDefinitionKey==="Review_Report") this.isReviewVisible = true;
-          if (this.taskRecord.taskDefinitionKey==="Approve_Report") this.isApproveVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReviewVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
 
           const params = new HttpParams()
             .set('taskId', this.taskId);
@@ -119,15 +124,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   setCommentsAndRecommendations(params) {
-    this.formViewService.getCommentsForTask(params).subscribe(data=>{
-      if (data.comments !== null  && data.comments !== undefined) {
+    this.formViewService.getCommentsForTask(params).subscribe(data => {
+      if (data.comments !== null && data.comments !== undefined) {
         data.comments.forEach((c) => {
           this.comments.push(new CommentNode(c.id, c.content, c.userId, [], this.getRepliesToComments(c.children), new Date(c.dateCreated)));
         });
       }
     }, error => console.log("Error getting comments", error));
 
-    this.formViewService.getRecommendationsForTask(params).subscribe(data=>{
+    this.formViewService.getRecommendationsForTask(params).subscribe(data => {
       if (data.recommendations !== null && data.recommendations !== undefined) {
         data.recommendations.forEach((r) => {
           this.recommendations.push(new CommentNode(r.id, r.content, r.userId, [], [], new Date(r.dateCreated)));
@@ -198,7 +203,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   getRepliesToComments(list) {
     let answers = [];
-    if(list!==null && list!==undefined && !Array.isArray(list)) {
+    if (list !== null && list !== undefined && !Array.isArray(list)) {
       JSON.parse(list).forEach((answer) => {
         answers.push(new CommentNode(answer.id, answer.text, answer.user, answer.likes, this.getRepliesToComments(answer.answers), new Date(answer.dateTimeCreated)));
       });
@@ -253,7 +258,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (formName == 'Review') this.isReviewVisible = true;
     if (formName == 'Approve') this.isApproveVisible = true;
     window.scroll(0, 0);
-    this.successMessage = false;
+    this.success = false;
   }
 
   viewComments(): void {
@@ -330,7 +335,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
   }
 
-  saveReport(reportValues: { [key: string]: string }) {
+  saveReport(reportValues: { [key: string]: string }, status) {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processId: this.taskRecord.processInstanceId,
@@ -338,41 +343,44 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
       reportValues: JSON.stringify(reportValues),
-      status: 'In Progress'
+      status: status
     }
     if (this.report) {
       this.formViewService.updateReport(reportRecord, this.report.id).subscribe((data) => {
-        this.errorMessage = false;
-        this.successMessage = true;
+        this.error = false;
+        this.success = true; this.successMessage = "Updated Report";
       }, error => {
-        this.errorMessage = true;
-        this.successMessage = false;
+        this.error = true; this.errorMessage = "Failed to update Report";
+        this.success = false;
         console.log(error);
       });
     } else {
       this.formViewService.createReport(reportRecord).subscribe((data) => {
-        this.errorMessage = false;
-        this.successMessage = true;
+        this.error = false;
+        this.success = true; this.successMessage = "Saved Report";
       }, error => {
-        this.errorMessage = true;
-        this.successMessage = false;
+        this.error = true; this.errorMessage = "Failed to save Report";
+        this.success = false;
         console.log(error);
       });
     }
 
-    this.updateTaskStatus("In_Progress");
+    setTimeout(()=>{
+      this.success = false;
+      this.error = false;
+    }, 3000);
   }
 
-  submitReport() {
-    this.errorMessage = false;
-    this.successMessage = false;
+  submitReport(status) {
+    this.error = false;
+    this.success = false;
 
     let reportValues: { [key: string]: string } = {
       financialReport: JSON.stringify(this.financialReport),
       performanceReport: JSON.stringify(this.performanceReport),
+      reviewerInformation: JSON.stringify(this.reviewerInformation),
+      approverInformation: JSON.stringify(this.approverInformation)
     }
-
-    this.saveReport(reportValues);
 
     let attachments = [];
     attachments.push({key: 'attachment1', value: this.attachment1});
@@ -410,12 +418,21 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
     });
 
-    this.changeForm('Review');
+    if (status === "save") {
+      this.saveReport(reportValues, 'saved_for_later');
+      this.updateTaskStatus("In_Progress");
+      this._location.back();
+    }
+    if (status === "submit") {
+      this.saveReport(reportValues, 'final_submission');
+      this.updateTaskStatus("Under_Review");
+      this.changeForm('Review');
+    }
   }
 
-  reviewReport() {
-    this.errorMessage = false;
-    this.successMessage = false;
+  reviewReport(status) {
+    this.error = false;
+    this.success = false;
 
     let reportValues: { [key: string]: string } = {
       financialReport: JSON.stringify(this.financialReport),
@@ -433,9 +450,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       })
     }
 
-    this.saveReport(reportValues);
-
-    this.changeForm('Approve');
+    if (status === "revise") {
+      this.saveReport(reportValues, 'asked_for_revisions');
+      this._location.back();
+    }
+    if (status === "submit") {
+      this.saveReport(reportValues, 'reviewed_and_submitted');
+      this.updateTaskStatus("Waiting_For_Approval");
+      this.changeForm('Approve');
+    }
   }
 
   approveReport() {
@@ -492,7 +515,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       })
     }
 
-    this.saveReport(reportValues);
+    this.saveReport(reportValues, 'approved_report');
+    this.updateTaskStatus("Approved");
+    this._location.back();
   }
 
   updateTaskStatus(status) {
@@ -501,5 +526,4 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
   }
-
 }
