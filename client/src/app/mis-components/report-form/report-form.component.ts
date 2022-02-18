@@ -80,7 +80,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private _location: Location, private formViewService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private formViewService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -421,7 +421,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (status === "save") {
       this.saveReport(reportValues, 'saved_for_later');
       this.updateTaskStatus("In_Progress");
-      this._location.back();
+      this.location.back();
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'final_submission');
@@ -452,11 +452,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     if (status === "revise") {
       this.saveReport(reportValues, 'asked_for_revisions');
-      this._location.back();
+      this.updateTaskStatus("Needs_Revision");
+      this.location.back();
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'reviewed_and_submitted');
-      this.updateTaskStatus("Waiting_For_Approval");
+      this.updateTaskStatus("Pending_Approval");
       this.changeForm('Approve');
     }
   }
@@ -517,7 +518,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     this.saveReport(reportValues, 'approved_report');
     this.updateTaskStatus("Approved");
-    this._location.back();
+    this.location.back();
   }
 
   updateTaskStatus(status) {

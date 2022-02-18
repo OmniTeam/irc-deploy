@@ -37,8 +37,18 @@
                       <td class='text-center'>{{ row.taskName }}</td>
                       <td class='text-center'>{{ row.description }}</td>
                       <td class='text-center'>{{ row.dateCreated  | date: 'medium' }}</td>
-                      <td class='text-center'>{{ row.status | replace: '_' : ' ' | titlecase }}</td>
-                      <td class='text-center'><a [routerLink]="['/formView', row.id]" style="font-size:20px;" class="text fas fa-external-link-square-alt"></a></td>
+                      <td class='text-center'
+                          [style.color]="row.status=='Approved' ? 'limegreen' :
+                          row.status=='In_Progress' ? 'orange' :
+                          row.status=='Pending_Approval' ? 'orange' :
+                          row.status=='Under_Review' ? 'cornflowerblue' :
+                          row.status=='Needs_Revision' ? 'red' : 'black'">
+                        <div style="display: inline-flex;">{{ row.status | replace: '_' : ' ' | titlecase }}
+                          <i class="far fa-check-circle" style="color: limegreen; font-size: 12px"
+                             [style.display]="row.status=='Approved' ? 'block' : 'none'"></i></div>
+                      </td>
+                      <td class='text-center'><a [routerLink]="['/formView', row.id]" style="font-size:20px;"
+                                                 class="text fas fa-external-link-square-alt"></a></td>
                     </tr>
                     </tbody>
                   </table>
