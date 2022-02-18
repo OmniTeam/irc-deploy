@@ -83,4 +83,14 @@ class ReportFormRecommendationsController {
 
         render status: NO_CONTENT
     }
+
+    def getRecommendationsForTask() {
+        def recommendations = [recommendations: ReportFormRecommendations.findAllByTaskId(params.taskId)]
+        respond recommendations
+    }
+
+    def getRecommendationById() {
+        def recommendation = [recommendation: ReportFormRecommendations.findById(params.id)]
+        respond recommendation
+    }
 }

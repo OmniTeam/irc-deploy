@@ -83,4 +83,14 @@ class ReportFormCommentsController {
 
         render status: NO_CONTENT
     }
+
+    def getCommentsForTask() {
+        def comments = [comments: ReportFormComments.findAllByTaskId(params.taskId)]
+        respond comments
+    }
+
+    def getCommentById() {
+        def comment = [comment: ReportFormComments.findById(params.id)]
+        respond comment
+    }
 }

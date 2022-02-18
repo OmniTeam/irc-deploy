@@ -42,8 +42,24 @@ export class ReportFormService {
     return this.http.get(`${environment.serverUrl}/reportFormFiles/get_file_by_task_and_name`,{params});
   }
 
+  getCommentsForTask(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormComments/get_comments_for_task`, {params});
+  }
+
+  getRecommendationsForTask(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormRecommendations/get_recommendations_for_task`, {params});
+  }
+
+  getComment(params): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormComments/get_comment`, {params});
+  }
+
   saveComment(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/reportFormComments`, formData);
+  }
+
+  getRecommendation(params): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormRecommendations/get_recommendation`, {params});
   }
 
   saveRecommendation(formData): Observable<any> {
