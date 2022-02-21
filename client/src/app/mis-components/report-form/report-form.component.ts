@@ -527,4 +527,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
   }
+
+  onBackPressed() {
+    this.location.back();
+  }
 }
