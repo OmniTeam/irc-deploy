@@ -3,83 +3,83 @@
     <div class=" header-body">
       <div class=" row align-items-center py-4">
         <div class="col-md-12">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h3 class=" card-title text-uppercase text-muted mb-0" style="padding-bottom: 10px">
-                    Users
-                  </h3>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-3">
-                      <div class="dataTables_length" >
-                        <ng-select class="form-control form-control-sm"
-                                   name="datatable_length"
-                                   aria-controls="datatable"
-                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   (change)="onChangeRoles($event)"
-                                   placeholder="Role"
-                                   [searchable]="true"
-                                   [clearable]="true">
-                          <ng-option [value]="item.name" *ngFor="let item of roles">
-                            {{item.name}}
-                          </ng-option>
-                        </ng-select>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-3 ">
-                      <div class="dataTables_length" >
-                        <ng-select class="form-control form-control-sm"
-                                   name="datatable_length"
-                                   aria-controls="datatable"
-                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   (change)="onChangePartner($event)"
-                                   placeholder="Select Partner"
-                                   [searchable]="true"
-                                   [clearable]="true">
-                          <ng-option [value]="item.name" *ngFor="let item of partners">
-                            {{item.name}}
-                          </ng-option>
-                        </ng-select>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-3">
-                      <div class="dataTables_length">
-                        <ng-select class="form-control form-control-sm"
-                                   name="datatable_length"
-                                   aria-controls="datatable"
-                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   (change)="onChangeGroup($event)"
-                                   placeholder="Organisation Group"
-                                   [searchable]="true"
-                                   [clearable]="true">
-                          <ng-option [value]="item.name" *ngFor="let item of groups">
-                            {{item.name}}
-                          </ng-option>
-                        </ng-select>
-                      </div>
-                    </div>
-                    <div class="col-sm-12 col-md-3 ">
-                      <div id="datatable_filter" class="dataTables_filter">
-                        <label>
-                          <input
-                            type="search"
-                            class="form-control form-control-sm"
-                            placeholder="Search Users"
-                            aria-controls="datatable"
-                            (keyup)="onChangeSearch($event)"
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<!--          <div class=" card card-stats">-->
+<!--            <div class=" card-body">-->
+<!--              <div class=" row">-->
+<!--                <div class=" col">-->
+<!--                  <h3 class=" card-title text-uppercase text-muted mb-0" style="padding-bottom: 10px">-->
+<!--                    Users-->
+<!--                  </h3>-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-sm-12 col-md-3">-->
+<!--                      <div class="dataTables_length" >-->
+<!--                        <ng-select class="form-control form-control-sm"-->
+<!--                                   name="datatable_length"-->
+<!--                                   aria-controls="datatable"-->
+<!--                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                   [multiple]="false"-->
+<!--                                   (change)="onChangeRoles($event)"-->
+<!--                                   placeholder="Role"-->
+<!--                                   [searchable]="true"-->
+<!--                                   [clearable]="true">-->
+<!--                          <ng-option [value]="item.name" *ngFor="let item of roles">-->
+<!--                            {{item.name}}-->
+<!--                          </ng-option>-->
+<!--                        </ng-select>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-sm-12 col-md-3 ">-->
+<!--                      <div class="dataTables_length" >-->
+<!--                        <ng-select class="form-control form-control-sm"-->
+<!--                                   name="datatable_length"-->
+<!--                                   aria-controls="datatable"-->
+<!--                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                   [multiple]="false"-->
+<!--                                   (change)="onChangePartner($event)"-->
+<!--                                   placeholder="Select Partner"-->
+<!--                                   [searchable]="true"-->
+<!--                                   [clearable]="true">-->
+<!--                          <ng-option [value]="item.name" *ngFor="let item of partners">-->
+<!--                            {{item.name}}-->
+<!--                          </ng-option>-->
+<!--                        </ng-select>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-sm-12 col-md-3">-->
+<!--                      <div class="dataTables_length">-->
+<!--                        <ng-select class="form-control form-control-sm"-->
+<!--                                   name="datatable_length"-->
+<!--                                   aria-controls="datatable"-->
+<!--                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                   [multiple]="false"-->
+<!--                                   (change)="onChangeGroup($event)"-->
+<!--                                   placeholder="Organisation Group"-->
+<!--                                   [searchable]="true"-->
+<!--                                   [clearable]="true">-->
+<!--                          <ng-option [value]="item.name" *ngFor="let item of groups">-->
+<!--                            {{item.name}}-->
+<!--                          </ng-option>-->
+<!--                        </ng-select>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-sm-12 col-md-3 ">-->
+<!--                      <div id="datatable_filter" class="dataTables_filter">-->
+<!--                        <label>-->
+<!--                          <input-->
+<!--                            type="search"-->
+<!--                            class="form-control form-control-sm"-->
+<!--                            placeholder="Search Users"-->
+<!--                            aria-controls="datatable"-->
+<!--                            (keyup)="onChangeSearch($event)"-->
+<!--                          />-->
+<!--                        </label>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -93,8 +93,8 @@
         <div class="dataTables_wrapper py-4">
           <div class="row" style="padding: 11px;">
             <div class="col-lg-12 col-5 text-right" style="margin-top: -31px;">
-              <a class=" btn btn-default"  style="color: white"> Make Inactive</a>
-              <a class=" btn btn-danger" (click)="deleteGroups()" style="color: white"> Delete User </a>
+<!--              <a class=" btn btn-default"  style="color: white"> Make Inactive</a>-->
+<!--              <a class=" btn btn-danger" (click)="deleteGroups()" style="color: white"> Delete User </a>-->
               <a class=" btn btn-success" (click) ="createUser()" style="color: white" > Add New User </a>
             </div>
           </div>
@@ -105,134 +105,15 @@
             [footerHeight]="50"
             [rowHeight]="'auto'"
             [rows]="users"
-            [externalPaging]="true"
-            [externalSorting]="true"
-            [count]="page.count"
-            [offset]="page.offset"
-            [limit]="page.limit"
-            [sortType]="'single'"
-            (page)="pageCallback($event)"
-            (sort)="sortCallback($event)"
+            [limit]="entries != -1 ? entries : undefined"
+            (activate)="onActivate($event)"
           >
-            <ngx-datatable-column
-              [width]="15"
-              prop="id"
-            >
-              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <input type="checkbox" [value]="value" (change)="onSelected($event)">
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Username" prop="username">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/user/edit/{{row.id}}">{{row.username}}</a>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="First Name" prop="first_name"></ngx-datatable-column>
-            <ngx-datatable-column name="Last Name" prop="last_name"></ngx-datatable-column>
-            <ngx-datatable-column name="Telephone" prop="telephone"></ngx-datatable-column>
+            <ngx-datatable-column name="Names" prop="names"></ngx-datatable-column>
+            <ngx-datatable-column name="Username" prop="username"></ngx-datatable-column>
             <ngx-datatable-column name="Email" prop="email"></ngx-datatable-column>
-            <ngx-datatable-column name="Is Active?" prop="is_active"></ngx-datatable-column>
-            <ngx-datatable-column name="Mobile User ID" prop="email"></ngx-datatable-column>
-            <ngx-datatable-column name="Roles" prop="role"></ngx-datatable-column>
-            <ngx-datatable-column name="Groups" prop="groups"></ngx-datatable-column>
-            <!--<ngx-datatable-column name="Action" sortable="false">
-              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button
-                  (click)="seeDetails(row);"
-                  class="btn btn-default"
-                  style="padding: 1px 6px;">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-                <button (click)="deleteGroup(row)" class="btn btn-danger" style="padding: 1px 6px;">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </ng-template>
-
-            </ngx-datatable-column>-->
           </ngx-datatable>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!--<div class=" container-fluid mt&#45;&#45;6">
-  <div class=" row">
-    <div class=" col">
-      <div class=" card">
-        <div class="dataTables_wrapper py-4">
-          <div class="row">
-            <div class="col-sm-12 col-md-4">
-              <div class="dataTables_length" id="datatable_length">
-                <label>
-                  Show
-                  <select
-                    name="datatable_length"
-                    aria-controls="datatable"
-                    class="form-control form-control-sm"
-                    (change)="entriesChange($event)"
-                  >
-                    <option value="10" [selected]="entries == 10">10</option>
-                    <option value="25" [selected]="entries == 25">25</option>
-                    <option value="50" [selected]="entries == 50">50</option>
-                    <option value="-1" [selected]="entries == -1">All</option>
-                  </select>
-                  entries
-                </label>
-              </div>
-            </div>
-            <div class="col-sm-12 col-md-3">
-              <div id="datatable_filter" class="dataTables_filter">
-                <label>
-                  <input
-                    type="search"
-                    class="form-control form-control-sm"
-                    placeholder="Search Tags"
-                    aria-controls="datatable"
-                    (keyup)="onChangeSearch($event)"
-                  />
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row" style="padding: 11px;">
-            <div class="col-lg-12 col-5 text-right">
-              <a class=" btn btn-default" (click)="open(mymodal)" style="color: white"> Add New Tag </a>
-            </div>
-          </div>
-          <ngx-datatable
-            class="bootstrap selection-cell"
-            [columnMode]="'force'"
-            [headerHeight]="50"
-            [footerHeight]="50"
-            [rowHeight]="'auto'"
-            [rows]="tags"
-          >
-            <ngx-datatable-column name="Tag Name" prop="name"></ngx-datatable-column>
-            <ngx-datatable-column name="Tag Type" prop="tagTypeName"></ngx-datatable-column>
-            <ngx-datatable-column name="Date Created" prop="dateCreated">
-              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
-                {{ value | date }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Action" sortable="false">
-              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-&lt;!&ndash;                <button&ndash;&gt;
-&lt;!&ndash;                  (click)="editTag(row);"&ndash;&gt;
-&lt;!&ndash;                  class="btn btn-default"&ndash;&gt;
-&lt;!&ndash;                  style="padding: 1px 6px;">&ndash;&gt;
-&lt;!&ndash;                  <i class="fa fa-pencil-alt"></i>&ndash;&gt;
-&lt;!&ndash;                </button>&ndash;&gt;
-                <button (click)="deleteTag(row)" class="btn btn-danger" style="padding: 1px 6px;">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </ng-template>
-
-            </ngx-datatable-column>
-          </ngx-datatable>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>-->

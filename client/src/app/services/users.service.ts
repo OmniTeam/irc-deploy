@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
 })
 export class UsersService {
   baseurl = environment.serverUrl
-  urlUsers = `${this.baseurl}/users/`
+  urlUsers = `${this.baseurl}/user/`
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   createUser(formData): Observable<any> {
-    return this.http.get(this.urlUsers, formData);
+    return this.http.post(this.urlUsers, formData);
   }
 
   updateUser(id, groupData): Observable<any> {

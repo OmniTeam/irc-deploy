@@ -39,7 +39,6 @@ export class CreateUserComponent implements OnInit {
   clicked = false;
   currentDashboards: any
   formGroup: FormGroup
-  formData: any;
   submitted = false;
   fieldTextType: boolean;
   sex = [
@@ -93,14 +92,7 @@ export class CreateUserComponent implements OnInit {
       password: ['', [Validators.required]],
       username: ['', [Validators.required]],
       names: ['', [Validators.required]],
-      // first_name: ['', [Validators.required]],
-      // last_name: ['', [Validators.required]],
       email: [''],
-      // telephone: ['', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
-      // role: [null],
-      // groups: [null],
-      // is_active: [true],
-      // data_collector_Type: [null],
     });
   }
 
@@ -116,10 +108,8 @@ export class CreateUserComponent implements OnInit {
       return;
     }
      const formData = this.formGroup.value;
-    console.log(this.formGroup.getRawValue())
     this.userService.createUser(formData).subscribe((result) => {
-        console.warn(result, 'User created Successfully');
-        this.alertService.success(`Name of user is: ${result.first_name} ${result.last_name}, Username is: ${result.username} and Password is: ${this.formGroup.controls.password.value}`);
+        this.alertService.success(`User is created successfully`);
         this.router.navigate(['/users']);
     },error => {this.alertService.error("Failed to Create the User")});
   }

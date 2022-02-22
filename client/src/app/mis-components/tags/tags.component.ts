@@ -27,6 +27,7 @@ export class TagsComponent implements OnInit {
   rowData: any;
   submitted = false;
   tagTypes = [];
+  activeRow: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -147,5 +148,9 @@ export class TagsComponent implements OnInit {
   onSelect({selected}) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+  }
+
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 }

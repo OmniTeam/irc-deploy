@@ -60,17 +60,17 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'fas fa-home',
   },
   formsMenu,
-  {
-    path: '/widgets',
-    title: 'Reports',
-    type: 'sub',
-    icontype: 'ni-books text-pink',
-    isCollapsed: true,
-    children: [
-      {path: 'dashboard', title: 'Farmer Report', type: 'link'},
-      {path: 'alternative', title: 'Trends', type: 'link'}
-    ]
-  },
+  // {
+  //   path: '/widgets',
+  //   title: 'Reports',
+  //   type: 'sub',
+  //   icontype: 'ni-books text-pink',
+  //   isCollapsed: true,
+  //   children: [
+  //     {path: 'dashboard', title: 'Farmer Report', type: 'link'},
+  //     {path: 'alternative', title: 'Trends', type: 'link'}
+  //   ]
+  // },
   {
     path: '/',
     title: 'Admin',
@@ -104,8 +104,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-single-02 text-green',
     isCollapsed: true,
     children: [
-      {path: 'groups', title: 'Groups', type: 'link'},
-      {path: 'dashboard', title: 'Roles', type: 'link'},
+      // {path: 'groups', title: 'Groups', type: 'link'},
+      // {path: 'dashboard', title: 'Roles', type: 'link'},
       {path: 'users', title: 'Users', type: 'link'}
     ]
   },

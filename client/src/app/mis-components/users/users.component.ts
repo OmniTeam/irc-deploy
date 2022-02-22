@@ -4,8 +4,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../services/alert";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {HttpParams} from "@angular/common/http";
-import {GroupsService} from "../../services/groups.service";
 import {UsersService} from "../../services/users.service";
 
 @Component({
@@ -15,17 +13,11 @@ import {UsersService} from "../../services/users.service";
 })
 export class UsersComponent implements OnInit {
 
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 100,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
+  activeRow: any;
   private searchValue = '';
   tags: any
   closeResult: string;
@@ -92,18 +84,7 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 0});
-    /*this.formGroup = this.formBuilder.group({
-      username: [''],
-      first_name: [''],
-      last_name: [''],
-      telephone: [''],
-      email: [''],
-      password: [''],
-      is_active: [''],
-      user_type: [''],
-      data_collector_type: [''],
-    });*/
+    this.reloadTable();
   }
 
   onChangePartner(event) {
@@ -147,17 +128,8 @@ export class UsersComponent implements OnInit {
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('partner', `${this.partnerValue}`)
-      .set('role', `${this.roleValue}`)
-      .set('group', `${this.groupValue}`)
-      .set('search', `${this.searchValue}`);
-
-    this.usersService.getUsersFiltered(params).subscribe((data) => {
-      this.users = data
-      this.page.count = data.length
-      // console.log(this.users, 'these are the users')
+    this.usersService.getUsers().subscribe((data) => {
+      this.users = data;
     });
   }
 
@@ -219,18 +191,9 @@ export class UsersComponent implements OnInit {
 
   entriesChange($event) {
     this.entries = $event.target.value;
-    this.reloadTable();
   }
 
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
-    this.reloadTable();
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 }
