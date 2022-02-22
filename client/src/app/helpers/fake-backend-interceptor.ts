@@ -9,6 +9,7 @@ import {
 import {Injectable} from '@angular/core';
 import {Observable, of, throwError} from 'rxjs';
 import {delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
+import {SampleData} from "./sample-data";
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -27,6 +28,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
     function handleRoute() {
       switch (true) {
+        case url.endsWith('/users/') && method === 'GET':
+          return getUserData();
+        case url.endsWith('/groups/') && method === 'GET':
+          return getGroupData()
         // case url.endsWith('/api/login') && method === 'POST':
         //     return t();
         default:
@@ -57,7 +62,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     // }
     // helper functions
 
+    function getUserData(){
+      return ok(
+        SampleData.users()
+      );
+    }
 
+    function getGroupData(){
+      return ok(
+        SampleData.groups()
+      );
+    }
 
     // tslint:disable-next-line:no-shadowed-variable
     function ok(body?) {
