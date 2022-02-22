@@ -42,14 +42,20 @@ class UserService extends AbstractExcelImporter{
             def csv = FuzzyCSVTable.parseCsv(new InputStreamReader(file.inputStream))
             print(csv)
             csv.each {record->
-                def user = User.find(record.Username)?:
+                def user = User.findByUsername(record.Username)?:
                         new User(
                                 names: record.Name,
                                 username: record.Username,
                                 password: record.Password,
                                 email: record.Email,
                         ).save(flush: true, failOnError: true)
-
+                def roles = record.Role?.split(",")
+                roles.each {roleStr->
+                    def role = Role.findByAuthority(roleStr) ?: new Role(authority: roleStr).save(failOnError: true, flush: true)
+                    if(!user.authorities.contains(role)) {
+                        UserRole.create user,role
+                    }
+                }
             }
         }catch(Exception ex) {
             ex.printStackTrace()

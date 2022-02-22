@@ -1,6 +1,8 @@
 package com.kengamis
 
+import grails.converters.JSON
 import grails.validation.ValidationException
+import org.apache.http.HttpStatus
 import org.springframework.web.multipart.MultipartFile
 
 import static org.springframework.http.HttpStatus.CREATED
@@ -93,6 +95,7 @@ class UserController {
             String fileType = file.getContentType()
             println fileType
             userService.importUsers(file)
+            render([code: HttpStatus.SC_OK, msg: "Successfully uploaded users."] as JSON)
         }catch(Exception ex) {
             ex.printStackTrace()
         }
