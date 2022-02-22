@@ -228,7 +228,7 @@ class QueryHelper {
     }
 
     private String getUserFilter() {
-        if (params.userFilter != '') {
+        if (params.userFilter) {
             if (userBaseTable)
                 return "(${escapeField userBaseTable}.submitterName = '${escapeSql params.userFilter}')"
             else
@@ -238,7 +238,7 @@ class QueryHelper {
     }
 
     private String getDateRangeFilterExpr() {
-        if (params.dateFrom != '' && params.dateTo != '') {
+        if (params.dateFrom && params.dateTo) {
             if (userBaseTable)
                 return "(${escapeField userBaseTable}.submissionDate BETWEEN '${escapeSql params.dateFrom}' AND '${escapeSql params.dateTo}')"
             else

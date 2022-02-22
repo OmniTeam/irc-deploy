@@ -17,6 +17,7 @@ class UrlMappings {
         post "/$controller/insert_entity_record(.$format)?"(action:"insertEntityRecord")
         get "/$controller/get_entity_fields(.$format)?"(action:"getEntityFields")
         get "/$controller/get_entity_record(.$format)?"(action:"getEntityRecord")
+        get "/$controller/get_export_form_data(.$format)?"(action:"getExportFormData")
         get "/$controller/view_data(.$format)?"(action:"viewData")
         get "/$controller/getAllTagsByTagType(.$format)?"(action:"getAllTagsByTagType")
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")

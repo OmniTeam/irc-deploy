@@ -37,7 +37,7 @@ class MisEntityController {
         respond misEntity
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond misEntityService.get(id)
     }
 
@@ -94,12 +94,31 @@ class MisEntityController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
+        def misEntity = MisEntity.get(id)
+        def entityTable = misEntity.tableName
+        def prefixTable = misEntity.prefixIncrementTable
+        def taggingTable = misEntity.entityTagTable
 
+        def entityViews = misEntity.entityViews
+        entityViews.each {
+            def entityViewTable = it.tableName
+            def deleteTableQuery = " DROP VIEW IF EXISTS ${entityViewTable}".toString()
+            def results = AppHolder.withMisSqlNonTx { execute(deleteTableQuery) }
+            if (!results) {
+                log.info("Views successfully deleted")
+            }
+        }
+
+        def deleteTablesQuery = """ DROP TABLE ${entityTable}, ${prefixTable}, ${taggingTable}""".toString()
+        def results = AppHolder.withMisSqlNonTx { execute(deleteTablesQuery) }
+        if (!results) {
+            log.info("Tables successfully deleted")
+        }
         misEntityService.delete(id)
 
         render status: NO_CONTENT
