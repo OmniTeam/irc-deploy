@@ -146,7 +146,12 @@ mainClassName = 'com.kengamis.Application'
 // Optional: Customize the jar properties:
 //  https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html
 jar {
-    archiveName('kengamis.jar')
+    archiveName('crvpf-server.jar')
+}
+bootJar {
+    archiveBaseName = 'crvpf-server'
+    archiveVersion = '1.0.0'
+    archiveFileName = 'crvpf-server.jar'
 }
 test {
     ignoreFailures = true
