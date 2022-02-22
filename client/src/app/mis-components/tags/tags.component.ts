@@ -14,18 +14,11 @@ import {HttpParams} from "@angular/common/http";
 })
 export class TagsComponent implements OnInit {
 
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
   groups;
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 100,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
   private searchValue = '';
   tags: any
   closeResult: string;
@@ -34,6 +27,7 @@ export class TagsComponent implements OnInit {
   rowData: any;
   submitted = false;
   tagTypes = [];
+  activeRow: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -44,7 +38,7 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 100});
+    this.reloadTable();
     this.formGroup = this.formBuilder.group({
       name: ['', Validators.required],
       tagType: ['', Validators.required]
@@ -136,12 +130,7 @@ export class TagsComponent implements OnInit {
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.page.offset}`)
-      .set('search', `${this.searchValue}`);
-
-    this.tagService.getTags(params).subscribe((data) => {
+    this.tagService.getTags().subscribe((data) => {
       this.tags = data;
     });
   }
@@ -161,15 +150,7 @@ export class TagsComponent implements OnInit {
     this.selected.push(...selected);
   }
 
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
-    this.reloadTable();
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 }

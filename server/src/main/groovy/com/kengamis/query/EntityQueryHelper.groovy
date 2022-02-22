@@ -58,7 +58,7 @@ class EntityQueryHelper {
 
     List<Map> getData() {
         log.trace("Query: Fetching Data: [$query]")
-        withMisSqlNonTx { rows("$query  limit $maxRows offset $offset".toString()) }
+        withMisSqlNonTx { rows("$query".toString()) }
     }
 
     String getQuery() {

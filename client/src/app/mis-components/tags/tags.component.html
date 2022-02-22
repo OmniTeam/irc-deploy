@@ -61,7 +61,9 @@
             [headerHeight]="50"
             [footerHeight]="50"
             [rowHeight]="'auto'"
+            [limit]="entries != -1 ? entries : undefined"
             [rows]="tags"
+            (activate)="onActivate($event)"
           >
             <ngx-datatable-column name="Tag Name" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="Tag Type" prop="tagTypeName"></ngx-datatable-column>

@@ -18,6 +18,7 @@ import grails.gorm.transactions.Transactional
 class UserController {
 
     UserService userService
+    UserRoleService userRoleService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -45,6 +46,7 @@ class UserController {
 
         try {
             userService.save(user)
+            createUserRole(user)
         } catch (ValidationException e) {
             respond user.errors
             return
@@ -98,6 +100,13 @@ class UserController {
             render([code: HttpStatus.SC_OK, msg: "Successfully uploaded users."] as JSON)
         }catch(Exception ex) {
             ex.printStackTrace()
+        }
+    }
+
+    def createUserRole(User user) {
+        def role = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
+        if (!user.authorities.contains(role)) {
+            UserRole.create user, role
         }
     }
 }

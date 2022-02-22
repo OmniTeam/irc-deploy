@@ -62,7 +62,11 @@
             [selectionType]="SelectionType.single"
             (select)="onSelect($event)"
           >
-            <ngx-datatable-column name="Entity View Name" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Entity View Name" prop="name">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                <a routerLink="/entityView/{{row.id}}"> {{ value }} </a>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="View Table" prop="tableName"></ngx-datatable-column>
             <ngx-datatable-column name="Description" prop="description"></ngx-datatable-column>
             <ngx-datatable-column name="Date Created" prop="dateCreated">

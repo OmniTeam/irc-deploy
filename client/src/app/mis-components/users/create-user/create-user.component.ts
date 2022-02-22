@@ -1,0 +1,121 @@
+import {Component, OnInit} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AuthService} from '../../../services/auth.service';
+import {UsersService} from "../../../services/users.service";
+import {TagService} from "../../../services/tags";
+import {AlertService} from "../../../services/alert";
+
+
+@Component({
+  selector: 'app-createppdauser',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.scss']
+})
+export class CreateUserComponent implements OnInit {
+  private DataEmail: any;
+  private DataTelephone: any;
+  private DataUsername: any;
+
+  constructor(
+    private userService: UsersService,
+    private tagsService: TagService,
+    private alertService: AlertService,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private router: Router
+  ) {
+  }
+
+  clicked = false;
+  currentDashboards: any
+  formGroup: FormGroup
+  submitted = false;
+  fieldTextType: boolean;
+  sex = [
+    {
+      'name': 'Male'
+    },
+    {
+      'name': 'Female'
+    }
+  ];
+  user_Type = [
+    {
+      'name': 'Data Manager'
+    },
+    {
+      'name': 'Data Viewer'
+    },
+    {
+      'name': 'Data Collector'
+    },
+  ];
+  data_collector_Type = [
+    {
+      'name': 'Enumerator'
+    },
+    {
+      'name': 'Field Staff'
+    }
+  ];
+  groups = [
+    {
+      name: "Partner 4",
+    },
+    {
+      name: "Partner 1",
+    },
+    {
+      name: "Uganda",
+    },
+    {
+      name: "CRVP-Staff",
+    },
+  ]
+
+  get f() {
+    return this.formGroup.controls;
+  }
+
+  ngOnInit(): void {
+    this.formGroup = this.formBuilder.group({
+      password: ['', [Validators.required]],
+      username: ['', [Validators.required]],
+      names: ['', [Validators.required]],
+      email: [''],
+    });
+  }
+
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+
+  createUser() {
+    this.clicked = true;
+    this.submitted = true;
+    if (this.formGroup.invalid) {
+      console.log('Invalid');
+      return;
+    }
+     const formData = this.formGroup.value;
+    this.userService.createUser(formData).subscribe((result) => {
+        this.alertService.success(`User is created successfully`);
+        this.router.navigate(['/users']);
+    },error => {this.alertService.error("Failed to Create the User")});
+  }
+
+  resetForm() {
+    this.formGroup.reset();
+  }
+
+}

@@ -11,8 +11,8 @@ export class TagService {
   constructor(private http: HttpClient) {
   }
 
-  getTags(params): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/tag`, {params});
+  getTags(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/tag`);
   }
 
   addNewTag(newTag): Observable<any> {
@@ -28,8 +28,8 @@ export class TagService {
     return this.http.get(`${environment.serverUrl}/tagType`);
   }
 
-  getTagTypes(params): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/tagType`, {params});
+  getTagTypes(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/tagType`);
   }
 
   addNewTagType(newTagType): Observable<any> {
