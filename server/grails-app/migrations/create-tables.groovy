@@ -1162,6 +1162,14 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1645511152009-13") {
         addForeignKeyConstraint(baseColumnNames: "acl_object_identity", baseTableName: "acl_entry", constraintName: "FKl39t1oqikardwghegxe0wdcpt", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_object_identity", validate: "true")
     }
+    changeSet(author: "victorkakama (generated)", id: "1645520788547-2") {
+        addColumn(tableName: "role") {
+            column(name: "description", type: "varchar(255)")
+        }
+    }
+    changeSet(author: "victorkakama (generated)", id: "1645520788547-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "email", tableName: "user")
+    }
 
 
 }

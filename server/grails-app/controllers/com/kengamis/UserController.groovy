@@ -1,6 +1,8 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+import org.springframework.web.multipart.MultipartFile
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -81,5 +83,18 @@ class UserController {
         userService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def uploadUsers() {
+        println("===================")
+        try{
+            MultipartFile file = request.getFile('users')
+            String fileType = file.getContentType()
+            println fileType
+            userService.importUsers(file)
+        }catch(Exception ex) {
+            ex.printStackTrace()
+        }
     }
 }

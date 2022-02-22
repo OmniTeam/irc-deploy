@@ -31,12 +31,19 @@ class UrlMappings {
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
         post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
 
-        '/odxRest/getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
-        '/odxRest/getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')
-        '/odxRest/getPreloadEntities'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getPreloadEntities')
-        '/odxRest/getFilters'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilters')
-        '/odxRest/getFilteredEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityData')
-        '/odxRest/getFilteredEntityDataMap'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityDataMap')
+        group "/api/v1/odxRest/", {
+            'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
+            'getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')
+            'getPreloadEntities'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getPreloadEntities')
+            'getFilters'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilters')
+            'getFilteredEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityData')
+            'getFilteredEntityDataMap'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityDataMap')
+
+        }
+
+        group "/api/v1/user/", {
+            'import-users'(controller: 'user', action: 'uploadUsers', method: 'POST')
+        }
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
