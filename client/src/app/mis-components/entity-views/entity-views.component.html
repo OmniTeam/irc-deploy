@@ -62,13 +62,6 @@
             [selectionType]="SelectionType.single"
             (select)="onSelect($event)"
           >
-            <ngx-datatable-column
-              [width]="50"
-              [sortable]="false"
-              [canAutoResize]="false"
-              [draggable]="false"
-              [resizeable]="false"
-            >
             <ngx-datatable-column name="Entity View Name" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="View Table" prop="tableName"></ngx-datatable-column>
             <ngx-datatable-column name="Description" prop="description"></ngx-datatable-column>
