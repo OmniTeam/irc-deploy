@@ -7,7 +7,6 @@ import grails.core.GrailsApplication
 import grails.converters.*
 import org.apache.commons.lang.StringEscapeUtils
 import org.springframework.util.Assert
-import sun.misc.BASE64Decoder
 
 class KengaMobileRestController {
     static namespace = 'rest'
@@ -233,7 +232,8 @@ class KengaMobileRestController {
 
     def decodeBasicUser(def authString) {
         def encodedPair = authString - 'Basic '
-        def decodedPair = new String(new BASE64Decoder().decodeBuffer(encodedPair))
+//        def decodedPair = new String(new BASE64Decoder().decodeBuffer(encodedPair))
+        def decodedPair = new String(Base64.getEncoder().decodeBase64(encodedPair.getBytes()))
         def credentials = decodedPair.split(':')
         def user = User.findByUsername(credentials[0])
 

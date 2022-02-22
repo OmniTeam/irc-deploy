@@ -94,13 +94,13 @@ dataSource:
     jmxExport: true
     driverClassName: com.mysql.jdbc.Driver
     username: root
-    password: omnitech2020!A
+    password:
 #omnitech2020!A
 environments:
     development:
         dataSource:
 #            dbCreate: create-drop
-            url: jdbc:mysql://localhost:3306/kengamis?verifyServerCertificate=false&useSSL=true&sessionVariables=sql_mode=''
+            url: jdbc:mysql://localhost:3306/kengamis?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
     test:
         dataSource:
             dbCreate: update

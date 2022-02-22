@@ -23,6 +23,7 @@ class MisEntity {
     }
 
     static mapping = {
+        id generator: 'uuid2'
         entityFields cascade: "all-delete-orphan"
         entityFields sort: "orderOfDisplay", order: 'asc'
     }

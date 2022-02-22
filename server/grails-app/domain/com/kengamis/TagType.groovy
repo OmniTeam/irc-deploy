@@ -9,6 +9,9 @@ class TagType {
 
     static belongsTo = [misEntity: MisEntity]
     static hasMany = [tags: Tag]
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
     }
 

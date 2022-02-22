@@ -19,6 +19,9 @@ class EntityViewFields {
 
     static belongsTo = [entityView: EntityView]
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
         name nullable: false, validator: { value, object -> object.entityView.viewQuery.contains(value) ?: 'validation.entityView.missingViewColumn' }
         datatype nullable: false, inList: ['Text', 'Date', 'Number'], size: 1..255
