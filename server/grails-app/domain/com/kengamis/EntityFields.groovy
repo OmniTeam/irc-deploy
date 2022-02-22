@@ -22,6 +22,10 @@ class EntityFields {
 
     static	belongsTo	= [misEntity: MisEntity]
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
+
     static constraints = {
         fieldName nullable: false
         displayName nullable: false

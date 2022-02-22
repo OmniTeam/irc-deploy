@@ -9,6 +9,9 @@ class EntityForm {
     static	belongsTo	= [misEntity: MisEntity, form:Form]
     static	hasMany		= [fieldsMap: EntityFormFieldMap]
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
     }
 }

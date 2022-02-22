@@ -23,6 +23,10 @@ class Study implements Serializable {
 
     static hasMany = [forms: Form]
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
+
     static constraints = {
         centralId nullable: false
     }
