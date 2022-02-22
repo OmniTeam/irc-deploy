@@ -98,14 +98,15 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
   {
-    path: '/widgets',
+    path: '',
     title: 'User',
     type: 'sub',
     icontype: 'ni-single-02 text-green',
     isCollapsed: true,
     children: [
+      {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'dashboard', title: 'Roles', type: 'link'},
-      {path: 'alternative', title: 'Groups', type: 'link'}
+      {path: 'users', title: 'Users', type: 'link'}
     ]
   },
 ];
