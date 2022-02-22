@@ -21,7 +21,4 @@ class KengaGroup {
         parent nullable: true
     }
 
-    Set<User> getUsers(){
-        UserGroup.findAllByGroup(this).collect{ it.user } as Set
-    }
 }
