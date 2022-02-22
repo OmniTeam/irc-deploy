@@ -3,7 +3,7 @@ package com.kengamis
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class GroupSpec extends Specification implements DomainUnitTest<Group> {
+class KengaGroupSpec extends Specification implements DomainUnitTest<KengaGroup> {
 
     def setup() {
     }
