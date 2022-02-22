@@ -12,6 +12,9 @@ class EntityFormFieldMap {
 
     static	belongsTo	= [entityForm: EntityForm]
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
         formField nullable: false
         entityField nullable: false
