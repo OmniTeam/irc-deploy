@@ -2,10 +2,10 @@ package com.kengamis
 
 import com.omnitech.odkodata2sql.SqlSchemaGen
 import grails.gorm.transactions.Transactional
+import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import org.openxdata.markup.XformType
 
-@ToString(includes = 'displayName', includeNames = true, includePackage = false)
 class FormSetting {
 
     final static SETTING_TEXT = 'text'
@@ -13,6 +13,10 @@ class FormSetting {
     final static SETTING_REPEAT = 'repeat'
     final static SETTING_GROUP = 'group'
     final static GROUP_QUESTION_TYPES = [XformType.REPEAT.value, XformType.GROUP.value]
+    final static META_USERNAME     = 'central_user_name'
+    final static META_USER_ID      = 'submitterId'
+    final static META_DATE_CREATED = 'submissionDate'
+    final static META_ID           = '__id'
 
     String id
     String field
@@ -45,6 +49,12 @@ class FormSetting {
         sort 'displayName'
         questionText type: 'text'
         displayName type: 'text'
+    }
+
+    @Override
+    // Override toString for a nicer / more descriptive UI
+    String toString() {
+        return "${form} : ${displayName}";
     }
 
     ChoiceOption findChoiceOption(String bindValue) {
@@ -88,5 +98,21 @@ class FormSetting {
             addToChoiceOptions(choiceOption)
         }
         return this
+    }
+
+    Collection<FormSetting> getChildElements() {
+        return form.formSettings.findAll { it.parentQuestion == field }
+    }
+
+    Collection<FormSetting> getChildGroupsAndRepeats() {
+        return form.formSettings.findAll {
+            it.parentQuestion == field && it.xformType in GROUP_QUESTION_TYPES
+        }
+    }
+
+    Collection<FormSetting> getChildQuestions() {
+        return form.formSettings.findAll {
+            it.parentQuestion == field && !(it.xformType in GROUP_QUESTION_TYPES)
+        }
     }
 }

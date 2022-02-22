@@ -50,6 +50,11 @@ class FormDataValue {
 
     }
 
+    String getField() {
+        formSetting.field
+
+    }
+
 
     static boolean isFloatingPoint(def val) {
 
@@ -74,11 +79,22 @@ class FormDataValue {
     }
 
     private final static META_COLUMN_NAMES = ['__id',
-                                              'submitterName',
-                                              'submissionDate']*.toLowerCase()
+                                                'submitterName',
+                                                'unique_id',
+                                                '__start',
+                                                '__end',
+                                                '__today',
+                                                'instanceID',
+                                                '__reviewed',
+                                                '__reviewedBy',
+                                                'edits',
+                                                'deviceId',
+                                                'parentId',
+                                                'attachmentsPresent',
+                                                'attachmentsExpected']*.toLowerCase()
 
     boolean isMetaColumn() {
-        return META_COLUMN_NAMES.contains(field.toLowerCase())
+        return META_COLUMN_NAMES.contains(formSetting.field.toLowerCase())
     }
 
     static class Option {
