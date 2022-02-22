@@ -1,5 +1,6 @@
 package com.kengamis
 
+import com.kengamis.exporter.DataExporter
 import com.kengamis.query.FormData
 import com.kengamis.query.FormDataValue
 import com.kengamis.query.QueryHelper
@@ -7,6 +8,7 @@ import grails.core.GrailsApplication
 import grails.rest.*
 import grails.converters.*
 import groovy.sql.Sql
+import org.openxdata.markup.XformType
 
 import static com.kengamis.AppHolder.withMisSql
 import static com.kengamis.Util.constructFormTable
@@ -54,7 +56,42 @@ class DataController {
         def formDataRecord = []
         formData.allFormDataValues.each { fd ->
             FormDataValue formDataValue = fd
-            formDataRecord << [question: formDataValue.label, value: formDataValue.humanReadableValue]
+            if (formDataValue.humanReadableValue) {
+                if (!formDataValue.isMetaColumn()) {
+                    if (formDataValue.formSetting.xformType == XformType.SELECT.value) {
+                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.options]
+                    }
+                    else if (formDataValue.formSetting.xformType == XformType.REPEAT.value) {
+                        def repeatFormData = formDataValue.value as List<FormData>
+                        def repeatFirstRecord = repeatFormData.first().allFormDataValues
+                        def headers = []
+                        headers << [field: 'increment', questionText: '#']
+                        repeatFirstRecord.each {header ->
+                            if (header.humanReadableValue) {
+                                if (!header.isMetaColumn()) {
+                                    headers << [field: header.field, questionText: header.label]
+                                }
+                            }
+                        }
+                        def resultList = []
+                        def counter = 1
+                        repeatFormData.collect {
+                            def formDataValues = it.allFormDataValues
+                            def record = [:]
+                            record["increment"] = counter
+                            formDataValues.each {
+                                record["${it.field}"] = it.humanReadableValue
+                            }
+                            resultList << record
+                            counter++
+                        }
+                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
+                    }
+                    else {
+                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.humanReadableValue]
+                    }
+                }
+            }
         }
         respond formDataRecord
     }
@@ -115,5 +152,14 @@ class DataController {
                 GROUP BY submitterName,submissionDate """.toString()
         def records = withMisSql { rows(query) }
         return records
+    }
+
+    def getExportFormData() {
+        def formtable = params.formtable as String
+        def dataExporter = new DataExporter(formtable, params)
+        def exportedData = dataExporter.exportToExcel()
+        def fileName = dataExporter.setFileName()
+        def response = [data: exportedData, file: fileName]
+        respond response
     }
 }
