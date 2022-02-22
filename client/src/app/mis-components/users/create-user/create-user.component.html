@@ -28,6 +28,41 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>
+                                            Names
+                                            <span class="required-indicator">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="col-md-12">
+                                            <div class="form-group ">
+                                                <div class=" input-group input-group-merge">
+                                                    <div class=" input-group-prepend">
+                                                <span class="input-group-text" style="padding-right: 10px;">
+                                                    <i class=" fas fa-user"></i>
+                                                </span>
+                                                    </div>
+                                                    <input
+                                                            class="form-control"
+                                                            placeholder="Names"
+                                                            type="text"
+                                                            style="padding-left: 10px;"
+                                                            formControlName="names"
+                                                            [ngClass]="{ 'is-invalid': submitted && f.names.errors }"
+                                                    >
+                                                  <div *ngIf="submitted && f.names.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.username.errors.required" class="input-error">Username is required</div>
+                                                  </div>
+                                                </div>
+                                                <!--<div *ngIf="f.username.hasError('alreadyExist')" >
+                                                    <div class="input-error">Username is already taken</div>
+                                                </div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>
                                             Username
                                             <span class="required-indicator">*</span>
                                         </label>
@@ -60,7 +95,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!--<div class="row">
                                     <div class="col-md-3">
                                         <label>
                                             First Name
@@ -124,7 +159,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label>
@@ -177,7 +212,7 @@
                                     <div class="col-md-3">
                                         <label>
                                             Email
-                                            <span class="required-indicator">*</span>
+<!--                                            <span class="required-indicator">*</span>-->
                                         </label>
                                     </div>
                                     <div class="col-md-9">
@@ -209,7 +244,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!--<div class="row">
                                     <div class="col-md-3">
                                         <label>
                                             Telephone
@@ -377,7 +412,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <div class="row">

@@ -90,16 +90,17 @@ export class CreateUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required]],
       username: ['', [Validators.required]],
-      first_name: ['', [Validators.required]],
-      last_name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      telephone: ['', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
-      role: [null],
-      groups: [null],
-      is_active: [true],
-      data_collector_Type: [null],
+      names: ['', [Validators.required]],
+      // first_name: ['', [Validators.required]],
+      // last_name: ['', [Validators.required]],
+      email: [''],
+      // telephone: ['', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
+      // role: [null],
+      // groups: [null],
+      // is_active: [true],
+      // data_collector_Type: [null],
     });
   }
 
