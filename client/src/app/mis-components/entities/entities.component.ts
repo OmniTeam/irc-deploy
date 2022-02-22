@@ -23,13 +23,13 @@ export class EntitiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityService.getEntities().subscribe((data) => {
-      console.log(data);
       let rowData = []
       for (let record of data) {
         let rowRecord = {};
         rowRecord['id'] = record.id;
         rowRecord['name'] = record.name;
         rowRecord['tableName'] = record.tableName;
+        rowRecord['prefix'] = record.prefix;
         rowRecord['dateCreated'] = record.dateCreated;
         rowRecord['entityViews'] = this.getGroupEntityViews(record.entityViews);
         rowData.push(rowRecord);
@@ -47,7 +47,7 @@ export class EntitiesComponent implements OnInit {
       columnDefs: [{
         orderable: false,
         className: 'select-checkbox',
-        targets: 6
+        targets: 7
       }],
       select: {
         style: 'os',
@@ -71,7 +71,7 @@ export class EntitiesComponent implements OnInit {
         },
 
         {
-          text: 'Create Entity',
+          text: 'Create New Entity',
           action: ( e, dt, button, config ) => {
             this.createNewEntity();
           }

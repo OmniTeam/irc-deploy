@@ -6,6 +6,7 @@ class EntityFields {
     static String TYPE_FILTER_FIELD = "Filter Field"
     static String TYPE_KEY_FIELD = "Key Field"
     static String TYPE_OTHER_FIELD = "Other"
+    static String TYPE_TAG_FIELD = "Tag Field"
 
     String id
     String displayName

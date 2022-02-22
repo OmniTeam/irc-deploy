@@ -6,6 +6,8 @@ import {EntityService} from "../../../services/entity.service";
 import {ReplacePipe} from "../../../replace-pipe";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AlertService} from "../../../services/alert";
+import {TagService} from "../../../services/tags";
 
 @Component({
   selector: 'app-entity-tables',
@@ -15,8 +17,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class EntityTablesComponent implements OnInit {
 
   entityName = "";
-  entries = 5;
-  selected: any[] = [];
+  entries = 50;
+  selected = [];
   activeRow: any;
   rows: Object[];
   columns: any;
@@ -25,13 +27,21 @@ export class EntityTablesComponent implements OnInit {
   closeModal: string;
   formInputConfigs: any;
   formGroup: FormGroup;
+  tagFormGroup: FormGroup;
   submitted = false;
+  tagTypes = [];
+  tags = [];
+  enableTagging: any;
+  enableTagButton = false;
+  enableRemoveTagButton = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private entityService: EntityService,
               private modalService: NgbModal,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private alertService: AlertService,
+              private tagService: TagService) {
   }
 
   entriesChange($event) {
@@ -55,6 +65,16 @@ export class EntityTablesComponent implements OnInit {
     this.selected.push(...selected);
   }
 
+  onCheckboxChangeFn(event) {
+    if (event.target.checked) {
+      this.enableTagButton = !!this.enableTagging;
+      this.enableRemoveTagButton = !!this.enableTagging;
+    } else {
+      this.enableTagButton = false;
+      this.enableRemoveTagButton = false;
+    }
+  }
+
   onActivate(event) {
     this.activeRow = event.row;
   }
@@ -63,10 +83,19 @@ export class EntityTablesComponent implements OnInit {
     return this.formGroup.controls;
   }
 
+  get fTag() {
+    return this.tagFormGroup.controls;
+  }
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
       this.getEntityData();
+    });
+
+    this.tagFormGroup = this.formBuilder.group({
+      tagType: ['', Validators.required],
+      tag: ['', Validators.required]
     });
   }
 
@@ -76,6 +105,8 @@ export class EntityTablesComponent implements OnInit {
     this.entityService.getEntityData(params).subscribe((data) => {
       this.entityName = new ReplacePipe().transform(data.entity['name'], '_', ' ');
       this.rows = data.resultList;
+      this.tagTypes = data.tagTypeList;
+      this.enableTagging = data.enableTagging;
       this.columns = this.columnMappings(data.headerList);
       this.formInputConfigs = this.generateFormInputConfigs(data.headerList);
     }, error => console.log(error));
@@ -93,11 +124,19 @@ export class EntityTablesComponent implements OnInit {
   }
 
   openFormModal(modalDom) {
-    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
       this.closeModal = `Closed with: ${result}`;
     }, (reason) => {
       this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  getTags(tagTypeId) {
+    const params = new HttpParams()
+      .set('id', tagTypeId);
+    this.tagService.getTagsByTagType(params).subscribe((data) => {
+      this.tags = data;
+    }, error => console.log(error));
   }
 
   deleteRecord() {
@@ -118,24 +157,92 @@ export class EntityTablesComponent implements OnInit {
 
     const newEntityRecord = this.formGroup.value;
     this.entityService.addNewEntityRecord(newEntityRecord, params).subscribe((data) => {
-      window.location.reload();
-    }, error => { console.log(error)})
+      this.getEntityData();
+      this.alertService.success(`New record has been successfully inserted `);
+    }, error => {
+      this.alertService.error(`New record has not been successfully inserted `);
+    });
+    this.modalService.dismissAll('Dismissed after saving data');
+    this.router.navigate(['/entity/' + this.entityId]);
+
+    if (this.formGroup.valid) {
+      setTimeout(() => {
+        this.formGroup.reset();
+        this.submitted = false;
+      }, 100);
+    }
+  }
+
+  addTagToRecord() {
+    const newTaggingRecord = this.tagFormGroup.value;
+    const params = new HttpParams()
+      .set('id', this.entityId);
+
+    const post = {};
+    post['mis_entity_id'] = this.entityId;
+    post['record_id'] = this.selected[0]['id'];
+    post['tag_type_id'] = newTaggingRecord.tagType;
+    post['tag_id'] = newTaggingRecord.tag;
+
+    this.tagService.addEntityTagRecord(post, params).subscribe((data) => {
+      this.getEntityData();
+      this.alertService.success(`Record has been tagged successfully`);
+    }, error => {
+      this.alertService.error(`Record has not been tagged`);
+    });
+    this.modalService.dismissAll('Dismissed after saving data');
+    this.router.navigate(['/entity/' + this.entityId]);
+
+    if (this.tagFormGroup.valid) {
+      setTimeout(() => {
+        this.tagFormGroup.reset();
+        this.submitted = false;
+      }, 100);
+    }
+  }
+
+  removeTagToRecord() {
+    const taggingRecord = this.tagFormGroup.value;
+    const params = new HttpParams()
+      .set('id', this.entityId);
+
+    const post = {};
+    post['mis_entity_id'] = this.entityId;
+    post['record_id'] = this.selected[0]['id'];
+    post['tag_id'] = taggingRecord.tag;
+
+    this.tagService.removeEntityTagRecord(post, params).subscribe((data) => {
+      this.getEntityData();
+      this.alertService.success(`Record has been untagged successfully`);
+    }, error => {
+      this.alertService.error(`Record has not been untagged`);
+    });
+    this.modalService.dismissAll('Dismissed after saving data');
+    this.router.navigate(['/entity/' + this.entityId]);
+
+    if (this.tagFormGroup.valid) {
+      setTimeout(() => {
+        this.tagFormGroup.reset();
+        this.submitted = false;
+      }, 100);
+    }
   }
 
   generateFormInputConfigs(questions: any) {
     const configs = [];
     const controlsConfig = {}
     for (const question of questions) {
-      const inputProperties = {};
-      inputProperties['label'] = question['displayName'];
-      inputProperties['type'] = this.getInputType(question['dataType']);
-      inputProperties['controlName'] = question['fieldName'];
-      configs.push(inputProperties);
-      if (question['mandatory'] === 'Yes') {
-        controlsConfig[question['fieldName']] = ['', Validators.required];
-      }
-      else {
-        controlsConfig[question['fieldName']] = [''];
+      if (question['fieldType'] !== 'Key Field' && question['fieldType'] !== 'Tag Field') {
+        const inputProperties = {};
+        inputProperties['label'] = question['displayName'];
+        inputProperties['type'] = this.getInputType(question['dataType']);
+        inputProperties['controlName'] = question['fieldName'];
+        configs.push(inputProperties);
+        if (question['mandatory'] === 'Yes') {
+          controlsConfig[question['fieldName']] = ['', Validators.required];
+        } else {
+          controlsConfig[question['fieldName']] = [''];
+        }
       }
     }
     this.formGroup = this.formBuilder.group(controlsConfig);

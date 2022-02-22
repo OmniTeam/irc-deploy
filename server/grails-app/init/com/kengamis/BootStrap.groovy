@@ -79,6 +79,24 @@ class BootStrap {
                 extraParams: 'class:com.kengamis.tasks.CentralDataImportJob',
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
+
+        TaskDef.findByName("Start Camunda Instances Job") ?: new TaskDef(
+                name: 'Start Camunda Instances Job',
+                description: 'Starts Camunda Instances',
+                cronExpression: '0 0/60 * * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.StartCamundaInstancesJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
+
+        TaskDef.findByName("TaskList Job") ?: new TaskDef(
+                name: 'TaskList Job',
+                description: 'Download and Upload tasks',
+                cronExpression: '0 0/5 * * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.TasklistSyncJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
     }
 
     def initStartUpJobs() {

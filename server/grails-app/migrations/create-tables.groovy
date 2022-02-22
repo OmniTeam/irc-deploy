@@ -716,4 +716,168 @@ databaseChangeLog = {
     changeSet(author: "Bryan (generated)", id: "1641561324661-4") {
         addForeignKeyConstraint(baseColumnNames: "entity_view_id", baseTableName: "entity_view_fields", constraintName: "FKio7hqe8r4oyua9qfs7g5sbmar", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view", validate: "true")
     }
+
+    changeSet(author: "BrunoJay (generated)", id: "1641542082472-1") {
+        createTable(tableName: "task_list") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "task_listPK")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "output_variables", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_def_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "input_variables", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "synced", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "form_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "task_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "task_definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "BrunoJay (generated)", id: "1641553977460-1") {
+        addColumn(tableName: "task_list") {
+            column(name: "task_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "BrunoJay (generated)", id: "1641554948339-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "form_id", tableName: "task_list")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644499803165-1") {
+        createTable(tableName: "tag") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tagPK")
+            }
+
+            column(name: "tag_type_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644499803165-2") {
+        createTable(tableName: "tag_type") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tag_typePK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644499803165-3") {
+        addForeignKeyConstraint(baseColumnNames: "tag_type_id", baseTableName: "tag", constraintName: "FK4dal6a59cl5t8omhsi2yrtk0g", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "tag_type", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644824111661-1") {
+        addColumn(tableName: "tag_type") {
+            column(name: "mis_entity_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644824111661-2") {
+        addForeignKeyConstraint(baseColumnNames: "mis_entity_id", baseTableName: "tag_type", constraintName: "FK2yamjvvmhg3koumfynkxt9ail", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "mis_entity", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644832502002-1") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "enable_tagging", type: "bit") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644832502002-2") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "prefix", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644847113497-1") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "prefix_increment_table", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1644911791342-1") {
+        addColumn(tableName: "mis_entity") {
+            column(name: "entity_tag_table", type: "varchar(255)")
+        }
+    }
+
+
 }

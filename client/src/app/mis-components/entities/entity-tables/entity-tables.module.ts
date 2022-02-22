@@ -6,6 +6,7 @@ import {EntityTablesComponent} from "./entity-tables.component";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {EntityViewTableModule} from "../../entity-views/entity-view-table/entity-view-table.module";
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {NgSelectModule} from "@ng-select/ng-select";
     NgxDatatableModule,
     ReactiveFormsModule,
     FormsModule,
-    NgSelectModule
+    NgSelectModule,
+    EntityViewTableModule
   ]
 })
 export class EntityTablesModule { }

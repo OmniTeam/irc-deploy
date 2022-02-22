@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {EntityService} from "../../../services/entity.service";
+import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'app-create-entities',
@@ -63,7 +64,8 @@ export class CreateEntitiesComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
-              private entityService: EntityService) {
+              private entityService: EntityService,
+              private alertService: AlertService) {
   }
 
   ngOnInit(): void {
@@ -75,7 +77,9 @@ export class CreateEntitiesComponent implements OnInit {
       orderOfDisplay: [1, [Validators.required]],
     })
     this.formGroup = this.formBuilder.group({
-      name: ['', [Validators.required]]
+      name: ['', [Validators.required]],
+      prefix: ['', [Validators.required]],
+      enableTagging: [false, [Validators.required]],
     });
     this.rows = [];
   }
@@ -95,13 +99,42 @@ export class CreateEntitiesComponent implements OnInit {
     } else {
       this.formData = this.formGroup.value;
       let entityName = this.formData.name;
+      let codeField = {};
+      codeField['displayName'] = 'Code';
+      codeField['fieldName'] = '_code';
+      codeField['fieldType'] = 'Key Field';
+      codeField['dataType'] = 'String';
+      codeField['sqlDataType'] = 'text';
+      codeField['mandatory'] = 'Yes';
+
+      // Add Tag Field is its enabled
+      if (this.formData.enableTagging === true) {
+        let tagField = {};
+        tagField['displayName'] = 'Tag';
+        tagField['fieldName'] = '_tag';
+        tagField['fieldType'] = 'Tag Field';
+        tagField['dataType'] = 'String';
+        tagField['sqlDataType'] = 'text';
+        tagField['mandatory'] = 'No';
+        tagField['orderOfDisplay'] = 100;
+        this.rows.push(tagField);
+        let entityTagTable = {"entityTagTable": this.generateEntityTagTableName(entityName)};
+        this.formData = Object.assign(this.formData, entityTagTable);
+      }
+      this.rows.push(codeField);
+
       let entityFields = {"entityFields": this.rows};
       let tableName = {"tableName": this.generateEntityTableName(entityName)};
+      let prefixIncrementTable = {"prefixIncrementTable": this.generateEntityPrefixIncrementTableName(entityName)};
       this.formData = Object.assign(this.formData, entityFields);
       this.formData = Object.assign(this.formData, tableName);
+      this.formData = Object.assign(this.formData, prefixIncrementTable);
       this.entityService.createEntity(this.formData).subscribe((data) => {
+        this.alertService.success(`Entity record has been created successfully`);
         this.router.navigate(['/entity']);
-      }, error => console.log(error));
+      }, error => {
+        this.alertService.error(`Entity record has not been successfully created`);
+      });
     }
   }
 
@@ -120,6 +153,13 @@ export class CreateEntitiesComponent implements OnInit {
       this.rows.push(this.formDataField);
       this.rows = [...this.rows];
     }
+
+    if (this.formGroupField.valid) {
+      setTimeout(() => {
+        this.formGroupField.reset();
+        this.submitFields = false;
+      }, 100);
+    }
   }
 
   editField() {
@@ -131,7 +171,15 @@ export class CreateEntitiesComponent implements OnInit {
   }
 
   generateEntityTableName(entityName: string): string {
-    return entityName.toLowerCase().replace(' ', '_');
+    return this.replaceAll(entityName.toLowerCase(), ' ', '_');
+  }
+
+  generateEntityPrefixIncrementTableName(entityName: string): string {
+    return this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_prefix_increment';
+  }
+
+  generateEntityTagTableName(entityName: string): string {
+    return this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_tagging';
   }
 
   generateSqlDataType(dataType: string): string {
@@ -153,7 +201,7 @@ export class CreateEntitiesComponent implements OnInit {
   }
 
   generateFieldName(displayName: string): string {
-    return displayName.toLowerCase().replace(' ', '_');
+    return '_' + this.replaceAll(displayName.toLowerCase(), ' ', '_');
   }
 
   updateValue(event, cell, rowIndex) {
@@ -161,6 +209,15 @@ export class CreateEntitiesComponent implements OnInit {
     this.rows[rowIndex][cell] = event.target.value;
     this.rows = [...this.rows];
     this.formData = this.rows[rowIndex];
+  }
+
+  onReset() {
+    this.formGroup.reset();
+    this.formGroupField.reset();
+  }
+
+  replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
   }
 
 }
