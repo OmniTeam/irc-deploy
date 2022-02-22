@@ -17,18 +17,11 @@ export class EntitiesComponent implements OnInit {
   private searchValue = '';
   enableLinkToForm = false;
   enableAddNewView = false;
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   activeRow: any;
   SelectionType = SelectionType;
   search = '';
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 50,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
   entityId: any;
   constructor(private router: Router,
               private entityService: EntityService,
@@ -36,7 +29,7 @@ export class EntitiesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 50});
+    this.reloadTable();
   }
 
   onCheckboxChangeFn(event) {
@@ -89,11 +82,6 @@ export class EntitiesComponent implements OnInit {
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.page.offset}`)
-      .set('search', `${this.searchValue}`);
-
     this.entityService.getEntities().subscribe((data) => {
       let rowData = []
       for (let record of data) {
@@ -112,7 +100,6 @@ export class EntitiesComponent implements OnInit {
 
   entriesChange($event) {
     this.entries = $event.target.value;
-    this.reloadTable();
   }
 
   onActivate(event) {
@@ -121,7 +108,6 @@ export class EntitiesComponent implements OnInit {
 
   filterTable($event) {
     this.search = $event.target.value;
-    this.reloadTable();
   }
 
   onSelect({selected}) {
@@ -130,17 +116,5 @@ export class EntitiesComponent implements OnInit {
     if (selected) {
       this.entityId = this.selected[0].id
     }
-  }
-
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
-    this.reloadTable();
   }
 }

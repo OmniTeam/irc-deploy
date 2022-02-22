@@ -18,8 +18,7 @@ class TagTypeController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index() {
         def tagTypes = []
         tagTypeService.list(params).each { tagType ->
             def newTagTypeObject = [:]
