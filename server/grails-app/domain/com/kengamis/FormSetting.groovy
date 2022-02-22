@@ -45,6 +45,7 @@ class FormSetting {
     }
 
     static mapping = {
+        id generator: 'uuid2'
         sort 'displayName'
         questionText type: 'text'
         displayName type: 'text'
