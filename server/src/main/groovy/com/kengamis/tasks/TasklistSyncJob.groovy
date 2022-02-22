@@ -54,8 +54,6 @@ class TasklistSyncJob extends Script {
                         def hasMore = json['hasMore']
                         def nextStart = json['nextStart']
 
-                        println("................tasklist job connected to camunda................")
-
                         //Setting the parser type to JsonParserLax
                         tasklist.each { task ->
                             def returnedVariables = []
