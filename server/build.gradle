@@ -125,6 +125,8 @@ dependencies {
     compile 'com.omnitech:oxd-jooq:0.3'
     compile 'com.omnitech:topological-sorting-directed-graph:0.1'
     compile 'com.omnitech:sql-logical-ids:0.11'
+
+    compile 'org.grails.plugins:spring-security-acl:4.0.1.BUILD-SNAPSHOT'
 }
 
 bootRun {
@@ -146,7 +148,12 @@ mainClassName = 'com.kengamis.Application'
 // Optional: Customize the jar properties:
 //  https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html
 jar {
-    archiveName('kengamis.jar')
+    archiveName('crvpf-server.jar')
+}
+bootJar {
+    archiveBaseName = 'crvpf-server'
+    archiveVersion = '1.0.0'
+    archiveFileName = 'crvpf-server.jar'
 }
 test {
     ignoreFailures = true

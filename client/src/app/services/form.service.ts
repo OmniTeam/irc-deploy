@@ -35,4 +35,8 @@ export class FormService {
   updateForm(id, formData): Observable<any> {
     return this.http.put(`${environment.serverUrl}/form/${id}`, formData);
   }
+
+  exportFormData(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/data/get_export_form_data`, {params});
+  }
 }

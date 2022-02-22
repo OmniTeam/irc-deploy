@@ -4,6 +4,7 @@ import com.kengamis.*
 import com.softkiwi.algorithms.graphs.DefaultGraph
 import groovy.transform.Memoized
 import groovy.util.logging.Log4j
+import org.apache.commons.validator.FormSet
 import org.jooq.DSLContext
 import org.openxdata.markup.XformType
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,10 +45,12 @@ class FormData {
         record = jooq.selectFrom(table(tableName))
                 .where(field('__id').eq(id))
                 .fetchOneMap()
+
+        loadChildren()
         return this
     }
 
-    FormData loadByUniqueId(String uniqueId){
+    FormData loadByUniqueId(String uniqueId) {
         record = jooq.selectFrom(table(tableName))
                 .where(field('unique_id').eq(uniqueId))
                 .fetchOneMap()
@@ -57,8 +60,7 @@ class FormData {
 
     FormData lazyLoad() {
         def headers = FormSetting.findAllByFormAndViewInTable(form, true, [sort: "orderOfDisplayInTable"])
-        def groups = hasGroups(headers)
-        def otherHeaders = groups ? ["$tableName['__id'] as parentId"] : ['__id', 'submitterName', 'submissionDate']
+        def otherHeaders =  ['__id', 'submitterName', 'submissionDate']
         def selectFields = headers.collect { field(it.field) }
         otherHeaders.each { selectFields << field(it) }
         record = jooq.select(selectFields)
@@ -68,16 +70,38 @@ class FormData {
         return this
     }
 
+
+    FormData exportLazyLoad() {
+        def headers = FormSetting.findAllByFormAndXformTypeNotEqual(form, 'repeat')
+        def selectFields = headers.collect { field(it.field) }
+        record = jooq.select(selectFields)
+                .from(table(tableName))
+                .where(field('__id').eq(id))
+                .fetchOneMap()
+        return this
+    }
+
+    FormData loadChildren() {
+        def groupQns
+
+        if (formSetting)
+            formSetting.childGroupsAndRepeats
+        else
+            groupQns = form.findAllRepeatAndGroupQns()
+
+        for (gn in groupQns) {
+            def children = loadChildren(gn)
+            record.put(gn.field, children)
+        }
+        return this
+    }
+
     static FormData load(String id, String formName) {
         return load(id, Form.findByName(formName))
     }
 
     static FormData load(String id, Form form) {
         return init(id, form).load()
-    }
-
-    String getOxdId() {
-        return getAt('openxdata_form_data_id').value
     }
 
     static def getFieldValue(String id, String field, String formTable) {
@@ -153,24 +177,40 @@ class FormData {
 
     List<String> query(String returnField, FormSetting conditionSetting, def value) {
 //    ToDo fix situations where some settings are in repeat questions
-       /* if (conditionSetting.parentFormSetting && conditionSetting.parentFormSetting.xformType == XformType.REPEAT.value) {
-            tableName = conditionSetting.parentFormSetting.tableName
-        }*/
-        try{
+        /* if (conditionSetting.parentFormSetting && conditionSetting.parentFormSetting.xformType == XformType.REPEAT.value) {
+             tableName = conditionSetting.parentFormSetting.tableName
+         }*/
+        try {
             List<String> result = jooq.select(field(returnField))
                     .from(table(tableName))
                     .where(field(conditionSetting.field).eq(value))
                     .fetchMaps().collect { it.get(returnField) }
 
             return result
-        }catch(Exception ex){
-           log.error(ex.getMessage())
+        } catch (Exception ex) {
+            log.error(ex.getMessage())
         }
         return Collections.EMPTY_LIST
     }
 
     boolean hasGroups(def headers) {
         return headers.any { it.parentFormSetting?.xformType in [XformType.GROUP.value, XformType.REPEAT.value] }
+    }
+
+    List<FormData> loadChildren(FormSetting formSettingParam) {
+        def records = jooq.selectFrom(table(formSettingParam.tableName))
+                .where(field('parentId').eq(id))
+                .fetchMaps()
+
+
+        def formDatas = records.collect { Map r ->
+            new FormData(id: r.get('Id'),
+                    formSetting: formSettingParam,
+                    form: form,
+                    parentId: id,
+                    record: r).loadChildren()
+        }
+        return formDatas
     }
 }
 

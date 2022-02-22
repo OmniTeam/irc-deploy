@@ -1,5 +1,6 @@
 package com.kengamis
 
+import grails.util.Holders
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
@@ -25,5 +26,13 @@ class Study implements Serializable {
 
     static constraints = {
         centralId nullable: false
+    }
+
+    static Study getCurrentStudy(){
+        def study = Holders.getApplicationContext().servletContext['currentStudy']
+        if (study){
+            return study
+        }
+        return null
     }
 }

@@ -10,6 +10,8 @@ import * as dc from 'dc';
 import * as crossfilter from 'crossfilter2/crossfilter';
 import * as d3Tip from 'd3-tip';
 import * as L from 'leaflet';
+import * as XLSX from 'xlsx';
+import {ExportService} from "../../services/export.service";
 
 const iconRetinaUrl = '../../../assets/leaflet/marker-icon-2x.png';
 const iconUrl = '../../../assets/leaflet/marker-icon.png';
@@ -70,12 +72,15 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   searchValue = '';
   private map;
   formDataRecord: any;
+  repeatRows: Object[];
+  repeatColumns: Object[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private formService: FormService,
               private modalService: NgbModal,
-              private http: HttpClient) {
+              private http: HttpClient,
+              private exportService: ExportService) {
   }
 
   entriesChange($event) {
@@ -316,14 +321,14 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     for (const column of array) {
       const columnProperties = {};
       columnProperties['prop'] = column['field'];
-      columnProperties['name'] = column['displayName'];
+      columnProperties['name'] = column['questionText'];
       columns.push(columnProperties);
     }
     return columns;
   }
 
   userMappings(array) {
-    if(array.length > 0) {
+    if (array.length > 0) {
       const users = [];
       for (const user of array) {
         const userProperties = {};
@@ -341,9 +346,21 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', this.formtable)
       .set('id', id);
     this.formService.getFormDataRecord(params).subscribe((data) => {
+      this.formDataRecord = [];
       if (data !== null) {
         document.getElementById("form-data-display").style.display = "block";
-        this.formDataRecord = data;
+        for (const record of data) {
+          let recordObject = {};
+          recordObject['question'] = record.question;
+          recordObject['xformtype'] = record.xformtype;
+          if (record['xformtype'] === "repeat") {
+            this.repeatRows = record['value']['resultList'];
+            this.repeatColumns = this.columnMappings(record['value']['headerList']);
+          } else {
+            recordObject['value'] = record.value;
+          }
+          this.formDataRecord.push(recordObject);
+        }
       } else {
         document.getElementById("form-data-display").style.display = "none";
         this.formDataRecord = [];
@@ -449,5 +466,23 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       this.selectedUser = '';
     }
     this.getFormData();
+  }
+
+  exportExcelFormData() {
+    const params = new HttpParams()
+      .set('formtable', `${this.formtable}`);
+
+    this.formService.exportFormData(params).subscribe((data) => {
+      this.exportService.exportJsonToExcel(data['data'], data['file']);
+    }, error => console.log(error));
+  }
+
+  exportCSVFormData() {
+    const params = new HttpParams()
+      .set('formtable', `${this.formtable}`);
+    this.formService.exportFormData(params).subscribe((data) => {
+      console.log(data['data']);
+      this.exportService.exportToCsv(data['data'], data['file']);
+    }, error => console.log(error));
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import { v4 as uuid } from 'uuid';
 
@@ -38,22 +38,25 @@ export class CommentNode {
   styleUrls: ['./comments.component.css']
 })
 export class CommentsComponent implements OnInit {
-  @Input()
-  comments:CommentNode[] = [];
+  @Input() comments:CommentNode[] = [];
+  @Input() isRecommendation: boolean = false;
+
+  @Output() commentsChanged: EventEmitter<CommentNode[]> = new EventEmitter();
+
   text:string;
   numberOfLikes:number;
 
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    console.log("Comments", this.comments);
+    //console.log("Component Comments", this.comments);
   }
 
   addComment(comment:CommentNode){
     comment.addAnswer(new CommentNode(uuid(), this.text, this.authService.getLoggedInUsername(),[], [], new Date()));
     comment.isOpen = false;
     this.text="";
-    console.log(this.comments);
+    this.commentsChanged.emit(this.comments);
   }
 
   openCommentText(comment){
@@ -64,10 +67,10 @@ export class CommentsComponent implements OnInit {
   deleteComment(comment:CommentNode){
     let index = this.comments.indexOf(comment);
     this.comments = this.comments.splice(index,1);
+    this.commentsChanged.emit(this.comments);
   }
 
   isLiked(comment:CommentNode) : boolean {
-    console.log(comment.likes.includes(this.authService.getLoggedInUsername()));
     return comment.likes.includes(this.authService.getLoggedInUsername());
   }
 
@@ -91,6 +94,6 @@ export class CommentsComponent implements OnInit {
     if (index !== -1) {
       this.comments[index] = newComment;
     }
+    this.commentsChanged.emit(this.comments);
   }
-
 }
