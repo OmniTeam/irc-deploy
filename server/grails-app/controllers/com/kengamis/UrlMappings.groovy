@@ -31,7 +31,7 @@ class UrlMappings {
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
         post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
 
-        group "/api/v1/odxRest/", {
+        group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
             'getServerDbVersion'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getServerDbVersion')
             'getPreloadEntities'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getPreloadEntities')
