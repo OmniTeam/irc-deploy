@@ -82,6 +82,7 @@ class UserRole implements Serializable {
 	}
 
 	static mapping = {
+		id generator: 'uuid2'
 		id composite: ['user', 'role']
 		//version false
 	}

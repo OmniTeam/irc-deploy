@@ -21,7 +21,9 @@ class Form {
     static hasMany = [formSettings: FormSetting, userForms:UserForm]
     static belongsTo = [study: Study]
 
-
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
         name nullable: false
         description nullable: true

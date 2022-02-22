@@ -23,6 +23,7 @@ class Role {
 	}
 
 	static mapping = {
+		id generator: 'uuid2'
 		//cache true
 	}
 }

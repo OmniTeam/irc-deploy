@@ -52,11 +52,11 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 grails.gorm.failOnError = false
-server.port = 8081
+server.port = 8080
 
 
 grails.gorm.default.mapping = {
-    id generator: 'uuid2'
+//    id generator: 'uuid2'
     version false
     autoTimestamp true
 }

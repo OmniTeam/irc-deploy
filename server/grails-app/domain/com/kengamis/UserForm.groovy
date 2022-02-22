@@ -15,6 +15,9 @@ class UserForm {
 
     static belongsTo = [form: Form]
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
         user unique: 'form'
     }
