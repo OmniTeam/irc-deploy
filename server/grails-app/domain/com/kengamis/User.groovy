@@ -1,6 +1,6 @@
 package com.kengamis
 
-
+import grails.plugin.springsecurity.SpringSecurityUtils
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
@@ -28,11 +28,13 @@ class User {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
+        email nullable: true
 
 
     }
 
     static mapping = {
+        id generator: 'uuid2'
         password column: '`password`'
     }
 
@@ -86,6 +88,37 @@ class User {
         def groupIds = getGroups(Group.ROLE_SUPERVISOR).collect { it.id }
         if (!groupIds) return [this]
         return executeQuery("select distinct upg.user from UserGroup upg where upg.group.id in (:ids) ", [ids: groupIds])
+    }
+
+    Set<Form> getLoggedInUserForms() {
+        if (SpringSecurityUtils.ifAnyGranted('ROLE_SUPER_ADMIN,ROLE_ADMIN')) {
+            return Form.list() as Set
+        } else {
+            UserForm.findAllByUser(this).collect { it.form } as Set
+        }
+    }
+
+    Set<Study> getLoggedInUserStudies() {
+        if (SpringSecurityUtils.ifAnyGranted('ROLE_SUPER_ADMIN,ROLE_ADMIN')) {
+            return Study.list(sort: 'name',order: 'asc') as Set
+        } else {
+            UserStudy.findAllByUser(this).collect { it.study }.sort {it.name} as Set
+        }
+    }
+
+    boolean hasAnyFormPermissions(Study study) {
+        if(isAdmin()) return true
+        return !UserForm.getUserStudyForms(study,this).isEmpty()
+    }
+
+    boolean hasAccessToForm(Form form) {
+        if (id == null)
+            return false
+        return loggedInUserForms.any { form.id == it.id }
+    }
+
+    boolean isAdmin(){
+        return SpringSecurityUtils.ifAnyGranted('ROLE_SUPER_ADMIN,ROLE_ADMIN')
     }
 
 }

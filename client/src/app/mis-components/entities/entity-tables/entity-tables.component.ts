@@ -17,7 +17,7 @@ import {TagService} from "../../../services/tags";
 export class EntityTablesComponent implements OnInit {
 
   entityName = "";
-  entries = 50;
+  entries = 10;
   selected = [];
   activeRow: any;
   rows: Object[];

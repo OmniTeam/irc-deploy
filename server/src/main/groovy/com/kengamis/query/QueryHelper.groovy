@@ -228,7 +228,7 @@ class QueryHelper {
     }
 
     private String getUserFilter() {
-        if (params.userFilter != '') {
+        if (params.userFilter) {
             if (userBaseTable)
                 return "(${escapeField userBaseTable}.submitterName = '${escapeSql params.userFilter}')"
             else
@@ -238,7 +238,7 @@ class QueryHelper {
     }
 
     private String getDateRangeFilterExpr() {
-        if (params.dateFrom != '' && params.dateTo != '') {
+        if (params.dateFrom && params.dateTo) {
             if (userBaseTable)
                 return "(${escapeField userBaseTable}.submissionDate BETWEEN '${escapeSql params.dateFrom}' AND '${escapeSql params.dateTo}')"
             else
@@ -349,7 +349,7 @@ class QueryHelper {
 
     List<Map> getData() {
         log.trace("Query: Fetching Data: [$query]")
-        withMisSqlNonTx { rows("$query  limit $maxRows offset $offset".toString()) }
+        withMisSqlNonTx { rows("$query".toString()) }
     }
 
     List<Map> getFormDataCollectors() {

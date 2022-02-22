@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {EntityService} from "../../services/entity.service";
-import {Entity} from "../../models/entity";
-import {Subject} from "rxjs";
+import {AlertService} from "../../services/alert";
+import {HttpParams} from "@angular/common/http";
+import {SelectionType} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-entities',
@@ -11,17 +12,76 @@ import {Subject} from "rxjs";
 })
 export class EntitiesComponent implements OnInit {
 
-  rows: Entity[] = [];
+  rows: Object[];
+  submitted = false;
+  private searchValue = '';
   enableLinkToForm = false;
   enableAddNewView = false;
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
-
+  entries: number = 10;
+  selected: any[] = [];
+  activeRow: any;
+  SelectionType = SelectionType;
+  search = '';
+  entityId: any;
   constructor(private router: Router,
-              private entityService: EntityService) {
+              private entityService: EntityService,
+              private alertService: AlertService) {
   }
 
   ngOnInit(): void {
+    this.reloadTable();
+  }
+
+  onCheckboxChangeFn(event) {
+    this.enableAddNewView = !!event.target.checked;
+  }
+
+  createNewEntity() {
+    this.router.navigate(['/createEntity']);
+  }
+
+  linkToForm(entityId: any) {
+    this.router.navigate(['/linkForm', entityId]);
+  }
+
+  createNewView() {
+    this.router.navigate(['/createEntityView', this.entityId]);
+  }
+
+  getGroupEntityViews(entityViews): string {
+    let d = [];
+    for (let view of entityViews) {
+      let viewName = view.name;
+      d.push(viewName);
+    }
+    return d.join(", ");
+  }
+
+  deleteEntity(row) {
+    let entityId = row.id
+    if (confirm('Are you sure to delete this Entity?')) {
+      this.entityService.deleteEntity(entityId).subscribe((result) => {
+          this.alertService.warning(`Entity has been  deleted `);
+          this.router.navigate(['/entity']);
+          this.reloadTable();
+        }, error => {
+          this.alertService.error(`Entity could not be deleted`)
+        }
+      );
+    }
+  }
+
+  onChangeSearch(event) {
+    console.log(event.target.value)
+    if (!event.target.value)
+      this.searchValue = ''
+    else {
+      this.searchValue = event.target.value;
+    }
+    this.reloadTable();
+  }
+
+  reloadTable() {
     this.entityService.getEntities().subscribe((data) => {
       let rowData = []
       for (let record of data) {
@@ -35,79 +95,26 @@ export class EntitiesComponent implements OnInit {
         rowData.push(rowRecord);
       }
       this.rows = rowData;
-      this.dtTrigger.next();
     }, error => console.log(error));
-
-    this.dtOptions = {
-      pagingType: "numbers",
-      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-      processing: true,
-      responsive: true,
-      dom: 'lfBrtip',
-      columnDefs: [{
-        orderable: false,
-        className: 'select-checkbox',
-        targets: 7
-      }],
-      select: {
-        style: 'os',
-      },
-      buttons: [
-        {
-          extend: 'selectedSingle',
-          text: 'Link To Form',
-          action: ( e, dt, button, config ) => {
-            let entityId = dt.row( { selected: true } ).data()[0];
-            this.linkToForm(entityId);
-          }
-        },
-        {
-          extend: 'selectedSingle',
-          text: 'Add New View',
-          action: ( e, dt, button, config ) => {
-            let entityId = dt.row( { selected: true } ).data()[0];
-            this.createNewView(entityId);
-          }
-        },
-
-        {
-          text: 'Create New Entity',
-          action: ( e, dt, button, config ) => {
-            this.createNewEntity();
-          }
-        },
-        {
-          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
-          extend: 'csvHtml5',
-          title: 'Entity'
-        },
-        {
-          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
-          extend: 'excelHtml5',
-          title: 'Entity'
-        }
-      ]
-    };
   }
 
-  createNewEntity() {
-    this.router.navigate(['/createEntity']);
+  entriesChange($event) {
+    this.entries = $event.target.value;
   }
 
-  linkToForm(entityId: any) {
-    this.router.navigate(['/linkForm', entityId]);
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 
-  createNewView(entityId: any) {
-    this.router.navigate(['/createEntityView', entityId]);
+  filterTable($event) {
+    this.search = $event.target.value;
   }
 
-  getGroupEntityViews(entityViews): string {
-    let d = [];
-    for (let view of entityViews) {
-      let viewName = view.name;
-      d.push(viewName);
+  onSelect({selected}) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+    if (selected) {
+      this.entityId = this.selected[0].id
     }
-    return d.join(", ");
   }
 }

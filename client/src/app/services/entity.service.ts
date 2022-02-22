@@ -34,16 +34,23 @@ export class EntityService {
     return this.http.get(`${environment.serverUrl}/misEntity/get_entity_fields`, {params});
   }
 
+  deleteEntity(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/misEntity/${deletedRow}`);
+  }
+
   getEntityViews(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/entityView`);
   }
 
   createEntityView(formData): Observable<any> {
-    console.log(formData);
     return this.http.post(`${environment.serverUrl}/entityView`, formData);
   }
 
   getEntityViewData(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/entityView/view_data`, {params});
+  }
+
+  deleteEntityView(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/entityView/${deletedRow}`);
   }
 }

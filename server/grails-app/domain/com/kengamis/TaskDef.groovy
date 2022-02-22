@@ -19,6 +19,9 @@ class TaskDef {
     Date dateCreated
     Date lastUpdated
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
         name nullable: false,unique: true
         description nullable: true

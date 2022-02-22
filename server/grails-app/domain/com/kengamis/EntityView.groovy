@@ -17,6 +17,7 @@ class EntityView {
     static hasMany = [viewFields: EntityViewFields]
 
     static mapping = {
+        id generator: 'uuid2'
         viewQuery type: 'text'
     }
 

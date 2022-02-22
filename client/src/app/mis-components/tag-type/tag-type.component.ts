@@ -14,18 +14,11 @@ import {EntityService} from "../../services/entity.service";
 })
 export class TagTypeComponent implements OnInit {
 
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   activeRow: any;
   tagTypeId = '';
   search = '';
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 50,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
   private searchValue = '';
   tagTypes: Object[];
   closeResult: string;
@@ -45,7 +38,7 @@ export class TagTypeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 50});
+    this.reloadTable();
     this.formGroup = this.formBuilder.group({
       name: ['', Validators.required],
       misEntity: ['', Validators.required]
@@ -138,13 +131,7 @@ export class TagTypeComponent implements OnInit {
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.page.offset}`)
-      .set('search', `${this.searchValue}`);
-
-    this.tagService.getTagTypes(params).subscribe((data) => {
-      console.log(data);
+    this.tagService.getTagTypes().subscribe((data) => {
       this.tagTypes = data;
     });
   }
@@ -166,17 +153,5 @@ export class TagTypeComponent implements OnInit {
   onSelect({selected}) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
-  }
-
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
-    this.reloadTable();
   }
 }

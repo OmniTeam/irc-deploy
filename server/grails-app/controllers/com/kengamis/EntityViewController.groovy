@@ -30,7 +30,7 @@ class EntityViewController {
         respond entityViewService.list(params), model: [entityViewCount: entityViewService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond entityViewService.get(id)
     }
 
@@ -81,10 +81,18 @@ class EntityViewController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
+        }
+
+        def entityView = EntityView.get(id)
+        def entityViewTable = entityView.tableName
+        def deleteTableQuery = " DROP VIEW IF EXISTS ${entityViewTable}".toString()
+        def results = AppHolder.withMisSqlNonTx { execute(deleteTableQuery) }
+        if (!results) {
+            log.info("Views successfully deleted")
         }
 
         entityViewService.delete(id)
@@ -100,8 +108,7 @@ class EntityViewController {
         }
     }
 
-    def viewData(Integer max) {
-        params.max = Math.min(max ?: 100, 100)
+    def viewData() {
         def entityView = EntityView.get(params.id)
         params.formtable = entityView.tableName
         def query
