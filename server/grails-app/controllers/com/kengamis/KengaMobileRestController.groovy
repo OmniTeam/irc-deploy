@@ -234,7 +234,7 @@ class KengaMobileRestController {
         def encodedPair = authString - 'Basic '
 //        def decodedPair = new String(new BASE64Decoder().decodeBuffer(encodedPair))
 //        def decodedPair = new String(Base64.getEncoder().decodeBase64(encodedPair.getBytes()))
-        def decodedPair = encodedPair.decodeBase64()
+        def decodedPair = new String(encodedPair.decodeBase64())
         println(decodedPair)
         def credentials = decodedPair.split(':')
         def user = User.findByUsername(credentials[0])
