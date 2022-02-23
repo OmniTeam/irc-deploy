@@ -91,10 +91,9 @@ export class EditUserComponent implements OnInit {
       this.formGroup = this.formBuilder.group({
         password: [null],
         username: [this.result?.username, [Validators.required]],
-        first_name: [this.result?.first_name, [Validators.required]],
-        last_name: [this.result?.last_name, [Validators.required]],
-        email: [this.result?.email, [Validators.required, Validators.email]],
-        telephone: [this.result?.telephone, [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
+        names: [this.result?.names, [Validators.required]],
+        email: [this.result?.email],
+        telephone: [this.result?.telephone],
         role: [this.result?.role],
         groups: [this.result?.groups],
         is_active: [this.result?.is_active],

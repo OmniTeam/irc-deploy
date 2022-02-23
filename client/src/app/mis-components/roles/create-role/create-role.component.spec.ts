@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateGroupComponent } from './create-group.component';
+import { CreateRoleComponent } from './create-role.component';
 
 describe('CreateSystemUserComponent', () => {
-  let component: CreateGroupComponent;
-  let fixture: ComponentFixture<CreateGroupComponent>;
+  let component: CreateRoleComponent;
+  let fixture: ComponentFixture<CreateRoleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateGroupComponent ]
+      declarations: [ CreateRoleComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateGroupComponent);
+    fixture = TestBed.createComponent(CreateRoleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

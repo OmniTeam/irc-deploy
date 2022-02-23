@@ -14,6 +14,7 @@ import {AuthService} from '../../../services/auth.service';
 import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
+import {UsernameValidator} from "../../../Validators/username.validator";
 
 
 @Component({
@@ -90,9 +91,14 @@ export class CreateUserComponent implements OnInit {
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
       email: [''],
+      telephone: [''],
+      role: [null],
+      groups: [null],
+      is_active: [false],
+      data_collector_Type: [],
     });
   }
 
@@ -115,7 +121,9 @@ export class CreateUserComponent implements OnInit {
   }
 
   resetForm() {
-    this.formGroup.reset();
+    this.formGroup.reset()
+    this.clicked =  false
+    this.submitted = false
   }
 
 }

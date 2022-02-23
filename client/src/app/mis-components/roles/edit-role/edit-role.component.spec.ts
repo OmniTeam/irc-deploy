@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditGroupComponent } from './edit-group.component';
+import { EditRoleComponent } from './edit-role.component';
 
 describe('EditSystemusersComponent', () => {
-  let component: EditGroupComponent;
-  let fixture: ComponentFixture<EditGroupComponent>;
+  let component: EditRoleComponent;
+  let fixture: ComponentFixture<EditRoleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditGroupComponent ]
+      declarations: [ EditRoleComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditGroupComponent);
+    fixture = TestBed.createComponent(EditRoleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

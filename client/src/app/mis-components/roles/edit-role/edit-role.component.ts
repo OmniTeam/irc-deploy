@@ -18,9 +18,9 @@ import {GroupsService} from "../../../services/groups.service";
 @Component({
   selector: 'app-edit-group',
   templateUrl: './edit-role.component.html',
-  styleUrls: ['./edit-group.component.scss']
+  styleUrls: ['./edit-role.component.scss']
 })
-export class EditGroupComponent implements OnInit {
+export class EditRoleComponent implements OnInit {
 
   constructor(
     private groupsService: GroupsService,

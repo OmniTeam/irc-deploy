@@ -19,10 +19,10 @@ import {GroupsService} from "../../../services/groups.service";
 
 @Component({
   selector: 'app-create-group',
-  templateUrl: './create-group.component.html',
-  styleUrls: ['./create-group.component.scss']
+  templateUrl: './create-role.component.html',
+  styleUrls: ['./create-role.component.scss']
 })
-export class CreateGroupComponent implements OnInit {
+export class CreateRoleComponent implements OnInit {
 
   constructor(
     private groupsService: GroupsService,
@@ -91,10 +91,10 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
       name: ['',[Validators.required]],
-      parent: [null, [Validators.required]],
+      /*parent: [null, [Validators.required]],
       access_to_central_data: [false],
       permissions: [null, [Validators.required]],
-      data_collectors: [null]
+      data_collectors: [null]*/
     });
   }
 
@@ -111,7 +111,7 @@ export class CreateGroupComponent implements OnInit {
     this.groupsService.createGroup(formData).subscribe((result) => {
         console.warn(result, 'Group created Successfully');
         this.alertService.success(`Group: ${this.formGroup.controls.name.value} has been created`);
-        this.router.navigate(['/groups']);
+        this.router.navigate(['/roles']);
     },error => {this.alertService.error("Failed to Create the Group")});
   }
 

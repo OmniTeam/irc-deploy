@@ -1,24 +1,24 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
-import {GroupsRoutingModule} from './groups-routing.module';
+import {RolesRoutingModule} from './roles-routing.module';
 import {DataTablesModule} from "angular-datatables";
-import {GroupsComponent} from "./groups.component";
+import {RolesComponent} from "./roles.component";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
-  declarations: [GroupsComponent],
+  declarations: [RolesComponent],
   imports: [
     CommonModule,
-    GroupsRoutingModule,
+    RolesRoutingModule,
     DataTablesModule,
     NgxDatatableModule,
     ReactiveFormsModule,
     NgSelectModule
   ]
 })
-export class GroupsModule {
+export class RolesModule {
 }

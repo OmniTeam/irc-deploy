@@ -90,10 +90,10 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      name: [''],
-      parent: [null],
+      name: ['',[Validators.required]],
+      parent: [null, [Validators.required]],
       access_to_central_data: [false],
-      permissions: [null],
+      permissions: [null, [Validators.required]],
       data_collectors: [null]
     });
   }
@@ -117,6 +117,8 @@ export class CreateGroupComponent implements OnInit {
 
   resetForm() {
     this.formGroup.reset();
+    this.clicked = false
+    this.submitted = false
   }
 
 }

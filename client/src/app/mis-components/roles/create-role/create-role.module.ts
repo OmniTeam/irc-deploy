@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CreateGroupRoutingModule } from './create-group-routing.module';
+import { CreateRoleRoutingModule } from './create-role-routing.module';
 import {ComponentsModule} from '../../../components/components.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {HttpClientModule} from '@angular/common/http';
 import {NgSelectModule} from '@ng-select/ng-select';
-import {CreateGroupComponent} from './create-group.component';
+import {CreateRoleComponent} from './create-role.component';
 
 
 @NgModule({
-  declarations: [CreateGroupComponent],
+  declarations: [CreateRoleComponent],
   imports: [
     CommonModule,
-    CreateGroupRoutingModule,
+    CreateRoleRoutingModule,
     ComponentsModule,
     FormsModule,
     NgxDatatableModule,
@@ -23,4 +23,4 @@ import {CreateGroupComponent} from './create-group.component';
     ReactiveFormsModule,
   ]
 })
-export class CreateGroupModule { }
+export class CreateRoleModule { }

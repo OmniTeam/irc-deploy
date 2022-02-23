@@ -1,17 +1,20 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {UserService} from '../services/user.service';
+import {UsersService} from "../services/users.service";
+
 
 export class UsernameValidator{
 
-    static  validateUsername(userService: UserService) {
+    static  validateUsername(userService: UsersService) {
         return (control: AbstractControl): ValidationErrors | null => {
             return userService.getUsers()
                 .subscribe(data => {
-                        control.setErrors(null)
-                        if (data.results.map(a=>a.username).includes(control.value)) {
+                        if(control.value){
+                          control.setErrors(null)
+                          if (data.map(a=>a.username).includes(control.value)) {
                             return control.setErrors({'alreadyExist': true})
-                        } else {
+                          } else {
                             return null;
+                          }
                         }
                     },
                     (error) => {

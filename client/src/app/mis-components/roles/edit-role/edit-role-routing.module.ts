@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {EditGroupComponent} from './edit-group.component';
+import {EditRoleComponent} from './edit-role.component';
 
 const routes: Routes = [
   {
     path:'',
-    component: EditGroupComponent
+    component: EditRoleComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EditGroupRoutingModule { }
+export class EditRoleRoutingModule { }

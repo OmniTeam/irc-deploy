@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EditGroupRoutingModule } from './edit-group-routing.module';
+import { EditRoleRoutingModule } from './edit-role-routing.module';
 import {ComponentsModule} from '../../../components/components.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {HttpClientModule} from '@angular/common/http';
 import {NgSelectModule} from '@ng-select/ng-select';
-import {EditGroupComponent} from './edit-group.component';
+import {EditRoleComponent} from './edit-role.component';
 
 
 @NgModule({
-  declarations: [EditGroupComponent],
+  declarations: [EditRoleComponent],
   imports: [
     CommonModule,
-    EditGroupRoutingModule,
+    EditRoleRoutingModule,
     ComponentsModule,
     FormsModule,
     NgxDatatableModule,
@@ -22,4 +22,4 @@ import {EditGroupComponent} from './edit-group.component';
     ReactiveFormsModule
   ]
 })
-export class EditGroupModule { }
+export class EditRoleModule { }

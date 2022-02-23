@@ -6,32 +6,32 @@ import {environment} from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class RolesService {
   baseurl = environment.serverUrl
-  urlUsers = `${this.baseurl}/user/`
+  userRoles = `${this.baseurl}/roles/`
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<any> {
-    return this.http.get(this.urlUsers);
+  getRoles(): Observable<any> {
+    return this.http.get(this.userRoles);
   }
-  getUsersFiltered(params): Observable<any> {
-    return this.http.get(this.urlUsers, {params});
-  }
-
-  createUser(formData): Observable<any> {
-    return this.http.post(this.urlUsers, formData);
+  getRolesFiltered(params): Observable<any> {
+    return this.http.get(this.userRoles, {params});
   }
 
-  updateUser(id, groupData): Observable<any> {
-    return this.http.get(`${this.urlUsers}${id}/`, groupData);
+  createRole(formData): Observable<any> {
+    return this.http.post(this.userRoles, formData);
   }
 
-  getCurrentUser(id){
-    return this.http.get(`${this.urlUsers}${id}`)
+  updateRole(id, groupData): Observable<any> {
+    return this.http.get(`${this.userRoles}${id}/`, groupData);
   }
 
-  deleteCurrentUser(p): Observable<any> {
-    return this.http.delete(`${this.urlUsers}${p}/`);
+  getCurrentRole(id){
+    return this.http.get(`${this.userRoles}${id}`)
+  }
+
+  deleteCurrentRole(p): Observable<any> {
+    return this.http.delete(`${this.userRoles}${p}/`);
   }
 }

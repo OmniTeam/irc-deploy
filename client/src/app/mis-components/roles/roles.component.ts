@@ -7,13 +7,14 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TagService} from "../../services/tags";
 import {HttpParams} from "@angular/common/http";
 import {GroupsService} from "../../services/groups.service";
+import {RolesService} from "../../services/roles.service";
 
 @Component({
   selector: 'app-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.css']
+  templateUrl: './roles.component.html',
+  styleUrls: ['./roles.component.css']
 })
-export class GroupsComponent implements OnInit {
+export class RolesComponent implements OnInit {
 
   entries: number = 500;
   selected: any[] = [];
@@ -35,14 +36,14 @@ export class GroupsComponent implements OnInit {
   submitted = false;
   private selectedTags=[];
   private checkedRow: any;
-  groups: any;
+  roles: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
               private modalService: NgbModal,
-              private groupsService: GroupsService
+              private rolesService: RolesService
   ) {
   }
 
@@ -62,12 +63,12 @@ export class GroupsComponent implements OnInit {
   }
 
 
-  addGroup(){
-    this.router.navigate(['group/create']);
+  addRole(){
+    this.router.navigate(['role/create']);
   }
 
   editTag(row) {
-    this.router.navigate(['group/edit/' + row.id]);
+    this.router.navigate(['role/edit/' + row.id]);
   }
 
   onSelected(event) {
@@ -83,10 +84,19 @@ export class GroupsComponent implements OnInit {
     console.log(this.selectedTags);
   }
 
-  deleteGroups() {
+  deleteRole(row){
+    this.rolesService.deleteCurrentRole(row).subscribe((result) => {
+      console.warn(result, 'Tags have been deleted');
+      this.router.navigate(['/groups']).then(() => {
+        window.location.reload();
+      });
+    })
+  }
+
+  deleteRoles() {
     const deletedRow = this.selectedTags;
     deletedRow.forEach((p) => {
-        this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
+        this.rolesService.deleteCurrentRole(p).subscribe((result) => {
           console.warn(result, 'Tags have been deleted');
           this.router.navigate(['/groups']).then(() => {
             window.location.reload();
@@ -136,9 +146,9 @@ export class GroupsComponent implements OnInit {
       .set('max', `${this.entries}`)
       .set('search', `${this.searchValue}`);
 
-    this.groupsService.getGroupsFiltered(params).subscribe((data) => {
-      this.groups =data;
-      this.page.count = this.groups.length
+    this.rolesService.getRolesFiltered(params).subscribe((data) => {
+      this.roles =data;
+      this.page.count = this.roles.length
     });
   }
 
