@@ -72,8 +72,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   searchValue = '';
   private map;
   formDataRecord: any;
-  repeatRows: Object[];
-  repeatColumns: Object[];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -354,9 +352,13 @@ export class FormDataComponent implements OnInit, AfterViewInit {
           recordObject['question'] = record.question;
           recordObject['xformtype'] = record.xformtype;
           if (record['xformtype'] === "repeat") {
-            this.repeatRows = record['value']['resultList'];
-            this.repeatColumns = this.columnMappings(record['value']['headerList']);
-          } else {
+            recordObject['repeatRows'] = record['value']['resultList'];
+            recordObject['repeatColumns'] = this.columnMappings(record['value']['headerList']);
+          }
+          else if(record['xformtype'] === "select") {
+            recordObject['selectOptions'] = record.value;
+          }
+          else {
             recordObject['value'] = record.value;
           }
           this.formDataRecord.push(recordObject);

@@ -357,7 +357,8 @@
 </div>
 <ng-template #formDataModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title w-100 text-center" id="modal-basic-title" style="font-size: 1.4rem !important;">{{ formName }}</h4>
+    <h4 class="modal-title w-100 text-center" id="modal-basic-title"
+        style="font-size: 1.4rem !important;">{{ formName }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
@@ -367,12 +368,22 @@
       <div class="row" *ngFor="let record of formDataRecord"
            style="border-bottom: 1px solid #e9ecef; padding: 10px !important; font-size: 0.9rem !important;">
         <div class="col-md-12">
-          <div class="row" *ngIf="!(record.xformtype == 'repeat')">
+          <div class="row" *ngIf="!(record.xformtype == 'repeat') && !(record.xformtype == 'select')">
             <div class="col-md-6">
               <span> {{ record.question }} </span>
             </div>
             <div class="col-md-6" style="border-left: 1px solid #e9ecef;">
               <span> {{ record.value }} </span>
+            </div>
+          </div>
+          <div class="row" *ngIf="record.xformtype == 'select'">
+            <div class="col-md-6">
+              <span> {{ record.question }} </span>
+            </div>
+            <div class="col-md-6" style="border-left: 1px solid #e9ecef;">
+              <div *ngFor="let option of record.selectOptions">
+                <span> {{ option }} </span>
+              </div>
             </div>
           </div>
           <div class="row" *ngIf="record.xformtype == 'repeat'">
@@ -388,9 +399,9 @@
                 [rowHeight]="'auto'"
                 [limit]="5"
                 rowHeight="auto"
-                [rows]="repeatRows"
+                [rows]="record.repeatRows"
               >
-                <ngx-datatable-column *ngFor="let col of repeatColumns; let i = index;"
+                <ngx-datatable-column *ngFor="let col of record.repeatColumns; let i = index;"
                                       name="{{col.name}}" prop="{{col.prop}}">
                 </ngx-datatable-column>
               </ngx-datatable>
