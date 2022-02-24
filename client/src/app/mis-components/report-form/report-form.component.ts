@@ -98,7 +98,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
           if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReviewVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
+            this.taskRecord.taskDefinitionKey === "Review_Performance_Report" ||
+            this.taskRecord.taskDefinitionKey === "Review_Program_Report") this.isReviewVisible = true;
           if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
 
           const params = new HttpParams()
@@ -250,7 +252,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     );
   }
 
-  changeForm(formName) {
+/*  changeForm(formName) {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
@@ -259,7 +261,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (formName == 'Approve') this.isApproveVisible = true;
     window.scroll(0, 0);
     this.success = false;
-  }
+  }*/
 
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
@@ -348,24 +350,28 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (this.report) {
       this.formViewService.updateReport(reportRecord, this.report.id).subscribe((data) => {
         this.error = false;
-        this.success = true; this.successMessage = "Updated Report";
+        this.success = true;
+        this.successMessage = "Updated Report";
       }, error => {
-        this.error = true; this.errorMessage = "Failed to update Report";
+        this.error = true;
+        this.errorMessage = "Failed to update Report";
         this.success = false;
         console.log(error);
       });
     } else {
       this.formViewService.createReport(reportRecord).subscribe((data) => {
         this.error = false;
-        this.success = true; this.successMessage = "Saved Report";
+        this.success = true;
+        this.successMessage = "Saved Report";
       }, error => {
-        this.error = true; this.errorMessage = "Failed to save Report";
+        this.error = true;
+        this.errorMessage = "Failed to save Report";
         this.success = false;
         console.log(error);
       });
     }
 
-    setTimeout(()=>{
+    setTimeout(() => {
       this.success = false;
       this.error = false;
     }, 3000);
@@ -420,13 +426,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     if (status === "save") {
       this.saveReport(reportValues, 'saved_for_later');
-      this.updateTaskStatus("In_Progress");
+      this.updateTaskStatus("in_progress");
       this.location.back();
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'final_submission');
-      this.updateTaskStatus("Under_Review");
-      this.changeForm('Review');
+      this.updateTaskStatus("completed");
+      this.location.back();
     }
   }
 
@@ -452,13 +458,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     if (status === "revise") {
       this.saveReport(reportValues, 'asked_for_revisions');
-      this.updateTaskStatus("Needs_Revision");
+      this.updateTaskStatus("needs_revision");
       this.location.back();
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'reviewed_and_submitted');
-      this.updateTaskStatus("Pending_Approval");
-      this.changeForm('Approve');
+      this.updateTaskStatus("completed");
+      this.location.back();
     }
   }
 
@@ -517,7 +523,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }
 
     this.saveReport(reportValues, 'approved_report');
-    this.updateTaskStatus("Approved");
+    this.updateTaskStatus("completed");
     this.location.back();
   }
 

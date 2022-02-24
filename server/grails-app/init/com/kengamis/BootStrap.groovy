@@ -94,7 +94,7 @@ class BootStrap {
                 description: 'Download and Upload tasks',
                 cronExpression: '0 0/5 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
-                extraParams: 'class:com.kengamis.tasks.TasklistSyncJob',
+                extraParams: 'class:com.kengamis.tasks.TaskListSyncJob',
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
     }
