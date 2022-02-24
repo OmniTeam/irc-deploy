@@ -11,14 +11,12 @@ class KengaGroup {
     String name
     Date dateCreated
     Date lastUpdated
-    KengaGroup parent
 
     static mapping = {
         id generator: 'uuid2'
     }
     static constraints = {
         name blank: false,unique: true
-        parent nullable: true
     }
 
 }
