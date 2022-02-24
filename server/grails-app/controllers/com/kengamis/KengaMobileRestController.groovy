@@ -241,6 +241,7 @@ class KengaMobileRestController {
         } else {
             return null
         }
+
     }
 
     private def getFilterEntity(def filters) {
