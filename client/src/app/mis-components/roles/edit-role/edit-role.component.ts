@@ -14,6 +14,7 @@ import {UsersService} from "../../../services/users.service";
 import {AlertService} from "../../../services/alert";
 import {AuthService} from "../../../services/auth.service";
 import {GroupsService} from "../../../services/groups.service";
+import {RolesService} from "../../../services/roles.service";
 
 @Component({
   selector: 'app-edit-group',
@@ -23,7 +24,7 @@ import {GroupsService} from "../../../services/groups.service";
 export class EditRoleComponent implements OnInit {
 
   constructor(
-    private groupsService: GroupsService,
+    private rolesService: RolesService,
     private alertService: AlertService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -71,17 +72,6 @@ export class EditRoleComponent implements OnInit {
       'name': 'Reports'
     },
   ]
-  dataCollectors =[
-    {
-      'name': 'Okello Marvin'
-    },
-    {
-      'name': 'Lewis Hamilton'
-    },
-    {
-      'name': 'Pierre Gasly'
-    },
-  ]
 
 
   get f() {
@@ -89,34 +79,29 @@ export class EditRoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.groupsService.getGroups().subscribe((results: any) => {
-      this.result= results[0]
-      console.log(this.result)
+    this.rolesService.getCurrentRole(this.route.snapshot.params.id).subscribe((results: any) => {
+      console.log(results,  "--------------")
       this.formGroup = this.formBuilder.group({
-        name: [this.result?.name],
-        parent: [this.result?.parent],
-        access_to_central_data: [this.result?.access_to_central_data],
-        permissions: [this.result?.permissions],
-        data_collectors: [this.result?.data_collectors]
+        authority: [results?.authority],
       });
     });
   }
 
-  deleteGroup() {
-    if (confirm('Are you sure to delete this Group?')) {
+  deleteRole() {
+    if (confirm('Are you sure to delete this Role?')) {
       console.log(
-        this.groupsService.deleteCurrentGroup(this.route.snapshot.params.id).subscribe((result) => {
-            console.warn(result, 'Group has been deleted');
-            this.alertService.warning(`Group has been deleted`)
-            this.router.navigate(['/groups']);
+        this.rolesService.deleteCurrentRole(this.route.snapshot.params.id).subscribe((result) => {
+            console.warn(result, 'Role has been deleted');
+            this.alertService.warning(`Role has been deleted`)
+            this.router.navigate(['/roles']);
           }, error => {
-            this.alertService.error(`Failed to delete Group: ${this.formGroup.controls.name.value}`)
+            this.alertService.error(`Failed to delete Role: ${this.formGroup.controls.authority.value}`)
           }
         ));
     }
   }
 
-  updateGroup() {
+  updateRole() {
     this.clicked = true;
     this.submitted = true;
     if (this.formGroup.invalid) {
@@ -125,16 +110,12 @@ export class EditRoleComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    /*const formData = Object.keys(fData).filter(item => fData[item] != undefined || fData[item] != null);
-    const submitData = {};
-    formData.forEach(item => Object.assign(submitData, {[item]: fData[item]}));
-    console.log(submitData);*/
-    this.groupsService.updateGroup(this.route.snapshot.params.id, submitData).subscribe((result) => {
-      console.warn(result, 'Group Successfully');
-      this.alertService.success(`Group: ${result.name} has been successfully updated`)
-      this.router.navigate(['/groups']);
+    this.rolesService.updateRole(this.route.snapshot.params.id, submitData).subscribe((result) => {
+      console.warn(result, 'Role Successfully');
+      this.alertService.success(`Role: ${result.authority} has been successfully updated`)
+      this.router.navigate(['/roles']);
     }, error => {
-      this.alertService.error(`Failed to update group: ${this.formGroup.controls.name.value}`)
+      this.alertService.error(`Failed to update Role: ${this.formGroup.controls.authority.value}`)
     });
   }
 }

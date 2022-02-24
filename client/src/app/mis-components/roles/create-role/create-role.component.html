@@ -43,19 +43,16 @@
                           </div>
                           <input
                             class="form-control"
-                            placeholder="Group Name"
+                            placeholder="Role Name"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="name"
-                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                            formControlName="authority"
+                            [ngClass]="{ 'is-invalid': submitted && f.authority.errors }"
                           >
-                          <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                            <div *ngIf="f.name.errors.required" class="input-error">A Group Name is required</div>
+                          <div *ngIf="submitted && f.authority.errors" class="invalid-feedback">
+                            <div *ngIf="f.authority.errors.required" class="input-error">A Role Name is required</div>
                           </div>
                         </div>
-                        <!--<div *ngIf="f.username.hasError('alreadyExist')" >
-                            <div class="input-error">Username is already taken</div>
-                        </div>-->
                       </div>
                     </div>
                   </div>

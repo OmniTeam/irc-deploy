@@ -148,6 +148,7 @@ export class RolesComponent implements OnInit {
 
     this.rolesService.getRolesFiltered(params).subscribe((data) => {
       this.roles =data;
+      console.log(this.roles)
       this.page.count = this.roles.length
     });
   }

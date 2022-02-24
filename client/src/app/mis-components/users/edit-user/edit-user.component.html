@@ -218,6 +218,39 @@
                           <div class="row">
                             <div class="col-md-3">
                               <label>
+                                Role
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <ng-select class="form-control form-control-sm"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="false"
+                                               placeholder="Role"
+                                               formControlName="role"
+                                               [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
+                                               [searchable]="true"
+                                               [clearable]="true"
+                                    >
+                                      <ng-option [value]="item.id" *ngFor="let item of user_Type">
+                                        {{item.authority}}
+                                      </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+                                      <div *ngIf="f.role.errors.required" class="input-error">A role is required</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label>
                                 Groups
                               </label>
                             </div>
@@ -242,39 +275,6 @@
                                     </ng-select>
                                     <div *ngIf="submitted && f.groups.errors" class="invalid-feedback">
                                       <div *ngIf="f.groups.errors.required" class="input-error">A role is required</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>
-                                Role
-                              </label>
-                            </div>
-                            <div class="col-md-9">
-                              <div class="col-md-12">
-                                <div class="form-group ">
-                                  <div class=" input-group input-group-merge">
-                                    <ng-select class="form-control form-control-sm"
-                                               name="datatable_length"
-                                               aria-controls="datatable"
-                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                               [multiple]="false"
-                                               placeholder="Role"
-                                               formControlName="role"
-                                               [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
-                                               [searchable]="true"
-                                               [clearable]="true"
-                                    >
-                                      <ng-option [value]="item.name" *ngFor="let item of user_Type">
-                                        {{item.name}}
-                                      </ng-option>
-                                    </ng-select>
-                                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
-                                      <div *ngIf="f.role.errors.required" class="input-error">A role is required</div>
                                     </div>
                                   </div>
                                 </div>

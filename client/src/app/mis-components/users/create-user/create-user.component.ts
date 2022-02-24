@@ -15,6 +15,7 @@ import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {UsernameValidator} from "../../../Validators/username.validator";
+import {RolesService} from "../../../services/roles.service";
 
 
 @Component({
@@ -23,12 +24,10 @@ import {UsernameValidator} from "../../../Validators/username.validator";
   styleUrls: ['./create-user.component.scss']
 })
 export class CreateUserComponent implements OnInit {
-  private DataEmail: any;
-  private DataTelephone: any;
-  private DataUsername: any;
 
   constructor(
     private userService: UsersService,
+    private rolesService: RolesService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -50,17 +49,8 @@ export class CreateUserComponent implements OnInit {
       'name': 'Female'
     }
   ];
-  user_Type = [
-    {
-      'name': 'Data Manager'
-    },
-    {
-      'name': 'Data Viewer'
-    },
-    {
-      'name': 'Data Collector'
-    },
-  ];
+  // represents the user roles
+  user_Type: any;
   data_collector_Type = [
     {
       'name': 'Enumerator'
@@ -89,6 +79,9 @@ export class CreateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.rolesService.getRoles().subscribe( data =>{
+      this.user_Type = data
+    }, error => {this.alertService.error("Failed to get Roles")})
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],

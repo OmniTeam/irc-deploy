@@ -13,6 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UsersService} from "../../../services/users.service";
 import {AlertService} from "../../../services/alert";
 import {AuthService} from "../../../services/auth.service";
+import {RolesService} from "../../../services/roles.service";
 
 @Component({
   selector: 'app-edit-user',
@@ -20,9 +21,11 @@ import {AuthService} from "../../../services/auth.service";
   styleUrls: ['./edit-user.component.scss']
 })
 export class EditUserComponent implements OnInit {
+  user_Type: any;
 
   constructor(
     private userService: UsersService,
+    private rolesService: RolesService,
     private alertService: AlertService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -45,17 +48,6 @@ export class EditUserComponent implements OnInit {
     {
       'name': 'Female'
     }
-  ];
-  user_Type = [
-    {
-      'name': 'Data Manager'
-    },
-    {
-      'name': 'Data Viewer'
-    },
-    {
-      'name': 'Data Collector'
-    },
   ];
   data_collector_Type = [
     {
@@ -86,18 +78,20 @@ export class EditUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((results: any) => {
-      this.result= results[0]
+    this.rolesService.getRoles().subscribe( data =>{
+      this.user_Type = data
+    }, error => {this.alertService.error("Failed to get Roles")})
+    this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
         password: [null],
-        username: [this.result?.username, [Validators.required]],
-        names: [this.result?.names, [Validators.required]],
-        email: [this.result?.email],
-        telephone: [this.result?.telephone],
-        role: [this.result?.role],
-        groups: [this.result?.groups],
-        is_active: [this.result?.is_active],
-        data_collector_Type: [this.result?.data_collector_Type],
+        username: [results?.username, [Validators.required]],
+        names: [results?.names, [Validators.required]],
+        email: [results?.email],
+        telephone: [results?.telephone],
+        role: [results?.role],
+        groups: [results?.groups],
+        is_active: [results?.is_active],
+        data_collector_Type: [results?.data_collector_Type],
       });
     });
   }
@@ -110,11 +104,11 @@ export class EditUserComponent implements OnInit {
     if (confirm('Are you sure to delete this System user?')) {
       console.log(
         this.userService.deleteCurrentUser(this.route.snapshot.params.id).subscribe((result) => {
-            console.warn(result, 'System User has been deleted');
+            console.warn(result, 'User has been deleted');
             this.alertService.warning(`User has been deleted`)
-            this.router.navigate(['/ppdausers']);
+            this.router.navigate(['/users']);
           }, error => {
-            this.alertService.error(`Failed to delete User: ${this.formGroup.controls.username.value}`)
+            this.alertService.error(`Failed to delete User`)
           }
         ));
     }
@@ -129,14 +123,10 @@ export class EditUserComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    /*const formData = Object.keys(fData).filter(item => fData[item] != undefined || fData[item] != null);
-    const submitData = {};
-    formData.forEach(item => Object.assign(submitData, {[item]: fData[item]}));
-    console.log(submitData);*/
     this.userService.updateUser(this.route.snapshot.params.id, submitData).subscribe((result) => {
       console.warn(result, 'System User Updated Successfully');
       this.alertService.success(`User: ${result.username} has been successfully updated`)
-      this.router.navigate(['/ppdausers']);
+      this.router.navigate(['/users']);
     }, error => {
       this.alertService.error(`Failed to update User: ${this.formGroup.controls.username.value}`)
     });

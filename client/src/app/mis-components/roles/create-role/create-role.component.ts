@@ -15,6 +15,7 @@ import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
+import {RolesService} from "../../../services/roles.service";
 
 
 @Component({
@@ -25,7 +26,7 @@ import {GroupsService} from "../../../services/groups.service";
 export class CreateRoleComponent implements OnInit {
 
   constructor(
-    private groupsService: GroupsService,
+    private rolesService: RolesService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -90,11 +91,7 @@ export class CreateRoleComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      name: ['',[Validators.required]],
-      /*parent: [null, [Validators.required]],
-      access_to_central_data: [false],
-      permissions: [null, [Validators.required]],
-      data_collectors: [null]*/
+      authority: ['',[Validators.required]],
     });
   }
 
@@ -108,11 +105,11 @@ export class CreateRoleComponent implements OnInit {
     }
      const formData = this.formGroup.value;
     console.log(this.formGroup.getRawValue())
-    this.groupsService.createGroup(formData).subscribe((result) => {
-        console.warn(result, 'Group created Successfully');
-        this.alertService.success(`Group: ${this.formGroup.controls.name.value} has been created`);
+    this.rolesService.createRole(formData).subscribe((result) => {
+        console.warn(result, 'Role created Successfully');
+        this.alertService.success(`Role: ${this.formGroup.controls.authority.value} has been created`);
         this.router.navigate(['/roles']);
-    },error => {this.alertService.error("Failed to Create the Group")});
+    },error => {this.alertService.error("Failed to Create the Role")});
   }
 
   resetForm() {

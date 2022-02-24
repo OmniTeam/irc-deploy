@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
 })
 export class RolesService {
   baseurl = environment.serverUrl
-  userRoles = `${this.baseurl}/roles/`
+  userRoles = `${this.baseurl}/role/`
 
   constructor(private http: HttpClient) { }
 
@@ -24,11 +24,11 @@ export class RolesService {
   }
 
   updateRole(id, groupData): Observable<any> {
-    return this.http.get(`${this.userRoles}${id}/`, groupData);
+    return this.http.put(`${this.userRoles}${id}/`, groupData);
   }
 
   getCurrentRole(id){
-    return this.http.get(`${this.userRoles}${id}`)
+    return this.http.get(`${this.userRoles}${id}/`)
   }
 
   deleteCurrentRole(p): Observable<any> {
