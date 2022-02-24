@@ -14,6 +14,7 @@ import {UsersService} from "../../../services/users.service";
 import {AlertService} from "../../../services/alert";
 import {AuthService} from "../../../services/auth.service";
 import {RolesService} from "../../../services/roles.service";
+import {GroupsService} from "../../../services/groups.service";
 
 @Component({
   selector: 'app-edit-user',
@@ -25,6 +26,7 @@ export class EditUserComponent implements OnInit {
 
   constructor(
     private userService: UsersService,
+    private groupsService: GroupsService,
     private rolesService: RolesService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -41,14 +43,6 @@ export class EditUserComponent implements OnInit {
   deactivate = false;
   submitted = false;
   fieldTextType: boolean;
-  sex = [
-    {
-      'name': 'Male'
-    },
-    {
-      'name': 'Female'
-    }
-  ];
   data_collector_Type = [
     {
       'name': 'Enumerator'
@@ -57,20 +51,7 @@ export class EditUserComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  groups = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
+  groups: any;
 
 
   get f() {
@@ -81,16 +62,19 @@ export class EditUserComponent implements OnInit {
     this.rolesService.getRoles().subscribe( data =>{
       this.user_Type = data
     }, error => {this.alertService.error("Failed to get Roles")})
+    this.groupsService.getGroups().subscribe( result =>{
+      this.groups = result
+    }, error => {this.alertService.error("Failed to get Groups")})
     this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
         password: [null],
         username: [results?.username, [Validators.required]],
         names: [results?.names, [Validators.required]],
-        email: [results?.email],
-        telephone: [results?.telephone],
+        email: [results?.email, [Validators.required, Validators.email]],
+        // telephone: [results?.telephone],
         role: [results?.role],
         groups: [results?.groups],
-        is_active: [results?.is_active],
+        enabled: [results?.enabled],
         data_collector_Type: [results?.data_collector_Type],
       });
     });

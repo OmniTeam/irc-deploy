@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
 })
 export class GroupsService {
   baseurl = environment.serverUrl
-  urlGroups = `${this.baseurl}/group/`
+  urlGroups = `${this.baseurl}/KengaGroup/`
 
   constructor(private http: HttpClient) { }
 
@@ -21,6 +21,9 @@ export class GroupsService {
 
   createGroup(formData): Observable<any> {
     return this.http.post(this.urlGroups, formData);
+  }
+  getCurrentGroup(id){
+    return this.http.get(`${this.urlGroups}${id}/`)
   }
 
   updateGroup(id, submitData): Observable<any> {

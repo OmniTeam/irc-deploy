@@ -91,10 +91,10 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
       name: ['',[Validators.required]],
-      /*parent: [null],
+      parent: [null],
       access_to_central_data: [false],
       permissions: [null],
-      data_collectors: [null]*/
+      data_collectors: [null]
     });
   }
 

@@ -16,6 +16,7 @@ import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {UsernameValidator} from "../../../Validators/username.validator";
 import {RolesService} from "../../../services/roles.service";
+import {GroupsService} from "../../../services/groups.service";
 
 
 @Component({
@@ -28,6 +29,7 @@ export class CreateUserComponent implements OnInit {
   constructor(
     private userService: UsersService,
     private rolesService: RolesService,
+    private groupsService: GroupsService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -59,20 +61,7 @@ export class CreateUserComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  groups = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
+  groups: any;
 
   get f() {
     return this.formGroup.controls;
@@ -82,15 +71,18 @@ export class CreateUserComponent implements OnInit {
     this.rolesService.getRoles().subscribe( data =>{
       this.user_Type = data
     }, error => {this.alertService.error("Failed to get Roles")})
+    this.groupsService.getGroups().subscribe( data =>{
+      this.groups = data
+    }, error => {this.alertService.error("Failed to get Groups")})
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
-      email: [''],
-      telephone: [''],
+      email: ['', [Validators.required, Validators.email]],
+      // telephone: [''],
       role: [null],
       groups: [null],
-      is_active: [false],
+      enabled: [true],
       data_collector_Type: [],
     });
   }

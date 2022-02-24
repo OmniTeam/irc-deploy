@@ -52,13 +52,6 @@ export class GroupsComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageCallback({offset: 0});
-    /*this.formGroup = this.formBuilder.group({
-      name: [''],
-      parent: [''],
-      access_to_central_data: [''],
-      permissions: [''],
-      data_collectors: ['']
-    });*/
   }
 
 
@@ -66,7 +59,7 @@ export class GroupsComponent implements OnInit {
     this.router.navigate(['group/create']);
   }
 
-  editTag(row) {
+  editGroup(row) {
     this.router.navigate(['group/edit/' + row.id]);
   }
 
@@ -87,13 +80,22 @@ export class GroupsComponent implements OnInit {
     const deletedRow = this.selectedTags;
     deletedRow.forEach((p) => {
         this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
-          console.warn(result, 'Tags have been deleted');
+          console.warn(result, 'Groups have been deleted');
           this.router.navigate(['/groups']).then(() => {
             window.location.reload();
           });
         })
       }
     )
+  }
+  deleteGroup(row){
+    this.groupsService.deleteCurrentGroup(row).subscribe((result) => {
+      console.warn(result, 'Group has been deleted');
+      this.router.navigate(['/groups']).then(() => {
+        window.location.reload();
+      });
+      this.alertService.warning("Group has been deleted")
+    }, error => {this.alertService.error("Failed to delete Group")})
   }
 
   /*Responsible for the opening of the Modals*/

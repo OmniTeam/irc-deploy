@@ -145,6 +145,7 @@
                   <div class="col-md-3">
                     <label>
                       Email
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -164,16 +165,20 @@
                             formControlName="email"
                             [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
                           >
+                          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required" class="input-error">Email is required</div>
+                            <div *ngIf="f.email.errors.email" class="input-error">Email is in wrong format</div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                   <div class="col-md-3">
                     <label>
                       Telephone
-                      <!--                                <span class="required-indicator">*</span>-->
+                      &lt;!&ndash;                                <span class="required-indicator">*</span>&ndash;&gt;
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -206,7 +211,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>-->
                 <div class="row">
                   <div class="col-md-3">
                     <label>
@@ -261,7 +266,7 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of groups">
+                            <ng-option [value]="item.id" *ngFor="let item of groups">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -324,7 +329,7 @@
                         <input
                           checked="checked"
                           type="checkbox"
-                          formControlName="is_active"
+                          formControlName="enabled"
                         />
 
                         <span
