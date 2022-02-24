@@ -84,6 +84,30 @@ const routes: Routes = [
       {
         path: 'tagType', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/tag-type/tag-type.module').then(m => m.TagTypeModule)
+      },
+      {
+        path:'groups', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/groups/groups.module').then(m => m.GroupsModule)
+      },
+      {
+        path: 'group/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/groups/create-group/create-group.module').then(m => m.CreateGroupModule)
+      },
+      {
+        path: 'group/edit/:id', canActivate: [AuthGuard],
+        loadChildren:() => import('./mis-components/groups/edit-group/edit-group.module').then(m => m.EditGroupModule)
+      },
+      {
+        path: 'users', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
+      },
+      {
+        path: 'user/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/users/create-user/create-user.module').then(m => m.CreateUserModule)
+      },
+      {
+        path: 'user/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/users/edit-user/edit-user.module').then(m => m.EditUserModule)
       }
     ]
   },

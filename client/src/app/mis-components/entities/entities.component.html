@@ -92,7 +92,11 @@
                 <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Entity Name" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Entity Name" prop="name">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                <a routerLink="/entity/{{row.id}}"> {{ value }}</a>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Database Name" prop="tableName"></ngx-datatable-column>
             <ngx-datatable-column name="Prefix" prop="prefix"></ngx-datatable-column>
             <ngx-datatable-column name="Date Created" prop="dateCreated">

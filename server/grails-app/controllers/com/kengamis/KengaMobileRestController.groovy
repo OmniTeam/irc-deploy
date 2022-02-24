@@ -129,7 +129,10 @@ class KengaMobileRestController {
             }  else {
                 query = scriptService.evaluate(MisEntity.DEFAULT_QUERY, tmpBinding)
             }
-            def data = rows(query.toString()).collect {
+            log.info(query)
+            def cleanQuery = cleanOxdData(query)
+            log.info(cleanQuery)
+            def data = rows(cleanQuery.toString()).collect {
                 def otherFldsMap = [:]
                 otherFieldsToList(otherFields).each { fld ->
                     otherFldsMap << ["$fld": it."$fld"]
@@ -197,14 +200,17 @@ class KengaMobileRestController {
             whereClause = ''
         }
 
+        def cleanWhereClause = cleanOxdData(whereClause)
         def tableName = params.tableName
         def keyField = params.keyField
         def displayField = params.displayField
         if (tableName && keyField && displayField) {
-            def displayFieldQuery = "CONCAT(${displayField.split(",").join(",',',")}) as displayField"
+            def cleanDisplayField = cleanOxdData(displayField)
+            def displayFieldQuery = "CONCAT(${cleanDisplayField.split(",").join(",',',")}) as displayField"
             def query = """
-                    SELECT $keyField as keyField,$displayFieldQuery FROM $tableName $whereClause
+                    SELECT $keyField as keyField,$displayFieldQuery FROM $tableName $cleanWhereClause
                 """
+            log.info(query)
             def data = AppHolder.withMisSql { rows(query.toString()) }
             render data as JSON
         }
@@ -232,8 +238,7 @@ class KengaMobileRestController {
 
     def decodeBasicUser(def authString) {
         def encodedPair = authString - 'Basic '
-//        def decodedPair = new String(new BASE64Decoder().decodeBuffer(encodedPair))
-        def decodedPair = new String(Base64.getEncoder().decodeBase64(encodedPair.getBytes()))
+        def decodedPair = new String(encodedPair.decodeBase64())
         def credentials = decodedPair.split(':')
         def user = User.findByUsername(credentials[0])
 
@@ -303,6 +308,25 @@ class KengaMobileRestController {
     def otherFieldsToList(String otherFields) {
         if (otherFields.isEmpty()) return []
         return otherFields.drop(1).split(",")
+    }
+
+    def cleanOxdData(def data) {
+        if (!(data instanceof Date)) {
+            data = data.toString() + ""
+            if (data.contains("slash"))
+                data = data.replaceAll("slash", "/")
+            if (data.contains("dot_e_dot_g_dot"))
+                data = data.replaceAll("dot_e_dot_g_dot", ",")
+            if (data.contains("_hyphen_"))
+                data = data.replaceAll("_hyphen_", "-")
+        }
+        if (data instanceof Date) {
+            data = data.format('yyyy-MM-dd HH:MM:ss')
+        }
+        if (data == 'null' || data == null) {
+            data = ""
+        }
+        return data?.toString()
     }
 
     def beforeInterceptor = {

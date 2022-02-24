@@ -1162,6 +1162,25 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1645511152009-13") {
         addForeignKeyConstraint(baseColumnNames: "acl_object_identity", baseTableName: "acl_entry", constraintName: "FKl39t1oqikardwghegxe0wdcpt", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_object_identity", validate: "true")
     }
-
+    changeSet(author: "victorkakama (generated)", id: "1645520788547-2") {
+        addColumn(tableName: "role") {
+            column(name: "description", type: "varchar(255)")
+        }
+    }
+    changeSet(author: "victorkakama (generated)", id: "1645520788547-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "email", tableName: "user")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1645545375346-1") {
+        dropForeignKeyConstraint(baseTableName: "user_form", constraintName: "FKet5bou1rejvasjlchtk95m0f")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1645545375346-2") {
+        dropForeignKeyConstraint(baseTableName: "user_form", constraintName: "FKm04eqjlt7jll97dnmhk01dsh8")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1645545375346-5") {
+        dropUniqueConstraint(constraintName: "UKd512f11de5e919c52773dbc40494", tableName: "user_form")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1645545375346-10") {
+        dropTable(tableName: "user_form")
+    }
 
 }

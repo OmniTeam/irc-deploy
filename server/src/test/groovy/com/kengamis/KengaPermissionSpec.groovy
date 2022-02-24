@@ -3,7 +3,7 @@ package com.kengamis
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class UserFormSpec extends Specification implements DomainUnitTest<UserForm> {
+class KengaPermissionSpec extends Specification implements DomainUnitTest<KengaPermission> {
 
     def setup() {
     }
