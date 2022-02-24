@@ -5,7 +5,6 @@ import groovy.transform.ToString
 @ToString(cache=true, includeNames=true, includePackage=false)
 class UserGroup {
 
-    String groupRole = KengaGroup.ROLE_BASIC
 
     String id
     User user
