@@ -1162,25 +1162,42 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1645511152009-13") {
         addForeignKeyConstraint(baseColumnNames: "acl_object_identity", baseTableName: "acl_entry", constraintName: "FKl39t1oqikardwghegxe0wdcpt", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_object_identity", validate: "true")
     }
-    changeSet(author: "victorkakama (generated)", id: "1645520788547-2") {
-        addColumn(tableName: "role") {
-            column(name: "description", type: "varchar(255)")
+
+    changeSet(author: "victorkakama (generated)", id: "1645697783843-2") {
+        createTable(tableName: "kenga_group") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_groupPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
         }
     }
-    changeSet(author: "victorkakama (generated)", id: "1645520788547-1") {
-        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "email", tableName: "user")
+
+    changeSet(author: "victorkakama (generated)", id: "1645697783843-3") {
+        addUniqueConstraint(columnNames: "name", constraintName: "UC_KENGA_GROUPNAME_COL", tableName: "kenga_group")
     }
-    changeSet(author: "victorkakama (generated)", id: "1645545375346-1") {
-        dropForeignKeyConstraint(baseTableName: "user_form", constraintName: "FKet5bou1rejvasjlchtk95m0f")
+
+    changeSet(author: "victorkakama (generated)", id: "1645697783843-4") {
+        addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "user_group", constraintName: "FKk2k4e53v15rb9374r2nu24rts", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
     }
-    changeSet(author: "victorkakama (generated)", id: "1645545375346-2") {
-        dropForeignKeyConstraint(baseTableName: "user_form", constraintName: "FKm04eqjlt7jll97dnmhk01dsh8")
+
+    changeSet(author: "victorkakama (generated)", id: "1645697783843-5") {
+        dropForeignKeyConstraint(baseTableName: "user_group", constraintName: "FKjonf4pqux3h1e687sd18dhcnj")
     }
-    changeSet(author: "victorkakama (generated)", id: "1645545375346-5") {
-        dropUniqueConstraint(constraintName: "UKd512f11de5e919c52773dbc40494", tableName: "user_form")
+    changeSet(author: "victorkakama (generated)", id: "1645697783843-8") {
+        dropUniqueConstraint(constraintName: "UC_GROUPNAME_COL", tableName: "group")
     }
-    changeSet(author: "victorkakama (generated)", id: "1645545375346-10") {
-        dropTable(tableName: "user_form")
-    }
+
+
 
 }
