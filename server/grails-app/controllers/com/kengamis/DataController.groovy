@@ -42,8 +42,8 @@ class DataController {
         } catch (Exception e) {
             flash.error = "Data Might Not Be Available For This Form."
             log.error("Error fetching data", e)
-            formData = [headerList: [], resultList: [], resultListCount: 0, formtable: params.formtable,
-                        filters: [], form: Form.findByName(params.formtable), gpsCoordinates: [], formDataCollectors: [],
+            formData = [headerList   : [], resultList: [], resultListCount: 0, formtable: params.formtable,
+                        filters      : [], form: Form.findByName(params.formtable), gpsCoordinates: [], formDataCollectors: [],
                         formGraphData: []]
         }
         respond formData
@@ -59,35 +59,43 @@ class DataController {
             if (formDataValue.humanReadableValue) {
                 if (!formDataValue.isMetaColumn()) {
                     if (formDataValue.formSetting.xformType == XformType.SELECT.value) {
-                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.options]
+                        def options = []
+                        if (formDataValue.options.size() > 0) {
+                            formDataValue.options.each {option ->
+                                options << option.textValue
+                            }
+                            formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: options]
+                        }
                     }
                     else if (formDataValue.formSetting.xformType == XformType.REPEAT.value) {
-                        def repeatFormData = formDataValue.value as List<FormData>
-                        def repeatFirstRecord = repeatFormData.first().allFormDataValues
                         def headers = []
-                        headers << [field: 'increment', questionText: '#']
-                        repeatFirstRecord.each {header ->
-                            if (header.humanReadableValue) {
-                                if (!header.isMetaColumn()) {
-                                    headers << [field: header.field, questionText: header.label]
+                        def resultList = []
+                        def repeatFormData = formDataValue.value as List<FormData>
+                        if (repeatFormData.size() > 0) {
+                            def repeatFirstRecord = repeatFormData.first().allFormDataValues
+
+                            headers << [field: 'increment', questionText: '#']
+                            repeatFirstRecord.each { header ->
+                                if (header.humanReadableValue) {
+                                    if (!header.isMetaColumn()) {
+                                        headers << [field: header.field, questionText: header.label]
+                                    }
                                 }
                             }
-                        }
-                        def resultList = []
-                        def counter = 1
-                        repeatFormData.collect {
-                            def formDataValues = it.allFormDataValues
-                            def record = [:]
-                            record["increment"] = counter
-                            formDataValues.each {
-                                record["${it.field}"] = it.humanReadableValue
+                            def counter = 1
+                            repeatFormData.each { value ->
+                                def formDataValues = value.allFormDataValues
+                                def record = [:]
+                                record["increment"] = counter
+                                formDataValues.each {dataValue ->
+                                    record["${dataValue.field}"] = dataValue.humanReadableValue
+                                }
+                                resultList << record
+                                counter++
                             }
-                            resultList << record
-                            counter++
+                            formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
                         }
-                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
-                    }
-                    else {
+                    } else {
                         formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.humanReadableValue]
                     }
                 }
