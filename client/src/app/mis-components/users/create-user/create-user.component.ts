@@ -78,7 +78,7 @@ export class CreateUserComponent implements OnInit {
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: [''/*, [Validators.required, Validators.email]*/],
       // telephone: [''],
       role: [null],
       groups: [null],

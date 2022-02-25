@@ -70,7 +70,7 @@ export class EditUserComponent implements OnInit {
         password: [null],
         username: [results?.username, [Validators.required]],
         names: [results?.names, [Validators.required]],
-        email: [results?.email, [Validators.required, Validators.email]],
+        email: [results?.email/*, [Validators.required, Validators.email]*/],
         // telephone: [results?.telephone],
         role: [results?.role],
         groups: [results?.groups],
