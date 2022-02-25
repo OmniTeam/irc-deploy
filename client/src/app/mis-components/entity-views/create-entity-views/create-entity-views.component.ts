@@ -17,14 +17,16 @@ export class CreateEntityViewsComponent implements OnInit {
   formGroupField: FormGroup;
   entityName = "";
   entityId = "";
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  entries: number = 10;
+  selected: any[] = [];
+  activeRow: any;
+  rows: Object[];
   formData: any;
   formDataField: any;
   submitted = false;
   submitFields = false;
   entityRecord: any;
-  rows = [];
+  editing = {};
   fieldTypes = [
     {'name': "Display Field", 'value': "Display Field"},
     {'name': "Filter Field", 'value': "Filter Field"},
@@ -63,13 +65,31 @@ export class CreateEntityViewsComponent implements OnInit {
       viewQuery: ['', [Validators.required]],
     });
     this.rows = [];
-    this.dtOptions = {
-      pagingType: "numbers",
-      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      processing: true,
-      responsive: true,
-      dom: 'lfrtip'
-    };
+  }
+
+  entriesChange($event) {
+    this.entries = $event.target.value;
+  }
+
+  filterTable($event) {
+    let val = $event.target.value;
+    this.rows = this.rows.filter(function (d) {
+      for (let key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  onSelect({selected}) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 
   createEntityView() {
@@ -118,6 +138,13 @@ export class CreateEntityViewsComponent implements OnInit {
 
   get fFields() {
     return this.formGroupField.controls;
+  }
+
+  updateValue(event, cell, rowIndex) {
+    this.editing[rowIndex + '-' + cell] = false;
+    this.rows[rowIndex][cell] = event.target.value;
+    this.rows = [...this.rows];
+    this.formData = this.rows[rowIndex];
   }
 
   deleteField(deletedRow) {

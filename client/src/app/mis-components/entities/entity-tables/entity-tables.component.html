@@ -65,12 +65,12 @@
             [limit]="entries != -1 ? entries : undefined"
             [rows]="rows"
             [selected]="selected"
-            [selectionType]="SelectionType.checkbox"
+            [selectionType]="SelectionType.multiClick"
             (activate)="onActivate($event)"
             (select)="onSelect($event)"
           >
             <ngx-datatable-column
-              [width]="30"
+              [width]="50"
               [sortable]="false"
               [canAutoResize]="false"
               [draggable]="false"
@@ -88,7 +88,6 @@
                 ngx-datatable-cell-template
                 let-value="value"
                 let-isSelected="isSelected"
-                let-onCheckboxChangeFn="onCheckboxChangeFn"
               >
                 <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
               </ng-template>

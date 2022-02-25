@@ -251,10 +251,6 @@
                     </div>
                     <div class="col-md-2 text-left">
                       <button class=" btn btn-default" type="submit">Add Field</button>
-<!--                      <button class=" btn" type="submit">-->
-<!--                        <i class="fa fa-plus" style="font-size: 1.5rem"></i>-->
-<!--                        Add Field-->
-<!--                      </button>-->
                     </div>
                   </div>
                 </form>
@@ -262,12 +258,6 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <div class="row" style="padding: 11px;">
-                  <div class="col-lg-12 col-5 text-right">
-                    <a class=" btn btn-default" (click)="editField()" style="color: white"> Edit </a>
-                    <a class=" btn btn-default" (click)="deleteField()" style="color: white"> Delete </a>
-                  </div>
-                </div>
                 <div class="row">
                   <div class="col-md-12">
                     <ngx-datatable
@@ -280,9 +270,72 @@
                       [rows]="rows"
                       (activate)="onActivate($event)"
                     >
-                      <ngx-datatable-column name="Display Name" prop="displayName"></ngx-datatable-column>
-                      <ngx-datatable-column name="Data Type" prop="dataType"></ngx-datatable-column>
-                      <ngx-datatable-column name="Mandatory" prop="mandatory"></ngx-datatable-column>
+                      <ngx-datatable-column name="Display Name" prop="displayName">
+                        <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                           <span
+                             title="Double click to edit"
+                             (dblclick)="editing[rowIndex + '-displayName'] = true"
+                             *ngIf="!editing[rowIndex + '-displayName']"
+                           >
+                               {{ value }} ...
+                           </span>
+                            <input
+                              class="form-control"
+                              autofocus
+                              (blur)="updateValue($event, 'displayName', rowIndex)"
+                              *ngIf="editing[rowIndex + '-displayName']"
+                              type="text"
+                              [value]="value"
+                            />
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Data Type" prop="dataType">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                     let-value="value">
+                            <span
+                              title="Double click to edit"
+                              (dblclick)="editing[rowIndex + '-dataType'] = true"
+                              *ngIf="!editing[rowIndex + '-dataType']"
+                            >
+                                       {{ value }} ...
+                            </span>
+                          <select
+                            class="browser-default custom-select"
+                            *ngIf="editing[rowIndex + '-dataType']"
+                            (blur)="editing[rowIndex + '-dataType'] = false"
+                            (change)="updateValue($event, 'dataType', rowIndex)"
+                            [value]="value"
+                          >
+                            <option value="String">String</option>
+                            <option value="Number">Number</option>
+                            <option value="Date">Date</option>
+                            <option value="Float">Float</option>
+                            <option value="Boolean">Boolean</option>
+                          </select>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Mandatory" prop="mandatory">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                     let-value="value">
+                            <span
+                              title="Double click to edit"
+                              (dblclick)="editing[rowIndex + '-mandatory'] = true"
+                              *ngIf="!editing[rowIndex + '-mandatory']"
+                            >
+                                       {{ value }} ...
+                            </span>
+                          <select
+                            class="browser-default custom-select"
+                            *ngIf="editing[rowIndex + '-mandatory']"
+                            (blur)="editing[rowIndex + '-mandatory'] = false"
+                            (change)="updateValue($event, 'mandatory', rowIndex)"
+                            [value]="value"
+                          >
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                          </select>
+                        </ng-template>
+                      </ngx-datatable-column>
                       <ngx-datatable-column name="Field Type" prop="fieldType">
                         <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
                                      let-value="value">
@@ -291,9 +344,10 @@
                               (dblclick)="editing[rowIndex + '-fieldType'] = true"
                               *ngIf="!editing[rowIndex + '-fieldType']"
                             >
-                                       {{ value }}
+                                       {{ value }} ...
                             </span>
                           <select
+                            class="browser-default custom-select"
                             *ngIf="editing[rowIndex + '-fieldType']"
                             (blur)="editing[rowIndex + '-fieldType'] = false"
                             (change)="updateValue($event, 'fieldType', rowIndex)"

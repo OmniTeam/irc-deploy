@@ -60,7 +60,25 @@
             [rows]="rows"
             (activate)="onActivate($event)"
           >
-            <ngx-datatable-column name="Name" prop="displayName"></ngx-datatable-column>
+            <ngx-datatable-column name="Name" prop="displayName">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                           <span
+                             title="Double click to edit"
+                             (dblclick)="editing[rowIndex + '-displayName'] = true"
+                             *ngIf="!editing[rowIndex + '-displayName']"
+                           >
+                               {{ value }} ...
+                           </span>
+                <input
+                  class="form-control"
+                  autofocus
+                  (blur)="updateValue($event, 'displayName', rowIndex)"
+                  *ngIf="editing[rowIndex + '-displayName']"
+                  type="text"
+                  [value]="value"
+                />
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Form ID" prop="centralId"></ngx-datatable-column>
             <ngx-datatable-column name="Syncable" prop="syncMode">
               <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
@@ -69,9 +87,10 @@
                   (dblclick)="editing[rowIndex + '-syncMode'] = true"
                   *ngIf="!editing[rowIndex + '-syncMode']"
                 >
-                  {{ value }}
+                  {{ value }} ...
                 </span>
                 <select
+                  class="browser-default custom-select"
                   *ngIf="editing[rowIndex + '-syncMode']"
                   (blur)="editing[rowIndex + '-syncMode'] = false"
                   (change)="updateValue($event, 'syncMode', rowIndex)"
@@ -89,9 +108,10 @@
                   (dblclick)="editing[rowIndex + '-enabled'] = true"
                   *ngIf="!editing[rowIndex + '-enabled']"
                 >
-                  {{ value }}
+                  {{ value }} ...
                 </span>
                 <select
+                  class="browser-default custom-select"
                   *ngIf="editing[rowIndex + '-enabled']"
                   (blur)="editing[rowIndex + '-enabled'] = false"
                   (change)="updateValue($event, 'enabled', rowIndex)"
