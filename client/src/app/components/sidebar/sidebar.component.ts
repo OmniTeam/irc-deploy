@@ -104,8 +104,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-single-02 text-green',
     isCollapsed: true,
     children: [
-      // {path: 'groups', title: 'Groups', type: 'link'},
-      // {path: 'dashboard', title: 'Roles', type: 'link'},
+      {path: 'groups', title: 'Groups', type: 'link'},
+      {path: 'roles', title: 'Roles', type: 'link'},
       {path: 'users', title: 'Users', type: 'link'}
     ]
   },

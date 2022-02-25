@@ -65,9 +65,10 @@
                    (dblclick)="editing[rowIndex + '-displayName'] = true"
                    *ngIf="!editing[rowIndex + '-displayName']"
                  >
-              {{ value }}
+              {{ value }} ...
             </span>
                 <input
+                  class="form-control"
                   autofocus
                   (blur)="updateValue($event, 'displayName', rowIndex)"
                   *ngIf="editing[rowIndex + '-displayName']"
@@ -90,9 +91,10 @@
                   (dblclick)="editing[rowIndex + '-viewInTable'] = true"
                   *ngIf="!editing[rowIndex + '-viewInTable']"
                 >
-                  {{ value }}
+                  {{ value }} ...
                 </span>
                 <select
+                  class="browser-default custom-select"
                   *ngIf="editing[rowIndex + '-viewInTable']"
                   (blur)="editing[rowIndex + '-viewInTable'] = false"
                   (change)="updateValue($event, 'viewInTable', rowIndex)"
@@ -110,9 +112,10 @@
                   (dblclick)="editing[rowIndex + '-viewOnMap'] = true"
                   *ngIf="!editing[rowIndex + '-viewOnMap']"
                 >
-                  {{ value }}
+                  {{ value }} ...
                 </span>
                 <select
+                  class="browser-default custom-select"
                   *ngIf="editing[rowIndex + '-viewOnMap']"
                   (blur)="editing[rowIndex + '-viewOnMap'] = false"
                   (change)="updateValue($event, 'viewOnMap', rowIndex)"

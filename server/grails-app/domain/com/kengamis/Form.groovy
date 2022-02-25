@@ -144,6 +144,12 @@ class Form {
         }
     }
 
+    String truncateNameForSql() {
+        if(name.size() > 63)
+            return name.substring(0,63)
+        return name
+    }
+
     /**
      * Simple method to create a meta setting simply to reduce on boiler plate
      * It only sets the field and display and nothing else.

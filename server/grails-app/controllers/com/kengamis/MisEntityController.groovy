@@ -62,7 +62,9 @@ class MisEntityController {
             misEntityService.save(misEntity)
             createEntityTable(misEntity)
             createEntityPrefixTable(misEntity)
-            createEntityTagTable(misEntity)
+            if (misEntity.enableTagging) {
+                createEntityTagTable(misEntity)
+            }
         } catch (ValidationException e) {
             respond misEntity.errors
             return

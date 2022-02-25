@@ -39,4 +39,8 @@ export class FormService {
   exportFormData(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/data/get_export_form_data`, {params});
   }
+
+  deleteForm(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/form/${deletedRow}`);
+  }
 }

@@ -89,15 +89,13 @@ export class EditGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.groupsService.getGroups().subscribe((results: any) => {
-      this.result= results[0]
-      console.log(this.result)
+    this.groupsService.getCurrentGroup(this.route.snapshot.params.id).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
-        name: [this.result?.name],
-        parent: [this.result?.parent],
-        access_to_central_data: [this.result?.access_to_central_data],
-        permissions: [this.result?.permissions],
-        data_collectors: [this.result?.data_collectors]
+        name: [results?.name],
+        parent: [results?.parent],
+        access_to_central_data: [results?.access_to_central_data],
+        permissions: [results?.permissions],
+        data_collectors: [results?.data_collectors]
       });
     });
   }

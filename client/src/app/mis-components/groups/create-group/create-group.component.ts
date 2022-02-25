@@ -90,7 +90,7 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      name: [''],
+      name: ['',[Validators.required]],
       parent: [null],
       access_to_central_data: [false],
       permissions: [null],
@@ -106,17 +106,19 @@ export class CreateGroupComponent implements OnInit {
       console.log('Invalid');
       return;
     }
-     const formData = this.formGroup.value;
-    console.log(this.formGroup.getRawValue())
+    const formData = this.formGroup.value;
+    console.log(formData)
     this.groupsService.createGroup(formData).subscribe((result) => {
         console.warn(result, 'Group created Successfully');
-        this.alertService.success(`Group: ${this.formGroup.controls.name.value} has been created`);
+        this.alertService.success(`Group has been created`);
         this.router.navigate(['/groups']);
     },error => {this.alertService.error("Failed to Create the Group")});
   }
 
   resetForm() {
     this.formGroup.reset();
+    this.clicked = false
+    this.submitted = false
   }
 
 }

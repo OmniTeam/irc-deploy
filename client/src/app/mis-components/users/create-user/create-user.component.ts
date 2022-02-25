@@ -14,6 +14,9 @@ import {AuthService} from '../../../services/auth.service';
 import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
+import {UsernameValidator} from "../../../Validators/username.validator";
+import {RolesService} from "../../../services/roles.service";
+import {GroupsService} from "../../../services/groups.service";
 
 
 @Component({
@@ -22,12 +25,11 @@ import {AlertService} from "../../../services/alert";
   styleUrls: ['./create-user.component.scss']
 })
 export class CreateUserComponent implements OnInit {
-  private DataEmail: any;
-  private DataTelephone: any;
-  private DataUsername: any;
 
   constructor(
     private userService: UsersService,
+    private rolesService: RolesService,
+    private groupsService: GroupsService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -49,17 +51,8 @@ export class CreateUserComponent implements OnInit {
       'name': 'Female'
     }
   ];
-  user_Type = [
-    {
-      'name': 'Data Manager'
-    },
-    {
-      'name': 'Data Viewer'
-    },
-    {
-      'name': 'Data Collector'
-    },
-  ];
+  // represents the user roles
+  user_Type: any;
   data_collector_Type = [
     {
       'name': 'Enumerator'
@@ -68,31 +61,29 @@ export class CreateUserComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  groups = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
+  groups: any;
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
+    this.rolesService.getRoles().subscribe( data =>{
+      this.user_Type = data
+    }, error => {this.alertService.error("Failed to get Roles")})
+    this.groupsService.getGroups().subscribe( data =>{
+      this.groups = data
+    }, error => {this.alertService.error("Failed to get Groups")})
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
-      email: [''],
+      email: [''/*, [Validators.required, Validators.email]*/],
+      // telephone: [''],
+      role: [null],
+      groups: [null],
+      enabled: [true],
+      data_collector_Type: [],
     });
   }
 
@@ -115,7 +106,9 @@ export class CreateUserComponent implements OnInit {
   }
 
   resetForm() {
-    this.formGroup.reset();
+    this.formGroup.reset()
+    this.clicked =  false
+    this.submitted = false
   }
 
 }

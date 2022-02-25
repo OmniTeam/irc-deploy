@@ -1,191 +1,368 @@
 <div class=" header bg-success pb-6" style="overflow-x: hidden;">
-    <div class=" container-fluid">
-        <div class=" header-body">
-            <div class=" row align-items-center py-4">
-                <div class=" col-lg-6 col-7">
-                    <h6 class=" h2 text-white d-inline-block mb-0">Users</h6>
-                    <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
-                </div>
-                <div class=" col-lg-6 col-5 text-right">
-
-                </div>
-            </div>
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Users</h6>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
         </div>
+        <div class=" col-lg-6 col-5 text-right">
+
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class=" container-fluid mt--6" style="overflow-x: hidden;">
-    <div class=" row justify-content-center">
-        <div class=" col-lg-10 card-wrapper">
-            <div class="card">
-                <div class="card-header" style="padding: 10px">
-                    <h3 style="font-family: Open Sans, sans-serif;">Add New User</h3>
+  <div class=" row justify-content-center">
+    <div class=" col-lg-10 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif;">Add New User</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formGroup" (ngSubmit)="createUser()" *ngIf="formGroup" style="padding:30px">
+            <div class="row">
+              <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Username
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <div class=" input-group-prepend">
+                                                <span class="input-group-text" style="padding-right: 10px;">
+                                                    <i class=" fas fa-user"></i>
+                                                </span>
+                          </div>
+                          <input
+                            class="form-control"
+                            placeholder="Username"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="username"
+                            [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+                          >
+                          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                            <div *ngIf="f.username.errors.required" class="input-error">Username is required</div>
+                          </div>
+                        </div>
+                        <div *ngIf="f.username.hasError('alreadyExist')" >
+                          <div class="input-error">Username is already taken</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-body">
-                    <form [formGroup]="formGroup" (ngSubmit)="createUser()" *ngIf="formGroup" style="padding:30px">
-                        <div class="row">
-                            <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>
-                                            Names
-                                            <span class="required-indicator">*</span>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="col-md-12">
-                                            <div class="form-group ">
-                                                <div class=" input-group input-group-merge">
-                                                    <div class=" input-group-prepend">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Names
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <div class=" input-group-prepend">
                                                 <span class="input-group-text" style="padding-right: 10px;">
                                                     <i class=" fas fa-user"></i>
                                                 </span>
-                                                    </div>
-                                                    <input
-                                                            class="form-control"
-                                                            placeholder="Names"
-                                                            type="text"
-                                                            style="padding-left: 10px;"
-                                                            formControlName="names"
-                                                            [ngClass]="{ 'is-invalid': submitted && f.names.errors }"
-                                                    >
-                                                  <div *ngIf="submitted && f.names.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.username.errors.required" class="input-error">Username is required</div>
-                                                  </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>
-                                            Username
-                                            <span class="required-indicator">*</span>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="col-md-12">
-                                            <div class="form-group ">
-                                                <div class=" input-group input-group-merge">
-                                                    <div class=" input-group-prepend">
-                                                <span class="input-group-text" style="padding-right: 10px;">
-                                                    <i class=" fas fa-user"></i>
-                                                </span>
-                                                    </div>
-                                                    <input
-                                                            class="form-control"
-                                                            placeholder="Username"
-                                                            type="text"
-                                                            style="padding-left: 10px;"
-                                                            formControlName="username"
-                                                            [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
-                                                    >
-                                                  <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                                                    <div *ngIf="f.username.errors.required" class="input-error">Username is required</div>
-                                                  </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>
-                                            Password
-                                            <span class="required-indicator">*</span>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <div class=" input-group input-group-merge">
-                                                    <div class=" input-group-prepend">
+                          </div>
+                          <input
+                            class="form-control"
+                            placeholder="Names"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="names"
+                            [ngClass]="{ 'is-invalid': submitted && f.names.errors }"
+                          >
+                          <div *ngIf="submitted && f.names.errors" class="invalid-feedback">
+                            <div *ngIf="f.names.errors.required" class="input-error">Names is required</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Password
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class=" input-group input-group-merge">
+                          <div class=" input-group-prepend">
                                                 <span class="input-group-text" style="padding-right: 10px;">
                                                     <i class=" fas fa-unlock-alt"></i>
                                                 </span>
-                                                    </div>
-                                                    <input
-                                                            class="form-control"
-                                                            placeholder="Password"
-                                                            type="password"
-                                                            formControlName="password"
-                                                            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
-                                                            [type]="fieldTextType ? 'text' : 'password'"
-                                                            style="padding-left: 10px;"
-                                                    >
-                                                    <div class="input-group-append">
+                          </div>
+                          <input
+                            class="form-control"
+                            placeholder="Password"
+                            type="password"
+                            formControlName="password"
+                            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                            [type]="fieldTextType ? 'text' : 'password'"
+                            style="padding-left: 10px;"
+                          >
+                          <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i
-                                                                class="fa"
-                                                                [ngClass]="{
+                                                          class="fa"
+                                                          [ngClass]="{
                                                                 'fa-eye-slash':!fieldTextType,
                                                                 'fa-eye':fieldTextType
                                                                 }"
-                                                                (click)="toggleFieldTextType()"
+                                                          (click)="toggleFieldTextType()"
                                                         >
 
                                                         </i>
                                                     </span>
-                                                    </div>
-                                                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                                        <div *ngIf="f.password.errors.required" class="input-error">Password is required</div>
-                                                        <div *ngIf="f.password.errors.minlength" class="input-error">Minimum Length is 8</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label>
-                                            Email
-                                        </label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="col-md-12">
-                                            <div class="form-group ">
-                                                <div class=" input-group input-group-merge">
-                                                    <div class=" input-group-prepend">
+                          </div>
+                          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required" class="input-error">Password is required</div>
+                            <div *ngIf="f.password.errors.minlength" class="input-error">Minimum Length is 8</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Email
+<!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <div class=" input-group-prepend">
                                                 <span class="input-group-text" style="padding-right: 10px;">
                                                     <i class=" fas fa-envelope"></i>
                                                 </span>
-                                                    </div>
-                                                    <input
-                                                            class="form-control"
-                                                            placeholder="Email"
-                                                            type="text"
-                                                            style="padding-left: 10px;"
-                                                            formControlName="email"
-                                                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                          </div>
+                          <input
+                            class="form-control"
+                            placeholder="Email"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="email"
+                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                          >
+                          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required" class="input-error">Email is required</div>
+                            <div *ngIf="f.email.errors.email" class="input-error">Email is in wrong format</div>
+                          </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
-                                <a class=" btn btn-danger" (click)="resetForm()" style="color: #ffffff">
-                                    Reset </a>
-                                <button
-                                        class=" btn btn-default"
-                                        type="submit"
-                                        [disabled]="clicked"
-                                >
-                                    Save
-                                </button>
-
-                            </div>
-                        </div>
-                    </form>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <!--<div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Telephone
+                      &lt;!&ndash;                                <span class="required-indicator">*</span>&ndash;&gt;
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <div class=" input-group-prepend">
+                                                <span class="input-group-text" style="padding-right: 10px;">
+                                                    <i class=" fas fa-user"></i>
+                                                </span>
+                          </div>
+                          <input
+                            class="form-control"
+                            placeholder="Telephone"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="telephone"
+                            [ngClass]="{ 'is-invalid': submitted && f.telephone.errors }"
+                          >
+                          <div *ngIf="submitted && f.telephone.errors" class="invalid-feedback">
+                            <div *ngIf="f.telephone.errors.required" class="input-error">Telephone is required</div>
+                            <div *ngIf="f.telephone.errors.pattern" class="input-error">Telephone should be in format
+                              07XXXXXXXX
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="f.telephone.hasError('alreadyExist')">
+                          <div class="input-error">Telephone number is already in use</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>-->
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Role
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Role"
+                                     formControlName="role"
+                                     [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.id" *ngFor="let item of user_Type">
+                              {{item.authority}}
+                            </ng-option>
+                          </ng-select>
+                          <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+                            <div *ngIf="f.role.errors.required" class="input-error">A role is required</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Groups
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Groups"
+                                     formControlName="groups"
+                                     [ngClass]="{ 'is-invalid': submitted && f.groups.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.id" *ngFor="let item of groups">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                          <div *ngIf="submitted && f.groups.errors" class="invalid-feedback">
+                            <div *ngIf="f.groups.errors.required" class="input-error">A Group is required</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Data Collector Type
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Data Collector Type"
+                                     formControlName="data_collector_Type"
+                                     [ngClass]="{ 'is-invalid': submitted && f.data_collector_Type.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of data_collector_Type">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                          <div *ngIf="submitted && f.data_collector_Type.errors" class="invalid-feedback">
+                            <div *ngIf="f.data_collector_Type.errors.required" class="input-error">Data Collector Type
+                              is required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 offset-5" style="padding-left: 10px">
+                  <div class="form-group">
+                    <div class=" input-group input-group-merge" style="padding-top: 15px">
+                      <label
+                        style="
+                                                            padding-right: 5px;
+                                                            font-size: 0.875rem;
+                                                            font-family: Open Sans, sans-serif;
+                                                            color: #8898aa;"
+                      >
+                        Is Active?
+                      </label>
+                      <label class=" custom-toggle custom-toggle-success mr-1">
+                        <input
+                          checked="checked"
+                          type="checkbox"
+                          formControlName="enabled"
+                        />
+
+                        <span
+                          class=" custom-toggle-slider rounded-circle"
+                          data-label-off="No"
+                          data-label-on="Yes"
+                        >
+                                                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div class="row">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+                <a class=" btn btn-danger" (click)="resetForm()" style="color: #ffffff">
+                  Reset </a>
+                <button
+                  class=" btn btn-default"
+                  type="submit"
+                  [disabled]="clicked"
+                >
+                  Save
+                </button>
+
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 
 
 </div>

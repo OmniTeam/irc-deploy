@@ -65,8 +65,6 @@
         <div class="dataTables_wrapper py-4">
           <div class="row" style="padding: 11px;">
             <div class="col-lg-12 col-5 text-right" style="margin-top: -31px;">
-              <a class=" btn btn-default" style="color: white"> Add Data Collectors</a>
-              <a class=" btn btn-default" style="color: white"> Edit Group </a>
               <a class=" btn btn-danger" (click)="deleteGroups()" style="color: white"> Delete Group </a>
               <a class=" btn btn-success" (click)="addGroup()" style="color: white"> Add New Group </a>
             </div>
@@ -100,14 +98,19 @@
                 <a routerLink="/group/edit/{{row.id}}">{{row.name}}</a>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Parent" prop="parent"></ngx-datatable-column>
+            <ngx-datatable-column name="Group Name" prop="name">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a>{{row.dateCreated | date: 'dd/M/yyyy'}}</a>
+              </ng-template>
+            </ngx-datatable-column>
+            <!--<ngx-datatable-column name="Parent" prop="parent"></ngx-datatable-column>
             <ngx-datatable-column name="Permissions" prop="permissions"></ngx-datatable-column>
             <ngx-datatable-column name="Data Collectors" prop="data_collectors"></ngx-datatable-column>
-            <ngx-datatable-column name="MIS Users" prop="mis_users"></ngx-datatable-column>
-            <!--<ngx-datatable-column name="Action" sortable="false">
+            <ngx-datatable-column name="MIS Users" prop="mis_users"></ngx-datatable-column>-->
+            <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <button
-                  (click)="seeDetails(row);"
+                  (click)="editGroup(row);"
                   class="btn btn-default"
                   style="padding: 1px 6px;">
                   <i class="fa fa-pencil-alt"></i>
@@ -117,7 +120,7 @@
                 </button>
               </ng-template>
 
-            </ngx-datatable-column>-->
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

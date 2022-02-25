@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   updateUser(id, groupData): Observable<any> {
-    return this.http.get(`${this.urlUsers}${id}/`, groupData);
+    return this.http.put(`${this.urlUsers}${id}/`, groupData);
   }
 
   getCurrentUser(id){

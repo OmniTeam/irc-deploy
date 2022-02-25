@@ -166,8 +166,9 @@ export class CreateEntitiesComponent implements OnInit {
 
   }
 
-  deleteField() {
-
+  deleteField(deletedRow) {
+    this.rows = this.removeElementFormArray(this.rows, deletedRow.fieldName);
+    this.rows = [...this.rows];
   }
 
   generateEntityTableName(entityName: string): string {
@@ -218,6 +219,12 @@ export class CreateEntitiesComponent implements OnInit {
 
   replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
+  }
+
+  removeElementFormArray(array, rowName) {
+    return array.filter(function(element){
+      return element.fieldName != rowName;
+    });
   }
 
 }

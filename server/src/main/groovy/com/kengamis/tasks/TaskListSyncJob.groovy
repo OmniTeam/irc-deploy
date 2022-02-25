@@ -8,7 +8,7 @@ import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
-class TasklistSyncJob extends Script {
+class TaskListSyncJob extends Script {
     Sql sql = sql
     static def url = StartCamundaInstancesJob.camundaApiUrl
     static def path = '/get-tasks/CRVPF_REPORTING/'
@@ -16,6 +16,10 @@ class TasklistSyncJob extends Script {
     @Override
     Object run() {
         downloadTasks(url + path + '0/50')
+        //send data to workflow
+        def data = TaskList.where {status == 'completed' && synced == 'false' }.findAll()
+        data.each {  sendTasksToWorkflow(it as TaskList) }
+
         return null
     }
 
@@ -84,26 +88,35 @@ class TasklistSyncJob extends Script {
     }
 
     def deleteCompletedTask(def id) {
-        TaskList.where {synced == 'true' && taskId == id }.deleteAll()
+        TaskList.where {synced == 'true' && id == id }.deleteAll()
     }
 
-    def setTaskSyncStatusToTrue(def id) {
-        def taskList = TaskList.findByTaskId(id.toString())
-        taskList(synced: 'true').save(failOnError: true, flush: true)
+    static def setTaskSyncStatusToTrue(def id) {
+        def taskList = TaskList.get(id)
+        taskList.synced = 'true'
+        taskList.save(failOnError: true, flush: true)
     }
 
-    def completeTask() {
-        def _processInstanceId = (String) request.getJSON().processInstanceId
-        def _taskDefKey = (String) request.getJSON().taskDefKey
-        println("$processInstanceId, $taskDefKey")
-        def taskListRecord = new TaskList()
-
-        def existingTaskInTaskList = TaskList.where {processInstanceId == _processInstanceId && taskDefinitionKey == _taskDefKey}.get()
-
-        if (existingTaskInTaskList) {
-            taskListRecord = existingTaskInTaskList
-            taskListRecord.status = "completed"
-            taskListRecord.save(failOnError: true, flush: true)
+    def sendTasksToWorkflow(TaskList task) {
+        def output = '{"taskId": "' + task.taskId + '", "variables": ' + task.outputVariables + ' }'
+        // POST
+        try {
+            def http = new HTTPBuilder(url+'/complete-task')
+            http.headers.Accept = ContentType.JSON
+            http.request(Method.POST, ContentType.JSON) { req ->
+                body = output
+                requestContentType = ContentType.JSON
+                response.success = { resp, json ->
+                    println "Camunda :: receivedOutputVariables() True [ ${json} ]"
+                    setTaskSyncStatusToTrue(task.id)
+                    this.deleteCompletedTask(task.id)
+                }
+                response.failure = { resp ->
+                    println "Camunda :: receivedOutputVariables() False [ ${resp.status} ]"
+                }
+            }
+        } catch (Exception e) {
+            println "Exception $e"
         }
     }
 

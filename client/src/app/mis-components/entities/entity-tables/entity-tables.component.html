@@ -64,7 +64,8 @@
             [rowHeight]="'auto'"
             [limit]="entries != -1 ? entries : undefined"
             [rows]="rows"
-            [selectionType]="SelectionType.single"
+            [selected]="selected"
+            [selectionType]="SelectionType.multiClick"
             (activate)="onActivate($event)"
             (select)="onSelect($event)"
           >
@@ -81,15 +82,14 @@
                 let-allRowsSelected="allRowsSelected"
                 let-selectFn="selectFn"
               >
-                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)" />
               </ng-template>
               <ng-template
                 ngx-datatable-cell-template
                 let-value="value"
-                let-row="row"
                 let-isSelected="isSelected"
               >
-                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
+                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name | replace: '_' : ' '}}"

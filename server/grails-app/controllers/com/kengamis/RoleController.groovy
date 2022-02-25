@@ -23,7 +23,7 @@ class RoleController {
         respond roleService.list(params), model:[roleCount: roleService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond roleService.get(id)
     }
 
@@ -72,7 +72,7 @@ class RoleController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return

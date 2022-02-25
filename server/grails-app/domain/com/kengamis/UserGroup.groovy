@@ -5,11 +5,10 @@ import groovy.transform.ToString
 @ToString(cache=true, includeNames=true, includePackage=false)
 class UserGroup {
 
-    String groupRole = Group.ROLE_BASIC
 
     String id
     User user
-    Group group
+    KengaGroup group
 
     Date dateCreated
     Date lastUpdated
@@ -23,17 +22,17 @@ class UserGroup {
 
     static UserGroup get(String userId, String groupId) {
         where {
-            user == User.load(userId) && group == Group.load(groupId)
+            user == User.load(userId) && group == KengaGroup.load(groupId)
         }.get()
     }
 
-    static UserGroup create(User user, Group group, String groupRole, boolean flush = false) {
+    static UserGroup create(User user, KengaGroup group, String groupRole, boolean flush = false) {
         new UserGroup(user: user, group: group, groupRole: groupRole).save(flush: flush, insert: true)
     }
 
-    static boolean remove(User user, Group group, boolean flush = false) {
+    static boolean remove(User user, KengaGroup group, boolean flush = false) {
         int rowCount = (int) where {
-            user == User.load(user.id) && group == Group.load(group.id)
+            user == User.load(user.id) && group == KengaGroup.load(group.id)
         }.deleteAll()
         rowCount > 0
     }
@@ -44,9 +43,9 @@ class UserGroup {
         }.deleteAll()
     }
 
-    static void removeAll(Group g) {
+    static void removeAll(KengaGroup g) {
         where {
-            group == Group.load(g.id)
+            group == KengaGroup.load(g.id)
         }.deleteAll()
     }
 }
