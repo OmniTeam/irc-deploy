@@ -78,22 +78,19 @@
           <div class="col-sm-12 justify-center">
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'"
-                      (click)="changeForm('Submit')" [disabled]="!isSubmitVisible">Submit Report
+                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible">Submit Report
               </button>
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'"
-                      (click)="changeForm('Review')" [disabled]="!isReviewVisible">Review Report
+                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible">Review Report
               </button>
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'"
-                      (click)="changeForm('Approve')" [disabled]="!isApproveVisible">Approve Report
+                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible">Approve Report
               </button>
             </div>
           </div>

@@ -27,7 +27,7 @@ export class TaskListComponent implements OnInit {
 
     this.dtOptions = {
       pagingType: "numbers",
-      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
       processing: true,
       responsive: true,
       dom: 'lfBrtip',
