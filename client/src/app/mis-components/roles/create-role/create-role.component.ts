@@ -15,17 +15,18 @@ import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
+import {RolesService} from "../../../services/roles.service";
 
 
 @Component({
   selector: 'app-create-group',
-  templateUrl: './create-group.component.html',
-  styleUrls: ['./create-group.component.scss']
+  templateUrl: './create-role.component.html',
+  styleUrls: ['./create-role.component.scss']
 })
-export class CreateGroupComponent implements OnInit {
+export class CreateRoleComponent implements OnInit {
 
   constructor(
-    private groupsService: GroupsService,
+    private rolesService: RolesService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -90,11 +91,7 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      name: ['',[Validators.required]],
-      parent: [null],
-      access_to_central_data: [false],
-      permissions: [null],
-      data_collectors: [null]
+      authority: ['',[Validators.required]],
     });
   }
 
@@ -106,13 +103,13 @@ export class CreateGroupComponent implements OnInit {
       console.log('Invalid');
       return;
     }
-    const formData = this.formGroup.value;
-    console.log(formData)
-    this.groupsService.createGroup(formData).subscribe((result) => {
-        console.warn(result, 'Group created Successfully');
-        this.alertService.success(`Group has been created`);
-        this.router.navigate(['/groups']);
-    },error => {this.alertService.error("Failed to Create the Group")});
+     const formData = this.formGroup.value;
+    console.log(this.formGroup.getRawValue())
+    this.rolesService.createRole(formData).subscribe((result) => {
+        console.warn(result, 'Role created Successfully');
+        this.alertService.success(`Role: ${this.formGroup.controls.authority.value} has been created`);
+        this.router.navigate(['/roles']);
+    },error => {this.alertService.error("Failed to Create the Role")});
   }
 
   resetForm() {

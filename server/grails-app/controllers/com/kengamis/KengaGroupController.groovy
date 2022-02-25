@@ -11,64 +11,64 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class RoleController {
+class KengaGroupController {
 
-    RoleService roleService
+    KengaGroupService kengaGroupService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond roleService.list(params), model:[roleCount: roleService.count()]
+        respond kengaGroupService.list(params), model:[kengaGroupCount: kengaGroupService.count()]
     }
 
     def show(String id) {
-        respond roleService.get(id)
+        respond kengaGroupService.get(id)
     }
 
     @Transactional
-    def save(Role role) {
-        if (role == null) {
+    def save(KengaGroup kengaGroup) {
+        if (kengaGroup == null) {
             render status: NOT_FOUND
             return
         }
-        if (role.hasErrors()) {
+        if (kengaGroup.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond role.errors
+            respond kengaGroup.errors
             return
         }
 
         try {
-            roleService.save(role)
+            kengaGroupService.save(kengaGroup)
         } catch (ValidationException e) {
-            respond role.errors
+            respond kengaGroup.errors
             return
         }
 
-        respond role, [status: CREATED, view:"show"]
+        respond kengaGroup, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(Role role) {
-        if (role == null) {
+    def update(KengaGroup kengaGroup) {
+        if (kengaGroup == null) {
             render status: NOT_FOUND
             return
         }
-        if (role.hasErrors()) {
+        if (kengaGroup.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond role.errors
+            respond kengaGroup.errors
             return
         }
 
         try {
-            roleService.save(role)
+            kengaGroupService.save(kengaGroup)
         } catch (ValidationException e) {
-            respond role.errors
+            respond kengaGroup.errors
             return
         }
 
-        respond role, [status: OK, view:"show"]
+        respond kengaGroup, [status: OK, view:"show"]
     }
 
     @Transactional
@@ -78,7 +78,7 @@ class RoleController {
             return
         }
 
-        roleService.delete(id)
+        kengaGroupService.delete(id)
 
         render status: NO_CONTENT
     }

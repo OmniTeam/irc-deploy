@@ -11,74 +11,74 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class RoleController {
+class UserGroupController {
 
-    RoleService roleService
+    UserGroupService userGroupService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond roleService.list(params), model:[roleCount: roleService.count()]
+        respond userGroupService.list(params), model:[userGroupCount: userGroupService.count()]
     }
 
-    def show(String id) {
-        respond roleService.get(id)
+    def show(Long id) {
+        respond userGroupService.get(id)
     }
 
     @Transactional
-    def save(Role role) {
-        if (role == null) {
+    def save(UserGroup userGroup) {
+        if (userGroup == null) {
             render status: NOT_FOUND
             return
         }
-        if (role.hasErrors()) {
+        if (userGroup.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond role.errors
+            respond userGroup.errors
             return
         }
 
         try {
-            roleService.save(role)
+            userGroupService.save(userGroup)
         } catch (ValidationException e) {
-            respond role.errors
+            respond userGroup.errors
             return
         }
 
-        respond role, [status: CREATED, view:"show"]
+        respond userGroup, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(Role role) {
-        if (role == null) {
+    def update(UserGroup userGroup) {
+        if (userGroup == null) {
             render status: NOT_FOUND
             return
         }
-        if (role.hasErrors()) {
+        if (userGroup.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond role.errors
+            respond userGroup.errors
             return
         }
 
         try {
-            roleService.save(role)
+            userGroupService.save(userGroup)
         } catch (ValidationException e) {
-            respond role.errors
+            respond userGroup.errors
             return
         }
 
-        respond role, [status: OK, view:"show"]
+        respond userGroup, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(String id) {
+    def delete(Long id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
-        roleService.delete(id)
+        userGroupService.delete(id)
 
         render status: NO_CONTENT
     }

@@ -64,7 +64,7 @@
                           <div class="row">
                             <div class="col-md-3">
                               <label>
-                                First Name
+                                  Names
                                 <span class="required-indicator">*</span>
                               </label>
                             </div>
@@ -82,45 +82,12 @@
                                       placeholder="First Name"
                                       type="text"
                                       style="padding-left: 10px;"
-                                      formControlName="first_name"
-                                      [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"
+                                      formControlName="names"
+                                      [ngClass]="{ 'is-invalid': submitted && f.names.errors }"
                                     >
-                                    <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
-                                      <div *ngIf="f.first_name.errors.required" class="input-error">First Name is required</div>
+                                    <div *ngIf="submitted && f.names.errors" class="invalid-feedback">
+                                      <div *ngIf="f.names.errors.required" class="input-error">Names are required</div>
                                     </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>
-                                Last Name
-                                <span class="required-indicator">*</span>
-                              </label>
-                            </div>
-                            <div class="col-md-9">
-                              <div class="col-md-12">
-                                <div class="form-group ">
-                                  <div class=" input-group input-group-merge">
-                                    <div class=" input-group-prepend">
-                                                <span class="input-group-text" style="padding-right: 10px;">
-                                                    <i class=" fas fa-user"></i>
-                                                </span>
-                                    </div>
-                                    <input
-                                      class="form-control"
-                                      placeholder="Last Name"
-                                      type="text"
-                                      style="padding-left: 10px;"
-                                      formControlName="last_name"
-                                      [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"
-                                    >
-                                    <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
-                                      <div *ngIf="f.last_name.errors.required" class="input-error">Last Name is required</div>
-                                    </div>
-
                                   </div>
                                 </div>
                               </div>
@@ -178,7 +145,7 @@
                             <div class="col-md-3">
                               <label>
                                 Email
-                                <span class="required-indicator">*</span>
+<!--                                <span class="required-indicator">*</span>-->
                               </label>
                             </div>
                             <div class="col-md-9">
@@ -210,11 +177,11 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row">
+                          <!--<div class="row">
                             <div class="col-md-3">
                               <label>
                                 Telephone
-                                <span class="required-indicator">*</span>
+&lt;!&ndash;                                <span class="required-indicator">*</span>&ndash;&gt;
                               </label>
                             </div>
                             <div class="col-md-9">
@@ -247,6 +214,39 @@
                                 </div>
                               </div>
                             </div>
+                          </div>-->
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label>
+                                Role
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <ng-select class="form-control form-control-sm"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="false"
+                                               placeholder="Role"
+                                               formControlName="role"
+                                               [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
+                                               [searchable]="true"
+                                               [clearable]="true"
+                                    >
+                                      <ng-option [value]="item.id" *ngFor="let item of user_Type">
+                                        {{item.authority}}
+                                      </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+                                      <div *ngIf="f.role.errors.required" class="input-error">A role is required</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                           <div class="row">
                             <div class="col-md-3">
@@ -268,48 +268,13 @@
                                                [ngClass]="{ 'is-invalid': submitted && f.groups.errors }"
                                                [searchable]="true"
                                                [clearable]="true"
-                                               required
                                     >
-                                      <ng-option [value]="item.id" *ngFor="let item of groups">
+                                      <ng-option [value]="item.name" *ngFor="let item of groups">
                                         {{item.name}}
                                       </ng-option>
                                     </ng-select>
                                     <div *ngIf="submitted && f.groups.errors" class="invalid-feedback">
                                       <div *ngIf="f.groups.errors.required" class="input-error">A role is required</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>
-                                Role
-                              </label>
-                            </div>
-                            <div class="col-md-9">
-                              <div class="col-md-12">
-                                <div class="form-group ">
-                                  <div class=" input-group input-group-merge">
-                                    <ng-select class="form-control form-control-sm"
-                                               name="datatable_length"
-                                               aria-controls="datatable"
-                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                               [multiple]="false"
-                                               placeholder="Role"
-                                               formControlName="role"
-                                               [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
-                                               [searchable]="true"
-                                               [clearable]="true"
-                                               required
-                                    >
-                                      <ng-option [value]="item.id" *ngFor="let item of user_Type">
-                                        {{item.name}}
-                                      </ng-option>
-                                    </ng-select>
-                                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
-                                      <div *ngIf="f.role.errors.required" class="input-error">A role is required</div>
                                     </div>
                                   </div>
                                 </div>
@@ -341,8 +306,8 @@
                                         {{item.name}}
                                       </ng-option>
                                     </ng-select>
-                                    <div *ngIf="submitted && f.tags.errors" class="invalid-feedback">
-                                      <div *ngIf="f.tags.errors.required" class="input-error">A Group is required
+                                    <div *ngIf="submitted && f.data_collector_Type.errors" class="invalid-feedback">
+                                      <div *ngIf="f.data_collector_Type.errors.required" class="input-error">A Data Collector is Required is required
                                       </div>
                                     </div>
                                   </div>
@@ -366,7 +331,7 @@
                                   <input
                                     checked="checked"
                                     type="checkbox"
-                                    formControlName="is_active"
+                                    formControlName="enabled"
                                   />
 
                                   <span

@@ -156,8 +156,8 @@ export class UsersComponent implements OnInit {
     const deletedRow = this.selectedUsers;
     deletedRow.forEach((p) => {
         this.usersService.deleteCurrentUser(p).subscribe((result) => {
-          console.warn(result, 'Tags have been deleted');
-          this.router.navigate(['/groups']).then(() => {
+          console.warn(result, 'Users have been deleted');
+          this.router.navigate(['/users']).then(() => {
             window.location.reload();
           });
         })
