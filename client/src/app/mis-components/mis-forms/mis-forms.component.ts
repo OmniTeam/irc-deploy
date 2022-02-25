@@ -4,6 +4,7 @@ import {FormService} from "../../services/form.service";
 import {Project} from "../../models/project";
 import {Subject} from "rxjs";
 import {Form} from "../../models/form";
+import {AlertService} from "../../services/alert";
 
 @Component({
   selector: 'app-mis-forms',
@@ -19,7 +20,9 @@ export class MisFormsComponent implements OnInit {
   editing = {};
   formData: any;
 
-  constructor( private router: Router, private formService: FormService) {
+  constructor( private router: Router,
+               private alertService: AlertService,
+               private formService: FormService) {
   }
 
   entriesChange($event) {
@@ -45,6 +48,10 @@ export class MisFormsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.reloadTable();
+  }
+
+  reloadTable() {
     this.formService.getForms().subscribe(data => {
       this.rows = data;
     }, error => console.log(error));
@@ -59,5 +66,19 @@ export class MisFormsComponent implements OnInit {
     this.formService.updateForm(formId, this.formData).subscribe((data) => {
       console.log(data);
     }, error => console.log(error));
+  }
+
+  deleteForm(row) {
+    const deletedRow = row.id;
+    if (confirm('Are you sure to delete this Form?')) {
+      this.formService.deleteForm(deletedRow).subscribe((result) => {
+          this.alertService.warning(`Form has been  deleted `);
+          this.router.navigate(['/forms']);
+          this.reloadTable();
+        }, error => {
+          this.alertService.error(`Form could not be deleted`);
+        }
+      );
+    }
   }
 }
