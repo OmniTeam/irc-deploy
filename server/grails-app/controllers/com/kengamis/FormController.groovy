@@ -29,7 +29,7 @@ class FormController {
         respond forms
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond formService.get(id)
     }
 
@@ -78,13 +78,33 @@ class FormController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
+        def form = Form.get(id)
+        def repeatTableNames = form.findAllChildTables()
+        def formTable = form.truncateNameForSql()
         formService.delete(id)
+        try{
+            AppHolder.withMisSqlNonTx {
+                execute("SET foreign_key_checks = 0;")
+                repeatTableNames.each { table ->
+                    try{
+                        log.info("deleting table ===================${table}")
+                        execute("DROP TABLE IF EXISTS ${table}".toString())
+                    }catch(Exception ex) {
+                        ex.printStackTrace()
+                    }
+                }
+                execute("DROP TABLE IF EXISTS ${formTable}".toString())
+                execute("SET foreign_key_checks = 1;")
+            }
+        } catch(Exception ex) {
+            log.error(ex.message)
+        }
 
         render status: NO_CONTENT
     }

@@ -14,12 +14,6 @@ class DataService {
 
     def springSecurityService
 
-    boolean hasAccessToTable(User user, String table) {
-        def forms = listAllUserForms(user)
-        def hasAccess = forms.any { it.name == table }
-        return hasAccess
-    }
-
     List<FormData> listAll(def params) {
         def q = new QueryHelper(params, springSecurityService.currentUser as User)
         List<FormData> formDataList = q.data.collect {

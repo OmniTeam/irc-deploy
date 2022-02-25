@@ -8,6 +8,9 @@ class Tag {
     Date lastUpdated
 
     static belongsTo = [tagType: TagType]
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
     }
 

@@ -56,7 +56,7 @@ server.port = 8081
 
 
 grails.gorm.default.mapping = {
-    id generator: 'uuid2'
+//    id generator: 'uuid2'
     version false
     autoTimestamp true
 }

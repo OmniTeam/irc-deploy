@@ -17,7 +17,7 @@ import {TagService} from "../../../services/tags";
 export class EntityTablesComponent implements OnInit {
 
   entityName = "";
-  entries = 50;
+  entries = 10;
   selected = [];
   activeRow: any;
   rows: Object[];
@@ -178,13 +178,17 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', this.entityId);
 
-    const post = {};
-    post['mis_entity_id'] = this.entityId;
-    post['record_id'] = this.selected[0]['id'];
-    post['tag_type_id'] = newTaggingRecord.tagType;
-    post['tag_id'] = newTaggingRecord.tag;
-
-    this.tagService.addEntityTagRecord(post, params).subscribe((data) => {
+    let selectedRows = this.selected;
+    let postRequest = [];
+    for (const selectedRow of selectedRows) {
+      const post = {};
+      post['mis_entity_id'] = this.entityId;
+      post['record_id'] = selectedRow['id'];
+      post['tag_type_id'] = newTaggingRecord.tagType;
+      post['tag_id'] = newTaggingRecord.tag;
+      postRequest.push(post);
+    }
+    this.tagService.addEntityTagRecord(postRequest, params).subscribe((data) => {
       this.getEntityData();
       this.alertService.success(`Record has been tagged successfully`);
     }, error => {
@@ -192,6 +196,7 @@ export class EntityTablesComponent implements OnInit {
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/entity/' + this.entityId]);
+    this.selected = [];
 
     if (this.tagFormGroup.valid) {
       setTimeout(() => {
@@ -202,16 +207,22 @@ export class EntityTablesComponent implements OnInit {
   }
 
   removeTagToRecord() {
-    const taggingRecord = this.tagFormGroup.value;
+    const deleteTaggingRecord = this.tagFormGroup.value;
     const params = new HttpParams()
       .set('id', this.entityId);
 
-    const post = {};
-    post['mis_entity_id'] = this.entityId;
-    post['record_id'] = this.selected[0]['id'];
-    post['tag_id'] = taggingRecord.tag;
+    let selectedRows = this.selected;
+    let postRequest = [];
+    for (const selectedRow of selectedRows) {
+      const post = {};
+      post['mis_entity_id'] = this.entityId;
+      post['record_id'] = selectedRow['id'];
+      post['tag_type_id'] = deleteTaggingRecord.tagType;
+      post['tag_id'] = deleteTaggingRecord.tag;
+      postRequest.push(post);
+    }
 
-    this.tagService.removeEntityTagRecord(post, params).subscribe((data) => {
+    this.tagService.removeEntityTagRecord(postRequest, params).subscribe((data) => {
       this.getEntityData();
       this.alertService.success(`Record has been untagged successfully`);
     }, error => {
@@ -219,6 +230,7 @@ export class EntityTablesComponent implements OnInit {
     });
     this.modalService.dismissAll('Dismissed after saving data');
     this.router.navigate(['/entity/' + this.entityId]);
+    this.selected = [];
 
     if (this.tagFormGroup.valid) {
       setTimeout(() => {

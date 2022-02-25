@@ -17,6 +17,7 @@ class ChoiceOption {
     static belongsTo = [formSetting: FormSetting]
 
     static mapping = {
+        id generator: 'uuid2'
         text type: 'text'
     }
 }

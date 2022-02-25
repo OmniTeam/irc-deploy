@@ -108,8 +108,7 @@ class EntityViewController {
         }
     }
 
-    def viewData(Integer max) {
-        params.max = Math.min(max ?: 100, 100)
+    def viewData() {
         def entityView = EntityView.get(params.id)
         params.formtable = entityView.tableName
         def query

@@ -12,6 +12,7 @@ class Role {
 
 	String id
 	String authority
+	String description
 
 	Date dateCreated
 	Date lastUpdated
@@ -20,9 +21,11 @@ class Role {
 
 	static constraints = {
 		authority nullable: false, blank: false, unique: true
+		description nullable: true
 	}
 
 	static mapping = {
+		id generator: 'uuid2'
 		//cache true
 	}
 }

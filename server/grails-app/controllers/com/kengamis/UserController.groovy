@@ -1,6 +1,10 @@
 package com.kengamis
 
+import grails.converters.JSON
 import grails.validation.ValidationException
+import org.apache.http.HttpStatus
+import org.springframework.web.multipart.MultipartFile
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -14,6 +18,7 @@ import grails.gorm.transactions.Transactional
 class UserController {
 
     UserService userService
+    UserRoleService userRoleService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -41,6 +46,7 @@ class UserController {
 
         try {
             userService.save(user)
+            createUserRole(user)
         } catch (ValidationException e) {
             respond user.errors
             return
@@ -81,5 +87,26 @@ class UserController {
         userService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def uploadUsers() {
+        println("===================")
+        try{
+            MultipartFile file = request.getFile('users')
+            String fileType = file.getContentType()
+            println fileType
+            userService.importUsers(file)
+            render([code: HttpStatus.SC_OK, msg: "Successfully uploaded users."] as JSON)
+        }catch(Exception ex) {
+            ex.printStackTrace()
+        }
+    }
+
+    def createUserRole(User user) {
+        def role = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
+        if (!user.authorities.contains(role)) {
+            UserRole.create user, role
+        }
     }
 }
