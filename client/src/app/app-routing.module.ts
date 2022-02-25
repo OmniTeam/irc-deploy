@@ -108,6 +108,17 @@ const routes: Routes = [
       {
         path: 'user/edit/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/users/edit-user/edit-user.module').then(m => m.EditUserModule)
+      },{
+        path:'roles', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/roles/roles.module').then(m => m.RolesModule)
+      },
+      {
+        path:'role/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/roles/create-role/create-role.module').then(m => m.CreateRoleModule)
+      },
+      {
+        path: 'role/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/roles/edit-role/edit-role.module').then(m => m.EditRoleModule)
       }
     ]
   },

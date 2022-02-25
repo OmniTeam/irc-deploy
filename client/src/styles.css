@@ -48,3 +48,16 @@ table tr th.select-checkbox.selected::after {
 table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before {
   margin-top: 3px !important;
 }
+.input-error{
+  color:red;
+  font-size: 80%;
+  font-weight: 400;
+  font-family: Open Sans, sans-serif;
+}
+
+.invalid-feedback {
+  color: red;
+}
+.was-validated .form-control:invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .custom-select.is-invalid {
+  border-color: red !important;
+}
