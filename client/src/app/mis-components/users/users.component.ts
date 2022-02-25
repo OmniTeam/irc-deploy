@@ -119,11 +119,17 @@ export class UsersComponent implements OnInit {
 
   onChangeSearch(event) {
     console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
+    this.searchValue = event.target.value
+    if(!this.searchValue){
+      this.reloadTable()
+    } else {
+      this.users = this.users.filter(a => a.username.includes(this.searchValue) ||a.names.includes(this.searchValue))
     }
+
+  }
+  entriesChange($event) {
+    this.entries = $event.target.value;
+    console.log(this.entries,"Entries")
     this.reloadTable();
   }
 
@@ -187,10 +193,6 @@ export class UsersComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
-  }
-
-  entriesChange($event) {
-    this.entries = $event.target.value;
   }
 
   onActivate(event) {
