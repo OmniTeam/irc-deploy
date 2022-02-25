@@ -307,7 +307,13 @@
                         </ng-template>
                       </ngx-datatable-column>
                       <ngx-datatable-column name="Display Order" prop="orderOfDisplay"></ngx-datatable-column>
-                      <ngx-datatable-column name="Action"></ngx-datatable-column>
+                      <ngx-datatable-column name="Action" sortable="false">
+                        <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                          <button (click)="deleteField(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </ng-template>
+                      </ngx-datatable-column>
                     </ngx-datatable>
                   </div>
                 </div>

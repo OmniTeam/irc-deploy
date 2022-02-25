@@ -227,7 +227,11 @@
                     <td class='text-center'>{{ row.fieldType }}</td>
                     <td class='text-center'>{{ row.orderOfDisplay }}</td>
                     <td class='text-center'>{{ row.filterOrder }}</td>
-                    <td class='text-center'></td>
+                    <td class='text-center'>
+                      <button (click)="deleteField(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
                   </tr>
                   </tbody>
                 </table>

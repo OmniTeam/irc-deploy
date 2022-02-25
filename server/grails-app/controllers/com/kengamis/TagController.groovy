@@ -110,32 +110,33 @@ class TagController {
     @Transactional
     def tagEntityRecord() {
         def message = ["Entity record tagged successfully"]
-        def id = UUID.randomUUID() as String
         def misEntityId = params.id as String
-        def record = request.JSON
-        def recordId = record['record_id'] as String
-        def tagTypeId = record['tag_type_id'] as String
-        def tagId = record['tag_id'] as String
-        def simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        def dateCreated = Timestamp.valueOf(simpleDateFormat.format(new Date()))
+        def records = request.JSON
+        records.each { record ->
+            def recordId = record['record_id'] as String
+            def tagTypeId = record['tag_type_id'] as String
+            def tagId = record['tag_id'] as String
+            def simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            def dateCreated = Timestamp.valueOf(simpleDateFormat.format(new Date()))
+            def id = UUID.randomUUID() as String
+            def misEntity = MisEntity.get(misEntityId)
 
-        def misEntity = MisEntity.get(misEntityId)
+            //Insert into Tag Table
+            def queryInsertTag = "INSERT IGNORE INTO ${escapeField misEntity.entityTagTable} (id, mis_entity_id, record_id, tag_type_id, tag_id, date_created) values ('${id}', '${misEntityId}', '${recordId}', '${tagTypeId}', '${tagId}', '${dateCreated}')"
+            log.info(queryInsertTag)
+            def result = AppHolder.withMisSql { execute(queryInsertTag.toString()) }
+            if (!result) {
+                log.info("Entity Tag Table ${misEntity.entityTagTable} successfully inserted a record")
+            }
 
-        //Insert into Tag Table
-        def queryInsertTag = "INSERT IGNORE INTO ${escapeField misEntity.entityTagTable} (id, mis_entity_id, record_id, tag_type_id, tag_id, date_created) values ('${id}', '${misEntityId}', '${recordId}', '${tagTypeId}', '${tagId}', '${dateCreated}')"
-        log.trace(queryInsertTag)
-        def result = AppHolder.withMisSql { execute(queryInsertTag.toString()) }
-        if (!result) {
-            log.info("Entity Tag Table ${misEntity.entityTagTable} successfully inserted a record")
-        }
+            def recordTags = getRecordTags(misEntity, recordId)
 
-        def recordTags = getRecordTags(misEntity, recordId)
-
-        def updateQuery = "update ${escapeField misEntity.tableName} set _tag = '${recordTags}' where id = '${recordId}'".toString()
-        log.trace(updateQuery)
-        def resultUpdate = AppHolder.withMisSql { execute(updateQuery.toString()) }
-        if (!resultUpdate) {
-            log.info("Table ${misEntity.tableName} successfully updated a record")
+            def updateQuery = "update ${escapeField misEntity.tableName} set _tag = '${recordTags}' where id = '${recordId}'".toString()
+            log.info(updateQuery)
+            def resultUpdate = AppHolder.withMisSql { execute(updateQuery.toString()) }
+            if (!resultUpdate) {
+                log.info("Table ${misEntity.tableName} successfully updated a record")
+            }
         }
         respond message
     }

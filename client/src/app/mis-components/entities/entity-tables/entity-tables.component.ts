@@ -61,6 +61,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   onSelect({selected}) {
+    console.log('Select Event', selected, this.selected);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
@@ -177,14 +178,18 @@ export class EntityTablesComponent implements OnInit {
     const newTaggingRecord = this.tagFormGroup.value;
     const params = new HttpParams()
       .set('id', this.entityId);
-
-    const post = {};
-    post['mis_entity_id'] = this.entityId;
-    post['record_id'] = this.selected[0]['id'];
-    post['tag_type_id'] = newTaggingRecord.tagType;
-    post['tag_id'] = newTaggingRecord.tag;
-
-    this.tagService.addEntityTagRecord(post, params).subscribe((data) => {
+    console.log(this.selected);
+    let selectedRows = this.selected;
+    let postRequest = [];
+    for (const selectedRow of selectedRows) {
+      const post = {};
+      post['mis_entity_id'] = this.entityId;
+      post['record_id'] = selectedRow['id'];
+      post['tag_type_id'] = newTaggingRecord.tagType;
+      post['tag_id'] = newTaggingRecord.tag;
+      postRequest.push(post);
+    }
+    this.tagService.addEntityTagRecord(postRequest, params).subscribe((data) => {
       this.getEntityData();
       this.alertService.success(`Record has been tagged successfully`);
     }, error => {

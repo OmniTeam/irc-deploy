@@ -56,18 +56,12 @@ class User {
         roleNames.any { role -> authorities?.any { role == it.authority } }
     }
 
-    Set<Group> getGroups() {
+    Set<Study> getStudies() {
+        UserStudy.findAllByUser(this).collect { it.study } as Set
+    }
+
+    Set<KengaGroup> getGroups() {
         UserGroup.findAllByUser(this).collect { it.group } as Set
-    }
-
-    Set<Group> getGroups(String role) {
-        UserGroup.findAllByUserAndGroupRole(this, role).collect { it.group } as Set
-    }
-
-    List<User> findFellowUsers() {
-        def groupIds = getGroups(Group.ROLE_SUPERVISOR).collect { it.id }
-        if (!groupIds) return [this]
-        return executeQuery("select distinct upg.user from UserGroup upg where upg.group.id in (:ids) ", [ids: groupIds])
     }
 
     Set<Study> getLoggedInUserStudies() {

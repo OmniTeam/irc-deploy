@@ -43,7 +43,6 @@ export class CreateEntityViewsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
     });
-    console.log(this.entityId);
     const params = new HttpParams()
       .set('id', this.entityId);
     this.entityService.getEntityRecord(params).subscribe((data) => {
@@ -121,9 +120,21 @@ export class CreateEntityViewsComponent implements OnInit {
     return this.formGroupField.controls;
   }
 
+  deleteField(deletedRow) {
+    console.log(deletedRow);
+    this.rows = this.removeElementFormArray(this.rows, deletedRow.name);
+    this.rows = [...this.rows];
+  }
+
   onReset() {
     this.formGroup.reset();
     this.formGroupField.reset();
+  }
+
+  removeElementFormArray(array, rowName) {
+    return array.filter(function(element){
+      return element.name != rowName;
+    });
   }
 
 }
