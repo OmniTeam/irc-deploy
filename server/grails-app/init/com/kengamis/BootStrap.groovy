@@ -29,7 +29,7 @@ class BootStrap {
     @Transactional
     def initData() {
         //Initial Study
-        def study = Study.findByCentralId('8') ?: new Study(name: 'CRVPF', centralId: '8')
+        def study = Study.findByCentralId('9') ?: new Study(name: 'IRC', centralId: '9')
         study.save(failOnError: true, flush: true)
 
         // Initial User and Roles
@@ -42,14 +42,14 @@ class BootStrap {
                 names: "Super User",
                 email: "super@gmail.com",
                 username: 'super',
-                password: 'pass',
+                password: 'omg!@mni',
                 enabled: true).save(failOnError: true)
 
         def adminUser = User.findByUsername('root') ?: new User(
                 names: "Root User",
                 email: "root@gmail.com",
                 username: 'root',
-                password: 'pass',
+                password: 'omg!@mni',
                 enabled: true).save(failOnError: true)
 
         if (!superAdminUser.authorities.contains(superAdminRole)) {
@@ -74,7 +74,7 @@ class BootStrap {
         TaskDef.findByName("Central Sync Job") ?: new TaskDef(
                 name: 'Central Sync Job',
                 description: 'Central Data import into MIS',
-                cronExpression: '0 0/40 * * * ?',
+                cronExpression: '0 0/30 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.CentralDataImportJob',
                 startOnStartup: true
