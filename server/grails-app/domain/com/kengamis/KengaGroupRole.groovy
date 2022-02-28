@@ -1,9 +1,11 @@
 package com.kengamis
 
 import grails.gorm.DetachedCriteria
+import groovy.transform.ToString
 import org.codehaus.groovy.util.HashCodeHelper
 
-class KengaGroupRole {
+@ToString(cache=true, includeNames=true, includePackage=false)
+class KengaGroupRole implements Serializable{
     String id
     KengaGroup kengaGroup
     Role role

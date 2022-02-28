@@ -1197,7 +1197,41 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1645697783843-8") {
         dropUniqueConstraint(constraintName: "UC_GROUPNAME_COL", tableName: "group")
     }
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-1") {
+        createTable(tableName: "kenga_group_role") {
+            column(name: "kenga_group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_group_rolePK")
+            }
 
+            column(name: "role_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_group_rolePK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-2") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_group_role", constraintName: "FK6j6xb1j0i5wp1b50f7ff7f39u", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-3") {
+        addForeignKeyConstraint(baseColumnNames: "role_id", baseTableName: "kenga_group_role", constraintName: "FK8fmsx15k5wgah0nxu3aojreiy", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "role", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-4") {
+        dropTable(tableName: "group")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-5") {
+        dropColumn(columnName: "group_role", tableName: "user_group")
+    }
 
 
 }
