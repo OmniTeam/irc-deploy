@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../services/alert";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UsersService} from "../../services/users.service";
+import {RolesService} from "../../services/roles.service";
 
 @Component({
   selector: 'app-users',
@@ -55,16 +56,7 @@ export class UsersComponent implements OnInit {
       'name': 'Partner 4',
     },
   ];
-  roles = [
-    {
-      'name': 'Active',
-      'value': true
-    },
-    {
-      'name': 'Inactive',
-      'value': false
-    }
-  ];
+  roles: any;
   private partnerValue = '';
   private roleValue = '';
   private groupValue = '';
@@ -76,7 +68,8 @@ export class UsersComponent implements OnInit {
     private alertService: AlertService,
     private router: Router,
     private modalService: NgbModal,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private rolesService: RolesService
   ) { }
 
   get f() {
@@ -85,6 +78,9 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadTable();
+    this.rolesService.getRoles().subscribe(results =>{
+      this.roles = results
+    }, error => {this.alertService.error("Failed to get Roles")})
   }
 
   onChangePartner(event) {
@@ -123,9 +119,8 @@ export class UsersComponent implements OnInit {
     if(!this.searchValue){
       this.reloadTable()
     } else {
-      this.users = this.users.filter(a => a.username.includes(this.searchValue) ||a.names.includes(this.searchValue))
+      this.users = this.users.filter(a => a.username.toUpperCase().includes(this.searchValue.toUpperCase()) ||a.names.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
-
   }
   entriesChange($event) {
     this.entries = $event.target.value;

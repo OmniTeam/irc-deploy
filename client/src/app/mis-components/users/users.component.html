@@ -43,8 +43,8 @@
                                    placeholder="Role"
                                    [searchable]="true"
                                    [clearable]="true">
-                          <ng-option [value]="item.name" *ngFor="let item of roles">
-                            {{item.name}}
+                          <ng-option [value]="item.id" *ngFor="let item of roles">
+                            {{item?.authority}}
                           </ng-option>
                         </ng-select>
                       </div>

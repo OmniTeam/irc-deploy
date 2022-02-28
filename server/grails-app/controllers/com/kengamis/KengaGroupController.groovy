@@ -19,8 +19,15 @@ class KengaGroupController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond kengaGroupService.list(params), model:[kengaGroupCount: kengaGroupService.count()]
+        def kengaGroups=[]
+        kengaGroupService.list(params).each {kengaGroup ->
+            def newKengaGroupObject=[:]
+            newKengaGroupObject['id']=kengaGroup.id
+            newKengaGroupObject['name']=kengaGroup.name
+            newKengaGroupObject['dateCreated']=kengaGroup.dateCreated
+            kengaGroups << newKengaGroupObject
+        }
+        respond kengaGroups
     }
 
     def show(String id) {
