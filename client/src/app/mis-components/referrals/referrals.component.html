@@ -1,0 +1,211 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <h1 style="color: white">
+        REFERRAL DASHBOARD
+      </h1>
+      <div class=" row align-items-center py-4">
+        <div class="col-md-3">
+          <div class=" card card-stats">
+            <div class=" card-body">
+              <div class=" row">
+                <div class=" col">
+                  <h5 class=" card-title text-uppercase text-muted mb-0">
+                    Community
+                  </h5>
+                  <span class=" h2 font-weight-bold mb-0"> 24 </span>
+                </div>
+                <div class=" col-auto">
+                  <div
+                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                  >
+                    <i class=" fa fa-users"> </i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class=" card card-stats">
+            <div class=" card-body">
+              <div class=" row">
+                <div class=" col">
+                  <h5 class=" card-title text-uppercase text-muted mb-0">
+                    Health Facility
+                  </h5>
+
+                  <span class=" h2 font-weight-bold mb-0"> 34 </span>
+                </div>
+
+                <div class=" col-auto">
+                  <div
+                    class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                  >
+                    <i class=" fa fa-heartbeat"> </i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class=" card card-stats">
+            <div class=" card-body">
+              <div class=" row">
+                <div class=" col">
+                  <h5 class=" card-title text-uppercase text-muted mb-0">
+                    Inter-agency
+                  </h5>
+
+                  <span class=" h2 font-weight-bold mb-0"> 33 </span>
+                </div>
+
+                <div class=" col-auto">
+                  <div
+                    class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                  >
+                    <i class=" fa fa-h-square"> </i>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class=" card card-stats">
+            <div class=" card-body">
+              <div class=" row">
+                <div class=" col">
+                  <h5 class=" card-title text-uppercase text-muted mb-0">
+                    Intra-agency
+                  </h5>
+
+                  <span class=" h2 font-weight-bold mb-0"> 5 </span>
+                </div>
+
+                <div class=" col-auto">
+                  <div
+                    class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
+                  >
+                    <i class=" fa fa-medkit"> </i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class="dataTables_wrapper py-4">
+          <div class="row" style="padding: 11px;">
+            <div class="col-lg-8 text-left" style="margin-top: -31px;">
+              <div class="col-sm-12 ">
+                <div class="dataTables_length" id="datatable_length">
+                  <label>
+                    Show
+                    <select
+                      name="datatable_length"
+                      aria-controls="datatable"
+                      class="form-control form-control-sm"
+                      (change)="entriesChange($event)"
+                    >
+                      <option value="5" [selected]="entries == 5">5</option>
+                      <option value="10" [selected]="entries == 10">10</option>
+                      <option value="25" [selected]="entries == 25">25</option>
+                      <option value="50" [selected]="entries == 50">50</option>
+                      <option value="100" [selected]="entries == 100">100</option>
+                      <option value="-1" [selected]="entries == -1">All</option>
+                    </select>
+                    entries
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 ">
+                <div id="datatable_filter" class="dataTables_filter">
+                  <label>
+                    <input
+                      type="search"
+                      class="form-control form-control-sm"
+                      placeholder="Search"
+                      aria-controls="datatable"
+                      (keyup)="onChangeSearch($event)"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div class="col-sm-12 ">
+                <div class="dataTables_length" >
+                  <ng-select class="form-control form-control-sm"
+                             name="datatable_length"
+                             aria-controls="datatable"
+                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                             [multiple]="false"
+                             (change)="onChangeStatus($event)"
+                             placeholder="Status"
+                             [searchable]="true"
+                             [clearable]="true">
+                    <ng-option [value]="item.name" *ngFor="let item of status">
+                      {{item?.name}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 text-right" style="margin-top: -31px;">
+              <div
+                class=" btn btn-success fa fa-plus"
+                (click)="createReferral()"
+              >
+                Add Referral
+
+              </div>
+              <div
+                class=" btn btn-success fa fa-download "
+                (click)="downloadReferrals()"
+              >
+                Excel
+              </div>
+            </div>
+          </div>
+          <ngx-datatable
+            class="bootstrap selection-cell"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [rows]="referrals"
+            [limit]="entries != -1 ? entries : undefined"
+            (activate)="onActivate($event)"
+          >
+            <ngx-datatable-column [width]="15" prop="id" >
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <input type="checkbox" [value]="value" (change)="onSelected($event)">
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Client Name" prop="name_of_client_being_referred">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a routerLink="/action-referral/{{row.id}}">{{row?.name_of_client_being_referred}} </a>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Referring Officer" prop="name_of_referring_officer"></ngx-datatable-column>
+            <ngx-datatable-column name="Date of Referral" prop="date_of_referral"></ngx-datatable-column>
+            <ngx-datatable-column name="Contact" prop="phone_number"></ngx-datatable-column>
+            <ngx-datatable-column name="Country of Origin" prop="country_of_origin"></ngx-datatable-column>
+            <ngx-datatable-column name="Nationality" prop="country_of_origin"></ngx-datatable-column>
+            <ngx-datatable-column name="Disability" prop="disability"></ngx-datatable-column>
+            <ngx-datatable-column name="status" prop="status"></ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,7 +12,7 @@ let formsMenu: any = {
   path: '/forms/data',
   title: 'Data',
   type: 'sub',
-  icontype: 'ni-single-copy-04 text-pink',
+  icontype: 'ni-books text-pink',
   isCollapsed: true,
   children: []
 }
@@ -60,17 +60,12 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'fas fa-home',
   },
   formsMenu,
-  // {
-  //   path: '/widgets',
-  //   title: 'Reports',
-  //   type: 'sub',
-  //   icontype: 'ni-books text-pink',
-  //   isCollapsed: true,
-  //   children: [
-  //     {path: 'dashboard', title: 'Farmer Report', type: 'link'},
-  //     {path: 'alternative', title: 'Trends', type: 'link'}
-  //   ]
-  // },
+  {
+    path: 'referrals-list',
+    title: 'Referrals List',
+    type: 'link',
+    icontype: 'ni-single-copy-04 text-pink',
+  },
   {
     path: '/',
     title: 'Admin',

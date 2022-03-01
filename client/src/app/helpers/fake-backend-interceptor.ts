@@ -28,10 +28,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
     function handleRoute() {
       switch (true) {
-        case url.endsWith('/users/') && method === 'GET':
-          return getUserData();
-        /*case url.endsWith('/group/') && method === 'GET':
-          return getGroupData()*/
+        /*case url.endsWith('/users/') && method === 'GET':
+          return getUserData();*/
+        case url.endsWith('/referral/') && method === 'GET':
+          return getReferralData()
         // case url.endsWith('/api/login') && method === 'POST':
         //     return t();
         default:
@@ -68,9 +68,9 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       );
     }
 
-    function getGroupData(){
+    function getReferralData(){
       return ok(
-        SampleData.groups()
+        SampleData.referrals()
       );
     }
 
