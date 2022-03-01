@@ -135,7 +135,7 @@
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.indicator }}</td>
                       <td class='text-center'>{{ row.overallTarget}}</td>
-                      <td class='text-center'><button class="btn btn-link" (click)="toggleDisaggregation($event, row)"><i style="font-size:20px;" class="text fas fa-plus"></i></button></td>
+                      <td class='text-center'><button class="btn btn-link" [id]="row.id" (click)="toggleDisaggregation($event, row)"><i style="font-size:20px;" class="text fas fa-plus"></i></button></td>
                     </tr>
                     </tbody>
                   </table>

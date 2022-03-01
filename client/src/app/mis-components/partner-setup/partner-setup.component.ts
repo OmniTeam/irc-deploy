@@ -72,14 +72,23 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   toggleDisaggregation(event, row) {
     this.showDisaggregation = !this.showDisaggregation;
+    const button = (document.getElementById(row.id) as HTMLButtonElement);
     let details = (document.getElementById("detailsDisaggregation") as HTMLTableRowElement);
     let target = event.target;
-    let button = (target as HTMLButtonElement);
+
+    const minus_icon = document.createElement('i');
+    minus_icon.classList.add('text', 'fas', 'fa-minus');
+    minus_icon.style.fontSize = '20px';
+    minus_icon.style.color =  'red';
+
+
+    const plus_icon = document.createElement('i');
+    plus_icon.classList.add('text', 'fas', 'fa-plus');
+    plus_icon.style.fontSize = '20px';
 
     if(this.showDisaggregation) {
-      button.removeChild(button.firstChild);
-      button.insertAdjacentHTML('beforeend', '<i style="font-size:20px; color: red;" class="text fas fa-minus"></i>')
-      let tr = <HTMLTableRowElement> target.closest('tr');
+      const tr = <HTMLTableRowElement> target.closest('tr');
+      button.firstChild.replaceWith(minus_icon);
       tr.insertAdjacentHTML('afterend', '' +
         '  <tr id="detailsDisaggregation">\n' +
         '                      <td colspan="5">\n' +
@@ -99,10 +108,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         '');
       details.style.display = 'block';
     } else {
+      button.firstChild.replaceWith(plus_icon);
       details.style.display = 'none';
-      details.parentNode.removeChild(details)
-      button.removeChild(button.firstChild);
-      button.insertAdjacentHTML('beforeend', '<i style="font-size:20px;" class="text fas fa-plus"></i>')
+      details.parentNode.removeChild(details);
     }
   }
 
