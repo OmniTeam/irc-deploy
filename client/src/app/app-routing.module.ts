@@ -86,6 +86,18 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/tag-type/tag-type.module').then(m => m.TagTypeModule)
       },
       {
+        path: 'referrals-list', canActivate: [AuthGuard],
+        loadChildren: ()=> import('./mis-components/referrals/referrals.module').then(m => m.ReferralsModule)
+      },
+      {
+        path: 'create-referral', canActivate: [AuthGuard],
+        loadChildren: ()=> import('./mis-components/referrals/create-referral/create-referral.module').then(m => m.CreateReferralModule)
+      },
+      {
+        path: 'action-referral/:id', canActivate:[AuthGuard],
+        loadChildren: () => import('./mis-components/referrals/action-referral/action-referral.module').then(m => m.ActionReferralModule)
+      },
+      {
         path:'groups', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/groups/groups.module').then(m => m.GroupsModule)
       },

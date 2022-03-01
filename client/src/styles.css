@@ -61,3 +61,10 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .was-validated .form-control:invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .custom-select.is-invalid {
   border-color: red !important;
 }
+
+.ng-select.ng-select-single .ng-select-container {
+  height: 46px !important;
+}
+.form-control-sm {
+  height: 46px !important;
+}
