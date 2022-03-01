@@ -23,9 +23,17 @@ class UserController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond userService.list(params), model:[userCount: userService.count()]
+    def index() {
+        def users =[]
+        userService.list(params).each {user ->
+            def newUserObject =[:]
+            newUserObject['id']=user.id
+            newUserObject['username']=user.username
+            newUserObject['names']=user.names
+            newUserObject['email']=user.email
+            users << newUserObject
+        }
+        respond users
     }
 
     def show(String id) {

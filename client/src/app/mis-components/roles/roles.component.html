@@ -22,6 +22,7 @@
                             class="form-control form-control-sm"
                             (change)="entriesChange($event)"
                           >
+                            <option value="5" [selected]="entries == 5">5</option>
                             <option value="10" [selected]="entries == 10">10</option>
                             <option value="25" [selected]="entries == 25">25</option>
                             <option value="50" [selected]="entries == 50">50</option>
@@ -73,14 +74,8 @@
             [footerHeight]="50"
             [rowHeight]="'auto'"
             [rows]="roles"
-            [externalPaging]="true"
-            [externalSorting]="true"
             [count]="page.count"
-            [offset]="page.offset"
-            [limit]="page.limit"
-            [sortType]="'single'"
-            (page)="pageCallback($event)"
-            (sort)="sortCallback($event)"
+            [limit]="entries != -1 ? entries : undefined"
           >
             <ngx-datatable-column
               [width]="15"

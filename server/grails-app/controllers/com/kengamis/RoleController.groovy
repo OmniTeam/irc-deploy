@@ -19,8 +19,17 @@ class RoleController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond roleService.list(params), model:[roleCount: roleService.count()]
+        /*params.max = Math.min(max ?: 10, 100)
+        respond roleService.list(params), model:[roleCount: roleService.count()]*/
+        def roles =[]
+        roleService.list(params).each {role ->
+            def newRoleObject = [:]
+            newRoleObject['id']=role.id
+            newRoleObject['authority']=role.authority
+            newRoleObject['dateCreated']=role.dateCreated
+            roles << newRoleObject
+        }
+        respond roles
     }
 
     def show(String id) {
