@@ -68,4 +68,8 @@ export class DummyData {
     amount_utilized: '',
     balance_spent_overspend: ''
   };
+  static disbursementPlan: any;
+  static budget: any;
+  static indicators: any;
+  static calendar: any;
 }

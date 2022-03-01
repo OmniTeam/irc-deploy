@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DummyData} from "../../utilities/dummy-data";
 import {Subject} from "rxjs";
 import {PartnerSetupService} from "../../services/partner-setup.service";
+import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
 
 @Component({
   selector: 'app-partner-setup',
@@ -13,6 +14,10 @@ export class PartnerSetupComponent implements OnInit {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   rows: [] = [];
+  calendar: any;
+  indicators: any;
+  budget: any;
+  disbursementPlan: any;
 
   organisationalInfo: any;
   periodChosen: string;
@@ -30,6 +35,10 @@ export class PartnerSetupComponent implements OnInit {
 
   ngOnInit(): void {
     this.organisationalInfo = DummyData.organisationalInfo;
+    this.calendar = DummyData.calendar;
+    this.indicators = DummyData.indicators;
+    this.budget = DummyData.budget;
+    this.disbursementPlan = DummyData.disbursementPlan;
 
     this.partnerSetupService.getInfo().subscribe(data => {
       console.log(data);
