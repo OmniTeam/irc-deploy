@@ -73,6 +73,6 @@ environments {
     }
     production {
         uploadFolder = "/opt/uploads/"
-        imageFolder = "/opt/uploads/centralImages"
+        imageFolder = "/opt/uploads/centralImages/"
     }
 }
