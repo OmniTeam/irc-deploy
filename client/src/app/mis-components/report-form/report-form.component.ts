@@ -4,13 +4,13 @@ import {Subject} from "rxjs";
 import {ReportFormService} from "../../services/report-form.service";
 import {CommentNode} from '../comments/comments.component';
 import {Location} from '@angular/common';
-import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
+import {CellEdit, OnUpdateCell} from '../../helpers/cell_edit';
 import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {DummyData} from "../../utilities/dummy-data";
+import {SampleData} from "../../helpers/sample-data";
 
 @Component({
   selector: 'app-report-form',
@@ -88,8 +88,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-    this.organisationalInfo = DummyData.organisationalInfo;
-    this.projectInfo = DummyData.projectInfo;
+    this.organisationalInfo = SampleData.organisationalInfo;
+    this.projectInfo = SampleData.projectInfo;
 
     this.route.params
       .subscribe(p => {
@@ -174,8 +174,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
       } else {
-        this.financialReport = DummyData.financialReport;
-        this.performanceReport = DummyData.performanceReport;
+        this.financialReport = SampleData.financialReport;
+        this.performanceReport = SampleData.performanceReport;
       }
 
       this.dtTrigger.next();
