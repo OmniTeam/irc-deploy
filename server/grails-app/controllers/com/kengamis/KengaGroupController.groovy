@@ -19,7 +19,7 @@ class KengaGroupController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 1000, 1000)
         respond kengaGroupService.list(params), model:[kengaGroupCount: kengaGroupService.count()]
     }
 

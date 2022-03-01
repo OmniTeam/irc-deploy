@@ -30,6 +30,11 @@ class UrlMappings {
         get "/$controller/getAllTagsByTagType(.$format)?"(action:"getAllTagsByTagType")
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
         post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
+        get "/$controller/runNow(.$format)?"(action:"runNow")
+        get "/$controller/scheduleTask(.$format)?"(action:"scheduleTask")
+        get "/$controller/unScheduleTask(.$format)?"(action:"unScheduleTask")
+        get "/$controller/disableTask(.$format)?"(action:"disableTask")
+        get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')
