@@ -1,0 +1,169 @@
+<div class="header bg-success pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <h6 class="h2 text-white d-inline-block mb-0">Partner Reporting Plan - Technical</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class="row">
+          <div class=" col-md-12 col-sm-12" style="margin-top: 20px;">
+            <div class=" row">
+              <div class=" col">
+
+                <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
+                <div class="card">
+                  <div class="row" style="margin: 10px;">
+                    <div class="col-sm-6">
+                      <ul style="list-style: none; font-size: 15px">
+                        <li>Program: <b>{{organisationalInfo.program}}</b></li>
+                        <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
+                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b>
+                        </li>
+                        <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
+                        <li>Acronym Name: <b>{{organisationalInfo.acronym_name}}</b></li>
+                        <li>Email: <b>{{organisationalInfo.email}}</b></li>
+                      </ul>
+                    </div>
+                    <div class="col-sm-6">
+                      <ul style="list-style: none; font-size: 15px">
+                        <li>Type of Organisation: <b>{{organisationalInfo.organization_type}}</b></li>
+                        <li>Website: <b>{{organisationalInfo.website}}</b></li>
+                        <li>Legal Status: <b>{{organisationalInfo.legal_status}}</b></li>
+                        <li>Country: <b>{{organisationalInfo.country}}</b></li>
+                        <li>Name of Contact Person: <b>{{organisationalInfo.contact_person}}</b></li>
+                        <li>City: <b>{{organisationalInfo.city}}</b></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <h3 style="margin-left: 40px;">REPORTING CALENDAR</h3>
+                <div class="card">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="row">
+                        <div class="col-sm-6">Grant Start Date</div>
+                        <div class="col-sm-6">
+                          <input class="form-control" type="datetime-local"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">End of Grant Date</div>
+                        <div class="col-sm-6">
+                          <input class="form-control" type="datetime-local"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">Project Reporting Start Date</div>
+                        <div class="col-sm-6">
+                          <input class="form-control" type="datetime-local"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-4">Reporting Period
+                        </div>
+                        <div class="col-sm-4">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let period of periodItems">
+                              <input type="radio" name="reporting_period" [(ngModel)]="periodChosen"
+                                     value="{{period.value}}"/>
+                              {{period.name}}
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-sm-4">
+                          <button class="btn btn-info btn-circle btn-lg" (click)="generateCalendar($event)">Generate
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <h3>Generated Reporting Calendar</h3>
+                      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                             class="table table-striped table-bordered" id="calendar">
+                        <thead>
+                        <tr>
+                          <th>Quarter</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>22/Jun/2022</td>
+                          <td>21/Sep/2022</td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <h3 style="margin-left: 40px;">OUTPUT INDICATORS</h3>
+                <div class="card">
+                </div>
+
+                <h3 style="margin-left: 40px;">BUDGET</h3>
+                <div class="card">
+                </div>
+
+                <h3 style="margin-left: 40px;">DISBURSEMENT PLAN</h3>
+                <div class="card">
+                </div>
+
+                <h3 style="margin-left: 40px;">CURRENT STATUS</h3>
+                <div class="card">
+                  <div style="margin: 10px;">
+                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                      <div class="col">Total Amount Disbursed:</div>
+                      <div class="col text-left"><input type="text" class="form-control"
+                                                        [(ngModel)]="totalAmountDisbursed"/><br></div>
+                    </div>
+                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                      <div class="col">Total Amount Accounted for:</div>
+                      <div class="col text-left"><input type="text" class="form-control"
+                                                        [(ngModel)]="totalAmountAccountedFor"/><br></div>
+                    </div>
+                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                      <div class="col">Date of last Disbursement:</div>
+                      <div class="col text-left"><input type="text" class="form-control"
+                                                        [(ngModel)]="dateOfLastDisbursement"/><br></div>
+                    </div>
+                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                      <div class="col">Start Reporting Cycle?</div>
+                      <div class="col">
+                        <label class="switch">
+                          <input type="checkbox" class="form-control" [(ngModel)]="startReportingCycle"/>
+                          <span class="slider round"></span>
+                        </label>
+                        <br></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger">Cancel</button>
+                    <button class="btn btn-success">Save Plan</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
