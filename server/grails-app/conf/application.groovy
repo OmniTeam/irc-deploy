@@ -69,8 +69,10 @@ environments {
     development {
         uploadFolder = "D:/uploads/"
         uploadDocsFolder = "D:/uploads/"
+        imageFolder = "D:/uploads/centralImages/"
     }
     production {
         uploadFolder = "/opt/uploads/"
+        imageFolder = "/opt/uploads/centralImages"
     }
 }

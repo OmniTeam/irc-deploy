@@ -3,6 +3,7 @@ package com.kengamis.query
 import com.kengamis.ChoiceOption
 import com.kengamis.FormSetting
 import com.kengamis.Util
+import grails.util.Holders
 import groovy.transform.ToString
 import groovy.util.logging.Log4j
 import org.openxdata.markup.XformType
@@ -11,6 +12,8 @@ import org.openxdata.markup.XformType
 class FormDataValue {
 
     private def SELECT_TYPES = [XformType.SELECT, XformType.SELECT1, XformType.SELECT1_DYNAMIC]*.value
+    private def REPEATS = XformType.REPEAT.value
+    private def PICTURES = XformType.PICTURE.value
     FormSetting formSetting
     def value
 
@@ -27,7 +30,69 @@ class FormDataValue {
         return strOptions.collect {
             new Option(bindValue: it, option: formSetting.findChoiceOption(it))
         }
+    }
 
+    List getMultiSelectOptions() {
+
+        if (!value || !(formSetting.xformType in SELECT_TYPES))
+            return Collections.EMPTY_LIST
+
+        //Assert.isInstanceOf(String, value)
+
+        def strValue = value as String
+        def strOptions = strValue.split(/\s+/)
+
+        return strOptions.collect {
+            [bindValue: it, option: formSetting.findChoiceOption(it).text]
+        }
+    }
+
+    List getRepeatHeaders() {
+        if (!value || !(formSetting.xformType = REPEATS))
+            return Collections.EMPTY_LIST
+
+        def repeatFormData = value as List<FormData>
+        def repeatFirstRecord = repeatFormData.first().allFormDataValues
+        def headers = []
+        headers << [field: 'increment', questionText: '#']
+        repeatFirstRecord.each { header ->
+            if (header.humanReadableValue) {
+                if (!header.isMetaColumn()) {
+                    headers << [field: header.field, questionText: header.label]
+                }
+            }
+        }
+        return headers
+    }
+
+    List getRepeatData() {
+        def resultList = []
+        if (!value || !(formSetting.xformType = REPEATS))
+            return Collections.EMPTY_LIST
+
+        def repeatFormData = value as List<FormData>
+        def counter = 1
+        repeatFormData.each { value ->
+            def formDataValues = value.allFormDataValues
+            def record = [:]
+            record["increment"] = counter
+            formDataValues.each {dataValue ->
+                record["${dataValue.field}"] = dataValue.humanReadableValue
+            }
+            resultList << record
+            counter++
+        }
+        return resultList
+    }
+
+    String getImagePath() {
+        if (!value || !(formSetting.xformType = PICTURES))
+            return null
+
+        def strValue = value as String
+        def baseFolder = Holders.grailsApplication.config.imageFolder
+        def imageFilePath = (baseFolder + strValue) as String
+        return imageFilePath
     }
 
     String getHumanReadableValue() {
