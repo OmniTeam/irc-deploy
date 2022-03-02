@@ -18,6 +18,7 @@ import {UsernameValidator} from "../../../Validators/username.validator";
 import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
 import {ReferralsService} from "../../../services/referrals.service";
+import {CountriesService} from "../../../services/countries.service";
 
 
 @Component({
@@ -29,6 +30,7 @@ export class CreateReferralComponent implements OnInit {
 
   constructor(
     private userService: UsersService,
+    private CountriesService: CountriesService,
     private referralsService: ReferralsService,
     private groupsService: GroupsService,
     private alertService: AlertService,
@@ -113,32 +115,16 @@ export class CreateReferralComponent implements OnInit {
       'name': 'Minors Pass'
     },
   ];
-  country_of_origin = [
-    {
-      'name': 'Uganda'
-    },
-    {
-      'name': 'Kenya'
-    },
-    {
-      'name': 'Tanzania'
-    },
-    {
-      'name': 'Rwanda'
-    },
-    {
-      'name': 'Burundi'
-    },
-    {
-      'name': 'Sudan'
-    },
-  ];
+  country_of_origin: any;
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
+    this.CountriesService.getCountries().subscribe(data =>{
+      this.country_of_origin=data
+    }, error => {this.alertService.error("Failed to get Countries")})
     this.formGroup = this.formBuilder.group({
       date_of_referral: [''],
       name_of_referring_officer: [''],

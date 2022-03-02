@@ -12,16 +12,15 @@ import {CreateReferralComponent} from './create-referral.component';
 
 @NgModule({
   declarations: [CreateReferralComponent],
-  imports: [
-    CommonModule,
-    CreateReferralRoutingModule,
-    ComponentsModule,
-    FormsModule,
-    NgxDatatableModule,
-    HttpClientModule,
-    NgSelectModule,
-    ReactiveFormsModule,
-
-  ]
+    imports: [
+        CommonModule,
+        CreateReferralRoutingModule,
+        ComponentsModule,
+        FormsModule,
+        NgxDatatableModule,
+        HttpClientModule,
+        NgSelectModule,
+        ReactiveFormsModule,
+    ]
 })
 export class CreateReferralModule { }
