@@ -15,7 +15,7 @@ import {GroupsService} from "../../services/groups.service";
 })
 export class GroupsComponent implements OnInit {
 
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
@@ -51,7 +51,7 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 0});
+    this.reloadTable()
   }
 
 
@@ -124,22 +124,18 @@ export class GroupsComponent implements OnInit {
 
   onChangeSearch(event) {
     console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
+    this.searchValue = event.target.value
+    if(!this.searchValue){
+      this.reloadTable()
+    } else {
+      this.groups = this.groups.filter(a => a.name.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
-    this.reloadTable();
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.entries}`)
-      .set('search', `${this.searchValue}`);
-
-    this.groupsService.getGroupsFiltered(params).subscribe((data) => {
+    this.groupsService.getGroups( ).subscribe((data) => {
       this.groups =data;
+      console.log(data)
       this.page.count = this.groups.length
     });
   }
@@ -147,7 +143,6 @@ export class GroupsComponent implements OnInit {
   entriesChange($event) {
     console.log($event.target.value)
     this.entries = $event.target.value;
-    this.reloadTable();
   }
 
   pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {

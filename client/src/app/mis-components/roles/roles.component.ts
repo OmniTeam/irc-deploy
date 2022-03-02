@@ -16,7 +16,7 @@ import {RolesService} from "../../services/roles.service";
 })
 export class RolesComponent implements OnInit {
 
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
@@ -52,14 +52,7 @@ export class RolesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 0});
-    /*this.formGroup = this.formBuilder.group({
-      name: [''],
-      parent: [''],
-      access_to_central_data: [''],
-      permissions: [''],
-      data_collectors: ['']
-    });*/
+    this.reloadTable()
   }
 
 
@@ -86,8 +79,8 @@ export class RolesComponent implements OnInit {
 
   deleteRole(row){
     this.rolesService.deleteCurrentRole(row).subscribe((result) => {
-      console.warn(result, 'Tags have been deleted');
-      this.router.navigate(['/groups']).then(() => {
+      console.warn(result, 'Roles have been deleted');
+      this.router.navigate(['/roles']).then(() => {
         window.location.reload();
       });
     })
@@ -98,7 +91,7 @@ export class RolesComponent implements OnInit {
     deletedRow.forEach((p) => {
         this.rolesService.deleteCurrentRole(p).subscribe((result) => {
           console.warn(result, 'Tags have been deleted');
-          this.router.navigate(['/groups']).then(() => {
+          this.router.navigate(['/roles']).then(() => {
             window.location.reload();
           });
         })
@@ -132,21 +125,16 @@ export class RolesComponent implements OnInit {
 
   onChangeSearch(event) {
     console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
+    this.searchValue = event.target.value
+    if(!this.searchValue){
+      this.reloadTable()
+    } else {
+      this.roles = this.roles.filter(a => a.authority.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
-    this.reloadTable();
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.entries}`)
-      .set('search', `${this.searchValue}`);
-
-    this.rolesService.getRolesFiltered(params).subscribe((data) => {
+    this.rolesService.getRoles().subscribe((data) => {
       this.roles =data;
       console.log(this.roles)
       this.page.count = this.roles.length
@@ -156,7 +144,6 @@ export class RolesComponent implements OnInit {
   entriesChange($event) {
     console.log($event.target.value)
     this.entries = $event.target.value;
-    this.reloadTable();
   }
 
   pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {

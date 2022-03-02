@@ -1,5 +1,6 @@
 package com.kengamis
 
+import groovy.time.TimeCategory
 import org.grails.exceptions.reporting.DefaultStackTraceFilterer
 import org.owasp.esapi.ESAPI
 import org.owasp.esapi.codecs.MySQLCodec
@@ -139,5 +140,61 @@ class Util {
         if (num >= temp.size())
             return temp
         return temp[0..num - 3] + '...'
+    }
+
+    @SuppressWarnings("GroovyAssignabilityCheck")
+    static String fromNow(Date date) {
+        if (!date) return ''
+        def d = TimeCategory.minus(date, new Date())
+        if (d.days) {
+            int days = d.days
+
+            //dsd
+            long years = Math.round(days / 365)
+            if (years) {
+                return "${years.abs()} year${numberEnding years}"
+            }
+
+            long months = (long) (days / 30)
+            if (months) {
+                def roundMonth = Math.round(days / 30)
+                return "${roundMonth.abs()} month${numberEnding roundMonth}"
+            }
+
+            long weeks = (long) (days / 7)
+            if (weeks) {
+                if (weeks == 1) {
+                    days -= (weeks * 7)
+                    def string = "${weeks.abs()} week${numberEnding weeks}"
+                    if (days) {
+                        string = "$string and $days day${numberEnding days}"
+                    }
+                    return string
+                }
+                return "${weeks.abs()} week${numberEnding weeks}"
+            }
+//          return "${days.abs()}day(s)${d.hours ? ' ' + d.hours.abs() + 'h' : ''}${d.days < 0 ? ' ago' : ''}"
+            if (d.hours) {
+                return "${days.abs() + (days < 0 ? 0 : 1)} day${numberEnding(days + (days < 0 ? 0 : 1))}"
+            }
+            return "${days.abs()} day${numberEnding days}"
+        }
+
+        if (d.hours) {
+            return "${d.hours.abs()} hour${numberEnding d.hours}"
+        }
+
+        if (d.minutes) {
+            return "${d.minutes.abs()} minute${numberEnding d.minutes}"
+        }
+
+        return "now"
+
+    }
+
+    private static def numberEnding(Number number) {
+        def end = (number < 0) ? ' ago' : ''
+        def absNum = number.abs()
+        return (absNum > 1) ? "s$end" : end;
     }
 }

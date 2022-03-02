@@ -123,6 +123,10 @@ const routes: Routes = [
       {
         path: 'role/edit/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/roles/edit-role/edit-role.module').then(m => m.EditRoleModule)
+      },
+      {
+        path: 'scheduledTasks', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
       }
     ]
   },
