@@ -8,6 +8,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";
 import {TagService} from "../../../services/tags";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-entity-tables',
@@ -21,6 +22,7 @@ export class EntityTablesComponent implements OnInit {
   selected = [];
   activeRow: any;
   rows: Object[];
+  temp: Object[];
   columns: any;
   entityId = "";
   SelectionType = SelectionType;
@@ -48,11 +50,13 @@ export class EntityTablesComponent implements OnInit {
     this.entries = $event.target.value;
   }
 
-  filterTable($event) {
-    const val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    console.log(val);
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
       for (const key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -104,6 +108,7 @@ export class EntityTablesComponent implements OnInit {
       .set('id', this.entityId);
     this.entityService.getEntityData(params).subscribe((data) => {
       this.entityName = new ReplacePipe().transform(data.entity['name'], '_', ' ');
+      this.temp = [...data.resultList];
       this.rows = data.resultList;
       this.tagTypes = data.tagTypeList;
       this.enableTagging = data.enableTagging;

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {EntityService} from "../../services/entity.service";
 import {AlertService} from "../../services/alert";
-import {HttpParams} from "@angular/common/http";
 import {SelectionType} from '@swimlane/ngx-datatable';
 
 @Component({
@@ -13,6 +12,7 @@ import {SelectionType} from '@swimlane/ngx-datatable';
 export class EntitiesComponent implements OnInit {
 
   rows: Object[];
+  temp: Object[];
   submitted = false;
   private searchValue = '';
   enableLinkToForm = false;
@@ -72,12 +72,16 @@ export class EntitiesComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
@@ -93,6 +97,7 @@ export class EntitiesComponent implements OnInit {
         rowRecord['entityViews'] = this.getGroupEntityViews(record.entityViews);
         rowData.push(rowRecord);
       }
+      this.temp = [...rowData];
       this.rows = rowData;
     }, error => console.log(error));
   }
@@ -106,7 +111,16 @@ export class EntitiesComponent implements OnInit {
   }
 
   filterTable($event) {
-    this.search = $event.target.value;
+    let val = $event.target.value;
+    console.log(val);
+    this.rows = this.rows.filter(function (d) {
+      for (const key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   onSelect({selected}) {
