@@ -216,19 +216,19 @@ export class SampleData {
       overallTarget: '300',
       disaggregation: [
         {
-          quarter: 'Q1',
+          datePeriod: 'Q1',
           target: '100'
         },
         {
-          quarter: 'Q2',
+          datePeriod: 'Q2',
           target: '20'
         },
         {
-          quarter: 'Q3',
+          datePeriod: 'Q3',
           target: '80'
         },
         {
-          quarter: 'Q4',
+          datePeriod: 'Q4',
           target: '100'
         }
       ]
@@ -239,44 +239,55 @@ export class SampleData {
       overallTarget: '500',
       disaggregation: [
         {
-          quarter: 'Q1',
+          datePeriod: 'Q1',
           target: '200'
         },
         {
-          quarter: 'Q2',
+          datePeriod: 'Q2',
           target: '20'
         },
         {
-          quarter: 'Q3',
+          datePeriod: 'Q3',
           target: '180'
         },
         {
-          quarter: 'Q4',
+          datePeriod: 'Q4',
           target: '100'
         }
       ]
     },
   ];
-  static calendar = [
-    {
-      quarter: 'Q1',
+  static calendar = {
+    id: 'ewrwrwrwsdfdsf',
+    periodType: 'quarterly',
+    grantStartDate: '22/Jun/2022',
+    grantEndDate: '21/Sep/2022',
+    projectReportingStartDate: '',
+    reportingCalender: [{
+      datePeriod: 'Q1',
       startDate: '22/Jun/2022',
       endDate: '21/Sep/2022'
     },
     {
-      quarter: 'Q2',
+      datePeriod: 'Q2',
       startDate: '22/Sep/2022',
       endDate: '21/Dec/2022'
     },
     {
-      quarter: 'Q3',
-      startDate: '22/Dec/2023',
+      datePeriod: 'Q3',
+      startDate: '22/Dec/2022',
       endDate: '21/Mar/2023'
     },
     {
-      quarter: 'Q4',
+      datePeriod: 'Q4',
       startDate: '22/Mar/2023',
       endDate: '21/Jun/2023'
-    },
-  ];
+    }]
+  };
+  static currentStatus = {
+    totalAmountDisbursed: '5000',
+    totalAmountAccountedFor: '6000',
+    dateOfLastDisbursement: '01/02/2022',
+    startReportingCycle: 'true'
+  }
 }

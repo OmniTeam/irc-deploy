@@ -63,19 +63,19 @@
                       <div class="row">
                         <div class="col-sm-6">Grant Start Date:</div>
                         <div class="col-sm-6">
-                          <input class="form-control" type="datetime-local"/><br>
+                          <input class="form-control" type="datetime-local" [(ngModel)]="calendar.grantStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-6">End of Grant Date:</div>
                         <div class="col-sm-6">
-                          <input class="form-control" type="datetime-local"/><br>
+                          <input class="form-control" type="datetime-local" [(ngModel)]="calendar.grantEndDate"/><br>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-6">Project Reporting Start Date:</div>
                         <div class="col-sm-6">
-                          <input class="form-control" type="datetime-local"/><br>
+                          <input class="form-control" type="datetime-local" [(ngModel)]="calendar.projectReportingStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
@@ -111,15 +111,15 @@
                              class="table table-striped table-bordered" id="calendar">
                         <thead>
                         <tr>
-                          <th class='text-center'>Quarter</th>
+                          <th class='text-center'>{{ calendar.periodType }}</th>
                           <th class='text-center'>Start Date</th>
                           <th class='text-center'>End Date</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let row of calendar">
+                        <tr *ngFor="let row of calendar.reportingCalender">
                           <td class='text-center' style="display: none;">{{row.id}}</td>
-                          <td class='text-center'>{{ row.quarter }}</td>
+                          <td class='text-center'>{{ row.datePeriod }}</td>
                           <td class='text-center'>{{ row.startDate }}</td>
                           <td class='text-center'>{{ row.endDate }}</td>
                         </tr>
@@ -168,7 +168,7 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.approvedAmount }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, row.id, 'approvedAmount', row.approvedAmount)"><i
+                                  (click)="cellEditor(row, row.id, 'budget', row.approvedAmount)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -198,7 +198,7 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.disbursement }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, row.id, 'disbursement', row.disbursement)"><i
+                                  (click)="cellEditor(row, row.id, 'disbursementPlan', row.disbursement)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -213,23 +213,23 @@
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Total Amount Disbursed:</div>
                       <div class="col text-left"><input type="text" class="form-control"
-                                                        [(ngModel)]="totalAmountDisbursed"/><br></div>
+                                                        [(ngModel)]="currentStatus.totalAmountDisbursed"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Total Amount Accounted for:</div>
                       <div class="col text-left"><input type="text" class="form-control"
-                                                        [(ngModel)]="totalAmountAccountedFor"/><br></div>
+                                                        [(ngModel)]="currentStatus.totalAmountAccountedFor"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Date of last Disbursement:</div>
                       <div class="col text-left"><input type="text" class="form-control"
-                                                        [(ngModel)]="dateOfLastDisbursement"/><br></div>
+                                                        [(ngModel)]="currentStatus.dateOfLastDisbursement"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Start Reporting Cycle?</div>
                       <div class="col">
                         <label class="switch">
-                          <input type="checkbox" class="form-control" [(ngModel)]="startReportingCycle"/>
+                          <input type="checkbox" class="form-control" [(ngModel)]="currentStatus.startReportingCycle"/>
                           <span class="slider round"></span>
                         </label>
                         <br></div>
@@ -240,8 +240,8 @@
                 <div class="row">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger">Cancel</button>
-                    <button class="btn btn-success">Save Plan</button>
+                    <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
+                    <button class="btn btn-success" (click)="onSavePlan()">Save Plan</button>
                   </div>
                 </div>
 
