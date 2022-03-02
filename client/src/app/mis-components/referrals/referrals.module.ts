@@ -17,7 +17,7 @@ import {NgSelectModule} from "@ng-select/ng-select";
     DataTablesModule,
     NgxDatatableModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
   ]
 })
 export class ReferralsModule {

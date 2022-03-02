@@ -183,7 +183,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
@@ -192,8 +191,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of country_of_origin">
-                              {{item.name}}
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -213,7 +212,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
@@ -266,7 +264,7 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
+
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
@@ -296,7 +294,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
@@ -328,7 +325,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
@@ -350,6 +346,7 @@
                   <div class="row">
                     <label>
                       Feedback Given
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="row">
@@ -404,7 +401,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
@@ -434,7 +430,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"

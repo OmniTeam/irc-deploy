@@ -194,8 +194,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of country_of_origin">
-                              {{item.name}}
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
                             </ng-option>
                           </ng-select>
                         </div>

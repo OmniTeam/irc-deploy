@@ -8,6 +8,7 @@ import {AuthService} from '../../../services/auth.service';
 import {UsersService} from "../../../services/users.service";
 import {AlertService} from "../../../services/alert";
 import {ReferralsService} from "../../../services/referrals.service";
+import {CountriesService} from "../../../services/countries.service";
 
 
 @Component({
@@ -21,6 +22,7 @@ export class ActionReferralComponent implements OnInit {
 
   constructor(
     private userService: UsersService,
+    private CountriesService: CountriesService,
     private referralsService: ReferralsService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -142,52 +144,36 @@ export class ActionReferralComponent implements OnInit {
       'name': 'Minors Pass'
     },
   ];
-  country_of_origin = [
-    {
-      'name': 'Uganda'
-    },
-    {
-      'name': 'Kenya'
-    },
-    {
-      'name': 'Tanzania'
-    },
-    {
-      'name': 'Rwanda'
-    },
-    {
-      'name': 'Burundi'
-    },
-    {
-      'name': 'Sudan'
-    },
-  ];
+  country_of_origin: any;
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
+    this.CountriesService.getCountries().subscribe(data =>{
+      this.country_of_origin=data
+    }, error => {this.alertService.error("Failed to get Countries")})
     this.referralsService.getReferrals().subscribe(data => {
       this.allReferrals = data
       this.referrals = this.allReferrals[0]
       this.formGroup = this.formBuilder.group({
-        date_of_referral: [this.referrals.date_of_referral],
-        name_of_referring_officer: [this.referrals.name_of_referring_officer],
-        name_of_client_being_referred: [this.referrals.name_of_client_being_referred],
-        phone_number: [this.referrals.phone_number],
-        date_of_birth: [this.referrals.date_of_birth],
-        age_category: [this.referrals.age_category],
-        country_of_origin: [this.referrals.country_of_origin],
-        identification_document: [this.referrals.identification_document],
-        identification_number: [this.referrals.identification_number],
-        reason_for_referral: [this.referrals.reason_for_referral],
-        organization_referred_to: [this.referrals.organization_referred_to],
-        received_feedback: [this.referrals.received_feedback],
-        feedback_given: [this.referrals.feedback_given],
-        date_of_feedback: [this.referrals.date_of_feedback],
-        disability: [this.referrals.disability],
-        status: [this.referrals.status],
+        date_of_referral: [this.referrals?.date_of_referral],
+        name_of_referring_officer: [this.referrals?.name_of_referring_officer],
+        name_of_client_being_referred: [this.referrals?.name_of_client_being_referred],
+        phone_number: [this.referrals?.phone_number],
+        date_of_birth: [this.referrals?.date_of_birth],
+        age_category: [this.referrals?.age_category],
+        country_of_origin: [this.referrals?.country_of_origin],
+        identification_document: [this.referrals?.identification_document],
+        identification_number: [this.referrals?.identification_number],
+        reason_for_referral: [this.referrals?.reason_for_referral],
+        organization_referred_to: [this.referrals?.organization_referred_to],
+        received_feedback: [this.referrals?.received_feedback],
+        feedback_given: [this.referrals?.feedback_given],
+        date_of_feedback: [this.referrals?.date_of_feedback],
+        disability: [this.referrals?.disability],
+        status: [this.referrals?.status],
       });
     })
 
