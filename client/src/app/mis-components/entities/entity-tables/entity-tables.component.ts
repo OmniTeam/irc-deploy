@@ -151,7 +151,6 @@ export class EntityTablesComponent implements OnInit {
 
     this.submitted = true;
     if (this.formGroup.invalid) {
-      console.log('Invalid');
       return;
     }
 

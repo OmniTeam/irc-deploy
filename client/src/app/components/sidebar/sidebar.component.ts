@@ -107,7 +107,8 @@ export const ROUTES: RouteInfo[] = [
     children: [
       {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'roles', title: 'Roles', type: 'link'},
-      {path: 'users', title: 'Users', type: 'link'}
+      {path: 'users', title: 'Users', type: 'link'},
+      {path: 'requestMaps', title: 'Request Maps', type: 'link'}
     ]
   },
 ];

@@ -72,7 +72,6 @@ export class EntitiesComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
     if (!event.target.value)
       this.searchValue = ''
     else {

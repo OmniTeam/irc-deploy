@@ -123,7 +123,19 @@ const routes: Routes = [
       {
         path: 'scheduledTasks', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
-      }
+      },
+      {
+        path: 'requestMaps', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/request-maps.module').then(m => m.RequestMapsModule)
+      },
+      {
+        path:'requestMaps/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/create-request-maps/create-request-maps.module').then(m => m.CreateRequestMapsModule)
+      },
+      {
+        path: 'requestMaps/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
+      },
     ]
   },
   {
