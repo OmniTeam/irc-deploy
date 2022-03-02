@@ -43,7 +43,7 @@ export class ReferralsComponent implements OnInit {
   private statusValue = '';
   private groupValue = '';
   users: any;
-  private referrals: any;
+  referrals: any;
 
   constructor(
     private formBuilder: FormBuilder,

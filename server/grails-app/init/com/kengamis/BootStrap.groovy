@@ -71,10 +71,10 @@ class BootStrap {
 
     @Transactional
     def initSystemDefaultJobs() {
-        TaskDef.findByName("Central Sync Job") ?: new TaskDef(
-                name: 'Central Sync Job',
+        TaskDef.findByName("Central Data Sync Job") ?: new TaskDef(
+                name: 'Central Data Sync Job',
                 description: 'Central Data import into MIS',
-                cronExpression: '0 0/30 * * * ?',
+                cronExpression: '0 0/20 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.CentralDataImportJob',
                 startOnStartup: true
@@ -95,6 +95,15 @@ class BootStrap {
                 cronExpression: '0 0/5 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.TaskListSyncJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
+
+        TaskDef.findByName("Central Images Sync Job") ?: new TaskDef(
+                name: 'Central Images Sync Job',
+                description: 'Sync Central Images to MIS',
+                cronExpression: '0 0/20 * * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.CentralImagesSyncJob',
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
     }

@@ -90,6 +90,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'entity', title: 'Entities', type: 'link'},
       {path: 'entityView', title: 'Entity Views', type: 'link'},
       {path: 'tasklist', title: 'Task List', type: 'link'},
+      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link'},
     ]
   },
   {
