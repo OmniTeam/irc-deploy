@@ -46,7 +46,11 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
       {
-        path: 'tasklist', canActivate: [AuthGuard],
+        path: 'partnerSetup', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+      },
+      {
+        path: 'taskList', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
       {
