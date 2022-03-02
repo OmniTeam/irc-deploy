@@ -6,16 +6,13 @@ import com.kengamis.query.FormDataValue
 import com.kengamis.query.QueryHelper
 import grails.core.GrailsApplication
 import grails.io.IOUtils
-import grails.rest.*
 import grails.converters.*
 import grails.util.Holders
-import groovy.sql.Sql
 import org.openxdata.markup.XformType
 
 import static com.kengamis.AppHolder.withMisSql
 import static com.kengamis.Util.constructFormTable
 import static com.kengamis.Util.escapeField
-import static fuzzycsv.FuzzyCSVTable.toCSV
 
 class DataController {
     static responseFormats = ['json', 'xml']
@@ -116,10 +113,13 @@ class DataController {
 
         def fd = FormData.init(id, form)
 
-        Map<String, Object> data = [:]
-
+        def data = []
         for (mf in mapFields) {
-            data[mf.displayName] = fd.getDataFor(mf.field).humanReadableValue
+            def map = [:]
+            map['question'] = mf.displayName
+            map['answer'] = fd.getDataFor(mf.field).humanReadableValue
+            map['xformtype'] = mf.xformType
+            data << map
         }
         respond data
     }
