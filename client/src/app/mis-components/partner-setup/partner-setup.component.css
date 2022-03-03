@@ -70,3 +70,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+ul>li {
+  margin: 0 0 10px 0;
+}

@@ -30,7 +30,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   showDisaggregation: boolean;
   disaggregation: any;
   organisationalInfo: any;
-  periodChosen: string;
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
@@ -42,6 +41,12 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     totalAmountDisbursed: string;
     dateOfLastDisbursement: string
   };
+  businessChampion = [
+    {
+      name: 'BC One',
+      value: 'bc_one'
+    }
+  ];
 
   constructor(private location: Location, private partnerSetupService: PartnerSetupService, public authService: AuthService) { }
 
@@ -70,7 +75,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   generateCalendar(event) {
-    console.log(event);
+    console.log(event, this.calendar);
   }
 
   saveCellValue(value: string, key: string, rowId): any {

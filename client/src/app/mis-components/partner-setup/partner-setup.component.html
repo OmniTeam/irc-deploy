@@ -20,20 +20,25 @@
               <div class=" col">
 
                 <div class="form-group" style="margin: 0 0 30px 30px; width: 60%;">
-                  <label for="bc" class="control-label" style="margin-left: 12px;"><b>SELECT BUSINESS CHAMPION:</b></label>
-                  <select class="custom-select browser-default" name="bc" id="bc">
-                    <option value="1">BC One</option>
-                    <option value="12">BC Two</option>
-                    <option value="13">BC Three</option>
-                    <option value="14">BC Four</option>
-                  </select>
+                  <label class="control-label" style="margin-left: 12px;"><b>SELECT BUSINESS CHAMPION:</b></label>
+                  <ng-select class="form-control form-control-sm"
+                             aria-controls="datatable"
+                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                             [multiple]="false"
+                             placeholder="Select Business Champion"
+                             [searchable]="true"
+                             [clearable]="true">
+                    <ng-option [value]="item.name" *ngFor="let item of businessChampion">
+                      {{item.name}}
+                    </ng-option>
+                  </ng-select>
                 </div>
 
                 <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
                 <div class="card">
                   <div class="row" style="margin: 10px;">
                     <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 15px">
+                      <ul style="list-style: none; font-size: 16px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
                         <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
                         <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b>
@@ -44,7 +49,7 @@
                       </ul>
                     </div>
                     <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 15px">
+                      <ul style="list-style: none; font-size: 16px">
                         <li>Type of Organisation: <b>{{organisationalInfo.organization_type}}</b></li>
                         <li>Website: <b>{{organisationalInfo.website}}</b></li>
                         <li>Legal Status: <b>{{organisationalInfo.legal_status}}</b></li>
@@ -84,7 +89,7 @@
                         <div class="col-sm-6">
                           <ul class="list-group list-group-flush" style="line-height: 10px;">
                             <li class="list-group-item" *ngFor="let period of periodItems">
-                              <input type="radio" name="reporting_period" [(ngModel)]="periodChosen"
+                              <input type="radio" name="reporting_period" [(ngModel)]="calendar.periodType"
                                      value="{{period.value}}"/>
                               {{period.name}}
                             </li>

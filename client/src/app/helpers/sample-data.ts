@@ -259,10 +259,10 @@ export class SampleData {
   ];
   static calendar = {
     id: 'ewrwrwrwsdfdsf',
-    periodType: 'quarterly',
-    grantStartDate: '22/Jun/2022',
-    grantEndDate: '21/Sep/2022',
-    projectReportingStartDate: '',
+    periodType: 'quarter',
+    grantStartDate: '2022-03-02T14:27',
+    grantEndDate: '2023-03-02T14:27',
+    projectReportingStartDate: '2022-03-02T14:27',
     reportingCalender: [{
       datePeriod: 'Q1',
       startDate: '22/Jun/2022',
