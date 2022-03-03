@@ -67,7 +67,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.disbursementPlan = SampleData.disbursementPlan;
     this.currentStatus = SampleData.currentStatus;
 
-    this.partnerSetupService.getInfo().subscribe(data => {
+    this.partnerSetupService.getPartnerSetup().subscribe(data => {
       console.log(data);
       this.rows = data;
       this.dtTrigger.next();

@@ -1250,4 +1250,32 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "BrunoJay (generated)", id: "1646309130239-1") {
+        createTable(tableName: "partner_setup") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setupPK")
+            }
+
+            column(name: "setup_values", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "business_champion", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }
