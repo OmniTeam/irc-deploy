@@ -13,4 +13,8 @@ export class PartnerSetupService {
   getPartnerSetup(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/partnerSetup`);
   }
+
+  createPartnerSetup(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/partnerSetup`, formData);
+  }
 }

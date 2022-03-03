@@ -1256,7 +1256,7 @@ databaseChangeLog = {
                 constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setupPK")
             }
 
-            column(name: "setup_values", type: "VARCHAR(255)") {
+            column(name: "setup_values", type: "text") {
                 constraints(nullable: "false")
             }
 

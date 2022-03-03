@@ -31,6 +31,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   showDisaggregation: boolean;
   disaggregation: any;
   organisationalInfo: any;
+  listOfBusinessChampions: any;
+  businessChampionChosen: string;
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
@@ -42,20 +44,10 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     totalAmountDisbursed: string;
     dateOfLastDisbursement: string
   };
-  businessChampion = [
-    {
-      name: 'BC One',
-      value: 'bc_one'
-    },
-    {
-      name: 'BC Two',
-      value: 'bc_two'
-    },
-    {
-      name: 'BC Three',
-      value: 'bc_three'
-    }
-  ];
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
 
   constructor(private location: Location, private partnerSetupService: PartnerSetupService, public authService: AuthService) { }
 
@@ -66,6 +58,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.budget = SampleData.budget;
     this.disbursementPlan = SampleData.disbursementPlan;
     this.currentStatus = SampleData.currentStatus;
+    this.listOfBusinessChampions = SampleData.businessChampion;
 
     this.partnerSetupService.getPartnerSetup().subscribe(data => {
       console.log(data);
@@ -97,7 +90,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       //generate two years
       let years = [];
       let months = DateSplitter.genDatesInRange(startDate, endDate, true);
-      console.log('months', months);
       let numOfYears = Math.floor(months.length/12);
       let countStart = 0;
       let countEnd = 0;
@@ -192,12 +184,40 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   onSavePlan() {
-    console.log('calendar', this.calendar);
-    console.log('indicators', this.indicators);
-    console.log('budget', this.budget);
-    console.log('disbursementPlan', this.disbursementPlan);
-    console.log('currentStatus', this.currentStatus);
-    console.log('user', this.authService.getLoggedInUsername());
+    this.error = false;
+    this.success = false;
+
+    let reportValues: { [key: string]: string } = {
+      calendar: JSON.stringify(this.calendar),
+      indicators: JSON.stringify(this.indicators),
+      budget: JSON.stringify(this.budget),
+      disbursementPlan: JSON.stringify(this.disbursementPlan),
+      currentStatus: JSON.stringify(this.currentStatus)
+    }
+
+    let partnerSetupRecord: { [key: string]: string } = {
+      businessChampion: this.businessChampionChosen,
+      userId: this.authService.getLoggedInUsername(),
+      setupValues: JSON.stringify(reportValues),
+    }
+
+    console.log('partnerSetupRecord', partnerSetupRecord);
+
+    this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
+      this.error = false;
+      this.success = true;
+      this.successMessage = "Saved Report";
+    }, error => {
+      this.error = true;
+      this.errorMessage = "Failed to save Report";
+      this.success = false;
+      console.log(error);
+    });
+
+    setTimeout(() => {
+      this.success = false;
+      this.error = false;
+    }, 3000);
   }
 
   onBackPressed() {

@@ -271,4 +271,18 @@ export class SampleData {
     dateOfLastDisbursement: '01/02/2022',
     startReportingCycle: 'true'
   }
+  static businessChampion = [
+    {
+      name: 'BC One',
+      value: 'bc_one'
+    },
+    {
+      name: 'BC Two',
+      value: 'bc_two'
+    },
+    {
+      name: 'BC Three',
+      value: 'bc_three'
+    }
+  ];
 }

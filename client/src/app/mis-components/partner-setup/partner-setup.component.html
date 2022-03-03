@@ -1,6 +1,14 @@
 <div class="header bg-success pb-6">
   <div class="container-fluid">
     <div class="header-body">
+      <div *ngIf="error || success" class="row align-items-center text-center" style="display: flex; justify-content: center;">
+        <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+          <strong>Error:</strong> {{errorMessage}}
+        </div>
+        <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+          <strong>Success:</strong> {{successMessage}}
+        </div>
+      </div>
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
           <h6 class="h2 text-white d-inline-block mb-0">PARTNER REPORTING PLAN - TECHNICAL</h6>
@@ -27,8 +35,9 @@
                              [multiple]="false"
                              placeholder="Select Business Champion"
                              [searchable]="true"
-                             [clearable]="true">
-                    <ng-option [value]="bc.name" *ngFor="let bc of businessChampion">
+                             [clearable]="true"
+                             [(ngModel)]="businessChampionChosen">
+                    <ng-option [value]="bc.name" *ngFor="let bc of listOfBusinessChampions">
                       {{bc.name}}
                     </ng-option>
                   </ng-select>
