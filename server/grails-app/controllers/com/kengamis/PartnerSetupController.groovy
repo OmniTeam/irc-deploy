@@ -1,6 +1,8 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+import groovy.json.JsonSlurper
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -19,8 +21,18 @@ class PartnerSetupController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond partnerSetupService.list(params), model:[partnerSetupCount: partnerSetupService.count()]
+        //params.max = Math.min(max ?: 10, 100)
+
+        def partnerSetups = partnerSetupService.list(params)
+        def list = []
+
+        partnerSetups.each{PartnerSetup setup ->
+            list << [id: setup.id,
+                      businessChampion : setup.businessChampion,
+                      lastUpdated : setup.lastUpdated,
+                      dateCreated: setup.dateCreated]
+        }
+        respond list
     }
 
     def show(Long id) {
@@ -81,5 +93,10 @@ class PartnerSetupController {
         partnerSetupService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getPartnerSetupRecord() {
+        def map = [setup: PartnerSetup.findById(params.id)]
+        respond map
     }
 }
