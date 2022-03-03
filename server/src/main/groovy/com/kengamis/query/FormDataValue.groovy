@@ -43,7 +43,7 @@ class FormDataValue {
         def strOptions = strValue.split(/\s+/)
 
         return strOptions.collect {
-            [bindValue: it, option: formSetting.findChoiceOption(it).text]
+            formSetting.findChoiceOption(it).text
         }
     }
 

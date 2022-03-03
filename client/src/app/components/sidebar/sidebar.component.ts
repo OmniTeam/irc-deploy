@@ -79,7 +79,8 @@ export const ROUTES: RouteInfo[] = [
     isCollapsed: true,
     children: [
       {path: 'tags', title: 'Tags', type: 'link'},
-      {path: 'tagType', title: 'Tag Type', type: 'link'}
+      {path: 'tagType', title: 'Tag Type', type: 'link'},
+      {path: 'milestones', title: 'Project Milestones', type: 'link'}
     ]
   },
   {
@@ -108,7 +109,8 @@ export const ROUTES: RouteInfo[] = [
     children: [
       {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'roles', title: 'Roles', type: 'link'},
-      {path: 'users', title: 'Users', type: 'link'}
+      {path: 'users', title: 'Users', type: 'link'},
+      {path: 'requestMaps', title: 'Request Maps', type: 'link'}
     ]
   },
 ];

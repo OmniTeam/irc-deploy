@@ -127,7 +127,31 @@ const routes: Routes = [
       {
         path: 'scheduledTasks', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
-      }
+      },
+      {
+        path: 'requestMaps', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/request-maps.module').then(m => m.RequestMapsModule)
+      },
+      {
+        path:'requestMaps/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/create-request-maps/create-request-maps.module').then(m => m.CreateRequestMapsModule)
+      },
+      {
+        path: 'requestMaps/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
+      },
+      {
+        path: 'milestones', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/project-milestones/project-milestones.module').then(m => m.ProjectMilestonesModule)
+      },
+      {
+        path:'milestones/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/project-milestones/create-project-milestones/create-project-milestones.module').then(m => m.CreateProjectMilestonesModule)
+      },
+      {
+        path: 'milestones/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/project-milestones/edit-project-milestones/edit-project-milestones.module').then(m => m.EditProjectMilestonesModule)
+      },
     ]
   },
   {
