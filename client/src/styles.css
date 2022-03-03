@@ -62,6 +62,15 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   border-color: red !important;
 }
 
+.leaflet-popup-content {
+  width: 600px !important;
+}
+
+.leaflet-container {
+  font-family: Open Sans, sans-serif !important;
+}
+
+
 .ng-select.ng-select-single .ng-select-container {
   height: 46px !important;
 }

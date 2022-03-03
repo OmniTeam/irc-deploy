@@ -374,7 +374,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
           }
           else if(record['xformtype'] === "picture") {
             let image = `${environment.serverUrl}/data/getFormDataImage?path=${record.value}`;
-            console.log(image);
             recordObject['image'] = image;
           }
           else {
@@ -434,13 +433,23 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', `${formtable}`);
 
     this.formService.getPointDetails(params).subscribe((data) => {
-      if (Object.keys(data).length > 0) {
+      if (data.length > 0) {
         let pointDetails = data;
-        let html = "<table style='border-collapse: collapse; text-align: center !important; width: 100%;'>";
-        for (const [k, v] of Object.entries(pointDetails)) {
-          let value = (v === null) ? 'None' : v.toString();
-          html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + k.replace(/_/g, " ")
-            + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + value.replace(/_/g, " ") + "</td> </tr>";
+        let html = "<table style='border-collapse: collapse; text-align: center !important; width: 100%; border-radius: 4px;'>";
+        for (const detail of pointDetails) {
+          if (detail['xformtype'] === 'picture') {
+            let key = detail['question'];
+            let image = `${environment.serverUrl}/data/getFormDataImage?path=${detail['answer']}`;
+            html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
+              + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'><img  src='"+image+"' style='width: 250px; height: 150px;' alt='Form Data Image'/></td> </tr>";
+          }
+          else {
+            let key = detail['question'];
+            let value = detail['answer'];
+            html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
+              + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + value.replace(/_/g, " ") + "</td> </tr>";
+          }
+
         }
         html = html + "</table>";
         popup.setContent(html);
@@ -502,7 +511,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     const params = new HttpParams()
       .set('formtable', `${this.formtable}`);
     this.formService.exportFormData(params).subscribe((data) => {
-      console.log(data['data']);
       this.exportService.exportToCsv(data['data'], data['file']);
     }, error => console.log(error));
   }

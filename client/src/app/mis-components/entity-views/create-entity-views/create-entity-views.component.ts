@@ -148,7 +148,6 @@ export class CreateEntityViewsComponent implements OnInit {
   }
 
   deleteField(deletedRow) {
-    console.log(deletedRow);
     this.rows = this.removeElementFormArray(this.rows, deletedRow.name);
     this.rows = [...this.rows];
   }

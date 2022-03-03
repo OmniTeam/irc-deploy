@@ -31,6 +31,7 @@ export class EntityViewTableComponent implements OnInit {
       .set('id', this.entityViewId);
 
     this.entityService.getEntityViewData(params).subscribe((data) => {
+      console.log(data);
       if (data['headers'].length > 0) {
         this.columns = data['headers'];
         this.rows = data['dataList'];

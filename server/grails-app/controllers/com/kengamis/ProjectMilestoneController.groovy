@@ -1,9 +1,6 @@
 package com.kengamis
 
-import grails.converters.JSON
 import grails.validation.ValidationException
-import org.springframework.http.HttpMethod
-
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -14,64 +11,64 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class RequestMapController {
+class ProjectMilestoneController {
 
-    RequestMapService requestMapService
+    ProjectMilestoneService projectMilestoneService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 100, 100)
-        respond requestMapService.list(params), model:[requestMapCount: requestMapService.count()]
+        params.max = Math.min(max ?: 10, 100)
+        respond projectMilestoneService.list(params), model:[projectMilestoneCount: projectMilestoneService.count()]
     }
 
     def show(String id) {
-        respond requestMapService.get(id)
+        respond projectMilestoneService.get(id)
     }
 
     @Transactional
-    def save(RequestMap requestMap) {
-        if (requestMap == null) {
+    def save(ProjectMilestone projectMilestone) {
+        if (projectMilestone == null) {
             render status: NOT_FOUND
             return
         }
-        if (requestMap.hasErrors()) {
+        if (projectMilestone.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond requestMap.errors
+            respond projectMilestone.errors
             return
         }
 
         try {
-            requestMapService.save(requestMap)
+            projectMilestoneService.save(projectMilestone)
         } catch (ValidationException e) {
-            respond requestMap.errors
+            respond projectMilestone.errors
             return
         }
 
-        respond requestMap, [status: CREATED, view:"show"]
+        respond projectMilestone, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(RequestMap requestMap) {
-        if (requestMap == null) {
+    def update(ProjectMilestone projectMilestone) {
+        if (projectMilestone == null) {
             render status: NOT_FOUND
             return
         }
-        if (requestMap.hasErrors()) {
+        if (projectMilestone.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond requestMap.errors
+            respond projectMilestone.errors
             return
         }
 
         try {
-            requestMapService.save(requestMap)
+            projectMilestoneService.save(projectMilestone)
         } catch (ValidationException e) {
-            respond requestMap.errors
+            respond projectMilestone.errors
             return
         }
 
-        respond requestMap, [status: OK, view:"show"]
+        respond projectMilestone, [status: OK, view:"show"]
     }
 
     @Transactional
@@ -81,14 +78,8 @@ class RequestMapController {
             return
         }
 
-        requestMapService.delete(id)
+        projectMilestoneService.delete(id)
 
         render status: NO_CONTENT
-    }
-
-    def getHttpMethods() {
-        def httpMethods = []
-        HttpMethod.values().collect { httpMethods << it.name() }
-        respond httpMethods
     }
 }

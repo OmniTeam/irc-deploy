@@ -1322,4 +1322,34 @@ databaseChangeLog = {
     }
 
 
+    changeSet(author: "Bryan (generated)", id: "1646229444195-1") {
+        createTable(tableName: "project_milestone") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "project_milestonePK")
+            }
+
+            column(name: "reporting_query", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "dashboard_table", type: "VARCHAR(255)")
+
+            column(name: "dashboard_query", type: "LONGTEXT")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "reporting_table", type: "VARCHAR(255)")
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
 }
