@@ -1,21 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
   FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
+  FormGroup
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
 import {UsersService} from "../../../services/users.service";
-import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
-import {UsernameValidator} from "../../../Validators/username.validator";
-import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
 import {ReferralsService} from "../../../services/referrals.service";
 import {CountriesService} from "../../../services/countries.service";
@@ -27,6 +18,7 @@ import {CountriesService} from "../../../services/countries.service";
   styleUrls: ['./create-referral.component.scss']
 })
 export class CreateReferralComponent implements OnInit {
+  private nationalityValue = '';
 
   constructor(
     private userService: UsersService,
@@ -60,6 +52,17 @@ export class CreateReferralComponent implements OnInit {
     {
       'name': 'LGBTI'
     },
+  ];
+  nationality_status = [
+    {
+      'name': 'Foreigner'
+    },
+    {
+      'name': 'Refugee'
+    },
+    {
+      'name': 'National'
+    }
   ];
   age_category = [
     {
@@ -122,9 +125,11 @@ export class CreateReferralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.CountriesService.getCountries().subscribe(data =>{
-      this.country_of_origin=data
-    }, error => {this.alertService.error("Failed to get Countries")})
+    this.CountriesService.getCountries().subscribe(data => {
+      this.country_of_origin = data
+    }, error => {
+      this.alertService.error("Failed to get Countries")
+    })
     this.formGroup = this.formBuilder.group({
       date_of_referral: [''],
       name_of_referring_officer: [''],
@@ -136,6 +141,7 @@ export class CreateReferralComponent implements OnInit {
       identification_document: [null],
       identification_number: [],
       reason_for_referral: [null],
+      nationality_status: [null],
       organization_referred_to: [null],
       disability: [''],
       status: ['Pending'],
@@ -149,17 +155,36 @@ export class CreateReferralComponent implements OnInit {
       console.log('Invalid');
       return;
     }
-     const formData = this.formGroup.value;
-    console.log(formData,"submitted data")
+    const formData = this.formGroup.value;
+    console.log(formData, "submitted data")
     this.referralsService.createReferral(formData).subscribe((result) => {
-        this.alertService.success(`Referral is created successfully`);
-        this.router.navigate(['/referrals-list']);
-    },error => {this.alertService.error("Failed to Create Referral")});
+      this.alertService.success(`Referral is created successfully`);
+      this.router.navigate(['/referrals-list']);
+    }, error => {
+      this.alertService.error("Failed to Create Referral")
+    });
+  }
+
+  onChangeCountry(event) {
+    console.log(event, "nationality")
+    if (!event) {
+      this.nationalityValue = ''
+      document.getElementById('country_of_origin').hidden = true
+      this.formGroup.controls['country_of_origin'].reset();
+    } else {
+      this.nationalityValue = event;
+      if(this.nationalityValue === "National"){
+        document.getElementById('country_of_origin').hidden = true
+      } else {
+        document.getElementById('country_of_origin').hidden = false
+      }
+
+    }
   }
 
   resetForm() {
     this.formGroup.reset()
-    this.clicked =  false
+    this.clicked = false
     this.submitted = false
   }
 

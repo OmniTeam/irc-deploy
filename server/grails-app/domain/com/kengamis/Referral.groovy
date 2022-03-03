@@ -15,10 +15,12 @@ class Referral {
     String organization_referred_to
     String disability
     String received_feedback
+    String nationality_status
     String feedback_given
     String date_of_feedback
     String followup_needed
     String followup_areas
+    String followup_organization
     String status
 
     static mapping = {
@@ -29,21 +31,23 @@ class Referral {
         date_of_referral nullable: false
         name_of_referring_officer nullable: false
         name_of_client_being_referred nullable: false
-        phone_number nullable: false
-        date_of_birth nullable: false
-        age_category nullable: false
-        country_of_origin nullable: false
-        identification_document nullable: false
-        identification_number nullable: false
-        reason_for_referral nullable: false
-        organization_referred_to nullable: false
-        disability nullable: false
-        status nullable: false
+        phone_number nullable: true
+        date_of_birth nullable: true
+        age_category nullable: true
+        country_of_origin nullable: true
+        identification_document nullable: true
+        identification_number nullable: true
+        reason_for_referral nullable: true
+        organization_referred_to nullable: true
+        disability nullable: true
+        status nullable: true
         received_feedback nullable: true
+        nationality_status nullable: true
         feedback_given nullable: true
          date_of_feedback nullable: true
         followup_needed nullable: true
         followup_areas nullable: true
+        followup_organization nullable: true
     }
 
     @Override

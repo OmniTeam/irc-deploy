@@ -176,6 +176,37 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
+                      Nationality Status
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     (change)="onChangeCountry($event)"
+                                     placeholder="Nationality Status"
+                                     formControlName="nationality_status"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of nationality_status">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" id="country_of_origin" [hidden]="true">
+                  <div class="col-md-3">
+                    <label>
                       Country of Origin
                       <span class="required-indicator">*</span>
                     </label>

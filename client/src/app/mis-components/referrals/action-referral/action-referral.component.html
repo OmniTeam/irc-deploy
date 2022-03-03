@@ -7,7 +7,7 @@
           <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
         </div>
         <div class=" col-lg-6 col-5 text-right">
-
+          <a class=" btn btn-sm btn-danger" (click)="deleteReferral()" style="color: #ffffff"> Delete </a>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class=" form-control"
-                            type="datetime-local"
+                            type="date"
                             formControlName="date_of_referral"
                           />
                         </div>
@@ -134,7 +134,7 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class=" form-control"
-                            type="datetime-local"
+                            type="date"
                             formControlName="date_of_birth"
                           />
                         </div>
@@ -172,6 +172,37 @@
                   </div>
                 </div>
                 <div>
+                  <div class="row">
+                    <label>
+                      Nationality Status
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     (change)="onChangeCountry($event)"
+                                     placeholder="Nationality Status"
+                                     formControlName="nationality_status"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of nationality_status">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="country_of_origin" [hidden]="true">
                   <div class="row">
                     <label>
                       Country of Origin
@@ -275,6 +306,9 @@
                     </div>
                   </div>
                 </div>
+
+              </div>
+              <div class="col-lg-6">
                 <div>
                   <div class="row">
                     <label>
@@ -334,8 +368,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-6">
                 <div>
                   <div class="row">
                     <label>
@@ -429,6 +461,7 @@
                                      [multiple]="false"
                                      placeholder="Follow Up Needed?"
                                      formControlName="followup_needed"
+                                     (change)="onChangeFollowUp($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -441,7 +474,7 @@
                     </div>
                   </div>
                 </div>
-                <div>
+                <div id="followup_areas" *ngIf="this.referrals?.followup_areas">
                   <div class="row">
                     <label>
                       Follow Up Area?
@@ -470,10 +503,41 @@
                     </div>
                   </div>
                 </div>
+                <div id="followup_organization" *ngIf="this.referrals?.followup_organization" >
+                  <div class="row">
+                    <label>
+                     Follow Up Organization
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Follow Up Organization"
+                                     formControlName="followup_organization"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12 offset-6" style="padding-bottom: 15px; padding-left: 0px">
+
                 <button
                   class=" btn btn-default"
                   type="submit"
