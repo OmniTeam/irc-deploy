@@ -154,15 +154,15 @@ export class ActionReferralComponent implements OnInit {
     this.CountriesService.getCountries().subscribe(data =>{
       this.country_of_origin=data
     }, error => {this.alertService.error("Failed to get Countries")})
-    this.referralsService.getReferrals().subscribe(data => {
-      this.allReferrals = data
-      this.referrals = this.allReferrals[0]
+    this.referralsService.getCurrentReferral(this.route.snapshot.params.id).subscribe(data => {
+      console.log(data,"referral data")
+      this.referrals = data
       this.formGroup = this.formBuilder.group({
-        date_of_referral: [this.referrals?.date_of_referral],
+        date_of_referral: [this.referrals?.date_of_referral.toString().slice(0,10)],
         name_of_referring_officer: [this.referrals?.name_of_referring_officer],
         name_of_client_being_referred: [this.referrals?.name_of_client_being_referred],
         phone_number: [this.referrals?.phone_number],
-        date_of_birth: [this.referrals?.date_of_birth],
+        date_of_birth: [this.referrals?.date_of_birth.toString().slice(0,10)],
         age_category: [this.referrals?.age_category],
         country_of_origin: [this.referrals?.country_of_origin],
         identification_document: [this.referrals?.identification_document],
@@ -172,8 +172,10 @@ export class ActionReferralComponent implements OnInit {
         received_feedback: [this.referrals?.received_feedback],
         feedback_given: [this.referrals?.feedback_given],
         date_of_feedback: [this.referrals?.date_of_feedback],
+        followup_needed: [this.referrals?.followup_needed],
+        followup_areas: [this.referrals?.followup_areas],
         disability: [this.referrals?.disability],
-        status: [this.referrals?.status],
+        status: ['Actioned'],
       });
     })
 
@@ -191,7 +193,7 @@ export class ActionReferralComponent implements OnInit {
     this.referralsService.updateReferral(this.route.snapshot.params.id, submitData).subscribe((result) => {
       console.warn(result, 'Referral Updated Successfully');
       this.alertService.success(`Referral has been successfully updated`)
-      this.router.navigate(['/referrals']);
+      this.router.navigate(['/referrals-list']);
     }, error => {
       this.alertService.error(`Failed to update Referral`)
     });

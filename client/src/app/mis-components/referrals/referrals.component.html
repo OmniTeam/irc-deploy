@@ -105,6 +105,7 @@
   <div class=" row">
     <div class=" col">
       <div class=" card">
+        <h1 class="card-title" style="text-align: center">REFERRAL LIST </h1>
         <div class="dataTables_wrapper py-4">
           <div class="row" style="padding: 11px;">
             <div class="col-lg-8 text-left" style="margin-top: -31px;">
@@ -197,7 +198,11 @@
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Referring Officer" prop="name_of_referring_officer"></ngx-datatable-column>
-            <ngx-datatable-column name="Date of Referral" prop="date_of_referral"></ngx-datatable-column>
+            <ngx-datatable-column name="Date of Referral" prop="date_of_referral">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row?.date_of_referral | date:'dd-MM-yyyy'}}
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Contact" prop="phone_number"></ngx-datatable-column>
             <ngx-datatable-column name="Country of Origin" prop="country_of_origin"></ngx-datatable-column>
             <ngx-datatable-column name="Nationality" prop="country_of_origin"></ngx-datatable-column>

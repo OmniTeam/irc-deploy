@@ -138,7 +138,7 @@ export class CreateReferralComponent implements OnInit {
       reason_for_referral: [null],
       organization_referred_to: [null],
       disability: [''],
-      status: [null],
+      status: ['Pending'],
     });
   }
 
@@ -150,9 +150,10 @@ export class CreateReferralComponent implements OnInit {
       return;
     }
      const formData = this.formGroup.value;
+    console.log(formData,"submitted data")
     this.referralsService.createReferral(formData).subscribe((result) => {
         this.alertService.success(`Referral is created successfully`);
-        this.router.navigate(['/referrals']);
+        this.router.navigate(['/referrals-list']);
     },error => {this.alertService.error("Failed to Create Referral")});
   }
 
