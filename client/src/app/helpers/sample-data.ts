@@ -261,28 +261,9 @@ export class SampleData {
     id: 'ewrwrwrwsdfdsf',
     periodType: 'quarter',
     grantStartDate: '2022-03-02T14:27',
-    grantEndDate: '2023-03-02T14:27',
+    grantEndDate: '2025-03-02T14:27',
     projectReportingStartDate: '2022-03-02T14:27',
-    reportingCalender: [{
-      datePeriod: 'Q1',
-      startDate: '22/Jun/2022',
-      endDate: '21/Sep/2022'
-    },
-    {
-      datePeriod: 'Q2',
-      startDate: '22/Sep/2022',
-      endDate: '21/Dec/2022'
-    },
-    {
-      datePeriod: 'Q3',
-      startDate: '22/Dec/2022',
-      endDate: '21/Mar/2023'
-    },
-    {
-      datePeriod: 'Q4',
-      startDate: '22/Mar/2023',
-      endDate: '21/Jun/2023'
-    }]
+    reportingCalender: []
   };
   static currentStatus = {
     totalAmountDisbursed: '5000',

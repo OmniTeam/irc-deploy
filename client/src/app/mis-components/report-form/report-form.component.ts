@@ -4,7 +4,7 @@ import {Subject} from "rxjs";
 import {ReportFormService} from "../../services/report-form.service";
 import {CommentNode} from '../comments/comments.component';
 import {Location} from '@angular/common';
-import {CellEdit, OnUpdateCell} from '../../helpers/cell_edit';
+import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";

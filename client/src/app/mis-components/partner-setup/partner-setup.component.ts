@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {PartnerSetupService} from "../../services/partner-setup.service";
-import {CellEdit, OnUpdateCell} from '../../helpers/cell_edit';
+import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
+import {DateSplitter} from '../../helpers/date-splitter';
 
 @Component({
   selector: 'app-partner-setup',
@@ -33,7 +34,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
-    {name: 'Biannually', value: 'biannual'}
+    {name: 'Annually', value: 'annual'}
   ];
   currentStatus: {
     startReportingCycle: string;
@@ -45,6 +46,14 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     {
       name: 'BC One',
       value: 'bc_one'
+    },
+    {
+      name: 'BC Two',
+      value: 'bc_two'
+    },
+    {
+      name: 'BC Three',
+      value: 'bc_three'
     }
   ];
 
@@ -75,7 +84,34 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   generateCalendar(event) {
-    console.log(event, this.calendar);
+    let startDate = this.calendar.grantStartDate;
+    let endDate = this.calendar.grantEndDate;
+
+    if(this.calendar.periodType=="quarter") {
+      //generate quarters
+      this.calendar.reportingCalender = DateSplitter.genDatesInRange(startDate, endDate, false);
+    } else if(this.calendar.periodType=="month") {
+      //generate quarters
+      this.calendar.reportingCalender = DateSplitter.genDatesInRange(startDate, endDate, true);
+    } else if(this.calendar.periodType=="annual") {
+      //generate two years
+      let years = [];
+      let months = DateSplitter.genDatesInRange(startDate, endDate, true);
+      console.log('months', months);
+      let numOfYears = Math.floor(months.length/12);
+      let countStart = 0;
+      let countEnd = 0;
+      for(let number=1; number<=numOfYears; number++) {
+        countStart = countEnd + (number-1);
+        countEnd = countStart + 11;
+        years.push({
+          'datePeriod': 'Y' + number,
+          'startDate': months[countStart].startDate,
+          'endDate': months[countEnd].endDate,
+        });
+      }
+      this.calendar.reportingCalender = years;
+    }
   }
 
   saveCellValue(value: string, key: string, rowId): any {

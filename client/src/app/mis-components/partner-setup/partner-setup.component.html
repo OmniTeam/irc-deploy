@@ -28,8 +28,8 @@
                              placeholder="Select Business Champion"
                              [searchable]="true"
                              [clearable]="true">
-                    <ng-option [value]="item.name" *ngFor="let item of businessChampion">
-                      {{item.name}}
+                    <ng-option [value]="bc.name" *ngFor="let bc of businessChampion">
+                      {{bc.name}}
                     </ng-option>
                   </ng-select>
                 </div>
