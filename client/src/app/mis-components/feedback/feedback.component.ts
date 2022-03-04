@@ -8,6 +8,7 @@ import {UsersService} from "../../services/users.service";
 import {RolesService} from "../../services/roles.service";
 import * as XLSX from 'xlsx';
 import {ReferralsService} from "../../services/referrals.service";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-users',
@@ -52,7 +53,7 @@ export class FeedbackComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private usersService: UsersService,
-    private referralsService: ReferralsService,
+    private feedbackService: FeedbackService,
   ) { }
 
   get f() {
@@ -102,8 +103,8 @@ export class FeedbackComponent implements OnInit {
   }
 
   reloadTable() {
-    this.referralsService.getReferrals().subscribe((data) => {
-      this.referrals = data.filter(a => a.status);
+    this.feedbackService.getFeedback().subscribe((data) => {
+      this.referrals = data;
       console.log(data)
     });
   }

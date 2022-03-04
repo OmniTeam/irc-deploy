@@ -1417,4 +1417,42 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "status", tableName: "referral")
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1646399866100-1") {
+        createTable(tableName: "feedback") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "feedbackPK")
+            }
+
+            column(name: "sub_sector", type: "VARCHAR(255)")
+
+            column(name: "remain_anonymous", type: "VARCHAR(255)")
+
+            column(name: "name_of_register", type: "VARCHAR(255)")
+
+            column(name: "location", type: "VARCHAR(255)")
+
+            column(name: "preferred_channel", type: "VARCHAR(255)")
+
+            column(name: "client_type", type: "VARCHAR(255)")
+
+            column(name: "phone_number", type: "VARCHAR(255)")
+
+            column(name: "name_of_client", type: "VARCHAR(255)")
+
+            column(name: "project_sector", type: "VARCHAR(255)")
+
+            column(name: "current_status_of_feedback", type: "VARCHAR(255)")
+
+            column(name: "staff_designation", type: "VARCHAR(255)")
+
+            column(name: "type_of_feedback", type: "VARCHAR(255)")
+
+            column(name: "date_feedback_received", type: "VARCHAR(255)")
+
+            column(name: "nationality_status", type: "VARCHAR(255)")
+        }
+    }
+
+
+
 }

@@ -175,22 +175,22 @@
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Client Name" prop="name_of_client_being_referred">
+            <ngx-datatable-column name="Name Of Register" prop="nameOfRegister">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/action-referral/{{row.id}}">{{row?.name_of_client_being_referred}} </a>
+                <a routerLink="/action-referral/{{row.id}}">{{row?.nameOfRegister}} </a>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Referring Officer" prop="name_of_referring_officer"></ngx-datatable-column>
-            <ngx-datatable-column name="Date of Referral" prop="date_of_referral">
+            <ngx-datatable-column name="Receiving Channel" prop="preferredChannel"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Received" prop="dateFeedbackReceived">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                {{row?.date_of_referral | date:'dd-MM-yyyy'}}
+                {{row?.dateFeedbackReceived | date:'dd-MM-yyyy'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Contact" prop="phone_number"></ngx-datatable-column>
-            <ngx-datatable-column name="Country of Origin" prop="country_of_origin"></ngx-datatable-column>
-            <ngx-datatable-column name="Nationality" prop="country_of_origin"></ngx-datatable-column>
-            <ngx-datatable-column name="Disability" prop="disability"></ngx-datatable-column>
-            <ngx-datatable-column name="status" prop="status"></ngx-datatable-column>
+            <ngx-datatable-column name="Staff Designation" prop="staffDesignation"></ngx-datatable-column>
+            <ngx-datatable-column name="Project Sector" prop="projectSector"></ngx-datatable-column>
+            <ngx-datatable-column name="Name of Client" prop="nameOfClient"></ngx-datatable-column>
+            <ngx-datatable-column name="Location" prop="location"></ngx-datatable-column>
+            <ngx-datatable-column name="status" prop="currentStatusOfFeedback"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

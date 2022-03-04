@@ -10,6 +10,7 @@ import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
 import {ReferralsService} from "../../../services/referrals.service";
 import {CountriesService} from "../../../services/countries.service";
+import {FeedbackService} from "../../../services/feedback.service";
 
 
 @Component({
@@ -18,12 +19,11 @@ import {CountriesService} from "../../../services/countries.service";
   styleUrls: ['./create-feedback.component.scss']
 })
 export class CreateFeedbackComponent implements OnInit {
-  private nationalityValue = '';
 
   constructor(
     private userService: UsersService,
     private CountriesService: CountriesService,
-    private referralsService: ReferralsService,
+    private feedbackService: FeedbackService,
     private groupsService: GroupsService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -131,24 +131,24 @@ export class CreateFeedbackComponent implements OnInit {
       this.alertService.error("Failed to get Countries")
     })
     this.formGroup = this.formBuilder.group({
-      date_of_referral: [''],
-      name_of_referring_officer: [''],
-      name_of_client_being_referred: [''],
-      phone_number: [''],
-      date_of_birth: [''],
-      age_category: [null],
-      country_of_origin: [null],
-      identification_document: [null],
-      identification_number: [],
-      reason_for_referral: [null],
-      nationality_status: [null],
-      organization_referred_to: [null],
-      disability: [''],
-      status: ['Pending'],
+      dateFeedbackReceived: [''],
+      nameOfRegister: [''],
+      staffDesignation: [null],
+      typeOfFeedback: [null],
+      currentStatusOfFeedback: [null],
+      location: [null],
+      projectSector: [null],
+      subSector: [null],
+      nameOfClient: [],
+      remainAnonymous: [null],
+      nationalityStatus: [null],
+      clientType: [null],
+      preferredChannel: [null],
+      phoneNumber: [''],
     });
   }
 
-  createReferral() {
+  createFeedback() {
     this.clicked = true;
     this.submitted = true;
     if (this.formGroup.invalid) {
@@ -157,30 +157,14 @@ export class CreateFeedbackComponent implements OnInit {
     }
     const formData = this.formGroup.value;
     console.log(formData, "submitted data")
-    this.referralsService.createReferral(formData).subscribe((result) => {
-      this.alertService.success(`Referral is created successfully`);
-      this.router.navigate(['/referrals-list']);
+    this.feedbackService.createFeedback(formData).subscribe((result) => {
+      this.alertService.success(`feedback is created successfully`);
+      this.router.navigate(['/feedback-list']);
     }, error => {
-      this.alertService.error("Failed to Create Referral")
+      this.alertService.error("Failed to Create feedback")
     });
   }
 
-  onChangeCountry(event) {
-    console.log(event, "nationality")
-    if (!event) {
-      this.nationalityValue = ''
-      document.getElementById('country_of_origin').hidden = true
-      this.formGroup.controls['country_of_origin'].reset();
-    } else {
-      this.nationalityValue = event;
-      if(this.nationalityValue === "National"){
-        document.getElementById('country_of_origin').hidden = true
-      } else {
-        document.getElementById('country_of_origin').hidden = false
-      }
-
-    }
-  }
 
   resetForm() {
     this.formGroup.reset()

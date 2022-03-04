@@ -22,11 +22,11 @@
           <h3 style="font-family: Open Sans, sans-serif;">Add New Feedback</h3>
         </div>
         <div class="card-body">
-          <form [formGroup]="formGroup" (ngSubmit)="createReferral()" *ngIf="formGroup" style="padding:30px">
+          <form [formGroup]="formGroup" (ngSubmit)="createFeedback()" *ngIf="formGroup" style="padding:30px">
             <div class="row">
-              <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
-                <div class="row">
-                  <div class="col-md-3">
+              <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
+                <div >
+                  <div class="row">
                     <label
                       style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
                                                     line-height: 1.5; text-align: left;"
@@ -35,51 +35,51 @@
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class=" input-group input-group-merge">
                           <input
                             class=" form-control"
                             type="date"
-                            formControlName="date_of_referral"
+                            formControlName="dateFeedbackReceived"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
+                <div >
+                  <div class="row">
                     <label>
                       Name of Register
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Name Of Referring Officer"
+                            placeholder="Name Register"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="name_of_referring_officer"
+                            formControlName="nameOfRegister"
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row"  >
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
                     <label>
                       Staff Designation
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -88,8 +88,8 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Country of Origin"
-                                     formControlName="country_of_origin"
+                                     placeholder="Staff Designation"
+                                     formControlName="staffDesignation"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -102,14 +102,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="row"  >
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
                     <label>
                       Type of Feedback
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -118,8 +118,8 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Country of Origin"
-                                     formControlName="country_of_origin"
+                                     placeholder="Type of Feedback"
+                                     formControlName="typeOfFeedback"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -132,14 +132,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="row"  >
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
                     <label>
                       Current Status of the Feedback
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -148,8 +148,8 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Country of Origin"
-                                     formControlName="country_of_origin"
+                                     placeholder="Current Status of the Feedback"
+                                     formControlName="currentStatusOfFeedback"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -162,14 +162,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="row"  >
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
                     <label>
                       Location
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -178,8 +178,8 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Country of Origin"
-                                     formControlName="country_of_origin"
+                                     placeholder="Location"
+                                     formControlName="location"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -192,14 +192,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="row"  >
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
                     <label>
                       Project Sector
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -208,8 +208,8 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Country of Origin"
-                                     formControlName="country_of_origin"
+                                     placeholder="Project Sector"
+                                     formControlName="projectSector"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -222,14 +222,16 @@
                     </div>
                   </div>
                 </div>
-                <div class="row"  >
-                  <div class="col-md-3">
+              </div>
+              <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
+                <div>
+                  <div class="row">
                     <label>
                       Sub Sector (Project Level)
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -238,8 +240,8 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Country of Origin"
-                                     formControlName="country_of_origin"
+                                     placeholder="Sub Sector (Project Level)"
+                                     formControlName="subSector"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -252,38 +254,157 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="row">
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
                     <label>
-                      Name Of Client Being Referred
+                      Name Of Client/Community/Group
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Name Of Client Being Referred"
+                            placeholder="Name Of Client/Community/Group"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="name_of_client_being_referred"
+                            formControlName="nameOfClient"
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
+                <div>
+                  <div class="row">
+                    <label>
+                      Remain Anonymous?
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Remain Anonymous?"
+                                     formControlName="remainAnonymous"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      Nationality Status
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Nationality Status"
+                                     formControlName="nationalityStatus"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      Type of Client
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Type of Client"
+                                     formControlName="clientType"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      Preferred Channel for Response
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Preferred Channel for Response"
+                                     formControlName="preferredChannel"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
                     <label>
                       Phone Number
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -292,230 +413,8 @@
                             placeholder="Phone Number"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="phone_number"
+                            formControlName="phoneNumber"
                           >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Date of Birth
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="date"
-                            formControlName="date_of_birth"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Age Category
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Age Category"
-                                     formControlName="age_category"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of age_category">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Nationality Status
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     (change)="onChangeCountry($event)"
-                                     placeholder="Nationality Status"
-                                     formControlName="nationality_status"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of nationality_status">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Identification Document
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Identification Document"
-                                     formControlName="identification_document"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of identification_document">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Identification Number
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Identification Number"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="identification_number"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Disability
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Disability"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="disability"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Reason for Referral
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Reason for Referral"
-                                     formControlName="reason_for_referral"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of reason_for_referral">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Organization Referred to
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Organization Referred to"
-                                     formControlName="organization_referred_to"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
                         </div>
                       </div>
                     </div>
