@@ -19,12 +19,41 @@ class ProjectMilestoneController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond projectMilestoneService.list(params), model:[projectMilestoneCount: projectMilestoneService.count()]
+        def projectMilestones = []
+        projectMilestoneService.list(params).each { projectMilestone ->
+            def newProjectMilestoneObject = [:]
+            def categoryId = projectMilestone.programCategory.id
+            def category = ProgramCategory.findById(categoryId)
+            def program = Program.findById(category.program.id)
+            newProjectMilestoneObject['id'] = projectMilestone.id
+            newProjectMilestoneObject['name'] = projectMilestone.name
+            newProjectMilestoneObject['description'] = projectMilestone.description
+            newProjectMilestoneObject['categoryId'] = categoryId
+            newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
+            newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
+            newProjectMilestoneObject['category'] = category.name
+            newProjectMilestoneObject['program'] = program.title
+            projectMilestones << newProjectMilestoneObject
+        }
+        respond projectMilestones
     }
 
     def show(String id) {
-        respond projectMilestoneService.get(id)
+        def projectMilestone = projectMilestoneService.get(id)
+        def newProjectMilestoneObject = [:]
+        def categoryId = projectMilestone.programCategory.id
+        def category = ProgramCategory.findById(categoryId)
+        def program = Program.findById(category.program.id)
+        newProjectMilestoneObject['id'] = projectMilestone.id
+        newProjectMilestoneObject['name'] = projectMilestone.name
+        newProjectMilestoneObject['description'] = projectMilestone.description
+        newProjectMilestoneObject['categoryId'] = categoryId
+        newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
+        newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
+        newProjectMilestoneObject['category'] = category.name
+        newProjectMilestoneObject['program'] = program.title
+        newProjectMilestoneObject['programId'] = program.title
+        respond newProjectMilestoneObject
     }
 
     @Transactional

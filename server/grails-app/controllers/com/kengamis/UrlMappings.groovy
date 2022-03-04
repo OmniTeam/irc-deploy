@@ -36,6 +36,7 @@ class UrlMappings {
         get "/$controller/disableTask(.$format)?"(action:"disableTask")
         get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
+        get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')

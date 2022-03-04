@@ -14,6 +14,14 @@ export class ProjectMilestoneService {
     return this.http.get(this.baseurl);
   }
 
+  getPrograms(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/program/`);
+  }
+
+  getProgramCategories(params): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/programCategory/getCategoriesByProgram`, {params});
+  }
+
   createMilestone(formData): Observable<any> {
     return this.http.post(this.baseurl, formData);
   }

@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../services/alert";
 import {ProjectMilestoneService} from "../../../services/project-milestone.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-edit-project-milestones',
@@ -15,6 +16,8 @@ export class EditProjectMilestonesComponent implements OnInit {
   submitted = false;
   formData: any;
   milestoneId: any;
+  programs = [];
+  categories = [];
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
@@ -24,13 +27,27 @@ export class EditProjectMilestonesComponent implements OnInit {
   ngOnInit(): void {
     this.milestoneId = this.route.snapshot.params.id
     this.projectMilestoneService.getCurrentMilestone(this.milestoneId).subscribe((results: any) => {
+      console.log(results);
       this.formGroup = this.formBuilder.group({
+        program: [results?.programId, [Validators.required]],
+        category: [results?.category, [Validators.required]],
         name: [results?.name, [Validators.required]],
         description: [results?.description],
         reportingQuery: [results?.reportingQuery],
         dashboardQuery: [results?.dashboardQuery]
       });
     });
+    this.projectMilestoneService.getPrograms().subscribe(data => {
+      this.programs = data;
+    }, error => console.log(error));
+  }
+
+  getCategories(value) {
+    const params = new HttpParams()
+      .set('id', value);
+    this.projectMilestoneService.getProgramCategories(params).subscribe(data => {
+      this.categories = data;
+    }, error => console.log(error));
   }
 
   get f() {
@@ -46,8 +63,8 @@ export class EditProjectMilestonesComponent implements OnInit {
     this.formData = this.formGroup.value;
     let reportingTable = {"reportingTable": 'milestone_reporting_table'};
     let dashboardTable = {"dashboardTable": 'milestone_dashboard_table'};
-    this.formData = Object.assign(this.formData, {"reportingTable": reportingTable});
-    this.formData = Object.assign(this.formData, {"dashboardTable": dashboardTable});
+    this.formData = Object.assign(this.formData, reportingTable);
+    this.formData = Object.assign(this.formData, dashboardTable);
     this.projectMilestoneService.updateMilestone(this.milestoneId, this.formData).subscribe(results => {
       this.router.navigate(['/milestones']);
       this.alertService.success(`Milestone has been successfully updated `);

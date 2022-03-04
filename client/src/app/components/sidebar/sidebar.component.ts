@@ -80,6 +80,8 @@ export const ROUTES: RouteInfo[] = [
     children: [
       {path: 'tags', title: 'Tags', type: 'link'},
       {path: 'tagType', title: 'Tag Type', type: 'link'},
+      {path: 'program', title: 'Program', type: 'link'},
+      {path: 'programCategory', title: 'Program Category', type: 'link'},
       {path: 'milestones', title: 'Project Milestones', type: 'link'}
     ]
   },

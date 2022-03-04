@@ -141,6 +141,30 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
       },
       {
+        path: 'program', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program/program.module').then(m => m.ProgramModule)
+      },
+      {
+        path:'program/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program/create-program/create-program.module').then(m => m.CreateProgramModule)
+      },
+      {
+        path: 'program/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program/edit-program/edit-program.module').then(m => m.EditProgramModule)
+      },
+      {
+        path: 'programCategory', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-category/program-category.module').then(m => m.ProgramCategoryModule)
+      },
+      {
+        path:'programCategory/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-category/create-program-category/create-program-category.module').then(m => m.CreateProgramCategoryModule)
+      },
+      {
+        path: 'programCategory/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-category/edit-program-category/edit-program-category.module').then(m => m.EditProgramCategoryModule)
+      },
+      {
         path: 'milestones', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/project-milestones/project-milestones.module').then(m => m.ProjectMilestonesModule)
       },
