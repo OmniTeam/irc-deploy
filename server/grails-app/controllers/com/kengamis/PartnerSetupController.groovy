@@ -28,7 +28,7 @@ class PartnerSetupController {
 
         partnerSetups.each{PartnerSetup setup ->
             list << [id: setup.id,
-                      businessChampion : setup.businessChampion,
+                      partnerId : setup.partnerId,
                       lastUpdated : setup.lastUpdated,
                       dateCreated: setup.dateCreated]
         }

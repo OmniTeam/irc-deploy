@@ -31,9 +31,15 @@ export class PartnerListComponent implements OnInit {
       dom: 'lfBrtip',
       buttons: [
         {
+          text: '<i class="text fas fa-plus" style="color: cornflowerblue;"></i>&nbsp;&nbsp;Add Partner Setup',
+          action: ( e, dt, node, config ) => {
+            this.router.navigate(['/partnerSetup']);
+          }
+        },
+        {
           text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
           extend: 'csvHtml5',
-          title: 'TaskList'
+          title: 'Setup'
         },
         {
           text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',

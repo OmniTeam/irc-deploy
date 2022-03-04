@@ -46,11 +46,15 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
       {
+        path: 'partnerSetup', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+      },
+      {
         path: 'partnerSetup/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
       },
       {
-        path: 'partnerSetup', canActivate: [AuthGuard],
+        path: 'partnerSetupList', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/partner-list/partner-list.module').then(m => m.PartnerListModule)
       },
       {

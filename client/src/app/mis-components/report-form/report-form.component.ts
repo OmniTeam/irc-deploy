@@ -173,10 +173,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
-      } else {
+      } /*else {
         this.financialReport = SampleData.financialReport;
         this.performanceReport = SampleData.performanceReport;
-      }
+      }*/
 
       this.dtTrigger.next();
     }, error => console.log("Error getting reports", error));

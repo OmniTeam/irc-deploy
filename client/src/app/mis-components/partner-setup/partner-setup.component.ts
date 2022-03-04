@@ -19,33 +19,21 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   rows: [] = [];
-  calendar: {
-    id: string;
-    periodType: string;
-    grantStartDate: string;
-    grantEndDate: string;
-    projectReportingStartDate: string;
-    reportingCalender: any
-  };
-  indicators: any;
-  budget: any;
-  disbursementPlan: any;
+  calendar: any = [];
+  indicators: any = [];
+  budget: any = [];
+  disbursementPlan: any = [];
   showDisaggregation: boolean;
-  disaggregation: any;
-  organisationalInfo: any;
-  listOfBusinessChampions: any;
-  businessChampionChosen: string;
+  disaggregation: any = [];
+  organisationalInfo: any = [];
+  listOfPartners: any = [];
+  partnerChosen: string;
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
-  currentStatus: {
-    startReportingCycle: string;
-    totalAmountAccountedFor: string;
-    totalAmountDisbursed: string;
-    dateOfLastDisbursement: string
-  };
+  currentStatus:any = [];
   error: boolean;
   success: boolean;
   errorMessage: string;
@@ -57,7 +45,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   ngOnInit(): void {
     this.organisationalInfo = SampleData.organisationalInfo;
-    this.listOfBusinessChampions = SampleData.businessChampion;
+    this.listOfPartners = SampleData.partners;
 
     this.route.params
       .subscribe(p => {
@@ -73,26 +61,26 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             this.budget = JSON.parse(setupValues.budget);
             this.disbursementPlan = JSON.parse(setupValues.disbursementPlan);
             this.currentStatus = JSON.parse(setupValues.currentStatus);
-            this.businessChampionChosen = data.setup.businessChampion
-          } else {
+            this.partnerChosen = data.setup.partnerId
+          } /*else {
             this.calendar = SampleData.calendar;
             this.indicators = SampleData.indicators;
             this.budget = SampleData.budget;
             this.disbursementPlan = SampleData.disbursementPlan;
             this.currentStatus = SampleData.currentStatus;
-          }
+          }*/
           this.dtTrigger.next();
         }, error => console.log(error));
-
-        this.dtOptions = {
-          pagingType: "numbers",
-          lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-          processing: true,
-          responsive: true,
-          dom: 'lfBrtip',
-          buttons: []
-        };
       });
+
+    this.dtOptions = {
+      pagingType: "numbers",
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      processing: true,
+      responsive: true,
+      dom: 'lfBrtip',
+      buttons: []
+    };
   }
 
   generateCalendar(event) {
@@ -217,7 +205,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     let partnerSetupRecord: { [key: string]: string } = {
-      businessChampion: this.businessChampionChosen,
+      partnerId: this.partnerChosen,
       userId: this.authService.getLoggedInUsername(),
       setupValues: JSON.stringify(reportValues),
     }
@@ -238,7 +226,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     setTimeout(() => {
       this.success = false;
       this.error = false;
-    }, 3000);
+      this.onBackPressed();
+    }, 6000);
   }
 
   onBackPressed() {

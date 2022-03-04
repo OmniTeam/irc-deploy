@@ -4,7 +4,7 @@ class PartnerSetup {
 
     String id
     String userId
-    String businessChampion
+    String partnerId
     String setupValues
     Date dateCreated
     Date lastUpdated

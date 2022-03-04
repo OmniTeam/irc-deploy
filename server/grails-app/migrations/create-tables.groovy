@@ -1272,7 +1272,7 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
-            column(name: "business_champion", type: "VARCHAR(255)") {
+            column(name: "partner_id", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
         }
