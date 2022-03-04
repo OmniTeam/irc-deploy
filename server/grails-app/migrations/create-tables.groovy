@@ -1347,4 +1347,54 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "entity_view_id", baseTableName: "entity_view_filters", constraintName: "FKccsoafxljte0s32kxgj58sy58", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view", validate: "true")
     }
 
+    changeSet(author: "Bryan (generated)", id: "1646382998928-1") {
+        createTable(tableName: "program_partner") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "program_partnerPK")
+            }
+
+            column(name: "legal", type: "VARCHAR(255)")
+
+            column(name: "lead_cluster", type: "VARCHAR(255)")
+
+            column(name: "organisation", type: "VARCHAR(255)")
+
+            column(name: "postal_address", type: "VARCHAR(255)")
+
+            column(name: "physical_address", type: "VARCHAR(255)")
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "city", type: "VARCHAR(255)")
+
+            column(name: "name_contact_person", type: "VARCHAR(255)")
+
+            column(name: "country", type: "VARCHAR(255)")
+
+            column(name: "email", type: "VARCHAR(255)")
+
+            column(name: "website", type: "VARCHAR(255)")
+
+            column(name: "program_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "acronym", type: "VARCHAR(255)")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646382998928-2") {
+        addForeignKeyConstraint(baseColumnNames: "program_id", baseTableName: "program_partner", constraintName: "FK2rc72b856yntd7xpsdrj8l0qa", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "program", validate: "true")
+    }
+
 }

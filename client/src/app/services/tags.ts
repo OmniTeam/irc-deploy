@@ -15,9 +15,17 @@ export class TagService {
     return this.http.get(`${environment.serverUrl}/tag`);
   }
 
+  getCurrentTag(id): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/tag/${id}`);
+  }
+
   addNewTag(newTag): Observable<any> {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     return this.http.post(`${environment.serverUrl}/tag`, newTag, httpOptions);
+  }
+
+  updateTag(id, formData): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/tag/${id}/`, formData);
   }
 
   deleteTag(deletedRow): Observable<any> {
@@ -28,6 +36,10 @@ export class TagService {
     return this.http.get(`${environment.serverUrl}/tagType`);
   }
 
+  getCurrentTagType(id): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/tagType/${id}`);
+  }
+
   getTagTypes(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/tagType`);
   }
@@ -35,6 +47,10 @@ export class TagService {
   addNewTagType(newTagType): Observable<any> {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     return this.http.post(`${environment.serverUrl}/tagType`, newTagType, httpOptions);
+  }
+
+  updateTagType(id, formData): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/tagType/${id}/`, formData);
   }
 
   deleteTagType(deletedRow): Observable<any> {

@@ -27,7 +27,6 @@ export class EditProjectMilestonesComponent implements OnInit {
   ngOnInit(): void {
     this.milestoneId = this.route.snapshot.params.id
     this.projectMilestoneService.getCurrentMilestone(this.milestoneId).subscribe((results: any) => {
-      console.log(results);
       this.formGroup = this.formBuilder.group({
         program: [results?.programId, [Validators.required]],
         category: [results?.category, [Validators.required]],
@@ -80,8 +79,8 @@ export class EditProjectMilestonesComponent implements OnInit {
     }
   }
 
-  onReset() {
-    this.formGroup.reset();
+  cancel(): void {
+    window.history.back();
   }
 
 }

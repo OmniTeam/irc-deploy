@@ -56,7 +56,6 @@ export class CreateProjectMilestonesComponent implements OnInit {
       return;
     }
     this.formData = this.formGroup.value;
-    console.log(this.formData);
     let reportingTable = {"reportingTable": 'milestone_reporting_table'};
     let dashboardTable = {"dashboardTable": 'milestone_dashboard_table'};
     this.formData = Object.assign(this.formData, reportingTable);

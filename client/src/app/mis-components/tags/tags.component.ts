@@ -77,8 +77,8 @@ export class TagsComponent implements OnInit {
   }
 
   editTag(row) {
-    const editedRow = row.id;
-    console.log(row);
+    const id = row.id;
+    this.router.navigate(['/tags/edit/'+ id]);
   }
 
   deleteTag(row) {

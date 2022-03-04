@@ -8,7 +8,7 @@ class Program {
     Date dateCreated
     Date lastUpdated
 
-    static hasMany = [programCategories: ProgramCategory]
+    static hasMany = [programCategories: ProgramCategory, programPartners: ProgramPartner]
 
     static constraints = {
         description nullable: true

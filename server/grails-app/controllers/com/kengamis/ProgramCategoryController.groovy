@@ -19,21 +19,21 @@ class ProgramCategoryController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        def projectCategories = []
+        def programCategories = []
         programCategoryService.list(params).each { programCategory ->
-            def newProjectCategoryObject = [:]
+            def newProgramCategoryObject = [:]
             def programId = programCategory.program.id
             def program = Program.findById(programId)
-            newProjectCategoryObject['id'] = programCategory.id
-            newProjectCategoryObject['name'] = programCategory.name
-            newProjectCategoryObject['description'] = programCategory.description
-            newProjectCategoryObject['dateCreated'] = programCategory.dateCreated
-            newProjectCategoryObject['lastUpdated'] = programCategory.lastUpdated
-            newProjectCategoryObject['program'] = program.title
-            newProjectCategoryObject['programId'] = program.id
-            projectCategories << newProjectCategoryObject
+            newProgramCategoryObject['id'] = programCategory.id
+            newProgramCategoryObject['name'] = programCategory.name
+            newProgramCategoryObject['description'] = programCategory.description
+            newProgramCategoryObject['dateCreated'] = programCategory.dateCreated
+            newProgramCategoryObject['lastUpdated'] = programCategory.lastUpdated
+            newProgramCategoryObject['program'] = program.title
+            newProgramCategoryObject['programId'] = program.id
+            programCategories << newProgramCategoryObject
         }
-        respond projectCategories
+        respond programCategories
     }
 
     def getCategoriesByProgram() {
@@ -45,17 +45,17 @@ class ProgramCategoryController {
 
     def show(String id) {
         def programCategory = programCategoryService.get(id)
-        def newProjectCategoryObject = [:]
+        def newProgramCategoryObject = [:]
         def programId = programCategory.program.id
         def program = Program.findById(programId)
-        newProjectCategoryObject['id'] = programCategory.id
-        newProjectCategoryObject['name'] = programCategory.name
-        newProjectCategoryObject['description'] = programCategory.description
-        newProjectCategoryObject['dateCreated'] = programCategory.dateCreated
-        newProjectCategoryObject['lastUpdated'] = programCategory.lastUpdated
-        newProjectCategoryObject['program'] = program.title
-        newProjectCategoryObject['programId'] = program.id
-        respond newProjectCategoryObject
+        newProgramCategoryObject['id'] = programCategory.id
+        newProgramCategoryObject['name'] = programCategory.name
+        newProgramCategoryObject['description'] = programCategory.description
+        newProgramCategoryObject['dateCreated'] = programCategory.dateCreated
+        newProgramCategoryObject['lastUpdated'] = programCategory.lastUpdated
+        newProgramCategoryObject['program'] = program.title
+        newProgramCategoryObject['programId'] = program.id
+        respond newProgramCategoryObject
     }
 
     @Transactional

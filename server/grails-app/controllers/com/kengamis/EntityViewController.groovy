@@ -27,11 +27,18 @@ class EntityViewController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond entityViewService.list(params), model: [entityViewCount: entityViewService.count()]
+        def entityViews = EntityView.findAll().collect { entityView ->
+            def entityViewFilters = entityView.filters.collect { [id: it.id, name: it.name] }
+            [id: entityView.id, name: entityView.name, tableName: entityView.tableName, description: entityView.description, dateCreated: entityView.dateCreated, entityViewFilters: entityViewFilters]
+        }
+        respond entityViews
     }
 
     def show(String id) {
-        respond entityViewService.get(id)
+        def entityView = entityViewService.get(id)
+        def entityViewFilters = entityView.filters.collect { [id: it.id, name: it.name] }
+        def entityViewReturned = [id: entityView.id, name: entityView.name, tableName: entityView.tableName, description: entityView.description, dateCreated: entityView.dateCreated, entityViewFilters: entityViewFilters]
+        respond entityViewReturned
     }
 
     @Transactional
