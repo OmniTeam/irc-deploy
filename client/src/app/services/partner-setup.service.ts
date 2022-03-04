@@ -10,7 +10,15 @@ export class PartnerSetupService {
 
   constructor(private http: HttpClient) { }
 
-  getInfo(): Observable<any> {
+  getPartnerSetup(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/partnerSetup`);
+  }
+
+  createPartnerSetup(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/partnerSetup`, formData);
+  }
+
+  getPartnerSetupRecord(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/partnerSetup/get_partner_setup_record`, {params});
   }
 }

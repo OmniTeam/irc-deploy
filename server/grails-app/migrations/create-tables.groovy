@@ -1397,4 +1397,32 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "program_id", baseTableName: "program_partner", constraintName: "FK2rc72b856yntd7xpsdrj8l0qa", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "program", validate: "true")
     }
 
+    changeSet(author: "BrunoJay (generated)", id: "1646309130239-1") {
+        createTable(tableName: "partner_setup") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setupPK")
+            }
+
+            column(name: "setup_values", type: "text") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "partner_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }

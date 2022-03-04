@@ -1,15 +1,11 @@
 package com.kengamis
 
-class ReportForm {
+class PartnerSetup {
 
     String id
-    String groupId
-    String processId
-    String taskId
-    String taskDefinitionKey
     String userId
-    String reportValues
-    String status
+    String partnerId
+    String setupValues
     Date dateCreated
     Date lastUpdated
 

@@ -8,17 +8,19 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
 import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 @NgModule({
   declarations: [PartnerSetupComponent],
-  imports: [
-    CommonModule,
-    PartnerSetupRoutingModule,
-    FormsModule,
-    NgxDatatableModule,
-    ComponentsModule,
-    DataTablesModule,
-    EntityViewTableModule,
-  ]
+    imports: [
+        CommonModule,
+        PartnerSetupRoutingModule,
+        FormsModule,
+        NgxDatatableModule,
+        ComponentsModule,
+        DataTablesModule,
+        EntityViewTableModule,
+        NgSelectModule,
+    ]
 })
 export class PartnerSetupModule { }

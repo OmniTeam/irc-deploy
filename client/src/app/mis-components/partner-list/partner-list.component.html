@@ -3,7 +3,7 @@
     <div class="header-body">
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
-          <h6 class="h2 text-white d-inline-block mb-0">TaskList</h6>
+          <h6 class="h2 text-white d-inline-block mb-0">Partner Setup List</h6>
         </div>
       </div>
     </div>
@@ -24,29 +24,20 @@
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
-                      <th class='text-center'>Task Name</th>
-                      <th class='text-center'>Description</th>
+                      <th class='text-center'>Partner/Cluster</th>
                       <th class='text-center'>Date Created</th>
-                      <th class='text-center'>Status</th>
+                      <th class='text-center'>Date Last Updated</th>
                       <th class='text-center'>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let row of rows">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'>{{ row.taskName }}</td>
-                      <td class='text-center'>{{ row.description }}</td>
+                      <td class='text-center'>{{ row.partnerId }}</td>
                       <td class='text-center'>{{ row.dateCreated  | date: 'medium' }}</td>
-                      <td class='text-center'
-                          [style.color]="row.status=='completed' ? 'limegreen' :
-                          row.status=='in_progress' ? 'orange' :
-                          row.status=='needs_revision' ? 'red' : 'black'">
-                        <div style="display: inline-flex;">{{ row.status | replace: '_' : ' ' | titlecase }}
-                          <i class="far fa-check-circle" style="color: limegreen; font-size: 12px"
-                             [style.display]="row.status=='completed' ? 'block' : 'none'"></i></div>
-                      </td>
-                      <td class='text-center'><a [routerLink]="['/reportForm', row.id]" style="font-size:20px;"
-                                                 class="text fas fa-external-link-square-alt"></a></td>
+                      <td class='text-center'>{{ row.lastUpdated  | date: 'medium' }}</td>
+                      <td class='text-center'><a [routerLink]="['/partnerSetup', row.id]" style="font-size:20px;"
+                                                 class="text fas fa-pencil-alt"></a></td>
                     </tr>
                     </tbody>
                   </table>
