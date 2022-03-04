@@ -2,23 +2,25 @@ package com.kengamis
 
 class Referral {
     String id
-    String date_of_referral
-    String name_of_referring_officer
-    String name_of_client_being_referred
-    String phone_number
-    String date_of_birth
-    String age_category
-    String country_of_origin
-    String identification_document
-    String identification_number
-    String reason_for_referral
-    String organization_referred_to
+    String dateOfReferral
+    String nameOfReferringOfficer
+    String nameOfClientBeingReferred
+    String phoneNumber
+    String dateOfBirth
+    String ageCategory
+    String countryOfOrigin
+    String identificationDocument
+    String identificationNumber
+    String reasonForReferral
+    String organizationReferredTo
     String disability
-    String received_feedback
-    String feedback_given
-    String date_of_feedback
-    String followup_needed
-    String followup_areas
+    String receivedFeedback
+    String nationalityStatus
+    String feedbackGiven
+    String dateOfFeedback
+    String followupNeeded
+    String followupAreas
+    String followupOrganization
     String status
 
     static mapping = {
@@ -26,24 +28,26 @@ class Referral {
     }
 
     static constraints = {
-        date_of_referral nullable: false
-        name_of_referring_officer nullable: false
-        name_of_client_being_referred nullable: false
-        phone_number nullable: false
-        date_of_birth nullable: false
-        age_category nullable: false
-        country_of_origin nullable: false
-        identification_document nullable: false
-        identification_number nullable: false
-        reason_for_referral nullable: false
-        organization_referred_to nullable: false
-        disability nullable: false
-        status nullable: false
-        received_feedback nullable: true
-        feedback_given nullable: true
-         date_of_feedback nullable: true
-        followup_needed nullable: true
-        followup_areas nullable: true
+        dateOfReferral nullable: false
+        nameOfReferringOfficer nullable: false
+        nameOfClientBeingReferred nullable: false
+        phoneNumber nullable: true
+        dateOfBirth nullable: true
+        ageCategory nullable: true
+        countryOfOrigin nullable: true
+        identificationDocument nullable: true
+        identificationNumber nullable: true
+        reasonForReferral nullable: true
+        organizationReferredTo nullable: true
+        disability nullable: true
+        status nullable: true
+        receivedFeedback nullable: true
+        nationalityStatus nullable: true
+        feedbackGiven nullable: true
+        dateOfFeedback nullable: true
+        followupNeeded nullable: true
+        followupAreas nullable: true
+        followupOrganization nullable: true
     }
 
     @Override

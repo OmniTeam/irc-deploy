@@ -98,6 +98,18 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/referrals/action-referral/action-referral.module').then(m => m.ActionReferralModule)
       },
       {
+        path: 'feedback-list', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/feedback/feedback.module').then(m => m.FeedbackModule)
+      },
+      {
+        path: 'action-feedback', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/feedback/action-feedback/action-feedback.module').then(m => m.ActionFeedbackModule)
+      },
+      {
+        path: 'create-feedback', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/feedback/create-feeback/create-feedback.module').then(m => m.CreateFeedbackModule)
+      },
+      {
         path:'groups', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/groups/groups.module').then(m => m.GroupsModule)
       },
