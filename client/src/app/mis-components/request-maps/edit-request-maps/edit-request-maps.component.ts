@@ -62,8 +62,8 @@ export class EditRequestMapsComponent implements OnInit {
     }
   }
 
-  onReset() {
-    this.formGroup.reset();
+  cancel(): void {
+    window.history.back();
   }
 
 }

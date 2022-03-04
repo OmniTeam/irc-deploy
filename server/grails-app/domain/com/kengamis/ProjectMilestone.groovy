@@ -9,8 +9,11 @@ class ProjectMilestone {
     String dashboardQuery
     String reportingTable
     String dashboardTable
+    String program
     Date dateCreated
     Date lastUpdated
+
+    static belongsTo = [programCategory: ProgramCategory]
 
     static constraints = {
         reportingQuery nullable: true
@@ -24,5 +27,10 @@ class ProjectMilestone {
         id generator: 'uuid2'
         reportingQuery type: 'text'
         dashboardQuery type: 'text'
+    }
+
+    @Override
+    public String toString() {
+        return "${name}";
     }
 }

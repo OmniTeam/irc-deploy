@@ -445,7 +445,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
           }
           else {
             let key = detail['question'];
-            let value = detail['answer'];
+            let value = detail['answer'] ? detail['answer'] : '';
             html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
               + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + value.replace(/_/g, " ") + "</td> </tr>";
           }
