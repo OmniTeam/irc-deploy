@@ -35,6 +35,10 @@ class KengaGroupRole implements Serializable{
         criteriaFor(kengaGroupId, roleId).get()
     }
 
+    static List<KengaGroup> findAllGroups(Role user) {
+
+    }
+
     static boolean exists(String kengaGroupId, String roleId) {
         criteriaFor(kengaGroupId, roleId).count()
     }
