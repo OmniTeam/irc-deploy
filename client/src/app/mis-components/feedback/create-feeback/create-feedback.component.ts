@@ -14,10 +14,10 @@ import {CountriesService} from "../../../services/countries.service";
 
 @Component({
   selector: 'app-createReferral',
-  templateUrl: './create-referral.component.html',
-  styleUrls: ['./create-referral.component.scss']
+  templateUrl: './create-feedback.component.html',
+  styleUrls: ['./create-feedback.component.scss']
 })
-export class CreateReferralComponent implements OnInit {
+export class CreateFeedbackComponent implements OnInit {
   private nationalityValue = '';
 
   constructor(
@@ -131,18 +131,18 @@ export class CreateReferralComponent implements OnInit {
       this.alertService.error("Failed to get Countries")
     })
     this.formGroup = this.formBuilder.group({
-      dateOfReferral: [''],
-      nameOfReferringOfficer: [''],
-      nameOfClientBeingReferred: [''],
-      phoneNumber: [''],
-      dateOfBirth: [''],
-      ageCategory: [null],
-      countryOfOrigin: [null],
-      identificationDocument: [null],
-      identificationNumber: [],
-      reasonForReferral: [null],
-      nationalityStatus: [null],
-      organizationReferredTo: [null],
+      date_of_referral: [''],
+      name_of_referring_officer: [''],
+      name_of_client_being_referred: [''],
+      phone_number: [''],
+      date_of_birth: [''],
+      age_category: [null],
+      country_of_origin: [null],
+      identification_document: [null],
+      identification_number: [],
+      reason_for_referral: [null],
+      nationality_status: [null],
+      organization_referred_to: [null],
       disability: [''],
       status: ['Pending'],
     });
@@ -170,7 +170,7 @@ export class CreateReferralComponent implements OnInit {
     if (!event) {
       this.nationalityValue = ''
       document.getElementById('country_of_origin').hidden = true
-      this.formGroup.controls['countryOfOrigin'].reset();
+      this.formGroup.controls['country_of_origin'].reset();
     } else {
       this.nationalityValue = event;
       if(this.nationalityValue === "National"){

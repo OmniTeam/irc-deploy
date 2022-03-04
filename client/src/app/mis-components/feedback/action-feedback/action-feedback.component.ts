@@ -16,12 +16,12 @@ import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-createReferral',
-  templateUrl: './action-referral.component.html',
-  styleUrls: ['./action-referral.component.scss']
+  templateUrl: './action-feedback.component.html',
+  styleUrls: ['./action-feedback.component.scss']
 })
-export class ActionReferralComponent implements OnInit {
+export class ActionFeedbackComponent implements OnInit {
   private referrals: any;
-  private nationalityValue = '';
+  private nationalityValue='';
   private followUpValue = '';
 
   constructor(
@@ -167,39 +167,39 @@ export class ActionReferralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.CountriesService.getCountries().subscribe(data => {
-      this.country_of_origin = data
-    }, error => {
-      this.alertService.error("Failed to get Countries")
-    })
+    this.CountriesService.getCountries().subscribe(data =>{
+      this.country_of_origin=data
+    }, error => {this.alertService.error("Failed to get Countries")})
     this.referralsService.getCurrentReferral(this.route.snapshot.params.id).subscribe(data => {
-      console.log(data, "referral data")
+      console.log(data,"referral data")
 
       this.referrals = data
+      let myDate = this.datePipe.transform(this.referrals.date_of_referral, 'dd-MM-yyyy')
+      console.log(myDate," this is the date formatted")
       this.formGroup = this.formBuilder.group({
-        dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
-        nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
-        nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
-        phoneNumber: [this.referrals?.phoneNumber],
-        dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
-        ageCategory: [this.referrals?.ageCategory],
-        countryOfOrigin: [this.referrals?.countryOfOrigin],
-        identificationDocument: [this.referrals?.identificationDocument],
-        identificationNumber: [this.referrals?.identificationNumber],
-        reasonForReferral: [this.referrals?.reasonForReferral],
-        organizationReferredTo: [this.referrals?.organizationReferredTo],
-        receivedFeedback: [this.referrals?.receivedFeedback],
-        feedbackGiven: [this.referrals?.feedbackGiven],
-        dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
-        nationalityStatus: [this.referrals?.nationalityStatus],
-        followupNeeded: [this.referrals?.followupNeeded],
-        followupAreas: [this.referrals?.followupAreas],
-        followupOrganization: [this.referrals?.followupOrganization],
+        date_of_referral: [(this.datePipe.transform(this.referrals.date_of_referral, 'yyyy-MM-dd'))],
+        name_of_referring_officer: [this.referrals?.name_of_referring_officer],
+        name_of_client_being_referred: [this.referrals?.name_of_client_being_referred],
+        phone_number: [this.referrals?.phone_number],
+        date_of_birth: [this.datePipe.transform(this.referrals.date_of_birth, 'yyyy-MM-dd')],
+        age_category: [this.referrals?.age_category],
+        country_of_origin: [this.referrals?.country_of_origin],
+        identification_document: [this.referrals?.identification_document],
+        identification_number: [this.referrals?.identification_number],
+        reason_for_referral: [this.referrals?.reason_for_referral],
+        organization_referred_to: [this.referrals?.organization_referred_to],
+        received_feedback: [this.referrals?.received_feedback],
+        feedback_given: [this.referrals?.feedback_given],
+        date_of_feedback: [this.datePipe.transform(this.referrals.date_of_feedback, 'yyyy-MM-dd')],
+        nationality_status: [this.referrals?.nationality_status],
+        followup_needed: [this.referrals?.followup_needed],
+        followup_areas: [this.referrals?.followup_areas],
+        followup_organization: [this.referrals?.followup_organization],
         disability: [this.referrals?.disability],
         status: ['Actioned'],
       });
-
     })
+
   }
 
   actionReferral() {
@@ -219,8 +219,7 @@ export class ActionReferralComponent implements OnInit {
       this.alertService.error(`Failed to update Referral`)
     });
   }
-
-  close() {
+  close(){
     this.router.navigate(['/referrals-list'])
   }
 
@@ -229,10 +228,10 @@ export class ActionReferralComponent implements OnInit {
     if (!event) {
       this.nationalityValue = ''
       document.getElementById('country_of_origin').hidden = true
-      this.formGroup.controls['countryOfOrigin'].reset();
+      this.formGroup.controls['country_of_origin'].reset();
     } else {
       this.nationalityValue = event;
-      if (this.nationalityValue === "National") {
+      if(this.nationalityValue === "National"){
         document.getElementById('country_of_origin').hidden = true
       } else {
         document.getElementById('country_of_origin').hidden = false
@@ -245,20 +244,20 @@ export class ActionReferralComponent implements OnInit {
     console.log(event, "nationality")
     if (!event) {
       this.followUpValue = ''
-      document.getElementById('followupAreas').hidden = true
-      document.getElementById('followupOrganization').hidden = true
-      this.formGroup.controls['followupAreas'].reset();
-      this.formGroup.controls['followupOrganization'].reset();
+      document.getElementById('followup_areas').hidden = true
+      document.getElementById('followup_organization').hidden = true
+      this.formGroup.controls['followup_areas'].reset();
+      this.formGroup.controls['followup_organization'].reset();
     } else {
       this.followUpValue = event;
-      if (this.followUpValue === "No") {
-        document.getElementById('followupAreas').hidden = true
-        document.getElementById('followupOrganization').hidden = true
-        this.formGroup.controls['followupAreas'].reset();
-        this.formGroup.controls['followupOrganization'].reset();
+      if(this.followUpValue === "No"){
+        document.getElementById('followup_areas').hidden = true
+        document.getElementById('followup_organization').hidden = true
+        this.formGroup.controls['followup_areas'].reset();
+        this.formGroup.controls['followup_organization'].reset();
       } else {
-        document.getElementById('followupAreas').hidden = false
-        document.getElementById('followupOrganization').hidden = false
+        document.getElementById('followup_areas').hidden = false
+        document.getElementById('followup_organization').hidden = false
       }
 
     }
@@ -277,6 +276,7 @@ export class ActionReferralComponent implements OnInit {
         ));
     }
   }
+
 
 
 }
