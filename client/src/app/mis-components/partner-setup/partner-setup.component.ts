@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {PartnerSetupService} from "../../services/partner-setup.service";
+import {ProgramPartnersService} from "../../services/program-partners.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
@@ -40,13 +41,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   successMessage: string;
   private partnerSetupId: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private partnerSetupService: PartnerSetupService, public authService: AuthService) {
-  }
+  constructor(private router: Router, private route: ActivatedRoute,
+              private location: Location,
+              private partnerSetupService: PartnerSetupService,
+              public authService: AuthService,
+              private programPartnersService: ProgramPartnersService) {}
 
   ngOnInit(): void {
-    this.organisationalInfo = SampleData.organisationalInfo;
-    this.listOfPartners = SampleData.partners;
-
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
@@ -72,6 +73,26 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           this.dtTrigger.next();
         }, error => console.log(error));
       });
+
+    this.programPartnersService.getProgramPartners().subscribe(data => {
+      if (data!== null && data !== undefined) {
+        console.log('listOfPartnersData', data);
+        this.listOfPartners = data;
+      } /*else {
+        this.listOfPartners = SampleData.partners;
+      }*/
+    });
+
+    if(this.partnerChosen!=undefined) {
+      this.programPartnersService.getCurrentProgramPartner(this.partnerChosen).subscribe((results: any) => {
+        if (results!== null && results !== undefined) {
+          console.log('results', results);
+          this.organisationalInfo = results;
+        }
+      });
+    } /*else {
+      this.organisationalInfo = SampleData.organisationalInfo;
+    }*/
 
     this.dtOptions = {
       pagingType: "numbers",

@@ -273,14 +273,17 @@ export class SampleData {
   }
   static partners = [
     {
+      id: 'ewrwrwrwsfdgdgdfdsf',
       name: 'Partner One',
       value: 'partner_one'
     },
     {
+      id: 'ewrwsfdsfsdrwrwsdfdsf',
       name: 'Parter Two',
       value: 'partner_two'
     },
     {
+      id: 'ewrwrwrwsdfdsdfsfsdfsf',
       name: 'Partner Three',
       value: 'partner_three'
     }

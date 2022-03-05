@@ -28,7 +28,7 @@
                              [searchable]="true"
                              [clearable]="true"
                              [(ngModel)]="partnerChosen">
-                    <ng-option [value]="bc.value" *ngFor="let bc of listOfPartners">
+                    <ng-option [value]="bc.id" *ngFor="let bc of listOfPartners">
                       {{bc.name}}
                     </ng-option>
                   </ng-select>
