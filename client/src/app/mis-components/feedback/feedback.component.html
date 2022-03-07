@@ -121,7 +121,7 @@
                 </div>
               </div>
               <div class="col-sm-12 ">
-                <div class="dataTables_length" >
+                <div class="dataTables_length">
                   <ng-select class="form-control form-control-sm"
                              name="datatable_length"
                              aria-controls="datatable"
@@ -166,18 +166,18 @@
             [headerHeight]="50"
             [footerHeight]="50"
             [rowHeight]="'auto'"
-            [rows]="referrals"
+            [rows]="feedback"
             [limit]="entries != -1 ? entries : undefined"
             (activate)="onActivate($event)"
           >
-            <ngx-datatable-column [width]="15" prop="id" >
+            <ngx-datatable-column [width]="15" prop="id">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Name Of Register" prop="nameOfRegister">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/action-referral/{{row.id}}">{{row?.nameOfRegister}} </a>
+                <a routerLink="/action-feedback/{{row.id}}">{{row?.nameOfRegister}} </a>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Receiving Channel" prop="preferredChannel"></ngx-datatable-column>

@@ -36,15 +36,21 @@ export class FeedbackComponent implements OnInit {
       "name":"Actioned"
     },
     {
-      "name":"Pending"
-    }
+      "name":"Under Review"
+    },
+    {
+      "name":"No Action Required"
+    },
+    {
+      "name":"Forwarded for Action"
+    },
 
   ];
   private partnerValue = '';
   private statusValue = '';
   private groupValue = '';
   users: any;
-  referrals: any;
+  feedback: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,7 +88,7 @@ export class FeedbackComponent implements OnInit {
     }
     else {
       this.statusValue = event;
-      this.referrals=this.referrals.filter(a => a.status.toUpperCase().includes(this.statusValue.toUpperCase()))
+      this.feedback=this.feedback.filter(a => a.currentStatusOfFeedback.toUpperCase().includes(this.statusValue.toUpperCase()))
     }
 
   }
@@ -93,7 +99,7 @@ export class FeedbackComponent implements OnInit {
     if(!this.searchValue){
       this.reloadTable()
     } else {
-      this.referrals = this.referrals.filter(a => a.name_of_client_being_referred.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.feedback = this.feedback.filter(a => a.nameOfClient.toUpperCase().includes(this.searchValue.toUpperCase()) ||a.nameOfClient.toUpperCase().includes(this.searchValue.toUpperCase() ))
     }
   }
 
@@ -104,7 +110,7 @@ export class FeedbackComponent implements OnInit {
 
   reloadTable() {
     this.feedbackService.getFeedback().subscribe((data) => {
-      this.referrals = data;
+      this.feedback = data;
       console.log(data)
     });
   }
@@ -117,7 +123,7 @@ export class FeedbackComponent implements OnInit {
     this.router.navigate(['action-feedback']);
   }
 
-  editUser(row) {
+  editFeedback(row) {
     this.router.navigate(['edit-feedback' + row.id]);
   }
 
@@ -147,7 +153,7 @@ export class FeedbackComponent implements OnInit {
 
   downloadFeedback(): void {
     const fileName = 'Referrals_list.xlsx';
-    const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(this.referrals);
+    const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(this.feedback);
 
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();

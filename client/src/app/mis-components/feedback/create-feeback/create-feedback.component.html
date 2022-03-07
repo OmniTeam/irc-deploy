@@ -25,7 +25,7 @@
           <form [formGroup]="formGroup" (ngSubmit)="createFeedback()" *ngIf="formGroup" style="padding:30px">
             <div class="row">
               <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
-                <div >
+                <div>
                   <div class="row">
                     <label
                       style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
@@ -93,8 +93,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of staff_Designation">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -123,8 +123,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of type_of_feedback">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -153,8 +153,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of feedback_status">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -183,8 +183,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of location">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -213,8 +213,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of project_status">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -235,20 +235,13 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Sub Sector (Project Level)"
-                                     formControlName="subSector"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                          <input
+                            class="form-control"
+                            placeholder="Sub Sector (Project Level)"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="subSector"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
-                            </ng-option>
-                          </ng-select>
                         </div>
                       </div>
                     </div>
@@ -298,8 +291,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of remain_anonymous">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -328,8 +321,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of nationality_status">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -358,8 +351,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of type_of_client">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -388,8 +381,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item?.name" *ngFor="let item of preferred_channel">
+                              {{item?.name}}
                             </ng-option>
                           </ng-select>
                         </div>

@@ -14,7 +14,7 @@ import {FeedbackService} from "../../../services/feedback.service";
 
 
 @Component({
-  selector: 'app-createReferral',
+  selector: 'app-createFeedback',
   templateUrl: './create-feedback.component.html',
   styleUrls: ['./create-feedback.component.scss']
 })
@@ -36,6 +36,156 @@ export class CreateFeedbackComponent implements OnInit {
   currentDashboards: any
   formGroup: FormGroup
   submitted = false;
+
+  staff_Designation =[
+    {
+      'name': 'AAP Officer'
+    },
+    {
+      'name': 'CCEO'
+    },
+    {
+      'name': 'Monitoring & Evaluation Officer'
+    },
+    {
+      'name': 'Program Staff'
+    },
+  ];
+  type_of_feedback = [
+    {
+      'name': 'Old'
+    },
+    {
+      'name': 'New'
+    },
+  ];
+  feedback_status = [
+    {
+      'name': 'Actioned'
+    },
+    {
+      'name': 'Under Review'
+    },
+    {
+      'name': 'No Actioned Required'
+    },
+    {
+      'name': 'Forwarded For Action'
+    },
+  ];
+  location = [
+    {
+      'name': 'Kampala Office'
+    },
+    {
+      'name': 'Gulu Office'
+    },
+    {
+      'name': 'Hoima Office'
+    },
+  ];
+  project_status = [
+    {
+      'name': 'SAFETY (wpe)'
+    },
+    {
+      'name': 'HEALTH'
+    },
+    {
+      'name': 'ERD'
+    },
+    {
+      'name': 'EDUCATION'
+    },
+    {
+      'name': 'PROTECTION (prol)'
+    },
+    {
+      'name': 'No sector related'
+    },
+  ];
+  remain_anonymous = [
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+    {
+      'name': 'Not Sure'
+    },
+  ];
+  gender = [
+    {
+      'name': 'Female'
+    },
+    {
+      'name': 'Male'
+    },
+    {
+      'name': 'Not Disclosed'
+    },
+  ];
+  nationality_status = [
+    {
+      'name': 'Foreigner'
+    },
+    {
+      'name': 'Refugee'
+    },
+    {
+      'name': 'National'
+    }
+  ];
+  type_of_client = [
+    {
+      'name': 'Direct'
+    },
+    {
+      'name': 'Indirect Client'
+    },
+    {
+      'name': 'Intended'
+    },
+    {
+      'name': 'Other'
+    },
+  ];
+  preferred_channel = [
+    {
+      'name': 'Client Forum'
+    },
+    {
+      'name': 'Collectively with Community'
+    },
+    {
+      'name': 'Email Address'
+    },
+    {
+      'name': 'In Person'
+    },
+    {
+      'name': 'In Person'
+    },
+    {
+      'name': 'Phone Call'
+    },
+    {
+      'name': 'SMS'
+    },
+    {
+      'name': 'Stakeholders Reference Group'
+    },
+    {
+      'name': 'Through a Third Party'
+    },
+    {
+      'name': 'Via IRC Staff'
+    },
+    {
+      'name': 'Other'
+    },
+  ];
   reason_for_referral = [
     {
       'name': 'Food amd Shelter'
@@ -53,83 +203,13 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'LGBTI'
     },
   ];
-  nationality_status = [
-    {
-      'name': 'Foreigner'
-    },
-    {
-      'name': 'Refugee'
-    },
-    {
-      'name': 'National'
-    }
-  ];
-  age_category = [
-    {
-      'name': '0 - 28 days'
-    },
-    {
-      'name': '29 days - 4 years'
-    },
-    {
-      'name': '5 - 9 years'
-    },
-    {
-      'name': '10 -19 years'
-    },
-    {
-      'name': '20 - 29 years'
-    },
-    {
-      'name': '30 - 59 years'
-    },
-    {
-      'name': '60 years and above'
-    },
-  ];
-  organization_referred_to = [
-    {
-      'name': 'AVSI FOUNDATION'
-    },
-    {
-      'name': 'JRS'
-    },
-    {
-      'name': 'REFUGEPOINT'
-    },
-  ];
-  identification_document = [
-    {
-      'name': 'National ID'
-    },
-    {
-      'name': 'Alien Card'
-    },
-    {
-      'name': 'Asylum Card'
-    },
-    {
-      'name': 'Waiting card'
-    },
-    {
-      'name': 'UNHCR Mandate'
-    },
-    {
-      'name': 'Minors Pass'
-    },
-  ];
-  country_of_origin: any;
+
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
-    this.CountriesService.getCountries().subscribe(data => {
-      this.country_of_origin = data
-    }, error => {
-      this.alertService.error("Failed to get Countries")
-    })
     this.formGroup = this.formBuilder.group({
       dateFeedbackReceived: [''],
       nameOfRegister: [''],
