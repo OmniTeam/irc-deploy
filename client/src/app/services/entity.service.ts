@@ -18,6 +18,10 @@ export class EntityService {
     return this.http.get(`${environment.serverUrl}/misEntity/get_entity_record`, {params});
   }
 
+  deleteEntityRecord(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/misEntity/deleteEntityRecord`, {params});
+  }
+
   createEntity(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/misEntity`, formData);
   }
