@@ -19,12 +19,27 @@ class EntityViewFiltersController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond entityViewFiltersService.list(params), model:[entityViewFiltersCount: entityViewFiltersService.count()]
+        def entityViewFilters = EntityViewFilters.findAll().collect { entityViewFilter ->
+            def entityView = entityViewFilter.entityView.name
+            [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description, entityView: entityView]
+        }
+        respond entityViewFilters
     }
 
     def show(String id) {
-        respond entityViewFiltersService.get(id)
+        def entityViewFilter = entityViewFiltersService.get(id)
+        def entityView = entityViewFilter.entityView.name
+        def entityViewFilterReturned = [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description, entityView: entityView]
+        respond entityViewFilterReturned
+    }
+
+    def filterFiltersByEntityView() {
+        def entityViewId = params.id as String
+        def entityView = EntityView.get(entityViewId)
+        def entityViewFilters = EntityViewFilters.findAllByEntityView(entityView).collect { entityViewFilter ->
+            [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description, entityView: entityView.name]
+        }
+        respond entityViewFilters
     }
 
     @Transactional
@@ -46,7 +61,7 @@ class EntityViewFiltersController {
             return
         }
 
-        respond entityViewFilters, [status: CREATED, view:"show"]
+        respond entityViewFilters, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -68,7 +83,7 @@ class EntityViewFiltersController {
             return
         }
 
-        respond entityViewFilters, [status: OK, view:"show"]
+        respond entityViewFilters, [status: OK, view: "show"]
     }
 
     @Transactional

@@ -39,7 +39,7 @@ class ProgramCategoryController {
     def getCategoriesByProgram() {
         def programId = params.id as String
         def program = Program.get(programId)
-        def programCategories = ProgramCategory.findByProgram(program).collect { [id: it.id, name: it.name]}
+        def programCategories = ProgramCategory.findAllByProgram(program).collect { [id: it.id, name: it.name]}
         respond programCategories
     }
 
