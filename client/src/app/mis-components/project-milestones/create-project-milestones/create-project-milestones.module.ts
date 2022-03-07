@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CreateProjectMilestonesRoutingModule } from './create-project-milestones-routing.module';
 import {CreateProjectMilestonesComponent} from "./create-project-milestones.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     CommonModule,
     CreateProjectMilestonesRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ]
 })
 export class CreateProjectMilestonesModule { }

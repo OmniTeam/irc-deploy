@@ -66,3 +66,7 @@ label.control-label.col-sm-4 {
   width: auto;
   height: auto;
 }
+
+ul>li {
+  margin: 0 0 10px 0;
+}
