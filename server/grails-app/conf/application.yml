@@ -94,7 +94,7 @@ dataSource:
     jmxExport: true
     driverClassName: com.mysql.jdbc.Driver
     username: root
-    password: root
+    password:
 #omnitech2020!A
 environments:
     development:

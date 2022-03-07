@@ -11,10 +11,10 @@ import {ReferralsService} from "../../services/referrals.service";
 
 @Component({
   selector: 'app-users',
-  templateUrl: './referrals.component.html',
-  styleUrls: ['./referrals.component.css']
+  templateUrl: './feedback.component.html',
+  styleUrls: ['./feedback.component.css']
 })
-export class ReferralsComponent implements OnInit {
+export class FeedbackComponent implements OnInit {
 
   entries: number = 10;
   selected: any[] = [];
@@ -108,16 +108,16 @@ export class ReferralsComponent implements OnInit {
     });
   }
 
-  createReferral() {
-    this.router.navigate(['create-referral']);
+  createFeedback() {
+    this.router.navigate(['create-feedback']);
   }
 
-  actionReferral() {
-    this.router.navigate(['action-referral']);
+  actionFeedback() {
+    this.router.navigate(['action-feedback']);
   }
 
   editUser(row) {
-    this.router.navigate(['edit-referral' + row.id]);
+    this.router.navigate(['edit-feedback' + row.id]);
   }
 
   onSelected(event) {
@@ -144,7 +144,7 @@ export class ReferralsComponent implements OnInit {
     )
   }
 
-  downloadReferrals(): void {
+  downloadFeedback(): void {
     const fileName = 'Referrals_list.xlsx';
     const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(this.referrals);
 

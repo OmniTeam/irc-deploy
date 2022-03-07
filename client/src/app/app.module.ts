@@ -15,6 +15,7 @@ import { TagInputModule } from 'ngx-chips';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {TokenInterceptor} from "./helpers/token.interceptor";
 import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
+import {DatePipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    fakeBackendProvider,
+    fakeBackendProvider,DatePipe
   ],
   bootstrap: [AppComponent]
 })

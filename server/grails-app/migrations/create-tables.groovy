@@ -1219,6 +1219,108 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1645545375346-10") {
         dropTable(tableName: "user_form")
     }
+    changeSet(author: "omni-tech (generated)", id: "1646223890752-1") {
+        createTable(tableName: "referral") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "referralPK")
+            }
+
+            column(name: "disability", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_of_birth", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "organization_referred_to", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "reason_for_referral", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name_of_client_being_referred", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name_of_referring_officer", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "identification_document", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "age_category", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "country_of_origin", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "identification_number", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "phone_number", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646229644712-1") {
+        addColumn(tableName: "referral") {
+            column(name: "date_of_feedback", type: "datetime")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646229644712-2") {
+        addColumn(tableName: "referral") {
+            column(name: "date_of_referral", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646229644712-3") {
+        addColumn(tableName: "referral") {
+            column(name: "feedback_given", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646229644712-4") {
+        addColumn(tableName: "referral") {
+            column(name: "followup_areas", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646229644712-5") {
+        addColumn(tableName: "referral") {
+            column(name: "followup_needed", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646229644712-6") {
+        addColumn(tableName: "referral") {
+            column(name: "received_feedback", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646291998652-27") {
+        dropColumn(columnName: "date_created", tableName: "referral")
+    }
+
 
     changeSet(author: "Bryan (generated)", id: "1646229444195-1") {
         createTable(tableName: "project_milestone") {
@@ -1250,6 +1352,7 @@ databaseChangeLog = {
         }
     }
 
+<<<<<<< HEAD
     changeSet(author: "Bryan (generated)", id: "1646313846384-1") {
         createTable(tableName: "program") {
             column(name: "id", type: "VARCHAR(255)") {
@@ -1293,11 +1396,25 @@ databaseChangeLog = {
             column(name: "description", type: "VARCHAR(255)")
 
             column(name: "program_id", type: "VARCHAR(255)") {
+=======
+    changeSet(author: "omni-tech (generated)", id: "1646300678941-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "country_of_origin", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646300678941-2") {
+        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "followup_needed", tableName: "referral", validate: "true")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646302812633-2") {
+        addColumn(tableName: "referral") {
+            column(name: "nationality_status", type: "varchar(255)") {
+>>>>>>> f8d4aaa5b46986edd4fe9188db3345bc7cf68b7a
                 constraints(nullable: "false")
             }
         }
     }
 
+<<<<<<< HEAD
     changeSet(author: "Bryan (generated)", id: "1646313846384-3") {
         addColumn(tableName: "project_milestone") {
             column(name: "program", type: "varchar(255)") {
@@ -1405,6 +1522,55 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
         }
+=======
+    changeSet(author: "omni-tech (generated)", id: "1646303514788-1") {
+        addColumn(tableName: "referral") {
+            column(name: "followup_organization", type: "varchar(255)")
+        }
+    }
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "age_category", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-2") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "date_of_birth", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-3") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "disability", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-4") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "followup_needed", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-5") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "identification_document", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-6") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "identification_number", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-7") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "nationality_status", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-8") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "organization_referred_to", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-9") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "phone_number", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-10") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "reason_for_referral", tableName: "referral")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646315844192-11") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "status", tableName: "referral")
+>>>>>>> f8d4aaa5b46986edd4fe9188db3345bc7cf68b7a
     }
 
 }

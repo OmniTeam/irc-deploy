@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
 })
 export class ReferralsService {
   baseurl = environment.serverUrl
-  urlReferral = `${this.baseurl}/referral/`
+  urlReferral = `${this.baseurl}/Referral/`
 
   constructor(private http: HttpClient) { }
 
