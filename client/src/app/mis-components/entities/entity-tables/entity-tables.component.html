@@ -95,6 +95,17 @@
             <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name | replace: '_' : ' '}}"
                                   prop="{{col.prop}}">
             </ngx-datatable-column>
+            <ngx-datatable-column name="Action" sortable="false">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+<!--                <button (click)="editEntityDataRecord(row);" class="btn btn-default" style="padding: 1px 6px;">-->
+<!--                  <i class="fa fa-pencil-alt"></i>-->
+<!--                </button>-->
+                <button (click)="deleteEntityDataRecord(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </ng-template>
+
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

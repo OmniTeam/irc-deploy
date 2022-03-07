@@ -55,7 +55,7 @@ export class EntityTablesComponent implements OnInit {
     // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
-        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+        if (d[key] !== null && d[key].toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -93,9 +93,8 @@ export class EntityTablesComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
-      this.getEntityData();
     });
-
+    this.getEntityData();
     this.tagFormGroup = this.formBuilder.group({
       tagType: ['', Validators.required],
       tag: ['', Validators.required]
@@ -143,12 +142,6 @@ export class EntityTablesComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  deleteRecord() {
-  }
-
-  exportToExcel() {
-  }
-
   addNewEntityRecord() {
     const params = new HttpParams()
       .set('id', this.entityId);
@@ -173,6 +166,23 @@ export class EntityTablesComponent implements OnInit {
         this.formGroup.reset();
         this.submitted = false;
       }, 100);
+    }
+  }
+
+  deleteEntityDataRecord(row) {
+    const deletedRow = row.id;
+    const params = new HttpParams()
+      .set('id', deletedRow)
+      .set('entityId', this.entityId);
+
+    if (confirm('Are you sure to delete this Record?')) {
+      this.entityService.deleteEntityRecord(params).subscribe((result) => {
+          this.alertService.warning(`Record has been  deleted `);
+          this.getEntityData();
+        }, error => {
+          this.alertService.error(`Record could not be deleted`)
+        }
+      );
     }
   }
 
