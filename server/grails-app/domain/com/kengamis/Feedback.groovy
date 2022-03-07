@@ -4,6 +4,9 @@ class Feedback {
     String id
     String dateFeedbackReceived
     String nameOfRegister
+    String serialNumber
+    String gender
+    String age
     String staffDesignation
     String typeOfFeedback
     String currentStatusOfFeedback
@@ -22,6 +25,9 @@ class Feedback {
     }
 
     static constraints = {
+        serialNumber nullable: true
+        gender nullable: true
+        age nullable: true
         dateFeedbackReceived nullable: true
         nameOfRegister nullable: true
         staffDesignation nullable: true

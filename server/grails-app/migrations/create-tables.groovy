@@ -1615,4 +1615,23 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1646659570424-1") {
+        addColumn(tableName: "feedback") {
+            column(name: "age", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646659570424-2") {
+        addColumn(tableName: "feedback") {
+            column(name: "gender", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646659570424-3") {
+        addColumn(tableName: "feedback") {
+            column(name: "serial_number", type: "varchar(255)")
+        }
+    }
+
+
 }

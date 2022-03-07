@@ -31,18 +31,18 @@ export class FeedbackComponent implements OnInit {
   submitted = false;
   private selectedUsers = [];
   private checkedRow: any;
-  status=[
+  feedback_status = [
     {
-      "name":"Actioned"
+      "name": "Actioned"
     },
     {
-      "name":"Under Review"
+      "name": "Under Review"
     },
     {
-      "name":"No Action Required"
+      "name": "No Action Required"
     },
     {
-      "name":"Forwarded for Action"
+      "name": "Forwarded for Action"
     },
 
   ];
@@ -50,7 +50,13 @@ export class FeedbackComponent implements OnInit {
   private statusValue = '';
   private groupValue = '';
   users: any;
+  active_div = ''
   feedback: any;
+  feedbackForwarded: any;
+  feedbackNotActioned: any;
+  feedbackUnderReview: any;
+  feedbackActioned: any;
+  feedbackRegistered: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,7 +66,8 @@ export class FeedbackComponent implements OnInit {
     private modalService: NgbModal,
     private usersService: UsersService,
     private feedbackService: FeedbackService,
-  ) { }
+  ) {
+  }
 
   get f() {
     return this.formGroup.controls;
@@ -70,14 +77,50 @@ export class FeedbackComponent implements OnInit {
     this.reloadTable();
   }
 
-  onChangePartner(event) {
-    console.log(event)
-    if (!event)
-      this.partnerValue = ''
-    else {
-      this.partnerValue = event;
-    }
-    this.reloadTable();
+  clickRegisteredFeedback() {
+    this.active_div = 'clickRegisteredFeedback'
+    this.reloadTable()
+  }
+
+  clickActioned() {
+    this.active_div = 'clickActioned'
+    this.feedbackService.getFeedback().subscribe((data) => {
+      this.feedback = data.filter(a => a.currentStatusOfFeedback.includes("Actioned"))
+    });
+  }
+
+  clickUnderReview() {
+    this.active_div = 'clickUnderReview'
+    this.feedbackService.getFeedback().subscribe((data) => {
+      this.feedback = data.filter(a => a.currentStatusOfFeedback.includes("Under Review"))
+    });
+  }
+
+  clickNotActioned() {
+    this.active_div = 'clickNotActioned'
+    this.feedbackService.getFeedback().subscribe((data) => {
+      this.feedback = data.filter(a => a.currentStatusOfFeedback.includes("No Actioned Required"))
+    });
+  }
+
+  clickForwarded() {
+    this.active_div = 'clickForwarded'
+    this.feedbackService.getFeedback().subscribe((data) => {
+      this.feedback = data.filter(a => a.currentStatusOfFeedback.includes("Forwarded For Action"))
+    });
+  }
+
+  clickReset() {
+    this.active_div=''
+    this.reloadTable()
+  }
+
+  cardsData() {
+    this.feedbackRegistered = this.feedback.length
+    this.feedbackActioned = this.feedback.filter(a => a.currentStatusOfFeedback.includes("Actioned")).length
+    this.feedbackUnderReview = this.feedback.filter(a => a.currentStatusOfFeedback.includes("Under Review")).length
+    this.feedbackNotActioned = this.feedback.filter(a => a.currentStatusOfFeedback.includes("No Actioned Required")).length
+    this.feedbackForwarded = this.feedback.filter(a => a.currentStatusOfFeedback.includes("Forwarded For Action")).length
   }
 
   onChangeStatus(event) {
@@ -85,10 +128,9 @@ export class FeedbackComponent implements OnInit {
     if (!event) {
       this.statusValue = ''
       this.reloadTable()
-    }
-    else {
+    } else {
       this.statusValue = event;
-      this.feedback=this.feedback.filter(a => a.currentStatusOfFeedback.toUpperCase().includes(this.statusValue.toUpperCase()))
+      this.feedback = this.feedback.filter(a => a.currentStatusOfFeedback.toUpperCase().includes(this.statusValue.toUpperCase()))
     }
 
   }
@@ -96,21 +138,22 @@ export class FeedbackComponent implements OnInit {
   onChangeSearch(event) {
     console.log(event.target.value)
     this.searchValue = event.target.value
-    if(!this.searchValue){
+    if (!this.searchValue) {
       this.reloadTable()
     } else {
-      this.feedback = this.feedback.filter(a => a.nameOfClient.toUpperCase().includes(this.searchValue.toUpperCase()) ||a.nameOfClient.toUpperCase().includes(this.searchValue.toUpperCase() ))
+      this.feedback = this.feedback.filter(a => a.nameOfClient.toUpperCase().includes(this.searchValue.toUpperCase()) || a.nameOfClient.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
   }
 
   entriesChange($event) {
     this.entries = $event.target.value;
-    console.log(this.entries,"Entries")
+    console.log(this.entries, "Entries")
   }
 
   reloadTable() {
     this.feedbackService.getFeedback().subscribe((data) => {
       this.feedback = data;
+      this.cardsData()
       console.log(data)
     });
   }
@@ -153,7 +196,7 @@ export class FeedbackComponent implements OnInit {
 
   downloadFeedback(): void {
     const fileName = 'Referrals_list.xlsx';
-    const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(this.feedback);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.feedback);
 
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();

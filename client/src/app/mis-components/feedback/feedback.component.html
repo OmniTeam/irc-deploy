@@ -5,75 +5,151 @@
         CLIENT FEEDBACK
       </h1>
       <div class=" row align-items-center py-4">
-        <div class="col-md-4">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Feedback Registered
-                  </h5>
-                  <span class=" h2 font-weight-bold mb-0"> 24 </span>
-                </div>
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                  >
-                    <i class=" fa fa-registered"> </i>
+          <div class="col-md-4" (click)="clickRegisteredFeedback()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickRegisteredFeedback'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Feedback Registered
+                    </h5>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackRegistered}} </span>
+                  </div>
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-registered"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Referred/Shared Feedback
-                  </h5>
+          <div class="col-md-4" (click)="clickActioned()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickActioned'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Actioned
+                    </h5>
 
-                  <span class=" h2 font-weight-bold mb-0"> 34 </span>
-                </div>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackActioned}} </span>
+                  </div>
 
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
-                  >
-                    <i class=" fa fa-share"> </i>
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-check-double"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Pending Feedback
-                  </h5>
+          <div class="col-md-4" (click)="clickUnderReview()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickUnderReview'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Under Review
+                    </h5>
 
-                  <span class=" h2 font-weight-bold mb-0"> 33 </span>
-                </div>
-
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
-                  >
-                    <i class=" fa fa-pause"> </i>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackUnderReview}} </span>
                   </div>
-                </div>
 
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-eye"> </i>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
+          <div class="col-md-4" (click)="clickNotActioned()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickNotActioned'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      No Action Required
+                    </h5>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackNotActioned}} </span>
+                  </div>
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-pause"> </i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" (click)="clickForwarded()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickForwarded'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Forwarded for Action
+                    </h5>
+
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackForwarded}} </span>
+                  </div>
+
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-share"> </i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" (click)="clickReset()">
+            <div
+              class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+            >
+              <i class=" fa fa-eraser"> </i>
+
+            </div>
+            <h3 style="color: white">
+              Reset
+            </h3>
+            <!--<div class=" card card-stats">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h3 class=" card-title text-uppercase text-muted mb-0">
+                      Reset
+                    </h3>
+                  </div>
+
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-eraser"> </i>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>-->
+          </div>
         </div>
-      </div>
+
     </div>
   </div>
 </div>

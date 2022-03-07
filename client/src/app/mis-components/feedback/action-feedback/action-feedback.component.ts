@@ -215,6 +215,7 @@ export class ActionFeedbackComponent implements OnInit {
         clientType: [this.feedback?.clientType],
         preferredChannel: [this.feedback?.preferredChannel],
         phoneNumber: [this.feedback?.phoneNumber],
+        serialNumber: [this.feedback?.serialNumber],
       });
     })
 
