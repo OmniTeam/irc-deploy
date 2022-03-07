@@ -38,6 +38,7 @@ class UrlMappings {
         get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
         get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
+        get "/$controller/getMilestonesByProgram(.$format)?"(action:"getMilestonesByProgram")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')

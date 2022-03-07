@@ -4,6 +4,7 @@ Thumbs.db
 server/build/
 out/
 .idea
+.jpb
 *.iml
 *.ipr
 *.iws

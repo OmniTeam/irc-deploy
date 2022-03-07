@@ -212,7 +212,7 @@ export class SampleData {
   static indicators = [
     {
       id: 'asdsfggewrwetwtrewtwtwr',
-      indicator: 'No of safe spaces established within the community',
+      name: 'No of safe spaces established within the community',
       overallTarget: '300',
       disaggregation: [
         {
@@ -235,7 +235,7 @@ export class SampleData {
     },
     {
       id: 'asdsvnvnvgfnfhfhtwtrewtwtwr',
-      indicator: 'No of Adolescent girls utilising safe spaces',
+      name: 'No of Adolescent girls utilising safe spaces',
       overallTarget: '500',
       disaggregation: [
         {
