@@ -30,8 +30,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       switch (true) {
         /*case url.endsWith('/users/') && method === 'GET':
           return getUserData();*/
-        /*case url.endsWith('/referral/') && method === 'GET':
-          return getReferralData()*/
+        // case url.endsWith('/referral/') && method === 'GET':
+        //   return getReferralData()
         // case url.endsWith('/api/login') && method === 'POST':
         //     return t();
         default:

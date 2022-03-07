@@ -112,7 +112,6 @@ export class EntitiesComponent implements OnInit {
 
   filterTable($event) {
     let val = $event.target.value;
-    console.log(val);
     this.rows = this.rows.filter(function (d) {
       for (const key in d) {
         if (d[key].toLowerCase().indexOf(val) !== -1) {

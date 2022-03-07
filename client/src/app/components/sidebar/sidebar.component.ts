@@ -79,8 +79,11 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-badge text-default',
     isCollapsed: true,
     children: [
-      {path: 'tags', title: 'Tags', type: 'link'},
       {path: 'tagType', title: 'Tag Type', type: 'link'},
+      {path: 'tags', title: 'Tags', type: 'link'},
+      {path: 'program', title: 'Program', type: 'link'},
+      {path: 'programStaff', title: 'Program Staff', type: 'link'},
+      {path: 'programCategory', title: 'Program Category', type: 'link'},
       {path: 'milestones', title: 'Project Milestones', type: 'link'}
     ]
   },
@@ -96,6 +99,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'project', title: 'Project', type: 'link'},
       {path: 'entity', title: 'Entities', type: 'link'},
       {path: 'entityView', title: 'Entity Views', type: 'link'},
+      {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link'},
       {path: 'taskList', title: 'Task List', type: 'link'},
       {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link'},
     ]

@@ -20,6 +20,7 @@ class UrlMappings {
         get "/$controller/get_export_form_data(.$format)?"(action:"getExportFormData")
         get "/$controller/view_data(.$format)?"(action:"viewData")
         get "/$controller/get_task_record(.$format)?"(action:"getTaskRecord")
+        get "/$controller/get_partner_setup_record(.$format)?"(action:"getPartnerSetupRecord")
         get "/$controller/get_report_for_task(.$format)?"(action:"getReportForTask")
         get "/$controller/get_file_by_task_and_name(.$format)?"(action:"getFileByTaskAndName")
         get "/$controller/get_files_for_task(.$format)?"(action:"getFilesForTask")
@@ -36,6 +37,7 @@ class UrlMappings {
         get "/$controller/disableTask(.$format)?"(action:"disableTask")
         get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
+        get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')

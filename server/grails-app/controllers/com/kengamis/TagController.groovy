@@ -35,13 +35,25 @@ class TagController {
             newTagObject['dateCreated'] = tag.dateCreated
             newTagObject['lastUpdated'] = tag.lastUpdated
             newTagObject['tagTypeName'] = tagType.name
+            newTagObject['tagTypeId'] = tagType.id
             tags << newTagObject
         }
         respond tags
     }
 
-    def show(Long id) {
-        respond tagService.get(id)
+    def show(String id) {
+        def tag = tagService.get(id)
+        def newTagObject = [:]
+        def tagTypeId = tag.tagType.id
+        def tagType = TagType.findById(tagTypeId)
+        newTagObject['id'] = tag.id
+        newTagObject['name'] = tag.name
+        newTagObject['tagType'] = tagTypeId
+        newTagObject['dateCreated'] = tag.dateCreated
+        newTagObject['lastUpdated'] = tag.lastUpdated
+        newTagObject['tagTypeName'] = tagType.name
+        newTagObject['tagTypeId'] = tagType.id
+        respond newTagObject
     }
 
     @Transactional
@@ -96,6 +108,7 @@ class TagController {
         }
 
         tagService.delete(id)
+        deleteAllTaggings(id)
 
         render status: NO_CONTENT
     }
@@ -187,5 +200,18 @@ class TagController {
         }
         def message = ["Entity tag Record remove successfully"]
         respond message
+    }
+
+    def deleteAllTaggings(String id) {
+        def tag = Tag.findById(id)
+        def tagType = tag.tagType
+        def misEntity = tagType.misEntity
+        def removeQuery = "delete from ${escapeField misEntity.entityTagTable} where tag_id = '${id}'".toString()
+        log.trace(removeQuery)
+        def resultDelete = AppHolder.withMisSql { execute(removeQuery.toString()) }
+        if (!resultDelete) {
+            log.info("Table ${misEntity.tableName} successfully removed a record")
+        }
+
     }
 }

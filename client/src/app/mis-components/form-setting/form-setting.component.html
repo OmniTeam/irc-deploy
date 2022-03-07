@@ -83,7 +83,25 @@
                 {{ value | date }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Order of Display" prop="orderOfDisplayInTable"></ngx-datatable-column>
+            <ngx-datatable-column name="Order of Display" prop="orderOfDisplayInTable">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                 <span
+                   title="Double click to edit"
+                   (dblclick)="editing[rowIndex + '-orderOfDisplayInTable'] = true"
+                   *ngIf="!editing[rowIndex + '-orderOfDisplayInTable']"
+                 >
+              {{ value }} ...
+            </span>
+                <input
+                  class="form-control"
+                  autofocus
+                  (blur)="updateValue($event, 'orderOfDisplayInTable', rowIndex)"
+                  *ngIf="editing[rowIndex + '-orderOfDisplayInTable']"
+                  type="number"
+                  [value]="value"
+                />
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="View In Table" prop="viewInTable">
               <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
                 <span
