@@ -38,6 +38,8 @@ class UrlMappings {
         get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
         get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
+        get "/$controller/defaultFilterQuery(.$format)?"(action:"defaultFilterQuery")
+        get "/$controller/filterFiltersByEntityView(.$format)?"(action:"filterFiltersByEntityView")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')

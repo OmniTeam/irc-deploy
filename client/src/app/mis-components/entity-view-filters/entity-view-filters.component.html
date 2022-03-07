@@ -15,7 +15,7 @@
     <div class=" col">
       <div class=" card">
         <div class="dataTables_wrapper py-4">
-          <div class="row">
+          <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12 col-md-4">
               <div class="dataTables_length" id="datatable_length">
                 <label>
@@ -34,6 +34,20 @@
                   entries
                 </label>
               </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <ng-select class="form-control form-control-sm"
+                         aria-controls="datatable"
+                         style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                         [multiple]="false"
+                         placeholder=" Filter By Entity Views"
+                         (change)="getFilteredFilters($event)"
+                         [searchable]="true"
+                         [clearable]="true">
+                <ng-option [value]="item.id" *ngFor="let item of entityViews">
+                  {{item.name}}
+                </ng-option>
+              </ng-select>
             </div>
           </div>
           <ngx-datatable
