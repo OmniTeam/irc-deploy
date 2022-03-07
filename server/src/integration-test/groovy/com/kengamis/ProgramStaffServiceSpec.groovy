@@ -9,35 +9,35 @@ import org.hibernate.SessionFactory
 @Rollback
 class ProgramStaffServiceSpec extends Specification {
 
-    ProgramPartnerService programPartnerService
+    ProgramStaffService programStaffService
     SessionFactory sessionFactory
 
     private Long setupData() {
         // TODO: Populate valid domain instances and return a valid ID
-        //new ProgramPartner(...).save(flush: true, failOnError: true)
-        //new ProgramPartner(...).save(flush: true, failOnError: true)
-        //ProgramPartner programPartner = new ProgramPartner(...).save(flush: true, failOnError: true)
-        //new ProgramPartner(...).save(flush: true, failOnError: true)
-        //new ProgramPartner(...).save(flush: true, failOnError: true)
+        //new programStaff(...).save(flush: true, failOnError: true)
+        //new programStaff(...).save(flush: true, failOnError: true)
+        //ProgramStaff programStaff = new ProgramStaff(...).save(flush: true, failOnError: true)
+        //new ProgramStaff(...).save(flush: true, failOnError: true)
+        //new ProgramStaff(...).save(flush: true, failOnError: true)
         assert false, "TODO: Provide a setupData() implementation for this generated test suite"
-        //programPartner.id
+        //programStaff.id
     }
 
     void "test get"() {
         setupData()
 
         expect:
-        programPartnerService.get(1) != null
+        programStaffService.get(1) != null
     }
 
     void "test list"() {
         setupData()
 
         when:
-        List<ProgramStaff> programPartnerList = programPartnerService.list(max: 2, offset: 2)
+        List<ProgramStaff> programStaffList = programStaffService.list(max: 2, offset: 2)
 
         then:
-        programPartnerList.size() == 2
+        programStaffList.size() == 2
         assert false, "TODO: Verify the correct instances are returned"
     }
 
@@ -45,30 +45,30 @@ class ProgramStaffServiceSpec extends Specification {
         setupData()
 
         expect:
-        programPartnerService.count() == 5
+        programStaffService.count() == 5
     }
 
     void "test delete"() {
-        Long programPartnerId = setupData()
+        Long programStaffId = setupData()
 
         expect:
-        programPartnerService.count() == 5
+        programStaffService.count() == 5
 
         when:
-        programPartnerService.delete(programPartnerId)
+        programStaffService.delete(programStaffId)
         sessionFactory.currentSession.flush()
 
         then:
-        programPartnerService.count() == 4
+        programStaffService.count() == 4
     }
 
     void "test save"() {
         when:
         assert false, "TODO: Provide a valid instance to save"
-        ProgramStaff programPartner = new ProgramStaff()
-        programPartnerService.save(programPartner)
+        ProgramStaff programStaff = new ProgramStaff()
+        programStaffService.save(programStaff)
 
         then:
-        programPartner.id != null
+        programStaff.id != null
     }
 }

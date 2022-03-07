@@ -42,7 +42,7 @@ export class EditProgramStaffComponent implements OnInit {
     return this.formGroup.controls;
   }
 
-  editProgramPartner() {
+  editProgramStaff() {
     this.submitted = true;
     if (this.formGroup.invalid) {
       console.log('Invalid');

@@ -38,7 +38,7 @@ export class CreateProgramStaffComponent implements OnInit {
     return this.formGroup.controls;
   }
 
-  createProgramPartner() {
+  createProgramStaff() {
     this.submitted = true;
     if (this.formGroup.invalid) {
       console.log('Invalid');

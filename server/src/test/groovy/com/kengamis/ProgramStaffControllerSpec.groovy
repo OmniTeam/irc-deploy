@@ -22,7 +22,7 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the index action returns the correct response"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
+        controller.programStaffService = Mock(ProgramStaffService) {
             1 * list(_) >> []
             1 * count() >> 0
         }
@@ -47,7 +47,7 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the save action correctly persists"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
+        controller.programStaffService = Mock(ProgramStaffService) {
             1 * save(_ as ProgramStaff)
         }
 
@@ -66,9 +66,9 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the save action with an invalid instance"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
-            1 * save(_ as ProgramStaff) >> { ProgramStaff programPartner ->
-                throw new ValidationException("Invalid instance", programPartner.errors)
+        controller.programStaffService = Mock(ProgramStaffService) {
+            1 * save(_ as ProgramStaff) >> { ProgramStaff programStaff ->
+                throw new ValidationException("Invalid instance", programStaff.errors)
             }
         }
 
@@ -86,7 +86,7 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the show action with a null id"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
+        controller.programStaffService = Mock(ProgramStaffService) {
             1 * get(null) >> null
         }
 
@@ -99,7 +99,7 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the show action with a valid id"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
+        controller.programStaffService = Mock(ProgramStaffService) {
             1 * get(2) >> new ProgramStaff()
         }
 
@@ -124,7 +124,7 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the update action correctly persists"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
+        controller.programStaffService = Mock(ProgramStaffService) {
             1 * save(_ as ProgramStaff)
         }
 
@@ -145,9 +145,9 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the update action with an invalid instance"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
-            1 * save(_ as ProgramStaff) >> { ProgramStaff programPartner ->
-                throw new ValidationException("Invalid instance", programPartner.errors)
+        controller.programStaffService = Mock(ProgramStaffService) {
+            1 * save(_ as ProgramStaff) >> { ProgramStaff programStaff ->
+                throw new ValidationException("Invalid instance", programStaff.errors)
             }
         }
 
@@ -176,7 +176,7 @@ class ProgramStaffControllerSpec extends Specification implements ControllerUnit
 
     void "Test the delete action with an instance"() {
         given:
-        controller.programPartnerService = Mock(ProgramPartnerService) {
+        controller.programStaffService = Mock(ProgramStaffService) {
             1 * delete(2)
         }
 

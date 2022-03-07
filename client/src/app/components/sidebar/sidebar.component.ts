@@ -82,7 +82,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'tagType', title: 'Tag Type', type: 'link'},
       {path: 'tags', title: 'Tags', type: 'link'},
       {path: 'program', title: 'Program', type: 'link'},
-      {path: 'programPartner', title: 'Program Partner', type: 'link'},
+      {path: 'programStaff', title: 'Program Staff', type: 'link'},
       {path: 'programCategory', title: 'Program Category', type: 'link'},
       {path: 'milestones', title: 'Project Milestones', type: 'link'}
     ]

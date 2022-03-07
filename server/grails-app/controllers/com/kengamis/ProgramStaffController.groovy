@@ -12,106 +12,90 @@ import grails.gorm.transactions.Transactional
 @ReadOnly
 class ProgramStaffController {
 
-    ProgramPartnerService programPartnerService
+    ProgramStaffService programStaffService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        def programPartners = []
-        programPartnerService.list(params).each { programPartner ->
-            def newProgramPartnerObject = [:]
-            def programId = programPartner.program.id
+        def programStaffs = []
+        programStaffService.list(params).each { programStaff ->
+            def newProgramStaffObject = [:]
+            def programId = programStaff.program.id
             def program = Program.findById(programId)
-            newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.name
-            newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
-            newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-            newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
-            newProgramPartnerObject['acronym'] = programPartner.acronym
-            newProgramPartnerObject['email'] = programPartner.email
-            newProgramPartnerObject['organisation'] = programPartner.organisation
-            newProgramPartnerObject['website'] = programPartner.website
-            newProgramPartnerObject['legal'] = programPartner.legal
-            newProgramPartnerObject['country'] = programPartner.country
-            newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
-            newProgramPartnerObject['city'] = programPartner.city
-            newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
-            newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
-            newProgramPartnerObject['program'] = program.title
-            newProgramPartnerObject['programId'] = program.id
-            programPartners << newProgramPartnerObject
+            newProgramStaffObject['id'] = programStaff.id
+            newProgramStaffObject['name'] = programStaff.name
+            newProgramStaffObject['email'] = programStaff.email
+            newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
+            newProgramStaffObject['personContact'] = programStaff.personContact
+            newProgramStaffObject['dateCreated'] = programStaff.dateCreated
+            newProgramStaffObject['lastUpdated'] = programStaff.lastUpdated
+            newProgramStaffObject['program'] = program.title
+            newProgramStaffObject['programId'] = program.id
+            programStaffs << newProgramStaffObject
         }
-        respond programPartners
+        respond programStaffs
     }
 
     def show(String id) {
-        def programPartner = programPartnerService.get(id)
-        def newProgramPartnerObject = [:]
-        def programId = programPartner.program.id
+        def programStaff = programStaffService.get(id)
+        def newProgramStaffObject = [:]
+        def programId = programStaff.program.id
         def program = Program.findById(programId)
-        newProgramPartnerObject['id'] = programPartner.id
-        newProgramPartnerObject['name'] = programPartner.name
-        newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
-        newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-        newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
-        newProgramPartnerObject['acronym'] = programPartner.acronym
-        newProgramPartnerObject['email'] = programPartner.email
-        newProgramPartnerObject['organisation'] = programPartner.organisation
-        newProgramPartnerObject['website'] = programPartner.website
-        newProgramPartnerObject['legal'] = programPartner.legal
-        newProgramPartnerObject['country'] = programPartner.country
-        newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
-        newProgramPartnerObject['city'] = programPartner.city
-        newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
-        newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
-        newProgramPartnerObject['program'] = program.title
-        newProgramPartnerObject['programId'] = program.id
-        respond newProgramPartnerObject
+        newProgramStaffObject['id'] = programStaff.id
+        newProgramStaffObject['name'] = programStaff.name
+        newProgramStaffObject['email'] = programStaff.email
+        newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
+        newProgramStaffObject['personContact'] = programStaff.personContact
+        newProgramStaffObject['dateCreated'] = programStaff.dateCreated
+        newProgramStaffObject['lastUpdated'] = programStaff.lastUpdated
+        newProgramStaffObject['program'] = program.title
+        newProgramStaffObject['programId'] = program.id
+        respond newProgramStaffObject
     }
 
     @Transactional
-    def save(ProgramStaff programPartner) {
-        if (programPartner == null) {
+    def save(ProgramStaff programStaff) {
+        if (programStaff == null) {
             render status: NOT_FOUND
             return
         }
-        if (programPartner.hasErrors()) {
+        if (programStaff.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond programPartner.errors
+            respond programStaff.errors
             return
         }
 
         try {
-            programPartnerService.save(programPartner)
+            programStaffService.save(programStaff)
         } catch (ValidationException e) {
-            respond programPartner.errors
+            respond programStaff.errors
             return
         }
 
-        respond programPartner, [status: CREATED, view:"show"]
+        respond programStaff, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(ProgramStaff programPartner) {
-        if (programPartner == null) {
+    def update(ProgramStaff programStaff) {
+        if (programStaff == null) {
             render status: NOT_FOUND
             return
         }
-        if (programPartner.hasErrors()) {
+        if (programStaff.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond programPartner.errors
+            respond programStaff.errors
             return
         }
 
         try {
-            programPartnerService.save(programPartner)
+            programStaffService.save(programStaff)
         } catch (ValidationException e) {
-            respond programPartner.errors
+            respond programStaff.errors
             return
         }
 
-        respond programPartner, [status: OK, view:"show"]
+        respond programStaff, [status: OK, view:"show"]
     }
 
     @Transactional
@@ -121,7 +105,7 @@ class ProgramStaffController {
             return
         }
 
-        programPartnerService.delete(id)
+        programStaffService.delete(id)
 
         render status: NO_CONTENT
     }

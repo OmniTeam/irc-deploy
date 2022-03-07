@@ -3,7 +3,7 @@ package com.kengamis
 import grails.gorm.services.Service
 
 @Service(ProgramStaff)
-interface ProgramPartnerService {
+interface ProgramStaffService {
 
     ProgramStaff get(Serializable id)
 
@@ -13,6 +13,6 @@ interface ProgramPartnerService {
 
     void delete(Serializable id)
 
-    ProgramStaff save(ProgramStaff programPartner)
+    ProgramStaff save(ProgramStaff programStaff)
 
 }

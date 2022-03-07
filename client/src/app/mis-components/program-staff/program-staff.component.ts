@@ -29,6 +29,7 @@ export class ProgramStaffComponent implements OnInit {
 
   reloadTable() {
     this.programStaffService.getProgramStaffs().subscribe((data) => {
+      console.log()
       this.staffs = data;
     });
   }
