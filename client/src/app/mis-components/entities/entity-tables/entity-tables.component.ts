@@ -52,7 +52,6 @@ export class EntityTablesComponent implements OnInit {
 
   filterTable(event) {
     let val = event.target.value.toLowerCase();
-    console.log(val);
     // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {

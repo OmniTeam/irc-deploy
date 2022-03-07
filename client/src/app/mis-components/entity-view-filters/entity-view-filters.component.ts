@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {EntityViewFiltersService} from "../../services/entity-view-filters.service";
+import {EntityService} from "../../services/entity.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-entity-view-filters',
@@ -19,13 +21,20 @@ export class EntityViewFiltersComponent implements OnInit {
   filters: any
   submitted = false;
   activeRow: any;
+  entityViews: [];
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
-              private entityViewFiltersService: EntityViewFiltersService) { }
+              private entityViewFiltersService: EntityViewFiltersService,
+              private entityService: EntityService) { }
 
   ngOnInit(): void {
     this.reloadTable();
+    this.entityService.getEntityViews().subscribe((data) => {
+      this.entityViews = data;
+    });
+
   }
 
   reloadTable() {
@@ -53,6 +62,15 @@ export class EntityViewFiltersComponent implements OnInit {
       );
     }
   }
+
+  getFilteredFilters(value) {
+    const params = new HttpParams()
+      .set('id', value);
+    this.entityViewFiltersService.filterFiltersByEntityView(params).subscribe(data => {
+      this.filters = data;
+    }, error => console.log(error));
+  }
+
 
   entriesChange($event) {
     this.entries = $event.target.value;

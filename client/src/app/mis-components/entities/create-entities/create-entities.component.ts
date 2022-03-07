@@ -172,15 +172,15 @@ export class CreateEntitiesComponent implements OnInit {
   }
 
   generateEntityTableName(entityName: string): string {
-    return this.replaceAll(entityName.toLowerCase(), ' ', '_');
+    return 'entity_' + this.replaceAll(entityName.toLowerCase(), ' ', '_');
   }
 
   generateEntityPrefixIncrementTableName(entityName: string): string {
-    return this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_prefix_increment';
+    return 'entity_' + this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_prefix_increment';
   }
 
   generateEntityTagTableName(entityName: string): string {
-    return this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_tagging';
+    return 'entity_' + this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_tagging';
   }
 
   generateSqlDataType(dataType: string): string {
