@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
-import { v4 as uuid } from 'uuid';
+import {v4 as uuid} from 'uuid';
 import {PartnerSetupService} from "../../services/partner-setup.service";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
@@ -38,7 +38,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
-  indicatorChosen: Indicator = {id:'',name:'',overallTarget:'',disaggregation:[]};
+  indicatorChosen: Indicator;
   currentStatus: any = [];
   error: boolean;
   success: boolean;
@@ -55,6 +55,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   ngOnInit(): void {
+    this.indicatorChosen = {id: '', name: '', overallTarget: '', disaggregation: []};
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
@@ -186,7 +187,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         );
       });
     });
-    select.insertAdjacentHTML('beforeend',"<option selected>Select Milestone</option>\n" + this.getOptionsForSelect(this.indicators));
+    select.insertAdjacentHTML('beforeend', "<option selected>Select Milestone</option>\n" + this.getOptionsForSelect(this.indicators));
 
     const div = document.createElement('div');
     div.classList.add('form-group', 'text-center');
@@ -270,7 +271,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       tr2.appendChild(td);
 
-      tr.insertAdjacentElement('afterend',tr2);
+      tr.insertAdjacentElement('afterend', tr2);
 
       details.style.display = 'block';
     } else {
@@ -289,11 +290,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       td1.insertAdjacentHTML('beforeend', row.datePeriod);
 
       const icon_pencil = document.createElement('i');
-      icon_pencil.classList.add('fas','fa-pencil-alt');
+      icon_pencil.classList.add('fas', 'fa-pencil-alt');
 
       const button = document.createElement('button');
       button.classList.add('btn', 'btn-link');
-      button.addEventListener('click', (e: Event) => this.cellEditor(row,row.datePeriod,'disaggregation',row.target));
+      button.addEventListener('click', (e: Event) => this.cellEditor(row, row.datePeriod, 'disaggregation', row.target, 'number'));
       button.appendChild(icon_pencil);
 
       const div = document.createElement('div');
@@ -315,16 +316,25 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   getOptionsForSelect(data): string {
     let htmlString = "";
     data.forEach(function (row) {
-      htmlString += '<option value="' + row.id + '" name="'+ row.name +'">' + row.name + '</option>';
+      htmlString += '<option value="' + row.id + '" name="' + row.name + '">' + row.name + '</option>';
     });
     return htmlString;
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  cellEditor(row, td_id, key: string, oldValue, type?: string) {
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
+    if (key == 'disaggregation') {
+      let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
+      if (this.indicatorChosen.disaggregation.some(x => x.datePeriod === row.id)) {
+        this.indicatorChosen.disaggregation.forEach(function (item) {
+          if (item.datePeriod === row.id) item.target = newValue
+        });
+      }
+    }
   }
 
   saveCellValue(value: string, key: string, rowId): any {
+    console.log('indicatorChosen', this.indicatorChosen);
     switch (key) {
       case 'budget':
         if (this.budget.some(x => x.id === rowId)) {

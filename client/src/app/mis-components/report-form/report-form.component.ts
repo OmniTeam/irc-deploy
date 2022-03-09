@@ -333,8 +333,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  cellEditor(row, td_id, key: string, oldValue, type?: string) {
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue,type);
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
