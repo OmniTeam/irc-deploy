@@ -14,8 +14,8 @@ export class EntityService {
     return this.http.get(`${environment.serverUrl}/misEntity`);
   }
 
-  getEntityRecord(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/misEntity/get_entity_record`, {params});
+  getCurrentEntity(id): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/misEntity/${id}`);
   }
 
   deleteEntityRecord(params: any): Observable<any> {
@@ -46,8 +46,16 @@ export class EntityService {
     return this.http.get(`${environment.serverUrl}/entityView`);
   }
 
+  getCurrentEntityView(id): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/entityView/${id}`);
+  }
+
   createEntityView(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/entityView`, formData);
+  }
+
+  updateEntityView(id, formData): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/entityView/${id}/`, formData);
   }
 
   getEntityViewData(params: any): Observable<any> {

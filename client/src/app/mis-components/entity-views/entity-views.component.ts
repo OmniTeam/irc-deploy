@@ -20,7 +20,8 @@ export class EntityViewsComponent implements OnInit {
   SelectionType = SelectionType;
   search = '';
   enableAddNewViewFilter = false;
-  entityViewId: any
+  entityViewId: any;
+  entityId: any;
   constructor(private route: ActivatedRoute,
               private router: Router,
               private entityService: EntityService,
@@ -34,7 +35,12 @@ export class EntityViewsComponent implements OnInit {
   }
 
   createNewViewFilter() {
-    this.router.navigate(['/entityViewFilter/create', this.entityViewId]);
+    this.router.navigate(['/entityViewFilter/create/' + this.entityViewId]);
+  }
+
+  editEntityView(row) {
+    let entityViewId = row.id;
+    this.router.navigate(['/entityView/edit/' + this.entityId + '/' + entityViewId]);
   }
 
   deleteEntityView(row) {
@@ -71,8 +77,10 @@ export class EntityViewsComponent implements OnInit {
         rowRecord['tableName'] = record.tableName;
         rowRecord['description'] = record.description;
         rowRecord['dateCreated'] = record.dateCreated;
+        rowRecord['entityId'] = record.entityId;
         rowRecord['entityViewFilters'] = this.groupEntityViewFilters(record.entityViewFilters);
         rowData.push(rowRecord);
+        this.entityId = record.entityId;
       }
       this.temp = [...rowData];
       this.rows = rowData;

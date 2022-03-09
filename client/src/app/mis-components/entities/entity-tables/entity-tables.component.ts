@@ -166,7 +166,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`New record has not been successfully inserted `);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -216,7 +216,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been tagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -250,7 +250,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been untagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
