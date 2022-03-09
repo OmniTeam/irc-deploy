@@ -89,7 +89,7 @@ export class EditEntityViewsComponent implements OnInit {
       this.formData = Object.assign(this.formData, entity);
       this.entityService.updateEntityView(this.entityViewId, this.formData).subscribe(results => {
         this.router.navigate(['/entityView']);
-        this.alertService.error(`${this.formData.name} has been successfully updated`);
+        this.alertService.success(`${this.formData.name} has been successfully updated`);
       }, error => {
         this.alertService.error(`${this.formData.name} could not be updated`);
       });
