@@ -10,6 +10,7 @@ import {DateSplitter} from '../../helpers/date-splitter';
 import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {Indicator} from "../../models/indicator";
 
 @Component({
   selector: 'app-partner-setup',
@@ -36,15 +37,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
-  indicatorChosen: {
-    id: string;
-    name: string;
-    overallTarget: string;
-    disaggregation: {
-      datePeriod: string,
-      target: string
-    }[]
-  };
+  indicatorChosen: Indicator = {id:'',name:'',overallTarget:'',disaggregation:[]};
   currentStatus: any = [];
   error: boolean;
   success: boolean;
@@ -61,10 +54,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   ngOnInit(): void {
-    this.indicatorChosen = SampleData.indicators[0];
-    this.indicators = SampleData.indicators;
-    this.calendar = SampleData.calendar;
-
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
@@ -143,25 +132,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  saveCellValue(value: string, key: string, rowId): any {
-    switch (key) {
-      case 'budget':
-        if (this.budget.some(x => x.id === rowId)) {
-          this.budget.forEach(function (item) {
-            if (item.id === rowId) item.approvedAmount = value
-          });
-        }
-        break;
-      case 'disbursementPlan':
-        if (this.disbursementPlan.some(x => x.id === rowId)) {
-          this.disbursementPlan.forEach(function (item) {
-            if (item.id === rowId) item.disbursement = value
-          });
-        }
-        break;
-    }
-  }
-
   onPartnerChange(event) {
     if (this.partnerChosen != undefined) {
       this.programPartnersService.getCurrentProgramPartner(this.partnerChosen).subscribe((results: any) => {
@@ -184,10 +154,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }*/
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
-  }
-
   createNewIndicator(row) {
     if (this.calendar.reportingCalender == undefined) {
       console.log('Error', 'No Calendar dates');
@@ -199,30 +165,57 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       return;
     }
 
-    this.calendar.reportingCalender.forEach((c) => {
-      this.indicatorChosen.disaggregation.push(
-        {
-          datePeriod: c.datePeriod,
-          target: ''
-        }
-      );
-    });
-
     const table = document.getElementById('indicators') as HTMLTableElement;
-    const tr = table.createTBody().insertRow(0)
-    tr.insertAdjacentHTML('beforeend', "<td class=\'text-center\' style='display: none;'>" + row.id + "</td>\n" +
-    "                      <td class=\'text-center\'>\n" +
-    "                        <div class='form-group text-center' style='margin: 0 0 30px 30px; width: 60%;'>\n" +
-    "                          <select class='form-control form-control-sm' aria-label='Default select example'>\n" +
-    "                              <option selected>Select Milestone</option>\n" + this.getOptionsForSelect(this.indicators) +
-    "                         </select>" +
-    "                        </div>\n" +
-    "                      </td>\n" +
-    "                      <td class=\'text-center\'>" + row.overallTarget + "</td>\n" +
-    "                      <td class=\'text-center\'>\n" +
-    "                   <button class='btn btn-link' id='" + row.id + "' onclick='this.toggleDisaggregation($event, " + JSON.stringify(row) + ")'>" +
-    "                    <i style='font-size:20px;' class='text fas fa-plus'><i/></button></div>" +
-    "                      </td>");
+
+    const button = document.createElement('button');
+
+    const select = document.createElement('select');
+    select.classList.add('form-control', 'form-control-sm');
+    select.addEventListener("change", (e: Event) => {
+      button.id = select.value;
+      this.indicatorChosen.id = select.value;
+      this.indicatorChosen.name = select.name;
+      this.calendar.reportingCalender.forEach((c) => {
+        this.indicatorChosen.disaggregation.push(
+          {
+            datePeriod: c.datePeriod,
+            target: ''
+          }
+        );
+      });
+    });
+    select.insertAdjacentHTML('beforeend',"<option selected>Select Milestone</option>\n" + this.getOptionsForSelect(this.indicators));
+
+    const div = document.createElement('div');
+    div.classList.add('form-group', 'text-center');
+    div.style.margin = '0 0 30px 30px';
+    div.style.width = '60%';
+    div.appendChild(select);
+
+    const td1 = document.createElement('td');
+    td1.classList.add('text-center');
+    td1.appendChild(div);
+
+    const td2 = document.createElement('td');
+    td2.classList.add('text-center');
+    td2.insertAdjacentHTML('beforeend', row.overallTarget);
+
+    const icon_plus = document.createElement('i');
+    icon_plus.classList.add('text', 'fas', 'fa-plus');
+    icon_plus.style.fontSize = '20px';
+
+    button.classList.add('btn', 'btn-link');
+    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, row));
+    button.appendChild(icon_plus);
+
+    const td3 = document.createElement('td');
+    td3.classList.add('text-center');
+    td3.appendChild(button);
+
+    const tr = table.createTBody().insertRow(0);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
   }
 
   toggleDisaggregation(event, row) {
@@ -255,40 +248,81 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         '                              <th class=\'text-center\'>Target</th>\n' +
         '                            </tr>\n' +
         '                            </thead>\n' +
-        '                            <tbody>\n' + this.getRowsForDetails(row.disaggregation) +
-        '                            </tbody>\n' +
+        '                            <tbody><tr>\n' + this.getRowsForDetails(row.disaggregation) +
+        '                            </tbody></tr>\n' +
         '                          </table>\n' +
         '                      </td>\n' +
         '                    </tr>' +
         '');
       details.style.display = 'block';
     } else {
-      //button.firstChild.replaceWith(plus_icon);
+      button.firstChild.replaceWith(plus_icon);
       details.style.display = 'none';
       details.parentNode.removeChild(details);
     }
   }
 
   getRowsForDetails(data): string {
+    const mainDiv = document.createElement('div');
+    data.forEach((row) => {
+      const tr = document.createElement('tr');
+      const td1 = document.createElement('td');
+      td1.classList.add('text-center');
+      td1.insertAdjacentHTML('beforeend', row.datePeriod);
+
+      const icon_pencil = document.createElement('i');
+      icon_pencil.classList.add('fas','fa-pencil-alt');
+
+      const button = document.createElement('button');
+      button.classList.add('btn', 'btn-link');
+      button.addEventListener("click", (e: Event) => this.cellEditor(row,row.datePeriod,'disaggregation',row.target));
+      button.appendChild(icon_pencil);
+
+      const div = document.createElement('div');
+      div.insertAdjacentHTML('afterbegin', row.target);
+      div.appendChild(button);
+
+      const td2 = document.createElement('td');
+      td2.classList.add('text-center');
+      td2.id = row.datePeriod;
+      td2.appendChild(div);
+
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      mainDiv.appendChild(tr);
+    });
+    return mainDiv.innerHTML;
+  }
+
+  getOptionsForSelect(data): string {
     let htmlString = "";
     data.forEach(function (row) {
-      htmlString += "<tr>\n" +
-        "<td class=\'text-center\'>" + row.datePeriod + "</td>\n" +
-        "<td class=\'text-center\'><div>" + row.target +
-        "<button class='btn btn-link' onclick='this.cellEditor(" + JSON.stringify(row) + ", " + row.id + ", \"disbursementPlan\", " + row.disbursement + ")'>" +
-        "<i class='fas fa-pencil-alt'></i></button></div> </td>\n" +
-        "</tr>\n";
+      htmlString += '<option value="' + row.id + '" name="'+ row.name +'">' + row.name + '</option>';
     });
     return htmlString;
   }
 
-  getOptionsForSelect(data): string {
-    console.log('data', data);
-    let htmlString = "";
-    data.forEach(function (row) {
-      htmlString += '<option value="' + row.id + '">\n' + row.name + '</option>\n';
-    });
-    return htmlString;
+  cellEditor(row, td_id, key: string, oldValue) {
+    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  }
+
+  saveCellValue(value: string, key: string, rowId): any {
+    switch (key) {
+      case 'budget':
+        if (this.budget.some(x => x.id === rowId)) {
+          this.budget.forEach(function (item) {
+            if (item.id === rowId) item.approvedAmount = value
+          });
+        }
+        break;
+      case 'disbursementPlan':
+        if (this.disbursementPlan.some(x => x.id === rowId)) {
+          this.disbursementPlan.forEach(function (item) {
+            if (item.id === rowId) item.disbursement = value
+          });
+        }
+        break;
+    }
   }
 
   onSavePlan() {
