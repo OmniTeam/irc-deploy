@@ -8,6 +8,7 @@ import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
 import {DateSplitter} from '../../helpers/date-splitter';
+import {Global} from '../../helpers/globals';
 import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
@@ -38,7 +39,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
-  indicatorChosen: Indicator;
   currentStatus: any = [];
   error: boolean;
   success: boolean;
@@ -55,7 +55,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   ngOnInit(): void {
-    this.indicatorChosen = {id: '', name: '', overallTarget: '', disaggregation: []};
+    Global.INDICATOR = {id: '', name: '', overallTarget: '', disaggregation: []};
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
@@ -156,7 +156,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }*/
   }
 
-  createNewIndicator(row) {
+  createNewIndicator() {
     if (this.calendar.reportingCalender == undefined) {
       console.log('Error', 'No Calendar dates');
       return;
@@ -176,10 +176,10 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     const select = document.createElement('select');
     select.classList.add('form-control', 'form-control-sm');
     select.addEventListener("change", (e: Event) => {
-      this.indicatorChosen.id = select.value;
-      this.indicatorChosen.name = select.name;
+      Global.INDICATOR.id = select.value;
+      Global.INDICATOR.name = select.name;
       this.calendar.reportingCalender.forEach((c) => {
-        this.indicatorChosen.disaggregation.push(
+        Global.INDICATOR.disaggregation.push(
           {
             datePeriod: c.datePeriod,
             target: ''
@@ -201,7 +201,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     const td2 = document.createElement('td');
     td2.classList.add('text-center');
-    td2.insertAdjacentHTML('beforeend', row.overallTarget);
+    td2.insertAdjacentHTML('beforeend', Global.INDICATOR.overallTarget);
 
     const icon_plus = document.createElement('i');
     icon_plus.classList.add('text', 'fas', 'fa-plus');
@@ -209,7 +209,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     button.id = btn_id;
     button.classList.add('btn', 'btn-link');
-    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, row, btn_id));
+    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, btn_id));
     button.appendChild(icon_plus);
 
     const td3 = document.createElement('td');
@@ -222,7 +222,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     tr.appendChild(td3);
   }
 
-  toggleDisaggregation(event, row, btn_id) {
+  toggleDisaggregation(event, btn_id) {
     this.showDisaggregation = !this.showDisaggregation;
     const button = (document.getElementById(btn_id) as HTMLButtonElement);
     let details = (document.getElementById("detailsDisaggregation") as HTMLTableRowElement);
@@ -265,7 +265,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       thead.appendChild(tr3);
 
       table.appendChild(thead);
-      table.appendChild(this.getRowsForDetails(row.disaggregation));
+      table.appendChild(this.getRowsForDetails());
 
       td.appendChild(table);
 
@@ -273,7 +273,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       tr.insertAdjacentElement('afterend', tr2);
 
-      details.style.display = 'block';
+      if(details!=null) details.style.display = 'block';
     } else {
       button.firstChild.replaceWith(plus_icon);
       details.style.display = 'none';
@@ -281,9 +281,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  getRowsForDetails(data): HTMLTableSectionElement {
+  getRowsForDetails(): HTMLTableSectionElement {
     const tbody = document.createElement('tbody');
-    data.forEach((row) => {
+    Global.INDICATOR.disaggregation.forEach((row) => {
       const tr = document.createElement('tr');
       const td1 = document.createElement('td');
       td1.classList.add('text-center');
@@ -294,16 +294,16 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       const button = document.createElement('button');
       button.classList.add('btn', 'btn-link');
-      button.addEventListener('click', (e: Event) => this.cellEditor(row, row.datePeriod, 'disaggregation', row.target, 'number'));
+      button.addEventListener('click', (e: Event) => this.cellEditor(row.datePeriod, 'disaggregation', row.target, 'number'));
       button.appendChild(icon_pencil);
 
       const div = document.createElement('div');
-      div.insertAdjacentHTML('afterbegin', row.target);
       div.appendChild(button);
 
       const td2 = document.createElement('td');
       td2.classList.add('text-center');
       td2.id = row.datePeriod;
+      td2.insertAdjacentHTML('afterbegin', row.target);
       td2.appendChild(div);
 
       tr.appendChild(td1);
@@ -321,20 +321,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     return htmlString;
   }
 
-  cellEditor(row, td_id, key: string, oldValue, type?: string) {
-    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
-    if (key == 'disaggregation') {
-      let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
-      if (this.indicatorChosen.disaggregation.some(x => x.datePeriod === row.id)) {
-        this.indicatorChosen.disaggregation.forEach(function (item) {
-          if (item.datePeriod === row.id) item.target = newValue
-        });
-      }
-    }
+  cellEditor(rowId, key: string, oldValue, type?: string) {
+    new CellEdit().edit(rowId, rowId, oldValue, key, this.saveCellValue, type);
   }
 
   saveCellValue(value: string, key: string, rowId): any {
-    console.log('indicatorChosen', this.indicatorChosen);
     switch (key) {
       case 'budget':
         if (this.budget.some(x => x.id === rowId)) {
@@ -348,6 +339,17 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           this.disbursementPlan.forEach(function (item) {
             if (item.id === rowId) item.disbursement = value
           });
+        }
+        break;
+      case 'disaggregation':
+        let overallTarget:number = 0;
+        if (Global.INDICATOR.disaggregation.some(x => x.datePeriod === rowId)) {
+          Global.INDICATOR.disaggregation.forEach(function (item) {
+            if (item.datePeriod === rowId) item.target = value
+            if(item.target.length!=0) overallTarget += +item.target;
+          });
+          Global.INDICATOR.overallTarget = overallTarget.toString();
+          console.log('New Indicator', Global.INDICATOR);
         }
         break;
     }

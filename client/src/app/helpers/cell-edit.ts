@@ -24,7 +24,7 @@ export class CellEdit {
     if (this.condition) container1.style.display = 'none';
     else container1.style.display = 'block';
 
-    if (typeof status !== 'undefined') {
+    if (typeof status != 'undefined') {
       if (status === "save") {
         let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
         save(newValue, key, row_id);
@@ -42,12 +42,12 @@ export class CellEdit {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
-      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, "save"));
+      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined,"save"));
       saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
-      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, "cancel"));
+      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined,"cancel"));
       cancelButton.id = "cancel_button" + td_id;
 
       const icon_check = document.createElement('i');

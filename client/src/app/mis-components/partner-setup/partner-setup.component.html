@@ -144,7 +144,7 @@
                                   width: max-content;
                                   padding: revert;
                                   font-size: 12px;"
-                          (click)="createNewIndicator(indicatorChosen)">
+                          (click)="createNewIndicator()">
                     <i class="fas fa-plus"></i>
                     Add New
                   </button>
@@ -176,7 +176,7 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.approvedAmount }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, row.id, 'budget', row.approvedAmount, 'number')"><i
+                                  (click)="cellEditor(row.id, 'budget', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -205,7 +205,7 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.disbursement }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, row.id, 'disbursementPlan', row.disbursement, 'number')"><i
+                                  (click)="cellEditor(row.id, 'disbursementPlan', row.disbursement, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
