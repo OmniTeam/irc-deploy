@@ -41,11 +41,6 @@ class MisEntityController {
         respond misEntityService.get(id)
     }
 
-    def getEntityRecord() {
-        def misEntity = MisEntity.get(params.id)
-        respond misEntity
-    }
-
     @Transactional
     def save(MisEntity misEntity) {
         if (misEntity == null) {

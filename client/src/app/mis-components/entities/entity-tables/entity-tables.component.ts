@@ -52,10 +52,11 @@ export class EntityTablesComponent implements OnInit {
 
   filterTable(event) {
     let val = event.target.value.toLowerCase();
+    console.log(val);
     // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
-        if (d[key] !== null && d[key].toLowerCase().indexOf(val) !== -1) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -142,6 +143,12 @@ export class EntityTablesComponent implements OnInit {
     }, error => console.log(error));
   }
 
+  deleteRecord() {
+  }
+
+  exportToExcel() {
+  }
+
   addNewEntityRecord() {
     const params = new HttpParams()
       .set('id', this.entityId);
@@ -159,7 +166,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`New record has not been successfully inserted `);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -186,6 +193,7 @@ export class EntityTablesComponent implements OnInit {
     }
   }
 
+
   addTagToRecord() {
     const newTaggingRecord = this.tagFormGroup.value;
     const params = new HttpParams()
@@ -208,7 +216,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been tagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -242,7 +250,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been untagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -299,6 +307,4 @@ export class EntityTablesComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
-
 }
