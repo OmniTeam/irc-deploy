@@ -19,6 +19,23 @@ class Feedback {
     String clientType
     String preferredChannel
     String phoneNumber
+    String feedbackCategory
+    String feedbackPriority
+    String feedbackReferredShared
+    String feedbackInternallyExternally
+    String referredPersonName
+    String referredPersonPosition
+    String referredOrganization
+    String dateFeedbackReferredShared
+    String responseTypeRequired
+    String actionFollowupNeeded
+    String inFeedbackRegistry
+    String dateFeedbackClient
+    String actionTaken
+    String staffProvidedResponse
+    String responseSummary
+    String supervisor
+    String dataEntryFocalPoint
 
     static mapping = {
         id generator: 'uuid2'
@@ -42,6 +59,23 @@ class Feedback {
         clientType nullable: true
         preferredChannel nullable: true
         phoneNumber nullable: true
+        feedbackCategory nullable: true
+        feedbackPriority nullable: true
+        feedbackReferredShared nullable: true
+        feedbackInternallyExternally nullable: true
+        referredPersonName nullable: true
+        referredPersonPosition nullable: true
+        referredOrganization nullable: true
+        dateFeedbackReferredShared nullable: true
+        responseTypeRequired nullable: true
+        actionFollowupNeeded nullable: true
+        inFeedbackRegistry nullable: true
+        dateFeedbackClient nullable: true
+        actionTaken nullable: true
+        staffProvidedResponse nullable: true
+        responseSummary nullable: true
+        supervisor nullable: true
+        dataEntryFocalPoint nullable: true
     }
 
     @Override

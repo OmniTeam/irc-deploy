@@ -18,7 +18,7 @@ import {FeedbackService} from "../../../services/feedback.service";
   styleUrls: ['./action-feedback.component.scss']
 })
 export class ActionFeedbackComponent implements OnInit {
-  private feedback: any;
+  feedback: any;
   private nationalityValue='';
   private followUpValue = '';
 
@@ -39,6 +39,7 @@ export class ActionFeedbackComponent implements OnInit {
   currentDashboards: any
   formGroup: FormGroup
   submitted = false;
+
   staff_Designation =[
     {
       'name': 'AAP Officer'
@@ -53,6 +54,119 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'Program Staff'
     },
   ];
+  feedback_category =[
+    {
+      'name': 'Allegations non-IRC'
+    },
+    {
+      'name': 'Assistance'
+    },
+    {
+      'name': 'Information'
+    },
+    {
+      'name': 'Minor Dissatisfaction'
+    },
+    {
+      'name': 'Positive'
+    },
+  ];
+  feedback_priority =[
+    {
+      'name': 'Low'
+    },
+    {
+      'name': 'Medium'
+    },
+    {
+      'name': 'High'
+    },
+    {
+      'name': 'Critical'
+    },
+  ];
+  feedback_shared_referred =[
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+  feedback_internal_external =[
+    {
+      'name': 'Internally'
+    },
+    {
+      'name': 'Externally'
+    },
+    {
+      'name': 'I dont Know'
+    },
+  ];
+  response_required =[
+    {
+      'name': 'Apology'
+    },
+    {
+      'name': 'Change Policy'
+    },
+    {
+      'name': 'Corrective Decision'
+    },
+    {
+      'name': 'Explanation'
+    },
+    {
+      'name': 'External Referral'
+    },
+    {
+      'name': 'Goods/Services'
+    },
+    {
+      'name': 'Information'
+    },
+  ];
+  followup_needed =[
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+  in_feedback_registry =[
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+  action_taken =[
+    {
+      'name': 'Apology Sent'
+    },
+    {
+      'name': 'Corrective decision taken'
+    },
+    {
+      'name': 'Dropped'
+    },
+    {
+      'name': 'Explanation Provided'
+    },
+    {
+      'name': 'Information Provided'
+    },
+    {
+      'name': 'Programming change made'
+    },
+    {
+      'name': 'Referred externally'
+    },
+  ];
+
   type_of_feedback = [
     {
       'name': 'Old'
@@ -216,6 +330,23 @@ export class ActionFeedbackComponent implements OnInit {
         preferredChannel: [this.feedback?.preferredChannel],
         phoneNumber: [this.feedback?.phoneNumber],
         serialNumber: [this.feedback?.serialNumber],
+        feedbackCategory: [this.feedback?.feedbackCategory],
+        feedbackPriority: [this.feedback?.feedbackPriority],
+        feedbackReferredShared: [this.feedback?.feedbackReferredShared],
+        feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
+        referredPersonName: [this.feedback?.referredPersonName],
+        referredPersonPosition: [this.feedback?.referredPersonPosition],
+        referredOrganization: [this.feedback?.referredOrganization],
+        dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
+        responseTypeRequired: [this.feedback?.responseTypeRequired],
+        actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
+        inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
+        dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
+        actionTaken: [this.feedback?.actionTaken],
+        staffProvidedResponse: [this.feedback?.staffProvidedResponse],
+        responseSummary: [this.feedback?.responseSummary],
+        supervisor: [this.feedback?.supervisor],
+        dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
       });
     })
 

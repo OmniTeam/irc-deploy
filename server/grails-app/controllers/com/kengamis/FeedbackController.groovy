@@ -40,6 +40,8 @@ class FeedbackController {
         }
 
         try {
+//            String preString = 'IRC-FB-'
+//            feedback.serialNumber=
             feedbackService.save(feedback)
         } catch (ValidationException e) {
             respond feedback.errors
