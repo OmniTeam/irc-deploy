@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
+import { v4 as uuid } from 'uuid';
 import {PartnerSetupService} from "../../services/partner-setup.service";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
@@ -165,6 +166,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       return;
     }
 
+    let btn_id = uuid();
+
     const table = document.getElementById('indicators') as HTMLTableElement;
 
     const button = document.createElement('button');
@@ -172,7 +175,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     const select = document.createElement('select');
     select.classList.add('form-control', 'form-control-sm');
     select.addEventListener("change", (e: Event) => {
-      button.id = select.value;
       this.indicatorChosen.id = select.value;
       this.indicatorChosen.name = select.name;
       this.calendar.reportingCalender.forEach((c) => {
@@ -204,8 +206,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     icon_plus.classList.add('text', 'fas', 'fa-plus');
     icon_plus.style.fontSize = '20px';
 
+    button.id = btn_id;
     button.classList.add('btn', 'btn-link');
-    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, row));
+    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, row, btn_id));
     button.appendChild(icon_plus);
 
     const td3 = document.createElement('td');
@@ -218,10 +221,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     tr.appendChild(td3);
   }
 
-  toggleDisaggregation(event, row) {
-    console.log('calendar', this.calendar.reportingCalender);
+  toggleDisaggregation(event, row, btn_id) {
     this.showDisaggregation = !this.showDisaggregation;
-    const button = (document.getElementById(row.id) as HTMLButtonElement);
+    const button = (document.getElementById(btn_id) as HTMLButtonElement);
     let details = (document.getElementById("detailsDisaggregation") as HTMLTableRowElement);
     let target = event.target;
 
@@ -237,23 +239,39 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (this.showDisaggregation) {
       const tr = <HTMLTableRowElement>target.closest('tr');
       button.firstChild.replaceWith(minus_icon);
-      tr.insertAdjacentHTML('afterend', '' +
-        '  <tr id="detailsDisaggregation">\n' +
-        '                      <td colspan="5">\n' +
-        '                          <table style="padding-left:50px;"\n' +
-        '                                 class="table table-striped table-bordered" id="disaggregation">\n' +
-        '                            <thead>\n' +
-        '                            <tr>\n' +
-        '                              <th class=\'text-center\'>Period</th>\n' +
-        '                              <th class=\'text-center\'>Target</th>\n' +
-        '                            </tr>\n' +
-        '                            </thead>\n' +
-        '                            <tbody><tr>\n' + this.getRowsForDetails(row.disaggregation) +
-        '                            </tbody></tr>\n' +
-        '                          </table>\n' +
-        '                      </td>\n' +
-        '                    </tr>' +
-        '');
+
+      const td = document.createElement('td');
+      td.colSpan = 5;
+
+      const tr2 = document.createElement('tr');
+      tr2.id = 'detailsDisaggregation';
+
+      const table = document.createElement('table');
+      table.style.paddingLeft = '50px';
+      table.classList.add('table', 'table-striped', 'table-bordered');
+      table.id = 'disaggregation';
+
+      const thead = document.createElement('thead');
+      const tr3 = document.createElement('tr');
+      const th1 = document.createElement('th');
+      th1.classList.add('text-center');
+      th1.insertAdjacentHTML('beforeend', 'Period');
+      const th2 = document.createElement('th');
+      th2.classList.add('text-center');
+      th2.insertAdjacentHTML('beforeend', 'Target');
+      tr3.appendChild(th1);
+      tr3.appendChild(th2);
+      thead.appendChild(tr3);
+
+      table.appendChild(thead);
+      table.appendChild(this.getRowsForDetails(row.disaggregation));
+
+      td.appendChild(table);
+
+      tr2.appendChild(td);
+
+      tr.insertAdjacentElement('afterend',tr2);
+
       details.style.display = 'block';
     } else {
       button.firstChild.replaceWith(plus_icon);
@@ -262,8 +280,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  getRowsForDetails(data): string {
-    const mainDiv = document.createElement('div');
+  getRowsForDetails(data): HTMLTableSectionElement {
+    const tbody = document.createElement('tbody');
     data.forEach((row) => {
       const tr = document.createElement('tr');
       const td1 = document.createElement('td');
@@ -275,7 +293,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       const button = document.createElement('button');
       button.classList.add('btn', 'btn-link');
-      button.addEventListener("click", (e: Event) => this.cellEditor(row,row.datePeriod,'disaggregation',row.target));
+      button.addEventListener('click', (e: Event) => this.cellEditor(row,row.datePeriod,'disaggregation',row.target));
       button.appendChild(icon_pencil);
 
       const div = document.createElement('div');
@@ -289,9 +307,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       tr.appendChild(td1);
       tr.appendChild(td2);
-      mainDiv.appendChild(tr);
+      tbody.appendChild(tr);
     });
-    return mainDiv.innerHTML;
+    return tbody;
   }
 
   getOptionsForSelect(data): string {
