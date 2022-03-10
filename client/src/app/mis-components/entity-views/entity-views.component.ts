@@ -38,6 +38,12 @@ export class EntityViewsComponent implements OnInit {
     this.router.navigate(['/entityViewFilter/create/' + this.entityViewId]);
   }
 
+  showEntityView(row) {
+    let entityViewId = row.id;
+    this.router.navigate(['/entityView/showData/' + entityViewId]);
+  }
+
+
   editEntityView(row) {
     let entityViewId = row.id;
     this.router.navigate(['/entityView/edit/' + this.entityId + '/' + entityViewId]);

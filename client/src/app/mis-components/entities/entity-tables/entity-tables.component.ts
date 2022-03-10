@@ -52,8 +52,6 @@ export class EntityTablesComponent implements OnInit {
 
   filterTable(event) {
     let val = event.target.value.toLowerCase();
-    console.log(val);
-    // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
         if (d[key]?.toLowerCase().indexOf(val) !== -1) {
@@ -128,7 +126,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   openFormModal(modalDom) {
-    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'xl'}).result.then((result) => {
       this.closeModal = `Closed with: ${result}`;
     }, (reason) => {
       this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;

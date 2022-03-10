@@ -3,7 +3,7 @@
     <div class=" header-body">
       <div class=" row align-items-center py-4">
         <div class=" col-lg-6 col-7">
-          <h6 class=" h2 text-white d-inline-block mb-0">Manage Entity Views</h6>
+          <h6 class=" h2 text-white d-inline-block mb-0">Manage Data Views</h6>
         </div>
       </div>
     </div>
@@ -42,9 +42,9 @@
                   <input
                     type="search"
                     class="form-control form-control-sm"
-                    placeholder="Search Entity Views"
+                    placeholder="Search Data Views"
                     aria-controls="datatable"
-                    (keyup)="onChangeSearch($event)"
+                    (keyup)="filterTable($event)"
                   />
                 </label>
               </div>
@@ -53,7 +53,7 @@
 
           <div class="row" style="padding: 11px;">
             <div class="col-lg-12 col-5 text-right">
-              <a class=" btn btn-default" *ngIf="enableAddNewViewFilter === true" (click)="createNewViewFilter()" style="color: white">Create New Entity Filter </a>
+              <a class=" btn btn-default" (click)="createNewDataView()" style="color: white">Create New Data View </a>
             </div>
           </div>
 
@@ -66,37 +66,11 @@
             [rows]="rows"
             [limit]="entries != -1 ? entries : undefined"
             (activate)="onActivate($event)"
-            [selectionType]="SelectionType.single"
-            (select)="onSelect($event)"
           >
-            <ngx-datatable-column
-              [width]="50"
-              [sortable]="false"
-              [canAutoResize]="false"
-              [draggable]="false"
-              [resizeable]="false"
-            >
-              <ng-template
-                ngx-datatable-header-template
-                let-value="value"
-                let-allRowsSelected="allRowsSelected"
-                let-selectFn="selectFn"
-              >
-                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
-              </ng-template>
-              <ng-template
-                ngx-datatable-cell-template
-                let-value="value"
-                let-row="row"
-                let-isSelected="isSelected"
-              >
-                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Entity View Name" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="Data View Name" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="View Table" prop="tableName"></ngx-datatable-column>
             <ngx-datatable-column name="Description" prop="description"></ngx-datatable-column>
-            <ngx-datatable-column name="Entity View Filters" prop="entityViewFilters"></ngx-datatable-column>
+            <ngx-datatable-column name="View Query" prop="viewQuery"></ngx-datatable-column>
             <ngx-datatable-column name="Date Created" prop="dateCreated">
               <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
                 {{ value | date }}
@@ -104,13 +78,13 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button (click)="editEntityView(row)" class="btn btn-default" style="padding: 1px 6px;">
+                <button (click)="editDataView(row)" class="btn btn-default" style="padding: 1px 6px;">
                   <i class="fa fa-pencil-alt"></i>
                 </button>
-                <button (click)="showEntityView(row)" class="btn btn-info" style="padding: 1px 6px;">
+                <button (click)="showDataView(row)" class="btn btn-info" style="padding: 1px 6px;">
                   <i class="fa fa-eye"></i>
                 </button>
-                <button (click)="deleteEntityView(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                <button (click)="deleteDataView(row)" class="btn btn-danger" style="padding: 1px 6px;">
                   <i class="fa fa-trash"></i>
                 </button>
               </ng-template>
@@ -121,4 +95,5 @@
     </div>
   </div>
 </div>
+
 
