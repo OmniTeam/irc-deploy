@@ -32,7 +32,7 @@
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date of Referral
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -43,6 +43,7 @@
                             class=" form-control"
                             type="date"
                             formControlName="dateOfReferral"
+                            [readOnly]="true"
                           />
                         </div>
                       </div>
@@ -53,7 +54,7 @@
                   <div class="row">
                     <label>
                       Name of Referring Officer
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -66,6 +67,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="nameOfReferringOfficer"
+                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -76,7 +78,7 @@
                   <div class="row">
                     <label>
                       Name Of Client Being Referred
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -89,6 +91,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="nameOfClientBeingReferred"
+                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -99,7 +102,7 @@
                   <div class="row">
                     <label>
                       Phone Number
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -112,6 +115,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="phoneNumber"
+                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -125,7 +129,7 @@
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date of Birth
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -136,6 +140,7 @@
                             class=" form-control"
                             type="date"
                             formControlName="dateOfBirth"
+                            [readOnly]="true"
                           />
                         </div>
                       </div>
@@ -146,7 +151,7 @@
                   <div class="row">
                     <label>
                       Age Category
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -159,10 +164,10 @@
                                      [multiple]="false"
                                      placeholder="Age Category"
                                      formControlName="ageCategory"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                                     [searchable]="false"
+                                     [clearable]="false"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of age_category">
+                            <ng-option [value]="item.name" *ngFor="let item of age_category" [disabled]="true">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -175,7 +180,7 @@
                   <div class="row">
                     <label>
                       Nationality Status
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -190,10 +195,10 @@
                                      (change)="onChangeCountry($event)"
                                      placeholder="Nationality Status"
                                      formControlName="nationalityStatus"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                                     [searchable]="false"
+                                     [clearable]="false"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of nationality_status">
+                            <ng-option [value]="item.name" *ngFor="let item of nationality_status" [disabled]="true">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -206,7 +211,7 @@
                   <div class="row">
                     <label>
                       Country of Origin
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -219,10 +224,11 @@
                                      [multiple]="false"
                                      placeholder="Country of Origin"
                                      formControlName="countryOfOrigin"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                                     [searchable]="false"
+                                     [clearable]="false"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin"
+                                       [disabled]="true">
                               {{item.name?.common}}
                             </ng-option>
                           </ng-select>
@@ -235,7 +241,7 @@
                   <div class="row">
                     <label>
                       Identification Document
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -248,10 +254,11 @@
                                      [multiple]="false"
                                      placeholder="Identification Document"
                                      formControlName="identificationDocument"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                                     [searchable]="false"
+                                     [clearable]="false"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of identification_document">
+                            <ng-option [value]="item.name" *ngFor="let item of identification_document"
+                                       [disabled]="true">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -264,7 +271,7 @@
                   <div class="row">
                     <label>
                       Identification Number
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -277,6 +284,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="identificationNumber"
+                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -287,7 +295,7 @@
                   <div class="row">
                     <label>
                       Disability
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -300,6 +308,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="disability"
+                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -313,7 +322,7 @@
                   <div class="row">
                     <label>
                       Reason for Referral
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -322,15 +331,16 @@
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
 
-                                     aria-controls="datatable"
+
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
                                      placeholder="Reason for Referral"
                                      formControlName="reasonForReferral"
                                      [searchable]="true"
-                                     [clearable]="true"
+                                     [clearable]="false"
+                                     [disabled]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of reason_for_referral">
+                            <ng-option [value]="item.name" *ngFor="let item of reason_for_referral" [disabled]="true">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -343,23 +353,24 @@
                   <div class="row">
                     <label>
                       Organization Referred to
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
+                        <div class=" input-group input-group-merge ">
+                          <ng-select class="form-control form-control-sm "
                                      aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc; "
                                      [multiple]="false"
                                      placeholder="Organization Referred to"
                                      formControlName="organizationReferredTo"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                                     [searchable]="false"
+                                     [clearable]="false"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
+                            <ng-option [value]="item.name" *ngFor="let item of organization_referred_to"
+                                       [disabled]="true" style="background-color: #eaedf0 !important;">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -372,7 +383,7 @@
                   <div class="row">
                     <label>
                       Received Feedback After Referral?
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -401,7 +412,7 @@
                   <div class="row">
                     <label>
                       Feedback Given
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -427,7 +438,7 @@
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date of Feedback
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -478,7 +489,7 @@
                   <div class="row">
                     <label>
                       Follow Up Area?
-                      <span class="required-indicator">*</span>
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -503,11 +514,11 @@
                     </div>
                   </div>
                 </div>
-                <div id="followupOrganization" [hidden]="true" >
+                <div id="followupOrganization" [hidden]="true">
                   <div class="row">
                     <label>
-                     Follow Up Organization
-                      <span class="required-indicator">*</span>
+                      Follow Up Organization
+<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -541,9 +552,11 @@
                 <button
                   class=" btn btn-default"
                   type="submit"
-                  [disabled]="clicked"
                 >
                   Save
+                </button>
+                <button class=" btn btn-danger" type="button" (click)="close()">
+                  cancel
                 </button>
 
               </div>

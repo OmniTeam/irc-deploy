@@ -19,7 +19,7 @@ class FeedbackController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 1000, 10000)
         respond feedbackService.list(params), model:[feedbackCount: feedbackService.count()]
     }
 
@@ -40,8 +40,12 @@ class FeedbackController {
         }
 
         try {
-//            String preString = 'IRC-FB-'
-//            feedback.serialNumber=
+//            creating a serial number for the feedback in the backend
+            String orgString = 'IRCFD-'
+            String preString = (new Date().format('ddMMyyHHmmss')).toString()
+            String feedbackString = orgString + preString
+            feedback.serialNumber=feedbackString
+
             feedbackService.save(feedback)
         } catch (ValidationException e) {
             respond feedback.errors
