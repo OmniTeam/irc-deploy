@@ -223,6 +223,22 @@ const routes: Routes = [
         path: 'entityViewFilter/edit/:entityViewId/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entity-view-filters/edit-entity-view-filters/edit-entity-view-filters.module').then(m => m.EditEntityViewFiltersModule)
       },
+      {
+        path: 'dataView', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/data-views/data-views.module').then(m => m.DataViewsModule)
+      },
+      {
+        path:'dataView/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/data-views/create-data-views/create-data-views.module').then(m => m.CreateDataViewsModule)
+      },
+      {
+        path: 'dataView/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/data-views/edit-data-views/edit-data-views.module').then(m => m.EditDataViewsModule)
+      },
+      {
+        path: 'dataView/showData/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/data-views/data-view-table/data-view-table.module').then(m => m.DataViewTableModule)
+      },
     ]
   },
   {

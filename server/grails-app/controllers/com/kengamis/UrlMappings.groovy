@@ -40,6 +40,8 @@ class UrlMappings {
         get "/$controller/defaultFilterQuery(.$format)?"(action:"defaultFilterQuery")
         get "/$controller/filterFiltersByEntityView(.$format)?"(action:"filterFiltersByEntityView")
         get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
+        get "/$controller/getDataViewData(.$format)?"(action:"getDataViewData")
+        get "/$controller/dataViewRunNow(.$format)?"(action:"dataViewRunNow")
 
 
         group "/odxRest/", {
