@@ -166,6 +166,7 @@
                                      formControlName="ageCategory"
                                      [searchable]="false"
                                      [clearable]="false"
+                                     [readonly]="true"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of age_category" [disabled]="true">
                               {{item.name}}
@@ -197,6 +198,7 @@
                                      formControlName="nationalityStatus"
                                      [searchable]="false"
                                      [clearable]="false"
+                                     [readonly]="true"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of nationality_status" [disabled]="true">
                               {{item.name}}
@@ -226,6 +228,7 @@
                                      formControlName="countryOfOrigin"
                                      [searchable]="false"
                                      [clearable]="false"
+                                     [readonly]="true"
                           >
                             <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin"
                                        [disabled]="true">
@@ -256,6 +259,7 @@
                                      formControlName="identificationDocument"
                                      [searchable]="false"
                                      [clearable]="false"
+                                     [readonly]="true"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of identification_document"
                                        [disabled]="true">
@@ -338,7 +342,7 @@
                                      formControlName="reasonForReferral"
                                      [searchable]="true"
                                      [clearable]="false"
-                                     [disabled]="true"
+                                     [readonly]="true"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of reason_for_referral" [disabled]="true">
                               {{item.name}}
@@ -368,9 +372,10 @@
                                      formControlName="organizationReferredTo"
                                      [searchable]="false"
                                      [clearable]="false"
+                                     [readonly]="true"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of organization_referred_to"
-                                       [disabled]="true" style="background-color: #eaedf0 !important;">
+                                       [disabled]="true" >
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -547,7 +552,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 offset-6" style="padding-bottom: 15px; padding-left: 0px">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
 
                 <button
                   class=" btn btn-default"
