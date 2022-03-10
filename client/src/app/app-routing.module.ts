@@ -114,7 +114,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/feedback/feedback.module').then(m => m.FeedbackModule)
       },
       {
-        path: 'action-feedback', canActivate: [AuthGuard],
+        path: 'action-feedback/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/feedback/action-feedback/action-feedback.module').then(m => m.ActionFeedbackModule)
       },
       {

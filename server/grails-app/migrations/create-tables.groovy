@@ -1386,6 +1386,44 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "status", tableName: "referral")
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1646399866100-1") {
+        createTable(tableName: "feedback") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "feedbackPK")
+            }
+
+            column(name: "sub_sector", type: "VARCHAR(255)")
+
+            column(name: "remain_anonymous", type: "VARCHAR(255)")
+
+            column(name: "name_of_register", type: "VARCHAR(255)")
+
+            column(name: "location", type: "VARCHAR(255)")
+
+            column(name: "preferred_channel", type: "VARCHAR(255)")
+
+            column(name: "client_type", type: "VARCHAR(255)")
+
+            column(name: "phone_number", type: "VARCHAR(255)")
+
+            column(name: "name_of_client", type: "VARCHAR(255)")
+
+            column(name: "project_sector", type: "VARCHAR(255)")
+
+            column(name: "current_status_of_feedback", type: "VARCHAR(255)")
+
+            column(name: "staff_designation", type: "VARCHAR(255)")
+
+            column(name: "type_of_feedback", type: "VARCHAR(255)")
+
+            column(name: "date_feedback_received", type: "VARCHAR(255)")
+
+            column(name: "nationality_status", type: "VARCHAR(255)")
+        }
+    }
+
+
+
 
 
     changeSet(author: "Bryan (generated)", id: "1646229444195-1") {
@@ -1576,6 +1614,131 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "omni-tech (generated)", id: "1646659570424-1") {
+        addColumn(tableName: "feedback") {
+            column(name: "age", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646659570424-2") {
+        addColumn(tableName: "feedback") {
+            column(name: "gender", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646659570424-3") {
+        addColumn(tableName: "feedback") {
+            column(name: "serial_number", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-1") {
+        addColumn(tableName: "feedback") {
+            column(name: "action_followup_needed", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-2") {
+        addColumn(tableName: "feedback") {
+            column(name: "action_taken", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-3") {
+        addColumn(tableName: "feedback") {
+            column(name: "data_entry_focal_point", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-4") {
+        addColumn(tableName: "feedback") {
+            column(name: "date_feedback_client", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-5") {
+        addColumn(tableName: "feedback") {
+            column(name: "date_feedback_referred_shared", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-6") {
+        addColumn(tableName: "feedback") {
+            column(name: "feedback_category", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-7") {
+        addColumn(tableName: "feedback") {
+            column(name: "feedback_internally_externally", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-8") {
+        addColumn(tableName: "feedback") {
+            column(name: "feedback_priority", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-9") {
+        addColumn(tableName: "feedback") {
+            column(name: "feedback_referred_shared", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-10") {
+        addColumn(tableName: "feedback") {
+            column(name: "in_feedback_registry", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-11") {
+        addColumn(tableName: "feedback") {
+            column(name: "referred_organization", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-12") {
+        addColumn(tableName: "feedback") {
+            column(name: "referred_person_name", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-13") {
+        addColumn(tableName: "feedback") {
+            column(name: "referred_person_position", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-14") {
+        addColumn(tableName: "feedback") {
+            column(name: "response_summary", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-15") {
+        addColumn(tableName: "feedback") {
+            column(name: "response_type_required", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-16") {
+        addColumn(tableName: "feedback") {
+            column(name: "staff_provided_response", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1646830957790-17") {
+        addColumn(tableName: "feedback") {
+            column(name: "supervisor", type: "varchar(255)")
+        }
+    }
+
+
+
+
+
 
     changeSet(author: "LENOVO (generated)", id: "1646838666964-1") {
         createTable(tableName: "data_view") {

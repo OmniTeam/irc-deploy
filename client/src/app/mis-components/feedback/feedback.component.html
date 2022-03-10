@@ -5,75 +5,151 @@
         CLIENT FEEDBACK
       </h1>
       <div class=" row align-items-center py-4">
-        <div class="col-md-4">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Feedback Registered
-                  </h5>
-                  <span class=" h2 font-weight-bold mb-0"> 24 </span>
-                </div>
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                  >
-                    <i class=" fa fa-registered"> </i>
+          <div class="col-md-4" (click)="clickRegisteredFeedback()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickRegisteredFeedback'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Feedback Registered
+                    </h5>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackRegistered}} </span>
+                  </div>
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-registered"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Referred/Shared Feedback
-                  </h5>
+          <div class="col-md-4" (click)="clickActioned()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickActioned'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Actioned
+                    </h5>
 
-                  <span class=" h2 font-weight-bold mb-0"> 34 </span>
-                </div>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackActioned}} </span>
+                  </div>
 
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
-                  >
-                    <i class=" fa fa-share"> </i>
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-check-double"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Pending Feedback
-                  </h5>
+          <div class="col-md-4" (click)="clickUnderReview()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickUnderReview'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Under Review
+                    </h5>
 
-                  <span class=" h2 font-weight-bold mb-0"> 33 </span>
-                </div>
-
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
-                  >
-                    <i class=" fa fa-pause"> </i>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackUnderReview}} </span>
                   </div>
-                </div>
 
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-eye"> </i>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
+          <div class="col-md-4" (click)="clickNotActioned()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickNotActioned'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      No Action Required
+                    </h5>
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackNotActioned}} </span>
+                  </div>
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-pause"> </i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" (click)="clickForwarded()">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickForwarded'}">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h5 class=" card-title text-uppercase text-muted mb-0">
+                      Forwarded for Action
+                    </h5>
+
+                    <span class=" h2 font-weight-bold mb-0"> {{feedbackForwarded}} </span>
+                  </div>
+
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-share"> </i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" (click)="clickReset()">
+            <div
+              class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+            >
+              <i class=" fa fa-eraser"> </i>
+
+            </div>
+            <h3 style="color: white">
+              Reset
+            </h3>
+            <!--<div class=" card card-stats">
+              <div class=" card-body">
+                <div class=" row">
+                  <div class=" col">
+                    <h3 class=" card-title text-uppercase text-muted mb-0">
+                      Reset
+                    </h3>
+                  </div>
+
+                  <div class=" col-auto">
+                    <div
+                      class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                    >
+                      <i class=" fa fa-eraser"> </i>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>-->
+          </div>
         </div>
-      </div>
+
     </div>
   </div>
 </div>
@@ -121,7 +197,7 @@
                 </div>
               </div>
               <div class="col-sm-12 ">
-                <div class="dataTables_length" >
+                <div class="dataTables_length">
                   <ng-select class="form-control form-control-sm"
                              name="datatable_length"
                              aria-controls="datatable"
@@ -166,31 +242,31 @@
             [headerHeight]="50"
             [footerHeight]="50"
             [rowHeight]="'auto'"
-            [rows]="referrals"
+            [rows]="feedback"
             [limit]="entries != -1 ? entries : undefined"
             (activate)="onActivate($event)"
           >
-            <ngx-datatable-column [width]="15" prop="id" >
+            <ngx-datatable-column [width]="15" prop="id">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Client Name" prop="name_of_client_being_referred">
+            <ngx-datatable-column name="Name Of Register" prop="nameOfRegister">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/action-referral/{{row.id}}">{{row?.name_of_client_being_referred}} </a>
+                <a routerLink="/action-feedback/{{row.id}}">{{row?.nameOfRegister}} </a>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Referring Officer" prop="name_of_referring_officer"></ngx-datatable-column>
-            <ngx-datatable-column name="Date of Referral" prop="date_of_referral">
+            <ngx-datatable-column name="Receiving Channel" prop="preferredChannel"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Received" prop="dateFeedbackReceived">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                {{row?.date_of_referral | date:'dd-MM-yyyy'}}
+                {{row?.dateFeedbackReceived | date:'dd-MM-yyyy'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Contact" prop="phone_number"></ngx-datatable-column>
-            <ngx-datatable-column name="Country of Origin" prop="country_of_origin"></ngx-datatable-column>
-            <ngx-datatable-column name="Nationality" prop="country_of_origin"></ngx-datatable-column>
-            <ngx-datatable-column name="Disability" prop="disability"></ngx-datatable-column>
-            <ngx-datatable-column name="status" prop="status"></ngx-datatable-column>
+            <ngx-datatable-column name="Staff Designation" prop="staffDesignation"></ngx-datatable-column>
+            <ngx-datatable-column name="Project Sector" prop="projectSector"></ngx-datatable-column>
+            <ngx-datatable-column name="Name of Client" prop="nameOfClient"></ngx-datatable-column>
+            <ngx-datatable-column name="Location" prop="location"></ngx-datatable-column>
+            <ngx-datatable-column name="status" prop="currentStatusOfFeedback"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

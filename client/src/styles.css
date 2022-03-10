@@ -77,3 +77,10 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .form-control-sm {
   height: 46px !important;
 }
+
+.selected-div {
+  background-color: #b6b9b6;
+  color: #ffffff!important;
+}
+
+

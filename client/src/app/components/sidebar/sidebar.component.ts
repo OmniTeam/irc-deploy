@@ -66,12 +66,12 @@ export const ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
   },
-  /*{
+  {
     path: 'feedback-list',
     title: 'FeedBack List',
     type: 'link',
     icontype: 'fa fa-comment-dots',
-  },*/
+  },
   {
     path: '/',
     title: 'Admin',
