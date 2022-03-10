@@ -44,6 +44,12 @@ export class EntitiesComponent implements OnInit {
     this.router.navigate(['entityView/create/' + this.entityId]);
   }
 
+  showEntityData(row) {
+    let entityId = row.id;
+    this.router.navigate(['/entity/showData/' + entityId]);
+  }
+
+
   getGroupEntityViews(entityViews): string {
     let d = [];
     for (let view of entityViews) {
