@@ -12,6 +12,8 @@ import * as d3Tip from 'd3-tip';
 import * as L from 'leaflet';
 import * as XLSX from 'xlsx';
 import {ExportService} from "../../services/export.service";
+import {DomSanitizer} from "@angular/platform-browser";
+import {environment} from "../../../environments/environment";
 
 const iconRetinaUrl = '../../../assets/leaflet/marker-icon-2x.png';
 const iconUrl = '../../../assets/leaflet/marker-icon.png';
@@ -78,7 +80,8 @@ export class FormDataComponent implements OnInit, AfterViewInit {
               private formService: FormService,
               private modalService: NgbModal,
               private http: HttpClient,
-              private exportService: ExportService) {
+              private exportService: ExportService,
+              private sanitization: DomSanitizer) {
   }
 
   entriesChange($event) {
@@ -319,6 +322,17 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     for (const column of array) {
       const columnProperties = {};
       columnProperties['prop'] = column['field'];
+      columnProperties['name'] = column['displayName'];
+      columns.push(columnProperties);
+    }
+    return columns;
+  }
+
+  formDataRecordColumnMappings(array) {
+    const columns = [];
+    for (const column of array) {
+      const columnProperties = {};
+      columnProperties['prop'] = column['field'];
       columnProperties['name'] = column['questionText'];
       columns.push(columnProperties);
     }
@@ -353,10 +367,14 @@ export class FormDataComponent implements OnInit, AfterViewInit {
           recordObject['xformtype'] = record.xformtype;
           if (record['xformtype'] === "repeat") {
             recordObject['repeatRows'] = record['value']['resultList'];
-            recordObject['repeatColumns'] = this.columnMappings(record['value']['headerList']);
+            recordObject['repeatColumns'] = this.formDataRecordColumnMappings(record['value']['headerList']);
           }
           else if(record['xformtype'] === "select") {
             recordObject['selectOptions'] = record.value;
+          }
+          else if(record['xformtype'] === "picture") {
+            let image = `${environment.serverUrl}/data/getFormDataImage?path=${record.value}`;
+            recordObject['image'] = image;
           }
           else {
             recordObject['value'] = record.value;
@@ -415,13 +433,23 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', `${formtable}`);
 
     this.formService.getPointDetails(params).subscribe((data) => {
-      if (Object.keys(data).length > 0) {
+      if (data.length > 0) {
         let pointDetails = data;
-        let html = "<table style='border-collapse: collapse; text-align: center !important; width: 100%;'>";
-        for (const [k, v] of Object.entries(pointDetails)) {
-          let value = (v === null) ? 'None' : v.toString();
-          html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + k.replace(/_/g, " ")
-            + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + value.replace(/_/g, " ") + "</td> </tr>";
+        let html = "<table style='border-collapse: collapse; text-align: center !important; width: 100%; border-radius: 4px;'>";
+        for (const detail of pointDetails) {
+          if (detail['xformtype'] === 'picture') {
+            let key = detail['question'];
+            let image = `${environment.serverUrl}/data/getFormDataImage?path=${detail['answer']}`;
+            html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
+              + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'><img  src='"+image+"' style='width: 250px; height: 150px;' alt='Form Data Image'/></td> </tr>";
+          }
+          else {
+            let key = detail['question'];
+            let value = detail['answer'] ? detail['answer'] : '';
+            html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
+              + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + value.replace(/_/g, " ") + "</td> </tr>";
+          }
+
         }
         html = html + "</table>";
         popup.setContent(html);
@@ -483,7 +511,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     const params = new HttpParams()
       .set('formtable', `${this.formtable}`);
     this.formService.exportFormData(params).subscribe((data) => {
-      console.log(data['data']);
       this.exportService.exportToCsv(data['data'], data['file']);
     }, error => console.log(error));
   }

@@ -1220,4 +1220,242 @@ databaseChangeLog = {
         dropTable(tableName: "user_form")
     }
 
+    changeSet(author: "Bryan (generated)", id: "1646229444195-1") {
+        createTable(tableName: "project_milestone") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "project_milestonePK")
+            }
+
+            column(name: "reporting_query", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "dashboard_table", type: "VARCHAR(255)")
+
+            column(name: "dashboard_query", type: "LONGTEXT")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "reporting_table", type: "VARCHAR(255)")
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646313846384-1") {
+        createTable(tableName: "program") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "programPK")
+            }
+
+            column(name: "title", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646313846384-2") {
+        createTable(tableName: "program_category") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "program_categoryPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+
+            column(name: "program_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646313846384-3") {
+        addColumn(tableName: "project_milestone") {
+            column(name: "program", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646313846384-4") {
+        addColumn(tableName: "project_milestone") {
+            column(name: "program_category_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646313846384-5") {
+        addForeignKeyConstraint(baseColumnNames: "program_id", baseTableName: "program_category", constraintName: "FK1wjnxstqhnlgc5bkgf4so28d7", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "program", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646313846384-6") {
+        addForeignKeyConstraint(baseColumnNames: "program_category_id", baseTableName: "project_milestone", constraintName: "FKlltcynbquxvrpdr5lrrk19gwp", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "program_category", validate: "true")
+    }
+
+
+    changeSet(author: "Bryan (generated)", id: "1646375252167-1") {
+        createTable(tableName: "entity_view_filters") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "entity_view_filtersPK")
+            }
+
+            column(name: "entity_view_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "filter_query", type: "LONGTEXT")
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646375252167-2") {
+        addForeignKeyConstraint(baseColumnNames: "entity_view_id", baseTableName: "entity_view_filters", constraintName: "FKccsoafxljte0s32kxgj58sy58", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646382998928-1") {
+        createTable(tableName: "program_partner") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "program_partnerPK")
+            }
+
+            column(name: "legal", type: "VARCHAR(255)")
+
+            column(name: "lead_cluster", type: "VARCHAR(255)")
+
+            column(name: "organisation", type: "VARCHAR(255)")
+
+            column(name: "postal_address", type: "VARCHAR(255)")
+
+            column(name: "physical_address", type: "VARCHAR(255)")
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "city", type: "VARCHAR(255)")
+
+            column(name: "name_contact_person", type: "VARCHAR(255)")
+
+            column(name: "country", type: "VARCHAR(255)")
+
+            column(name: "email", type: "VARCHAR(255)")
+
+            column(name: "website", type: "VARCHAR(255)")
+
+            column(name: "program_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "acronym", type: "VARCHAR(255)")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1646382998928-2") {
+        addForeignKeyConstraint(baseColumnNames: "program_id", baseTableName: "program_partner", constraintName: "FK2rc72b856yntd7xpsdrj8l0qa", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "program", validate: "true")
+    }
+
+    changeSet(author: "BrunoJay (generated)", id: "1646309130239-1") {
+        createTable(tableName: "partner_setup") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setupPK")
+            }
+
+            column(name: "setup_values", type: "text") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "partner_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1646838666964-1") {
+        createTable(tableName: "data_view") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "data_viewPK")
+            }
+
+            column(name: "view_query", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "table_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "ignore_user_context", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
+
 }

@@ -5,15 +5,14 @@ import com.kengamis.query.FormData
 import com.kengamis.query.FormDataValue
 import com.kengamis.query.QueryHelper
 import grails.core.GrailsApplication
-import grails.rest.*
+import grails.io.IOUtils
 import grails.converters.*
-import groovy.sql.Sql
+import grails.util.Holders
 import org.openxdata.markup.XformType
 
 import static com.kengamis.AppHolder.withMisSql
 import static com.kengamis.Util.constructFormTable
 import static com.kengamis.Util.escapeField
-import static fuzzycsv.FuzzyCSVTable.toCSV
 
 class DataController {
     static responseFormats = ['json', 'xml']
@@ -59,43 +58,18 @@ class DataController {
             if (formDataValue.humanReadableValue) {
                 if (!formDataValue.isMetaColumn()) {
                     if (formDataValue.formSetting.xformType == XformType.SELECT.value) {
-                        def options = []
-                        if (formDataValue.options.size() > 0) {
-                            formDataValue.options.each {option ->
-                                options << option.textValue
-                            }
-                            formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: options]
+                        if (formDataValue.multiSelectOptions.size() > 0) {
+                            formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.multiSelectOptions]
                         }
                     }
                     else if (formDataValue.formSetting.xformType == XformType.REPEAT.value) {
-                        def headers = []
-                        def resultList = []
-                        def repeatFormData = formDataValue.value as List<FormData>
-                        if (repeatFormData.size() > 0) {
-                            def repeatFirstRecord = repeatFormData.first().allFormDataValues
-
-                            headers << [field: 'increment', questionText: '#']
-                            repeatFirstRecord.each { header ->
-                                if (header.humanReadableValue) {
-                                    if (!header.isMetaColumn()) {
-                                        headers << [field: header.field, questionText: header.label]
-                                    }
-                                }
-                            }
-                            def counter = 1
-                            repeatFormData.each { value ->
-                                def formDataValues = value.allFormDataValues
-                                def record = [:]
-                                record["increment"] = counter
-                                formDataValues.each {dataValue ->
-                                    record["${dataValue.field}"] = dataValue.humanReadableValue
-                                }
-                                resultList << record
-                                counter++
-                            }
+                        def headers = formDataValue.repeatHeaders
+                        def resultList = formDataValue.repeatData
+                        if (headers.size() > 0) {
                             formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
                         }
-                    } else {
+                    }
+                    else {
                         formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.humanReadableValue]
                     }
                 }
@@ -139,10 +113,13 @@ class DataController {
 
         def fd = FormData.init(id, form)
 
-        Map<String, Object> data = [:]
-
+        def data = []
         for (mf in mapFields) {
-            data[mf.displayName] = fd.getDataFor(mf.field).humanReadableValue
+            def map = [:]
+            map['question'] = mf.displayName
+            map['answer'] = fd.getDataFor(mf.field).humanReadableValue
+            map['xformtype'] = mf.xformType
+            data << map
         }
         respond data
     }
@@ -169,5 +146,19 @@ class DataController {
         def fileName = dataExporter.setFileName()
         def response = [data: exportedData, file: fileName]
         respond response
+    }
+
+    def getFormDataImage() {
+        def path = params.path
+        def baseFolder = Holders.grailsApplication.config.imageFolder
+        def imageFilePath = (baseFolder + path) as String
+        def file = new File(imageFilePath)
+        if (file.exists()) {
+            IOUtils.copy(file.newDataInputStream(), response.outputStream)
+            response.outputStream.flush()
+        }
+        else {
+            render([msg: "File doesnt exist", status: 500] as JSON)
+        }
     }
 }

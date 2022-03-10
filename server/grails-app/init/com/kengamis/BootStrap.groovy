@@ -29,7 +29,7 @@ class BootStrap {
     @Transactional
     def initData() {
         //Initial Study
-        def study = Study.findByCentralId('9') ?: new Study(name: 'IRC', centralId: '9')
+        def study = Study.findByCentralId('8') ?: new Study(name: 'CRVPF', centralId: '8')
         study.save(failOnError: true, flush: true)
 
         // Initial User and Roles
@@ -42,14 +42,14 @@ class BootStrap {
                 names: "Super User",
                 email: "super@gmail.com",
                 username: 'super',
-                password: 'omg!@mni',
+                password: 'pass',
                 enabled: true).save(failOnError: true)
 
         def adminUser = User.findByUsername('root') ?: new User(
                 names: "Root User",
                 email: "root@gmail.com",
                 username: 'root',
-                password: 'omg!@mni',
+                password: 'pass',
                 enabled: true).save(failOnError: true)
 
         if (!superAdminUser.authorities.contains(superAdminRole)) {
@@ -71,10 +71,10 @@ class BootStrap {
 
     @Transactional
     def initSystemDefaultJobs() {
-        TaskDef.findByName("Central Sync Job") ?: new TaskDef(
-                name: 'Central Sync Job',
+        TaskDef.findByName("Central Data Sync Job") ?: new TaskDef(
+                name: 'Central Data Sync Job',
                 description: 'Central Data import into MIS',
-                cronExpression: '0 0/30 * * * ?',
+                cronExpression: '0 0/20 * * * ?',
                 taskClass: 'com.kengamis.tasks.DynamicJobRunner',
                 extraParams: 'class:com.kengamis.tasks.CentralDataImportJob',
                 startOnStartup: true
@@ -97,6 +97,25 @@ class BootStrap {
                 extraParams: 'class:com.kengamis.tasks.TaskListSyncJob',
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
+
+        TaskDef.findByName("Central Images Sync Job") ?: new TaskDef(
+                name: 'Central Images Sync Job',
+                description: 'Sync Central Images to MIS',
+                cronExpression: '0 0/20 * * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.CentralImagesSyncJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
+
+        TaskDef.findByName("Central Users Sync Job") ?: new TaskDef(
+                name: 'Central Users Sync Job',
+                description: 'Sync Central Users to MIS',
+                cronExpression: '0 0 * * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.CentralSyncUsersJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
+
     }
 
     def initStartUpJobs() {

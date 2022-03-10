@@ -94,7 +94,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Entity Name" prop="name">
               <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/entity/{{row.id}}"> {{ value }}</a>
+                <a routerLink="/entity/showData/{{row.id}}"> {{ value }}</a>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Database Name" prop="tableName"></ngx-datatable-column>
@@ -108,12 +108,6 @@
             <ngx-datatable-column name="Linked Forms" prop="linkedForms"></ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <!--                <button-->
-                <!--                  (click)="editTagType(row);"-->
-                <!--                  class="btn btn-default"-->
-                <!--                  style="padding: 1px 6px;">-->
-                <!--                  <i class="fa fa-pencil-alt"></i>-->
-                <!--                </button>-->
                 <button (click)="deleteEntity(row)" class="btn btn-danger" style="padding: 1px 6px;">
                   <i class="fa fa-trash"></i>
                 </button>

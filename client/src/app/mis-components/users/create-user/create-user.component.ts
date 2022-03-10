@@ -14,7 +14,7 @@ import {AuthService} from '../../../services/auth.service';
 import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
-import {UsernameValidator} from "../../../Validators/username.validator";
+import {UsernameValidator} from "../../../validators/username.validator";
 import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
 

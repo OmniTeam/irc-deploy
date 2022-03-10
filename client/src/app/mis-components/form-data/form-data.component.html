@@ -124,6 +124,18 @@
                   </div>
                 </div>
               </div>
+
+              <div class=" col-sm-2 col-md-2">
+                <div class=" form-group row">
+                  <div class=" col-md-12 col-sm-12">
+                    <div class=" row">
+                      <div class=" col-md-12 col-sm-12" style="padding-right: 0 !important;">
+                        <button class=" btn btn-danger" type="reset" (click)="resetInputs()">Reset</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </fieldset>
@@ -368,12 +380,12 @@
       <div class="row" *ngFor="let record of formDataRecord"
            style="border-bottom: 1px solid #e9ecef; padding: 10px !important; font-size: 0.9rem !important;">
         <div class="col-md-12">
-          <div class="row" *ngIf="!(record.xformtype == 'repeat') && !(record.xformtype == 'select')">
+          <div class="row" *ngIf="!(record.xformtype == 'repeat') && !(record.xformtype == 'select') && !(record.xformtype == 'picture')">
             <div class="col-md-6">
               <span> {{ record.question }} </span>
             </div>
             <div class="col-md-6" style="border-left: 1px solid #e9ecef;">
-              <span> {{ record.value }} </span>
+              <span> {{ record.value}} </span>
             </div>
           </div>
           <div class="row" *ngIf="record.xformtype == 'select'">
@@ -384,6 +396,14 @@
               <div *ngFor="let option of record.selectOptions">
                 <span> {{ option }} </span>
               </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="record.xformtype == 'picture'">
+            <div class="col-md-6">
+              <span> {{ record.question }} </span>
+            </div>
+            <div class="col-md-6" style="border-left: 1px solid #e9ecef;">
+              <img src="{{ record.image }}" style="width: 400px; height: 400px;"/>
             </div>
           </div>
           <div class="row" *ngIf="record.xformtype == 'repeat'">

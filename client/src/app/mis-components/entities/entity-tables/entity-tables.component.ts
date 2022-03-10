@@ -8,6 +8,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";
 import {TagService} from "../../../services/tags";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-entity-tables',
@@ -21,6 +22,7 @@ export class EntityTablesComponent implements OnInit {
   selected = [];
   activeRow: any;
   rows: Object[];
+  temp: Object[];
   columns: any;
   entityId = "";
   SelectionType = SelectionType;
@@ -48,11 +50,13 @@ export class EntityTablesComponent implements OnInit {
     this.entries = $event.target.value;
   }
 
-  filterTable($event) {
-    const val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    console.log(val);
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
       for (const key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -90,9 +94,8 @@ export class EntityTablesComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
-      this.getEntityData();
     });
-
+    this.getEntityData();
     this.tagFormGroup = this.formBuilder.group({
       tagType: ['', Validators.required],
       tag: ['', Validators.required]
@@ -104,6 +107,7 @@ export class EntityTablesComponent implements OnInit {
       .set('id', this.entityId);
     this.entityService.getEntityData(params).subscribe((data) => {
       this.entityName = new ReplacePipe().transform(data.entity['name'], '_', ' ');
+      this.temp = [...data.resultList];
       this.rows = data.resultList;
       this.tagTypes = data.tagTypeList;
       this.enableTagging = data.enableTagging;
@@ -151,7 +155,6 @@ export class EntityTablesComponent implements OnInit {
 
     this.submitted = true;
     if (this.formGroup.invalid) {
-      console.log('Invalid');
       return;
     }
 
@@ -163,7 +166,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`New record has not been successfully inserted `);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -172,6 +175,24 @@ export class EntityTablesComponent implements OnInit {
       }, 100);
     }
   }
+
+  deleteEntityDataRecord(row) {
+    const deletedRow = row.id;
+    const params = new HttpParams()
+      .set('id', deletedRow)
+      .set('entityId', this.entityId);
+
+    if (confirm('Are you sure to delete this Record?')) {
+      this.entityService.deleteEntityRecord(params).subscribe((result) => {
+          this.alertService.warning(`Record has been  deleted `);
+          this.getEntityData();
+        }, error => {
+          this.alertService.error(`Record could not be deleted`)
+        }
+      );
+    }
+  }
+
 
   addTagToRecord() {
     const newTaggingRecord = this.tagFormGroup.value;
@@ -195,7 +216,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been tagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -229,7 +250,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been untagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -286,6 +307,4 @@ export class EntityTablesComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
-
 }

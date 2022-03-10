@@ -1,0 +1,194 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Project Milestone</h6>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+        </div>
+        <div class=" col-lg-6 col-5 text-right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row justify-content-center">
+    <div class=" col-lg-10 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Project Milestone</h3>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem;">
+          <form [formGroup]="formGroup" (ngSubmit)="createMilestone()" *ngIf="formGroup">
+            <div class="row">
+              <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Program
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="  Program"
+                                   formControlName="program"
+                                   [ngClass]="{ 'is-invalid': submitted && f.program.errors }"
+                                   (change)="getCategories($event)"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.id" *ngFor="let item of programs">
+                            {{item.title}}
+                          </ng-option>
+                        </ng-select>
+                        <div *ngIf="submitted && f.program.errors" class="invalid-feedback">
+                          <div *ngIf="f.program.errors.required">Program is required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Category Name
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="  Category Name"
+                                   formControlName="programCategory"
+                                   [ngClass]="{ 'is-invalid': submitted && f.programCategory.errors }"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.id" *ngFor="let item of categories">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
+                        <div *ngIf="submitted && f.programCategory.errors" class="invalid-feedback">
+                          <div *ngIf="f.programCategory.errors.required">Category Name is required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Milestone Name
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Milestone Name"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="name"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                          >
+                          <div *ngIf="submitted && f.name.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.name.errors.required">Milestone Name is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Description
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Description"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="description"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Reporting Query
+                    </label>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea class="form-control" rows="5" formControlName="reportingQuery">
+
+                          </textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Dashboard Query
+                    </label>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea class="form-control" rows="5" formControlName="dashboardQuery">
+
+                          </textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+                <button class=" btn btn-default" type="submit">Save</button>
+                <button class=" btn btn-danger" type="reset" (click)="onReset()">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

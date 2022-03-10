@@ -78,8 +78,8 @@ export class TagTypeComponent implements OnInit {
   }
 
   editTagType(row) {
-    const editedRow = row.id;
-    console.log(row);
+    const id = row.id;
+    this.router.navigate(['/tagType/edit/'+ id]);
   }
 
   deleteTagType(row) {

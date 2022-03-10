@@ -61,3 +61,12 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .was-validated .form-control:invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .custom-select.is-invalid {
   border-color: red !important;
 }
+
+.leaflet-popup-content {
+  width: 600px !important;
+}
+
+.leaflet-container {
+  font-family: Open Sans, sans-serif !important;
+}
+

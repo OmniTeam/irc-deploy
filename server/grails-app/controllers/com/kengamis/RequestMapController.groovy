@@ -1,6 +1,9 @@
 package com.kengamis
 
+import grails.converters.JSON
 import grails.validation.ValidationException
+import org.springframework.http.HttpMethod
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -19,11 +22,11 @@ class RequestMapController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 100, 100)
         respond requestMapService.list(params), model:[requestMapCount: requestMapService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond requestMapService.get(id)
     }
 
@@ -72,7 +75,7 @@ class RequestMapController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
@@ -81,5 +84,11 @@ class RequestMapController {
         requestMapService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getHttpMethods() {
+        def httpMethods = []
+        HttpMethod.values().collect { httpMethods << it.name() }
+        respond httpMethods
     }
 }

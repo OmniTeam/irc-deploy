@@ -42,27 +42,39 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
       },
       {
+        path: 'partnerSetup', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+      },
+      {
+        path: 'partnerSetup/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+      },
+      {
+        path: 'partnerSetupList', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-list/partner-list.module').then(m => m.PartnerListModule)
+      },
+      {
+        path: 'taskList', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
+      },
+      {
+        path: 'reportForm/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
+      },
+      {
         path: 'entity', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
       {
-        path: 'tasklist', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
-      },
-      {
-        path: 'formView/:id', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
-      },
-      {
-        path: 'createEntity', canActivate: [AuthGuard],
+        path: 'entity/create', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
       },
       {
-        path: 'entity/:id', canActivate: [AuthGuard],
+        path: 'entity/showData/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
       },
       {
-        path: 'linkForm/:id', canActivate: [AuthGuard],
+        path: 'entity/linkForm/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/link-form/link-form.module').then(m => m.LinkFormModule)
       },
       {
@@ -70,11 +82,16 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entity-views/entity-views.module').then(m => m.EntityViewsModule)
       },
       {
-        path: 'createEntityView/:id', canActivate: [AuthGuard],
+        path: 'entityView/create/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entity-views/create-entity-views/create-entity-views.module').then(m => m.CreateEntityViewsModule)
       },
       {
-        path: 'entityView/:id', canActivate: [AuthGuard],
+        path: 'entityView/edit/:entityId/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-views/edit-entity-views/edit-entity-views.module').then(m => m.EditEntityViewsModule)
+      },
+
+      {
+        path: 'entityView/showData/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entity-views/entity-view-table/entity-view-table.module').then(m => m.EntityViewTableModule)
       },
       {
@@ -82,8 +99,16 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/tags/tags.module').then(m => m.TagsModule)
       },
       {
+        path: 'tags/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tags/edit-tags/edit-tags.module').then(m => m.EditTagsModule)
+      },
+      {
         path: 'tagType', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/tag-type/tag-type.module').then(m => m.TagTypeModule)
+      },
+      {
+        path: 'tagType/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/tag-type/edit-tag-type/edit-tag-type.module').then(m => m.EditTagTypeModule)
       },
       {
         path:'groups', canActivate: [AuthGuard],
@@ -119,7 +144,85 @@ const routes: Routes = [
       {
         path: 'role/edit/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/roles/edit-role/edit-role.module').then(m => m.EditRoleModule)
-      }
+      },
+      {
+        path: 'scheduledTasks', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
+      },
+      {
+        path: 'requestMaps', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/request-maps.module').then(m => m.RequestMapsModule)
+      },
+      {
+        path:'requestMaps/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/create-request-maps/create-request-maps.module').then(m => m.CreateRequestMapsModule)
+      },
+      {
+        path: 'requestMaps/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
+      },
+      {
+        path: 'program', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program/program.module').then(m => m.ProgramModule)
+      },
+      {
+        path:'program/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program/create-program/create-program.module').then(m => m.CreateProgramModule)
+      },
+      {
+        path: 'program/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program/edit-program/edit-program.module').then(m => m.EditProgramModule)
+      },
+      {
+        path: 'programCategory', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-category/program-category.module').then(m => m.ProgramCategoryModule)
+      },
+      {
+        path:'programCategory/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-category/create-program-category/create-program-category.module').then(m => m.CreateProgramCategoryModule)
+      },
+      {
+        path: 'programCategory/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-category/edit-program-category/edit-program-category.module').then(m => m.EditProgramCategoryModule)
+      },
+      {
+        path: 'milestones', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/project-milestones/project-milestones.module').then(m => m.ProjectMilestonesModule)
+      },
+      {
+        path:'milestones/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/project-milestones/create-project-milestones/create-project-milestones.module').then(m => m.CreateProjectMilestonesModule)
+      },
+      {
+        path: 'milestones/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/project-milestones/edit-project-milestones/edit-project-milestones.module').then(m => m.EditProjectMilestonesModule)
+      },
+
+      {
+        path: 'programPartner', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-partners/program-partners.module').then(m => m.ProgramPartnersModule)
+      },
+      {
+        path:'programPartner/create', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-partners/create-program-partners/create-program-partners.module').then(m => m.CreateProgramPartnersModule)
+      },
+      {
+        path: 'programPartner/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/program-partners/edit-program-partners/edit-program-partners.module').then(m => m.EditProgramPartnersModule)
+      },
+
+      {
+        path: 'entityViewFilter', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-view-filters/entity-view-filters.module').then(m => m.EntityViewFiltersModule)
+      },
+      {
+        path:'entityViewFilter/create/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-view-filters/create-entity-view-filters/create-entity-view-filters.module').then(m => m.CreateEntityViewFiltersModule)
+      },
+      {
+        path: 'entityViewFilter/edit/:entityViewId/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entity-view-filters/edit-entity-view-filters/edit-entity-view-filters.module').then(m => m.EditEntityViewFiltersModule)
+      },
     ]
   },
   {

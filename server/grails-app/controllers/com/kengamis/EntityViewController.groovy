@@ -27,11 +27,22 @@ class EntityViewController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond entityViewService.list(params), model: [entityViewCount: entityViewService.count()]
+        def entityViews = EntityView.findAll().collect { entityView ->
+            def entityViewFilters = entityView.filters.collect { [id: it.id, name: it.name] }
+            [id: entityView.id, name: entityView.name, tableName: entityView.tableName,
+             description: entityView.description, dateCreated: entityView.dateCreated, entityId: entityView.misEntity.id,
+             entityViewFilters: entityViewFilters]
+        }
+        respond entityViews
     }
 
     def show(String id) {
-        respond entityViewService.get(id)
+        def entityView = entityViewService.get(id)
+        def entityViewFields = entityView.viewFields
+        def entityViewFilters = entityView.filters.collect { [id: it.id, name: it.name] }
+        def entityViewReturned = [entityView: entityView,
+                                  entityViewFields: entityViewFields, entityViewFilters: entityViewFilters]
+        respond entityViewReturned
     }
 
     @Transactional
@@ -72,6 +83,7 @@ class EntityViewController {
 
         try {
             entityViewService.save(entityView)
+            createView(entityView)
         } catch (ValidationException e) {
             respond entityView.errors
             return

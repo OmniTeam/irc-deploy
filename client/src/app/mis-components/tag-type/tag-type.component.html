@@ -74,12 +74,9 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-<!--                <button-->
-<!--                  (click)="editTagType(row);"-->
-<!--                  class="btn btn-default"-->
-<!--                  style="padding: 1px 6px;">-->
-<!--                  <i class="fa fa-pencil-alt"></i>-->
-<!--                </button>-->
+                <button (click)="editTagType(row);" class="btn btn-default" style="padding: 1px 6px;">
+                  <i class="fa fa-pencil-alt"></i>
+                </button>
                 <button (click)="deleteTagType(row)" class="btn btn-danger" style="padding: 1px 6px;">
                   <i class="fa fa-trash"></i>
                 </button>

@@ -100,4 +100,189 @@ export class SampleData {
       },
     ]
   }
+  static performanceReport = [
+    {
+      id: 'adaggfdfgsgsfgsfsd',
+      output_indicators: 'No of safe spaces established within the community',
+      overall_target: '500',
+      cumulative_achievement: '200',
+      quarter_target: '40',
+      quarter_achievement: '32',
+      percentage_achievement: '67%',
+      comment_on_result: ''
+    },
+    {
+      id: 'gddagdyrtaegssag',
+      output_indicators: 'No of Adolescent girls utilising safe spaces',
+      overall_target: '400',
+      cumulative_achievement: '120',
+      quarter_target: '50',
+      quarter_achievement: '22',
+      percentage_achievement: '70%',
+      comment_on_result: ''
+    }
+  ];
+  static financialReport = [
+    {
+      id: 'fdadasdasdasd',
+      budget_line: 'Staff salaries and related charges',
+      approved_budget: '30000',
+      total_advanced: '20000',
+      expense_to_date: '15000',
+      quarter_expenses: '',
+      variance: '4%',
+      reason_for_variance: ''
+    },
+    {
+      id: 'asdsafsagsgasgfds',
+      budget_line: 'Direct support to target population',
+      approved_budget: '30000',
+      total_advanced: '20000',
+      expense_to_date: '15000',
+      quarter_expenses: '',
+      variance: '25%',
+      reason_for_variance: ''
+    }
+  ];
+  static organisationalInfo = {
+    id: 'asdaasrsgsdgfssgs',
+    program: 'Adolescent Girl Power Program',
+    cluster_organization: 'Empowered Girls of Busano',
+    acronym_name: 'EGB',
+    organization_type: 'CBO',
+    legal_status: 'Registered NGO',
+    contact_person: 'Musamali Jacob',
+    physical_address: 'Khatwelatwela, Nyondo Parish',
+    postal_address: 'None',
+    email: 'egb@gmail.com',
+    website: 'https://empoweredbusano.org/',
+    country: 'Uganda',
+    city: 'Mbale'
+  };
+  static projectInfo = {
+    id: 'akhfbkabsdkfjbsjf',
+    reporting_period: '22 June 2022 to 21 Sep 2022',
+    grant_start_date: '21/Mar/2022',
+    grant_end_date: '21/Mar/2022',
+    total_grant_amount: '45,000 USD',
+    amount_transferred: '12,000',
+    amount_utilized: '',
+    balance_spent_overspend: ''
+  };
+  static disbursementPlan = [
+    {
+      id: 'asdsadasfsagrgwtregrege',
+      quarter: 'Q1',
+      startDate: '21/Mar/2021',
+      endDate: '21/Mar/2022',
+      disbursement: 'teste'
+    },
+    {
+      id: 'asdsadassfsdgwegrtregrege',
+      quarter: 'Q2',
+      startDate: '21/Jun/2021',
+      endDate: '21/Jan/2022',
+      disbursement: 'teset'
+    },
+    {
+      id: 'asdsadasfertreedgregrege',
+      quarter: 'Q3',
+      startDate: '21/Feb/2021',
+      endDate: '21/Sep/2022',
+      disbursement: 'tsest'
+    }
+  ];
+  static budget = [
+    {
+      id: 'asfdsfdgfsgsgfdsgfdsgfsgew',
+      budgetLine: 'Staff salaries and related charges',
+      approvedAmount: '5000'
+    },
+    {
+      id: 'asfdsfdsdgfsgsgfwrqsgfsgew',
+      budgetLine: 'Direct support to target population',
+      approvedAmount: '15000'
+    },
+    {
+      id: 'asfdsfdgfsgshyteywtwersgew',
+      budgetLine: 'Consultants and other contracted services',
+      approvedAmount: '51000'
+    }
+  ];
+  static indicators = [
+    {
+      id: 'asdsfggewrwetwtrewtwtwr',
+      indicator: 'No of safe spaces established within the community',
+      overallTarget: '300',
+      disaggregation: [
+        {
+          datePeriod: 'Q1',
+          target: '100'
+        },
+        {
+          datePeriod: 'Q2',
+          target: '20'
+        },
+        {
+          datePeriod: 'Q3',
+          target: '80'
+        },
+        {
+          datePeriod: 'Q4',
+          target: '100'
+        }
+      ]
+    },
+    {
+      id: 'asdsvnvnvgfnfhfhtwtrewtwtwr',
+      indicator: 'No of Adolescent girls utilising safe spaces',
+      overallTarget: '500',
+      disaggregation: [
+        {
+          datePeriod: 'Q1',
+          target: '200'
+        },
+        {
+          datePeriod: 'Q2',
+          target: '20'
+        },
+        {
+          datePeriod: 'Q3',
+          target: '180'
+        },
+        {
+          datePeriod: 'Q4',
+          target: '100'
+        }
+      ]
+    },
+  ];
+  static calendar = {
+    id: 'ewrwrwrwsdfdsf',
+    periodType: 'quarter',
+    grantStartDate: '2022-03-02T14:27',
+    grantEndDate: '2025-03-02T14:27',
+    projectReportingStartDate: '2022-03-02T14:27',
+    reportingCalender: []
+  };
+  static currentStatus = {
+    totalAmountDisbursed: '5000',
+    totalAmountAccountedFor: '6000',
+    dateOfLastDisbursement: '01/02/2022',
+    startReportingCycle: 'true'
+  }
+  static partners = [
+    {
+      name: 'Partner One',
+      value: 'partner_one'
+    },
+    {
+      name: 'Parter Two',
+      value: 'partner_two'
+    },
+    {
+      name: 'Partner Three',
+      value: 'partner_three'
+    }
+  ];
 }

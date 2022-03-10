@@ -4,13 +4,13 @@ import {Subject} from "rxjs";
 import {ReportFormService} from "../../services/report-form.service";
 import {CommentNode} from '../comments/comments.component';
 import {Location} from '@angular/common';
-import {CellEdit, OnUpdateCell} from '../../utilities/cell_edit';
+import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {DummyData} from "../../utilities/dummy-data";
+import {SampleData} from "../../helpers/sample-data";
 
 @Component({
   selector: 'app-report-form',
@@ -80,7 +80,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private formViewService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private reportFormService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -88,8 +88,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-    this.organisationalInfo = DummyData.organisationalInfo;
-    this.projectInfo = DummyData.projectInfo;
+    this.organisationalInfo = SampleData.organisationalInfo;
+    this.projectInfo = SampleData.projectInfo;
 
     this.route.params
       .subscribe(p => {
@@ -126,7 +126,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   setCommentsAndRecommendations(params) {
-    this.formViewService.getCommentsForTask(params).subscribe(data => {
+    this.reportFormService.getCommentsForTask(params).subscribe(data => {
       if (data.comments !== null && data.comments !== undefined) {
         data.comments.forEach((c) => {
           this.comments.push(new CommentNode(c.id, c.content, c.userId, [], this.getRepliesToComments(c.children), new Date(c.dateCreated)));
@@ -134,7 +134,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
     }, error => console.log("Error getting comments", error));
 
-    this.formViewService.getRecommendationsForTask(params).subscribe(data => {
+    this.reportFormService.getRecommendationsForTask(params).subscribe(data => {
       if (data.recommendations !== null && data.recommendations !== undefined) {
         data.recommendations.forEach((r) => {
           this.recommendations.push(new CommentNode(r.id, r.content, r.userId, [], [], new Date(r.dateCreated)));
@@ -144,7 +144,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   setReportsData(params) {
-    this.formViewService.getReportForTask(params).subscribe(data => {
+    this.reportFormService.getReportForTask(params).subscribe(data => {
       if (data.report !== null && data.report !== undefined) {
         this.report = data.report;
         let reports = JSON.parse(data.report.reportValues);
@@ -173,17 +173,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
-      } else {
-        this.financialReport = DummyData.financialReport;
-        this.performanceReport = DummyData.performanceReport;
-      }
+      } /*else {
+        this.financialReport = SampleData.financialReport;
+        this.performanceReport = SampleData.performanceReport;
+      }*/
 
       this.dtTrigger.next();
     }, error => console.log("Error getting reports", error));
   }
 
   setAttachments(params) {
-    this.formViewService.getAttachmentsForTask(params).subscribe(data => {
+    this.reportFormService.getAttachmentsForTask(params).subscribe(data => {
       if (data.files !== null) {
         data.files.forEach((file) => {
           if (file.name === "attachment1") {
@@ -348,7 +348,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       status: status
     }
     if (this.report) {
-      this.formViewService.updateReport(reportRecord, this.report.id).subscribe((data) => {
+      this.reportFormService.updateReport(reportRecord, this.report.id).subscribe((data) => {
         this.error = false;
         this.success = true;
         this.successMessage = "Updated Report";
@@ -359,7 +359,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         console.log(error);
       });
     } else {
-      this.formViewService.createReport(reportRecord).subscribe((data) => {
+      this.reportFormService.createReport(reportRecord).subscribe((data) => {
         this.error = false;
         this.success = true;
         this.successMessage = "Saved Report";
@@ -406,15 +406,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         }
 
         const params = new HttpParams().set('taskId', this.taskId).set('name', attachment.key);
-        this.formViewService.getFileByTaskAndName(params).subscribe((data) => {
+        this.reportFormService.getFileByTaskAndName(params).subscribe((data) => {
           let record = data.fileRecord;
           if (record == null) {
-            this.formViewService.saveFile(fileRecord).subscribe((data) => {
+            this.reportFormService.saveFile(fileRecord).subscribe((data) => {
               console.log('saved file successfully')
             }, error => console.log('file', error));
           } else {
             console.log('record', record);
-            this.formViewService.updateFile(fileRecord, record.id).subscribe((data) => {
+            this.reportFormService.updateFile(fileRecord, record.id).subscribe((data) => {
               console.log('updated file successfully')
             }, error => console.log('file', error));
           }
@@ -480,9 +480,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         children: JSON.stringify(comment.answers),
       }
       const params = new HttpParams().set('id', comment.id);
-      this.formViewService.getComment(params).subscribe((data) => {
+      this.reportFormService.getComment(params).subscribe((data) => {
         if (data.comment === null || data.comment === undefined) {
-          this.formViewService.saveComment(commentsRecord).subscribe((data) => {
+          this.reportFormService.saveComment(commentsRecord).subscribe((data) => {
             console.log('saved comment successfully')
           }, error => console.log('save comment', error));
         }
@@ -499,9 +499,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         content: recommendation.text,
       }
       const params = new HttpParams().set('id', recommendation.id);
-      this.formViewService.getRecommendation(params).subscribe((data) => {
+      this.reportFormService.getRecommendation(params).subscribe((data) => {
         if (data.recommendation === null || data.recommendation === undefined) {
-          this.formViewService.saveRecommendation(recommendationsRecord).subscribe((data) => {
+          this.reportFormService.saveRecommendation(recommendationsRecord).subscribe((data) => {
             console.log('saved recommendation successfully')
           }, error => console.log('save recommendation', error));
         }

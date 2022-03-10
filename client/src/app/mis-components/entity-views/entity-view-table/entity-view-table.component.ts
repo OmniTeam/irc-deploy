@@ -17,6 +17,7 @@ export class EntityViewTableComponent implements OnInit {
   entityViewId: any;
   columns = [];
   checkIfTableHasData = true;
+  entityViewName: any;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -32,6 +33,7 @@ export class EntityViewTableComponent implements OnInit {
 
     this.entityService.getEntityViewData(params).subscribe((data) => {
       if (data['headers'].length > 0) {
+        this.entityViewName = data['entity']['name'];
         this.columns = data['headers'];
         this.rows = data['dataList'];
         this.checkIfTableHasData = true;

@@ -78,8 +78,12 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'ni-badge text-default',
     isCollapsed: true,
     children: [
+      {path: 'tagType', title: 'Tag Type', type: 'link'},
       {path: 'tags', title: 'Tags', type: 'link'},
-      {path: 'tagType', title: 'Tag Type', type: 'link'}
+      {path: 'program', title: 'Program', type: 'link'},
+      {path: 'programPartner', title: 'Program Partner', type: 'link'},
+      {path: 'programCategory', title: 'Program Category', type: 'link'},
+      {path: 'milestones', title: 'Project Milestones', type: 'link'}
     ]
   },
   {
@@ -94,7 +98,10 @@ export const ROUTES: RouteInfo[] = [
       {path: 'project', title: 'Project', type: 'link'},
       {path: 'entity', title: 'Entities', type: 'link'},
       {path: 'entityView', title: 'Entity Views', type: 'link'},
-      {path: 'tasklist', title: 'Task List', type: 'link'},
+      {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link'},
+      {path: 'taskList', title: 'Task List', type: 'link'},
+      {path: 'partnerSetupList', title: 'Partner Setup', type: 'link'},
+      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link'},
     ]
   },
   {
@@ -106,7 +113,8 @@ export const ROUTES: RouteInfo[] = [
     children: [
       {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'roles', title: 'Roles', type: 'link'},
-      {path: 'users', title: 'Users', type: 'link'}
+      {path: 'users', title: 'Users', type: 'link'},
+      {path: 'requestMaps', title: 'Request Maps', type: 'link'}
     ]
   },
 ];
