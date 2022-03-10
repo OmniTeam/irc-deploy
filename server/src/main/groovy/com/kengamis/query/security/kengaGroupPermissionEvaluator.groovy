@@ -12,7 +12,6 @@ import org.springframework.security.acls.model.Acl
 import org.springframework.security.acls.model.MutableAcl
 import org.springframework.security.acls.model.NotFoundException
 import org.springframework.security.core.Authentication
-import org.springframework.security.acls.model.Permission
 import org.springframework.util.Assert
 
 @Slf4j
@@ -20,29 +19,35 @@ class kengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
     private PermissionFactory permissionFactory = new DefaultPermissionFactory()
 
     @Override
-    boolean hasPermission(Authentication authentication, String dataRecordId, Object permission) {
-        if (dataRecordId == null) {
+    boolean hasPermission(Authentication authentication, Object dataObject, Permission permission) {
+        if (dataObject == null) {
             return false
         }
-        KengaAclTableRecordIdentity recordIdentity = getRecordIdentity(dataRecordId)
+        KengaAclTableRecordIdentity recordIdentity = getRecordIdentity(dataObject)
         return checkPermission(authentication, recordIdentity, permission)
     }
 
-    KengaAclTableRecordIdentity getRecordIdentity(String dataRecordId) {
+    KengaAclTableRecordIdentity getRecordIdentity(Object dataObject) {
+//        assmumes the id field for the datatable is id
+        def dataRecordId = dataObject.id
         def query = KengaAclTableRecordIdentity
-                .where { tableRecordId == dataRecordId }
+                .where { dataTableRecordId == dataRecordId }
         KengaAclTableRecordIdentity tableRecordIdentity = query.find()
         return tableRecordIdentity
     }
 
-    private boolean checkPermission(Authentication authentication, KengaAclTableRecordIdentity recordIdentity, Object permission) {
+    private boolean checkPermission(Authentication authentication, KengaAclTableRecordIdentity recordIdentity, Permission permission) {
         //get groups applicable to the principle
         List<KengaGroup> groups = retrieveKengaGroups(authentication)
-        List<Permission> requiredPermissions = resolvePermission(permission)
+//        List<Permission> requiredPermissions = resolvePermission(permission)
         log.debug("Checking permission: ${permission} for object:${recordIdentity}")
 
         try {
 //            look for acls only for groups we are interested in
+            def acls = findAcls(recordIdentity)
+            if(isGranted(acls,permission,groups)){
+                return true
+            }
         } catch (NotFoundException exception) {
             log.debug("Returning false, no acls apply for this group")
         }
@@ -57,7 +62,7 @@ class kengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
 
     List<Permission> resolvePermission(Object permission) {
         if (permission instanceof Integer) {
-//            check whether it builds correctly
+//            TODO check whether it builds correctly
             return Arrays.asList(this.permissionFactory.buildFromMask((Integer) permission))
         }
         if (permission instanceof Permission) {
@@ -97,37 +102,33 @@ class kengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
         // Finally, convert our 'acls' into true Acls
     }
 
-    protected Map<KengaAclTableRecordIdentity, List<KengaGroupAclEntry>> findAcls(List<KengaAclTableRecordIdentity> kengaAclTableRecordIdentities) {
+    protected List<KengaGroupAclEntry> findAcls(KengaAclTableRecordIdentity tableRecordIdentity) {
         List<KengaGroupAclEntry> entries
-        if(kengaAclTableRecordIdentities) {
+        if(tableRecordIdentity) {
             entries = KengaGroupAclEntry.withCriteria {
-                'in'('kengaAclTableRecordIdentity', kengaAclTableRecordIdentities)
+                'eq'('kengaAclTableRecordIdentity', tableRecordIdentity)
             }
         }
 
-        def map = [:]
-
-        for (KengaAclTableRecordIdentity kengaAclTableRecordIdentity: kengaAclTableRecordIdentities) {
-            map[kengaAclTableRecordIdentity] = []
-        }
-
-        for(entry in entries) {
-            map[entry.kengaAclTableRecordIdentity] << entry
-        }
-
-        return map
+        return entries
     }
 
-    protected List<KengaAclTableRecordIdentity> convertEntries(
-            Map<KengaAclTableRecordIdentity, List<KengaGroupAclEntry>> kengaAclTableRecordIdentityListMap,
-    Map<Serializable, Acl> acls, List<KengaGroup> groups) {
-//
-        List<KengaAclTableRecordIdentity> parents = []
-
-        kengaAclTableRecordIdentityListMap.each { aclObjectIdentity, aclEntries ->
-            createAcl acls, aclObjectIdentity, aclEntries
+    /**
+     * checks if any of the groups has access to the record for permission
+     * @param entries
+     * @param permission
+     * @param groups
+     * @return true is permission is granted and false otherwisee
+     */
+    protected boolean isGranted(List<KengaGroupAclEntry> entries, Permission permission, List<KengaGroup> groups) {
+        if(permission == Permission.ADMINISTRATION) return true
+        for(KengaGroup group: groups){
+            for(KengaGroupAclEntry entry: entries) {
+                if(entry.kengaGroup == group && Permission.hasPermission(entry.mask,permission)){
+                    return true
+                }
+            }
         }
-
-        parents
+        return false
     }
 }

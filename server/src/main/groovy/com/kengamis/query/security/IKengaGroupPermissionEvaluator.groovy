@@ -16,5 +16,5 @@ interface IKengaGroupPermissionEvaluator {
      * @param permission a representation of the permission object
      * @return true if the permission is granted, false otherwise
      */
-    boolean hasPermission(Authentication authentication, String targetTable, Object permission);
+    boolean hasPermission(Authentication authentication, Object dataObject, Permission permission);
 }
