@@ -6,6 +6,7 @@ import {AlertService} from "../../services/alert";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UsersService} from "../../services/users.service";
 import {RolesService} from "../../services/roles.service";
+import {GroupsService} from "../../services/groups.service";
 
 @Component({
   selector: 'app-users',
@@ -66,6 +67,7 @@ export class UsersComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private alertService: AlertService,
+    private groupsService: GroupsService,
     private router: Router,
     private modalService: NgbModal,
     private usersService: UsersService,

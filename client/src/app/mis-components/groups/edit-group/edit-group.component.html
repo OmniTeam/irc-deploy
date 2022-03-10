@@ -83,7 +83,7 @@
                                                [searchable]="true"
                                                [clearable]="true"
                                     >
-                                      <ng-option [value]="item.name" *ngFor="let item of parents">
+                                      <ng-option [value]="item.id" *ngFor="let item of parents">
                                         {{item.name}}
                                       </ng-option>
                                     </ng-select>
@@ -114,6 +114,7 @@
                                     checked="checked"
                                     type="checkbox"
                                     formControlName="access_to_central_data"
+                                    (change)="changeCentralDataAccess()"
                                   />
 
                                   <span
@@ -160,7 +161,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row">
+                          <div class="row" id="data_collectors" [hidden]="true">
                             <div class="col-md-3">
                               <label>
                                 Data Collectors
@@ -182,8 +183,8 @@
                                                [searchable]="true"
                                                [clearable]="true"
                                     >
-                                      <ng-option [value]="item.name" *ngFor="let item of dataCollectors">
-                                        {{item.name}}
+                                      <ng-option [value]="item.id" *ngFor="let item of dataCollectors">
+                                        {{item.names}}
                                       </ng-option>
                                     </ng-select>
                                     <div *ngIf="submitted && f.data_collectors.errors" class="invalid-feedback">

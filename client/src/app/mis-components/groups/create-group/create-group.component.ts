@@ -23,9 +23,11 @@ import {GroupsService} from "../../../services/groups.service";
   styleUrls: ['./create-group.component.scss']
 })
 export class CreateGroupComponent implements OnInit {
+  ACD: boolean;
 
   constructor(
     private groupsService: GroupsService,
+    private usersService: UsersService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -47,21 +49,8 @@ export class CreateGroupComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  parents = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
-  permissions =[
+  parents: any
+  permissions = [
     {
       'name': 'Data Tables'
     },
@@ -72,25 +61,26 @@ export class CreateGroupComponent implements OnInit {
       'name': 'Reports'
     },
   ]
-  dataCollectors =[
-    {
-      'name': 'Okello Marvin'
-    },
-    {
-      'name': 'Lewis Hamilton'
-    },
-    {
-      'name': 'Pierre Gasly'
-    },
-  ]
+  dataCollectors: any
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
+    this.groupsService.getGroups().subscribe(data => {
+      this.parents = data
+    }, error => {
+      this.alertService.error("Failed to get Parents")
+    })
+    this.usersService.getUsers().subscribe(data => {
+      this.dataCollectors = data
+      console.log(this.dataCollectors)
+    }, error => {
+      this.alertService.error("Failed to get Data Collectors")
+    })
     this.formGroup = this.formBuilder.group({
-      name: ['',[Validators.required]],
+      name: ['', [Validators.required]],
       parent: [null],
       access_to_central_data: [false],
       permissions: [null],
@@ -109,16 +99,30 @@ export class CreateGroupComponent implements OnInit {
     const formData = this.formGroup.value;
     console.log(formData)
     this.groupsService.createGroup(formData).subscribe((result) => {
-        console.warn(result, 'Group created Successfully');
-        this.alertService.success(`Group has been created`);
-        this.router.navigate(['/groups']);
-    },error => {this.alertService.error("Failed to Create the Group")});
+      console.warn(result, 'Group created Successfully');
+      this.alertService.success(`Group has been created`);
+      this.router.navigate(['/groups']);
+    }, error => {
+      this.alertService.error("Failed to Create the Group")
+    });
   }
 
-  resetForm() {
-    this.formGroup.reset();
-    this.clicked = false
-    this.submitted = false
+  // shows data collectors based on access to central data toggle
+  changeCentralDataAccess() {
+    this.ACD = this.f['access_to_central_data'].value
+    if (this.ACD === true) {
+      this.f['data_collectors'].reset()
+      document.getElementById('data_collectors').hidden = false
+    } else {
+      this.f['data_collectors'].reset()
+      document.getElementById('data_collectors').hidden = true
+    }
+
+
+  }
+
+  goBack() {
+    this.router.navigate(['/groups'])
   }
 
 }
