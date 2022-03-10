@@ -106,6 +106,15 @@ class BootStrap {
                 extraParams: 'class:com.kengamis.tasks.CentralImagesSyncJob',
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
+
+        TaskDef.findByName("Central Users Sync Job") ?: new TaskDef(
+                name: 'Central Users Sync Job',
+                description: 'Sync Central Users to MIS',
+                cronExpression: '0 0 * * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.CentralSyncUsersJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
     }
 
     def initStartUpJobs() {

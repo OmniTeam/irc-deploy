@@ -16,7 +16,6 @@ class UrlMappings {
         get "/$controller/get_entity_data(.$format)?"(action:"getEntityData")
         post "/$controller/insert_entity_record(.$format)?"(action:"insertEntityRecord")
         get "/$controller/get_entity_fields(.$format)?"(action:"getEntityFields")
-        get "/$controller/get_entity_record(.$format)?"(action:"getEntityRecord")
         get "/$controller/get_export_form_data(.$format)?"(action:"getExportFormData")
         get "/$controller/view_data(.$format)?"(action:"viewData")
         get "/$controller/get_task_record(.$format)?"(action:"getTaskRecord")
@@ -38,6 +37,9 @@ class UrlMappings {
         get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
         get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
+        get "/$controller/defaultFilterQuery(.$format)?"(action:"defaultFilterQuery")
+        get "/$controller/filterFiltersByEntityView(.$format)?"(action:"filterFiltersByEntityView")
+        get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')

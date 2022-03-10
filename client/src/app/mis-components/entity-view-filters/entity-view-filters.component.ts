@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {EntityViewFiltersService} from "../../services/entity-view-filters.service";
+import {EntityService} from "../../services/entity.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-entity-view-filters',
@@ -19,10 +21,14 @@ export class EntityViewFiltersComponent implements OnInit {
   filters: any
   submitted = false;
   activeRow: any;
+  entityViews: [];
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
-              private entityViewFiltersService: EntityViewFiltersService) { }
+              private entityViewFiltersService: EntityViewFiltersService,
+              private entityService: EntityService) {
+  }
 
   ngOnInit(): void {
     this.reloadTable();
@@ -32,12 +38,15 @@ export class EntityViewFiltersComponent implements OnInit {
     this.entityViewFiltersService.getEntityViewFilters().subscribe((data) => {
       this.filters = data;
     });
+    this.entityService.getEntityViews().subscribe((data) => {
+      this.entityViews = data;
+    });
   }
 
   editEntityViewFilter(row) {
     const id = row.id;
     const entityViewId = row.entityView.id;
-    this.router.navigate(['/entityViewFilter/edit/'+ entityViewId + '/' + id]);
+    this.router.navigate(['/entityViewFilter/edit/' + entityViewId + '/' + id]);
   }
 
   deleteEntityViewFilter(row) {
@@ -82,4 +91,11 @@ export class EntityViewFiltersComponent implements OnInit {
     this.reloadTable();
   }
 
+  getFilteredFilters(value) {
+    const params = new HttpParams()
+      .set('id', value);
+    this.entityViewFiltersService.filterFiltersByEntityView(params).subscribe(data => {
+      this.filters = data;
+    }, error => console.log(error));
+  }
 }

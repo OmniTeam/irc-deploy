@@ -94,9 +94,8 @@ export class EntityTablesComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
-      this.getEntityData();
     });
-
+    this.getEntityData();
     this.tagFormGroup = this.formBuilder.group({
       tagType: ['', Validators.required],
       tag: ['', Validators.required]
@@ -167,7 +166,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`New record has not been successfully inserted `);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -176,6 +175,24 @@ export class EntityTablesComponent implements OnInit {
       }, 100);
     }
   }
+
+  deleteEntityDataRecord(row) {
+    const deletedRow = row.id;
+    const params = new HttpParams()
+      .set('id', deletedRow)
+      .set('entityId', this.entityId);
+
+    if (confirm('Are you sure to delete this Record?')) {
+      this.entityService.deleteEntityRecord(params).subscribe((result) => {
+          this.alertService.warning(`Record has been  deleted `);
+          this.getEntityData();
+        }, error => {
+          this.alertService.error(`Record could not be deleted`)
+        }
+      );
+    }
+  }
+
 
   addTagToRecord() {
     const newTaggingRecord = this.tagFormGroup.value;
@@ -199,7 +216,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been tagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -233,7 +250,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been untagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {

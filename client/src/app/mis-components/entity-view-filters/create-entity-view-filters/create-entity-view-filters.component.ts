@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../services/alert";
 import {EntityViewFiltersService} from "../../../services/entity-view-filters.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-create-entity-view-filters',
@@ -15,19 +16,26 @@ export class CreateEntityViewFiltersComponent implements OnInit {
   submitted = false;
   formData: any;
   entityViewId: any;
+  entityViewFilterQuery: any;
+
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
-              private entityViewFiltersService: EntityViewFiltersService) { }
+              private entityViewFiltersService: EntityViewFiltersService) {
+  }
 
   ngOnInit(): void {
     this.entityViewId = this.route.snapshot.params.id;
-    this.formGroup = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      description: [''],
-      filterQuery: ['']
-    });
+    const params = new HttpParams()
+      .set('id', this.entityViewId);
+    this.entityViewFiltersService.getDefaultFilterQuery(params).subscribe((results: any) => {
+      this.formGroup = this.formBuilder.group({
+        name: ['', [Validators.required]],
+        description: [''],
+        filterQuery: [results?.viewQuery]
+      });
+    }, error => console.log(error));
   }
 
   get f() {

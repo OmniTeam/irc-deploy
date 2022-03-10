@@ -23,6 +23,14 @@ export class EntityViewFiltersService {
     return this.http.get(`${this.baseurl}${id}/`);
   }
 
+  getDefaultFilterQuery(params) {
+    return this.http.get(`${this.baseurl}/defaultFilterQuery`, {params});
+  }
+
+  filterFiltersByEntityView(params) {
+    return this.http.get(`${this.baseurl}/filterFiltersByEntityView`, {params});
+  }
+
   updateEntityViewFilter(id, formData): Observable<any> {
     return this.http.put(`${this.baseurl}${id}/`, formData);
   }
