@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {v4 as uuid} from 'uuid';
@@ -8,7 +8,6 @@ import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
 import {DateSplitter} from '../../helpers/date-splitter';
-import {Global} from '../../helpers/globals';
 import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
@@ -23,28 +22,36 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  rows: [] = [];
-  calendar: any = [];
-  indicators: any = [];
+
+  calendar: any = {};
   budget: any = [];
   disbursementPlan: any = [];
-  showDisaggregation: boolean;
+  currentStatus: any = {};
+  indicatorRecord: Indicator;
+  indicators: Indicator[];
+
+  setup: any;
   disaggregation: any = [];
   organisationalInfo: any = [];
   listOfPartners: any = [];
+  milestones: any = [];
   partnerChosen: string;
+  milestoneChosen: any;
   programChosen: string;
+  partnerSetupId: string;
+
+  editing: boolean;
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
+  showDisaggregation: boolean;
+
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
-  currentStatus: any = [];
-  error: boolean;
-  success: boolean;
-  errorMessage: string;
-  successMessage: string;
-  private partnerSetupId: string;
 
   constructor(private router: Router, private route: ActivatedRoute,
               private location: Location,
@@ -55,13 +62,14 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   ngOnInit(): void {
-    Global.INDICATOR = {id: '', name: '', overallTarget: '', disaggregation: []};
+    this.editing = false;
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
         const params = new HttpParams().set('id', this.partnerSetupId);
         this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
-          this.setPartnerSetupInfo(data);
+          this.editing = true;
+          this.setPartnerSetupInfo(data.setup);
         }, error => console.log(error));
       });
 
@@ -84,23 +92,27 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   setPartnerSetupInfo(data) {
-    if (data.setup !== null && data.setup !== undefined) {
-      this.rows = data.setup;
-      let setupValues = JSON.parse(data.setup.setupValues);
+    this.setup = data;
+    if (data !== null && data !== undefined) {
+      let setupValues = JSON.parse(data.setupValues);
       console.log('setupValues', setupValues);
-      this.calendar = JSON.parse(setupValues.calendar);
-      this.indicators = JSON.parse(setupValues.indicators);
-      this.budget = JSON.parse(setupValues.budget);
-      this.disbursementPlan = JSON.parse(setupValues.disbursementPlan);
-      this.currentStatus = JSON.parse(setupValues.currentStatus);
-      this.partnerChosen = data.setup.partnerId
-    } /*else {
-          this.calendar = SampleData.calendar;
-          this.indicators = SampleData.indicators;
-          this.budget = SampleData.budget;
-          this.disbursementPlan = SampleData.disbursementPlan;
-          this.currentStatus = SampleData.currentStatus;
-        }*/
+      this.partnerChosen = data.partnerId
+      if (this.partnerChosen != undefined) this.onPartnerChange()
+      if (setupValues.calendar != undefined) this.calendar = setupValues.calendar;
+      if (setupValues.disbursementPlan != undefined) this.disbursementPlan = setupValues.disbursementPlan;
+      if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
+      if (setupValues.budget != undefined) {
+        this.budget = setupValues.budget;
+        this.milestoneChosen = setupValues.budget.budgetLine;
+      }
+      if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
+    } else {
+      //this.calendar = SampleData.calendar;
+      //this.indicatorsChosen = SampleData.indicators;
+      //this.budget = SampleData.budget;
+      //this.disbursementPlan = SampleData.disbursementPlan;
+      //this.currentStatus = SampleData.currentStatus;
+    }
     this.dtTrigger.next();
   }
 
@@ -132,9 +144,25 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       }
       this.calendar.reportingCalender = years;
     }
+
+    //set disbursement
+    if (!this.setup) {
+      this.calendar.reportingCalender.forEach((period) => {
+        this.disbursementPlan.push(
+          {
+            id: uuid(),
+            datePeriod: period.datePeriod,
+            startDate: period.startDate,
+            endDate: period.endDate,
+            disbursement: ''
+          }
+        );
+      });
+    }
+    this.savePlan();
   }
 
-  onPartnerChange(event) {
+  onPartnerChange() {
     if (this.partnerChosen != undefined) {
       this.programPartnersService.getCurrentProgramPartner(this.partnerChosen).subscribe((results: any) => {
         if (results !== null && results !== undefined) {
@@ -144,8 +172,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             const params = new HttpParams().set('program', this.programChosen);
             this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
               if (data !== null && data !== undefined) {
-                this.indicators = data.milestones;
-                console.log('indicators', this.indicators);
+                this.milestones = data.milestones;
+                //console.log('indicators', this.indicators);
               }
             });
           }
@@ -156,14 +184,15 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }*/
   }
 
-  createNewIndicator() {
+  createNewIndicator(row) {
+    this.indicatorRecord = {id: '', name: '', overallTarget: '', disaggregation: []};
     if (this.calendar.reportingCalender == undefined) {
-      console.log('Error', 'No Calendar dates');
+      alert('No Calendar dates, Fill in reporting calendar');
       return;
     }
 
-    if (this.indicators == undefined || this.indicators.length == 0) {
-      console.log('Error', 'No Milestones/Indicators');
+    if (this.milestones == undefined || this.milestones.length == 0) {
+      alert('No Milestones found, Select Partner to proceed');
       return;
     }
 
@@ -176,10 +205,10 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     const select = document.createElement('select');
     select.classList.add('form-control', 'form-control-sm');
     select.addEventListener("change", (e: Event) => {
-      Global.INDICATOR.id = select.value;
-      Global.INDICATOR.name = select.name;
+      row.id = select.value;
+      row.name = select.name;
       this.calendar.reportingCalender.forEach((c) => {
-        Global.INDICATOR.disaggregation.push(
+        row.disaggregation.push(
           {
             datePeriod: c.datePeriod,
             target: ''
@@ -187,7 +216,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         );
       });
     });
-    select.insertAdjacentHTML('beforeend', "<option selected>Select Milestone</option>\n" + this.getOptionsForSelect(this.indicators));
+    select.insertAdjacentHTML('beforeend', "<option selected>Select Milestone</option>\n" + this.getOptionsForSelect(this.milestones));
 
     const div = document.createElement('div');
     div.classList.add('form-group', 'text-center');
@@ -201,7 +230,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     const td2 = document.createElement('td');
     td2.classList.add('text-center');
-    td2.insertAdjacentHTML('beforeend', Global.INDICATOR.overallTarget);
+    td2.insertAdjacentHTML('beforeend', row.overallTarget);
 
     const icon_plus = document.createElement('i');
     icon_plus.classList.add('text', 'fas', 'fa-plus');
@@ -209,7 +238,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     button.id = btn_id;
     button.classList.add('btn', 'btn-link');
-    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, btn_id));
+    button.addEventListener("click", (e: Event) => this.toggleDisaggregation(e, btn_id, row));
     button.appendChild(icon_plus);
 
     const td3 = document.createElement('td');
@@ -222,7 +251,27 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     tr.appendChild(td3);
   }
 
-  toggleDisaggregation(event, btn_id) {
+  createNewBudgetItem() {
+    if (this.milestones == undefined || this.milestones.length == 0) {
+      alert('No Milestones found, Select Partner to proceed');
+      return;
+    }
+
+    let id = uuid();
+    this.budget.push({id: id, budgetLine: '', approvedAmount: ''});
+  }
+
+  setBudgetLine() {
+    if (this.milestoneChosen != undefined) {
+      if (this.budget.some(x => x.id === this.milestoneChosen.id)) {
+        this.budget.forEach((item) => {
+          if (item.id === this.milestoneChosen) item.budgetLine = this.milestoneChosen.value;
+        });
+      }
+    }
+  }
+
+  toggleDisaggregation(event, btn_id, row) {
     this.showDisaggregation = !this.showDisaggregation;
     const button = (document.getElementById(btn_id) as HTMLButtonElement);
     let details = (document.getElementById("detailsDisaggregation") as HTMLTableRowElement);
@@ -265,7 +314,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       thead.appendChild(tr3);
 
       table.appendChild(thead);
-      table.appendChild(this.getRowsForDetails());
+      table.appendChild(this.getRowsForDetails(row));
 
       td.appendChild(table);
 
@@ -273,7 +322,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       tr.insertAdjacentElement('afterend', tr2);
 
-      if(details!=null) details.style.display = 'block';
+      if (details != null) details.style.display = 'block';
     } else {
       button.firstChild.replaceWith(plus_icon);
       details.style.display = 'none';
@@ -281,30 +330,27 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  getRowsForDetails(): HTMLTableSectionElement {
+  getRowsForDetails(row): HTMLTableSectionElement {
     const tbody = document.createElement('tbody');
-    Global.INDICATOR.disaggregation.forEach((row) => {
+    row.disaggregation.forEach((row) => {
       const tr = document.createElement('tr');
       const td1 = document.createElement('td');
       td1.classList.add('text-center');
       td1.insertAdjacentHTML('beforeend', row.datePeriod);
 
-      const icon_pencil = document.createElement('i');
-      icon_pencil.classList.add('fas', 'fa-pencil-alt');
-
-      const button = document.createElement('button');
-      button.classList.add('btn', 'btn-link');
-      button.addEventListener('click', (e: Event) => this.cellEditor(row.datePeriod, 'disaggregation', row.target, 'number'));
-      button.appendChild(icon_pencil);
-
-      const div = document.createElement('div');
-      div.appendChild(button);
+      const editableDiv = new CellEdit().createEditableCell(
+        this.saveCellValue,
+        row.datePeriod,
+        'disaggregation',
+        row.target,
+        'number'
+      );
 
       const td2 = document.createElement('td');
       td2.classList.add('text-center');
       td2.id = row.datePeriod;
       td2.insertAdjacentHTML('afterbegin', row.target);
-      td2.appendChild(div);
+      td2.appendChild(editableDiv);
 
       tr.appendChild(td1);
       tr.appendChild(td2);
@@ -325,72 +371,106 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     new CellEdit().edit(rowId, rowId, oldValue, key, this.saveCellValue, type);
   }
 
-  saveCellValue(value: string, key: string, rowId): any {
-    switch (key) {
-      case 'budget':
-        if (this.budget.some(x => x.id === rowId)) {
-          this.budget.forEach(function (item) {
-            if (item.id === rowId) item.approvedAmount = value
-          });
-        }
-        break;
-      case 'disbursementPlan':
-        if (this.disbursementPlan.some(x => x.id === rowId)) {
-          this.disbursementPlan.forEach(function (item) {
-            if (item.id === rowId) item.disbursement = value
-          });
-        }
-        break;
-      case 'disaggregation':
-        let overallTarget:number = 0;
-        if (Global.INDICATOR.disaggregation.some(x => x.datePeriod === rowId)) {
-          Global.INDICATOR.disaggregation.forEach(function (item) {
-            if (item.datePeriod === rowId) item.target = value
-            if(item.target.length!=0) overallTarget += +item.target;
-          });
-          Global.INDICATOR.overallTarget = overallTarget.toString();
-          console.log('New Indicator', Global.INDICATOR);
-        }
-        break;
-    }
+  saveCellValue = (value: string, key: string, rowId): void => {
+    if (value !== null && value !== undefined)
+      switch (key) {
+        case 'budget':
+          if (this.budget.some(x => x.id === rowId)) {
+            this.budget.forEach(function (item) {
+              if (item.id === rowId) item.approvedAmount = value
+            });
+          }
+          break;
+        case 'disbursementPlan':
+          if (this.disbursementPlan.some(x => x.id === rowId)) {
+            this.disbursementPlan.forEach(function (item) {
+              if (item.id === rowId) item.disbursement = value
+            });
+          }
+          break;
+        case 'disaggregation':
+          let overallTarget: number = 0;
+          if (this.indicatorRecord.disaggregation.some(x => x.datePeriod === rowId)) {
+            this.indicatorRecord.disaggregation.forEach(function (item) {
+              if (item.datePeriod === rowId) item.target = value
+              if (item.target.length != 0) overallTarget += +item.target;
+            });
+            this.indicatorRecord.overallTarget = overallTarget.toString();
+          }
+          if (this.indicators.some(x => x.id === this.indicatorRecord.id)) {
+            this.indicators.forEach((indicator) => {
+              if (indicator.id === this.indicatorRecord.id) indicator = this.indicatorRecord
+            });
+          } else this.indicators.push(this.indicatorRecord);
+          console.log('save indicators', this.indicators);
+          break;
+      }
+    this.savePlan();
   }
 
-  onSavePlan() {
+  savePlan(done?: boolean) {
     this.error = false;
     this.success = false;
 
-    let reportValues: { [key: string]: string } = {
-      calendar: JSON.stringify(this.calendar),
+    console.log('this.indicatorsChosen', this.indicators);
+    console.log('this.budget', this.budget);
+
+    let values: { [key: string]: string } = {
+      calendar: this.calendar,
       indicators: JSON.stringify(this.indicators),
-      budget: JSON.stringify(this.budget),
-      disbursementPlan: JSON.stringify(this.disbursementPlan),
-      currentStatus: JSON.stringify(this.currentStatus)
+      budget: this.budget,
+      disbursementPlan: this.disbursementPlan,
+      currentStatus: this.currentStatus
     }
 
     let partnerSetupRecord: { [key: string]: string } = {
       partnerId: this.partnerChosen,
       userId: this.authService.getLoggedInUsername(),
-      setupValues: JSON.stringify(reportValues),
+      setupValues: JSON.stringify(values),
     }
 
-    console.log('partnerSetupRecord', partnerSetupRecord);
-
-    this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
-      this.error = false;
-      this.success = true;
-      this.successMessage = "Saved Report";
-    }, error => {
-      this.error = true;
-      this.errorMessage = "Failed to save Report";
-      this.success = false;
-      console.log(error);
-    });
+    if (this.setup) {
+      this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
+        console.log('data', data);
+        this.setPartnerSetupInfo(data);
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Updated Partner Setup";
+      }, error => {
+        this.error = true;
+        this.errorMessage = "Failed to update Partner Setup";
+        this.success = false;
+        console.log(error);
+      });
+    } else {
+      this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
+        console.log('data', data);
+        this.setPartnerSetupInfo(data);
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Saved Partner Setup";
+      }, error => {
+        this.error = true;
+        this.errorMessage = "Failed to save Partner Setup";
+        this.success = false;
+        console.log(error);
+      });
+    }
 
     setTimeout(() => {
       this.success = false;
       this.error = false;
-      this.onBackPressed();
+      if (done != undefined && done == true) this.onBackPressed();
     }, 6000);
+  }
+
+  isValidJSONStr(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   onBackPressed() {

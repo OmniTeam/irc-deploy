@@ -1,38 +1,46 @@
 export class CellEdit {
   condition: boolean;
 
-  createEditableCell(td_id: string, condition: boolean, cellValue: string) {
-    const comment_performance_cell = document.getElementById(td_id);
-    console.log("comment_performance_cell", comment_performance_cell);
-    const edit_button = document.createElement("button");
-    edit_button.addEventListener("click", (e: Event) => this.edit("", td_id, "", "", () => void {}));
+  createEditableCell(saveCellValue: (newValue: string, key: string, row_id, row?: any) => void,
+                     rowId: string,
+                     key: string,
+                     oldValue,
+                     type?: string,): HTMLDivElement {
     const icon_pencil = document.createElement('i');
     icon_pencil.classList.add('fas', 'fa-pencil-alt');
-    const container = document.createElement('div');
-    container.style.display = condition + " ? 'none' : 'block'";
-    container.innerHTML = '{{ ' + cellValue + ' }}';
 
-    edit_button.appendChild(icon_pencil);
-    container.appendChild(edit_button);
-    comment_performance_cell.appendChild(container);
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-link');
+    button.addEventListener('click', (e: Event) => {
+      new CellEdit().edit(rowId, rowId, oldValue, key, saveCellValue, type);
+    });
+    button.appendChild(icon_pencil);
+
+    const div = document.createElement('div');
+    div.appendChild(button);
+    return div;
   }
 
-  edit(row_id, td_id: string, oldValue: string, key: string, save: (newValue: string, key: string, row_id) => void, type?: string, status?: string) {
+  edit(row_id,
+       td_id: string,
+       oldValue: string,
+       key: string,
+       save: (newValue: string, key: string, row_id, row?: any) => void,
+       type?: string,
+       status?: string) {
     const td = document.getElementById(td_id);
     const container1 = td.firstElementChild as HTMLElement;
 
     if (this.condition) container1.style.display = 'none';
     else container1.style.display = 'block';
 
-    if (typeof status != 'undefined') {
-      if (status === "save") {
-        let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
-        save(newValue, key, row_id);
-        this.condition = false;
-      } else if (status === "cancel") {
-        (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = oldValue;
-        this.condition = false;
-      } else this.condition = !this.condition;
+    if (status === "save") {
+      let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
+      save(newValue, key, row_id);
+      this.condition = false;
+    } else if (status === "cancel") {
+      (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = oldValue;
+      this.condition = false;
     } else this.condition = !this.condition;
 
     if (this.condition) container1.style.display = 'none';
@@ -42,12 +50,12 @@ export class CellEdit {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
-      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined,"save"));
+      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined, "save"));
       saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
-      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined,"cancel"));
+      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined, "cancel"));
       cancelButton.id = "cancel_button" + td_id;
 
       const icon_check = document.createElement('i');
@@ -57,19 +65,15 @@ export class CellEdit {
 
       const container = document.createElement('div');
       container.id = "edit-cell-" + td_id;
-      container.style.maxWidth = 'fit-content';
-      container.style.display = 'flex';
 
       let input;
-      if (typeof type !== 'undefined') {
-        if (type == 'text') {
-          input = document.createElement('textarea');
-          input.setAttribute('rows', '1');
-        }
-        if (type == 'number') {
-          input = document.createElement('input');
-          input.type = 'number';
-        }
+
+      if (type == 'number') {
+        input = document.createElement('input');
+        input.type = 'number';
+      } else {
+        input = document.createElement('textarea');
+        input.setAttribute('rows', '1');
       }
       input.classList.add('form-control', 'in-line-cell');
       input.setAttribute('placeholder', 'edit');
@@ -120,7 +124,7 @@ export class CellEdit {
 }
 
 export abstract class OnUpdateCell {
-  abstract saveCellValue = (value: string, key: string, rowId) => void {};
+  abstract saveCellValue = (value: string, key: string, rowId, row?: any) => void {};
 }
 
 
