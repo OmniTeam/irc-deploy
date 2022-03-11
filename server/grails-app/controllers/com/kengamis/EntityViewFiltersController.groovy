@@ -21,7 +21,9 @@ class EntityViewFiltersController {
     def index(Integer max) {
         def entityViewFilters = EntityViewFilters.findAll().collect { entityViewFilter ->
             def entityView = entityViewFilter.entityView.name
-            [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description, entityView: entityView]
+            [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description,
+             filterQuery: entityViewFilter.filterQuery, entityView: entityView]
+
         }
         respond entityViewFilters
     }
@@ -29,15 +31,31 @@ class EntityViewFiltersController {
     def show(String id) {
         def entityViewFilter = entityViewFiltersService.get(id)
         def entityView = entityViewFilter.entityView.name
-        def entityViewFilterReturned = [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description, entityView: entityView]
+        def entityViewFilterReturned = [id: entityViewFilter.id, name: entityViewFilter.name,
+                                        description: entityViewFilter.description,
+                                        filterQuery: entityViewFilter.filterQuery, entityView: entityView]
+
         respond entityViewFilterReturned
     }
+
+    def defaultFilterQuery() {
+        def entityViewId = params.id as String
+        def entityView = EntityView.get(entityViewId)
+        def query = """
+                SELECT ${entityView.viewFields.collect { it.fieldType=='Key Field'? (it.name + ' as keyField') : it.name }.join(",")} FROM ${entityView.tableName}
+                """.toString()
+        def res = ["viewQuery" : query]
+        respond res
+    }
+
 
     def filterFiltersByEntityView() {
         def entityViewId = params.id as String
         def entityView = EntityView.get(entityViewId)
         def entityViewFilters = EntityViewFilters.findAllByEntityView(entityView).collect { entityViewFilter ->
-            [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description, entityView: entityView.name]
+            [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description,
+             filterQuery: entityViewFilter.filterQuery, entityView: entityView.name]
+
         }
         respond entityViewFilters
     }

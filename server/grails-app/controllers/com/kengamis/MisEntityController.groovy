@@ -41,11 +41,6 @@ class MisEntityController {
         respond misEntityService.get(id)
     }
 
-    def getEntityRecord() {
-        def misEntity = MisEntity.get(params.id)
-        respond misEntity
-    }
-
     @Transactional
     def save(MisEntity misEntity) {
         if (misEntity == null) {
@@ -284,5 +279,26 @@ class MisEntityController {
             increment_value = "0" + increment_value
         }
         return increment_value
+    }
+
+    @Transactional
+    def deleteEntityRecord() {
+        def recordId  = params.id as String
+        def entityId = params.entityId as String
+        def misEntity = MisEntity.findById(entityId)
+
+        def deleteTagRecord = "delete from ${escapeField misEntity.entityTagTable} where record_id='${recordId}'"
+        def result = AppHolder.withMisSql { execute(deleteTagRecord.toString()) }
+        if (!result) {
+            log.info("Table ${misEntity.entityTagTable} successfully deleted a record")
+        }
+
+        def deleteEntityRecord = "delete from ${escapeField misEntity.tableName} where id='${recordId}'"
+        def resultQuery = AppHolder.withMisSql { execute(deleteEntityRecord.toString()) }
+        if (!resultQuery) {
+            log.info("Table ${misEntity.tableName} successfully deleted a record")
+        }
+        def message = ["Entity Record Deleted"]
+        respond message
     }
 }

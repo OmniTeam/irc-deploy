@@ -47,9 +47,10 @@ export class CreateEntityViewsComponent implements OnInit {
     });
     const params = new HttpParams()
       .set('id', this.entityId);
-    this.entityService.getEntityRecord(params).subscribe((data) => {
+    this.entityService.getCurrentEntity(this.entityId).subscribe((data) => {
       this.entityRecord = data;
     }, error => console.log(error));
+
 
     this.formGroupField = this.formBuilder.group({
       name: ['', [Validators.required]],

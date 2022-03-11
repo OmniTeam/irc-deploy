@@ -5,6 +5,7 @@ import {EditProjectMilestonesRoutingModule} from './edit-project-milestones-rout
 import {EditProjectMilestonesComponent} from "./edit-project-milestones.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {NgSelectModule} from "@ng-select/ng-select";
     EditProjectMilestonesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
+    NgxDatatableModule
   ]
 })
 export class EditProjectMilestonesModule {

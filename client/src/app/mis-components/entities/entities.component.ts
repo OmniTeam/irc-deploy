@@ -37,15 +37,15 @@ export class EntitiesComponent implements OnInit {
   }
 
   createNewEntity() {
-    this.router.navigate(['/createEntity']);
-  }
-
-  linkToForm(entityId: any) {
-    this.router.navigate(['/linkForm', entityId]);
+    this.router.navigate(['/entity/create']);
   }
 
   createNewView() {
-    this.router.navigate(['/createEntityView', this.entityId]);
+    this.router.navigate(['entityView/create/' + this.entityId]);
+  }
+  showEntityData(row) {
+    let entityId = row.id;
+    this.router.navigate(['/entity/showData/' + entityId]);
   }
 
   getGroupEntityViews(entityViews): string {

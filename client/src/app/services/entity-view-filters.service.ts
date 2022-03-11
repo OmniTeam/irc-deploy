@@ -30,4 +30,13 @@ export class EntityViewFiltersService {
   deleteEntityViewFilter(id): Observable<any> {
     return this.http.delete(`${this.baseurl}${id}/`);
   }
+
+  getDefaultFilterQuery(params) {
+    return this.http.get(`${this.baseurl}/defaultFilterQuery`, {params});
+  }
+
+  filterFiltersByEntityView(params) {
+    return this.http.get(`${this.baseurl}/filterFiltersByEntityView`, {params});
+  }
+
 }

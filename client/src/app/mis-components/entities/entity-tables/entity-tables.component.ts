@@ -52,8 +52,6 @@ export class EntityTablesComponent implements OnInit {
 
   filterTable(event) {
     let val = event.target.value.toLowerCase();
-    console.log(val);
-    // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
         if (d[key]?.toLowerCase().indexOf(val) !== -1) {
@@ -94,9 +92,8 @@ export class EntityTablesComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
-      this.getEntityData();
     });
-
+    this.getEntityData();
     this.tagFormGroup = this.formBuilder.group({
       tagType: ['', Validators.required],
       tag: ['', Validators.required]
@@ -129,7 +126,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   openFormModal(modalDom) {
-    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'xl'}).result.then((result) => {
       this.closeModal = `Closed with: ${result}`;
     }, (reason) => {
       this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
@@ -167,7 +164,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`New record has not been successfully inserted `);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -176,6 +173,24 @@ export class EntityTablesComponent implements OnInit {
       }, 100);
     }
   }
+
+  deleteEntityDataRecord(row) {
+    const deletedRow = row.id;
+    const params = new HttpParams()
+      .set('id', deletedRow)
+      .set('entityId', this.entityId);
+
+    if (confirm('Are you sure to delete this Record?')) {
+      this.entityService.deleteEntityRecord(params).subscribe((result) => {
+          this.alertService.warning(`Record has been  deleted `);
+          this.getEntityData();
+        }, error => {
+          this.alertService.error(`Record could not be deleted`)
+        }
+      );
+    }
+  }
+
 
   addTagToRecord() {
     const newTaggingRecord = this.tagFormGroup.value;
@@ -199,7 +214,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been tagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -233,7 +248,7 @@ export class EntityTablesComponent implements OnInit {
       this.alertService.error(`Record has not been untagged`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/entity/' + this.entityId]);
+    this.router.navigate(['/entity/showData/' + this.entityId]);
     this.selected = [];
 
     if (this.tagFormGroup.valid) {
@@ -290,6 +305,4 @@ export class EntityTablesComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
-
 }

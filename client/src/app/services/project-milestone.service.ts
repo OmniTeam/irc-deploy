@@ -41,4 +41,8 @@ export class ProjectMilestoneService {
   deleteMilestone(id): Observable<any> {
     return this.http.delete(`${this.baseurl}${id}/`);
   }
+
+  runQuery(params) {
+    return this.http.get(`${this.baseurl}/runQuery`, {params});
+  }
 }

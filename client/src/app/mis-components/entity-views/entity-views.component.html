@@ -93,11 +93,7 @@
                 <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Entity View Name" prop="name">
-              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/entityView/{{row.id}}"> {{ value }} </a>
-              </ng-template>
-            </ngx-datatable-column>
+            <ngx-datatable-column name="Entity View Name" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="View Table" prop="tableName"></ngx-datatable-column>
             <ngx-datatable-column name="Description" prop="description"></ngx-datatable-column>
             <ngx-datatable-column name="Entity View Filters" prop="entityViewFilters"></ngx-datatable-column>
@@ -108,6 +104,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <button (click)="editEntityView(row)" class="btn btn-default" style="padding: 1px 6px;">
+                  <i class="fa fa-pencil-alt"></i>
+                </button>
+                <button (click)="showEntityView(row)" class="btn btn-info" style="padding: 1px 6px;">
+                  <i class="fa fa-eye"></i>
+                </button>
                 <button (click)="deleteEntityView(row)" class="btn btn-danger" style="padding: 1px 6px;">
                   <i class="fa fa-trash"></i>
                 </button>
