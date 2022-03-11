@@ -70,3 +70,6 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   font-family: Open Sans, sans-serif !important;
 }
 
+.form-control-sm {
+  height: 36px !important;
+}

@@ -29,20 +29,7 @@ export class UsersComponent implements OnInit {
   submitted = false;
   private selectedUsers = [];
   private checkedRow: any;
-  groups = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
+  groups: any
   partners = [
     {
       'name': 'Partner 1',
@@ -71,8 +58,9 @@ export class UsersComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private usersService: UsersService,
-    private rolesService: RolesService
-  ) { }
+    private rolesService: RolesService,
+  ) {
+  }
 
   get f() {
     return this.formGroup.controls;
@@ -80,59 +68,63 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadTable();
-    this.rolesService.getRoles().subscribe(results =>{
+    this.rolesService.getRoles().subscribe(results => {
       this.roles = results
-    }, error => {this.alertService.error("Failed to get Roles")})
-  }
+    }, error => {
+      this.alertService.error("Failed to get Roles")
+    })
 
-  onChangePartner(event) {
-    console.log(event)
-    if (!event)
-      this.partnerValue = ''
-    else {
-      this.partnerValue = event;
-    }
-    this.reloadTable();
+    this.groupsService.getGroups().subscribe(data => {
+      this.groups = data
+    }, error => {
+      this.alertService.error("Failed to get Groups")
+    })
   }
 
   onChangeRoles(event) {
     console.log(event)
-    if (!event)
+    if (!event) {
       this.roleValue = ''
-    else {
+      this.reloadTable()
+    } else {
       this.roleValue = event;
+      this.users=this.users.filter(a => a.role === this.roleValue)
     }
-    this.reloadTable();
+
   }
 
   onChangeGroup(event) {
     console.log(event)
-    if (!event)
+    if (!event) {
       this.groupValue = ''
-    else {
+      this.reloadTable()
+    } else {
       this.groupValue = event;
+      this.users = this.users.filter(a => a.groups === this.groupValue)
     }
-    this.reloadTable();
+
   }
 
   onChangeSearch(event) {
     console.log(event.target.value)
     this.searchValue = event.target.value
-    if(!this.searchValue){
+    if (!this.searchValue) {
       this.reloadTable()
     } else {
-      this.users = this.users.filter(a => a.username.toUpperCase().includes(this.searchValue.toUpperCase()) ||a.names.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.users = this.users.filter(a => a.username.toUpperCase().includes(this.searchValue.toUpperCase()) || a.names.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
   }
+
   entriesChange($event) {
     this.entries = $event.target.value;
-    console.log(this.entries,"Entries")
+    console.log(this.entries, "Entries")
     this.reloadTable();
   }
 
   reloadTable() {
     this.usersService.getUsers().subscribe((data) => {
       this.users = data;
+      console.log(data)
     });
   }
 

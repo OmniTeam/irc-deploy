@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://localhost:8082/irc'
+  serverUrl: 'http://localhost:8082/crvpf'
 };
 
 /*
