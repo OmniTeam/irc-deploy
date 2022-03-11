@@ -38,4 +38,8 @@ export class DataViewService {
   deleteDataView(id): Observable<any> {
     return this.http.delete(`${this.baseurl}${id}/`);
   }
+
+  syncViewToMetabase(params) {
+    return this.http.get(`${this.baseurl}/syncViewToMetabase`, {params});
+  }
 }
