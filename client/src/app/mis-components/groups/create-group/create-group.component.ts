@@ -23,9 +23,11 @@ import {GroupsService} from "../../../services/groups.service";
   styleUrls: ['./create-group.component.scss']
 })
 export class CreateGroupComponent implements OnInit {
+  ACD: any;
 
   constructor(
     private groupsService: GroupsService,
+    private usersService: UsersService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -47,20 +49,7 @@ export class CreateGroupComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  parents = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
+  parents:any;
   permissions =[
     {
       'name': 'Data Tables'
@@ -72,23 +61,26 @@ export class CreateGroupComponent implements OnInit {
       'name': 'Reports'
     },
   ]
-  dataCollectors =[
-    {
-      'name': 'Okello Marvin'
-    },
-    {
-      'name': 'Lewis Hamilton'
-    },
-    {
-      'name': 'Pierre Gasly'
-    },
-  ]
+  dataCollectors:any;
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
+    this.groupsService.getGroups().subscribe(data => {
+      this.parents = data
+      console.log(data)
+    }, error => {
+      this.alertService.error("Failed to get Parents")
+    })
+    this.usersService.getUsers().subscribe(data => {
+      this.dataCollectors = data
+      console.log(this.dataCollectors)
+    }, error => {
+      this.alertService.error("Failed to get Data Collectors")
+    })
+
     this.formGroup = this.formBuilder.group({
       name: ['',[Validators.required]],
       parent: [null],
@@ -115,10 +107,24 @@ export class CreateGroupComponent implements OnInit {
     },error => {this.alertService.error("Failed to Create the Group")});
   }
 
-  resetForm() {
-    this.formGroup.reset();
-    this.clicked = false
-    this.submitted = false
+  // shows data collectors based on access to central data toggle
+  changeCentralDataAccess() {
+    this.ACD = this.f['access_to_central_data'].value
+    console.log(this.ACD)
+    if (this.ACD === true) {
+      this.f['data_collectors'].reset()
+      document.getElementById('data_collectors').hidden = false
+    } else {
+      this.f['data_collectors'].reset()
+      document.getElementById('data_collectors').hidden = true
+    }
+
+
   }
+
+  goBack() {
+    this.router.navigate(['/groups'])
+  }
+
 
 }

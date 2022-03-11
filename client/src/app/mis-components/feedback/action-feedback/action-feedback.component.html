@@ -31,98 +31,19 @@
                       Feedback Details
                     </h2>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Serial Number:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.serialNumber}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Date Feedback Received:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.dateFeedbackReceived}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Name of Register:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.nameOfRegister}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Staff Designation:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.staffDesignation}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Type of Feedback:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.typeOfFeedback}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Current Status of the Feedback:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.currentStatusOfFeedback}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Location:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.location}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Project Sector:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.projectSector}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Sub Sector (Project Level):
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.subSector}}
+                  <div class="col-md-12">
+                    <ul style="list-style: none;">
+                      <li>Serial Number: <b>{{this.feedback?.serialNumber}}</b></li>
+                      <li>Date Feedback Received: <b>{{this.feedback?.dateFeedbackReceived}}</b></li>
+                      <li>Name of Register: <b>{{this.feedback?.nameOfRegister}}</b></li>
+                      <li>Staff Designation: <b>{{this.feedback?.staffDesignation}}</b></li>
+                      <li>Type of Feedback: <b>{{this.feedback?.typeOfFeedback}}</b></li>
+                      <li>Current Status of the Feedback: <b>{{this.feedback?.currentStatusOfFeedback}}</b></li>
+                      <li>Location: <b>{{this.feedback?.location}}</b></li>
+                      <li>Project Sector: <b>{{this.feedback?.projectSector}}</b></li>
+                      <li>Sub Sector (Project Level): <b>{{this.feedback?.subSector}}</b></li>
+                    </ul>
+
                   </div>
                 </div>
               </div>
@@ -133,65 +54,16 @@
                       Client Details
                     </h2>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Name Of Client/Community/Group:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.nameOfClient}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Remain Anonymous?:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.remainAnonymous}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Nationality Status:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.nationalityStatus}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Type of Client:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.clientType}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Preferred Channel for Response:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.preferredChannel}}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>
-                      Phone Number:
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    {{this.feedback?.phoneNumber}}
+                  <div class="col-md-12">
+                    <ul style="list-style: none;">
+                      <li>Name Of Client/Community/Group: <b>{{this.feedback?.nameOfClient}}</b></li>
+                      <li>Remain Anonymous?: <b>{{this.feedback?.remainAnonymous}}</b></li>
+                      <li>Nationality Status: <b>{{this.feedback?.nationalityStatus}}</b></li>
+                      <li>Type of Client: <b>{{this.feedback?.clientType}}</b></li>
+                      <li>Preferred Channel for Response: <b>{{this.feedback?.preferredChannel}}</b></li>
+                      <li>Phone Number: <b>{{this.feedback?.phoneNumber}}</b></li>
+                    </ul>
+
                   </div>
                 </div>
               </div>
@@ -281,6 +153,7 @@
                                      [multiple]="false"
                                      placeholder="Feedback Referred or Shared"
                                      formControlName="feedbackReferredShared"
+                                     (change)="onReferredOrShared($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -293,10 +166,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" id="internalExternal" [hidden]="true">
                   <div class="col-md-3">
                     <label>
-                      If yes, feedback shared internally or externally?
+                      Is feedback shared internally or externally?
 <!--                      -->
                     </label>
                   </div>
@@ -308,7 +181,7 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="If yes, feedback shared internally or externally?"
+                                     placeholder="Is feedback shared internally or externally?"
                                      formControlName="feedbackInternallyExternally"
                                      [searchable]="true"
                                      [clearable]="true"
@@ -322,10 +195,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" id="personName" [hidden]="true">
                   <div class="col-md-3">
                     <label>
-                      If yes, referred to Person: Name
+                      Name of person referred to
 <!--                      -->
                     </label>
                   </div>
@@ -335,7 +208,7 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="If yes, referred to Person: Name"
+                            placeholder="Name of person referred to"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="referredPersonName"
@@ -345,10 +218,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" id="personPosition" [hidden]="true">
                   <div class="col-md-3">
                     <label>
-                      If yes, person, referred to: Position
+                      Position of person referred to
 <!--                      -->
                     </label>
                   </div>
@@ -358,7 +231,7 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="If yes, person, referred to: Position"
+                            placeholder="Position of person referred to"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="referredPersonPosition"
@@ -368,10 +241,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" id="organizationReferred" [hidden]="true">
                   <div class="col-md-3">
                     <label>
-                      If yes, Organization referred to
+                      Organization referred to
 <!--                      -->
                     </label>
                   </div>
@@ -381,7 +254,7 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="If yes, Organization referred to"
+                            placeholder="Organization referred to"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="referredOrganization"

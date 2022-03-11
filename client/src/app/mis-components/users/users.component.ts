@@ -6,6 +6,7 @@ import {AlertService} from "../../services/alert";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UsersService} from "../../services/users.service";
 import {RolesService} from "../../services/roles.service";
+import {GroupsService} from "../../services/groups.service";
 
 @Component({
   selector: 'app-users',
@@ -69,7 +70,8 @@ export class UsersComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private usersService: UsersService,
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    private groupsService: GroupsService,
   ) { }
 
   get f() {
@@ -81,37 +83,38 @@ export class UsersComponent implements OnInit {
     this.rolesService.getRoles().subscribe(results =>{
       this.roles = results
     }, error => {this.alertService.error("Failed to get Roles")})
-  }
+    this.groupsService.getGroups().subscribe(data => {
+      this.groups = data
+    }, error => {
+      this.alertService.error("Failed to get Groups")
+    })
 
-  onChangePartner(event) {
-    console.log(event)
-    if (!event)
-      this.partnerValue = ''
-    else {
-      this.partnerValue = event;
-    }
-    this.reloadTable();
   }
 
   onChangeRoles(event) {
     console.log(event)
-    if (!event)
+    if (!event) {
       this.roleValue = ''
-    else {
+      this.reloadTable()
+    } else {
       this.roleValue = event;
+      this.users=this.users.filter(a => a.role === this.roleValue)
     }
-    this.reloadTable();
+
   }
 
   onChangeGroup(event) {
     console.log(event)
-    if (!event)
+    if (!event) {
       this.groupValue = ''
-    else {
+      this.reloadTable()
+    } else {
       this.groupValue = event;
+      this.users = this.users.filter(a => a.groups === this.groupValue)
     }
-    this.reloadTable();
+
   }
+
 
   onChangeSearch(event) {
     console.log(event.target.value)
@@ -122,6 +125,7 @@ export class UsersComponent implements OnInit {
       this.users = this.users.filter(a => a.username.toUpperCase().includes(this.searchValue.toUpperCase()) ||a.names.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
   }
+
   entriesChange($event) {
     this.entries = $event.target.value;
     console.log(this.entries,"Entries")
