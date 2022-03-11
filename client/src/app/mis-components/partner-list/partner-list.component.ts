@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
 import {PartnerSetupService} from "../../services/partner-setup.service";
+import {AlertService} from "../../services/alert";
 
 @Component({
   selector: 'app-partner-list',
@@ -14,9 +15,13 @@ export class PartnerListComponent implements OnInit {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private router: Router, private partnerSetupService: PartnerSetupService) { }
+  constructor(private router: Router, private partnerSetupService: PartnerSetupService, private alertService: AlertService) { }
 
   ngOnInit(): void {
+    this.reloadTable();
+  }
+
+  reloadTable() {
     this.partnerSetupService.getPartnerSetup().subscribe(data => {
       console.log(data);
       this.rows = data;
@@ -50,4 +55,15 @@ export class PartnerListComponent implements OnInit {
     };
   }
 
+  deleteRecord(id) {
+    if (confirm('Are you sure to delete this Partner Setup Record?')) {
+      this.partnerSetupService.deletePartnerSetupRecord(id).subscribe((result) => {
+          this.alertService.warning(`Partner Setup Record has been  deleted `);
+          this.reloadTable();
+        }, error => {
+          this.alertService.error(`Partner Setup Record could not be deleted`);
+        }
+      );
+    }
+  }
 }

@@ -33,11 +33,13 @@
                     <tbody>
                     <tr *ngFor="let row of rows">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'>{{ row.partnerId }}</td>
+                      <td class='text-center'>{{ row.partner }}</td>
                       <td class='text-center'>{{ row.dateCreated  | date: 'medium' }}</td>
                       <td class='text-center'>{{ row.lastUpdated  | date: 'medium' }}</td>
-                      <td class='text-center'><a [routerLink]="['/partnerSetup', row.id]" style="font-size:20px;"
-                                                 class="text fas fa-pencil-alt"></a></td>
+                      <td class='text-center'>
+                        <button class="btn btn-link"><a [routerLink]="['/partnerSetup', row.id]" class="text fas fa-pencil-alt"></a></button>
+                        <button class="btn btn-link" (click)="deleteRecord(row.id)"><a class="text fas fa-trash-alt" style="color: red"></a></button>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

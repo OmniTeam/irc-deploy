@@ -18,7 +18,15 @@ export class PartnerSetupService {
     return this.http.post(`${environment.serverUrl}/partnerSetup`, formData);
   }
 
+  updatePartnerSetup(formData, id): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/partnerSetup/${id}`, formData);
+  }
+
   getPartnerSetupRecord(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/partnerSetup/get_partner_setup_record`, {params});
+  }
+
+  deletePartnerSetupRecord(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/partnerSetup/${deletedRow}`);
   }
 }
