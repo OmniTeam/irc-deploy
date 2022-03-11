@@ -1345,5 +1345,12 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1646915942170-32") {
         dropTable(tableName: "kenga_group_role")
     }
+    changeSet(author: "victorkakama (generated)", id: "1646989014226-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "email", tableName: "user")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646989014226-2") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "names", tableName: "user")
+    }
 
 }

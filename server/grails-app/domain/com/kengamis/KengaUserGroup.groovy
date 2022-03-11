@@ -46,7 +46,7 @@ class KengaUserGroup implements Serializable{
     private static DetachedCriteria criteriaFor(String kengaGroupId, String userId) {
         where {
             kengaGroup == KengaGroup.load(kengaGroupId) &&
-                    user == Role.load(userId)
+                    user == User.load(userId)
         }
     }
 

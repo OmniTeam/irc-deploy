@@ -15,7 +15,11 @@ import org.springframework.security.core.Authentication
 import org.springframework.util.Assert
 
 @Slf4j
-class kengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
+class KengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
+
+    KengaGroupPermissionEvaluator() {
+    }
+
     private PermissionFactory permissionFactory = new DefaultPermissionFactory()
 
     @Override
@@ -39,7 +43,6 @@ class kengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
     private boolean checkPermission(Authentication authentication, KengaAclTableRecordIdentity recordIdentity, Permission permission) {
         //get groups applicable to the principle
         List<KengaGroup> groups = retrieveKengaGroups(authentication)
-//        List<Permission> requiredPermissions = resolvePermission(permission)
         log.debug("Checking permission: ${permission} for object:${recordIdentity}")
 
         try {
@@ -56,7 +59,7 @@ class kengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
     }
 
     List<KengaGroup> retrieveKengaGroups(Authentication authentication) {
-        def kengaGroups = KengaUserGroup.findAllGroups(authentication.principal)
+        def kengaGroups = KengaUserGroup.findAllGroups(authentication.principal.username)
         return kengaGroups
     }
 
