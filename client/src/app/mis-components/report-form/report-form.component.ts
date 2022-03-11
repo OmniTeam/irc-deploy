@@ -20,8 +20,6 @@ import {SampleData} from "../../helpers/sample-data";
 
 export class ReportFormComponent implements OnInit, OnUpdateCell {
 
-  @ViewChild(CellEdit) cellEdit;
-
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   comments: Array<CommentNode> = [];
