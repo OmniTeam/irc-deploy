@@ -190,9 +190,9 @@
                                    placeholder="Select Milestone"
                                    [searchable]="true"
                                    [clearable]="true"
-                                   (ngModelChange)="setBudgetLine()"
-                                   [(ngModel)]="milestoneChosen">
-                          <ng-option [value]="milestone" *ngFor="let milestone of milestones">
+                                   [(ngModel)]="milestoneChosen"
+                                   (ngModelChange)="setBudgetLine(row.id)">
+                          <ng-option [value]="milestone.name" *ngFor="let milestone of milestones">
                             {{milestone.name}}
                           </ng-option>
                         </ng-select>

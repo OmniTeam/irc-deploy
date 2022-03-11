@@ -95,13 +95,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.setup = data;
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
-      console.log('setupValues', setupValues);
       this.partnerChosen = data.partnerId
       if (this.partnerChosen != undefined) this.onPartnerChange()
       if (setupValues.calendar != undefined) this.calendar = setupValues.calendar;
       if (setupValues.disbursementPlan != undefined) this.disbursementPlan = setupValues.disbursementPlan;
       if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
       if (setupValues.budget != undefined) {
+        console.log('setupValues.budget', setupValues.budget);
         this.budget = setupValues.budget;
         this.milestoneChosen = setupValues.budget.budgetLine;
       }
@@ -261,14 +261,15 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.budget.push({id: id, budgetLine: '', approvedAmount: ''});
   }
 
-  setBudgetLine() {
+  setBudgetLine(rowId) {
     if (this.milestoneChosen != undefined) {
-      if (this.budget.some(x => x.id === this.milestoneChosen.id)) {
+      if (this.budget.some(x => x.id === rowId)) {
         this.budget.forEach((item) => {
-          if (item.id === this.milestoneChosen) item.budgetLine = this.milestoneChosen.value;
+          if (item.id === rowId) item.budgetLine = this.milestoneChosen;
         });
       }
     }
+    this.savePlan();
   }
 
   toggleDisaggregation(event, btn_id, row) {
