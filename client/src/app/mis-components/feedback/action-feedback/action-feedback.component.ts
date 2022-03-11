@@ -38,21 +38,9 @@ export class ActionFeedbackComponent implements OnInit {
   currentDashboards: any
   formGroup: FormGroup
   submitted = false;
+  showDiv:boolean
 
-  staff_Designation = [
-    {
-      'name': 'AAP Officer'
-    },
-    {
-      'name': 'CCEO'
-    },
-    {
-      'name': 'Monitoring & Evaluation Officer'
-    },
-    {
-      'name': 'Program Staff'
-    },
-  ];
+
   feedback_category = [
     {
       'name': 'Allegations non-IRC'
@@ -282,10 +270,10 @@ export class ActionFeedbackComponent implements OnInit {
       document.getElementById('personPosition').hidden = false
       document.getElementById('organizationReferred').hidden = false
     } else {
-      /*this.f['feedbackInternallyExternally'].reset()
+      this.f['feedbackInternallyExternally'].reset()
       this.f['referredPersonName'].reset()
       this.f['referredPersonPosition'].reset()
-      this.f['referredOrganization'].reset()*/
+      this.f['referredOrganization'].reset()
       document.getElementById('internalExternal').hidden = true
       document.getElementById('personName').hidden = true
       document.getElementById('personPosition').hidden = true
