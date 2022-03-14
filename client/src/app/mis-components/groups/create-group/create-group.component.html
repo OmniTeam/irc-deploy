@@ -82,8 +82,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of parents">
-                              {{item.name}}
+                            <ng-option [value]="item.id" *ngFor="let item of parents">
+                              {{item?.name}}
                             </ng-option>
                           </ng-select>
                           <div *ngIf="submitted && f.parent.errors" class="invalid-feedback">
@@ -113,6 +113,7 @@
                           checked="checked"
                           type="checkbox"
                           formControlName="access_to_central_data"
+                          (change)="changeCentralDataAccess()"
                         />
 
                         <span
@@ -159,7 +160,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" id="data_collectors" [hidden]="true">
                   <div class="col-md-3">
                     <label>
                       Data Collectors
@@ -181,8 +182,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of dataCollectors">
-                              {{item.name}}
+                            <ng-option [value]="item.id" *ngFor="let item of dataCollectors">
+                              {{item.names}}
                             </ng-option>
                           </ng-select>
                           <div *ngIf="submitted && f.data_collectors.errors" class="invalid-feedback">
@@ -197,8 +198,8 @@
             </div>
             <div class="row">
               <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
-                <a class=" btn btn-danger" (click)="resetForm()" style="color: #ffffff">
-                  Reset </a>
+                <a class=" btn btn-danger" (click)="goBack()" style="color: #ffffff">
+                  Cancel </a>
                 <button
                   class=" btn btn-default"
                   type="submit"

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterContentInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup
@@ -17,10 +17,9 @@ import {FeedbackService} from "../../../services/feedback.service";
   templateUrl: './action-feedback.component.html',
   styleUrls: ['./action-feedback.component.scss']
 })
-export class ActionFeedbackComponent implements OnInit {
+export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   feedback: any;
-  private nationalityValue='';
-  private followUpValue = '';
+  FBROS: any;
 
   constructor(
     private userService: UsersService,
@@ -39,22 +38,10 @@ export class ActionFeedbackComponent implements OnInit {
   currentDashboards: any
   formGroup: FormGroup
   submitted = false;
+  showDiv:boolean
 
-  staff_Designation =[
-    {
-      'name': 'AAP Officer'
-    },
-    {
-      'name': 'CCEO'
-    },
-    {
-      'name': 'Monitoring & Evaluation Officer'
-    },
-    {
-      'name': 'Program Staff'
-    },
-  ];
-  feedback_category =[
+
+  feedback_category = [
     {
       'name': 'Allegations non-IRC'
     },
@@ -71,7 +58,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'Positive'
     },
   ];
-  feedback_priority =[
+  feedback_priority = [
     {
       'name': 'Low'
     },
@@ -85,7 +72,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'Critical'
     },
   ];
-  feedback_shared_referred =[
+  feedback_shared_referred = [
     {
       'name': 'Yes'
     },
@@ -93,7 +80,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'No'
     },
   ];
-  feedback_internal_external =[
+  feedback_internal_external = [
     {
       'name': 'Internally'
     },
@@ -104,7 +91,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'I dont Know'
     },
   ];
-  response_required =[
+  response_required = [
     {
       'name': 'Apology'
     },
@@ -127,7 +114,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'Information'
     },
   ];
-  followup_needed =[
+  followup_needed = [
     {
       'name': 'Yes'
     },
@@ -135,7 +122,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'No'
     },
   ];
-  in_feedback_registry =[
+  in_feedback_registry = [
     {
       'name': 'Yes'
     },
@@ -143,7 +130,7 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'No'
     },
   ];
-  action_taken =[
+  action_taken = [
     {
       'name': 'Apology Sent'
     },
@@ -166,29 +153,6 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'Referred externally'
     },
   ];
-
-  type_of_feedback = [
-    {
-      'name': 'Old'
-    },
-    {
-      'name': 'New'
-    },
-  ];
-  feedback_status = [
-    {
-      'name': 'Actioned'
-    },
-    {
-      'name': 'Under Review'
-    },
-    {
-      'name': 'No Actioned Required'
-    },
-    {
-      'name': 'Forwarded For Action'
-    },
-  ];
   location = [
     {
       'name': 'Kampala Office'
@@ -198,37 +162,6 @@ export class ActionFeedbackComponent implements OnInit {
     },
     {
       'name': 'Hoima Office'
-    },
-  ];
-  project_status = [
-    {
-      'name': 'SAFETY (wpe)'
-    },
-    {
-      'name': 'HEALTH'
-    },
-    {
-      'name': 'ERD'
-    },
-    {
-      'name': 'EDUCATION'
-    },
-    {
-      'name': 'PROTECTION (prol)'
-    },
-    {
-      'name': 'No sector related'
-    },
-  ];
-  remain_anonymous = [
-    {
-      'name': 'Yes'
-    },
-    {
-      'name': 'No'
-    },
-    {
-      'name': 'Not Sure'
     },
   ];
   gender = [
@@ -242,66 +175,6 @@ export class ActionFeedbackComponent implements OnInit {
       'name': 'Not Disclosed'
     },
   ];
-  nationality_status = [
-    {
-      'name': 'Foreigner'
-    },
-    {
-      'name': 'Refugee'
-    },
-    {
-      'name': 'National'
-    }
-  ];
-  type_of_client = [
-    {
-      'name': 'Direct'
-    },
-    {
-      'name': 'Indirect Client'
-    },
-    {
-      'name': 'Intended'
-    },
-    {
-      'name': 'Other'
-    },
-  ];
-  preferred_channel = [
-    {
-      'name': 'Client Forum'
-    },
-    {
-      'name': 'Collectively with Community'
-    },
-    {
-      'name': 'Email Address'
-    },
-    {
-      'name': 'In Person'
-    },
-    {
-      'name': 'In Person'
-    },
-    {
-      'name': 'Phone Call'
-    },
-    {
-      'name': 'SMS'
-    },
-    {
-      'name': 'Stakeholders Reference Group'
-    },
-    {
-      'name': 'Through a Third Party'
-    },
-    {
-      'name': 'Via IRC Staff'
-    },
-    {
-      'name': 'Other'
-    },
-  ];
 
   get f() {
     return this.formGroup.controls;
@@ -309,11 +182,11 @@ export class ActionFeedbackComponent implements OnInit {
 
   ngOnInit(): void {
     this.feedbackService.getCurrentFeedback(this.route.snapshot.params.id).subscribe(data => {
-      console.log(data,"referral data")
+      console.log(data, "referral data")
 
       this.feedback = data
       let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
-      console.log(myDate," this is the date formatted")
+      console.log(myDate, " this is the date formatted")
       this.formGroup = this.formBuilder.group({
         dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
         nameOfRegister: [this.feedback?.nameOfRegister],
@@ -348,8 +221,31 @@ export class ActionFeedbackComponent implements OnInit {
         supervisor: [this.feedback?.supervisor],
         dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
       });
-    })
 
+    })
+  }
+
+  ngAfterContentInit(): void{
+    this.feedbackService.getCurrentFeedback(this.route.snapshot.params.id).subscribe(data => {
+      this.FBROS = data
+      console.log(this.FBROS.feedbackReferredShared)
+      if (this.FBROS?.feedbackReferredShared === 'Yes') {
+        document.getElementById("internalExternal").hidden = false
+        document.getElementById('personName').hidden = false
+        document.getElementById('personPosition').hidden = false
+        document.getElementById('organizationReferred').hidden = false
+      } else {
+        this.f['feedbackInternallyExternally'].reset()
+        this.f['referredPersonName'].reset()
+        this.f['referredPersonPosition'].reset()
+        this.f['referredOrganization'].reset()
+        document.getElementById('internalExternal').hidden = true
+        document.getElementById('personName').hidden = true
+        document.getElementById('personPosition').hidden = true
+        document.getElementById('organizationReferred').hidden = true
+
+      }
+    })
   }
 
   actionReferral() {
@@ -369,10 +265,10 @@ export class ActionFeedbackComponent implements OnInit {
       this.alertService.error(`Failed to update feedback`)
     });
   }
-  close(){
+
+  close() {
     this.router.navigate(['/feedback-list'])
   }
-
 
   deleteReferral() {
     if (confirm('Are you sure to delete this feedback?')) {
@@ -388,6 +284,25 @@ export class ActionFeedbackComponent implements OnInit {
     }
   }
 
+  onReferredOrShared(event) {
+    if (event === 'Yes') {
+      document.getElementById("internalExternal").hidden = false
+      document.getElementById('personName').hidden = false
+      document.getElementById('personPosition').hidden = false
+      document.getElementById('organizationReferred').hidden = false
+    } else {
+      this.f['feedbackInternallyExternally'].reset()
+      this.f['referredPersonName'].reset()
+      this.f['referredPersonPosition'].reset()
+      this.f['referredOrganization'].reset()
+      document.getElementById('internalExternal').hidden = true
+      document.getElementById('personName').hidden = true
+      document.getElementById('personPosition').hidden = true
+      document.getElementById('organizationReferred').hidden = true
+
+    }
+
+  }
 
 
 }

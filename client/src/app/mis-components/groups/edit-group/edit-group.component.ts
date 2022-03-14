@@ -21,9 +21,11 @@ import {GroupsService} from "../../../services/groups.service";
   styleUrls: ['./edit-group.component.scss']
 })
 export class EditGroupComponent implements OnInit {
+  ACD: any;
 
   constructor(
     private groupsService: GroupsService,
+    private usersService: UsersService,
     private alertService: AlertService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -46,20 +48,7 @@ export class EditGroupComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  parents = [
-    {
-      name: "Partner 4",
-    },
-    {
-      name: "Partner 1",
-    },
-    {
-      name: "Uganda",
-    },
-    {
-      name: "CRVP-Staff",
-    },
-  ]
+  parents:any
   permissions =[
     {
       'name': 'Data Tables'
@@ -71,17 +60,7 @@ export class EditGroupComponent implements OnInit {
       'name': 'Reports'
     },
   ]
-  dataCollectors =[
-    {
-      'name': 'Okello Marvin'
-    },
-    {
-      'name': 'Lewis Hamilton'
-    },
-    {
-      'name': 'Pierre Gasly'
-    },
-  ]
+  dataCollectors: any
 
 
   get f() {
@@ -89,6 +68,18 @@ export class EditGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.groupsService.getGroups().subscribe(data => {
+      this.parents = data
+      console.log(data)
+    }, error => {
+      this.alertService.error("Failed to get Parents")
+    })
+    this.usersService.getUsers().subscribe(data => {
+      this.dataCollectors = data
+      console.log(this.dataCollectors)
+    }, error => {
+      this.alertService.error("Failed to get Data Collectors")
+    })
     this.groupsService.getCurrentGroup(this.route.snapshot.params.id).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
         name: [results?.name],
@@ -134,5 +125,24 @@ export class EditGroupComponent implements OnInit {
     }, error => {
       this.alertService.error(`Failed to update group: ${this.formGroup.controls.name.value}`)
     });
+  }
+
+  // shows data collectors based on access to central data toggle
+  changeCentralDataAccess() {
+    this.ACD = this.f['access_to_central_data'].value
+    console.log(this.ACD)
+    if (this.ACD === true) {
+      this.f['data_collectors'].reset()
+      document.getElementById('data_collectors').hidden = false
+    } else {
+      this.f['data_collectors'].reset()
+      document.getElementById('data_collectors').hidden = true
+    }
+
+
+  }
+
+  goBack() {
+    this.router.navigate(['/groups'])
   }
 }
