@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {DataViewService} from "../../services/data-view.service";
+import {HttpParams} from "@angular/common/http";
 @Component({
   selector: 'app-data-views',
   templateUrl: './data-views.component.html',
@@ -59,6 +60,23 @@ export class DataViewsComponent implements OnInit {
       );
     }
   }
+
+  syncDataViewToMetabase(row) {
+    let dataViewId = row.id;
+    const params = new HttpParams()
+      .set('id', dataViewId);
+    if (confirm('Are you sure to sync this Data View?')) {
+      this.dataViewService.syncViewToMetabase(params).subscribe((result) => {
+          this.alertService.warning(`Data View has successfully synced to Metabase `);
+          this.router.navigate(['/dataView']);
+          this.reloadTable();
+        }, error => {
+          this.alertService.error(`Data View could not be synced to Metabase`);
+        }
+      );
+    }
+  }
+
 
   onActivate(event) {
     this.activeRow = event.row;

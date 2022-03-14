@@ -76,3 +76,5 @@ environments {
         imageFolder = "/opt/uploads/centralImages/"
     }
 }
+
+mis.database = 'ircmis'

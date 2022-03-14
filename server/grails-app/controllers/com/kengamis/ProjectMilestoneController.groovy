@@ -28,6 +28,8 @@ class ProjectMilestoneController {
             newProjectMilestoneObject['id'] = projectMilestone.id
             newProjectMilestoneObject['name'] = projectMilestone.name
             newProjectMilestoneObject['description'] = projectMilestone.description
+            newProjectMilestoneObject['reportingQuery'] = projectMilestone.reportingQuery
+            newProjectMilestoneObject['dashboardQuery'] = projectMilestone.dashboardQuery
             newProjectMilestoneObject['categoryId'] = categoryId
             newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
             newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
@@ -47,6 +49,8 @@ class ProjectMilestoneController {
         newProjectMilestoneObject['id'] = projectMilestone.id
         newProjectMilestoneObject['name'] = projectMilestone.name
         newProjectMilestoneObject['description'] = projectMilestone.description
+        newProjectMilestoneObject['reportingQuery'] = projectMilestone.reportingQuery
+        newProjectMilestoneObject['dashboardQuery'] = projectMilestone.dashboardQuery
         newProjectMilestoneObject['categoryId'] = categoryId
         newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
         newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
@@ -110,5 +114,25 @@ class ProjectMilestoneController {
         projectMilestoneService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def runQuery() {
+        def milestoneData
+        def milestoneQuery = params.query as String
+        try {
+            def query = "${milestoneQuery}".toString()
+            def data = AppHolder.withMisSql {
+                toCSV(it, query)
+            }.csv
+
+            def dataMapList = tbl(data).toMapList()
+            def headers = dataMapList.get(0).keySet()
+            milestoneData = [dataList: dataMapList, headerList: headers]
+        }
+        catch (Exception e) {
+            log.error("Error fetching data", e)
+            milestoneData = [dataList: [], headerList: []]
+        }
+        respond milestoneData
     }
 }
