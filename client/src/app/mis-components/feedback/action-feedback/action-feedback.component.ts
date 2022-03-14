@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterContentInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup
@@ -17,7 +17,7 @@ import {FeedbackService} from "../../../services/feedback.service";
   templateUrl: './action-feedback.component.html',
   styleUrls: ['./action-feedback.component.scss']
 })
-export class ActionFeedbackComponent implements OnInit {
+export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   feedback: any;
   FBROS: any;
 
@@ -221,9 +221,30 @@ export class ActionFeedbackComponent implements OnInit {
         supervisor: [this.feedback?.supervisor],
         dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
       });
-      this.FBROS = this.f['feedbackReferredShared'].value
-      // this.onReferredOrShared(this.FBROS)
 
+    })
+  }
+
+  ngAfterContentInit(): void{
+    this.feedbackService.getCurrentFeedback(this.route.snapshot.params.id).subscribe(data => {
+      this.FBROS = data
+      console.log(this.FBROS.feedbackReferredShared)
+      if (this.FBROS?.feedbackReferredShared === 'Yes') {
+        document.getElementById("internalExternal").hidden = false
+        document.getElementById('personName').hidden = false
+        document.getElementById('personPosition').hidden = false
+        document.getElementById('organizationReferred').hidden = false
+      } else {
+        this.f['feedbackInternallyExternally'].reset()
+        this.f['referredPersonName'].reset()
+        this.f['referredPersonPosition'].reset()
+        this.f['referredOrganization'].reset()
+        document.getElementById('internalExternal').hidden = true
+        document.getElementById('personName').hidden = true
+        document.getElementById('personPosition').hidden = true
+        document.getElementById('organizationReferred').hidden = true
+
+      }
     })
   }
 
