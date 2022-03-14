@@ -87,13 +87,13 @@ class PartnerSetupController {
     }
 
     @Transactional
-    def delete(Long id) {
-        if (id == null) {
+    def delete(String id) {
+        if (id == null && params.id == null) {
             render status: NOT_FOUND
             return
         }
 
-        partnerSetupService.delete(id)
+        partnerSetupService.delete(id ?: params.id)
 
         render status: NO_CONTENT
     }

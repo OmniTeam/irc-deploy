@@ -363,7 +363,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.success = false;
       this.error = false;
       if (done != undefined && done == true) this.onBackPressed();
-    }, 6000);
+    }, 3000);
   }
 
   isValidJSONStr(str) {
