@@ -1197,7 +1197,160 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1645697783843-8") {
         dropUniqueConstraint(constraintName: "UC_GROUPNAME_COL", tableName: "group")
     }
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-1") {
+        createTable(tableName: "kenga_group_role") {
+            column(name: "kenga_group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_group_rolePK")
+            }
 
+            column(name: "role_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_group_rolePK")
+            }
 
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-2") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_group_role", constraintName: "FK6j6xb1j0i5wp1b50f7ff7f39u", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-3") {
+        addForeignKeyConstraint(baseColumnNames: "role_id", baseTableName: "kenga_group_role", constraintName: "FK8fmsx15k5wgah0nxu3aojreiy", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "role", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-4") {
+        dropTable(tableName: "group")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646033595933-5") {
+        dropColumn(columnName: "group_role", tableName: "user_group")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-1") {
+        createTable(tableName: "kenga_acl_table_record_identity") {
+            column(autoIncrement: "true", name: "id", type: "BIGINT") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_acl_table_record_identityPK")
+            }
+
+            column(name: "data_table_record_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "kenga_data_table_id", type: "BIGINT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "kenga_group_id", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-2") {
+        createTable(tableName: "kenga_data_table") {
+            column(autoIncrement: "true", name: "id", type: "BIGINT") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_data_tablePK")
+            }
+
+            column(name: "table_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-3") {
+        createTable(tableName: "kenga_group_acl_entry") {
+            column(autoIncrement: "true", name: "id", type: "BIGINT") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_group_acl_entryPK")
+            }
+
+            column(name: "kenga_acl_table_record_identity_id", type: "BIGINT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "kenga_group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "ace_order", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "mask", type: "INT") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-4") {
+        createTable(tableName: "kenga_user_group") {
+            column(name: "kenga_group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_user_groupPK")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_user_groupPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-5") {
+        addUniqueConstraint(columnNames: "table_name", constraintName: "UC_KENGA_DATA_TABLETABLE_NAME_COL", tableName: "kenga_data_table")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-6") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_acl_table_record_identity", constraintName: "FK6ftxfqhndokh2opqomfxas4jw", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-7") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "kenga_user_group", constraintName: "FKfyp4kgxa9wq5bhqrmupeo0gel", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-8") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_acl_table_record_identity_id", baseTableName: "kenga_group_acl_entry", constraintName: "FKgaqw7dig1l625teoqbl0v70x8", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_acl_table_record_identity", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-9") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_data_table_id", baseTableName: "kenga_acl_table_record_identity", constraintName: "FKhr0nxosgu06xcby1pifmbp8dj", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_data_table", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-10") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_group_acl_entry", constraintName: "FKjq24i33cpngvs0aamferxunvi", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-11") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_user_group", constraintName: "FKox52rpnuevjm4m048an1pmxwh", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-12") {
+        dropForeignKeyConstraint(baseTableName: "kenga_group_role", constraintName: "FK6j6xb1j0i5wp1b50f7ff7f39u")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-13") {
+        dropForeignKeyConstraint(baseTableName: "kenga_group_role", constraintName: "FK8fmsx15k5wgah0nxu3aojreiy")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1646915942170-32") {
+        dropTable(tableName: "kenga_group_role")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1646989014226-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "email", tableName: "user")
+    }
+
+    changeSet(author: "victorkakama (generated)", id: "1646989014226-2") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "names", tableName: "user")
+    }
 
 }
