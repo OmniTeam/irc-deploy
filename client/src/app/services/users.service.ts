@@ -15,6 +15,11 @@ export class UsersService {
   getUsers(): Observable<any> {
     return this.http.get(this.urlUsers);
   }
+
+  getDataCollectors(): Observable<any> {
+    return this.http.get(`${this.urlUsers}/getDataCollectors`);
+  }
+
   getUsersFiltered(params): Observable<any> {
     return this.http.get(this.urlUsers, {params});
   }
