@@ -126,6 +126,14 @@ export class EditEntityViewsComponent implements OnInit {
   deleteField(deletedRow) {
     this.rows = this.removeElementFormArray(this.rows, deletedRow.name);
     this.rows = [...this.rows];
+    console.log(deletedRow);
+    let entityViewFieldId = deletedRow.id;
+    this.entityService.deleteEntityViewField(entityViewFieldId).subscribe((result) => {
+        this.alertService.warning(`Entity View Field has been  deleted `);
+      }, error => {
+        this.alertService.error(`Entity View Fieldcould not be deleted`);
+      }
+    );
   }
 
   removeElementFormArray(array, rowName) {

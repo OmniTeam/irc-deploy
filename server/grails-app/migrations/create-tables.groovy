@@ -1772,4 +1772,15 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-1") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "user_id", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-2") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "entity_view_filters", constraintName: "FK9432frmitk8mc7gfm3h6gqw9d", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+
 }

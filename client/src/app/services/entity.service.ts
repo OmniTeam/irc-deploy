@@ -65,4 +65,8 @@ export class EntityService {
   deleteEntityView(deletedRow): Observable<any> {
     return this.http.delete(`${environment.serverUrl}/entityView/${deletedRow}`);
   }
+
+  deleteEntityViewField(id): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/entityViewFields/${id}`);
+  }
 }

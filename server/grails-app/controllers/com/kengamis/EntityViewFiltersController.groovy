@@ -1,6 +1,9 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+
+import static fuzzycsv.FuzzyCSVTable.tbl
+import static fuzzycsv.FuzzyCSVTable.toCSV
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -21,8 +24,9 @@ class EntityViewFiltersController {
     def index(Integer max) {
         def entityViewFilters = EntityViewFilters.findAll().collect { entityViewFilter ->
             def entityView = entityViewFilter.entityView.name
+            def user = entityViewFilter.user?.names
             [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description,
-             filterQuery: entityViewFilter.filterQuery, entityView: entityView]
+             filterQuery: entityViewFilter.filterQuery, entityView: entityView, user: user]
         }
         respond entityViewFilters
     }
@@ -40,9 +44,11 @@ class EntityViewFiltersController {
     def show(String id) {
         def entityViewFilter = entityViewFiltersService.get(id)
         def entityView = entityViewFilter.entityView.name
+        def user = entityViewFilter.user?.names
         def entityViewFilterReturned = [id: entityViewFilter.id, name: entityViewFilter.name,
                                         description: entityViewFilter.description,
-                                        filterQuery: entityViewFilter.filterQuery, entityView: entityView]
+                                        filterQuery: entityViewFilter.filterQuery, entityView: entityView,
+                                        user: user]
         respond entityViewFilterReturned
     }
 
@@ -111,4 +117,25 @@ class EntityViewFiltersController {
 
         render status: NO_CONTENT
     }
+
+    def runFilterQuery() {
+        def filterViewData
+        def filterQuery = params.query as String
+        try {
+            def query = "${filterQuery}".toString()
+            def data = AppHolder.withMisSql {
+                toCSV(it, query)
+            }.csv
+
+            def dataMapList = tbl(data).toMapList()
+            def headers = dataMapList.get(0).keySet()
+            filterViewData = [dataList: dataMapList, headerList: headers]
+        }
+        catch (Exception e) {
+            log.error("Error fetching data", e)
+            filterViewData = [dataList: [], headerList: []]
+        }
+        respond filterViewData
+    }
+
 }

@@ -38,4 +38,9 @@ export class EntityViewFiltersService {
   deleteEntityViewFilter(id): Observable<any> {
     return this.http.delete(`${this.baseurl}${id}/`);
   }
+
+  runFilterQueryNow(params) {
+    return this.http.get(`${this.baseurl}/runFilterQuery`, {params});
+  }
+
 }

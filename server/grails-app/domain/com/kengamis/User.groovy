@@ -24,7 +24,7 @@ class User {
 
     static transients = ['springSecurityService']
 
-    static hasMany = [userRoles: UserRole]
+    static hasMany = [userRoles: UserRole, filters: EntityViewFilters]
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true

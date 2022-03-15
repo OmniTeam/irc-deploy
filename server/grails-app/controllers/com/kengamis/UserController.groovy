@@ -28,6 +28,16 @@ class UserController {
         respond userService.list(params), model:[userCount: userService.count()]
     }
 
+    def getDataCollectors() {
+        def role = Role.findByAuthority('ROLE_DATA_COLLECTOR')
+        def userRoles = UserRole.findAllByRole(role)
+        def dataCollectors = userRoles.collect { userRole ->
+            def user = userRole.user
+            [names: user.names, id: user.id] }
+        respond dataCollectors
+    }
+
+
     def show(String id) {
         respond userService.get(id)
     }
