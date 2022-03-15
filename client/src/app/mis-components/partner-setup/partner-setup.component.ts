@@ -1,13 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
+import {v4 as uuid} from 'uuid';
 import {PartnerSetupService} from "../../services/partner-setup.service";
+import {ProgramPartnersService} from "../../services/program-partners.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
 import {DateSplitter} from '../../helpers/date-splitter';
 import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {Indicator} from "../../models/indicator";
 
 @Component({
   selector: 'app-partner-setup',
@@ -18,60 +22,66 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  rows: [] = [];
-  calendar: any = [];
-  indicators: any = [];
+
+  calendar: any = {};
   budget: any = [];
   disbursementPlan: any = [];
-  showDisaggregation: boolean;
-  disaggregation: any = [];
+  currentStatus: any = {};
+  indicators: Indicator[] = [];
+
+  setup: any;
+  disaggregation: any;
   organisationalInfo: any = [];
   listOfPartners: any = [];
+  milestones: any = [];
   partnerChosen: string;
+  milestoneChosen: any;
+  indicatorChosen: any;
+  programChosen: string;
+  partnerSetupId: string;
+
+  openPopup: boolean;
+  editing: boolean;
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
+  showDisaggregation: boolean;
+  btn_id: string;
+
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
-  currentStatus:any = [];
-  error: boolean;
-  success: boolean;
-  errorMessage: string;
-  successMessage: string;
-  private partnerSetupId: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private partnerSetupService: PartnerSetupService, public authService: AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute,
+              private location: Location,
+              private partnerSetupService: PartnerSetupService,
+              public authService: AuthService,
+              private programPartnersService: ProgramPartnersService,
+              private projectMilestoneService: ProjectMilestoneService) {
   }
 
   ngOnInit(): void {
-    this.organisationalInfo = SampleData.organisationalInfo;
-    this.listOfPartners = SampleData.partners;
-
+    this.editing = false;
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
         const params = new HttpParams().set('id', this.partnerSetupId);
         this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
-          if (data.setup !== null && data.setup !== undefined) {
-            this.rows = data.setup;
-            let setupValues = JSON.parse(data.setup.setupValues);
-            console.log('setupValues', setupValues);
-            this.calendar = JSON.parse(setupValues.calendar);
-            this.indicators = JSON.parse(setupValues.indicators);
-            this.budget = JSON.parse(setupValues.budget);
-            this.disbursementPlan = JSON.parse(setupValues.disbursementPlan);
-            this.currentStatus = JSON.parse(setupValues.currentStatus);
-            this.partnerChosen = data.setup.partnerId
-          } /*else {
-            this.calendar = SampleData.calendar;
-            this.indicators = SampleData.indicators;
-            this.budget = SampleData.budget;
-            this.disbursementPlan = SampleData.disbursementPlan;
-            this.currentStatus = SampleData.currentStatus;
-          }*/
-          this.dtTrigger.next();
+          this.editing = true;
+          this.setPartnerSetupInfo(data.setup);
         }, error => console.log(error));
       });
+
+    this.programPartnersService.getProgramPartners().subscribe(data => {
+      if (data !== null && data !== undefined) {
+        this.listOfPartners = data;
+      } /*else {
+        this.listOfPartners = SampleData.partners;
+      }*/
+    });
 
     this.dtOptions = {
       pagingType: "numbers",
@@ -81,6 +91,31 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       dom: 'lfBrtip',
       buttons: []
     };
+  }
+
+  setPartnerSetupInfo(data) {
+    this.setup = data;
+    if (data !== null && data !== undefined) {
+      let setupValues = JSON.parse(data.setupValues);
+      this.partnerChosen = data.partnerId
+      if (this.partnerChosen != undefined) this.onPartnerChange()
+      if (setupValues.calendar != undefined) this.calendar = setupValues.calendar;
+      if (setupValues.disbursementPlan != undefined) this.disbursementPlan = setupValues.disbursementPlan;
+      if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
+      if (setupValues.budget != undefined) {
+        this.budget = setupValues.budget;
+        this.milestoneChosen = setupValues.budget.budgetLine;
+        this.indicatorChosen = setupValues.budget.budgetLine;
+      }
+      if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
+    } else {
+      //this.calendar = SampleData.calendar;
+      //this.indicatorsChosen = SampleData.indicators;
+      //this.budget = SampleData.budget;
+      //this.disbursementPlan = SampleData.disbursementPlan;
+      //this.currentStatus = SampleData.currentStatus;
+    }
+    this.dtTrigger.next();
   }
 
   generateCalendar(event) {
@@ -111,36 +146,107 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       }
       this.calendar.reportingCalender = years;
     }
+
+    //set disbursement
+    if (!this.setup) {
+      this.calendar.reportingCalender.forEach((period) => {
+        this.disbursementPlan.push(
+          {
+            id: uuid(),
+            datePeriod: period.datePeriod,
+            startDate: period.startDate,
+            endDate: period.endDate,
+            disbursement: ''
+          }
+        );
+      });
+    }
+    this.savePlan();
   }
 
-  saveCellValue(value: string, key: string, rowId): any {
-    switch (key) {
-      case 'budget':
-        if (this.budget.some(x => x.id === rowId)) {
-          this.budget.forEach(function (item) {
-            if (item.id === rowId) item.approvedAmount = value
-          });
+  onPartnerChange() {
+    if (this.partnerChosen != undefined) {
+      this.programPartnersService.getCurrentProgramPartner(this.partnerChosen).subscribe((results: any) => {
+        if (results !== null && results !== undefined) {
+          this.organisationalInfo = results;
+          this.programChosen = results.programId;
+          if (this.programChosen != undefined) {
+            const params = new HttpParams().set('program', this.programChosen);
+            this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
+              if (data !== null && data !== undefined) {
+                this.milestones = data.milestones;
+                //console.log('indicators', this.indicators);
+              }
+            });
+          }
         }
-        break;
-      case 'disbursementPlan':
-        if (this.disbursementPlan.some(x => x.id === rowId)) {
-          this.disbursementPlan.forEach(function (item) {
-            if (item.id === rowId) item.disbursement = value
+      });
+    } /*else {
+      this.organisationalInfo = SampleData.organisationalInfo;
+    }*/
+  }
+
+  createNewIndicator() {
+    if (this.calendar.reportingCalender == undefined) {
+      alert('No Calendar dates, Fill in reporting calendar');
+      return;
+    }
+
+    if (this.milestones == undefined || this.milestones.length == 0) {
+      alert('No Milestones found, Select Partner to proceed');
+      return;
+    }
+
+    let id = uuid();
+    this.indicators.push({id: id, name: '', overallTarget: '', disaggregation: []});
+  }
+
+  setDisaggregation(rowId) {
+    if (this.indicatorChosen != undefined) {
+      if (this.indicators.some(x => x.id === rowId)) {
+        this.indicators.forEach((item) => {
+          this.calendar.reportingCalender.forEach((c) => {
+            let exists = false;
+            if (item.disaggregation.some(x => x.datePeriod === c.datePeriod)) exists = true;
+            if (!exists) item.disaggregation.push(
+              {
+                datePeriod: c.datePeriod,
+                target: ''
+              }
+            );
           });
-        }
-        break;
+          if (item.id === rowId) item.name = this.indicatorChosen;
+        });
+      }
     }
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  createNewBudgetItem() {
+    if (this.milestones == undefined || this.milestones.length == 0) {
+      alert('No Milestones found, Select Partner to proceed');
+      return;
+    }
+
+    let id = uuid();
+    this.budget.push({id: id, budgetLine: '', approvedAmount: ''});
   }
 
-  toggleDisaggregation(event, row) {
+  setBudgetLine(rowId) {
+    if (this.milestoneChosen != undefined) {
+      if (this.budget.some(x => x.id === rowId)) {
+        this.budget.forEach((item) => {
+          if (item.id === rowId) item.budgetLine = this.milestoneChosen;
+        });
+      }
+    }
+    this.savePlan();
+  }
+
+  toggleDisaggregation(btn_id, data) {
     this.showDisaggregation = !this.showDisaggregation;
-    const button = (document.getElementById(row.id) as HTMLButtonElement);
-    let details = (document.getElementById("detailsDisaggregation") as HTMLTableRowElement);
-    let target = event.target;
+    this.openPopup = this.showDisaggregation;
+    this.btn_id = btn_id;
+    const button = (document.getElementById(btn_id) as HTMLButtonElement);
 
     const minus_icon = document.createElement('i');
     minus_icon.classList.add('text', 'fas', 'fa-minus');
@@ -152,82 +258,121 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     plus_icon.style.fontSize = '20px';
 
     if (this.showDisaggregation) {
-      const tr = <HTMLTableRowElement>target.closest('tr');
       button.firstChild.replaceWith(minus_icon);
-      tr.insertAdjacentHTML('afterend', '' +
-        '  <tr id="detailsDisaggregation">\n' +
-        '                      <td colspan="5">\n' +
-        '                          <table style="padding-left:50px;"\n' +
-        '                                 class="table table-striped table-bordered" id="disaggregation">\n' +
-        '                            <thead>\n' +
-        '                            <tr>\n' +
-        '                              <th class=\'text-center\'>Period</th>\n' +
-        '                              <th class=\'text-center\'>Target</th>\n' +
-        '                            </tr>\n' +
-        '                            </thead>\n' +
-        '                            <tbody>\n' + this.getRowsForDetails(row.disaggregation) +
-        '                            </tbody>\n' +
-        '                          </table>\n' +
-        '                      </td>\n' +
-        '                    </tr>' +
-        '');
-      details.style.display = 'block';
+      //set disaggregation values
+      this.disaggregation = data;
     } else {
       button.firstChild.replaceWith(plus_icon);
-      details.style.display = 'none';
-      details.parentNode.removeChild(details);
     }
   }
 
-  getRowsForDetails(data): string {
+  targetsChangedHandler(input) {
+    this.cellEditor(input.rowId, input.key, input.oldValue, input.type);
+  }
+
+  getOptionsForSelect(data): string {
     let htmlString = "";
     data.forEach(function (row) {
-      htmlString += '<tr>\n' +
-        '<td class=\'text-center\'>' + row.datePeriod + '</td>\n' +
-        '<td class=\'text-center\'><div>' + row.target +
-        '<button class="btn btn-link" onclick="cellEditor(' + row + ', ' + row.id + ', \'disbursementPlan\', ' + row.disbursement + ')">' +
-        '<i class="fas fa-pencil-alt"></i></button></div> </td>\n' +
-        '</tr>\n';
+      htmlString += '<option value="' + row.id + '" name="' + row.name + '">' + row.name + '</option>';
     });
     return htmlString;
   }
 
-  onSavePlan() {
+  cellEditor(rowId, key: string, oldValue, type?: string) {
+    new CellEdit().edit(rowId, rowId, oldValue, key, this.saveCellValue, type);
+  }
+
+  saveCellValue = (value: string, key: string, rowId): void => {
+    if (value !== null && value !== undefined)
+      switch (key) {
+        case 'budget':
+          if (this.budget.some(x => x.id === rowId)) {
+            this.budget.forEach(function (item) {
+              if (item.id === rowId) item.approvedAmount = value
+            });
+          }
+          break;
+        case 'disbursementPlan':
+          if (this.disbursementPlan.some(x => x.id === rowId)) {
+            this.disbursementPlan.forEach(function (item) {
+              if (item.id === rowId) item.disbursement = value
+            });
+          }
+          break;
+        case 'disaggregation':
+          let overallTarget: number = 0;
+          this.indicators.forEach((indicator) => {
+            if (indicator.disaggregation.some(x => x.datePeriod === rowId)) {
+              indicator.disaggregation.forEach(function (item) {
+                if (item.datePeriod === rowId) item.target = value
+                if (item.target.length != 0) overallTarget += +item.target;
+              });
+              indicator.overallTarget = overallTarget.toString();
+            }
+          });
+          break;
+      }
+    this.savePlan();
+  }
+
+  savePlan(done?: boolean) {
     this.error = false;
     this.success = false;
 
-    let reportValues: { [key: string]: string } = {
-      calendar: JSON.stringify(this.calendar),
+    let values: { [key: string]: string } = {
+      calendar: this.calendar,
       indicators: JSON.stringify(this.indicators),
-      budget: JSON.stringify(this.budget),
-      disbursementPlan: JSON.stringify(this.disbursementPlan),
-      currentStatus: JSON.stringify(this.currentStatus)
+      budget: this.budget,
+      disbursementPlan: this.disbursementPlan,
+      currentStatus: this.currentStatus
     }
 
     let partnerSetupRecord: { [key: string]: string } = {
       partnerId: this.partnerChosen,
       userId: this.authService.getLoggedInUsername(),
-      setupValues: JSON.stringify(reportValues),
+      setupValues: JSON.stringify(values),
     }
 
-    console.log('partnerSetupRecord', partnerSetupRecord);
-
-    this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
-      this.error = false;
-      this.success = true;
-      this.successMessage = "Saved Report";
-    }, error => {
-      this.error = true;
-      this.errorMessage = "Failed to save Report";
-      this.success = false;
-      console.log(error);
-    });
+    if (this.setup) {
+      this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
+        this.setPartnerSetupInfo(data);
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Updated Partner Setup";
+      }, error => {
+        this.error = true;
+        this.errorMessage = "Failed to update Partner Setup";
+        this.success = false;
+        console.log(error);
+      });
+    } else {
+      this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
+        this.setPartnerSetupInfo(data);
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Saved Partner Setup";
+      }, error => {
+        this.error = true;
+        this.errorMessage = "Failed to save Partner Setup";
+        this.success = false;
+        console.log(error);
+      });
+    }
 
     setTimeout(() => {
       this.success = false;
       this.error = false;
-      this.onBackPressed();
+      if (done != undefined && done == true) this.onBackPressed();
     }, 6000);
+  }
+
+  isValidJSONStr(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 
   onBackPressed() {

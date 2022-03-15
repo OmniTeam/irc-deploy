@@ -172,21 +172,21 @@ export class SampleData {
   static disbursementPlan = [
     {
       id: 'asdsadasfsagrgwtregrege',
-      quarter: 'Q1',
+      datePeriod: 'Q1',
       startDate: '21/Mar/2021',
       endDate: '21/Mar/2022',
       disbursement: 'teste'
     },
     {
       id: 'asdsadassfsdgwegrtregrege',
-      quarter: 'Q2',
+      datePeriod: 'Q2',
       startDate: '21/Jun/2021',
       endDate: '21/Jan/2022',
       disbursement: 'teset'
     },
     {
       id: 'asdsadasfertreedgregrege',
-      quarter: 'Q3',
+      datePeriod: 'Q3',
       startDate: '21/Feb/2021',
       endDate: '21/Sep/2022',
       disbursement: 'tsest'
@@ -212,7 +212,7 @@ export class SampleData {
   static indicators = [
     {
       id: 'asdsfggewrwetwtrewtwtwr',
-      indicator: 'No of safe spaces established within the community',
+      name: 'No of safe spaces established within the community',
       overallTarget: '300',
       disaggregation: [
         {
@@ -235,7 +235,7 @@ export class SampleData {
     },
     {
       id: 'asdsvnvnvgfnfhfhtwtrewtwtwr',
-      indicator: 'No of Adolescent girls utilising safe spaces',
+      name: 'No of Adolescent girls utilising safe spaces',
       overallTarget: '500',
       disaggregation: [
         {
@@ -273,14 +273,17 @@ export class SampleData {
   }
   static partners = [
     {
+      id: 'ewrwrwrwsfdgdgdfdsf',
       name: 'Partner One',
       value: 'partner_one'
     },
     {
+      id: 'ewrwsfdsfsdrwrwsdfdsf',
       name: 'Parter Two',
       value: 'partner_two'
     },
     {
+      id: 'ewrwrwrwsdfdsdfsfsdfsf',
       name: 'Partner Three',
       value: 'partner_three'
     }

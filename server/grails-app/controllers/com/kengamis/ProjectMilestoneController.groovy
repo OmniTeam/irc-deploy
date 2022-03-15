@@ -138,4 +138,11 @@ class ProjectMilestoneController {
         }
         respond milestoneData
     }
+
+    def getMilestonesByProgram() {
+        def programId = params.program as String
+        def programMilestones = ProjectMilestone.findAllByProgram(programId);
+        def data = [milestones: programMilestones]
+        respond data
+    }
 }
