@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
-import {PartnerSetupService} from "../../services/partner-setup.service";
-import {AlertService} from "../../services/alert";
+import {PartnerSetupService} from "../../../services/partner-setup.service";
+import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'app-partner-list',

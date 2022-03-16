@@ -25,6 +25,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   calendar: any = {};
   budget: any = [];
+  totalApprovedAmount: string;
+  totalDisbursement: string;
   disbursementPlan: any = [];
   currentStatus: any = {};
   indicators: Indicator[] = [];
@@ -108,9 +110,21 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         reportingCalender: rc
       };
 
-      if (setupValues.disbursementPlan != undefined) this.disbursementPlan = setupValues.disbursementPlan;
+      if (setupValues.disbursementPlan != undefined){
+        this.disbursementPlan = setupValues.disbursementPlan;
+        this.disbursementPlan.forEach((data) => {
+          this.updateDisbursementPlanValues(data.id, data.disbursement);
+        });
+      }
+
+      if (setupValues.budget != undefined) {
+        this.budget = setupValues.budget;
+        this.budget.forEach((data) => {
+          this.updateBudgetValues(data.id, data.approvedAmount);
+        });
+      }
+
       if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
-      if (setupValues.budget != undefined) this.budget = setupValues.budget;
       if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
     } else {
       //this.calendar = SampleData.calendar;
@@ -229,6 +243,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   toggleDisaggregation(btn_id, data) {
+    console.log('disaggregation', data);
     this.showDisaggregation = !this.showDisaggregation;
     this.openPopup = this.showDisaggregation;
     this.btn_id = btn_id;
@@ -252,6 +267,25 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
+  removeIndicator(indicator: Indicator) {
+    let index = this.indicators.indexOf(indicator);
+    if(~index){
+      this.indicators.slice(index,1);
+    }
+    this.removeBudgetRecord(indicator.name);
+  }
+
+  removeBudgetRecord(budgetLine) {
+    if (this.disbursementPlan.some(x => x.budgetLine === budgetLine)) {
+      this.disbursementPlan.forEach((item) => {
+        if (item.budgetLine === budgetLine) {
+          let index = this.budget.indexOf(item);
+          if (~index) this.budget.slice(index, 1);
+        }
+      });
+    }
+  }
+
   cellEditor(rowId, tdId, key: string, oldValue, type: string, selectList?: []) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
@@ -260,18 +294,10 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (value !== null && value !== undefined)
       switch (key) {
         case 'budget':
-          if (this.budget.some(x => x.id === rowId)) {
-            this.budget.forEach(function (item) {
-              if (item.id === rowId) item.approvedAmount = value
-            });
-          }
+          this.updateBudgetValues(rowId, value);
           break;
         case 'disbursementPlan':
-          if (this.disbursementPlan.some(x => x.id === rowId)) {
-            this.disbursementPlan.forEach(function (item) {
-              if (item.id === rowId) item.disbursement = value
-            });
-          }
+          this.updateDisbursementPlanValues(rowId, value);
           break;
         case 'disaggregation':
           let overallTarget: number = 0;
@@ -284,6 +310,14 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
               indicator.overallTarget = overallTarget.toString();
             }
           });
+          break;
+        case 'indicators':
+          if (this.indicators.some(x => x.id === rowId)) {
+            this.indicators.forEach(function (item) {
+              if (item.id === rowId) item.name = value
+            });
+          }
+          this.setDisaggregation(rowId);
           break;
       }
     this.savePlan();
@@ -356,5 +390,27 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   onBackPressed() {
     this.location.back();
+  }
+
+  private updateBudgetValues(id, newValue) {
+    let total: number = 0;
+    if (this.budget.some(x => x.id === id)) {
+      this.budget.forEach(function (item) {
+        if (item.id === id) item.approvedAmount = newValue;
+        total += +item.approvedAmount;
+      });
+    }
+    this.totalApprovedAmount = total.toString();
+  }
+
+  private updateDisbursementPlanValues(id, newValue) {
+    let totalD: number = 0;
+    if (this.disbursementPlan.some(x => x.id === id)) {
+      this.disbursementPlan.forEach(function (item) {
+        if (item.id === id) item.disbursement = newValue
+        totalD += +item.disbursement;
+      });
+    }
+    this.totalDisbursement = totalD.toString()
   }
 }

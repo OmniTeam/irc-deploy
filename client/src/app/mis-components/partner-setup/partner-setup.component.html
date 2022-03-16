@@ -29,7 +29,7 @@
         <tr *ngFor="let row of disaggregation">
           <td class="text-center">{{row.datePeriod}}</td>
           <td class="text-center" [id]="row.datePeriod">
-            <div>{{row.target}}
+            <div>{{row.target | number }}
               <button class="btn btn-link"
                       (click)="cellEditor(row.datePeriod, row.datePeriod, 'disaggregation', row.target, 'number')"><i
                 class="fas fa-pencil-alt"></i></button>
@@ -54,7 +54,7 @@
             <div class=" row">
               <div class=" col">
                 <div class="form-group" style="margin: 0 0 30px 30px; width: 60%;">
-                  <label class="control-label" style="margin-left: 12px;"><b>SELECT PARTNER/CLUSTER:</b></label>
+                  <label class="control-label" style="margin-left: 12px;"><b>SELECT PARTNER/CLUSTER: <span class="required-indicator">*</span></b></label>
                   <ng-select class="form-control form-control-sm"
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
@@ -97,31 +97,31 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;">REPORTING CALENDAR</h3>
+                <h3 style="margin-left: 40px;">REPORTING CALENDAR </h3>
                 <div class="card">
                   <div class="row">
                     <div class="col-sm-6">
                       <div class="row">
-                        <div class="col-sm-6">Grant Start Date:</div>
+                        <div class="col-sm-6">Grant Start Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
                           <input class="form-control" type="datetime-local" [(ngModel)]="calendar.grantStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6">End of Grant Date:</div>
+                        <div class="col-sm-6">End of Grant Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
                           <input class="form-control" type="datetime-local" [(ngModel)]="calendar.grantEndDate"/><br>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6">Project Reporting Start Date:</div>
+                        <div class="col-sm-6">Project Reporting Start Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
                           <input class="form-control" type="datetime-local"
                                  [(ngModel)]="calendar.projectReportingStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6">Reporting Period:
+                        <div class="col-sm-6">Reporting Period: <span class="required-indicator">*</span>
                         </div>
                         <div class="col-sm-6">
                           <ul class="list-group list-group-flush" style="line-height: 10px;">
@@ -195,24 +195,21 @@
                     <tbody>
                     <tr *ngFor="let indicator of indicators">
                       <td class='text-center' style="display: none;">{{indicator.id}}</td>
-                      <td class='text-center'>
-                        <div class="form-group text-center" style="margin: 0 0 30px 30px; width: 60%;">
-                          <select class="form-control form-control-sm"
-                                  aria-label="Select Indicator"
-                                  [(ngModel)]="indicator.name"
-                                  (ngModelChange)="setDisaggregation(indicator.id)">
-                            <option [ngValue]="null" [selected]="indicator.name.length===0" disabled>Select Indicator</option>
-                            <option [ngValue]="milestone.name"
-                                    *ngFor="let milestone of milestones"
-                                    [selected]="milestone.name===indicator.name">{{milestone.name}}</option>
-                          </select>
+                      <td class='text-center' [id]="indicator.id">
+                        <div>{{ indicator.name }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(indicator.id, indicator.id, 'indicators', indicator.name, 'select', milestones)"><i
+                            class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class="text-center">{{indicator.overallTarget}}</td>
+                      <td class="text-center">{{indicator.overallTarget | number }}</td>
                       <td class='text-center'>
                         <button class="btn btn-link" [id]="'btn' + indicator.id"
                                 (click)="toggleDisaggregation('btn' + indicator.id, indicator.disaggregation)"><i
                           class="text fas fa-plus"></i></button>
+                        <button class="btn btn-link"
+                                (click)="removeIndicator(indicator)"><i
+                          class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
                     </tr>
                     </tbody>
@@ -231,14 +228,9 @@
                     <tbody>
                     <tr *ngFor="let row of budget">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'[id]="row.id + 'td1'">
-                        <div>{{ row.budgetLine }}
-                          <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id + 'td1', 'budget', row.budgetLine, 'select', milestones)"><i
-                            class="fas fa-pencil-alt"></i></button>
-                        </div></td>
+                      <td class='text-center'>{{ row.budgetLine }}</td>
                       <td class='text-center' [id]="row.id">
-                        <div>{{ row.approvedAmount }}
+                        <div>{{ row.approvedAmount | number  }}
                           <button class="btn btn-link"
                                   (click)="cellEditor(row.id, row.id, 'budget', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
@@ -246,6 +238,12 @@
                       </td>
                     </tr>
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td class="text-center">Total</td>
+                        <td class="text-center">{{ totalApprovedAmount | number  }}</td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
 
@@ -267,7 +265,7 @@
                       <td class='text-center'>{{row.startDate }}</td>
                       <td class='text-center'>{{ row.endDate }}</td>
                       <td class='text-center' [id]="row.id">
-                        <div>{{ row.disbursement }}
+                        <div>{{ row.disbursement | number }}
                           <button class="btn btn-link"
                                   (click)="cellEditor(row.id, row.id, 'disbursementPlan', row.disbursement, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
@@ -275,6 +273,13 @@
                       </td>
                     </tr>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                      <td class="text-center">Total</td>
+                      <td>&nbsp;</td><td>&nbsp;</td>
+                      <td class="text-center">{{ totalDisbursement | number }}</td>
+                    </tr>
+                    </tfoot>
                   </table>
                 </div>
 
@@ -283,13 +288,13 @@
                   <div style="margin: 10px;">
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Total Amount Disbursed:</div>
-                      <div class="col text-left"><input type="number" class="form-control"
-                                                        [(ngModel)]="currentStatus.totalAmountDisbursed"/><br></div>
+                      <div class="col text-left"><input type="text" class="form-control"
+                                                        [ngModel]="currentStatus.totalAmountDisbursed | number"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Total Amount Accounted for:</div>
-                      <div class="col text-left"><input type="number" class="form-control"
-                                                        [(ngModel)]="currentStatus.totalAmountAccountedFor"/><br></div>
+                      <div class="col text-left"><input type="text" class="form-control"
+                                                        [ngModel]="currentStatus.totalAmountAccountedFor | number"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Date of last Disbursement:</div>
