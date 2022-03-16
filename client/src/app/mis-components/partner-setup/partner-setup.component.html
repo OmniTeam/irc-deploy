@@ -110,7 +110,7 @@
                       <div class="row">
                         <div class="col-sm-6">End of Grant Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
-                          <input class="form-control" type="datetime-local" [(ngModel)]="calendar.grantEndDate"/><br>
+                          <input class="form-control" type="datetime-local" [(ngModel)]="calendar.grantEndDate"  [min]="calendar.grantStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
