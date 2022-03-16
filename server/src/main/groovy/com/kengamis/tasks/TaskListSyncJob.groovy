@@ -1,6 +1,5 @@
 package com.kengamis.tasks
 
-
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
 import groovy.sql.Sql

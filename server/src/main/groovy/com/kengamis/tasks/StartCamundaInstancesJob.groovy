@@ -4,6 +4,7 @@ import groovy.json.JsonOutput
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
+import com.kengamis.PartnerSetup
 
 import java.text.SimpleDateFormat
 
@@ -15,15 +16,15 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
-        boolean started = startProcessInstance([
-                Start_date : "12-20-2021",
-                Report_id : UUID.randomUUID().toString(),
-                Report_Name :  "Test Report",
-                Report_Assigne : "Makwasis Cris"
-        ], CIIF_MANAGEMENT_KEY)
-        if (started) println(".................Started instances......")
-            else println("............failed to start instances")
-
+        def partnerSetup = PartnerSetup.all.each {
+            boolean started = startProcessInstance([
+                    PartnerId : it.partnerId,
+                    ProgramId : it.programId,
+                    StartDate : it.startDate,
+                    EndDate : it.endDate,
+                    GroupId: ""
+            ], CIIF_MANAGEMENT_KEY)
+        }
         return null
     }
 
