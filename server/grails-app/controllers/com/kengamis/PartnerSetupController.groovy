@@ -44,6 +44,7 @@ class PartnerSetupController {
 
     @Transactional
     def save(PartnerSetup partnerSetup) {
+        print "save hasErrors ${partnerSetup.errors}"
         if (partnerSetup == null) {
             render status: NOT_FOUND
             return
@@ -66,6 +67,7 @@ class PartnerSetupController {
 
     @Transactional
     def update(PartnerSetup partnerSetup) {
+        print "update $partnerSetup"
         if (partnerSetup == null) {
             render status: NOT_FOUND
             return

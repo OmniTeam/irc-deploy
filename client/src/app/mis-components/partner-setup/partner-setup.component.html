@@ -197,19 +197,13 @@
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>
                         <div class="form-group text-center" style="margin: 0 0 30px 30px; width: 60%;">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Select Indicator"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                                     [(ngModel)]="indicatorChosen"
-                                     (ngModelChange)="setDisaggregation(row.id)">
-                            <ng-option [value]="milestone.name" *ngFor="let milestone of milestones">
-                              {{milestone.name}}
-                            </ng-option>
-                          </ng-select>
+                          <select class="form-control"
+                                  aria-label="Select Indicator"
+                                  [(ngModel)]="indicatorChosen"
+                                  (ngModelChange)="setDisaggregation(row.id)">
+                            <option [value]="milestone.name"
+                                    *ngFor="let milestone of milestones">{{milestone.name}}</option>
+                          </select>
                         </div>
                       </td>
                       <td class="text-center">{{row.overallTarget}}</td>
@@ -247,19 +241,13 @@
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center' [id]="row.id + 'td1'">
                         <div class="form-group text-center" style="margin: 0 0 30px 30px; width: 60%;">
-                        <ng-select class="form-control form-control-sm"
-                                   aria-controls="datatable"
-                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   placeholder="Select Milestone"
-                                   [searchable]="true"
-                                   [clearable]="true"
-                                   [(ngModel)]="milestoneChosen"
-                                   (ngModelChange)="setBudgetLine(row.id)">
-                          <ng-option [value]="milestone.name" *ngFor="let milestone of milestones">
-                            {{milestone.name}}
-                          </ng-option>
-                        </ng-select>
+                          <select class="form-control"
+                                  aria-label="Select Milestone"
+                                  [(ngModel)]="milestoneChosen"
+                                  (ngModelChange)="setBudgetLine(row.id)">
+                            <option [value]="milestone.name"
+                                    *ngFor="let milestone of milestones">{{milestone.name}}</option>
+                          </select>
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id">

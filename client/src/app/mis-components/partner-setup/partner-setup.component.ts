@@ -97,9 +97,19 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.setup = data;
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
-      this.partnerChosen = data.partnerId
+      this.partnerChosen = data.partnerId;
       if (this.partnerChosen != undefined) this.onPartnerChange()
-      if (setupValues.calendar != undefined) this.calendar = setupValues.calendar;
+
+      let rc;
+      if (data.reportingCalendar != undefined) rc = JSON.parse(data.reportingCalendar)
+      this.calendar = {
+        periodType: data.periodType,
+        grantStartDate: data.startDate,
+        grantEndDate: data.endDate,
+        projectReportingStartDate: data.reportingStartDate,
+        reportingCalender: rc
+      };
+
       if (setupValues.disbursementPlan != undefined) this.disbursementPlan = setupValues.disbursementPlan;
       if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
       if (setupValues.budget != undefined) {
@@ -320,7 +330,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.success = false;
 
     let values: { [key: string]: string } = {
-      calendar: this.calendar,
       indicators: JSON.stringify(this.indicators),
       budget: this.budget,
       disbursementPlan: this.disbursementPlan,
@@ -328,9 +337,15 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     let partnerSetupRecord: { [key: string]: string } = {
-      partnerId: this.partnerChosen,
       userId: this.authService.getLoggedInUsername(),
+      partnerId: this.partnerChosen,
+      programId: this.programChosen,
       setupValues: JSON.stringify(values),
+      startDate: this.calendar.grantStartDate,
+      endDate: this.calendar.grantEndDate,
+      reportingStartDate: this.calendar.projectReportingStartDate,
+      reportingCalendar: JSON.stringify(this.calendar.reportingCalender),
+      periodType: this.calendar.periodType,
     }
 
     if (this.setup) {
@@ -360,9 +375,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     setTimeout(() => {
+      if (done == true && this.success) this.onBackPressed();
       this.success = false;
       this.error = false;
-      if (done != undefined && done == true) this.onBackPressed();
     }, 3000);
   }
 

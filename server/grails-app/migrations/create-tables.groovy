@@ -1457,5 +1457,62 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-1") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "user_id", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-2") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "entity_view_filters", constraintName: "FK9432frmitk8mc7gfm3h6gqw9d", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647339947546-1") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "end_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647339947546-2") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "period_type", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647339947546-3") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "program_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647339947546-4") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_calendar", type: "text") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647339947546-5") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_start_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647339947546-6") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "start_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
 
 }
