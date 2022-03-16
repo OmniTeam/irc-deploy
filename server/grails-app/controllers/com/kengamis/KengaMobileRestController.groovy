@@ -225,6 +225,37 @@ class KengaMobileRestController {
         return [name: ent.name, tableName: ent.tableName, displayField: displayFlds.join(","), keyField: keyField?.name ?: '', otherFields: otherFlds]
     }
 
+    def getDefaultEntityDataMap() {
+        def finalResult = []
+        User user = getUserFromRequest()
+        Assert.notNull(user, "Username cannot be null")
+
+
+        def entityViewFilters = EntityViewFilters.findAllByUser(user)
+        entityViewFilters.each { entityViewFilter ->
+            def viewQuery = entityViewFilter.filterQuery
+            def entityView = entityViewFilter.entityView
+            def viewFields = EntityViewFields.findAllByEntityView(entityView)
+            def entityViewData = viewToJSON(viewFields, entityView)
+            def results = AppHolder.withMisSql {
+                def otherFields = generateOtherFieldsQuery(entityView)
+                log.info(viewQuery)
+                def cleanQuery = cleanOxdData(viewQuery)
+                log.info(cleanQuery)
+                def data = rows(cleanQuery.toString()).collect {
+                    def otherFldsMap = [:]
+                    otherFieldsToList(otherFields).each { fld ->
+                        otherFldsMap << ["$fld": it."$fld"]
+                    }
+                    ["keyField": it.keyField, "otherFields": otherFldsMap]
+                }
+                return data
+            }
+            finalResult << ['entityView': entityViewData, 'results': results]
+        }
+        render finalResult as JSON
+    }
+
 
     private User getUserFromRequest() {
         def authString = request.getHeader('Authorization')

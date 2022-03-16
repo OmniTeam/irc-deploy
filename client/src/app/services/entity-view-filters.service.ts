@@ -39,4 +39,8 @@ export class EntityViewFiltersService {
     return this.http.get(`${this.baseurl}/filterFiltersByEntityView`, {params});
   }
 
+  runFilterQueryNow(params) {
+    return this.http.get(`${this.baseurl}/runFilterQuery`, {params});
+  }
+
 }

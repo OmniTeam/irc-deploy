@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../services/alert";
 import {EntityViewFiltersService} from "../../../services/entity-view-filters.service";
+import {UsersService} from "../../../services/users.service";
+import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-edit-entity-view-filters',
@@ -10,16 +13,27 @@ import {EntityViewFiltersService} from "../../../services/entity-view-filters.se
   styleUrls: ['./edit-entity-view-filters.component.css']
 })
 export class EditEntityViewFiltersComponent implements OnInit {
-
+  @ViewChild('showQueryData') showQueryData: any;
   formGroup: FormGroup;
   submitted = false;
   formData: any;
   entityViewId: any;
   entityViewFilterId: any;
+  dataCollectors: any;
+  submittedViewQuery = false;
+  rows: Object[];
+  temp: Object[];
+  columns = [];
+  closeModal: string;
+  entries: number = 5;
+  selected: any[] = [];
+  activeRow: any;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
+              private modalService: NgbModal,
+              private userService: UsersService,
               private entityViewFiltersService: EntityViewFiltersService) { }
 
   ngOnInit(): void {
@@ -29,8 +43,13 @@ export class EditEntityViewFiltersComponent implements OnInit {
       this.formGroup = this.formBuilder.group({
         name: [results?.name, [Validators.required]],
         description: [results?.description],
-        filterQuery: [results?.filterQuery]
+        filterQuery: [results?.filterQuery],
+        user: [results?.user]
       });
+    });
+
+    this.userService.getDataCollectors().subscribe((data) => {
+      this.dataCollectors = data;
     });
   }
 
@@ -60,6 +79,82 @@ export class EditEntityViewFiltersComponent implements OnInit {
         this.submitted = false;
       }, 100);
     }
+  }
+
+  runFilterQueryNow() {
+    const filterQueryControl = this.formGroup.get('filterQuery');
+    this.submittedViewQuery = true;
+    let inputValue = (<HTMLInputElement>document.getElementById('query')).value;
+    if (inputValue) {
+      const params = new HttpParams()
+        .set('query', inputValue);
+      this.entityViewFiltersService.runFilterQueryNow(params).subscribe((data) => {
+        if (data['headerList'].length > 0) {
+          this.temp = [...data['dataList']];
+          this.rows = data['dataList'];
+          this.columns = this.formattedColumns(data['headerList']);
+          this.openFormModal(this.showQueryData);
+        }
+        else {
+          filterQueryControl.setErrors({
+            "queryError": true
+          });
+        }
+      }, error => console.log(error));
+    } else {
+      filterQueryControl.setErrors({
+        "isEmpty": true
+      });
+    }
+  }
+
+  openFormModal(modalDom) {
+    this.modalService.open(modalDom, {ariaLabelledBy: 'modal-basic-title', size: 'xl'}).result.then((result) => {
+      this.closeModal = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  formattedColumns(array) {
+    const columns = [];
+    for (const column of array) {
+      const columnProperties = {};
+      columnProperties['prop'] = column;
+      columnProperties['name'] = column.replaceAll('_', ' ').toUpperCase().trim();
+      columns.push(columnProperties);
+    }
+    return columns;
+  }
+
+  getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  entriesChange($event) {
+    this.entries = $event.target.value;
+  }
+
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key] !== null && d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 
   onReset() {

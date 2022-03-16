@@ -7,11 +7,12 @@ class EntityViewFilters {
     String description
     String filterQuery
 
-    static belongsTo = [entityView: EntityView]
+    static belongsTo = [entityView: EntityView, user: User]
 
     static constraints = {
         filterQuery nullable: true
         description nullable: true
+        user nullable: true
     }
 
     static mapping = {
