@@ -110,7 +110,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         reportingCalender: rc
       };
 
-      if (setupValues.disbursementPlan != undefined){
+      if (setupValues.disbursementPlan != undefined) {
         this.disbursementPlan = setupValues.disbursementPlan;
         this.disbursementPlan.forEach((data) => {
           this.updateDisbursementPlanValues(data.id, data.disbursement);
@@ -243,7 +243,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   toggleDisaggregation(btn_id, data) {
-    console.log('disaggregation', data);
     this.showDisaggregation = !this.showDisaggregation;
     this.openPopup = this.showDisaggregation;
     this.btn_id = btn_id;
@@ -268,22 +267,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   removeIndicator(indicator: Indicator) {
-    let index = this.indicators.indexOf(indicator);
-    if(~index){
-      this.indicators.slice(index,1);
-    }
-    this.removeBudgetRecord(indicator.name);
-  }
-
-  removeBudgetRecord(budgetLine) {
-    if (this.disbursementPlan.some(x => x.budgetLine === budgetLine)) {
-      this.disbursementPlan.forEach((item) => {
-        if (item.budgetLine === budgetLine) {
-          let index = this.budget.indexOf(item);
-          if (~index) this.budget.slice(index, 1);
-        }
-      });
-    }
+    this.indicators = this.indicators.filter(item=>item.id !=indicator.id );
+    this.budget = this.budget.filter(item=>item.budgetLine !=indicator.name );
+    this.budget.forEach((data) => {
+      this.updateBudgetValues(data.id, data.approvedAmount);
+    });
   }
 
   cellEditor(rowId, tdId, key: string, oldValue, type: string, selectList?: []) {
@@ -308,6 +296,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
                 if (item.target.length != 0) overallTarget += +item.target;
               });
               indicator.overallTarget = overallTarget.toString();
+              this.disaggregation = indicator.disaggregation;
             }
           });
           break;

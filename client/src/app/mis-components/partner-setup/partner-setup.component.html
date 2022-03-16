@@ -288,13 +288,13 @@
                   <div style="margin: 10px;">
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Total Amount Disbursed:</div>
-                      <div class="col text-left"><input type="text" class="form-control"
-                                                        [ngModel]="currentStatus.totalAmountDisbursed | number"/><br></div>
+                      <div class="col text-left"><input type="number" class="form-control"
+                                                        [(ngModel)]="currentStatus.totalAmountDisbursed"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Total Amount Accounted for:</div>
-                      <div class="col text-left"><input type="text" class="form-control"
-                                                        [ngModel]="currentStatus.totalAmountAccountedFor | number"/><br></div>
+                      <div class="col text-left"><input type="number" class="form-control"
+                                                        [(ngModel)]="currentStatus.totalAmountAccountedFor"/><br></div>
                     </div>
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Date of last Disbursement:</div>
