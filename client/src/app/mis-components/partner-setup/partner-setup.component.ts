@@ -35,8 +35,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   listOfPartners: any = [];
   milestones: any = [];
   partnerChosen: string;
-  milestoneChosen: any;
-  indicatorChosen: any;
   programChosen: string;
   partnerSetupId: string;
 
@@ -112,11 +110,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       if (setupValues.disbursementPlan != undefined) this.disbursementPlan = setupValues.disbursementPlan;
       if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
-      if (setupValues.budget != undefined) {
-        this.budget = setupValues.budget;
-        this.milestoneChosen = setupValues.budget.budgetLine;
-        this.indicatorChosen = setupValues.budget.budgetLine;
-      }
+      if (setupValues.budget != undefined) this.budget = setupValues.budget;
       if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
     } else {
       //this.calendar = SampleData.calendar;
@@ -212,44 +206,26 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   setDisaggregation(rowId) {
-    if (this.indicatorChosen != undefined) {
-      if (this.indicators.some(x => x.id === rowId)) {
-        this.indicators.forEach((item) => {
-          this.calendar.reportingCalender.forEach((c) => {
-            let exists = false;
-            if (item.disaggregation.some(x => x.datePeriod === c.datePeriod)) exists = true;
-            if (!exists) item.disaggregation.push(
-              {
-                datePeriod: c.datePeriod,
-                target: ''
-              }
-            );
-          });
-          if (item.id === rowId) item.name = this.indicatorChosen;
+    if (this.indicators.some(x => x.id === rowId)) {
+      this.indicators.forEach((item) => {
+        this.calendar.reportingCalender.forEach((c) => {
+          let exists = false;
+          if (item.disaggregation.some(x => x.datePeriod === c.datePeriod)) exists = true;
+          if (!exists) item.disaggregation.push(
+            {
+              datePeriod: c.datePeriod,
+              target: ''
+            }
+          );
         });
-      }
+        if (item.id === rowId) this.createNewBudgetItem(item.name);
+      });
     }
   }
 
-  createNewBudgetItem() {
-    if (this.milestones == undefined || this.milestones.length == 0) {
-      alert('No Milestones found, Select Partner to proceed');
-      return;
-    }
-
+  createNewBudgetItem(value) {
     let id = uuid();
-    this.budget.push({id: id, budgetLine: '', approvedAmount: ''});
-  }
-
-  setBudgetLine(rowId) {
-    if (this.milestoneChosen != undefined) {
-      if (this.budget.some(x => x.id === rowId)) {
-        this.budget.forEach((item) => {
-          if (item.id === rowId) item.budgetLine = this.milestoneChosen;
-        });
-      }
-    }
-    this.savePlan();
+    this.budget.push({id: id, budgetLine: value, approvedAmount: ''});
   }
 
   toggleDisaggregation(btn_id, data) {
@@ -276,20 +252,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  targetsChangedHandler(input) {
-    this.cellEditor(input.rowId, input.key, input.oldValue, input.type);
-  }
-
-  getOptionsForSelect(data): string {
-    let htmlString = "";
-    data.forEach(function (row) {
-      htmlString += '<option value="' + row.id + '" name="' + row.name + '">' + row.name + '</option>';
-    });
-    return htmlString;
-  }
-
-  cellEditor(rowId, key: string, oldValue, type?: string) {
-    new CellEdit().edit(rowId, rowId, oldValue, key, this.saveCellValue, type);
+  cellEditor(rowId, tdId, key: string, oldValue, type: string, selectList?: []) {
+    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {

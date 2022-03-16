@@ -27,7 +27,8 @@ export class CellEdit {
        key: string,
        save: (newValue: string, key: string, row_id, row?: any) => void,
        type?: string,
-       status?: string) {
+       status?: string,
+       selectList?:[]) {
     const td = document.getElementById(td_id);
     const container1 = td.firstElementChild as HTMLElement;
 
@@ -35,7 +36,12 @@ export class CellEdit {
     else container1.style.display = 'block';
 
     if (status === "save") {
-      let newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value
+      let newValue;
+      if (type == 'select') {
+        newValue = (document.getElementById("input-" + td_id) as HTMLSelectElement).value;
+      } else  {
+        newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value;
+      }
       save(newValue, key, row_id);
       this.condition = false;
     } else if (status === "cancel") {
@@ -68,20 +74,30 @@ export class CellEdit {
 
       let input;
 
-      if (type == 'number') {
-        input = document.createElement('input');
-        input.type = 'number';
+      if (type == 'select') {
+        if(selectList==undefined) { console.log('Error: ','select has no data'); return; }
+        container.classList.add('form-group', 'text-center');
+        container.style.margin = '0 0 30px 30px';
+        container.style.width = '60%';
+        input = document.createElement('select');
+        input.classList.add('form-control','form-control-sm');
+        input.id = "input-" + td_id;
+        input.insertAdjacentHTML('afterbegin', "<option selected>"+oldValue+"</option>\n" + this.getOptionsForSelect(selectList, oldValue));
       } else {
-        input = document.createElement('textarea');
-        input.setAttribute('rows', '1');
-      }
-      input.classList.add('form-control', 'in-line-cell');
-      input.setAttribute('placeholder', 'edit');
-      input.id = "input-" + td_id;
-      input.setAttribute('value', oldValue);
-      input.setAttribute('name', key);
+        if (type == 'number') {
+          input = document.createElement('input');
+          input.type = 'number';
+        } else {
+          input = document.createElement('textarea');
+          input.setAttribute('rows', '1');
+        }
+        input.classList.add('form-control', 'in-line-cell');
+        input.id = "input-" + td_id;
+        input.setAttribute('value', oldValue);
+        input.setAttribute('name', key);
 
-      input.style.maxWidth = '400px';
+        input.style.maxWidth = '400px';
+      }
 
       saveButton.appendChild(icon_check);
       cancelButton.appendChild(icon_times);
@@ -100,6 +116,15 @@ export class CellEdit {
       if (this.condition) container1.style.display = 'none';
       else container1.style.display = 'block';
     }
+  }
+
+  getOptionsForSelect(data, oldValue): string {
+    console.log('data', data);
+    let htmlString = "";
+    data.forEach(function (row) {
+      if(row.name!==oldValue) htmlString += '<option value="' + row.name + '">\n' + row.name + '</option>\n';
+    });
+    return htmlString;
   }
 
   getInput(td_id: string) {
