@@ -44,7 +44,7 @@ export class EditEntityViewFiltersComponent implements OnInit {
         name: [results?.name, [Validators.required]],
         description: [results?.description],
         filterQuery: [results?.filterQuery],
-        user: [results?.user]
+        user: [results?.userId]
       });
     });
 
@@ -157,8 +157,8 @@ export class EditEntityViewFiltersComponent implements OnInit {
     this.activeRow = event.row;
   }
 
-  onReset() {
-    this.formGroup.reset();
+  cancel(): void {
+    window.history.back();
   }
 
 }
