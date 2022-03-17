@@ -44,12 +44,13 @@ export class EditEntityViewFiltersComponent implements OnInit {
         name: [results?.name, [Validators.required]],
         description: [results?.description],
         filterQuery: [results?.filterQuery],
-        user: [results?.user]
+        user: [results?.userId]
       });
     });
 
     this.userService.getDataCollectors().subscribe((data) => {
       this.dataCollectors = data;
+      console.log(this.dataCollectors);
     });
   }
 
@@ -64,6 +65,7 @@ export class EditEntityViewFiltersComponent implements OnInit {
       return;
     }
     this.formData = this.formGroup.value;
+    console.log(this.formData);
     let entityView = {"entityView": this.entityViewId};
     this.formData = Object.assign(this.formData, entityView);
     this.entityViewFiltersService.updateEntityViewFilter(this.entityViewFilterId, this.formData).subscribe(results => {
@@ -157,8 +159,8 @@ export class EditEntityViewFiltersComponent implements OnInit {
     this.activeRow = event.row;
   }
 
-  onReset() {
-    this.formGroup.reset();
+  cancel(): void {
+    window.history.back();
   }
 
 }
