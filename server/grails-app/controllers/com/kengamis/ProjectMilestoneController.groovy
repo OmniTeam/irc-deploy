@@ -1,9 +1,6 @@
 package com.kengamis
 
 import grails.validation.ValidationException
-
-import static fuzzycsv.FuzzyCSVTable.tbl
-import static fuzzycsv.FuzzyCSVTable.toCSV
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -31,8 +28,6 @@ class ProjectMilestoneController {
             newProjectMilestoneObject['id'] = projectMilestone.id
             newProjectMilestoneObject['name'] = projectMilestone.name
             newProjectMilestoneObject['description'] = projectMilestone.description
-            newProjectMilestoneObject['reportingQuery'] = projectMilestone.reportingQuery
-            newProjectMilestoneObject['dashboardQuery'] = projectMilestone.dashboardQuery
             newProjectMilestoneObject['categoryId'] = categoryId
             newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
             newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
@@ -53,8 +48,6 @@ class ProjectMilestoneController {
         newProjectMilestoneObject['name'] = projectMilestone.name
         newProjectMilestoneObject['description'] = projectMilestone.description
         newProjectMilestoneObject['categoryId'] = categoryId
-        newProjectMilestoneObject['reportingQuery'] = projectMilestone.reportingQuery
-        newProjectMilestoneObject['dashboardQuery'] = projectMilestone.dashboardQuery
         newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
         newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
         newProjectMilestoneObject['category'] = category.name
@@ -82,7 +75,7 @@ class ProjectMilestoneController {
             return
         }
 
-        respond projectMilestone, [status: CREATED, view: "show"]
+        respond projectMilestone, [status: CREATED, view:"show"]
     }
 
     @Transactional
@@ -104,7 +97,7 @@ class ProjectMilestoneController {
             return
         }
 
-        respond projectMilestone, [status: OK, view: "show"]
+        respond projectMilestone, [status: OK, view:"show"]
     }
 
     @Transactional
@@ -117,32 +110,5 @@ class ProjectMilestoneController {
         projectMilestoneService.delete(id)
 
         render status: NO_CONTENT
-    }
-
-    def runQuery() {
-        def milestoneData
-        def milestoneQuery = params.query as String
-        try {
-            def query = "${milestoneQuery}".toString()
-            def data = AppHolder.withMisSql {
-                toCSV(it, query)
-            }.csv
-
-            def dataMapList = tbl(data).toMapList()
-            def headers = dataMapList.get(0).keySet()
-            milestoneData = [dataList: dataMapList, headerList: headers]
-        }
-        catch (Exception e) {
-            log.error("Error fetching data", e)
-            milestoneData = [dataList: [], headerList: []]
-        }
-        respond milestoneData
-    }
-
-    def getMilestonesByProgram() {
-        def programId = params.program as String
-        def programMilestones = ProjectMilestone.findAllByProgram(programId);
-        def data = [milestones: programMilestones]
-        respond data
     }
 }
