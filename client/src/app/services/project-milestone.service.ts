@@ -22,6 +22,10 @@ export class ProjectMilestoneService {
     return this.http.get(`${environment.serverUrl}/programCategory/getCategoriesByProgram`, {params});
   }
 
+  getMilestonesByProgram(params): Observable<any> {
+    return this.http.get(`${this.baseurl}getMilestonesByProgram`, {params});
+  }
+
   createMilestone(formData): Observable<any> {
     return this.http.post(this.baseurl, formData);
   }
@@ -36,5 +40,9 @@ export class ProjectMilestoneService {
 
   deleteMilestone(id): Observable<any> {
     return this.http.delete(`${this.baseurl}${id}/`);
+  }
+
+  runQuery(params) {
+    return this.http.get(`${this.baseurl}/runQuery`, {params});
   }
 }

@@ -1273,43 +1273,6 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
-            column(name: "kenga_group_id", type: "VARCHAR(255)") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "ace_order", type: "INT") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "mask", type: "INT") {
-                constraints(nullable: "false")
-            }
-        }
-    }
-
-    changeSet(author: "victorkakama (generated)", id: "1646915942170-4") {
-        createTable(tableName: "kenga_user_group") {
-            column(name: "kenga_group_id", type: "VARCHAR(255)") {
-                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_user_groupPK")
-            }
-
-            column(name: "user_id", type: "VARCHAR(255)") {
-                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "kenga_user_groupPK")
-            }
-
-            column(name: "date_created", type: "datetime") {
-                constraints(nullable: "false")
-            }
-
-            column(name: "last_updated", type: "datetime") {
-                constraints(nullable: "false")
-            }
-        }
-    }
-
-    changeSet(author: "victorkakama (generated)", id: "1646915942170-5") {
-        addUniqueConstraint(columnNames: "table_name", constraintName: "UC_KENGA_DATA_TABLETABLE_NAME_COL", tableName: "kenga_data_table")
-    }
 
     changeSet(author: "victorkakama (generated)", id: "1645520788547-2") {
         addColumn(tableName: "role") {
@@ -1609,6 +1572,71 @@ databaseChangeLog = {
 
     changeSet(author: "victorkakama (generated)", id: "1646989014226-2") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "names", tableName: "user")
+    }
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-1") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "user_id", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-2") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "entity_view_filters", constraintName: "FK9432frmitk8mc7gfm3h6gqw9d", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-1") {
+        createTable(tableName: "user_entity_view_filters") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "user_entity_view_filtersPK")
+            }
+
+            column(name: "entity_view_filters_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-2") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-3") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-4") {
+        addUniqueConstraint(columnNames: "entity_view_filters_id, user_id", constraintName: "UK28e93280ffd3817340e71f819e6b", tableName: "user_entity_view_filters")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-5") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_entity_view_filters", constraintName: "FK660sr1x5pypub18iwh087qrc2", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-6") {
+        addForeignKeyConstraint(baseColumnNames: "entity_view_filters_id", baseTableName: "user_entity_view_filters", constraintName: "FKl1y77w88879q3g1di522fyby4", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view_filters", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647585031314-43") {
+        dropColumn(columnName: "user_id", tableName: "entity_view_filters")
     }
 
 }

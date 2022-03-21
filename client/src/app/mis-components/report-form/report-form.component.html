@@ -1,5 +1,3 @@
-
-
 <div class="header bg-success pb-6">
   <div class="container-fluid">
     <div class="header-body">
@@ -209,13 +207,13 @@
                       <td class='text-center' id="0-{{row.id}}">
                         <div>{{ row.quarter_expenses }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'0-'+row.id, 'quarterExpense', row.quarter_expenses)"><i
+                                  (click)="cellEditor(row,'0-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' id="1-{{row.id}}">
                         <div>{{ row.variance }}
-                          <button class="btn btn-link" (click)="cellEditor(row,'1-'+row.id, 'variance', row.variance)">
+                          <button class="btn btn-link" (click)="cellEditor(row,'1-'+row.id, 'variance', row.variance, 'number')">
                             <i class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>

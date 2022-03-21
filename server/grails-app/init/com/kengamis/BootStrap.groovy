@@ -116,6 +116,15 @@ class BootStrap {
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
 
+        TaskDef.findByName("Metabase Query Import Job") ?: new TaskDef(
+                name: 'Metabase Query Import Job',
+                description: 'Queries Views and creates/updates tables in metabase',
+                cronExpression: '0 0 0 * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.MetabaseQueryImportJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
+
     }
 
     def initStartUpJobs() {

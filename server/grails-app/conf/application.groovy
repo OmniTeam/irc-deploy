@@ -76,3 +76,4 @@ environments {
         imageFolder = "/opt/uploads/centralImages/"
     }
 }
+mis.database = 'kengamis'

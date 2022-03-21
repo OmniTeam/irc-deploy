@@ -20,8 +20,6 @@ import {SampleData} from "../../helpers/sample-data";
 
 export class ReportFormComponent implements OnInit, OnUpdateCell {
 
-  @ViewChild(CellEdit) cellEdit;
-
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
   comments: Array<CommentNode> = [];
@@ -80,7 +78,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private reportFormService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private location: Location,
+              private reportFormService: ReportFormService,
+              private taskListService: TaskListService,
+              private fileUploadService: FileUploadService,
+              public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -298,8 +302,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {
-    //save
-    console.log("newValue", value);
     if (value !== null && value !== undefined)
       switch (key) {
         case "summaryComment":
@@ -333,8 +335,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  cellEditor(row, td_id, key: string, oldValue, type?: string) {
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue,type);
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {

@@ -37,11 +37,17 @@ class UrlMappings {
         get "/$controller/getFormDataImage(.$format)?"(action:"getFormDataImage")
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
         get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
+        get "/$controller/getMilestonesByProgram(.$format)?"(action:"getMilestonesByProgram")
         get "/$controller/defaultFilterQuery(.$format)?"(action:"defaultFilterQuery")
         get "/$controller/filterFiltersByEntityView(.$format)?"(action:"filterFiltersByEntityView")
         get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
         get "/$controller/getDataViewData(.$format)?"(action:"getDataViewData")
         get "/$controller/dataViewRunNow(.$format)?"(action:"dataViewRunNow")
+        get "/$controller/runQuery(.$format)?"(action:"runQuery")
+        get "/$controller/syncViewToMetabase(.$format)?"(action:"syncViewToMetabase")
+        get "/$controller/getDataCollectors(.$format)?"(action:"getDataCollectors")
+        get "/$controller/runFilterQuery(.$format)?"(action:"runFilterQuery")
+        get "/$controller/saveUserEntityViewFilter(.$format)?"(action:"saveUserEntityViewFilter")
 
 
         group "/odxRest/", {
@@ -51,6 +57,7 @@ class UrlMappings {
             'getFilters'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilters')
             'getFilteredEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityData')
             'getFilteredEntityDataMap'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getFilteredEntityDataMap')
+            'getDefaultEntityDataMap'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getDefaultEntityDataMap')
 
         }
 
