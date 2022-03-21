@@ -125,9 +125,9 @@
                         <ng-select class="form-control form-control-sm"
                                    aria-controls="datatable"
                                    style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
+                                   [multiple]="true"
                                    placeholder="  Data Collector"
-                                   formControlName="user"
+                                   formControlName="users"
                                    [searchable]="true"
                                    [clearable]="true">
                           <ng-option [value]="item.id" *ngFor="let item of dataCollectors">

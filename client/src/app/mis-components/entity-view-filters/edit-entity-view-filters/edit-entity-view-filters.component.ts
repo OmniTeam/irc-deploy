@@ -44,7 +44,7 @@ export class EditEntityViewFiltersComponent implements OnInit {
         name: [results?.name, [Validators.required]],
         description: [results?.description],
         filterQuery: [results?.filterQuery],
-        user: [results?.userId]
+        users: [results?.users]
       });
     });
 
@@ -66,9 +66,16 @@ export class EditEntityViewFiltersComponent implements OnInit {
     this.formData = this.formGroup.value;
     let entityView = {"entityView": this.entityViewId};
     this.formData = Object.assign(this.formData, entityView);
+    let users = this.formData.users;
     this.entityViewFiltersService.updateEntityViewFilter(this.entityViewFilterId, this.formData).subscribe(results => {
-      this.router.navigate(['/entityViewFilter']);
-      this.alertService.success(`${this.formData.name} has been successfully updated `);
+      const params = new HttpParams()
+        .set('id', results['id'])
+        .set('users', users);
+      this.entityViewFiltersService.saveUserEntityViewFilter(params).subscribe(results => {
+        this.router.navigate(['/entityViewFilter']);
+        this.alertService.success(`${this.formData.name} has been successfully updated `);
+      });
+
     }, error => {
       this.alertService.error(`${this.formData.name} could not be updated`);
     });
