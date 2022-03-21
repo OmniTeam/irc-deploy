@@ -38,7 +38,10 @@ class MisEntityController {
     }
 
     def show(String id) {
-        respond misEntityService.get(id)
+        def misEntity = MisEntity.get(id)
+        def entityFields = misEntity.entityFields
+        def misEntityReturned = [id: misEntity.id, name: misEntity.name, tableName: misEntity.tableName, prefix: misEntity.prefix, enableTagging: misEntity.enableTagging, entityFields: entityFields]
+        respond misEntityReturned
     }
 
     @Transactional
