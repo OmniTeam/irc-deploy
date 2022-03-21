@@ -16,7 +16,6 @@ import grails.gorm.transactions.Transactional
 class PartnerSetupController {
 
     PartnerSetupService partnerSetupService
-    ProgramPartnerService programPartnerService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -28,10 +27,8 @@ class PartnerSetupController {
         def list = []
 
         partnerSetups.each{PartnerSetup setup ->
-            def partner = ProgramPartner.findById(setup.partnerId)
-
             list << [id: setup.id,
-                      partner : partner.name,
+                      partnerId : setup.partnerId,
                       lastUpdated : setup.lastUpdated,
                       dateCreated: setup.dateCreated]
         }

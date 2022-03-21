@@ -1,4 +1,4 @@
-package com.kengamis
+package com.kengamis.acl
 
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
@@ -11,64 +11,64 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class UserEntityViewFiltersController {
+class KengaGroupAclEntryController {
 
-    UserEntityViewFiltersService userEntityViewFiltersService
+    KengaGroupAclEntryService kengaGroupAclEntryService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond userEntityViewFiltersService.list(params), model:[userEntityViewFiltersCount: userEntityViewFiltersService.count()]
+        respond kengaGroupAclEntryService.list(params), model:[kengaGroupAclEntryCount: kengaGroupAclEntryService.count()]
     }
 
     def show(Long id) {
-        respond userEntityViewFiltersService.get(id)
+        respond kengaGroupAclEntryService.get(id)
     }
 
     @Transactional
-    def save(UserEntityViewFilters userEntityViewFilters) {
-        if (userEntityViewFilters == null) {
+    def save(KengaGroupAclEntry kengaGroupAclEntry) {
+        if (kengaGroupAclEntry == null) {
             render status: NOT_FOUND
             return
         }
-        if (userEntityViewFilters.hasErrors()) {
+        if (kengaGroupAclEntry.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond userEntityViewFilters.errors
+            respond kengaGroupAclEntry.errors
             return
         }
 
         try {
-            userEntityViewFiltersService.save(userEntityViewFilters)
+            kengaGroupAclEntryService.save(kengaGroupAclEntry)
         } catch (ValidationException e) {
-            respond userEntityViewFilters.errors
+            respond kengaGroupAclEntry.errors
             return
         }
 
-        respond userEntityViewFilters, [status: CREATED, view:"show"]
+        respond kengaGroupAclEntry, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(UserEntityViewFilters userEntityViewFilters) {
-        if (userEntityViewFilters == null) {
+    def update(KengaGroupAclEntry kengaGroupAclEntry) {
+        if (kengaGroupAclEntry == null) {
             render status: NOT_FOUND
             return
         }
-        if (userEntityViewFilters.hasErrors()) {
+        if (kengaGroupAclEntry.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond userEntityViewFilters.errors
+            respond kengaGroupAclEntry.errors
             return
         }
 
         try {
-            userEntityViewFiltersService.save(userEntityViewFilters)
+            kengaGroupAclEntryService.save(kengaGroupAclEntry)
         } catch (ValidationException e) {
-            respond userEntityViewFilters.errors
+            respond kengaGroupAclEntry.errors
             return
         }
 
-        respond userEntityViewFilters, [status: OK, view:"show"]
+        respond kengaGroupAclEntry, [status: OK, view:"show"]
     }
 
     @Transactional
@@ -78,7 +78,7 @@ class UserEntityViewFiltersController {
             return
         }
 
-        userEntityViewFiltersService.delete(id)
+        kengaGroupAclEntryService.delete(id)
 
         render status: NO_CONTENT
     }

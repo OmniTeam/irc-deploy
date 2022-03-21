@@ -32,15 +32,6 @@ class UserController {
         respond userService.get(id)
     }
 
-    def getDataCollectors() {
-        def role = Role.findByAuthority('ROLE_DATA_COLLECTOR')
-        def userRoles = UserRole.findAllByRole(role)
-        def dataCollectors = userRoles.collect { userRole ->
-            def user = userRole.user
-            [names: user.names, id: user.id] }
-        respond dataCollectors
-    }
-
     @Transactional
     def save(User user) {
         if (user == null) {

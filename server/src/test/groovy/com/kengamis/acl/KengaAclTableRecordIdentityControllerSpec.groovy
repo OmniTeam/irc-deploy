@@ -1,4 +1,4 @@
-package com.kengamis
+package com.kengamis.acl
 
 import spock.lang.*
 import static org.springframework.http.HttpStatus.OK
@@ -10,7 +10,7 @@ import grails.validation.ValidationException
 import grails.testing.web.controllers.ControllerUnitTest
 import grails.testing.gorm.DomainUnitTest
 
-class UserEntityViewFiltersControllerSpec extends Specification implements ControllerUnitTest<UserEntityViewFiltersController>, DomainUnitTest<UserEntityViewFilters> {
+class KengaAclTableRecordIdentityControllerSpec extends Specification implements ControllerUnitTest<KengaAclTableRecordIdentityController>, DomainUnitTest<KengaAclTableRecordIdentity> {
 
     def populateValidParams(params) {
         assert params != null
@@ -22,7 +22,7 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the index action returns the correct response"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
             1 * list(_) >> []
             1 * count() >> 0
         }
@@ -47,8 +47,8 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the save action correctly persists"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
-            1 * save(_ as UserEntityViewFilters)
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
+            1 * save(_ as KengaAclTableRecordIdentity)
         }
 
         when:
@@ -56,7 +56,7 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'POST'
         populateValidParams(params)
-        request.json = new UserEntityViewFilters(params)
+        request.json = new KengaAclTableRecordIdentity(params)
         controller.save()
 
         then:
@@ -66,9 +66,9 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the save action with an invalid instance"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
-            1 * save(_ as UserEntityViewFilters) >> { UserEntityViewFilters userEntityViewFilters ->
-                throw new ValidationException("Invalid instance", userEntityViewFilters.errors)
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
+            1 * save(_ as KengaAclTableRecordIdentity) >> { KengaAclTableRecordIdentity kengaAclTableRecordIdentity ->
+                throw new ValidationException("Invalid instance", kengaAclTableRecordIdentity.errors)
             }
         }
 
@@ -76,7 +76,7 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'POST'
         populateValidParams(params)
-        request.json = new UserEntityViewFilters(params)
+        request.json = new KengaAclTableRecordIdentity(params)
         controller.save()
 
         then:
@@ -86,7 +86,7 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the show action with a null id"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
             1 * get(null) >> null
         }
 
@@ -99,8 +99,8 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the show action with a valid id"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
-            1 * get(2) >> new UserEntityViewFilters()
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
+            1 * get(2) >> new KengaAclTableRecordIdentity()
         }
 
         when:"A domain instance is passed to the show action"
@@ -124,8 +124,8 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the update action correctly persists"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
-            1 * save(_ as UserEntityViewFilters)
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
+            1 * save(_ as KengaAclTableRecordIdentity)
         }
 
         when:
@@ -133,7 +133,7 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'PUT'
         populateValidParams(params)
-        def instance = new UserEntityViewFilters(params)
+        def instance = new KengaAclTableRecordIdentity(params)
         instance.id = 1
         instance.version = 0
         controller.update(instance)
@@ -145,16 +145,16 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the update action with an invalid instance"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
-            1 * save(_ as UserEntityViewFilters) >> { UserEntityViewFilters userEntityViewFilters ->
-                throw new ValidationException("Invalid instance", userEntityViewFilters.errors)
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
+            1 * save(_ as KengaAclTableRecordIdentity) >> { KengaAclTableRecordIdentity kengaAclTableRecordIdentity ->
+                throw new ValidationException("Invalid instance", kengaAclTableRecordIdentity.errors)
             }
         }
 
         when:
         request.contentType = JSON_CONTENT_TYPE
         request.method = 'PUT'
-        def instance = new UserEntityViewFilters(params)
+        def instance = new KengaAclTableRecordIdentity(params)
         instance.id = 1
         instance.version = 0
         controller.update(instance)
@@ -176,7 +176,7 @@ class UserEntityViewFiltersControllerSpec extends Specification implements Contr
 
     void "Test the delete action with an instance"() {
         given:
-        controller.userEntityViewFiltersService = Mock(UserEntityViewFiltersService) {
+        controller.kengaAclTableRecordIdentityService = Mock(KengaAclTableRecordIdentityService) {
             1 * delete(2)
         }
 

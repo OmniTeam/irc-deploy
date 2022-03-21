@@ -1,9 +1,9 @@
-package com.kengamis
+package com.kengamis.acl
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class KengaPermissionSpec extends Specification implements DomainUnitTest<KengaPermission> {
+class KengaDataTableSpec extends Specification implements DomainUnitTest<KengaDataTable> {
 
     def setup() {
     }

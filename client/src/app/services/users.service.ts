@@ -9,6 +9,7 @@ import {environment} from "../../environments/environment";
 export class UsersService {
   baseurl = environment.serverUrl
   urlUsers = `${this.baseurl}/user/`
+  urlUserGroup = `${this.baseurl}/UserGroup/`
 
   constructor(private http: HttpClient) { }
 
@@ -38,5 +39,10 @@ export class UsersService {
 
   deleteCurrentUser(p): Observable<any> {
     return this.http.delete(`${this.urlUsers}${p}/`);
+  }
+
+  // this is for creating records in the user group table
+  createUserGroup(userGroupData): Observable<any> {
+    return this.http.post(this.urlUserGroup, userGroupData);
   }
 }
