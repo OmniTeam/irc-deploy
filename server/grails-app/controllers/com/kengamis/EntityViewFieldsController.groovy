@@ -23,7 +23,7 @@ class EntityViewFieldsController {
         respond entityViewFieldsService.list(params), model:[entityViewFieldsCount: entityViewFieldsService.count()]
     }
 
-    def show(String id) {
+    def show(Long id) {
         respond entityViewFieldsService.get(id)
     }
 
@@ -72,7 +72,7 @@ class EntityViewFieldsController {
     }
 
     @Transactional
-    def delete(String id) {
+    def delete(Long id) {
         if (id == null) {
             render status: NOT_FOUND
             return
