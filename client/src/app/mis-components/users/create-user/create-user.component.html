@@ -259,10 +259,10 @@
                                      name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
+                                     [multiple]="true"
                                      placeholder="Groups"
-                                     formControlName="groups"
-                                     [ngClass]="{ 'is-invalid': submitted && f.groups.errors }"
+                                     formControlName="kengaGroup"
+                                     [ngClass]="{ 'is-invalid': submitted && f.kengaGroup.errors }"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -270,8 +270,8 @@
                               {{item.name}}
                             </ng-option>
                           </ng-select>
-                          <div *ngIf="submitted && f.groups.errors" class="invalid-feedback">
-                            <div *ngIf="f.groups.errors.required" class="input-error">A Group is required</div>
+                          <div *ngIf="submitted && f.kengaGroup.errors" class="invalid-feedback">
+                            <div *ngIf="f.kengaGroup.errors.required" class="input-error">A Group is required</div>
                           </div>
                         </div>
                       </div>

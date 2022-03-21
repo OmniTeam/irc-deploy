@@ -68,16 +68,17 @@ export class CreateGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.groupsService.getGroups().subscribe(data => {
-      this.parents = data
+    this.usersService.getUsers().subscribe(results => {
+      this.dataCollectors = results
+      console.log(results)
     }, error => {
-      this.alertService.error("Failed to get Parents")
+      this.alertService.error("Failed to get data collectors")
     })
-    this.usersService.getUsers().subscribe(data => {
-      this.dataCollectors = data
-      console.log(this.dataCollectors)
+    this.groupsService.getGroups().subscribe(results => {
+      this.parents = results
+      console.log(results)
     }, error => {
-      this.alertService.error("Failed to get Data Collectors")
+      this.alertService.error("Failed to get parents")
     })
     this.formGroup = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -101,6 +102,20 @@ export class CreateGroupComponent implements OnInit {
     this.groupsService.createGroup(formData).subscribe((result) => {
       console.warn(result, 'Group created Successfully');
       this.alertService.success(`Group has been created`);
+
+      console.log(formData.data_collectors, "Data Collectors")
+
+      //insert kenga_group_id and user_id into table. This tracks users who belong to the group
+      for(let i=0; i<formData.data_collectors.length; i++){
+        const KengaUserGroupData = new FormData()
+        KengaUserGroupData.append('kengaGroup', result.id)
+        KengaUserGroupData.append('user', formData.data_collectors[i])
+
+        this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
+          console.log(data ,"Kenga User Group details")
+        }, error => {this.alertService.error("failed to create Kenga User Groups")})
+      }
+
       this.router.navigate(['/groups']);
     }, error => {
       this.alertService.error("Failed to Create the Group")

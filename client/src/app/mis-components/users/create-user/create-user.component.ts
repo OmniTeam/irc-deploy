@@ -68,12 +68,16 @@ export class CreateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.rolesService.getRoles().subscribe( data =>{
+    this.rolesService.getRoles().subscribe(data => {
       this.user_Type = data
-    }, error => {this.alertService.error("Failed to get Roles")})
-    this.groupsService.getGroups().subscribe( data =>{
+    }, error => {
+      this.alertService.error("Failed to get Roles")
+    })
+    this.groupsService.getGroups().subscribe(data => {
       this.groups = data
-    }, error => {this.alertService.error("Failed to get Groups")})
+    }, error => {
+      this.alertService.error("Failed to get Groups")
+    })
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
@@ -81,7 +85,7 @@ export class CreateUserComponent implements OnInit {
       email: [''/*, [Validators.required, Validators.email]*/],
       // telephone: [''],
       role: [null],
-      groups: [null],
+      kengaGroup: [null],
       enabled: [true],
       data_collector_Type: [],
     });
@@ -98,16 +102,32 @@ export class CreateUserComponent implements OnInit {
       console.log('Invalid');
       return;
     }
-     const formData = this.formGroup.value;
+    const formData = this.formGroup.value;
+    console.log(formData)
     this.userService.createUser(formData).subscribe((result) => {
-        this.alertService.success(`User is created successfully`);
-        this.router.navigate(['/users']);
-    },error => {this.alertService.error("Failed to Create the User")});
+      this.alertService.success(`User is created successfully`);
+
+      console.log(formData.kengaGroup, "Groups")
+      // inserts user_id group_id pairs into the user group table
+      for(let i=0; i<formData.kengaGroup.length; i++){
+        const userGroupData = new FormData()
+        userGroupData.append('user', result.id)
+        userGroupData.append('group', formData.kengaGroup[i])
+
+        this.userService.createUserGroup(userGroupData).subscribe(data => {
+          console.log(data ,"User group details")
+        }, error => {this.alertService.error("failed to create user groups")})
+      }
+
+      this.router.navigate(['/users']);
+    }, error => {
+      this.alertService.error("Failed to Create the User")
+    });
   }
 
   resetForm() {
     this.formGroup.reset()
-    this.clicked =  false
+    this.clicked = false
     this.submitted = false
   }
 

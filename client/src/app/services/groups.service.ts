@@ -9,6 +9,7 @@ import {environment} from "../../environments/environment";
 export class GroupsService {
   baseurl = environment.serverUrl
   urlGroups = `${this.baseurl}/KengaGroup/`
+  urlKengaGroupUser = `${this.baseurl}/KengaUserGroup/`
 
   constructor(private http: HttpClient) { }
 
@@ -32,5 +33,9 @@ export class GroupsService {
 
   deleteCurrentGroup(p): Observable<any> {
     return this.http.delete(`${this.urlGroups}${p}/`);
+  }
+//  create kenga user group
+  createKengaUserGroup(KengaUserGroupData): Observable<any> {
+    return this.http.post(this.urlKengaGroupUser, KengaUserGroupData);
   }
 }
