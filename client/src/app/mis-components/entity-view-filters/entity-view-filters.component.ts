@@ -45,7 +45,7 @@ export class EntityViewFiltersComponent implements OnInit {
 
   editEntityViewFilter(row) {
     const id = row.id;
-    const entityViewId = row.entityView.id;
+    const entityViewId = row.entityViewId;
     this.router.navigate(['/entityViewFilter/edit/'+ entityViewId + '/' + id]);
   }
 

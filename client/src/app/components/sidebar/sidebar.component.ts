@@ -3,16 +3,26 @@ import {Router} from '@angular/router';
 import {AuthService} from "../../services/auth.service";
 import {FormService} from "../../services/form.service";
 import {ReplacePipe} from "../../replace-pipe";
+import {EntityService} from "../../services/entity.service";
 
 let misc: any = {
   sidebar_mini_active: true
 };
 
 let formsMenu: any = {
-  path: '/forms/data',
+  path: 'forms/data',
   title: 'Data',
   type: 'sub',
-  icontype: 'ni-single-copy-04 text-pink',
+  icontype: 'ni-single-copy-04 text-red',
+  isCollapsed: true,
+  children: []
+}
+
+let listsMenu: any = {
+  path: 'entity/showData/',
+  title: 'Lists',
+  type: 'sub',
+  icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
   children: []
 }
@@ -60,48 +70,70 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'fas fa-home',
   },
   formsMenu,
-  // {
-  //   path: '/widgets',
-  //   title: 'Reports',
-  //   type: 'sub',
-  //   icontype: 'ni-books text-pink',
-  //   isCollapsed: true,
-  //   children: [
-  //     {path: 'dashboard', title: 'Farmer Report', type: 'link'},
-  //     {path: 'alternative', title: 'Trends', type: 'link'}
-  //   ]
-  // },
+  listsMenu,
   {
     path: '/',
-    title: 'Admin',
+    title: 'Tasks',
     type: 'sub',
-    icontype: 'ni-badge text-default',
+    icontype: 'fas fa-tasks text-pink',
     isCollapsed: true,
     children: [
-      {path: 'tagType', title: 'Tag Type', type: 'link'},
-      {path: 'tags', title: 'Tags', type: 'link'},
-      {path: 'program', title: 'Program', type: 'link'},
-      {path: 'programPartner', title: 'Program Partner', type: 'link'},
-      {path: 'programCategory', title: 'Program Category', type: 'link'},
-      {path: 'milestones', title: 'Project Milestones', type: 'link'}
+      {path: 'taskList', title: 'Task List', type: 'link'},
+      // {path: 'onGoingTasks', title: 'Ongoing Tasks', type: 'link'},
+      // {path: 'taskReport', title: 'Task Report', type: 'link'},
     ]
   },
   {
     path: '/',
-    title: 'Settings',
+    title: 'Admin',
     type: 'sub',
-    icontype: 'ni-settings text-primary',
+    icontype: 'fas fa-user-cog',
+    isCollapsed: true,
+    children: [
+      {path: 'tags', title: 'Tags', type: 'link'},
+      {path: 'partnerSetupList', title: 'Work Plan', type: 'link'},
+      {path: 'programPartner', title: 'Program Partner', type: 'link'},
+      {path: 'users', title: 'Users', type: 'link'},
+    ]
+  },
+
+  {
+    path: '/',
+    title: 'Set-Up',
+    type: 'sub',
+    icontype: 'fas fa-cog text-blue',
+    isCollapsed: true,
+    children: [
+      {
+        path: '', title: 'Program', type: 'sub', isCollapsed: true,
+        children: [
+          {path: 'program', title: 'Add Program', type: 'link'},
+          {path: 'programCategory', title: 'Add Program Category', type: 'link'},
+        ]
+      },
+      {path: 'milestones', title: 'Project Milestones', type: 'link'}
+    ]
+  },
+
+  {
+    path: '/',
+    title: 'Configuration',
+    type: 'sub',
+    icontype: 'fas fa-tools text-purple',
     isCollapsed: true,
     children: [
       {path: 'forms', title: 'Forms', type: 'link'},
       formSettingsMenu,
-      {path: 'project', title: 'Project', type: 'link'},
-      {path: 'entity', title: 'Entities', type: 'link'},
-      {path: 'entityView', title: 'Entity Views', type: 'link'},
-      {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link'},
-      {path: 'dataView', title: 'Data View', type: 'link'},
-      {path: 'taskList', title: 'Task List', type: 'link'},
-      {path: 'partnerSetupList', title: 'Partner Setup', type: 'link'},
+      {
+        path: '', title: 'Entities', type: 'sub', isCollapsed: true,
+        children: [
+          {path: 'entity', title: 'Entities', type: 'link'},
+          {path: 'entityView', title: 'Entity Views', type: 'link'},
+          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link'},
+          {path: 'dataView', title: 'Data View', type: 'link'},
+        ]
+      },
+      {path: 'tagType', title: 'Tag Type', type: 'link'},
       {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link'},
     ]
   },
@@ -109,12 +141,12 @@ export const ROUTES: RouteInfo[] = [
     path: '',
     title: 'User',
     type: 'sub',
-    icontype: 'ni-single-02 text-green',
+    icontype: 'fas fa-user-tie text-green',
     isCollapsed: true,
     children: [
       {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'roles', title: 'Roles', type: 'link'},
-      {path: 'users', title: 'Users', type: 'link'},
+      {path: 'users', title: 'User Management', type: 'link'},
       {path: 'requestMaps', title: 'Request Maps', type: 'link'}
     ]
   },
@@ -129,7 +161,7 @@ export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
 
-  constructor(private router: Router, public authService: AuthService, private formService: FormService) {
+  constructor(private router: Router, public authService: AuthService, private formService: FormService, private entityService: EntityService) {
   }
 
   ngOnInit() {
@@ -151,6 +183,16 @@ export class SidebarComponent implements OnInit {
           formSettingObject['path'] = form.name.toString();
           formSettingObject['type'] = 'link';
           formSettingsMenu.children.push(formSettingObject);
+        }
+      }, error => console.log(error));
+
+      this.entityService.getEntities().subscribe((data) => {
+        for (let entity of data) {
+          let entityObject = {};
+          entityObject['title'] = new ReplacePipe().transform(entity.name, '_', ' ').toUpperCase();
+          entityObject['path'] = entity.id;
+          entityObject['type'] = 'link';
+          listsMenu.children.push(entityObject);
         }
       }, error => console.log(error));
     }

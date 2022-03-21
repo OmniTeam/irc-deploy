@@ -19,4 +19,12 @@ class EntityViewFilters {
         id generator: 'uuid2'
         filterQuery type: 'text'
     }
+
+    /*
+    * Methods of the Domain Class
+    */
+    @Override	// Override toString for a nicer / more descriptive UI
+    public String toString() {
+        return "${name}"
+    }
 }

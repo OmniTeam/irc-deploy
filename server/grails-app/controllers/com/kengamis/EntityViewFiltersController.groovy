@@ -24,9 +24,12 @@ class EntityViewFiltersController {
     def index(Integer max) {
         def entityViewFilters = EntityViewFilters.findAll().collect { entityViewFilter ->
             def entityView = entityViewFilter.entityView.name
+            def entityViewId = entityViewFilter.entityView.id
             def user = entityViewFilter.user?.names
+            def userId = entityViewFilter.user?.id
             [id: entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description,
-             filterQuery: entityViewFilter.filterQuery, entityView: entityView, user: user]
+             filterQuery: entityViewFilter.filterQuery, entityView: entityView,
+             entityViewId: entityViewId, user: user, userId: userId]
 
         }
         respond entityViewFilters
@@ -35,11 +38,13 @@ class EntityViewFiltersController {
     def show(String id) {
         def entityViewFilter = entityViewFiltersService.get(id)
         def entityView = entityViewFilter.entityView.name
+        def entityViewId = entityViewFilter.entityView.id
         def user = entityViewFilter.user?.names
+        def userId = entityViewFilter.user?.id
         def entityViewFilterReturned = [id: entityViewFilter.id, name: entityViewFilter.name,
                                         description: entityViewFilter.description,
                                         filterQuery: entityViewFilter.filterQuery, entityView: entityView,
-                                        user: user]
+                                        entityViewId: entityViewId, user: user, userId: userId]
 
         respond entityViewFilterReturned
     }

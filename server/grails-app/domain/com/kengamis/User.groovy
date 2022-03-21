@@ -4,8 +4,6 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-@EqualsAndHashCode(includes = 'username')
-@ToString(includes = 'username', includeNames = true, includePackage = false)
 class User {
 
     transient springSecurityService
@@ -36,6 +34,14 @@ class User {
     static mapping = {
         id generator: 'uuid2'
         password column: '`password`'
+    }
+
+    /*
+    * Methods of the Domain Class
+    */
+    @Override	// Override toString for a nicer / more descriptive UI
+    public String toString() {
+        return "${names}"
     }
 
     Set<Role> getAuthorities() {
