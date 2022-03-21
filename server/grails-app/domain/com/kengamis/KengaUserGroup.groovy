@@ -88,4 +88,7 @@ class KengaUserGroup implements Serializable{
 
     static belongsTo = [kengaGroup: KengaGroup, user: User]
 
+
+
+
 }

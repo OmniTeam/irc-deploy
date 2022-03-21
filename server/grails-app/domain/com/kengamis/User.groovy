@@ -29,7 +29,7 @@ class User {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: true
-
+        names nullable: true
 
     }
 
