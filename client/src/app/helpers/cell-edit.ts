@@ -73,15 +73,21 @@ export class CellEdit {
       container.id = "edit-cell-" + td_id;
 
       let input;
+      let selectInput;
 
       if (type == 'select') {
         if(selectList==undefined) { console.log('Error: ','select has no data'); return; }
         container.classList.add('form-group', 'text-center');
         container.style.margin = '0 0 30px 30px';
         container.style.width = '60%';
-        input = document.createElement('select');
-        input.classList.add('form-control','form-control-sm');
-        input.id = "input-" + td_id;
+
+        selectInput = document.createElement('input');
+        selectInput.id = "input-" + td_id;
+        selectInput.classList.add('form-control','form-control-sm');
+        selectInput.setAttribute('list', "data-list");
+
+        input = document.createElement('datalist');
+        input.id = "data-list";
         input.insertAdjacentHTML('afterbegin', "<option selected>"+oldValue+"</option>\n" + this.getOptionsForSelect(selectList, oldValue));
       } else {
         if (type == 'number') {
@@ -101,6 +107,7 @@ export class CellEdit {
 
       saveButton.appendChild(icon_check);
       cancelButton.appendChild(icon_times);
+      if (type == 'select') { container.appendChild(selectInput); }
       container.appendChild(input);
       container.appendChild(saveButton);
       container.appendChild(cancelButton);

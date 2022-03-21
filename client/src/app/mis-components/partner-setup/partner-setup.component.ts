@@ -32,7 +32,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   indicators: Indicator[] = [];
 
   setup: any;
-  disaggregation: any;
+  indicatorForDisaggregation: Indicator;
   organisationalInfo: any = [];
   listOfPartners: any = [];
   milestones: any = [];
@@ -137,6 +137,18 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   generateCalendar(event) {
+    if (this.disbursementPlan || this.indicators) {
+      if (confirm('This action will clear the targets and disbursement entered')) {
+        this.disbursementPlan = [];
+        this.indicators = [];
+        this.calendarDates();
+      }
+    } else {
+      this.calendarDates();
+    }
+  }
+
+  calendarDates() {
     let startDate = this.calendar.grantStartDate;
     let endDate = this.calendar.grantEndDate;
 
@@ -260,7 +272,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (this.showDisaggregation) {
       button.firstChild.replaceWith(minus_icon);
       //set disaggregation values
-      this.disaggregation = data;
+      this.indicatorForDisaggregation = data;
     } else {
       button.firstChild.replaceWith(plus_icon);
     }
@@ -289,14 +301,19 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           break;
         case 'disaggregation':
           let overallTarget: number = 0;
+          let arr = rowId.split(' ');
+          let datePeriod = arr[0];
+          let indicatorId = arr[1];
           this.indicators.forEach((indicator) => {
-            if (indicator.disaggregation.some(x => x.datePeriod === rowId)) {
-              indicator.disaggregation.forEach(function (item) {
-                if (item.datePeriod === rowId) item.target = value
-                if (item.target.length != 0) overallTarget += +item.target;
-              });
-              indicator.overallTarget = overallTarget.toString();
-              this.disaggregation = indicator.disaggregation;
+            if(indicator.id === indicatorId) {
+              if (indicator.disaggregation.some(x => x.datePeriod === datePeriod)) {
+                indicator.disaggregation.forEach(function (item) {
+                  if (item.datePeriod === datePeriod) item.target = value
+                  if (item.target.length != 0) overallTarget += +item.target;
+                });
+                indicator.overallTarget = overallTarget.toString();
+                this.indicatorForDisaggregation = indicator;
+              }
             }
           });
           break;
