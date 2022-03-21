@@ -231,7 +231,7 @@ class KengaMobileRestController {
         Assert.notNull(user, "Username cannot be null")
 
 
-        def entityViewFilters = EntityViewFilters.findAllByUser(user)
+        def entityViewFilters = user.entityViewFilters
         entityViewFilters.each { entityViewFilter ->
             def viewQuery = entityViewFilter.filterQuery
             def entityView = entityViewFilter.entityView

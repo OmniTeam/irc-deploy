@@ -22,7 +22,8 @@ class User {
 
     static transients = ['springSecurityService']
 
-    static hasMany = [userRoles: UserRole, filters: EntityViewFilters]
+    static hasMany = [userRoles: UserRole, userEntityViewFilters: UserEntityViewFilters]
+
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
@@ -46,6 +47,10 @@ class User {
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
+
+    Set<EntityViewFilters> getEntityViewFilters() {
+        (UserEntityViewFilters.findAllByUser(this) as List<UserEntityViewFilters>)*.entityViewFilters as Set<EntityViewFilters>
     }
 
     def roles() {

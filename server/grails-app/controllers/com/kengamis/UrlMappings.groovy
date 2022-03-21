@@ -47,6 +47,7 @@ class UrlMappings {
         get "/$controller/syncViewToMetabase(.$format)?"(action:"syncViewToMetabase")
         get "/$controller/getDataCollectors(.$format)?"(action:"getDataCollectors")
         get "/$controller/runFilterQuery(.$format)?"(action:"runFilterQuery")
+        get "/$controller/saveUserEntityViewFilter(.$format)?"(action:"saveUserEntityViewFilter")
 
 
         group "/odxRest/", {
