@@ -178,7 +178,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     //set disbursement
-    if (!this.setup) {
       this.calendar.reportingCalender.forEach((period) => {
         this.disbursementPlan.push(
           {
@@ -190,7 +189,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           }
         );
       });
-    }
     this.savePlan();
   }
 

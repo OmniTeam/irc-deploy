@@ -20,7 +20,7 @@ class StartCamundaInstancesJob extends Script {
             boolean started = startProcessInstance([
                     PartnerId : it.partnerId,
                     ProgramId : it.programId,
-                    StartDate : it.startDate,
+                    StartDate : it.reportingStartDate,
                     EndDate : it.endDate,
                     GroupId: ""
             ], CIIF_MANAGEMENT_KEY)
