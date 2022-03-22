@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 
 class StartCamundaInstancesJob extends Script {
     static String camundaApiUrl = "https://snvdata.org/ciif/mis/rest"
-    //static String camundaApiUrl = "http://localhost:8080/ciif/mis/rest"
+    //static String camundaApiUrl = "http://localhost:8080/mis/rest"
     static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
     static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 

@@ -129,8 +129,8 @@
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
                         <li>Reporting Period: <b>{{taskRecord.reportingPeriod}}</b></li>
-                        <li>Grant Start Date: <b>{{taskRecord.StartDate}}</b></li>
-                        <li>Grant End Date: <b>{{taskRecord.EndDate}}</b></li>
+                        <li>Grant Start Date: <b>{{taskRecord.startDate | date: 'medium' }}</b></li>
+                        <li>Grant End Date: <b>{{taskRecord.endDate | date: 'medium' }}</b></li>
                       </ul>
                     </div>
                     <div class="col-sm-6">

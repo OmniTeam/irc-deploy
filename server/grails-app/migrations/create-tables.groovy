@@ -1515,4 +1515,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "20220901124635-01") {
+        modifyDataType(columnName: "input_variables", newDataType: "LONGTEXT", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202209011224245-01") {
+        modifyDataType(columnName: "output_variables", newDataType: "LONGTEXT", tableName: "task_list")
+    }
+
 }

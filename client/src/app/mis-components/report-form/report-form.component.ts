@@ -95,16 +95,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
    //this.organisationalInfo = SampleData.organisationalInfo;
 
-    this.programPartnersService.getProgramPartners().subscribe(data => {
-      if (data !== null && data !== undefined) {
-        this.programPartnersService.getCurrentProgramPartner(data[0].id).subscribe((results: any) => {
-          if (results !== null && results !== undefined) {
-            this.organisationalInfo = results;
-          }
-        });
-      }
-    });
-
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
@@ -119,6 +109,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
           const params = new HttpParams()
             .set('taskId', this.taskId);
+
+          //set organizational Info
+          this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
+            if (results !== null && results !== undefined) {
+              this.organisationalInfo = results;
+            }
+          });
 
           this.setAttachments(params);
 

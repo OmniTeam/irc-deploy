@@ -20,6 +20,8 @@ class TaskList {
 
     static mapping = {
         id generator: 'uuid2'
+        outputVariables type: 'text'
+        inputVariables type: 'text'
     }
     static constraints = {
         formId nullable: true
