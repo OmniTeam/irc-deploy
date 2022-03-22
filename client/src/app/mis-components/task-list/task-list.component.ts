@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {TaskListService} from "../../services/task-list.service";
-import {TaskList} from "../../models/taskList";
+import {TaskList} from "../../models/tasklist";
 import {Subject} from "rxjs";
 
 @Component({
