@@ -58,6 +58,7 @@ class UrlMappings {
             'import-users'(controller: 'user', action: 'uploadUsers', method: 'POST')
         }
 
+        "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')

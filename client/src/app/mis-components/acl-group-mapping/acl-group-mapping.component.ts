@@ -46,16 +46,24 @@ export class AclGroupMappingComponent implements OnInit {
   parents: any
   permissions = [
     {
-      'permission': 0,
-      'name': 'Read'
-    },
-    {
       'permission': 1,
-      'name': 'Write'
+      'name': 'READ'
     },
     {
       'permission': 2,
-      'name': 'Administrator'
+      'name': 'WRITE'
+    },
+    {
+      'permission': 4,
+      'name': 'CREATE'
+    },
+    {
+      'permission': 8,
+      'name': 'DELETE'
+    },
+    {
+      'permission': 16,
+      'name': 'ADMIN'
     },
   ]
   forms: any

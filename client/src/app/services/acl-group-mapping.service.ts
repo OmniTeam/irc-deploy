@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
 })
 export class AclGroupMappingService {
   baseurl = environment.serverUrl
-  urlAcl = `${this.baseurl}/aclGroupMapping/`
+  urlAcl = `${this.baseurl}/api/v1/aclGroupMapping/`
 
   constructor(private http: HttpClient) { }
 
