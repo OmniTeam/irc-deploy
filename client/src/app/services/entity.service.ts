@@ -26,6 +26,10 @@ export class EntityService {
     return this.http.post(`${environment.serverUrl}/misEntity`, formData);
   }
 
+  updateEntity(id, formData): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/misEntity/${id}/`, formData);
+  }
+
   getEntityData(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/misEntity/get_entity_data`, {params});
   }
