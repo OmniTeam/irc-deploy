@@ -154,6 +154,10 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
       },
       {
+        path: 'acl-group-mapping', canActivate:[AuthGuard],
+        loadChildren: () => import('./mis-components/acl-group-mapping/acl-group-mapping.module').then(m => m.AclGroupMappingModule)
+      },
+      {
         path: 'requestMaps', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/request-maps/request-maps.module').then(m => m.RequestMapsModule)
       },
