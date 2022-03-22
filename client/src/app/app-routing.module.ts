@@ -70,6 +70,10 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
       },
       {
+        path: 'entity/edit/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/entities/edit-entities/edit-entities.module').then(m => m.EditEntitiesModule)
+      },
+      {
         path: 'entity/showData/:id', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
       },
