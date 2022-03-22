@@ -125,6 +125,18 @@ class BootStrap {
                 startOnStartup: true
         ).save(failOnError: true, flush: true)
 
+        def kengaGroupJob = TaskDef.findByName("KengaGroupAclJob") ?: new TaskDef(
+                name: 'KengaGroupAclJob',
+                description: 'Creates defaults mappings for acl tables',
+                cronExpression: '0 0 0 * * ?',
+                taskClass: 'com.kengamis.tasks.DynamicJobRunner',
+                extraParams: 'class:com.kengamis.tasks.KengaGroupAclJob',
+                startOnStartup: true
+        ).save(failOnError: true, flush: true)
+
+        taskService.runNow(kengaGroupJob)
+
+
     }
 
     def initStartUpJobs() {
