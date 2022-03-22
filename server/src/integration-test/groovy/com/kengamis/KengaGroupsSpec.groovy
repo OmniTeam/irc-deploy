@@ -93,7 +93,7 @@ class KengaGroupsSpec extends Specification {
         brian.save(flush: true)
 
         def userGroup1 = new KengaUserGroup(user: victor, kengaGroup: crvpfstaff)
-        userGroup1.save(flush: true)
+        userGroup1.save(flush: true, failOnError: true)
         //usergroup for brian
         def userGroup2 = new KengaUserGroup(user: brian, kengaGroup: uganda)
         userGroup2.save(flush: true)

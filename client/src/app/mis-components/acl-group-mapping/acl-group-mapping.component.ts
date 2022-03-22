@@ -66,6 +66,44 @@ export class AclGroupMappingComponent implements OnInit {
       'name': 'ADMIN'
     },
   ]
+  operation = [
+    {
+      'sign': '=',
+      'description':'EQUAL'
+    },
+    {
+      'sign': '>',
+      'description':'GREATER THAN'
+    },
+    {
+      'sign': '<',
+      'description':'LESS THAN'
+    },
+    {
+      'sign': '>=',
+      'description':'GREATER THAN OR EQUAL'
+    },
+    {
+      'sign': '<=',
+      'description':'LESS THAN OR EQUAL'
+    },
+    {
+      'sign': '<>',
+      'description':'NOT EQUAL'
+    },
+    {
+      'sign': 'BETWEEN',
+      'description':'BETWEEN'
+    },
+    {
+      'sign': 'LIKE',
+      'description':'SEARCH A PATTERN'
+    },
+    {
+      'sign': 'IN',
+      'description':'MULTIPLE POSSIBLE VALUES IN'
+    },
+  ]
   forms: any
 
   get f() {
