@@ -1,7 +1,9 @@
 package com.kengamis
 
 import com.kengamis.query.QueryHelper
+import com.kengamis.query.security.Permission
 import grails.validation.ValidationException
+import org.springframework.security.acls.domain.BasePermission
 
 import static fuzzycsv.FuzzyCSVTable.tbl
 import static fuzzycsv.FuzzyCSVTable.toCSV

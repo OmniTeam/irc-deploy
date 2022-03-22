@@ -2,17 +2,29 @@ package com.kengamis.acl
 
 import grails.gorm.services.Service
 
-@Service(KengaGroupAclEntry)
-interface KengaGroupAclEntryService {
 
-    KengaGroupAclEntry get(Serializable id)
+class KengaGroupAclEntryService {
 
-    List<KengaGroupAclEntry> list(Map args)
+    KengaGroupAclEntry get(Serializable id) {
+        return KengaGroupAclEntry.get(id)
+    }
 
-    Long count()
+    List<KengaGroupAclEntry> list(Map args){
+        return KengaGroupAclEntry.list(args)
+    }
 
-    void delete(Serializable id)
+    Long count(){
+        return KengaGroupAclEntry.count()
+    }
 
-    KengaGroupAclEntry save(KengaGroupAclEntry kengaGroupAclEntry)
+    void delete(Serializable id){
+        def kengaGroupAclEntry = get(id)
+        kengaGroupAclEntry.delete(flush: true)
+    }
+
+    KengaGroupAclEntry save(KengaGroupAclEntry kengaGroupAclEntry){
+        def saved = kengaGroupAclEntry.save(flush: true, failOnError: true)
+        return saved
+    }
 
 }
