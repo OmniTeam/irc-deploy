@@ -2,17 +2,29 @@ package com.kengamis.acl
 
 import grails.gorm.services.Service
 
-@Service(KengaDataTable)
-interface KengaDataTableService {
 
-    KengaDataTable get(Serializable id)
+class KengaDataTableService {
 
-    List<KengaDataTable> list(Map args)
+    KengaDataTable get(Serializable id){
+        return KengaDataTable.get(id)
+    }
 
-    Long count()
+    List<KengaDataTable> list(Map args){
+        return KengaDataTable.list(args)
+    }
 
-    void delete(Serializable id)
+    Long count(){
+        return KengaDataTable.count()
+    }
 
-    KengaDataTable save(KengaDataTable kengaDataTable)
+    void delete(Serializable id){
+        def kengaDataTable = get(id)
+        kengaDataTable.delete(flush: true)
+    }
+
+    KengaDataTable save(KengaDataTable kengaDataTable){
+        def saved = kengaDataTable.save(flush: true, failOnError: true)
+        return saved
+    }
 
 }
