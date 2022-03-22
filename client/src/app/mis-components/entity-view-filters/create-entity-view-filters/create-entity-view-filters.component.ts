@@ -44,7 +44,7 @@ export class CreateEntityViewFiltersComponent implements OnInit {
         name: ['', [Validators.required]],
         description: [''],
         filterQuery: [results?.viewQuery],
-        user: ['']
+        users: ['']
       });
     }, error => console.log(error));
 
@@ -67,9 +67,15 @@ export class CreateEntityViewFiltersComponent implements OnInit {
     this.formData = this.formGroup.value;
     let entityView = {"entityView": this.entityViewId};
     this.formData = Object.assign(this.formData, entityView);
+    let users = this.formData.users;
     this.entityViewFiltersService.createEntityViewFilter(this.formData).subscribe(results => {
-      this.router.navigate(['/entityViewFilter']);
-      this.alertService.success(`${this.formData.name} has been successfully created `);
+      const params = new HttpParams()
+        .set('id', results['id'])
+        .set('users', users);
+      this.entityViewFiltersService.saveUserEntityViewFilter(params).subscribe(results => {
+        this.router.navigate(['/entityViewFilter']);
+        this.alertService.success(`${this.formData.name} has been successfully created `);
+      });
     }, error => {
       this.alertService.error(`${this.formData.name} could not be created`);
     });

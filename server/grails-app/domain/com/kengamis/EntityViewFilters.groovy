@@ -7,24 +7,15 @@ class EntityViewFilters {
     String description
     String filterQuery
 
-    static belongsTo = [entityView: EntityView, user: User]
+    static belongsTo = [entityView: EntityView]
 
     static constraints = {
         filterQuery nullable: true
         description nullable: true
-        user nullable: true
     }
 
     static mapping = {
         id generator: 'uuid2'
         filterQuery type: 'text'
-    }
-
-    /*
-    * Methods of the Domain Class
-    */
-    @Override	// Override toString for a nicer / more descriptive UI
-    public String toString() {
-        return "${name}"
     }
 }

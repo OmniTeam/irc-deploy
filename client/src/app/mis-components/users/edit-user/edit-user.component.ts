@@ -66,6 +66,7 @@ export class EditUserComponent implements OnInit {
       this.groups = result
     }, error => {this.alertService.error("Failed to get Groups")})
     this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
+      console.log(results, "user")
       this.formGroup = this.formBuilder.group({
         password: [null],
         username: [results?.username, [Validators.required]],
