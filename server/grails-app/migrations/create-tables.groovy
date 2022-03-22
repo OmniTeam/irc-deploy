@@ -1353,4 +1353,48 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "names", tableName: "user")
     }
 
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-1") {
+        addColumn(tableName: "kenga_data_table") {
+            column(name: "id_label", type: "varchar(255)")
+        }
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-2") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_group", constraintName: "FK1c1dsw3q36679vaiqwvtv36a6", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-8") {
+        addForeignKeyConstraint(baseColumnNames: "parent_object", baseTableName: "acl_object_identity", constraintName: "FK4soxn7uid8qxltqps8kewftx7", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_object_identity", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-9") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_acl_table_record_identity", constraintName: "FK6ftxfqhndokh2opqomfxas4jw", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-13") {
+        addForeignKeyConstraint(baseColumnNames: "sid", baseTableName: "acl_entry", constraintName: "FK9r4mj8ewa904g3wivff0tb5b0", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_sid", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-16") {
+        addForeignKeyConstraint(baseColumnNames: "object_id_class", baseTableName: "acl_object_identity", constraintName: "FKc06nv93ck19el45a3g1p0e58w", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_class", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-18") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "kenga_user_group", constraintName: "FKfyp4kgxa9wq5bhqrmupeo0gel", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-19") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_acl_table_record_identity_id", baseTableName: "kenga_group_acl_entry", constraintName: "FKgaqw7dig1l625teoqbl0v70x8", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_acl_table_record_identity", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-21") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_data_table_id", baseTableName: "kenga_acl_table_record_identity", constraintName: "FKhr0nxosgu06xcby1pifmbp8dj", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_data_table", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-22") {
+        addForeignKeyConstraint(baseColumnNames: "owner_sid", baseTableName: "acl_object_identity", constraintName: "FKikrbtok3aqlrp9wbq6slh9mcw", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_sid", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-25") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_group_acl_entry", constraintName: "FKjq24i33cpngvs0aamferxunvi", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-26") {
+        addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "user_group", constraintName: "FKk2k4e53v15rb9374r2nu24rts", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-28") {
+        addForeignKeyConstraint(baseColumnNames: "acl_object_identity", baseTableName: "acl_entry", constraintName: "FKl39t1oqikardwghegxe0wdcpt", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "acl_object_identity", validate: "true")
+    }
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-31") {
+        addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_user_group", constraintName: "FKox52rpnuevjm4m048an1pmxwh", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
+    }
 }
