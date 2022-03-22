@@ -1710,4 +1710,37 @@ databaseChangeLog = {
     changeSet(author: "victorkakama (generated)", id: "1647936752765-31") {
         addForeignKeyConstraint(baseColumnNames: "kenga_group_id", baseTableName: "kenga_user_group", constraintName: "FKox52rpnuevjm4m048an1pmxwh", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "kenga_group", validate: "true")
     }
+
+    changeSet(author: "LENOVO (generated)", id: "1646838666964-1") {
+        createTable(tableName: "data_view") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "data_viewPK")
+            }
+
+            column(name: "view_query", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "table_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "ignore_user_context", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
 }

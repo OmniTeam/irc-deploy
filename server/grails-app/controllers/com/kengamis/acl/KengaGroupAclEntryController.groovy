@@ -82,4 +82,9 @@ class KengaGroupAclEntryController {
 
         render status: NO_CONTENT
     }
+
+    def saveGroupMappings(){
+        def json=request.JSON
+        print(json)
+    }
 }

@@ -2,12 +2,8 @@ package com.kengamis
 
 import com.kengamis.query.FormData
 import com.kengamis.query.QueryHelper
-import com.omnitech.oxd.jooq.tables.records.FormDataRecord
 import grails.gorm.transactions.Transactional
-import org.jooq.DSLContext
 import org.openxdata.markup.XformType
-
-import static com.kengamis.Form.*
 
 @Transactional
 class DataService {

@@ -9,6 +9,12 @@ import org.springframework.security.acls.domain.BasePermission
  */
 class Permission extends BasePermission{
 
+    static Permission READ = new Permission(1)
+    static Permission WRITE = new Permission(2)
+    static Permission CREATE = new Permission(4)
+    static Permission DELETE = new Permission(8)
+    static Permission ADMIN = new Permission(16)
+
     Permission(int mask) {
         super(mask)
     }
