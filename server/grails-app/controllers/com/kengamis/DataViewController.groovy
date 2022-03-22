@@ -1,7 +1,9 @@
 package com.kengamis
 
 import com.kengamis.query.QueryHelper
+import com.kengamis.query.security.Permission
 import grails.validation.ValidationException
+import org.springframework.security.acls.domain.BasePermission
 
 import static fuzzycsv.FuzzyCSVTable.tbl
 import static fuzzycsv.FuzzyCSVTable.toCSV
@@ -19,13 +21,15 @@ class DataViewController {
 
     DataViewService dataViewService
     def springSecurityService
+    def kengaGroupsService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond dataViewService.list(params), model: [dataViewCount: dataViewService.count()]
+        respond kengaGroupsService.postFilter(dataViewService.list(params), new Permission(1)),
+                model: [dataViewCount: dataViewService.count()]
     }
 
     def show(String id) {
