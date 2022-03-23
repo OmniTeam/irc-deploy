@@ -151,9 +151,9 @@ jar {
     archiveName('crvpf-server.jar')
 }
 bootJar {
-    archiveBaseName = 'irc-server'
+    archiveBaseName = 'crvpf-server'
     archiveVersion = '1.0.0'
-    archiveFileName = 'irc-server.jar'
+    archiveFileName = 'crvpf-server.jar'
 }
 test {
     ignoreFailures = true
