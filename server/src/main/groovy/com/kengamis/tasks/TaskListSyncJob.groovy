@@ -1,6 +1,5 @@
 package com.kengamis.tasks
 
-
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
 import groovy.sql.Sql
@@ -31,8 +30,8 @@ class TaskListSyncJob extends Script {
                 taskId: "${task['id']}",
                 userId: "${task['assigne']}",
                 groupId: "${task['group']}",
-                inputVariables: "${task['outputs']}",
-                outputVariables: variables as String,
+                inputVariables: "$variables",
+                outputVariables: "${task['outputs']}",
                 status: status,
                 taskName: "${task['name']}",
                 processInstanceId: "${task['process_instance_id']}",

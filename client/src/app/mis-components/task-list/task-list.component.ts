@@ -20,7 +20,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskListService.getTaskList().subscribe(data => {
-      console.log(data);
+      console.log('tasklist',data);
       this.rows = data;
       this.dtTrigger.next();
     }, error => console.log(error));
