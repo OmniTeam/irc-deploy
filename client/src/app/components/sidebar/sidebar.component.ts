@@ -145,6 +145,7 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'fas fa-user-tie text-green',
     isCollapsed: true,
     children: [
+      {path: 'acl-group-mapping', title: 'ACL Group Permissions', type: 'link'},
       {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'roles', title: 'Roles', type: 'link'},
       {path: 'users', title: 'User Management', type: 'link'},

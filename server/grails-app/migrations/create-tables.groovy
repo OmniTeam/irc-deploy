@@ -1611,4 +1611,42 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "names", tableName: "user")
     }
 
+    changeSet(author: "victorkakama (generated)", id: "1647936752765-1") {
+        addColumn(tableName: "kenga_data_table") {
+            column(name: "id_label", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "LENOVO (generated)", id: "1646838666964-1") {
+        createTable(tableName: "data_view") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "data_viewPK")
+            }
+
+            column(name: "view_query", type: "LONGTEXT")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "table_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "ignore_user_context", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "description", type: "VARCHAR(255)")
+        }
+    }
+
 }

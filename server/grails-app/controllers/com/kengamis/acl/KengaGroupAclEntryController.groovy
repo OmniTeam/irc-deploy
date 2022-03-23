@@ -1,5 +1,8 @@
 package com.kengamis.acl
 
+import com.kengamis.AppHolder
+import com.kengamis.Form
+import com.kengamis.KengaGroup
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -81,5 +84,35 @@ class KengaGroupAclEntryController {
         kengaGroupAclEntryService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def saveGroupMappings(){
+        def json=request.JSON
+        print(json)
+        def groupId = json.group
+        def formId = json.form
+        def permission = json.permissions
+        def grpConditionQuery = json.groupConditionQuery
+        def kengaGroup = KengaGroup.get(groupId)
+        def form = Form.get(formId)
+        def kengaDataTable = KengaDataTable.findByTableName(form.name)
+
+        //create entries
+        def records = AppHolder.withMisSqlNonTx {
+            def query = "select * from ${form.name} ${grpConditionQuery}"
+            log.info(query)
+            rows(query.toString())
+        }
+        log.info("==============size${records.size()}")
+        records.each {record->
+            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
+            new KengaGroupAclEntry(
+                    kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
+                    kengaGroup: kengaGroup,
+                    mask: permission
+            ).save(flush: true, failOnError: true)
+        }
+
     }
 }

@@ -33,7 +33,7 @@ class KengaGroupsSpec extends Specification {
             setupData()
             authenticate('victor','manager',true)
         expect:"fix me"
-            kengaGroupsService.postFilter(houseHoldRecords,new Permission(1)).size() == 10
+            kengaGroupsService.postFilter(houseHoldRecords,Permission.READ).size() == 10
     }
 
     void "test filtering returns correct records according to group with limited entries"() {
@@ -41,7 +41,7 @@ class KengaGroupsSpec extends Specification {
         setupData()
         authenticate('brian','uganda',true)
         expect:"return limited data since this user has limited entries to uganda"
-        kengaGroupsService.postFilter(houseHoldRecords,new Permission(1)).size() == 4
+        kengaGroupsService.postFilter(houseHoldRecords,Permission.READ).size() == 4
     }
 
     void "test that user has correct write permissions"() {
@@ -49,7 +49,7 @@ class KengaGroupsSpec extends Specification {
             setupData()
             authenticate('brian','uganda',true)
         expect:"return only records with write permissions"
-            kengaGroupsService.postFilter(houseHoldRecords,new Permission(2)).size() == 1
+            kengaGroupsService.postFilter(houseHoldRecords,Permission.WRITE).size() == 1
     }
 
     void "test that user has correct write permissions for crvpf"() {
@@ -57,7 +57,7 @@ class KengaGroupsSpec extends Specification {
         setupData()
         authenticate('victor','crvpf',true)
         expect:"return only records with write permissions"
-        kengaGroupsService.postFilter(houseHoldRecords,new Permission(2)).size() == 0
+        kengaGroupsService.postFilter(houseHoldRecords,Permission.WRITE).size() == 0
     }
 
     void setupData() {
@@ -93,7 +93,7 @@ class KengaGroupsSpec extends Specification {
         brian.save(flush: true)
 
         def userGroup1 = new KengaUserGroup(user: victor, kengaGroup: crvpfstaff)
-        userGroup1.save(flush: true)
+        userGroup1.save(flush: true, failOnError: true)
         //usergroup for brian
         def userGroup2 = new KengaUserGroup(user: brian, kengaGroup: uganda)
         userGroup2.save(flush: true)

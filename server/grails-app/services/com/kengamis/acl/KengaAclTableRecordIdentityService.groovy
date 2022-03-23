@@ -2,17 +2,29 @@ package com.kengamis.acl
 
 import grails.gorm.services.Service
 
-@Service(KengaAclTableRecordIdentity)
-interface KengaAclTableRecordIdentityService {
 
-    KengaAclTableRecordIdentity get(Serializable id)
+class KengaAclTableRecordIdentityService {
 
-    List<KengaAclTableRecordIdentity> list(Map args)
+    KengaAclTableRecordIdentity get(Serializable id){
+        return KengaAclTableRecordIdentity.get(id)
+    }
 
-    Long count()
+    List<KengaAclTableRecordIdentity> list(Map args){
+        return KengaAclTableRecordIdentity.list(args)
+    }
 
-    void delete(Serializable id)
+    Long count(){
+        return KengaAclTableRecordIdentity.count()
+    }
 
-    KengaAclTableRecordIdentity save(KengaAclTableRecordIdentity kengaAclTableRecordIdentity)
+    void delete(Serializable id){
+        def kengaAclRecordIdentity = get(id)
+        kengaAclRecordIdentity.delete(flush: true)
+    }
+
+    KengaAclTableRecordIdentity save(KengaAclTableRecordIdentity kengaAclTableRecordIdentity){
+        def saved = kengaAclTableRecordIdentity.save(flush: true, failOnError: true)
+        return saved
+    }
 
 }

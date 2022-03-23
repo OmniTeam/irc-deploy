@@ -4,6 +4,7 @@ import com.kengamis.exporter.DataExporter
 import com.kengamis.query.FormData
 import com.kengamis.query.FormDataValue
 import com.kengamis.query.QueryHelper
+import com.kengamis.query.security.Permission
 import grails.core.GrailsApplication
 import grails.io.IOUtils
 import grails.converters.*
@@ -20,11 +21,12 @@ class DataController {
     def dataService
     def springSecurityService
     GrailsApplication grailsApplication
+    def kengaGroupsService
 
     def index(Integer max) {
         def formData = []
         try {
-            def dataList = dataService.listAll(params)
+            def dataList = kengaGroupsService.postFilter(dataService.listAll(params), Permission.READ)
             def q = new QueryHelper(params, springSecurityService.currentUser as User)
             def resultList = []
             dataList.each { form_data ->
