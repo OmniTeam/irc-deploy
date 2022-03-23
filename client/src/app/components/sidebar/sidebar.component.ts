@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {FormService} from "../../services/form.service";
 import {ReplacePipe} from "../../replace-pipe";
 import {EntityService} from "../../services/entity.service";
+import {TitleCasePipe} from "@angular/common";
 
 let misc: any = {
   sidebar_mini_active: true
@@ -155,13 +156,16 @@ export const ROUTES: RouteInfo[] = [
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
+  providers: [TitleCasePipe]
 })
 export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
 
-  constructor(private router: Router, public authService: AuthService, private formService: FormService, private entityService: EntityService) {
+  constructor(private router: Router, public authService: AuthService, private formService: FormService,
+              private entityService: EntityService,
+              private titleCasePipe: TitleCasePipe) {
   }
 
   ngOnInit() {
@@ -174,12 +178,12 @@ export class SidebarComponent implements OnInit {
         for (let form of data) {
           let formObject = {};
           let formSettingObject = {};
-          formObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+          formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
           formsMenu.children.push(formObject);
 
-          formSettingObject['title'] = new ReplacePipe().transform(form.displayName, '_', ' ').toUpperCase();
+          formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formSettingObject['path'] = form.name.toString();
           formSettingObject['type'] = 'link';
           formSettingsMenu.children.push(formSettingObject);
@@ -189,7 +193,7 @@ export class SidebarComponent implements OnInit {
       this.entityService.getEntities().subscribe((data) => {
         for (let entity of data) {
           let entityObject = {};
-          entityObject['title'] = new ReplacePipe().transform(entity.name, '_', ' ').toUpperCase();
+          entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
           listsMenu.children.push(entityObject);
