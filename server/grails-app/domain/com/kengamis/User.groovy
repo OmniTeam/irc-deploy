@@ -4,8 +4,6 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-@EqualsAndHashCode(includes = 'username')
-@ToString(includes = 'username', includeNames = true, includePackage = false)
 class User {
 
     transient springSecurityService
@@ -24,12 +22,13 @@ class User {
 
     static transients = ['springSecurityService']
 
-    static hasMany = [userRoles: UserRole]
+    static hasMany = [userRoles: UserRole, userEntityViewFilters: UserEntityViewFilters]
+
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: true
-        names nullable: true
+
 
     }
 
@@ -38,8 +37,20 @@ class User {
         password column: '`password`'
     }
 
+    /*
+    * Methods of the Domain Class
+    */
+    @Override	// Override toString for a nicer / more descriptive UI
+    public String toString() {
+        return "${names}"
+    }
+
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
+
+    Set<EntityViewFilters> getEntityViewFilters() {
+        (UserEntityViewFilters.findAllByUser(this) as List<UserEntityViewFilters>)*.entityViewFilters as Set<EntityViewFilters>
     }
 
     def roles() {

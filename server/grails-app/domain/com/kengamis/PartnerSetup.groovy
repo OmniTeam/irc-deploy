@@ -5,13 +5,7 @@ class PartnerSetup {
     String id
     String userId
     String partnerId
-    String programId
     String setupValues
-    String startDate
-    String endDate
-    String reportingStartDate
-    String reportingCalendar
-    String periodType
     Date dateCreated
     Date lastUpdated
 
