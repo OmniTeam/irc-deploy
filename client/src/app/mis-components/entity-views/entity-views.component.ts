@@ -64,13 +64,16 @@ export class EntityViewsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
@@ -117,18 +120,6 @@ export class EntityViewsComponent implements OnInit {
 
   onActivate(event) {
     this.activeRow = event.row;
-  }
-
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
-      for (const key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
   }
 
   onSelect({selected}) {

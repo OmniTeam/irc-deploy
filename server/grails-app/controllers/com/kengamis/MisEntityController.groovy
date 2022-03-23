@@ -114,7 +114,8 @@ class MisEntityController {
             }
         }
 
-        def deleteTablesQuery = """ DROP TABLE ${entityTable}, ${prefixTable}, ${taggingTable}""".toString()
+        def tables = [entityTable?:null, prefixTable?:null, taggingTable?:null].findAll { it != null }.join(", ")
+        def deleteTablesQuery = """ DROP TABLE ${tables}""".toString()
         def results = AppHolder.withMisSqlNonTx { execute(deleteTablesQuery) }
         if (!results) {
             log.info("Tables successfully deleted")
@@ -304,4 +305,5 @@ class MisEntityController {
         def message = ["Entity Record Deleted"]
         respond message
     }
+
 }

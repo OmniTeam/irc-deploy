@@ -16,6 +16,7 @@ export class FormSettingComponent implements OnInit {
   selected: any[] = [];
   activeRow: any;
   rows: Object[];
+  temp: Object[];
   editing = {};
   formData: any;
 
@@ -28,11 +29,13 @@ export class FormSettingComponent implements OnInit {
     this.entries = $event.target.value;
   }
 
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function(d) {
-      for (var key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    console.log(val);
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -61,6 +64,7 @@ export class FormSettingComponent implements OnInit {
 
     this.formSettingService.getFormSettings(params).subscribe((data) => {
       this.formName = new ReplacePipe().transform(data['form_name'], '_', ' ');
+      this.temp = [...data['data']];
       this.rows = data['data'];
     }, error => console.log(error));
   }
