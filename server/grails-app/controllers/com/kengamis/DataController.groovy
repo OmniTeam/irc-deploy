@@ -26,8 +26,9 @@ class DataController {
     def index(Integer max) {
         def formData = []
         try {
-//            def dataList = kengaGroupsService.postFilter(dataService.listAll(params), Permission.READ)
-            def dataList = dataService.listAll(params)
+            def allData = dataService.listAll(params)
+            def dataList = kengaGroupsService.postFilter(allData, Permission.READ)
+//            def dataList = (dataService.listAll(params))
             def q = new QueryHelper(params, springSecurityService.currentUser as User)
             def resultList = []
             dataList.each { form_data ->

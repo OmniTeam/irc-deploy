@@ -1,6 +1,7 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -18,13 +19,45 @@ class KengaGroupController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 1000, 1000)
-        respond kengaGroupService.list(params), model:[kengaGroupCount: kengaGroupService.count()]
+    def index() {
+        /*params.max = Math.min(max ?: 1000, 1000)
+        respond kengaGroupService.list(params), model:[kengaGroupCount: kengaGroupService.count()]*/
+
+        def kenga_Groups = kengaGroupService.list(params)
+        def list=[]
+        kenga_Groups.each{KengaGroup grp ->
+            def dataCollectors = []
+            dataCollectors = AppHolder.withMisSqlNonTx {
+                rows("SELECT user_id FROM kenga_user_group WHERE kenga_user_group.kenga_group_id = '$grp.id'")
+            }
+            list << [
+                    id: grp.id,
+                    name: grp.name,
+                    data_collectors: dataCollectors
+            ]
+        }
+        respond list
     }
 
     def show(String id) {
-        respond kengaGroupService.get(id)
+        def list=[]
+        def data= kengaGroupService.get(id)
+        def dataCollectors = [:]
+        dataCollectors = AppHolder.withMisSqlNonTx {
+            rows("SELECT user_id FROM kenga_user_group WHERE kenga_user_group.kenga_group_id = '$id'")
+        }
+        def dataCollectorsAsArray = dataCollectors.collect{it -> it.user_id}
+        list << [
+                id: data.id,
+                name: data.name,
+                data_collectors: dataCollectorsAsArray
+        ]
+        respond list
+//        respond kengaGroupService.get(id)
+    }
+
+    def deleteOldKengaUserGroups(){
+        print("I am here")
     }
 
     @Transactional
