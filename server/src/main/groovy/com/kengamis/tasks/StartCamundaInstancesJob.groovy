@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 
 class StartCamundaInstancesJob extends Script {
     static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
-    //static String camundaApiUrl = "http://localhost:8080/mis/rest"
+    //static String camundaApiUrl = "http://localhost:8181/mis/rest"
     static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
     static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -18,6 +18,7 @@ class StartCamundaInstancesJob extends Script {
     Object run() {
         def partnerSetup = PartnerSetup.all.each {
             boolean started = startProcessInstance([
+                    PartnerSetupId : it.id,
                     PartnerId : it.partnerId,
                     ProgramId : it.programId,
                     StartDate : it.reportingStartDate,
