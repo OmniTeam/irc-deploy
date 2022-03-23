@@ -12,9 +12,6 @@ class ReportFormFiles {
     String name
     Date dateCreated
 
-    static mapping = {
-        id generator: 'uuid2'
-    }
     static constraints = {
     }
 }

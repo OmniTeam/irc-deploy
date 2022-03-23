@@ -25,9 +25,10 @@ class TaskListController {
         taskListMapList.each{TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def startDate, partnerId, programId, endDate, groupId
+            def partnerSetupId, startDate, partnerId, programId, endDate, groupId
 
             variables['data'].each {
+                if(it.key=='PartnerSetupId') partnerSetupId = it.value
                 if(it.key=='StartDate') startDate = it.value
                 if(it.key=='PartnerId') partnerId = it.value
                 if(it.key=='ProgramId') programId = it.value
@@ -37,6 +38,7 @@ class TaskListController {
 
             tasks << [id: task.id,
                         taskName : task.taskName,
+                        partnerSetupId: partnerSetupId,
                         startDate : startDate,
                         partnerId : partnerId,
                         programId : programId,
@@ -55,9 +57,10 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def startDate, partnerId, programId, endDate, groupId
+        def partnerSetupId, startDate, partnerId, programId, endDate, groupId
 
         variables['data'].each {
+            if(it.key=='PartnerSetupId') partnerSetupId = it.value
             if(it.key=='StartDate') startDate = it.value
             if(it.key=='PartnerId') partnerId = it.value
             if(it.key=='ProgramId') programId = it.value
@@ -67,6 +70,7 @@ class TaskListController {
 
         def t = [id: task.id,
                 taskName : task.taskName,
+                partnerSetupId: partnerSetupId,
                 startDate : startDate,
                 partnerId : partnerId,
                 programId : programId,

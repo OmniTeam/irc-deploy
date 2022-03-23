@@ -95,6 +95,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'partnerSetupList', title: 'Work Plan', type: 'link'},
       {path: 'programPartner', title: 'Program Partner', type: 'link'},
       {path: 'users', title: 'Users', type: 'link'},
+      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics'},
     ]
   },
 

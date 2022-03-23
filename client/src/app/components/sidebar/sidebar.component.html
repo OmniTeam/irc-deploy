@@ -82,6 +82,18 @@
                   >
                     {{ childitems.title }}
                   </a>
+
+                  <!-- if it is a direct link -->
+                  <a
+                    routerLinkActive="active"
+                    href="http://issdugdata.net:3000/"
+                    target="_blank"
+                    class="nav-link"
+                    *ngIf="childitems.type === 'analytics'"
+                  >
+                    {{ childitems.title }}
+                  </a>
+
                   <!--If it have a submenu-->
                   <a
                     data-toggle="collapse"

@@ -140,6 +140,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     this.dateFrom = '';
     this.searchValue = '';
     this.selectedUser = '';
+    this.getFormData();
   }
 
   ngAfterViewInit(): void {

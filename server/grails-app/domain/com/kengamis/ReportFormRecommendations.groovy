@@ -11,9 +11,6 @@ class ReportFormRecommendations {
     String content
     Date dateCreated
 
-    static mapping = {
-        id generator: 'uuid2'
-    }
     static constraints = {
     }
 }

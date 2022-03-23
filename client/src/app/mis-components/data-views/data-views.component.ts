@@ -97,9 +97,10 @@ export class DataViewsComponent implements OnInit {
     });
   }
 
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
       for (const key in d) {
         if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;

@@ -15,6 +15,7 @@ class PartnerSetup {
     Date dateCreated
     Date lastUpdated
 
+
     static mapping = {
         id generator: 'uuid2'
     }
