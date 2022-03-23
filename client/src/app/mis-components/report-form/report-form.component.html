@@ -102,21 +102,21 @@
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
-                        <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b>
+                        <li>Physical Address: <b>{{organisationalInfo.physicalAddress}}</b></li>
+                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.leadCluster}}</b>
                         </li>
-                        <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
-                        <li>Acronym Name: <b>{{organisationalInfo.acronym_name}}</b></li>
+                        <li>Postal Address: <b>{{organisationalInfo.postalAddress}}</b></li>
+                        <li>Acronym Name: <b>{{organisationalInfo.acronym}}</b></li>
                         <li>Email: <b>{{organisationalInfo.email}}</b></li>
                       </ul>
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
-                        <li>Type of Organisation: <b>{{organisationalInfo.organization_type}}</b></li>
+                        <li>Type of Organisation: <b>{{organisationalInfo.organisation}}</b></li>
                         <li>Website: <b>{{organisationalInfo.website}}</b></li>
-                        <li>Legal Status: <b>{{organisationalInfo.legal_status}}</b></li>
+                        <li>Legal Status: <b>{{organisationalInfo.legal}}</b></li>
                         <li>Country: <b>{{organisationalInfo.country}}</b></li>
-                        <li>Name of Contact Person: <b>{{organisationalInfo.contact_person}}</b></li>
+                        <li>Name of Contact Person: <b>{{organisationalInfo.nameContactPerson}}</b></li>
                         <li>City: <b>{{organisationalInfo.city}}</b></li>
                       </ul>
                     </div>
@@ -128,17 +128,17 @@
                   <div class="row" style="margin: 20px;">
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Reporting Period: <b>{{projectInfo.reporting_period}}</b></li>
-                        <li>Grant Start Date: <b>{{projectInfo.grant_start_date}}</b></li>
-                        <li>Grant End Date: <b>{{projectInfo.grant_end_date}}</b></li>
+                        <li>Reporting Period: <b>{{taskRecord.reportingPeriod}}</b></li>
+                        <li>Grant Start Date: <b>{{taskRecord.startDate | date: 'medium' }}</b></li>
+                        <li>Grant End Date: <b>{{taskRecord.endDate | date: 'medium' }}</b></li>
                       </ul>
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Total Grant Amount: <b>{{projectInfo.total_grant_amount}}</b></li>
-                        <li>Amount Transferred in the reporting period: <b>{{projectInfo.amount_transferred}}</b></li>
-                        <li>Amount Utilized in the period: <b>{{projectInfo.amount_utilized}}</b></li>
-                        <li>Balance Spent/Overspent: <b>{{projectInfo.balance_spent_overspend}}</b></li>
+                        <li>Total Grant Amount: <b> </b></li>
+                        <li>Amount Transferred in the reporting period: <b> </b></li>
+                        <li>Amount Utilized in the period: <b> </b></li>
+                        <li>Balance Spent/Overspent: <b> </b></li>
                       </ul>
                     </div>
                   </div>
@@ -153,10 +153,10 @@
                       <th class='text-center' style="display: none;">Id</th>
                       <th class='text-center'>Output Indicators</th>
                       <th class='text-center'>Overall Target</th>
-                      <th class='text-center'>Cumulative ach'mnt</th>
+                      <th class='text-center'>Cumulative achievement</th>
                       <th class='text-center'>Quarter Target</th>
-                      <th class='text-center'>Quarter ach'mnt</th>
-                      <th class='text-center'>% ach'mnt</th>
+                      <th class='text-center'>Quarter achievement</th>
+                      <th class='text-center'>Percentage achievement</th>
                       <th class='text-center'>Comment</th>
                     </tr>
                     </thead>

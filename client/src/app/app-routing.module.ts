@@ -51,7 +51,7 @@ const routes: Routes = [
       },
       {
         path: 'partnerSetupList', canActivate: [AuthGuard],
-        loadChildren: () => import('./mis-components/partner-list/partner-list.module').then(m => m.PartnerListModule)
+        loadChildren: () => import('./mis-components/partner-setup/partner-list/partner-list.module').then(m => m.PartnerListModule)
       },
       {
         path: 'taskList', canActivate: [AuthGuard],

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
-import {PartnerSetupService} from "../../services/partner-setup.service";
-import {AlertService} from "../../services/alert";
+import {PartnerSetupService} from "../../../services/partner-setup.service";
+import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'app-partner-list',
@@ -15,15 +15,12 @@ export class PartnerListComponent implements OnInit {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private router: Router, private partnerSetupService: PartnerSetupService, private alertService: AlertService) { }
-
-  ngOnInit(): void {
-    this.reloadTable();
+  constructor(private router: Router, private partnerSetupService: PartnerSetupService, private alertService: AlertService) {
   }
 
-  reloadTable() {
+  ngOnInit(): void {
     this.partnerSetupService.getPartnerSetup().subscribe(data => {
-      console.log(data);
+      console.log("data", data);
       this.rows = data;
       this.dtTrigger.next();
     }, error => console.log(error));
@@ -37,7 +34,7 @@ export class PartnerListComponent implements OnInit {
       buttons: [
         {
           text: '<i class="text fas fa-plus" style="color: cornflowerblue;"></i>&nbsp;&nbsp;Add Partner Setup',
-          action: ( e, dt, node, config ) => {
+          action: (e, dt, node, config) => {
             this.router.navigate(['/partnerSetup']);
           }
         },
@@ -59,11 +56,17 @@ export class PartnerListComponent implements OnInit {
     if (confirm('Are you sure to delete this Partner Setup Record?')) {
       this.partnerSetupService.deletePartnerSetupRecord(id).subscribe((result) => {
           this.alertService.warning(`Partner Setup Record has been  deleted `);
-          this.reloadTable();
+          this.reloadTableData();
         }, error => {
           this.alertService.error(`Partner Setup Record could not be deleted`);
         }
       );
     }
+  }
+
+  private reloadTableData() {
+    this.partnerSetupService.getPartnerSetup().subscribe(data => {
+      this.rows = data;
+    }, error => console.log(error));
   }
 }
