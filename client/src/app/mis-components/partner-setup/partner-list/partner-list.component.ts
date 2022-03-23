@@ -20,6 +20,7 @@ export class PartnerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.partnerSetupService.getPartnerSetup().subscribe(data => {
+      console.log("data", data);
       this.rows = data;
       this.dtTrigger.next();
     }, error => console.log(error));

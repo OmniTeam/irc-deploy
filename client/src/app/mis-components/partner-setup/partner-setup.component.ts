@@ -141,6 +141,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       if (confirm('This action will clear the targets and disbursement entered')) {
         this.disbursementPlan = [];
         this.indicators = [];
+        this.budget = [];
         this.calendarDates();
       }
     } else {
