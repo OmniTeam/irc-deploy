@@ -43,6 +43,7 @@ class UrlMappings {
         get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
         get "/$controller/getDataViewData(.$format)?"(action:"getDataViewData")
         get "/$controller/dataViewRunNow(.$format)?"(action:"dataViewRunNow")
+        delete "/$controller/KengaGroup(.$format)?"(action:"deleteOldKengaUserGroups")
 
 
         group "/odxRest/", {

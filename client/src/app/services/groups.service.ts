@@ -10,6 +10,7 @@ export class GroupsService {
   baseurl = environment.serverUrl
   urlGroups = `${this.baseurl}/KengaGroup/`
   urlKengaGroupUser = `${this.baseurl}/KengaUserGroup/`
+  urldeleteOldKengaUserGroups=`${this.baseurl}/api/v1/deleteOldKengaUserGroups/`
 
   constructor(private http: HttpClient) { }
 
@@ -25,6 +26,9 @@ export class GroupsService {
   }
   getCurrentGroup(id){
     return this.http.get(`${this.urlGroups}${id}/`)
+  }
+  deleteOldKengauserGroups(params){
+    return this.http.delete(this.urlGroups, {params});
   }
 
   updateGroup(id, submitData): Observable<any> {
