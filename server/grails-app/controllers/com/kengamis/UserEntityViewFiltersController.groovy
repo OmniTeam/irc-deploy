@@ -11,74 +11,74 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class EntityViewFieldsController {
+class UserEntityViewFiltersController {
 
-    EntityViewFieldsService entityViewFieldsService
+    UserEntityViewFiltersService userEntityViewFiltersService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond entityViewFieldsService.list(params), model:[entityViewFieldsCount: entityViewFieldsService.count()]
+        respond userEntityViewFiltersService.list(params), model:[userEntityViewFiltersCount: userEntityViewFiltersService.count()]
     }
 
-    def show(String id) {
-        respond entityViewFieldsService.get(id)
+    def show(Long id) {
+        respond userEntityViewFiltersService.get(id)
     }
 
     @Transactional
-    def save(EntityViewFields entityViewFields) {
-        if (entityViewFields == null) {
+    def save(UserEntityViewFilters userEntityViewFilters) {
+        if (userEntityViewFilters == null) {
             render status: NOT_FOUND
             return
         }
-        if (entityViewFields.hasErrors()) {
+        if (userEntityViewFilters.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond entityViewFields.errors
+            respond userEntityViewFilters.errors
             return
         }
 
         try {
-            entityViewFieldsService.save(entityViewFields)
+            userEntityViewFiltersService.save(userEntityViewFilters)
         } catch (ValidationException e) {
-            respond entityViewFields.errors
+            respond userEntityViewFilters.errors
             return
         }
 
-        respond entityViewFields, [status: CREATED, view:"show"]
+        respond userEntityViewFilters, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(EntityViewFields entityViewFields) {
-        if (entityViewFields == null) {
+    def update(UserEntityViewFilters userEntityViewFilters) {
+        if (userEntityViewFilters == null) {
             render status: NOT_FOUND
             return
         }
-        if (entityViewFields.hasErrors()) {
+        if (userEntityViewFilters.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond entityViewFields.errors
+            respond userEntityViewFilters.errors
             return
         }
 
         try {
-            entityViewFieldsService.save(entityViewFields)
+            userEntityViewFiltersService.save(userEntityViewFilters)
         } catch (ValidationException e) {
-            respond entityViewFields.errors
+            respond userEntityViewFilters.errors
             return
         }
 
-        respond entityViewFields, [status: OK, view:"show"]
+        respond userEntityViewFilters, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(String id) {
+    def delete(Long id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
-        entityViewFieldsService.delete(id)
+        userEntityViewFiltersService.delete(id)
 
         render status: NO_CONTENT
     }
