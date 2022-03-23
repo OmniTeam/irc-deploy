@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {HttpParams} from "@angular/common/http";
@@ -8,7 +8,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";
 import {TagService} from "../../../services/tags";
-import {Subject} from "rxjs";
+import {NgSelectComponent} from "@ng-select/ng-select";
 
 @Component({
   selector: 'app-entity-tables',
@@ -16,7 +16,6 @@ import {Subject} from "rxjs";
   styleUrls: ['./entity-tables.component.css']
 })
 export class EntityTablesComponent implements OnInit {
-
   entityName = "";
   entries = 10;
   selected = [];
@@ -33,9 +32,12 @@ export class EntityTablesComponent implements OnInit {
   submitted = false;
   tagTypes = [];
   tags = [];
+  tagFilters = [];
   enableTagging: any;
   enableTagButton = false;
   enableRemoveTagButton = false;
+  selectedTagTypeFilter = "";
+  selectedTagFilter = "";
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -92,6 +94,8 @@ export class EntityTablesComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
+      this.selectedTagTypeFilter = null;
+      this.selectedTagFilter = null;
       this.getEntityData();
     });
     this.tagFormGroup = this.formBuilder.group({
@@ -139,9 +143,6 @@ export class EntityTablesComponent implements OnInit {
     this.tagService.getTagsByTagType(params).subscribe((data) => {
       this.tags = data;
     }, error => console.log(error));
-  }
-
-  deleteRecord() {
   }
 
   exportToExcel() {
@@ -306,5 +307,41 @@ export class EntityTablesComponent implements OnInit {
     }
   }
 
+  onChangeTagType(value) {
+    this.selectedTagFilter = null;
+    this.getTagFilters(value);
+    this.selectedTagTypeFilter = value;
+    this.getFilteredEntityData();
+  }
 
+  getTagFilters(tagTypeId) {
+    const params = new HttpParams()
+      .set('id', tagTypeId);
+    this.tagService.getTagsByTagType(params).subscribe((data) => {
+      this.tagFilters = data;
+    }, error => console.log(error));
+  }
+
+  onChangeTag(value) {
+    this.selectedTagFilter = value;
+    this.getFilteredEntityData();
+  }
+
+  getFilteredEntityData() {
+    if (!this.selectedTagTypeFilter) {
+      this.selectedTagTypeFilter = "";
+    }
+    if (!this.selectedTagFilter) {
+      this.selectedTagFilter = "";
+    }
+    const params = new HttpParams()
+      .set('id', this.entityId)
+      .set('tagTypeFilter', this.selectedTagTypeFilter)
+      .set('tagFilter', this.selectedTagFilter);
+    this.entityService.getEntityData(params).subscribe((data) => {
+      this.temp = [...data.resultList];
+      this.rows = data.resultList;
+      this.columns = this.columnMappings(data.headerList);
+    }, error => console.log(error));
+  }
 }
