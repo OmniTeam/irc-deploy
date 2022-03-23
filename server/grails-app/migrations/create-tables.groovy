@@ -1714,6 +1714,10 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "entity_view_filters", constraintName: "FK9432frmitk8mc7gfm3h6gqw9d", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
     }
 
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-2") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "entity_view_filters", constraintName: "FK9432frmitk8mc7gfm3h6gqw9d", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
     changeSet(author: "Bryan (generated)", id: "1647848110366-1") {
         createTable(tableName: "user_entity_view_filters") {
             column(name: "id", type: "VARCHAR(255)") {
