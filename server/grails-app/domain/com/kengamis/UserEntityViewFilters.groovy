@@ -1,7 +1,5 @@
 package com.kengamis
 
-import grails.gorm.DetachedCriteria
-
 class UserEntityViewFilters {
 
     String id
@@ -10,7 +8,9 @@ class UserEntityViewFilters {
 
     Date dateCreated
     Date lastUpdated
+
     static belongsTo = [user: User, entityViewFilters: EntityViewFilters]
+
     static mapping = {
         id generator: 'uuid2'
     }
@@ -37,15 +37,13 @@ class UserEntityViewFilters {
     }
 
     static void removeAll(User u) {
-        where {
-            user == User.load(u.id)
-        }.deleteAll()
+        def users = findAllByUser(u)
+        users.each { it.delete(flush: true, failOnError: true) }
     }
 
     static void removeAll(EntityViewFilters e) {
-        DetachedCriteria<EntityViewFilters> filters = where {
-            entityViewFilters == EntityViewFilters.load(e.id)
-        } as DetachedCriteria<EntityViewFilters>
-        filters.deleteAll()
+        def filters = findAllByEntityViewFilters(e)
+        filters.each { it.delete(flush: true, failOnError: true) }
     }
+
 }
