@@ -10,7 +10,8 @@ import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {SampleData} from "../../helpers/sample-data";
+import {ProgramPartnersService} from "../../services/program-partners.service";
+//import {SampleData} from "../../helpers/sample-data";
 
 @Component({
   selector: 'app-report-form',
@@ -70,7 +71,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   attachment3: string;
 
   organisationalInfo: any;
-  projectInfo: any;
   performanceReport = [];
   financialReport = [];
   items = [
@@ -84,6 +84,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private reportFormService: ReportFormService,
               private taskListService: TaskListService,
               private fileUploadService: FileUploadService,
+              private programPartnersService: ProgramPartnersService,
               public authService: AuthService) {
   }
 
@@ -92,8 +93,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-    this.organisationalInfo = SampleData.organisationalInfo;
-    this.projectInfo = SampleData.projectInfo;
+   //this.organisationalInfo = SampleData.organisationalInfo;
 
     this.route.params
       .subscribe(p => {
@@ -109,6 +109,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
           const params = new HttpParams()
             .set('taskId', this.taskId);
+
+          //set organizational Info
+          this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
+            if (results !== null && results !== undefined) {
+              this.organisationalInfo = results;
+            }
+          });
 
           this.setAttachments(params);
 
@@ -177,7 +184,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
-      } /*else {
+      }/* else {
         this.financialReport = SampleData.financialReport;
         this.performanceReport = SampleData.performanceReport;
       }*/
