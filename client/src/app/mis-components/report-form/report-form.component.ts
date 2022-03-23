@@ -93,8 +93,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-   //this.organisationalInfo = SampleData.organisationalInfo;
-
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
@@ -116,6 +114,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               this.organisationalInfo = results;
             }
           });
+
+          //get partner setup record
+     /*     const params2 = new HttpParams().set('id', this.taskRecord.partnerId);
+          this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
+            this.editing = true;
+            this.setPartnerSetupInfo(data.setup);
+          }, error => console.log(error));*/
 
           this.setAttachments(params);
 
