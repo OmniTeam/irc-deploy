@@ -77,7 +77,7 @@
                                      [clearable]="true"
                           >
                             <ng-option [value]="item.id" *ngFor="let item of forms">
-                              {{item.name}}
+                              {{item?.displayName}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -203,7 +203,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+              <div class="col-md-12 offset-6" style="padding-bottom: 15px; padding-left: 0px">
                 <!--<a class=" btn btn-danger"  type="button" (click)="goBack()" style="color: #ffffff">
                   Cancel </a>-->
                 <button

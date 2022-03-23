@@ -11,7 +11,6 @@ import {
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {GroupsService} from "../../services/groups.service";
-import {UsersService} from "../../services/users.service";
 import {TagService} from "../../services/tags";
 import {AlertService} from "../../services/alert";
 import {AuthService} from "../../services/auth.service";
