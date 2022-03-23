@@ -11,6 +11,7 @@ import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {ProgramPartnersService} from "../../services/program-partners.service";
+import {PartnerSetupService} from "../../services/partner-setup.service";
 //import {SampleData} from "../../helpers/sample-data";
 
 @Component({
@@ -84,6 +85,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private reportFormService: ReportFormService,
               private taskListService: TaskListService,
               private fileUploadService: FileUploadService,
+              private partnerSetupService: PartnerSetupService,
               private programPartnersService: ProgramPartnersService,
               public authService: AuthService) {
   }
@@ -93,13 +95,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-   //this.organisationalInfo = SampleData.organisationalInfo;
-
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
+          console.log("taskRecord", data);
           this.taskRecord = data;
           if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
@@ -116,6 +117,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               this.organisationalInfo = results;
             }
           });
+
+          //get partner setup record
+          const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+          this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
+            console.log("params2", data);
+          }, error => console.log(error));
 
           this.setAttachments(params);
 
