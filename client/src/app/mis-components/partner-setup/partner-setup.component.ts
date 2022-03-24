@@ -243,14 +243,20 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             }
           );
         });
-        if (item.id === rowId) this.createNewBudgetItem(item.name);
+        if (item.id === rowId) this.createNewBudgetItem(item);
       });
     }
   }
 
-  createNewBudgetItem(value) {
-    let id = uuid();
-    this.budget.push({id: id, budgetLine: value, approvedAmount: ''});
+  createNewBudgetItem(indicator: Indicator) {
+    if (this.budget.some(x => x.indicatorId === indicator.id)) {
+      this.budget.forEach(function (item) {
+        if (item.indicatorId === indicator.id) item.budgetLine = indicator.name;
+      });
+    } else {
+      let id = uuid();
+      this.budget.push({id: id, indicatorId: indicator.id, budgetLine: indicator.name, approvedAmount: ''});
+    }
   }
 
   toggleDisaggregation(btn_id, data) {
