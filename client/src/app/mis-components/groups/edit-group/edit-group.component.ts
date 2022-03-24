@@ -14,6 +14,7 @@ import {UsersService} from "../../../services/users.service";
 import {AlertService} from "../../../services/alert";
 import {AuthService} from "../../../services/auth.service";
 import {GroupsService} from "../../../services/groups.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-edit-group',
@@ -70,19 +71,18 @@ export class EditGroupComponent implements OnInit {
   ngOnInit(): void {
     this.groupsService.getGroups().subscribe(data =>{
       this.parents=data
-      console.log(this.parents)
+      // console.log(this.parents)
     }, error => {this.alertService.error("Failed to get Parents")})
     this.usersService.getUsers().subscribe(data =>{
       this.dataCollectors=data
-      console.log(this.dataCollectors)
+      // console.log(this.dataCollectors)
     }, error => {this.alertService.error("Failed to get Data Collectors")})
     this.groupsService.getCurrentGroup(this.route.snapshot.params.id).subscribe((results: any) => {
+      console.log(results,"this group data")
       this.formGroup = this.formBuilder.group({
-        name: [results?.name],
+        name: [results[0]?.name],
         parent: [results?.parent],
-        access_to_central_data: [results?.access_to_central_data],
-        permissions: [results?.permissions],
-        data_collectors: [results?.data_collectors]
+        data_collectors: [results[0]?.data_collectors]
       });
     });
   }
@@ -110,10 +110,11 @@ export class EditGroupComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    /*const formData = Object.keys(fData).filter(item => fData[item] != undefined || fData[item] != null);
-    const submitData = {};
-    formData.forEach(item => Object.assign(submitData, {[item]: fData[item]}));
-    console.log(submitData);*/
+    /*const params =new HttpParams().set('id', this.route.snapshot.params.id)
+    this.groupsService.deleteOldKengauserGroups(params).subscribe(result =>{
+      console.log(result)
+    })*/
+
     this.groupsService.updateGroup(this.route.snapshot.params.id, submitData).subscribe((result) => {
       console.warn(result, 'Group Successfully');
       this.alertService.success(`Group: ${result.name} has been successfully updated`)
@@ -121,18 +122,5 @@ export class EditGroupComponent implements OnInit {
     }, error => {
       this.alertService.error(`Failed to update group: ${this.formGroup.controls.name.value}`)
     });
-  }
-
-  changeCentralDataAccess() {
-    this.ACD = this.f['access_to_central_data'].value
-    if (this.ACD === true) {
-      this.f['data_collectors'].reset()
-      document.getElementById('data_collectors').hidden = false
-    } else {
-      this.f['data_collectors'].reset()
-      document.getElementById('data_collectors').hidden = true
-    }
-
-
   }
 }

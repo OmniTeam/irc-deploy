@@ -122,7 +122,7 @@ export class CreateGroupComponent implements OnInit {
     });
   }
 
-  // shows data collectors based on access to central data toggle
+  /*// shows data collectors based on access to central data toggle
   changeCentralDataAccess() {
     this.ACD = this.f['access_to_central_data'].value
     if (this.ACD === true) {
@@ -134,7 +134,7 @@ export class CreateGroupComponent implements OnInit {
     }
 
 
-  }
+  }*/
 
   goBack() {
     this.router.navigate(['/groups'])
