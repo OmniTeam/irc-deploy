@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class DataViewService {
 
-  baseurl = `${environment.serverUrl}/dataView/`
+  baseurl = `${environment.serverUrl}/dataView`
   constructor(private http: HttpClient) { }
 
   getDataViews(): Observable<any> {

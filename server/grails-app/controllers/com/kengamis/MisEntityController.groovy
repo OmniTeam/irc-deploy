@@ -1,5 +1,6 @@
 package com.kengamis
 
+import com.kengamis.exporter.EntityDataExporter
 import com.kengamis.query.EntityQueryHelper
 import grails.converters.JSON
 import grails.validation.ValidationException
@@ -304,6 +305,24 @@ class MisEntityController {
         }
         def message = ["Entity Record Deleted"]
         respond message
+    }
+
+    def exportEntityData() {
+        def entityData = []
+        def id = params.id as String
+        try {
+            def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
+            def dataExporter = new EntityDataExporter(id, params)
+            def exportedData = dataExporter.exportToExcel(q.data)
+            def fileName = dataExporter.setFileName()
+            entityData = [data: exportedData, file: fileName]
+        }
+        catch (Exception e) {
+            flash.error = "Data Might Not Be Available For This entity."
+            log.error("Error fetching data", e)
+            entityData = [data: [], file: MisEntity.findById(id).name]
+        }
+        respond entityData
     }
 
 }

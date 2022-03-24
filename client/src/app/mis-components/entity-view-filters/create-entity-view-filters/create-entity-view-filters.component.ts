@@ -69,6 +69,7 @@ export class CreateEntityViewFiltersComponent implements OnInit {
     this.formData = Object.assign(this.formData, entityView);
     let users = this.formData.users;
     this.entityViewFiltersService.createEntityViewFilter(this.formData).subscribe(results => {
+      console.log(results['id'])
       const params = new HttpParams()
         .set('id', results['id'])
         .set('users', users);
