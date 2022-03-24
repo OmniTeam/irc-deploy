@@ -137,7 +137,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   generateCalendar(event) {
-    if (this.disbursementPlan || this.indicators) {
+    if (this.disbursementPlan.length>0 || this.indicators.length>0 || this.budget.length>0 ) {
       if (confirm('This action will clear the targets and disbursement entered')) {
         this.disbursementPlan = [];
         this.indicators = [];
@@ -150,7 +150,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   calendarDates() {
-    let startDate = this.calendar.grantStartDate;
+    let startDate = this.calendar.projectReportingStartDate;
     let endDate = this.calendar.grantEndDate;
 
     if (this.calendar.periodType == "quarter") {
