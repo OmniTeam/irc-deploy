@@ -33,7 +33,7 @@ export class PartnerListComponent implements OnInit {
       dom: 'lfBrtip',
       buttons: [
         {
-          text: '<i class="text fas fa-plus" style="color: cornflowerblue;"></i>&nbsp;&nbsp;Add Partner Setup',
+          text: '<i class="text fas fa-plus" style="color: cornflowerblue;"></i>&nbsp;&nbsp;Add Work Plan',
           action: (e, dt, node, config) => {
             this.router.navigate(['/partnerSetup']);
           }

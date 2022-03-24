@@ -76,20 +76,20 @@
           <div class="col-sm-12 justify-center">
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible">Submit Report
-              </button>
+                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'"  (click)="changeForm('Submit')">Submit Report
+              </button><!--[disabled]="!isSubmitVisible"-->
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible">Review Report
-              </button>
+                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'"  (click)="changeForm('Review')">Review Report
+              </button><!--[disabled]="!isReviewVisible"-->
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible">Approve Report
-              </button>
+                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'"  (click)="changeForm('Approve')">Approve Report
+              </button><!--[disabled]="!isApproveVisible"-->
             </div>
           </div>
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">

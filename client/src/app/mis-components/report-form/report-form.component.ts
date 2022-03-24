@@ -12,6 +12,7 @@ import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {PartnerSetupService} from "../../services/partner-setup.service";
+
 //import {SampleData} from "../../helpers/sample-data";
 
 @Component({
@@ -118,17 +119,47 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             }
           });
 
-          //get partner setup record
-          const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
-          this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
-            console.log("params2", data);
-          }, error => console.log(error));
-
           this.setAttachments(params);
 
           this.setCommentsAndRecommendations(params);
 
           this.setReportsData(params);
+
+          //get partner setup record
+          const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+          this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
+            console.log("partner", data);
+            if (data.setup != undefined && data.setup.setupValues != undefined) {
+              this.taskRecord.reportingPeriod = data.setup.periodType;
+              let values = JSON.parse(data.setup.setupValues);
+              console.log("values", values);
+
+              values.budget.forEach((b) => {
+                this.financialReport.push({
+                  id: b.id,
+                  budget_line: b.budgetLine,
+                  approved_budget: b.approvedAmount
+                });
+              });
+
+              if (values.indicators != undefined) {
+                let ind = JSON.parse(values.indicators);
+                ind.forEach((i) => {
+                  this.performanceReport.push({
+                    id: i.id,
+                    output_indicators: i.name,
+                    overall_target: i.overallTarget
+                  });
+                });
+              }
+
+              let reportValues: { [key: string]: string } = {
+                financialReport: JSON.stringify(this.financialReport),
+                performanceReport: JSON.stringify(this.performanceReport),
+              }
+              this.saveReport(reportValues, 'saved_for_later');
+            }
+          }, error => console.log(error));
 
         }, error => console.log(error));
       });
@@ -270,7 +301,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     );
   }
 
-/*  changeForm(formName) {
+  changeForm(formName) {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
@@ -279,7 +310,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (formName == 'Approve') this.isApproveVisible = true;
     window.scroll(0, 0);
     this.success = false;
-  }*/
+  }
 
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
@@ -350,7 +381,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   cellEditor(row, td_id, key: string, oldValue, type?: string) {
-    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue,type);
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
