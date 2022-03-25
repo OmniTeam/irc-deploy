@@ -15,7 +15,7 @@ export class ReportFormService {
   }
 
   getReportForTask(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportForm/get_report_for_task`, {params});
+    return this.http.get(`${environment.serverUrl}/reportForm/getReportForTask`, {params});
   }
 
   createReport(formData): Observable<any> {
@@ -27,7 +27,7 @@ export class ReportFormService {
   }
 
   getAttachmentsForTask(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportFormFiles/get_files_for_task`, {params});
+    return this.http.get(`${environment.serverUrl}/reportFormFiles/getFilesForTask`, {params});
   }
 
   saveFile(formData): Observable<any> {
@@ -39,19 +39,19 @@ export class ReportFormService {
   }
 
   getFileByTaskAndName(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportFormFiles/get_file_by_task_and_name`,{params});
+    return this.http.get(`${environment.serverUrl}/reportFormFiles/getFileByTaskAndName`,{params});
   }
 
   getCommentsForTask(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportFormComments/get_comments_for_task`, {params});
+    return this.http.get(`${environment.serverUrl}/reportFormComments/getCommentsForTask`, {params});
   }
 
   getRecommendationsForTask(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportFormRecommendations/get_recommendations_for_task`, {params});
+    return this.http.get(`${environment.serverUrl}/reportFormRecommendations/getRecommendationsForTask`, {params});
   }
 
   getComment(params): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportFormComments/get_comment`, {params});
+    return this.http.get(`${environment.serverUrl}/reportFormComments/getCommentById`, {params});
   }
 
   saveComment(formData): Observable<any> {
@@ -59,7 +59,7 @@ export class ReportFormService {
   }
 
   getRecommendation(params): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/reportFormRecommendations/get_recommendation`, {params});
+    return this.http.get(`${environment.serverUrl}/reportFormRecommendations/getRecommendationById`, {params});
   }
 
   saveRecommendation(formData): Observable<any> {

@@ -20,14 +20,14 @@ export class ProgramService {
   }
 
   getCurrentProgram(id) {
-    return this.http.get(`${this.baseurl}${id}/`);
+    return this.http.get(`${this.baseurl}/${id}/`);
   }
 
   updateProgram(id, formData): Observable<any> {
-    return this.http.put(`${this.baseurl}${id}/`, formData);
+    return this.http.put(`${this.baseurl}/${id}/`, formData);
   }
 
   deleteProgram(id): Observable<any> {
-    return this.http.delete(`${this.baseurl}${id}/`);
+    return this.http.delete(`${this.baseurl}/${id}/`);
   }
 }

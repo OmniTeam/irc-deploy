@@ -12,11 +12,16 @@ class KengaGroup {
     Date dateCreated
     Date lastUpdated
 
+    static hasMany = [kengaUserGroup: KengaUserGroup]
     static mapping = {
         id generator: 'uuid2'
     }
     static constraints = {
         name blank: false,unique: true
+    }
+
+    Set<User> getUsers() {
+        (KengaUserGroup.findAllByKengaGroup(this) as List<KengaUserGroup>)*.user as Set<User>
     }
 
 }

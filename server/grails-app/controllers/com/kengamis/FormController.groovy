@@ -24,7 +24,7 @@ class FormController {
         respond formService.list(params), model:[formCount: formService.count()]
     }
 
-    def enabledForms() {
+    def getEnabledForms() {
         def forms = Form.findAllByEnabled(true, [sort: "displayName", order: "asc"])
         respond forms
     }
