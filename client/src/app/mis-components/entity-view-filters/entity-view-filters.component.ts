@@ -64,11 +64,17 @@ export class EntityViewFiltersComponent implements OnInit {
   }
 
   getFilteredFilters(value) {
-    const params = new HttpParams()
-      .set('id', value);
-    this.entityViewFiltersService.filterFiltersByEntityView(params).subscribe(data => {
-      this.filters = data;
-    }, error => console.log(error));
+    console.log(value);
+    if (value) {
+      const params = new HttpParams()
+        .set('id', value);
+      this.entityViewFiltersService.filterFiltersByEntityView(params).subscribe(data => {
+        this.filters = data;
+      }, error => console.log(error));
+    }
+    else {
+      this.reloadTable();
+    }
   }
 
 

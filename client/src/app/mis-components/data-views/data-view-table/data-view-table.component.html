@@ -60,6 +60,9 @@
           >
             <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name}}"
                                   prop="{{col.prop}}">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{ value | replace: '_' : ' ' }}
+              </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>
         </div>

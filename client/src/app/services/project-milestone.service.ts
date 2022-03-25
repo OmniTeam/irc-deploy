@@ -7,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ProjectMilestoneService {
-  baseurl = `${environment.serverUrl}/projectMilestone/`
+  baseurl = `${environment.serverUrl}/projectMilestone`
   constructor(private http: HttpClient) { }
 
   getMilestones(): Observable<any> {

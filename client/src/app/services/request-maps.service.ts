@@ -7,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class RequestMapsService {
-  baseurl = `${environment.serverUrl}/requestMap/`
+  baseurl = `${environment.serverUrl}/requestMap`
   constructor(private http: HttpClient) { }
 
   getRequestMaps(): Observable<any> {

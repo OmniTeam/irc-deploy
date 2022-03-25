@@ -7,7 +7,7 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class ProgramPartnersService {
-  baseurl = `${environment.serverUrl}/programPartner/`
+  baseurl = `${environment.serverUrl}/programPartner`
   constructor(private http: HttpClient) { }
 
   getProgramPartners(): Observable<any> {

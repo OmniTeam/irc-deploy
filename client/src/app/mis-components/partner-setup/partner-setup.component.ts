@@ -137,7 +137,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   generateCalendar(event) {
-    if (this.disbursementPlan || this.indicators) {
+    if (this.disbursementPlan.length>0 || this.indicators.length>0 || this.budget.length>0 ) {
       if (confirm('This action will clear the targets and disbursement entered')) {
         this.disbursementPlan = [];
         this.indicators = [];
@@ -150,7 +150,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   calendarDates() {
-    let startDate = this.calendar.grantStartDate;
+    let startDate = this.calendar.projectReportingStartDate;
     let endDate = this.calendar.grantEndDate;
 
     if (this.calendar.periodType == "quarter") {
@@ -243,14 +243,20 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             }
           );
         });
-        if (item.id === rowId) this.createNewBudgetItem(item.name);
+        if (item.id === rowId) this.createNewBudgetItem(item);
       });
     }
   }
 
-  createNewBudgetItem(value) {
-    let id = uuid();
-    this.budget.push({id: id, budgetLine: value, approvedAmount: ''});
+  createNewBudgetItem(indicator: Indicator) {
+    if (this.budget.some(x => x.indicatorId === indicator.id)) {
+      this.budget.forEach(function (item) {
+        if (item.indicatorId === indicator.id) item.budgetLine = indicator.name;
+      });
+    } else {
+      let id = uuid();
+      this.budget.push({id: id, indicatorId: indicator.id, budgetLine: indicator.name, approvedAmount: ''});
+    }
   }
 
   toggleDisaggregation(btn_id, data) {

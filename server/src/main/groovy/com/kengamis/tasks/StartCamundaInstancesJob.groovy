@@ -1,5 +1,6 @@
 package com.kengamis.tasks
 
+import com.kengamis.TaskList
 import groovy.json.JsonOutput
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
@@ -17,14 +18,17 @@ class StartCamundaInstancesJob extends Script {
     @Override
     Object run() {
         def partnerSetup = PartnerSetup.all.each {
-            boolean started = startProcessInstance([
-                    PartnerSetupId : it.id,
-                    PartnerId : it.partnerId,
-                    ProgramId : it.programId,
-                    StartDate : it.reportingStartDate,
-                    EndDate : it.endDate,
-                    GroupId: ""
-            ], CIIF_MANAGEMENT_KEY)
+            def list = TaskList.findAllByInputVariablesIlike('%' + it.partnerId + '%')
+            if (list.size() == 0) {
+                boolean started = startProcessInstance([
+                        PartnerSetupId: it.id,
+                        PartnerId     : it.partnerId,
+                        ProgramId     : it.programId,
+                        StartDate     : it.reportingStartDate,
+                        EndDate       : it.endDate,
+                        GroupId       : ""
+                ], CIIF_MANAGEMENT_KEY)
+            }
         }
         return null
     }

@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class ProgramService {
 
-  baseurl = `${environment.serverUrl}/program/`
+  baseurl = `${environment.serverUrl}/program`
   constructor(private http: HttpClient) { }
 
   getPrograms(): Observable<any> {

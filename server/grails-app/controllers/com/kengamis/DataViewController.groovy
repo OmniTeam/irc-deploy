@@ -3,6 +3,7 @@ package com.kengamis
 import com.kengamis.query.MetabaseHelper
 import com.kengamis.query.QueryHelper
 import com.kengamis.query.security.Permission
+import grails.util.Holders
 import grails.validation.ValidationException
 import org.springframework.security.acls.domain.BasePermission
 
@@ -153,7 +154,7 @@ class DataViewController {
         def id = params.id as String
         def dataView = DataView.get(id)
         def misDb = Holders.grailsApplication.config.mis.database as String
-        def study = Study.findByCentralId('9')
+        def study = Study.findByCentralId('8')
         if (study) {
             def metabaseDb = "metabase_${constructFormTable(study.name)}"
             AppHolder.withMisSqlNonTx { executeUpdate("CREATE DATABASE IF NOT EXISTS ${metabaseDb}".toString()) }

@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class EntityViewFiltersService {
 
-  baseurl = `${environment.serverUrl}/entityViewFilters/`
+  baseurl = `${environment.serverUrl}/entityViewFilters`
   constructor(private http: HttpClient) { }
 
   getEntityViewFilters(): Observable<any> {

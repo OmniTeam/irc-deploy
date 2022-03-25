@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class ProgramCategoryService {
 
-  baseurl = `${environment.serverUrl}/programCategory/`
+  baseurl = `${environment.serverUrl}/programCategory`
   constructor(private http: HttpClient) { }
 
   getProgramCategories(): Observable<any> {
