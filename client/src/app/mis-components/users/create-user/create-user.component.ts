@@ -20,7 +20,7 @@ import {GroupsService} from "../../../services/groups.service";
 
 
 @Component({
-  selector: 'app-createppdauser',
+  selector: 'app-user',
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.scss']
 })
@@ -112,7 +112,7 @@ export class CreateUserComponent implements OnInit {
       for(let i=0; i<formData.kengaGroup.length; i++){
         const userGroupData = new FormData()
         userGroupData.append('user', result.id)
-        userGroupData.append('group', formData.kengaGroup[i])
+        userGroupData.append('kengaGroup', formData.kengaGroup[i])
 
         this.userService.createUserGroup(userGroupData).subscribe(data => {
           console.log(data ,"User group details")
