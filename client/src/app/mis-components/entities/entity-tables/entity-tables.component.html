@@ -86,6 +86,12 @@
                  style="color: white"> Add Tag </a>
               <a class=" btn btn-default" *ngIf="enableRemoveTagButton === true" (click)="openFormModal(removeTagModal)"
                  style="color: white"> Remove Tag </a>
+              <a class=" btn btn-default" (click)="exportExcelFormData()" style="color: white;">
+                <i class="fa fa-file-excel" style="margin-right: 10px; font-size: 1.1rem;"></i>
+                Export to Excel </a>
+              <a class=" btn btn-default" (click)="exportCSVFormData()" style="color: white;">
+                <i class="fa fa-file-csv" style="margin-right: 10px; font-size: 1.1rem;"></i>
+                Export to CSV </a>
             </div>
           </div>
           <ngx-datatable
@@ -129,9 +135,9 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <!--                <button (click)="editEntityDataRecord(row);" class="btn btn-default" style="padding: 1px 6px;">-->
-                <!--                  <i class="fa fa-pencil-alt"></i>-->
-                <!--                </button>-->
+<!--                <button (click)="editEntityDataRecord(row);" class="btn btn-default" style="padding: 1px 6px;">-->
+<!--                  <i class="fa fa-pencil-alt"></i>-->
+<!--                </button>-->
                 <button (click)="deleteEntityDataRecord(row)" class="btn btn-danger" style="padding: 1px 6px;">
                   <i class="fa fa-trash"></i>
                 </button>
@@ -343,3 +349,4 @@
     </div>
   </form>
 </ng-template>
+

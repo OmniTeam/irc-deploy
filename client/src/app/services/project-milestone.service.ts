@@ -7,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ProjectMilestoneService {
-  baseurl = `${environment.serverUrl}/projectMilestone/`
+  baseurl = `${environment.serverUrl}/projectMilestone`
   constructor(private http: HttpClient) { }
 
   getMilestones(): Observable<any> {
@@ -20,6 +20,10 @@ export class ProjectMilestoneService {
 
   getProgramCategories(params): Observable<any> {
     return this.http.get(`${environment.serverUrl}/programCategory/getCategoriesByProgram`, {params});
+  }
+
+  getMilestonesByProgram(params): Observable<any> {
+    return this.http.get(`${this.baseurl}getMilestonesByProgram`, {params});
   }
 
   createMilestone(formData): Observable<any> {
@@ -41,5 +45,4 @@ export class ProjectMilestoneService {
   runQuery(params) {
     return this.http.get(`${this.baseurl}/runQuery`, {params});
   }
-
 }

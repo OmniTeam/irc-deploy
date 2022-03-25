@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class EntityViewFiltersService {
 
-  baseurl = `${environment.serverUrl}/entityViewFilters/`
+  baseurl = `${environment.serverUrl}/entityViewFilters`
   constructor(private http: HttpClient) { }
 
   getEntityViewFilters(): Observable<any> {
@@ -23,20 +23,20 @@ export class EntityViewFiltersService {
     return this.http.get(`${this.baseurl}${id}/`);
   }
 
-  getDefaultFilterQuery(params) {
-    return this.http.get(`${this.baseurl}/defaultFilterQuery`, {params});
-  }
-
-  filterFiltersByEntityView(params) {
-    return this.http.get(`${this.baseurl}/filterFiltersByEntityView`, {params});
-  }
-
   updateEntityViewFilter(id, formData): Observable<any> {
     return this.http.put(`${this.baseurl}${id}/`, formData);
   }
 
   deleteEntityViewFilter(id): Observable<any> {
     return this.http.delete(`${this.baseurl}${id}/`);
+  }
+
+  getDefaultFilterQuery(params) {
+    return this.http.get(`${this.baseurl}/defaultFilterQuery`, {params});
+  }
+
+  filterFiltersByEntityView(params) {
+    return this.http.get(`${this.baseurl}/filterFiltersByEntityView`, {params});
   }
 
   runFilterQueryNow(params) {

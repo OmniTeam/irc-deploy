@@ -23,7 +23,6 @@ export class EntitiesComponent implements OnInit {
   SelectionType = SelectionType;
   search = '';
   entityId: any;
-
   constructor(private router: Router,
               private entityService: EntityService,
               private alertService: AlertService) {
@@ -54,7 +53,6 @@ export class EntitiesComponent implements OnInit {
     let entityId = row.id;
     this.router.navigate(['/entity/showData/' + entityId]);
   }
-
 
   getGroupEntityViews(entityViews): string {
     let d = [];
@@ -136,5 +134,9 @@ export class EntitiesComponent implements OnInit {
     if (selected) {
       this.entityId = this.selected[0].id
     }
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 }

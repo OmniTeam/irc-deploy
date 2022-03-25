@@ -62,9 +62,10 @@ class EntityViewFiltersController {
         def entityViewId = params.id as String
         def entityView = EntityView.get(entityViewId)
         def entityViewFilters = EntityViewFilters.findAllByEntityView(entityView).collect { entityViewFilter ->
-            def users = UserEntityViewFilters.findAllByEntityViewFilters(entityViewFilter).collect { it.user.names }.join(", ")
+            def users = entityViewFilter.users.collect { it.names }.join(", ")
+            def entityViewName = entityView.name
             [id          : entityViewFilter.id, name: entityViewFilter.name, description: entityViewFilter.description,
-             filterQuery : entityViewFilter.filterQuery, entityView: entityView,
+             filterQuery : entityViewFilter.filterQuery, entityView: entityViewName,
              entityViewId: entityViewId, users: users]
         }
         respond entityViewFilters

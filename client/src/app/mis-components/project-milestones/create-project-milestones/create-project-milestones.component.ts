@@ -49,7 +49,7 @@ export class CreateProjectMilestonesComponent implements OnInit {
 
   getCategories(value) {
     const params = new HttpParams()
-      .set('id', value);
+        .set('id', value);
     this.projectMilestoneService.getProgramCategories(params).subscribe(data => {
       this.categories = data;
     }, error => console.log(error));

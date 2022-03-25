@@ -17,7 +17,6 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
     ReactiveFormsModule,
     NgSelectModule,
     NgxDatatableModule
-
   ]
 })
 export class CreateProjectMilestonesModule { }

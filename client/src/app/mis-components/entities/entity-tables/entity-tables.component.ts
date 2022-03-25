@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";
 import {TagService} from "../../../services/tags";
 import {NgSelectComponent} from "@ng-select/ng-select";
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-entity-tables',
@@ -44,6 +45,7 @@ export class EntityTablesComponent implements OnInit {
               private entityService: EntityService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
+              private exportService: ExportService,
               private alertService: AlertService,
               private tagService: TagService) {
   }
@@ -342,6 +344,40 @@ export class EntityTablesComponent implements OnInit {
       this.temp = [...data.resultList];
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
+    }, error => console.log(error));
+  }
+
+  exportExcelFormData() {
+    if (!this.selectedTagTypeFilter) {
+      this.selectedTagTypeFilter = "";
+    }
+    if (!this.selectedTagFilter) {
+      this.selectedTagFilter = "";
+    }
+    const params = new HttpParams()
+      .set('id', this.entityId)
+      .set('tagTypeFilter', this.selectedTagTypeFilter)
+      .set('tagFilter', this.selectedTagFilter);
+
+    this.entityService.exportEntityData(params).subscribe((data) => {
+      this.exportService.exportJsonToExcel(data['data'], data['file']);
+    }, error => console.log(error));
+  }
+
+  exportCSVFormData() {
+    if (!this.selectedTagTypeFilter) {
+      this.selectedTagTypeFilter = "";
+    }
+    if (!this.selectedTagFilter) {
+      this.selectedTagFilter = "";
+    }
+    const params = new HttpParams()
+      .set('id', this.entityId)
+      .set('tagTypeFilter', this.selectedTagTypeFilter)
+      .set('tagFilter', this.selectedTagFilter);
+
+    this.entityService.exportEntityData(params).subscribe((data) => {
+      this.exportService.exportToCsv(data['data'], data['file']);
     }, error => console.log(error));
   }
 }

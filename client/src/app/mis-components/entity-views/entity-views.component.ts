@@ -38,16 +38,16 @@ export class EntityViewsComponent implements OnInit {
     this.router.navigate(['/entityViewFilter/create/' + this.entityViewId]);
   }
 
+  editEntityView(row) {
+    let entityViewId = row.id;
+    this.router.navigate(['/entityView/edit/' + this.entityId + '/' + entityViewId]);
+  }
+
   showEntityView(row) {
     let entityViewId = row.id;
     this.router.navigate(['/entityView/showData/' + entityViewId]);
   }
 
-
-  editEntityView(row) {
-    let entityViewId = row.id;
-    this.router.navigate(['/entityView/edit/' + this.entityId + '/' + entityViewId]);
-  }
 
   deleteEntityView(row) {
     let entityViewId = row.id
@@ -64,13 +64,16 @@ export class EntityViewsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
@@ -119,24 +122,16 @@ export class EntityViewsComponent implements OnInit {
     this.activeRow = event.row;
   }
 
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
-      for (const key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-
   onSelect({selected}) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
     if (selected) {
       this.entityViewId = this.selected[0].id
     }
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 
 }

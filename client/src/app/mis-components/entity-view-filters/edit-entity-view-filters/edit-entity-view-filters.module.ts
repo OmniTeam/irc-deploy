@@ -10,13 +10,13 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 @NgModule({
   declarations: [EditEntityViewFiltersComponent],
-  imports: [
-    CommonModule,
-    EditEntityViewFiltersRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgSelectModule,
-    NgxDatatableModule
-  ]
+    imports: [
+        CommonModule,
+        EditEntityViewFiltersRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgSelectModule,
+        NgxDatatableModule
+    ]
 })
 export class EditEntityViewFiltersModule { }

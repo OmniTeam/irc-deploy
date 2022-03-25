@@ -47,6 +47,7 @@ class UrlMappings {
         get "/$controller/getDataCollectors(.$format)?"(action:"getDataCollectors")
         get "/$controller/runFilterQuery(.$format)?"(action:"runFilterQuery")
         get "/$controller/saveUserEntityViewFilter(.$format)?"(action:"saveUserEntityViewFilter")
+        get "/$controller/exportEntityData(.$format)?"(action:"exportEntityData")
 
 
 

@@ -17,7 +17,6 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
     FormsModule,
     NgSelectModule,
     NgxDatatableModule
-
   ]
 })
 export class CreateEntityViewFiltersModule { }

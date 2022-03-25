@@ -204,7 +204,7 @@ class QueryHelper {
         if (currentUser.hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) return null
 
 
-        def userNames = currentUser.findFellowUsers().collect { it.username }.findAll()
+        def userNames = []
         if (!userNames) {
             if (currentUser.username) {
                 userNames = [currentUser.username]

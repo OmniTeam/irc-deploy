@@ -73,4 +73,8 @@ export class EntityService {
   deleteEntityViewField(id): Observable<any> {
     return this.http.delete(`${environment.serverUrl}/entityViewFields/${id}`);
   }
+
+  exportEntityData(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/misEntity/exportEntityData`, {params});
+  }
 }

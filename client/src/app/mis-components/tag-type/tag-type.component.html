@@ -44,6 +44,7 @@
                     placeholder="Search Tag Types"
                     aria-controls="datatable"
                     (keyup)="onChangeSearch($event)"
+                    (search)="onSearch($event)"
                   />
                 </label>
               </div>
@@ -61,7 +62,7 @@
             [headerHeight]="50"
             [footerHeight]="50"
             [rowHeight]="'auto'"
-            [rows]="tagTypes"
+            [rows]="rows"
             [limit]="entries != -1 ? entries : undefined"
             (activate)="onActivate($event)"
           >

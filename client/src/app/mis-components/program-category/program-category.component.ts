@@ -19,6 +19,8 @@ export class ProgramCategoryComponent implements OnInit {
   categories: any
   submitted = false;
   activeRow: any;
+  rows: Object[];
+  temp: Object[];
   constructor(private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
@@ -30,7 +32,8 @@ export class ProgramCategoryComponent implements OnInit {
 
   reloadTable() {
     this.programCategoryService.getProgramCategories().subscribe((data) => {
-      this.categories = data;
+      this.temp = [...data];
+      this.rows = data;
     });
   }
 
@@ -77,11 +80,19 @@ export class ProgramCategoryComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  onSearch(event) {
     this.reloadTable();
   }
 }

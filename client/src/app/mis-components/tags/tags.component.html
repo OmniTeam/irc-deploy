@@ -44,6 +44,7 @@
                     placeholder="Search Tags"
                     aria-controls="datatable"
                     (keyup)="onChangeSearch($event)"
+                    (search)="onSearch($event)"
                   />
                 </label>
               </div>
@@ -62,7 +63,7 @@
             [footerHeight]="50"
             [rowHeight]="'auto'"
             [limit]="entries != -1 ? entries : undefined"
-            [rows]="tags"
+            [rows]="rows"
             (activate)="onActivate($event)"
           >
             <ngx-datatable-column name="Tag Name" prop="name"></ngx-datatable-column>

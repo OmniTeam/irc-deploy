@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {DataViewService} from "../../services/data-view.service";
 import {HttpParams} from "@angular/common/http";
+
 @Component({
   selector: 'app-data-views',
   templateUrl: './data-views.component.html',
@@ -17,10 +18,12 @@ export class DataViewsComponent implements OnInit {
   selected: any[] = [];
   activeRow: any;
   search = '';
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private dataViewService: DataViewService,
-              private alertService: AlertService) { }
+              private alertService: AlertService) {
+  }
 
   ngOnInit(): void {
     this.reloadTable();
@@ -77,7 +80,6 @@ export class DataViewsComponent implements OnInit {
     }
   }
 
-
   onActivate(event) {
     this.activeRow = event.row;
   }
@@ -95,9 +97,10 @@ export class DataViewsComponent implements OnInit {
     });
   }
 
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
       for (const key in d) {
         if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
@@ -105,6 +108,10 @@ export class DataViewsComponent implements OnInit {
       }
       return false;
     });
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 
 }

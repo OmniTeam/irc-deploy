@@ -27,4 +27,8 @@ class MisEntity {
         entityFields cascade: "all-delete-orphan"
         entityFields sort: "orderOfDisplay", order: 'asc'
     }
+
+    EntityFields findEntityField(String field) {
+        entityFields.find { it.fieldName == field }
+    }
 }

@@ -106,8 +106,7 @@ export const ROUTES: RouteInfo[] = [
     isCollapsed: true,
     children: [
       {path: 'tags', title: 'Tags', type: 'link'},
-      {path: 'partnerSetupList', title: 'Work Plan', type: 'link'},
-      {path: 'programPartner', title: 'Program Partner', type: 'link'},
+      {path: 'programStaff', title: 'Program Staff', type: 'link'},
       {path: 'users', title: 'Users', type: 'link'},
     ]
   },
