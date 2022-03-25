@@ -91,4 +91,8 @@ export class ProgramCategoryComponent implements OnInit {
       return false;
     });
   }
+
+  onSearch(event) {
+    this.reloadTable();
+  }
 }

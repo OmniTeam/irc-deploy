@@ -130,4 +130,8 @@ export class EntityViewsComponent implements OnInit {
     }
   }
 
+  onSearch(event) {
+    this.reloadTable();
+  }
+
 }

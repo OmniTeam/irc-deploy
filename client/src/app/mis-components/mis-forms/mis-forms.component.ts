@@ -84,4 +84,8 @@ export class MisFormsComponent implements OnInit {
       );
     }
   }
+
+  onSearch(event) {
+    this.reloadTable();
+  }
 }

@@ -19,6 +19,7 @@ export class FormSettingComponent implements OnInit {
   temp: Object[];
   editing = {};
   formData: any;
+  formTable: any;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -31,7 +32,6 @@ export class FormSettingComponent implements OnInit {
 
   filterTable(event) {
     let val = event.target.value.toLowerCase();
-    console.log(val);
     // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
@@ -54,7 +54,8 @@ export class FormSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.getFormSettingData(params.formtable);
+      this.formTable = params.formtable;
+      this.getFormSettingData(this.formTable);
     });
   }
 
@@ -76,7 +77,10 @@ export class FormSettingComponent implements OnInit {
     let settingId = this.rows[rowIndex]['id'];
     this.formData = this.rows[rowIndex];
     this.formSettingService.updateFormSettings(settingId, this.formData).subscribe((data) => {
-      console.log(data);
     }, error => console.log(error));
+  }
+
+  onSearch(event) {
+    this.getFormSettingData(this.formTable);
   }
 }

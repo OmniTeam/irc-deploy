@@ -160,4 +160,8 @@ export class TagTypeComponent implements OnInit {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
+
+  onSearch(event) {
+    this.reloadTable();
+  }
 }

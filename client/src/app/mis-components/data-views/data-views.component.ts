@@ -110,4 +110,8 @@ export class DataViewsComponent implements OnInit {
     });
   }
 
+  onSearch(event) {
+    this.reloadTable();
+  }
+
 }
