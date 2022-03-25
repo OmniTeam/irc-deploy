@@ -9,7 +9,7 @@ import {environment} from "../../environments/environment";
 export class UsersService {
   baseurl = environment.serverUrl
   urlUsers = `${this.baseurl}/user/`
-  urlUserGroup = `${this.baseurl}/UserGroup/`
+  urlUserGroup = `${this.baseurl}/KengaUserGroup/`
 
   constructor(private http: HttpClient) { }
 

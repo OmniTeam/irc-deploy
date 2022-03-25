@@ -56,8 +56,14 @@ class KengaGroupController {
 //        respond kengaGroupService.get(id)
     }
 
+    @Transactional
     def deleteOldKengaUserGroups(){
-        print("I am here")
+        def id = params.id as String
+        def kengaUserGroup = KengaGroup.get(id)
+        KengaUserGroup.deleteOldRecords(kengaUserGroup)
+        def dataCollectors = params.data_collectors
+        print(dataCollectors)
+        render status: NO_CONTENT
     }
 
     @Transactional
