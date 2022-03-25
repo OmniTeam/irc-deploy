@@ -92,4 +92,8 @@ export class ProgramComponent implements OnInit {
     });
   }
 
+  onSearch(event) {
+    this.reloadTable();
+  }
+
 }

@@ -158,4 +158,8 @@ export class TagsComponent implements OnInit {
   onActivate(event) {
     this.activeRow = event.row;
   }
+
+  onSearch(event) {
+    this.reloadTable();
+  }
 }

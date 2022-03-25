@@ -91,4 +91,8 @@ export class ProgramPartnersComponent implements OnInit {
     });
   }
 
+  onSearch(event) {
+    this.reloadTable();
+  }
+
 }

@@ -135,4 +135,8 @@ export class EntitiesComponent implements OnInit {
       this.entityId = this.selected[0].id
     }
   }
+
+  onSearch(event) {
+    this.reloadTable();
+  }
 }

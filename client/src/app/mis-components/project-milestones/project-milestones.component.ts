@@ -91,4 +91,8 @@ export class ProjectMilestonesComponent implements OnInit {
     });
   }
 
+  onSearch(event) {
+    this.reloadTable();
+  }
+
 }

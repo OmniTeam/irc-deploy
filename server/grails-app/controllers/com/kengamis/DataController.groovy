@@ -142,10 +142,19 @@ class DataController {
         return records
     }
 
-    def getExportFormData() {
+    def getExportedFormData() {
         def formtable = params.formtable as String
         def dataExporter = new DataExporter(formtable, params)
         def exportedData = dataExporter.exportToExcel()
+        def fileName = dataExporter.setFileName()
+        def response = [data: exportedData, file: fileName]
+        respond response
+    }
+
+    def getExportedZippedFormData() {
+        def formtable = params.formtable as String
+        def dataExporter = new DataExporter(formtable, params)
+        def exportedData = dataExporter.exportToZipped()
         def fileName = dataExporter.setFileName()
         def response = [data: exportedData, file: fileName]
         respond response

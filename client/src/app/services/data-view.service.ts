@@ -20,7 +20,7 @@ export class DataViewService {
   }
 
   getCurrentDataView(id) {
-    return this.http.get(`${this.baseurl}${id}/`);
+    return this.http.get(`${this.baseurl}/${id}/`);
   }
 
   getDataViewData(params) {
@@ -32,11 +32,11 @@ export class DataViewService {
   }
 
   updateDataView(id, formData): Observable<any> {
-    return this.http.put(`${this.baseurl}${id}/`, formData);
+    return this.http.put(`${this.baseurl}/${id}/`, formData);
   }
 
   deleteDataView(id): Observable<any> {
-    return this.http.delete(`${this.baseurl}${id}/`);
+    return this.http.delete(`${this.baseurl}/${id}/`);
   }
 
   syncViewToMetabase(params) {
