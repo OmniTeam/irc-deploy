@@ -31,15 +31,15 @@ export class EntityService {
   }
 
   getEntityData(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/misEntity/get_entity_data`, {params});
+    return this.http.get(`${environment.serverUrl}/misEntity/getEntityData`, {params});
   }
 
   addNewEntityRecord(entityRecord, params): Observable<any> {
-    return this.http.post(`${environment.serverUrl}/misEntity/insert_entity_record`, entityRecord, {params});
+    return this.http.post(`${environment.serverUrl}/misEntity/insertEntityRecord`, entityRecord, {params});
   }
 
   getEntityFields(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/misEntity/get_entity_fields`, {params});
+    return this.http.get(`${environment.serverUrl}/misEntity/getEntityFields`, {params});
   }
 
   deleteEntity(deletedRow): Observable<any> {
@@ -63,7 +63,7 @@ export class EntityService {
   }
 
   getEntityViewData(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/entityView/view_data`, {params});
+    return this.http.get(`${environment.serverUrl}/entityView/viewData`, {params});
   }
 
   deleteEntityView(deletedRow): Observable<any> {
