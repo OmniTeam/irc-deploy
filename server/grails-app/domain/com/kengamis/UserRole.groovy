@@ -70,6 +70,14 @@ class UserRole implements Serializable {
 		r == null ? 0 : where { role == r }.deleteAll() as int
 	}
 
+	static findMMatchingRoles(e){
+		def roles = findAll()
+		roles = roles.findAll{it ->
+			it.userId == e
+		}.collect{it.roleId}
+		return roles
+	}
+
 	static constraints = {
 	    user nullable: false
 		role nullable: false, validator: { Role r, UserRole ur ->

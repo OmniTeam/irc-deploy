@@ -61,8 +61,8 @@ class KengaGroupController {
         def id = params.id as String
         def kengaUserGroup = KengaGroup.get(id)
         KengaUserGroup.deleteOldRecords(kengaUserGroup)
-        def dataCollectors = params.data_collectors
-        print(dataCollectors)
+        /*def dataCollectors = params.data_collectors
+        print(dataCollectors)*/
         render status: NO_CONTENT
     }
 

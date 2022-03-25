@@ -15,6 +15,7 @@ import {AlertService} from "../../../services/alert";
 import {AuthService} from "../../../services/auth.service";
 import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-edit-user',
@@ -65,18 +66,18 @@ export class EditUserComponent implements OnInit {
     this.groupsService.getGroups().subscribe( result =>{
       this.groups = result
     }, error => {this.alertService.error("Failed to get Groups")})
-    this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
+    const params = new HttpParams().set('id',this.route.snapshot.params.id )
+    this.userService.getCurrentUser(params).subscribe((results: any) => {
       console.log(results, "user")
       this.formGroup = this.formBuilder.group({
         password: [null],
-        username: [results?.username, [Validators.required]],
-        names: [results?.names, [Validators.required]],
-        email: [results?.email/*, [Validators.required, Validators.email]*/],
-        // telephone: [results?.telephone],
-        role: [results?.role],
-        groups: [results?.groups],
-        enabled: [results?.enabled],
-        data_collector_Type: [results?.data_collector_Type],
+        username: [results[0]?.username, [Validators.required]],
+        names: [results[0]?.names, [Validators.required]],
+        email: [results[0]?.email/*, [Validators.required, Validators.email]*/],
+        role: [results[0].role],
+        groups: [results[0]?.groups],
+        enabled: [results[0]?.enabled],
+        // data_collector_Type: [results[0]?.data_collector_Type],
       });
     });
   }
@@ -108,6 +109,12 @@ export class EditUserComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
+    //remove old groups
+    const params =new HttpParams()
+      .set('id', this.route.snapshot.params.id)
+    this.userService.deleteOldRolesAndGroups(params).subscribe(result =>{
+      console.log(result,"Removed old records")
+    })
     this.userService.updateUser(this.route.snapshot.params.id, submitData).subscribe((result) => {
       console.warn(result, 'System User Updated Successfully');
       this.alertService.success(`User: ${result.username} has been successfully updated`)
@@ -116,83 +123,6 @@ export class EditUserComponent implements OnInit {
       this.alertService.error(`Failed to update User: ${this.formGroup.controls.username.value}`)
     });
   }
-
-  /*private validateUsername():ValidatorFn {
-
-      return (control: AbstractControl): ValidationErrors | null => {
-          return this.userService.getUsers()
-              .subscribe(data => {
-                      this.DataUsername  = data.results.map(a=>a.username)
-                      // console.log(this.DataUsername,"Usernames")
-
-                      if (this.DataUsername.includes(control.value)) {
-                          // alert("username is already used")
-                          if(control.value!==null||control.value!=''){
-                              console.log("username is already used");
-                              return control.setErrors({'alreadyExist': true})
-                          }
-                      } else {
-                          // console.log("username is fresh");
-                          return null;
-                      }
-                  },
-                  (error) => {
-                      console.log(error);
-                  }
-              );
-      }
-  }
-  private validateEmail(): ValidatorFn {
-      return (control: AbstractControl): ValidationErrors | null => {
-          return this.userService.getUsers()
-              .subscribe(data => {
-                      this.DataEmail  = data.results.map(a=>a.email)
-                      // console.log(this.DataEmail,"Emails")
-
-                      if (this.DataEmail.includes(control.value)) {
-                          // alert("Email is already used")
-                          // console.log("Email is already used");
-                          return control.setErrors({'alreadyExist': true})
-                          /!*if(control.value!=null||control.value!=''){
-                              return control.setErrors({'alreadyExist': true})
-                          }*!/
-
-                      } else {
-                          // console.log("Email is fresh");
-                          return null;
-                      }
-                  },
-                  (error) => {
-                      console.log(error);
-                  }
-              );
-      }
-  }
-  private validateTelephone(): ValidatorFn {
-      return (control: AbstractControl): ValidationErrors | null => {
-          return this.userService.getUsers()
-              .subscribe(data => {
-                      this.DataTelephone  = data.results.map(a=>a.telephone)
-                      // console.log(this.DataTelephone,"Telephone")
-
-                      if (this.DataTelephone.includes(control.value)) {
-                          // alert("Telephone is already used")
-                          // console.log("Telephone is already used");
-                          return control.setErrors({'alreadyExist': true})
-                          // if(control.value!=null||control.value!=''){
-                          //     return control.setErrors({'alreadyExist': true})
-                          // }
-                      } else {
-                          // console.log("Telephone is fresh");
-                          return null;
-                      }
-                  },
-                  (error) => {
-                      console.log(error);
-                  }
-              );
-      }
-  }*/
 
 
 }

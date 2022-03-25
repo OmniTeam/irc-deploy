@@ -10,6 +10,8 @@ export class UsersService {
   baseurl = environment.serverUrl
   urlUsers = `${this.baseurl}/user/`
   urlUserGroup = `${this.baseurl}/KengaUserGroup/`
+  urlShowUser = `${this.baseurl}/showUser/`
+  urlDeleteOldRolesAndGroups = `${this.baseurl}/deleteOldRoleAndGroups/`
 
   constructor(private http: HttpClient) { }
 
@@ -32,9 +34,13 @@ export class UsersService {
   updateUser(id, groupData): Observable<any> {
     return this.http.put(`${this.urlUsers}${id}/`, groupData);
   }
+  deleteOldRolesAndGroups(params){
+    return this.http.delete(this.urlDeleteOldRolesAndGroups,{params});
 
-  getCurrentUser(id){
-    return this.http.get(`${this.urlUsers}${id}`)
+  }
+
+  getCurrentUser(params){
+    return this.http.get(`${this.urlShowUser}`, {params})
   }
 
   deleteCurrentUser(p): Observable<any> {

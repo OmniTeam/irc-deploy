@@ -262,14 +262,14 @@
                                                name="datatable_length"
                                                aria-controls="datatable"
                                                style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                               [multiple]="false"
+                                               [multiple]="true"
                                                placeholder="Groups"
                                                formControlName="groups"
                                                [ngClass]="{ 'is-invalid': submitted && f.groups.errors }"
                                                [searchable]="true"
                                                [clearable]="true"
                                     >
-                                      <ng-option [value]="item.name" *ngFor="let item of groups">
+                                      <ng-option [value]="item.id" *ngFor="let item of groups">
                                         {{item.name}}
                                       </ng-option>
                                     </ng-select>
@@ -281,7 +281,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row">
+                          <!--<div class="row">
                             <div class="col-md-3">
                               <label>
                                 Data Collector Type
@@ -314,7 +314,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div>-->
                           <div class="col-md-12 offset-5" style="padding-left: 10px">
                             <div class="form-group">
                               <div class=" input-group input-group-merge" style="padding-top: 15px">
@@ -348,7 +348,7 @@
                       </div>
                         <div class="row">
                             <div class="col-md-12 offset-5" style="padding-bottom: 15px;">
-                                <button class=" btn btn-default" type="submit" [disabled]="clicked">Save</button>
+                                <button class=" btn btn-default" type="submit">Save</button>
                             </div>
                         </div>
                     </form>

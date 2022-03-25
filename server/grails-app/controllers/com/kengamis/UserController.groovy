@@ -118,4 +118,30 @@ class UserController {
             UserRole.create user, role
         }
     }
+
+    def showUserWithAssociatedData(){
+        def id = params.id as String
+        def myUser = User.get(id)
+        def groups = KengaUserGroup.findMatchingGroups(id)
+        def roles = UserRole.findMMatchingRoles(id).join(",")
+        print(roles)
+        def list=[]
+        list << [
+                id: myUser.id,
+                username: myUser.username,
+                email: myUser.email,
+                names: myUser.names,
+                groups: groups,
+                role: roles,
+                enabled: myUser.enabled
+        ]
+        respond list
+    }
+
+    def deleteUserWithAssociatedData(){
+        print("I am here")
+
+        render status: NO_CONTENT
+    }
+
 }
