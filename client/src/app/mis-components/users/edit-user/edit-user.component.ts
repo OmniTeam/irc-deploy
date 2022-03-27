@@ -65,19 +65,19 @@ export class EditUserComponent implements OnInit {
     }, error => {this.alertService.error("Failed to get Roles")})
     this.groupsService.getGroups().subscribe( result =>{
       this.groups = result
+      console.log(result)
     }, error => {this.alertService.error("Failed to get Groups")})
     const params = new HttpParams().set('id',this.route.snapshot.params.id )
-    this.userService.getCurrentUser(params).subscribe((results: any) => {
+    this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
       console.log(results, "user")
       this.formGroup = this.formBuilder.group({
         password: [null],
-        username: [results[0]?.username, [Validators.required]],
-        names: [results[0]?.names, [Validators.required]],
-        email: [results[0]?.email/*, [Validators.required, Validators.email]*/],
-        role: [results[0].role],
-        groups: [results[0]?.groups],
-        enabled: [results[0]?.enabled],
-        // data_collector_Type: [results[0]?.data_collector_Type],
+        username: [results?.username, [Validators.required]],
+        names: [results?.names, [Validators.required]],
+        email: [results?.email/*, [Validators.required, Validators.email]*/],
+        role: [results.role[0]?.id],
+        groups: [results?.groups[0]?.id],
+        enabled: [results?.enabled],
       });
     });
   }
@@ -109,13 +109,10 @@ export class EditUserComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    //remove old groups
-    const params =new HttpParams()
-      .set('id', this.route.snapshot.params.id)
-    this.userService.deleteOldRolesAndGroups(params).subscribe(result =>{
-      console.log(result,"Removed old records")
-    })
-    this.userService.updateUser(this.route.snapshot.params.id, submitData).subscribe((result) => {
+    const params = new HttpParams()
+      .set('role', submitData.role)
+      .set('groups', submitData.groups)
+    this.userService.updateUser(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
       console.warn(result, 'System User Updated Successfully');
       this.alertService.success(`User: ${result.username} has been successfully updated`)
       this.router.navigate(['/users']);

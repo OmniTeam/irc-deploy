@@ -68,15 +68,12 @@ class KengaUserGroup implements Serializable{
 
     static void deleteOldRecords(KengaGroup e){
         def filters = findAllByKengaGroup(e)
+        print(filters)
         filters.each { it.delete(flush: true, failOnError: true) }
     }
-
-    static findMatchingGroups(e){
-        def groups = findAll()
-        groups = groups.findAll{it ->
-            it.userId == e
-        }.collect{it.kengaGroupId}
-        return groups
+    static void deleteOldRecordsUser(User e){
+        def filters = findAllByUser(e)
+        filters.each { it.delete(flush: true, failOnError: true) }
     }
 
     static int removeAll(User u) {

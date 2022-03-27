@@ -70,12 +70,9 @@ class UserRole implements Serializable {
 		r == null ? 0 : where { role == r }.deleteAll() as int
 	}
 
-	static findMMatchingRoles(e){
-		def roles = findAll()
-		roles = roles.findAll{it ->
-			it.userId == e
-		}.collect{it.roleId}
-		return roles
+	static void deleteOldRecords(User e){
+		def filters = findAllByUser(e)
+		filters.each { it.delete(flush: true, failOnError: true) }
 	}
 
 	static constraints = {

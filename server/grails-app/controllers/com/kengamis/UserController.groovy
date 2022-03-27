@@ -29,7 +29,19 @@ class UserController {
     }
 
     def show(String id) {
-        respond userService.get(id)
+        def user = User.get(id)
+        def kengaGroups = user.kengaGroups
+        def roles = user.authorities
+        def users= [
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                names: user.names,
+                groups: kengaGroups,
+                role: roles,
+                enabled: user.enabled
+        ]
+        respond users
     }
 
     def getDataCollectors() {
@@ -55,7 +67,6 @@ class UserController {
 
         try {
             userService.save(user)
-            createUserRole(user)
         } catch (ValidationException e) {
             respond user.errors
             return
@@ -66,6 +77,12 @@ class UserController {
 
     @Transactional
     def update(User user) {
+        def userId =user.id
+        def userRole = params.role as String
+        def userGroup = params.groups
+
+        print("user groups")
+        print(userGroup)
         if (user == null) {
             render status: NOT_FOUND
             return
@@ -77,6 +94,7 @@ class UserController {
         }
 
         try {
+            deleteOldRolesAndGroups(userId)
             userService.save(user)
         } catch (ValidationException e) {
             respond user.errors
@@ -112,36 +130,19 @@ class UserController {
         }
     }
 
-    def createUserRole(User user) {
-        def role = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
-        if (!user.authorities.contains(role)) {
-            UserRole.create user, role
-        }
+    @Transactional
+    def deleteOldRolesAndGroups(userId){
+        def kengaUserGroup= User.get(userId)
+//        section for User Role.
+//        Remove the old user role before adding a new one
+        UserRole.deleteOldRecords(kengaUserGroup)
+
+//        section for Kenga User Group
+//        Remove the old Kenga user Groups before adding a new one
+        KengaUserGroup.deleteOldRecordsUser(kengaUserGroup)
+
     }
 
-    def showUserWithAssociatedData(){
-        def id = params.id as String
-        def myUser = User.get(id)
-        def groups = KengaUserGroup.findMatchingGroups(id)
-        def roles = UserRole.findMMatchingRoles(id).join(",")
-        print(roles)
-        def list=[]
-        list << [
-                id: myUser.id,
-                username: myUser.username,
-                email: myUser.email,
-                names: myUser.names,
-                groups: groups,
-                role: roles,
-                enabled: myUser.enabled
-        ]
-        respond list
-    }
 
-    def deleteUserWithAssociatedData(){
-        print("I am here")
-
-        render status: NO_CONTENT
-    }
 
 }
