@@ -223,7 +223,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     if (this.milestones == undefined || this.milestones.length == 0) {
-      alert('No Milestones found, Select Partner to proceed');
+      alert('No Milestones found, Select Staff to proceed');
       return;
     }
 

@@ -54,7 +54,7 @@
             <div class=" row">
               <div class=" col">
                 <div class="form-group" style="margin: 0 0 30px 30px; width: 60%;">
-                  <label class="control-label" style="margin-left: 12px;"><b>SELECT PARTNER/CLUSTER: <span class="required-indicator">*</span></b></label>
+                  <label class="control-label" style="margin-left: 12px;"><b>SELECT STAFF: <span class="required-indicator">*</span></b></label>
                   <ng-select class="form-control form-control-sm"
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
@@ -237,10 +237,10 @@
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class='text-center' [id]="row.id">
+                      <td class='text-center' [id]="row.id+'-d'">
                         <div>{{ row.disburse | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id, 'budget_disburse', row.disburse, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id+'-d', 'budget_disburse', row.disburse, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
