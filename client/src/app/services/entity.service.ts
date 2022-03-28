@@ -38,6 +38,10 @@ export class EntityService {
     return this.http.post(`${environment.serverUrl}/misEntity/insertEntityRecord`, entityRecord, {params});
   }
 
+  updateEntityRecord(entityRecord, params): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/misEntity/updateEntityRecord`, entityRecord, {params});
+  }
+
   getEntityFields(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/misEntity/getEntityFields`, {params});
   }

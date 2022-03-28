@@ -244,6 +244,34 @@ class MisEntityController {
         respond message
     }
 
+    @Transactional
+    def updateEntityRecord() {
+        def message = ["Entity Record Updated"]
+        try {
+            def misEntity = MisEntity.get(params.entityId)
+            def recordId = params.id as String
+            def postRequest = request.JSON
+            def updateQuery = "UPDATE ${escapeField misEntity.tableName} set "
+            def setConditions = []
+            if (postRequest) {
+                postRequest.each { key, value ->
+                    setConditions << "${key}='${value}'"
+                }
+            }
+            updateQuery += setConditions.join(", ") + " where id='${recordId}'"
+            // Update into Entity Table
+            log.trace(updateQuery)
+            def result = AppHolder.withMisSql { execute(updateQuery.toString()) }
+            if (!result) {
+                log.trace("Table ${misEntity.tableName} successfully updated a record")
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace()
+        }
+        respond message
+    }
+
     def getEntityFields() {
         def entityFields = []
         try {
