@@ -75,7 +75,7 @@ export class EditGroupComponent implements OnInit {
     }, error => {this.alertService.error("Failed to get Parents")})
     this.usersService.getUsers().subscribe(data =>{
       this.dataCollectors=data
-      // console.log(this.dataCollectors)
+      console.log(this.dataCollectors)
     }, error => {this.alertService.error("Failed to get Data Collectors")})
     this.groupsService.getCurrentGroup(this.route.snapshot.params.id).subscribe((results: any) => {
       console.log(results,"this group data")
@@ -114,11 +114,11 @@ export class EditGroupComponent implements OnInit {
     const params =new HttpParams()
       .set('id', this.route.snapshot.params.id)
       .set('data_collectors',submitData.data_collectors)
-    this.groupsService.deleteOldKengauserGroups(params).subscribe(result =>{
+    /*this.groupsService.deleteOldKengauserGroups(params).subscribe(result =>{
       console.log(result)
-    })
+    })*/
 
-    //enter the new groups
+    /*//enter the new groups
     console.log(submitData.data_collectors, "dataColectors")
 
     //insert the new kenga_group_id and user_id data into the join table. This tracks users who belong to the group
@@ -130,10 +130,10 @@ export class EditGroupComponent implements OnInit {
       this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
         console.log(data ,"Kenga User Group details")
       }, error => {this.alertService.error("failed to create Kenga User Groups")})
-    }
+    }*/
 
     //updates the group name
-    this.groupsService.updateGroup(this.route.snapshot.params.id, submitData).subscribe((result) => {
+    this.groupsService.updateGroup(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
       console.warn(result, 'Group Successfully');
       this.alertService.success(`Group: ${result.name} has been successfully updated`)
       this.router.navigate(['/groups']);

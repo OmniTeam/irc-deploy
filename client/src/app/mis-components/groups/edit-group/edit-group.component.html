@@ -184,7 +184,7 @@
                                                [clearable]="true"
                                     >
                                       <ng-option [value]="item.id" *ngFor="let item of dataCollectors">
-                                        {{item.names}}
+                                        {{item.username}}
                                       </ng-option>
                                     </ng-select>
                                     <div *ngIf="submitted && f.data_collectors.errors" class="invalid-feedback">
