@@ -1,7 +1,11 @@
 package com.kengamis
 
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.validation.ValidationException
 import groovy.json.JsonSlurper
+import groovyx.net.http.ContentType
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -16,6 +20,7 @@ import grails.gorm.transactions.Transactional
 class PartnerSetupController {
 
     PartnerSetupService partnerSetupService
+    ProgramStaffService programStaffService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -26,11 +31,13 @@ class PartnerSetupController {
         def partnerSetups = partnerSetupService.list(params)
         def list = []
 
-        partnerSetups.each{PartnerSetup setup ->
-            list << [id: setup.id,
-                      partnerId : setup.partnerId,
-                      lastUpdated : setup.lastUpdated,
-                      dateCreated: setup.dateCreated]
+        partnerSetups.each { PartnerSetup setup ->
+            def partner = ProgramPartner.findById(setup.partnerId)
+
+            list << [id         : setup.id,
+                     partner    : partner.name,
+                     lastUpdated: setup.lastUpdated,
+                     dateCreated: setup.dateCreated]
         }
         respond list
     }
@@ -58,7 +65,7 @@ class PartnerSetupController {
             return
         }
 
-        respond partnerSetup, [status: CREATED, view:"show"]
+        respond partnerSetup, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -80,17 +87,25 @@ class PartnerSetupController {
             return
         }
 
-        respond partnerSetup, [status: OK, view:"show"]
+        respond partnerSetup, [status: OK, view: "show"]
     }
 
     @Transactional
-    def delete(Long id) {
-        if (id == null) {
+    def delete(String id) {
+        if (id == null && params.id == null) {
             render status: NOT_FOUND
             return
         }
 
-        partnerSetupService.delete(id)
+        //delete all tasks - process instance ids by this partner setup
+        def partnerSetup = partnerSetupService.get(params.id)
+        def list = TaskList.findAllByInputVariablesIlike('%' + partnerSetup.partnerId + '%')
+        list.each {
+            def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
+            if (deletedFromCamunda) it.delete()
+        }
+
+        partnerSetupService.delete(id ?: params.id)
 
         render status: NO_CONTENT
     }
@@ -98,5 +113,22 @@ class PartnerSetupController {
     def getPartnerSetupRecord() {
         def map = [setup: PartnerSetup.findById(params.id)]
         respond map
+    }
+
+    static boolean deleteProcessInstance(id) {
+        def http = new HTTPBuilder(StartCamundaInstancesJob.camundaApiUrl + "/delete/$id")
+        boolean deleted = false
+        http.request(Method.POST, ContentType.JSON) { req ->
+            headers.Accept = 'application/json'
+            requestContentType = ContentType.JSON
+            response.success = { resp, json ->
+                println("Camunda :: deleteProcessInstance() True [ " + json.text + " ]")
+                deleted = true
+            }
+            response.failure = { resp ->
+                println("Camunda :: deleteProcessInstance() False [ " + resp.status + " ]")
+            }
+        }
+        return deleted
     }
 }

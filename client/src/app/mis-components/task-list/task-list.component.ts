@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {TaskListService} from "../../services/task-list.service";
-import {TaskList} from "../../models/taskList";
+import {TaskList} from "../../models/tasklist";
 import {Subject} from "rxjs";
 
 @Component({
@@ -20,7 +20,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskListService.getTaskList().subscribe(data => {
-      console.log(data);
+      console.log('tasklist',data);
       this.rows = data;
       this.dtTrigger.next();
     }, error => console.log(error));

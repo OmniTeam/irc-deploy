@@ -42,6 +42,18 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
       },
       {
+        path: 'partnerSetup', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+      },
+      {
+        path: 'partnerSetup/:id', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+      },
+      {
+        path: 'partnerSetupList', canActivate: [AuthGuard],
+        loadChildren: () => import('./mis-components/partner-setup/partner-list/partner-list.module').then(m => m.PartnerListModule)
+      },
+      {
         path: 'taskList', canActivate: [AuthGuard],
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },

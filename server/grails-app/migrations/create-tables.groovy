@@ -1834,5 +1834,60 @@ databaseChangeLog = {
         dropColumn(columnName: "user_id", tableName: "entity_view_filters")
     }
 
+    changeSet(author: "bruno (generated)", id: "20220901124635-01") {
+        modifyDataType(columnName: "input_variables", newDataType: "LONGTEXT", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202209011224245-01") {
+        modifyDataType(columnName: "output_variables", newDataType: "LONGTEXT", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-1") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "end_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-2") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "period_type", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-3") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "program_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-4") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_calendar", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-5") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_start_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-6") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "start_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
 
 }
