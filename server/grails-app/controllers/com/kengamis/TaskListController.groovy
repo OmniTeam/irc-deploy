@@ -24,25 +24,63 @@ class TaskListController {
 
         taskListMapList.each{TaskList task ->
             def slurper = new JsonSlurper()
-            def variables = slurper.parseText(task.outputVariables)
+            def variables = slurper.parseText(task.inputVariables)
+            def partnerSetupId, startDate, partnerId, programId, endDate, groupId
 
-            def description = (variables['data'].value.toString()).replaceAll("\\[", "").replaceAll("\\]","")
+            variables['data'].each {
+                if(it.key=='PartnerSetupId') partnerSetupId = it.value
+                if(it.key=='StartDate') startDate = it.value
+                if(it.key=='PartnerId') partnerId = it.value
+                if(it.key=='ProgramId') programId = it.value
+                if(it.key=='EndDate') endDate = it.value
+                if(it.key=='GroupId') groupId = it.value
+            }
 
             tasks << [id: task.id,
-                    taskName : task.taskName,
-                    description : description,
-                    processInstanceId : task.processInstanceId,
-                    taskDefinitionKey : task.taskDefinitionKey,
-                    groupId : task.groupId,
-                    dateCreated: task.dateCreated,
-                    status: task.status]
+                      taskName : task.taskName,
+                      partnerSetupId: partnerSetupId,
+                      startDate : startDate,
+                      partnerId : partnerId,
+                      programId : programId,
+                      endDate : endDate,
+                      groupId : groupId,
+                      processInstanceId : task.processInstanceId,
+                      taskDefinitionKey : task.taskDefinitionKey,
+                      dateCreated: task.dateCreated,
+                      status: task.status]
         }
         respond tasks
     }
 
     def getTaskRecord() {
         def task = TaskList.get(params.id)
-        respond task
+
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+        def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+
+        variables['data'].each {
+            if(it.key=='PartnerSetupId') partnerSetupId = it.value
+            if(it.key=='StartDate') startDate = it.value
+            if(it.key=='PartnerId') partnerId = it.value
+            if(it.key=='ProgramId') programId = it.value
+            if(it.key=='EndDate') endDate = it.value
+            if(it.key=='GroupId') groupId = it.value
+        }
+
+        def t = [id: task.id,
+                 taskName : task.taskName,
+                 partnerSetupId: partnerSetupId,
+                 startDate : startDate,
+                 partnerId : partnerId,
+                 programId : programId,
+                 endDate : endDate,
+                 groupId : groupId,
+                 processInstanceId : task.processInstanceId,
+                 taskDefinitionKey : task.taskDefinitionKey,
+                 dateCreated: task.dateCreated,
+                 status: task.status]
+        respond t
     }
 
     def show(Long id) {

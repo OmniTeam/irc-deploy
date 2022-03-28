@@ -10,7 +10,10 @@ import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {SampleData} from "../../helpers/sample-data";
+import {ProgramStaffService} from "../../services/program-staff.service";
+import {PartnerSetupService} from "../../services/partner-setup.service";
+
+//import {SampleData} from "../../helpers/sample-data";
 
 @Component({
   selector: 'app-report-form',
@@ -19,8 +22,6 @@ import {SampleData} from "../../helpers/sample-data";
 })
 
 export class ReportFormComponent implements OnInit, OnUpdateCell {
-
-  @ViewChild(CellEdit) cellEdit;
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -72,7 +73,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   attachment3: string;
 
   organisationalInfo: any;
-  projectInfo: any;
   performanceReport = [];
   financialReport = [];
   items = [
@@ -80,7 +80,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private reportFormService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private location: Location,
+              private reportFormService: ReportFormService,
+              private taskListService: TaskListService,
+              private fileUploadService: FileUploadService,
+              private partnerSetupService: PartnerSetupService,
+              private programStaffService: ProgramStaffService,
+              public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -88,14 +96,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-    this.organisationalInfo = SampleData.organisationalInfo;
-    this.projectInfo = SampleData.projectInfo;
-
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
+          console.log("taskRecord", data);
           this.taskRecord = data;
           if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
@@ -106,11 +112,54 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           const params = new HttpParams()
             .set('taskId', this.taskId);
 
+          //set organizational Info
+          this.programStaffService.getCurrentProgramStaff(this.taskRecord.partnerId).subscribe((results: any) => {
+            if (results !== null && results !== undefined) {
+              this.organisationalInfo = results;
+            }
+          });
+
           this.setAttachments(params);
 
           this.setCommentsAndRecommendations(params);
 
           this.setReportsData(params);
+
+          //get partner setup record
+          const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+          this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
+            console.log("partner", data);
+            if (data.setup != undefined && data.setup.setupValues != undefined) {
+              this.taskRecord.reportingPeriod = data.setup.periodType;
+              let values = JSON.parse(data.setup.setupValues);
+              console.log("values", values);
+
+              values.budget.forEach((b) => {
+                this.financialReport.push({
+                  id: b.id,
+                  budget_line: b.budgetLine,
+                  approved_budget: b.approvedAmount
+                });
+              });
+
+              if (values.indicators != undefined) {
+                let ind = JSON.parse(values.indicators);
+                ind.forEach((i) => {
+                  this.performanceReport.push({
+                    id: i.id,
+                    output_indicators: i.name,
+                    overall_target: i.overallTarget
+                  });
+                });
+              }
+
+              let reportValues: { [key: string]: string } = {
+                financialReport: JSON.stringify(this.financialReport),
+                performanceReport: JSON.stringify(this.performanceReport),
+              }
+              this.saveReport(reportValues, 'saved_for_later');
+            }
+          }, error => console.log(error));
 
         }, error => console.log(error));
       });
@@ -173,7 +222,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
-      } /*else {
+      }/* else {
         this.financialReport = SampleData.financialReport;
         this.performanceReport = SampleData.performanceReport;
       }*/
@@ -252,7 +301,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     );
   }
 
-/*  changeForm(formName) {
+  changeForm(formName) {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
@@ -261,7 +310,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (formName == 'Approve') this.isApproveVisible = true;
     window.scroll(0, 0);
     this.success = false;
-  }*/
+  }
 
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
@@ -298,8 +347,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {
-    //save
-    console.log("newValue", value);
     if (value !== null && value !== undefined)
       switch (key) {
         case "summaryComment":
@@ -333,8 +380,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  cellEditor(row, td_id, key: string, oldValue, type?: string) {
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
