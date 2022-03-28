@@ -12,5 +12,6 @@ class ReportFormRecommendations {
     Date dateCreated
 
     static constraints = {
+        groupId nullable: true
     }
 }

@@ -138,7 +138,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                 this.financialReport.push({
                   id: b.id,
                   budget_line: b.budgetLine,
-                  approved_budget: b.approvedAmount
+                  approved_budget: b.approvedAmount,
+                  total_advanced: b.disburse
                 });
               });
 

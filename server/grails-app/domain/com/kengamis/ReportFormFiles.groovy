@@ -13,5 +13,6 @@ class ReportFormFiles {
     Date dateCreated
 
     static constraints = {
+        groupId nullable: true
     }
 }

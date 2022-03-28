@@ -26,6 +26,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   calendar: any = {};
   budget: any = [];
   totalApprovedAmount: string;
+  totalBudgetDisburse: string;
   totalDisbursement: string;
   disbursementPlan: any = [];
   currentStatus: any = {};
@@ -120,7 +121,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       if (setupValues.budget != undefined) {
         this.budget = setupValues.budget;
         this.budget.forEach((data) => {
-          this.updateBudgetValues(data.id, data.approvedAmount);
+          this.updateBudgetAmount(data.id, data.approvedAmount);
+          this.updateBudgetDisburse(data.id, data.disburse);
         });
       }
 
@@ -287,7 +289,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.indicators = this.indicators.filter(item=>item.id !=indicator.id );
     this.budget = this.budget.filter(item=>item.budgetLine !=indicator.name );
     this.budget.forEach((data) => {
-      this.updateBudgetValues(data.id, data.approvedAmount);
+      this.updateBudgetAmount(data.id, data.approvedAmount);
     });
   }
 
@@ -298,8 +300,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   saveCellValue = (value: string, key: string, rowId): void => {
     if (value !== null && value !== undefined)
       switch (key) {
-        case 'budget':
-          this.updateBudgetValues(rowId, value);
+        case 'budget_approved_amt':
+          this.updateBudgetAmount(rowId, value);
+          break;
+        case 'budget_disburse':
+          this.updateBudgetDisburse(rowId, value);
           break;
         case 'disbursementPlan':
           this.updateDisbursementPlanValues(rowId, value);
@@ -403,7 +408,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.location.back();
   }
 
-  private updateBudgetValues(id, newValue) {
+  private updateBudgetAmount(id, newValue) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach(function (item) {
@@ -412,6 +417,18 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     }
     this.totalApprovedAmount = total.toString();
+  }
+
+  private updateBudgetDisburse(id, newValue) {
+    let total: number = 0;
+    if (this.budget.some(x => x.id === id)) {
+      this.budget.forEach(function (item) {
+        if (item.id === id) item.disburse = newValue;
+        total += +item.disburse;
+      });
+    }
+    this.totalBudgetDisburse = total.toString();
+    this.currentStatus.totalAmountDisbursed = total;
   }
 
   private updateDisbursementPlanValues(id, newValue) {

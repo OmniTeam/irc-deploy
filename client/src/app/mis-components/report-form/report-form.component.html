@@ -204,20 +204,15 @@
                       <td class='text-center'>{{ row.approved_budget }}</td>
                       <td class='text-center'>{{ row.total_advanced }}</td>
                       <td class='text-center'>{{ row.expense_to_date }}</td>
-                      <td class='text-center' id="0-{{row.id}}">
-                        <div>{{ row.quarter_expenses }}
+                      <td class='text-center' [id]="'0-'+row.id">
+                        <div>{{ row.quarter_expenses | number }}
                           <button class="btn btn-link"
                                   (click)="cellEditor(row,'0-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class='text-center' id="1-{{row.id}}">
-                        <div>{{ row.variance }}
-                          <button class="btn btn-link" (click)="cellEditor(row,'1-'+row.id, 'variance', row.variance, 'number')">
-                            <i class="fas fa-pencil-alt"></i></button>
-                        </div>
-                      </td>
-                      <td class='text-center' id="2-{{row.id}}">
+                      <td class='text-center'>{{ row.variance }}</td>
+                      <td class='text-center' [id]="'2-'+row.id">
                         <div>{{ row.reason_for_variance }}
                           <button class="btn btn-link"
                                   (click)="cellEditor(row,'2-'+row.id, 'reason_for_variance',row.reason_for_variance)">
