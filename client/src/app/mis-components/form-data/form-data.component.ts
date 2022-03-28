@@ -515,4 +515,12 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       this.exportService.exportToCsv(data['data'], data['file']);
     }, error => console.log(error));
   }
+
+  exportZippedCSVFormData() {
+    const params = new HttpParams()
+      .set('formtable', `${this.formtable}`);
+    this.formService.exportZippedFormData(params).subscribe((data) => {
+      this.exportService.exportToZippedFile(data['data'], data['file']);
+    }, error => console.log(error));
+  }
 }

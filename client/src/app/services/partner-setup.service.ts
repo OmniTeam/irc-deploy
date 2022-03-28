@@ -23,7 +23,7 @@ export class PartnerSetupService {
   }
 
   getPartnerSetupRecord(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/partnerSetup/get_partner_setup_record`, {params});
+    return this.http.get(`${environment.serverUrl}/partnerSetup/getPartnerSetupRecord`, {params});
   }
 
   deletePartnerSetupRecord(deletedRow): Observable<any> {

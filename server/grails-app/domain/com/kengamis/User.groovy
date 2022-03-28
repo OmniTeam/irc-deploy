@@ -22,7 +22,7 @@ class User {
 
     static transients = ['springSecurityService']
 
-    static hasMany = [userRoles: UserRole, userEntityViewFilters: UserEntityViewFilters]
+    static hasMany = [userRoles: UserRole, userEntityViewFilters: UserEntityViewFilters, kengaUserGroup: KengaUserGroup]
 
     static constraints = {
         password nullable: false, blank: false, password: true
@@ -51,6 +51,10 @@ class User {
 
     Set<EntityViewFilters> getEntityViewFilters() {
         (UserEntityViewFilters.findAllByUser(this) as List<UserEntityViewFilters>)*.entityViewFilters as Set<EntityViewFilters>
+    }
+
+    Set<KengaGroup> getKengaGroups() {
+        (KengaUserGroup.findAllByUser(this) as List<KengaUserGroup>)*.kengaGroup as Set<KengaGroup>
     }
 
     def roles() {

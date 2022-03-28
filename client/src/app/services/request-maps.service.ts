@@ -23,14 +23,14 @@ export class RequestMapsService {
   }
 
   getCurrentRequestMap(id) {
-    return this.http.get(`${this.baseurl}${id}/`);
+    return this.http.get(`${this.baseurl}/${id}/`);
   }
 
   updateRequestMaps(id, formData): Observable<any> {
-    return this.http.put(`${this.baseurl}${id}/`, formData);
+    return this.http.put(`${this.baseurl}/${id}/`, formData);
   }
 
   deleteRequestMaps(id): Observable<any> {
-    return this.http.delete(`${this.baseurl}${id}/`);
+    return this.http.delete(`${this.baseurl}/${id}/`);
   }
 }

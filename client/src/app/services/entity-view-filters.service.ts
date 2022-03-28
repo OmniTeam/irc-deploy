@@ -20,15 +20,15 @@ export class EntityViewFiltersService {
   }
 
   getCurrentEntityViewFilter(id) {
-    return this.http.get(`${this.baseurl}${id}/`);
+    return this.http.get(`${this.baseurl}/${id}/`);
   }
 
   updateEntityViewFilter(id, formData): Observable<any> {
-    return this.http.put(`${this.baseurl}${id}/`, formData);
+    return this.http.put(`${this.baseurl}/${id}/`, formData);
   }
 
   deleteEntityViewFilter(id): Observable<any> {
-    return this.http.delete(`${this.baseurl}${id}/`);
+    return this.http.delete(`${this.baseurl}/${id}/`);
   }
 
   getDefaultFilterQuery(params) {
