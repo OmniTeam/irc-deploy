@@ -1890,4 +1890,8 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "2022090343454245-01") {
+        modifyDataType(columnName: "reporting_calendar", newDataType: "LONGTEXT", tableName: "partner_setup")
+    }
+
 }

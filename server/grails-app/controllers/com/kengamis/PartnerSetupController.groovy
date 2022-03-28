@@ -32,7 +32,7 @@ class PartnerSetupController {
         def list = []
 
         partnerSetups.each { PartnerSetup setup ->
-            def partner = ProgramPartner.findById(setup.partnerId)
+            def partner = ProgramStaff.findById(setup.partnerId)
 
             list << [id         : setup.id,
                      partner    : partner.name,
