@@ -57,16 +57,6 @@ class KengaGroupController {
     }
 
     @Transactional
-    def deleteOldKengaUserGroups(){
-        def id = params.id as String
-        def kengaUserGroup = KengaGroup.get(id)
-        KengaUserGroup.deleteOldRecords(kengaUserGroup)
-        def dataCollectors = params.data_collectors
-        print(dataCollectors)
-        render status: NO_CONTENT
-    }
-
-    @Transactional
     def save(KengaGroup kengaGroup) {
         if (kengaGroup == null) {
             render status: NOT_FOUND
@@ -101,6 +91,7 @@ class KengaGroupController {
         }
 
         try {
+            updateKengaUserGroups()
             kengaGroupService.save(kengaGroup)
         } catch (ValidationException e) {
             respond kengaGroup.errors
@@ -120,5 +111,19 @@ class KengaGroupController {
         kengaGroupService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def updateKengaUserGroups(){
+        def id = params.id as String
+        def kengaGroup = KengaGroup.get(id)
+        KengaUserGroup.deleteOldRecords(kengaGroup)
+
+        def dataCollectors = params.data_collectors as String
+        def listOfDataCollectors = dataCollectors ? dataCollectors.split(",") : []
+        listOfDataCollectors?.each{ myDataCollector ->
+            def currentCollector = User.get(myDataCollector)
+            KengaUserGroup.create(kengaGroup, currentCollector, true)
+        }
     }
 }

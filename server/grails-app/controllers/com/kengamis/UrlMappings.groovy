@@ -14,6 +14,7 @@ class UrlMappings {
         get "/$controller/getFormDataRecord(.$format)?"(action:"getFormDataRecord")
         get "/$controller/getEntityData(.$format)?"(action:"getEntityData")
         post "/$controller/insertEntityRecord(.$format)?"(action:"insertEntityRecord")
+        post "/$controller/updateEntityRecord(.$format)?"(action:"updateEntityRecord")
         get "/$controller/getEntityFields(.$format)?"(action:"getEntityFields")
         get "/$controller/exportFormData(.$format)?"(action:"getExportedFormData")
         get "/$controller/viewData(.$format)?"(action:"viewData")
@@ -67,7 +68,8 @@ class UrlMappings {
         }
 
         "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
-        "/deleteOldKengaUserGroups"(controller: 'kengaGroup', action:'deleteOldKengaUserGroups',method: 'DELETE' )
+//        "/deleteOldKengaUserGroups"(controller: 'kengaGroup', action:'deleteOldKengaUserGroups',method: 'DELETE' )
+        "/deleteOldRoleAndGroups"(controller: 'user', action:'deleteUserWithAssociatedData',method: 'DELETE' )
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')
