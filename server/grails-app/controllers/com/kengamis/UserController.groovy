@@ -30,7 +30,7 @@ class UserController {
 
     def show(String id) {
         def user = User.get(id)
-        def kengaGroups = user.kengaGroups
+        def kengaGroups = user.kengaGroups.collect{it.id}
         def roles = user.authorities
         def users= [
                 id: user.id,
@@ -79,10 +79,7 @@ class UserController {
     def update(User user) {
         def userId =user.id
         def userRole = params.role as String
-        def userGroup = params.groups
 
-        print("user groups")
-        print(userGroup)
         if (user == null) {
             render status: NOT_FOUND
             return
@@ -94,7 +91,7 @@ class UserController {
         }
 
         try {
-            deleteOldRolesAndGroups(userId)
+            updateRolesAndGroups(userId, userRole)
             userService.save(user)
         } catch (ValidationException e) {
             respond user.errors
@@ -131,18 +128,20 @@ class UserController {
     }
 
     @Transactional
-    def deleteOldRolesAndGroups(userId){
-        def kengaUserGroup= User.get(userId)
-//        section for User Role.
-//        Remove the old user role before adding a new one
-        UserRole.deleteOldRecords(kengaUserGroup)
+    def updateRolesAndGroups(userId, userRole){
+        def currentUser = User.get(userId)
+        def currentRole = Role.get(userRole)
 
-//        section for Kenga User Group
-//        Remove the old Kenga user Groups before adding a new one
-        KengaUserGroup.deleteOldRecordsUser(kengaUserGroup)
+        UserRole.deleteOldRecords(currentUser)
+        KengaUserGroup.deleteOldRecordsUser(currentUser)
 
+        UserRole.create(currentUser, currentRole, true)
+
+        def userGroup = params.groups as String
+        def listOfUserGroups = userGroup ? userGroup.split(",") : []
+        listOfUserGroups?.each{ myUserGroup ->
+            def currentGroup = KengaGroup.get(myUserGroup)
+            KengaUserGroup.create(currentGroup,currentUser, true)
+        }
     }
-
-
-
 }
