@@ -17,6 +17,7 @@ import {ExportService} from "../../../services/export.service";
   styleUrls: ['./entity-tables.component.css']
 })
 export class EntityTablesComponent implements OnInit {
+  @ViewChild('editEntityRecordModal') editEntityRecordModal: any;
   entityName = "";
   entries = 10;
   selected = [];
@@ -28,9 +29,12 @@ export class EntityTablesComponent implements OnInit {
   SelectionType = SelectionType;
   closeModal: string;
   formInputConfigs: any;
+  editFormInputConfigs: any;
   formGroup: FormGroup;
+  editFormGroup: FormGroup;
   tagFormGroup: FormGroup;
   submitted = false;
+  editSubmit = false;
   tagTypes = [];
   tags = [];
   tagFilters = [];
@@ -39,6 +43,7 @@ export class EntityTablesComponent implements OnInit {
   enableRemoveTagButton = false;
   selectedTagTypeFilter = "";
   selectedTagFilter = "";
+  recordId = "";
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -87,6 +92,10 @@ export class EntityTablesComponent implements OnInit {
 
   get f() {
     return this.formGroup.controls;
+  }
+
+  get fEdit() {
+    return this.editFormGroup.controls;
   }
 
   get fTag() {
@@ -147,9 +156,6 @@ export class EntityTablesComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  exportToExcel() {
-  }
-
   addNewEntityRecord() {
     const params = new HttpParams()
       .set('id', this.entityId);
@@ -173,6 +179,40 @@ export class EntityTablesComponent implements OnInit {
       setTimeout(() => {
         this.formGroup.reset();
         this.submitted = false;
+      }, 100);
+    }
+  }
+
+  editEntityDataRecordButton(row) {
+    this.editFormInputConfigs = this.generateEditFormInputConfigs(row, this.formInputConfigs);
+    this.recordId = row['id'];
+    this.openFormModal(this.editEntityRecordModal);
+  }
+
+  editEntityDataRecord() {
+    const params = new HttpParams()
+      .set('id', this.recordId)
+      .set('entityId', this.entityId);
+
+    this.editSubmit = true;
+    if (this.editFormGroup.invalid) {
+      return;
+    }
+
+    const entityRecord = this.editFormGroup.value;
+    this.entityService.updateEntityRecord(entityRecord, params).subscribe((data) => {
+      this.getEntityData();
+      this.alertService.success(`Record has been successfully updated `);
+    }, error => {
+      this.alertService.error(`Record has not been successfully updated `);
+    });
+    this.modalService.dismissAll('Dismissed after saving data');
+    this.router.navigate(['/entity/showData/' + this.entityId]);
+
+    if (this.editFormGroup.valid) {
+      setTimeout(() => {
+        this.editFormGroup.reset();
+        this.editSubmit = false;
       }, 100);
     }
   }
@@ -271,6 +311,7 @@ export class EntityTablesComponent implements OnInit {
         inputProperties['label'] = question['displayName'];
         inputProperties['type'] = this.getInputType(question['dataType']);
         inputProperties['controlName'] = question['fieldName'];
+        inputProperties['mandatory'] = question['mandatory'];
         configs.push(inputProperties);
         if (question['mandatory'] === 'Yes') {
           controlsConfig[question['fieldName']] = ['', Validators.required];
@@ -281,6 +322,19 @@ export class EntityTablesComponent implements OnInit {
     }
     this.formGroup = this.formBuilder.group(controlsConfig);
     return configs
+  }
+
+  generateEditFormInputConfigs(data: any, formInputConfigs: any) {
+    const controlsConfig = {};
+    for (const formInputConfig of formInputConfigs) {
+      if (formInputConfig['mandatory'] === 'Yes') {
+        controlsConfig[formInputConfig['controlName']] = [data[formInputConfig['controlName']], Validators.required];
+      } else {
+        controlsConfig[formInputConfig['fieldName']] = [data[formInputConfig['controlName']]];
+      }
+    }
+    this.editFormGroup = this.formBuilder.group(controlsConfig);
+    return formInputConfigs
   }
 
   getInputType(dataType: string): string {

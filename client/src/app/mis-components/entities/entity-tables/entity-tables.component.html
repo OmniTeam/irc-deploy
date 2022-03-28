@@ -135,9 +135,9 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-<!--                <button (click)="editEntityDataRecord(row);" class="btn btn-default" style="padding: 1px 6px;">-->
-<!--                  <i class="fa fa-pencil-alt"></i>-->
-<!--                </button>-->
+                <button (click)="editEntityDataRecordButton(row)" class="btn btn-default" style="padding: 1px 6px;">
+                  <i class="fa fa-pencil-alt"></i>
+                </button>
                 <button (click)="deleteEntityDataRecord(row)" class="btn btn-danger" style="padding: 1px 6px;">
                   <i class="fa fa-trash"></i>
                 </button>
@@ -192,6 +192,50 @@
         Close
       </button>
       <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #editEntityRecordModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title w-100 text-center">{{ entityName }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="editFormGroup" (ngSubmit)="editEntityDataRecord()">
+    <div class="modal-body">
+      <div class="row" *ngFor="let formInput of editFormInputConfigs; let i = index;">
+        <div class="col-md-12">
+          <div class="form">
+            <div class="row" style="padding-bottom: 15px">
+              <div class="col-md-4">
+                <label class=" form-control-label">
+                  {{ formInput.label | replace: '_' : ' ' | titlecase}}
+                </label>
+              </div>
+              <div class="col-md-8">
+                <input
+                  type="{{ formInput['type'] }}"
+                  class="form-control"
+                  placeholder="{{ formInput.label | replace: '_' : ' ' | titlecase}}"
+                  formControlName="{{ formInput['controlName'] }}"
+                  [ngClass]="{ 'is-invalid': editSubmit && fEdit[formInput['controlName']].errors }"
+                />
+                <div *ngIf="editSubmit && fEdit[formInput['controlName']].errors" class="invalid-feedback">
+                  <div *ngIf="fEdit[formInput['controlName']].errors.required">{{ formInput.label }} is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close('Close click')">
+        Close
+      </button>
+      <button type="submit" class="btn btn-primary">Update</button>
     </div>
   </form>
 </ng-template>
