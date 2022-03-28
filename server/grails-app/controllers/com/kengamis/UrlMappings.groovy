@@ -68,7 +68,8 @@ class UrlMappings {
         }
 
         "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
-        "/deleteOldKengaUserGroups"(controller: 'kengaGroup', action:'deleteOldKengaUserGroups',method: 'DELETE' )
+//        "/deleteOldKengaUserGroups"(controller: 'kengaGroup', action:'deleteOldKengaUserGroups',method: 'DELETE' )
+        "/deleteOldRoleAndGroups"(controller: 'user', action:'deleteUserWithAssociatedData',method: 'DELETE' )
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')
