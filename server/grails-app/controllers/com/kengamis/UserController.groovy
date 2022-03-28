@@ -29,7 +29,19 @@ class UserController {
     }
 
     def show(String id) {
-        respond userService.get(id)
+        def user = User.get(id)
+        def kengaGroups = user.kengaGroups.collect{it.id}
+        def roles = user.authorities
+        def users= [
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                names: user.names,
+                groups: kengaGroups,
+                role: roles,
+                enabled: user.enabled
+        ]
+        respond users
     }
 
     def getDataCollectors() {
@@ -55,7 +67,6 @@ class UserController {
 
         try {
             userService.save(user)
-            createUserRole(user)
         } catch (ValidationException e) {
             respond user.errors
             return
@@ -66,6 +77,9 @@ class UserController {
 
     @Transactional
     def update(User user) {
+        def userId =user.id
+        def userRole = params.role as String
+
         if (user == null) {
             render status: NOT_FOUND
             return
@@ -77,6 +91,7 @@ class UserController {
         }
 
         try {
+            updateRolesAndGroups(userId, userRole)
             userService.save(user)
         } catch (ValidationException e) {
             respond user.errors
@@ -112,10 +127,21 @@ class UserController {
         }
     }
 
-    def createUserRole(User user) {
-        def role = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
-        if (!user.authorities.contains(role)) {
-            UserRole.create user, role
+    @Transactional
+    def updateRolesAndGroups(userId, userRole){
+        def currentUser = User.get(userId)
+        def currentRole = Role.get(userRole)
+
+        UserRole.deleteOldRecords(currentUser)
+        KengaUserGroup.deleteOldRecordsUser(currentUser)
+
+        UserRole.create(currentUser, currentRole, true)
+
+        def userGroup = params.groups as String
+        def listOfUserGroups = userGroup ? userGroup.split(",") : []
+        listOfUserGroups?.each{ myUserGroup ->
+            def currentGroup = KengaGroup.get(myUserGroup)
+            KengaUserGroup.create(currentGroup,currentUser, true)
         }
     }
 }

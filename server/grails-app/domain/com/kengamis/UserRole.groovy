@@ -70,6 +70,11 @@ class UserRole implements Serializable {
 		r == null ? 0 : where { role == r }.deleteAll() as int
 	}
 
+	static void deleteOldRecords(User e){
+		def filters = findAllByUser(e)
+		filters.each { it.delete(flush: true, failOnError: true) }
+	}
+
 	static constraints = {
 	    user nullable: false
 		role nullable: false, validator: { Role r, UserRole ur ->

@@ -31,8 +31,8 @@ export class GroupsService {
     return this.http.delete(this.urldeleteOldKengaUserGroups, {params});
   }
 
-  updateGroup(id, submitData): Observable<any> {
-    return this.http.put(`${this.urlGroups}${id}/`, submitData);
+  updateGroup(id, submitData, params): Observable<any> {
+    return this.http.put(`${this.urlGroups}${id}/`, submitData, {params});
   }
 
   deleteCurrentGroup(p): Observable<any> {
