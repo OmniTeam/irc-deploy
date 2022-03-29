@@ -42,6 +42,7 @@
                                    formControlName="program"
                                    [ngClass]="{ 'is-invalid': submitted && f.program.errors }"
                                    (change)="getCategories($event)"
+                                   [(ngModel)]="selectedProgram"
                                    [searchable]="true"
                                    [clearable]="true">
                           <ng-option [value]="item.id" *ngFor="let item of programs">
@@ -74,6 +75,7 @@
                                    formControlName="programCategory"
                                    [ngClass]="{ 'is-invalid': submitted && f.programCategory.errors }"
                                    [searchable]="true"
+                                   [(ngModel)]="selectedProgramCategory"
                                    [clearable]="true">
                           <ng-option [value]="item.id" *ngFor="let item of categories">
                             {{item.name}}

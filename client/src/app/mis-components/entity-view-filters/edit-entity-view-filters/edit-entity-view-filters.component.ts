@@ -64,12 +64,9 @@ export class EditEntityViewFiltersComponent implements OnInit {
       return;
     }
     this.formData = this.formGroup.value;
-    console.log(this.formData);
     let entityView = {"entityView": this.entityViewId};
     this.formData = Object.assign(this.formData, entityView);
     let users = this.formData.users;
-    const params = new HttpParams()
-      .set('users', users);
     this.entityViewFiltersService.updateEntityViewFilter(this.entityViewFilterId, this.formData).subscribe(results => {
       const params = new HttpParams()
         .set('id', results['id'])
