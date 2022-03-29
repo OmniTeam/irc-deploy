@@ -1774,4 +1774,24 @@ databaseChangeLog = {
         dropColumn(columnName: "user_id", tableName: "entity_view_filters")
     }
 
+    changeSet(author: "bruno (generated)", id: "20220901134564565-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220345345544245-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form_comments")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220923455325245-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form_files")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022023423424456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form_recommendations")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20223423423424445-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "task_list")
+    }
+
 }

@@ -30,7 +30,6 @@ class ReportFormController {
 
     @Transactional
     def save(ReportForm reportForm) {
-        print "Report Errors: ${reportForm.errors}"
         if (reportForm == null) {
             render status: NOT_FOUND
             return
@@ -53,7 +52,6 @@ class ReportFormController {
 
     @Transactional
     def update(ReportForm reportForm) {
-        print "Report Errors: ${reportForm.errors}"
         if (reportForm == null) {
             render status: NOT_FOUND
             return

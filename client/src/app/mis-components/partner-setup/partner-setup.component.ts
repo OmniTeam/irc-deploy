@@ -202,19 +202,23 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           this.organisationalInfo = results;
           this.programChosen = results.programId;
           if (this.programChosen != undefined) {
-            const params = new HttpParams().set('program', this.programChosen);
-            this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
-              if (data !== null && data !== undefined) {
-                this.milestones = data.milestones;
-                //console.log('indicators', this.indicators);
-              }
-            });
+            this.setMilestones(this.programChosen);
           }
         }
       });
     } /*else {
       this.organisationalInfo = SampleData.organisationalInfo;
     }*/
+  }
+
+  setMilestones(program) {
+    const params = new HttpParams().set('program',program);
+    this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
+      if (data !== null && data !== undefined) {
+        this.milestones = data.milestones;
+        console.log('milestones', this.milestones);
+      }
+    });
   }
 
   createNewIndicator() {
