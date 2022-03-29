@@ -101,7 +101,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.taskId = p['id'];
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
-          console.log("taskRecord", data);
           this.taskRecord = data;
           if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
@@ -164,8 +163,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
         this.financialReport = JSON.parse(reports.financialReport);
         this.performanceReport = JSON.parse(reports.performanceReport);
-        console.log("financialReport", this.financialReport);
-        console.log("performanceReport", this.performanceReport);
 
         if (reports.reviewerInformation !== null && reports.reviewerInformation !== undefined) {
           this.reviewerInformation = JSON.parse(reports.reviewerInformation);
@@ -202,7 +199,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         this.taskRecord.reportingPeriod = data.setup.periodType;
         let values = JSON.parse(data.setup.setupValues);
-        console.log("111 setupValues", values);
 
         values.budget.forEach((b) => {
           if (!this.financialReport.some(x => x.id === b.id)) {
@@ -469,12 +465,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               console.log('saved file successfully')
             }, error => console.log('fileError', error));
           } else {
-            console.log('record', record);
             this.reportFormService.updateFile(fileRecord, record.id).subscribe((data) => {
               console.log('updated file successfully')
             }, error => console.log('fileError', error));
           }
-          console.log('file', record);
         }, error => console.log(error));
 
       }
@@ -583,6 +577,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
+    if (this.taskRecord.taskDefinitionKey === "Submit_Report") {
+      this.taskRecord.outputVariables = "{}";
+    }
+    if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report") {
+      this.taskRecord.outputVariables = '{"Funding_Decision": "' + this.radioEndOfPartnership + '"}';
+    }
+    if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
+      this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioRecommendFund + '"}';
+    }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));

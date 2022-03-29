@@ -1,9 +1,10 @@
 package com.kengamis
 
-
+import fuzzycsv.FuzzyCSVTable
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
 import static org.springframework.http.HttpStatus.*
@@ -36,18 +37,19 @@ class TaskListController {
                 if(it.key=='GroupId') groupId = it.value
             }
 
-            tasks << [id: task.id,
-                        taskName : task.taskName,
-                        partnerSetupId: partnerSetupId,
-                        startDate : startDate,
-                        partnerId : partnerId,
-                        programId : programId,
-                        endDate : endDate,
-                        groupId : groupId,
-                        processInstanceId : task.processInstanceId,
-                        taskDefinitionKey : task.taskDefinitionKey,
-                        dateCreated: task.dateCreated,
-                        status: task.status]
+            if(task.status != "completed") tasks << [id: task.id,
+                                                    taskName : task.taskName,
+                                                    partnerSetupId: partnerSetupId,
+                                                    startDate : startDate,
+                                                    partnerId : partnerId,
+                                                    programId : programId,
+                                                    endDate : endDate,
+                                                    groupId : groupId,
+                                                    outputVariables : task.outputVariables,
+                                                    processInstanceId : task.processInstanceId,
+                                                    taskDefinitionKey : task.taskDefinitionKey,
+                                                    dateCreated: task.dateCreated,
+                                                    status: task.status]
         }
         respond tasks
     }
@@ -76,6 +78,7 @@ class TaskListController {
                 programId : programId,
                 endDate : endDate,
                 groupId : groupId,
+                outputVariables : task.outputVariables,
                 processInstanceId : task.processInstanceId,
                 taskDefinitionKey : task.taskDefinitionKey,
                 dateCreated: task.dateCreated,
