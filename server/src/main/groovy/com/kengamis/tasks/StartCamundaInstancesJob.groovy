@@ -1,7 +1,9 @@
 package com.kengamis.tasks
 
 import com.kengamis.TaskList
+import com.kengamis.CalendarTriggerDates
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -17,20 +19,39 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
-        def partnerSetup = PartnerSetup.all.each {
-            def list = TaskList.findAllByInputVariablesIlike('%' + it.partnerId + '%')
-            if (list.size() == 0) {
-                boolean started = startProcessInstance([
-                        PartnerSetupId: it.id,
-                        PartnerId     : it.partnerId,
-                        ProgramId     : it.programId,
-                        StartDate     : it.reportingStartDate,
-                        EndDate       : it.endDate,
-                        GroupId       : ""
-                ], CIIF_MANAGEMENT_KEY)
+        PartnerSetup.findAllByStartCycle("true").each { setup ->
+            def allTasksForPartnerCompleted = allTasksCompleted(setup.id)
+            def calendar = CalendarTriggerDates.findAllByPartnerSetupId(setup.id)
+
+            calendar.each {
+
+                def sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+                def endDate = sdf.parse(it.endDate)
+                def currentDate = new Date()
+
+                if (allTasksForPartnerCompleted && endDate <= currentDate) {
+                    boolean started = startProcessInstance([
+                            PartnerSetupId: setup.id,
+                            PartnerId     : setup.partnerId,
+                            ProgramId     : setup.programId,
+                            StartDate     : it.startDate,
+                            EndDate       : it.endDate,
+                            Period        : it.period,
+                            GroupId       : ""
+                    ], CIIF_MANAGEMENT_KEY)
+
+                    if(started) print "================ started the damn instance ================"
+                }
             }
+
         }
         return null
+    }
+
+    static boolean allTasksCompleted(setupId) {
+        def list = TaskList.where {status != 'completed'}.findAllByInputVariablesIlike('%' + setupId + '%')
+        print "list $list"
+        return list.size() == 0
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {

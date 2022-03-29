@@ -28,6 +28,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   totalApprovedAmount: string;
   totalBudgetDisburse: string;
   totalDisbursement: string;
+  startReportingCycle = false;
   disbursementPlan: any = [];
   currentStatus: any = {};
   indicators: Indicator[] = [];
@@ -99,16 +100,15 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
       this.partnerChosen = data.partnerId;
+      this.startReportingCycle = data.startCycle;
       if (this.partnerChosen != undefined) this.onPartnerChange()
 
-      let rc;
-      if (data.reportingCalendar != undefined) rc = JSON.parse(data.reportingCalendar)
       this.calendar = {
         periodType: data.periodType,
         grantStartDate: data.startDate,
         grantEndDate: data.endDate,
         projectReportingStartDate: data.reportingStartDate,
-        reportingCalender: rc
+        reportingCalender: this.getCalendarForSetup(data.id)
       };
 
       if (setupValues.disbursementPlan != undefined) {
@@ -138,8 +138,17 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.dtTrigger.next();
   }
 
+  getCalendarForSetup(id): any {
+    const params = new HttpParams().set('setupId', id);
+    this.partnerSetupService.getReportingCalendarByPartnerSetupId(params).subscribe(data => {
+      console.log("calendar", data.calendar);
+      return data.calendar
+    });
+    return null
+  }
+
   generateCalendar(event) {
-    if (this.disbursementPlan.length>0 || this.indicators.length>0 || this.budget.length>0 ) {
+    if (this.disbursementPlan.length > 0 || this.indicators.length > 0 || this.budget.length > 0) {
       if (confirm('This action will clear the targets and disbursement entered')) {
         this.disbursementPlan = [];
         this.indicators = [];
@@ -181,17 +190,17 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     //set disbursement
-      this.calendar.reportingCalender.forEach((period) => {
-        this.disbursementPlan.push(
-          {
-            id: uuid(),
-            datePeriod: period.datePeriod,
-            startDate: period.startDate,
-            endDate: period.endDate,
-            disbursement: ''
-          }
-        );
-      });
+    this.calendar.reportingCalender.forEach((period) => {
+      this.disbursementPlan.push(
+        {
+          id: uuid(),
+          datePeriod: period.datePeriod,
+          startDate: period.startDate,
+          endDate: period.endDate,
+          disbursement: ''
+        }
+      );
+    });
     this.savePlan();
   }
 
@@ -212,7 +221,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   setMilestones(program) {
-    const params = new HttpParams().set('program',program);
+    const params = new HttpParams().set('program', program);
     this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
       if (data !== null && data !== undefined) {
         this.milestones = data.milestones;
@@ -290,8 +299,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   removeIndicator(indicator: Indicator) {
-    this.indicators = this.indicators.filter(item=>item.id !=indicator.id );
-    this.budget = this.budget.filter(item=>item.budgetLine !=indicator.name );
+    this.indicators = this.indicators.filter(item => item.id != indicator.id);
+    this.budget = this.budget.filter(item => item.budgetLine != indicator.name);
     this.budget.forEach((data) => {
       this.updateBudgetAmount(data.id, data.approvedAmount);
     });
@@ -319,7 +328,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           let datePeriod = arr[0];
           let indicatorId = arr[1];
           this.indicators.forEach((indicator) => {
-            if(indicator.id === indicatorId) {
+            if (indicator.id === indicatorId) {
               if (indicator.disaggregation.some(x => x.datePeriod === datePeriod)) {
                 indicator.disaggregation.forEach(function (item) {
                   if (item.datePeriod === datePeriod) item.target = value
@@ -362,12 +371,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       startDate: this.calendar.grantStartDate,
       endDate: this.calendar.grantEndDate,
       reportingStartDate: this.calendar.projectReportingStartDate,
-      reportingCalendar: JSON.stringify(this.calendar.reportingCalender),
       periodType: this.calendar.periodType,
+      startCycle: "" + this.startReportingCycle,
     }
 
     if (this.setup) {
       this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
+        this.saveReportingCalendar(this.setup.id);
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -380,6 +390,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     } else {
       this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
+        if (data !== null && data !== undefined) this.saveReportingCalendar(data.setup.id);
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -397,6 +408,38 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.success = false;
       this.error = false;
     }, 3000);
+  }
+
+  saveReportingCalendar(setupId) {
+    let values: { [key: string]: string }[] = []
+    this.calendar.reportingCalender.forEach((c) => {
+      values.push({
+        startDate: c.startDate,
+        endDate: c.endDate,
+        period: c.datePeriod,
+        partnerSetupId: setupId
+      });
+    });
+
+    if (values.length != 0) {
+      values.forEach((value) => {
+        let rc = null;
+        if (this.setup) rc = this.getCalendarForSetup(setupId);
+        if (rc) {
+          this.partnerSetupService.updateReportingCalendar(value, rc.id).subscribe((data) => {
+            console.log("calendar", data);
+          }, error => {
+            console.log(error);
+          });
+        } else {
+          this.partnerSetupService.createReportingCalendar(value).subscribe((data) => {
+            console.log("calendar", data);
+          }, error => {
+            console.log(error);
+          });
+        }
+      });
+    }
   }
 
   isValidJSONStr(str) {

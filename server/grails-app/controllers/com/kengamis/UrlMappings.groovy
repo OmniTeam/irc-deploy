@@ -28,6 +28,7 @@ class UrlMappings {
         get "/$controller/getRecommendationById(.$format)?"(action:"getRecommendationById")
         get "/$controller/getCommentById(.$format)?"(action:"getCommentById")
         get "/$controller/getAllTagsByTagType(.$format)?"(action:"getAllTagsByTagType")
+        get "/$controller/getReportingCalendarByPartnerSetupId(.$format)?"(action:"getReportingCalendarByPartnerSetupId")
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
         post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
         get "/$controller/runNow(.$format)?"(action:"runNow")
