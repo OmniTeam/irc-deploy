@@ -59,7 +59,7 @@ class ProjectMilestoneController {
         newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
         newProjectMilestoneObject['category'] = category.name
         newProjectMilestoneObject['program'] = program.title
-        newProjectMilestoneObject['programId'] = program.title
+        newProjectMilestoneObject['programId'] = program.id
         respond newProjectMilestoneObject
     }
 
