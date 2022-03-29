@@ -64,7 +64,6 @@ export class EntityViewFiltersComponent implements OnInit {
   }
 
   getFilteredFilters(value) {
-    console.log(value);
     if (value) {
       const params = new HttpParams()
         .set('id', value);
