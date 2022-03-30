@@ -150,6 +150,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'groups', title: 'Groups', type: 'link'},
       {path: 'roles', title: 'Roles', type: 'link'},
       {path: 'users', title: 'User Management', type: 'link'},
+      {path: 'acl-group-mapping-parent', title: 'ACL Group Permissions With Parent', type: 'link'},
       {path: 'requestMaps', title: 'Request Maps', type: 'link'}
     ]
   },

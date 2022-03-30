@@ -17,6 +17,7 @@ import {AlertService} from "../../../services/alert";
 import {UsernameValidator} from "../../../validators/username.validator";
 import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
+import {HttpParams} from "@angular/common/http";
 
 
 @Component({
@@ -83,11 +84,10 @@ export class CreateUserComponent implements OnInit {
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
       email: [''/*, [Validators.required, Validators.email]*/],
-      // telephone: [''],
       role: [null],
       kengaGroup: [null],
       enabled: [true],
-      data_collector_Type: [],
+      // data_collector_Type: [],
     });
   }
 
@@ -104,10 +104,24 @@ export class CreateUserComponent implements OnInit {
     }
     const formData = this.formGroup.value;
     console.log(formData)
+    const params = new HttpParams()
+      .set('role', formData.role)
+      .set('groups', formData.groups)
     this.userService.createUser(formData).subscribe((result) => {
       this.alertService.success(`User is created successfully`);
 
       console.log(formData.kengaGroup, "Groups")
+      console.log(formData.role, "Role")
+
+      //insert the user's role in the user role table
+      const userRoleData = new FormData()
+      userRoleData.append('user', result.id)
+      userRoleData.append('role', formData.role)
+
+      this.userService.createUserRole(userRoleData).subscribe(data => {
+        console.log(data, "User Role")
+      }, error => {this.alertService.error("failed to create user role")})
+
       // inserts user_id group_id pairs into the user group table
       for(let i=0; i<formData.kengaGroup.length; i++){
         const userGroupData = new FormData()
@@ -115,7 +129,7 @@ export class CreateUserComponent implements OnInit {
         userGroupData.append('kengaGroup', formData.kengaGroup[i])
 
         this.userService.createUserGroup(userGroupData).subscribe(data => {
-          console.log(data ,"User group details")
+          console.log(data ,"User group")
         }, error => {this.alertService.error("failed to create user groups")})
       }
 
