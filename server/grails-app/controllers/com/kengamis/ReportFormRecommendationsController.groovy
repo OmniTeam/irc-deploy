@@ -85,7 +85,7 @@ class ReportFormRecommendationsController {
     }
 
     def getRecommendationsForTask() {
-        def recommendations = [recommendations: ReportFormRecommendations.findAllByTaskId(params.taskId)]
+        def recommendations = [recommendations: ReportFormRecommendations.findAllByProcessInstanceId(params.processInstanceId)]
         respond recommendations
     }
 

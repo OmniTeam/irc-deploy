@@ -119,7 +119,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         this.budget = setupValues.budget;
         this.budget.forEach((data) => {
           this.updateBudgetAmount(data.id, data.approvedAmount);
-          this.updateBudgetDisburse(data.id, data.disburse);
+          this.updateBudgetDisburse(data.id, data.totalSpent);
         });
       }
 
@@ -477,8 +477,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach(function (item) {
-        if (item.id === id) item.disburse = newValue;
-        total += +item.disburse;
+        if (item.id === id) item.totalSpent = newValue;
+        total += +item.totalSpent;
       });
     }
     this.totalBudgetDisburse = total.toString();

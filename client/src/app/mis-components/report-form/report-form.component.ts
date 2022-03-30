@@ -109,7 +109,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
 
           const params = new HttpParams()
-            .set('taskId', this.taskId);
+            .set('processInstanceId', this.taskRecord.processInstanceId);
 
           //set organizational Info
           this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
@@ -205,7 +205,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               id: b.id,
               budget_line: b.budgetLine,
               approved_budget: b.approvedAmount,
-              total_advanced: b.disburse
+              expense_to_date: b.totalSpent
             });
           }
         });
@@ -387,7 +387,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   saveReport(reportValues: { [key: string]: string }, status) {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
-      processId: this.taskRecord.processInstanceId,
+      processInstanceId: this.taskRecord.processInstanceId,
       userId: this.authService.getLoggedInUsername(),
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -448,7 +448,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (attachment != null) {
         let fileRecord: { [key: string]: string } = {
           taskId: this.taskRecord.id,
-          processId: this.taskRecord.processInstanceId,
+          processInstanceId: this.taskRecord.processInstanceId,
           userId: this.authService.getLoggedInUsername(),
           groupId: this.taskRecord.groupId,
           taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -519,7 +519,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.processInstanceId,
+        processInstanceId: this.taskRecord.processInstanceId,
         userId: comment.user,
         groupId: this.taskRecord.groupId,
         taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -539,7 +539,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.recommendations.forEach((recommendation) => {
       let recommendationsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.processInstanceId,
+        processInstanceId: this.taskRecord.processInstanceId,
         userId: recommendation.user,
         groupId: this.taskRecord.groupId,
         taskDefinitionKey: this.taskRecord.taskDefinitionKey,

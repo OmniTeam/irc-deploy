@@ -85,7 +85,7 @@ class ReportFormController {
     }
 
     def getReportForTask() {
-        def reportData = [report: ReportForm.findByTaskId(params.taskId)]
+        def reportData = [report: ReportForm.findByProcessInstanceId(params.processInstanceId)]
         respond reportData
     }
 }
