@@ -74,15 +74,20 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
           this.editing = true;
           this.setPartnerSetupInfo(data.setup);
+          this.calendar = {
+            periodType: data.setup.periodType,
+            grantStartDate: data.setup.startDate,
+            grantEndDate: data.setup.endDate,
+            projectReportingStartDate: data.setup.reportingStartDate,
+            reportingCalender: this.getCalendarForSetup(data.setup.id)
+          };
         }, error => console.log(error));
       });
 
-    this.programPartnersService.getProgramPartners().subscribe(data => {
+    this.programPartnersService.getProgramPartnersWithoutWorkPlan().subscribe(data => {
       if (data !== null && data !== undefined) {
         this.listOfPartners = data;
-      } /*else {
-        this.listOfPartners = SampleData.partners;
-      }*/
+      }
     });
 
     this.dtOptions = {
@@ -102,14 +107,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.partnerChosen = data.partnerId;
       this.startReportingCycle = data.startCycle == "true";
       if (this.partnerChosen != undefined) this.onPartnerChange()
-
-      this.calendar = {
-        periodType: data.periodType,
-        grantStartDate: data.startDate,
-        grantEndDate: data.endDate,
-        projectReportingStartDate: data.reportingStartDate,
-        reportingCalender: this.getCalendarForSetup(data.id)
-      };
 
       if (setupValues.disbursementPlan != undefined) {
         this.disbursementPlan = setupValues.disbursementPlan;
@@ -208,7 +205,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         }
       );
     });
-    this.savePlan();
+    if (this.setup!=undefined) this.saveReportingCalendar(this.setup.id);
   }
 
   onPartnerChange() {
@@ -384,7 +381,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     if (this.setup) {
       this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
-        this.saveReportingCalendar(this.setup.id);
+        //this.saveReportingCalendar(this.setup.id);
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -397,7 +394,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     } else {
       this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
-        if (data !== null && data !== undefined) this.saveReportingCalendar(data.setup.id);
+        //if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -432,7 +429,16 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.partnerSetupService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
         values.forEach((value) => {
           this.partnerSetupService.createReportingCalendar(value).subscribe((data) => {
-            console.log(data);
+            console.log("saved reporting calendar", data);
+            if (this.calendar.reportingCalender.some(x => x.id === data.id)) {
+              this.calendar.reportingCalender.forEach(function (item) {
+                if (item.id === data.id) {
+                  item.startDate = data.startDate;
+                  item.endDate = data.endDate;
+                  item.datePeriod = data.period;
+                }
+              });
+            }
           }, error => {
             console.log(error);
           });

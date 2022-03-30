@@ -126,4 +126,40 @@ class ProgramPartnerController {
 
         render status: NO_CONTENT
     }
+
+    def getProgramPartnersWithoutWorkPlan() {
+        def programPartners = []
+        def list = []
+
+        PartnerSetup.all.each {
+            list << it.partnerId
+        }
+
+        programPartnerService.list(params).each { programPartner ->
+            if(!list.contains(programPartner.id)) {
+                def newProgramPartnerObject = [:]
+                def programId = programPartner.program.id
+                def program = Program.findById(programId)
+                newProgramPartnerObject['id'] = programPartner.id
+                newProgramPartnerObject['name'] = programPartner.name
+                newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
+                newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
+                newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
+                newProgramPartnerObject['acronym'] = programPartner.acronym
+                newProgramPartnerObject['email'] = programPartner.email
+                newProgramPartnerObject['organisation'] = programPartner.organisation
+                newProgramPartnerObject['website'] = programPartner.website
+                newProgramPartnerObject['legal'] = programPartner.legal
+                newProgramPartnerObject['country'] = programPartner.country
+                newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+                newProgramPartnerObject['city'] = programPartner.city
+                newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
+                newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
+                newProgramPartnerObject['program'] = program.title
+                newProgramPartnerObject['programId'] = program.id
+                programPartners << newProgramPartnerObject
+            }
+        }
+        respond programPartners
+    }
 }
