@@ -23,7 +23,7 @@ export class ProjectMilestoneService {
   }
 
   getMilestonesByProgram(params): Observable<any> {
-    return this.http.get(`${this.baseurl}getMilestonesByProgram`, {params});
+    return this.http.get(`${this.baseurl}/getMilestonesByProgram`, {params});
   }
 
   createMilestone(formData): Observable<any> {

@@ -1,9 +1,10 @@
 package com.kengamis
 
-
+import fuzzycsv.FuzzyCSVTable
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
 import static org.springframework.http.HttpStatus.*
@@ -25,10 +26,11 @@ class TaskListController {
         taskListMapList.each{TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+            def partnerSetupId, startDate, partnerId, programId, endDate, groupId, period
 
             variables['data'].each {
                 if(it.key=='PartnerSetupId') partnerSetupId = it.value
+                if(it.key=='Period') period = it.value
                 if(it.key=='StartDate') startDate = it.value
                 if(it.key=='PartnerId') partnerId = it.value
                 if(it.key=='ProgramId') programId = it.value
@@ -36,18 +38,20 @@ class TaskListController {
                 if(it.key=='GroupId') groupId = it.value
             }
 
-            tasks << [id: task.id,
-                        taskName : task.taskName,
-                        partnerSetupId: partnerSetupId,
-                        startDate : startDate,
-                        partnerId : partnerId,
-                        programId : programId,
-                        endDate : endDate,
-                        groupId : groupId,
-                        processInstanceId : task.processInstanceId,
-                        taskDefinitionKey : task.taskDefinitionKey,
-                        dateCreated: task.dateCreated,
-                        status: task.status]
+            if(task.status != "completed") tasks << [id: task.id,
+                                                    taskName : task.taskName,
+                                                    partnerSetupId: partnerSetupId,
+                                                    startDate : startDate,
+                                                    partnerId : partnerId,
+                                                    programId : programId,
+                                                    endDate : endDate,
+                                                    groupId : groupId,
+                                                    reportingPeriod : period,
+                                                    outputVariables : task.outputVariables,
+                                                    processInstanceId : task.processInstanceId,
+                                                    taskDefinitionKey : task.taskDefinitionKey,
+                                                    dateCreated: task.dateCreated,
+                                                    status: task.status]
         }
         respond tasks
     }
@@ -57,10 +61,11 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+        def partnerSetupId, startDate, partnerId, programId, endDate, groupId, period
 
         variables['data'].each {
             if(it.key=='PartnerSetupId') partnerSetupId = it.value
+            if(it.key=='Period') period = it.value
             if(it.key=='StartDate') startDate = it.value
             if(it.key=='PartnerId') partnerId = it.value
             if(it.key=='ProgramId') programId = it.value
@@ -76,6 +81,8 @@ class TaskListController {
                 programId : programId,
                 endDate : endDate,
                 groupId : groupId,
+                reportingPeriod : period,
+                outputVariables : task.outputVariables,
                 processInstanceId : task.processInstanceId,
                 taskDefinitionKey : task.taskDefinitionKey,
                 dateCreated: task.dateCreated,
