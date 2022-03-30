@@ -26,10 +26,11 @@ class TaskListController {
         taskListMapList.each{TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+            def partnerSetupId, startDate, partnerId, programId, endDate, groupId, period
 
             variables['data'].each {
                 if(it.key=='PartnerSetupId') partnerSetupId = it.value
+                if(it.key=='Period') period = it.value
                 if(it.key=='StartDate') startDate = it.value
                 if(it.key=='PartnerId') partnerId = it.value
                 if(it.key=='ProgramId') programId = it.value
@@ -45,6 +46,7 @@ class TaskListController {
                                                     programId : programId,
                                                     endDate : endDate,
                                                     groupId : groupId,
+                                                    reportingPeriod : period,
                                                     outputVariables : task.outputVariables,
                                                     processInstanceId : task.processInstanceId,
                                                     taskDefinitionKey : task.taskDefinitionKey,
@@ -59,10 +61,11 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+        def partnerSetupId, startDate, partnerId, programId, endDate, groupId, period
 
         variables['data'].each {
             if(it.key=='PartnerSetupId') partnerSetupId = it.value
+            if(it.key=='Period') period = it.value
             if(it.key=='StartDate') startDate = it.value
             if(it.key=='PartnerId') partnerId = it.value
             if(it.key=='ProgramId') programId = it.value
@@ -78,6 +81,7 @@ class TaskListController {
                 programId : programId,
                 endDate : endDate,
                 groupId : groupId,
+                reportingPeriod : period,
                 outputVariables : task.outputVariables,
                 processInstanceId : task.processInstanceId,
                 taskDefinitionKey : task.taskDefinitionKey,

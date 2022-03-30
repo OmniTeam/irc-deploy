@@ -25,7 +25,7 @@ class StartCamundaInstancesJob extends Script {
 
             calendar.each {
 
-                def sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+                def sdf = new SimpleDateFormat("yyyy-MM-dd")
                 def endDate = sdf.parse(it.endDate)
                 def currentDate = new Date()
 

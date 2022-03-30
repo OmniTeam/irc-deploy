@@ -197,7 +197,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
     this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
-        this.taskRecord.reportingPeriod = data.setup.periodType;
         let values = JSON.parse(data.setup.setupValues);
 
         values.budget.forEach((b) => {

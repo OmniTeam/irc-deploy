@@ -28,7 +28,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   totalApprovedAmount: string;
   totalBudgetDisburse: string;
   totalDisbursement: string;
-  startReportingCycle = false;
+  startReportingCycle: boolean = false;
   disbursementPlan: any = [];
   currentStatus: any = {};
   indicators: Indicator[] = [];
@@ -100,7 +100,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
       this.partnerChosen = data.partnerId;
-      this.startReportingCycle = data.startCycle;
+      this.startReportingCycle = data.startCycle == "true";
       if (this.partnerChosen != undefined) this.onPartnerChange()
 
       this.calendar = {
@@ -110,8 +110,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         projectReportingStartDate: data.reportingStartDate,
         reportingCalender: this.getCalendarForSetup(data.id)
       };
-
-      console.log("calendar", this.calendar)
 
       if (setupValues.disbursementPlan != undefined) {
         this.disbursementPlan = setupValues.disbursementPlan;
