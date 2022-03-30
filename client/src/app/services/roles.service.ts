@@ -34,4 +34,8 @@ export class RolesService {
   deleteCurrentRole(p): Observable<any> {
     return this.http.delete(`${this.userRoles}${p}/`);
   }
+
+  getUserRoles(params) {
+    return this.http.get(`${this.userRoles}/getUserRoles`, {params});
+  }
 }

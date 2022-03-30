@@ -16,6 +16,7 @@ let formsMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
+  roles: ["ROLE_SUPER_ADMIN"],
   children: []
 }
 
@@ -25,7 +26,8 @@ let listsMenu: any = {
   type: 'sub',
   icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
-  children: []
+  children: [],
+  roles: ["ROLE_SUPER_ADMIN"]
 }
 
 
@@ -34,6 +36,7 @@ let formSettingsMenu: any = {
   title: 'Form Settings',
   type: 'sub',
   isCollapsed: true,
+  roles: ["ROLE_SUPER_ADMIN"],
   children: []
 }
 
@@ -46,6 +49,7 @@ export interface RouteInfo {
   isCollapsed?: boolean;
   isCollapsing?: any;
   children?: ChildrenItems[];
+  roles?:any;
 }
 
 export interface ChildrenItems {
@@ -55,12 +59,14 @@ export interface ChildrenItems {
   collapse?: string;
   children?: ChildrenItems2[];
   isCollapsed?: boolean;
+  roles?:any;
 }
 
 export interface ChildrenItems2 {
   path?: string;
   title?: string;
   type?: string;
+  roles?:any;
 }
 
 // Menu Items
@@ -70,6 +76,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Home',
     type: 'link',
     icontype: 'fas fa-home',
+    roles: ["ROLE_SUPER_ADMIN"]
   },
   formsMenu,
   listsMenu,
@@ -78,12 +85,14 @@ export const ROUTES: RouteInfo[] = [
     title: 'Referrals List',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
+    roles: ["ROLE_SUPER_ADMIN"]
   },
   {
     path: 'feedback-list',
     title: 'FeedBack List',
     type: 'link',
     icontype: 'fa fa-comment-dots',
+    roles: ["ROLE_SUPER_ADMIN"]
   },
   {
     path: '/',
@@ -91,10 +100,9 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tasks text-pink',
     isCollapsed: true,
+    roles: ["ROLE_SUPER_ADMIN"],
     children: [
-      {path: 'taskList', title: 'Task List', type: 'link'},
-      // {path: 'onGoingTasks', title: 'Ongoing Tasks', type: 'link'},
-      // {path: 'taskReport', title: 'Task Report', type: 'link'},
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
     ]
   },
 
@@ -104,11 +112,12 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-user-cog',
     isCollapsed: true,
+    roles: ["ROLE_SUPER_ADMIN"],
     children: [
-      {path: 'tags', title: 'Tags', type: 'link'},
-      {path: 'partnerSetupList', title: 'Work Plan', type: 'link'},
-      {path: 'programStaff', title: 'Program Staff', type: 'link'},
-      {path: 'users', title: 'Users', type: 'link'},
+      {path: 'tags', title: 'Tags', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'programStaff', title: 'Program Staff', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'users', title: 'Users', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
     ]
   },
 
@@ -118,15 +127,16 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-cog text-blue',
     isCollapsed: true,
+    roles: ["ROLE_SUPER_ADMIN"],
     children: [
       {
-        path: '', title: 'Program', type: 'sub', isCollapsed: true,
+        path: '', title: 'Program', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN"],
         children: [
-          {path: 'program', title: 'Add Program', type: 'link'},
-          {path: 'programCategory', title: 'Add Program Category', type: 'link'},
+          {path: 'program', title: 'Add Program', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+          {path: 'programCategory', title: 'Add Program Category', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
         ]
       },
-      {path: 'milestones', title: 'Project Milestones', type: 'link'}
+      {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ["ROLE_SUPER_ADMIN"]}
     ]
   },
 
@@ -136,20 +146,21 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tools text-purple',
     isCollapsed: true,
+    roles: ["ROLE_SUPER_ADMIN"],
     children: [
-      {path: 'forms', title: 'Forms', type: 'link'},
+      {path: 'forms', title: 'Forms', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
       formSettingsMenu,
       {
-        path: '', title: 'Entities', type: 'sub', isCollapsed: true,
+        path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN"],
         children: [
-          {path: 'entity', title: 'Entities', type: 'link'},
-          {path: 'entityView', title: 'Entity Views', type: 'link'},
-          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link'},
-          {path: 'dataView', title: 'Data View', type: 'link'},
+          {path: 'entity', title: 'Entities', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+          {path: 'entityView', title: 'Entity Views', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+          {path: 'dataView', title: 'Data View', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
         ]
       },
-      {path: 'tagType', title: 'Tag Type', type: 'link'},
-      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link'},
+      {path: 'tagType', title: 'Tag Type', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
     ]
   },
   {
@@ -157,12 +168,13 @@ export const ROUTES: RouteInfo[] = [
     title: 'User',
     type: 'sub',
     icontype: 'fas fa-user-tie text-green',
+    roles: ["ROLE_SUPER_ADMIN"],
     isCollapsed: true,
     children: [
-      {path: 'groups', title: 'Groups', type: 'link'},
-      {path: 'roles', title: 'Roles', type: 'link'},
-      {path: 'users', title: 'User Management', type: 'link'},
-      {path: 'requestMaps', title: 'Request Maps', type: 'link'}
+      {path: 'groups', title: 'Groups', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'roles', title: 'Roles', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'users', title: 'User Management', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ["ROLE_SUPER_ADMIN"]}
     ]
   },
 
@@ -196,11 +208,13 @@ export class SidebarComponent implements OnInit {
           formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
+          formObject['roles'] = ["ROLE_SUPER_ADMIN"];
           formsMenu.children.push(formObject);
 
           formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formSettingObject['path'] = form.name.toString();
           formSettingObject['type'] = 'link';
+          formObject['roles'] = ["ROLE_SUPER_ADMIN"];
           formSettingsMenu.children.push(formSettingObject);
         }
       }, error => console.log(error));
@@ -211,6 +225,7 @@ export class SidebarComponent implements OnInit {
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
+          entityObject['roles'] = ["ROLE_SUPER_ADMIN"];
           listsMenu.children.push(entityObject);
         }
       }, error => console.log(error));

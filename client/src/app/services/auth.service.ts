@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Tokens} from "../models/tokens";
 import {environment} from "../../environments/environment";
 import {Observable, of} from "rxjs";
 import {catchError, mapTo, tap} from "rxjs/operators";
+import {User} from "../models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class AuthService {
   private readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
   private readonly USERNAME = 'USERNAME';
+  private readonly ROLES: any = [];
   private loggedUser: string;
 
   constructor(private http: HttpClient) { }
@@ -20,7 +21,7 @@ export class AuthService {
   login(user: { username: string, password: string }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/api/login`, user)
       .pipe(
-        tap(tokens => this.doLoginUser(user.username, tokens)),
+        tap(user => this.doLoginUser(user.username, user)),
         mapTo(true),
         catchError(error => {
           alert(error.error);
@@ -49,9 +50,9 @@ export class AuthService {
     return localStorage.getItem(this.JWT_TOKEN);
   }
 
-  private doLoginUser(username: string, tokens: Tokens) {
+  private doLoginUser(username: string, user: User) {
     this.loggedUser = username;
-    this.storeTokens(tokens);
+    this.storeTokens(user);
   }
 
   doLogoutUser() {
@@ -67,10 +68,11 @@ export class AuthService {
     localStorage.setItem(this.JWT_TOKEN, jwt);
   }
 
-  private storeTokens(tokens: Tokens) {
-    localStorage.setItem(this.JWT_TOKEN, tokens.access_token);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
+  private storeTokens(user: User) {
+    localStorage.setItem(this.JWT_TOKEN, user.access_token);
+    localStorage.setItem(this.REFRESH_TOKEN, user.refresh_token);
     localStorage.setItem(this.USERNAME, this.loggedUser);
+    localStorage.setItem(this.ROLES, user.roles);
   }
 
   private removeTokens() {
@@ -81,5 +83,9 @@ export class AuthService {
 
   getLoggedInUsername() {
     return localStorage.getItem(this.USERNAME);
+  }
+
+  getUserRoles() {
+    return localStorage.getItem(this.ROLES);
   }
 }
