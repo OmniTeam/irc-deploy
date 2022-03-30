@@ -111,6 +111,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         reportingCalender: this.getCalendarForSetup(data.id)
       };
 
+      console.log("calendar", this.calendar)
+
       if (setupValues.disbursementPlan != undefined) {
         this.disbursementPlan = setupValues.disbursementPlan;
         this.disbursementPlan.forEach((data) => {
@@ -139,12 +141,19 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   getCalendarForSetup(id): any {
+    let reportingCalendar: { [key: string]: string }[] = [];
     const params = new HttpParams().set('setupId', id);
     this.partnerSetupService.getReportingCalendarByPartnerSetupId(params).subscribe(data => {
-      console.log("calendar", data.calendar);
-      return data.calendar
+      data.calendar.forEach((cal) => {
+        reportingCalendar.push({
+          id: cal.id,
+          startDate: cal.startDate,
+          endDate: cal.endDate,
+          datePeriod: cal.period
+        });
+      });
     });
-    return null
+    return reportingCalendar
   }
 
   generateCalendar(event) {
@@ -422,22 +431,16 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     });
 
     if (values.length != 0) {
-      values.forEach((value) => {
-        let rc = null;
-        if (this.setup) rc = this.getCalendarForSetup(setupId);
-        if (rc) {
-          this.partnerSetupService.updateReportingCalendar(value, rc.id).subscribe((data) => {
-            console.log("calendar", data);
-          }, error => {
-            console.log(error);
-          });
-        } else {
+      this.partnerSetupService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
+        values.forEach((value) => {
           this.partnerSetupService.createReportingCalendar(value).subscribe((data) => {
-            console.log("calendar", data);
+            console.log(data);
           }, error => {
             console.log(error);
           });
-        }
+        });
+      }, error => {
+        console.log(error);
       });
     }
   }

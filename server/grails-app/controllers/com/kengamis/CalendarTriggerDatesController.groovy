@@ -71,13 +71,13 @@ class CalendarTriggerDatesController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
-        calendarTriggerDatesService.delete(id)
+        CalendarTriggerDates.findAllByPartnerSetupId(id).each {it.delete()}
 
         render status: NO_CONTENT
     }

@@ -34,8 +34,8 @@ export class PartnerSetupService {
     return this.http.get(`${environment.serverUrl}/calendarTriggerDates/getReportingCalendarByPartnerSetupId`, {params});
   }
 
-  updateReportingCalendar(formData, id): Observable<any> {
-    return this.http.put(`${environment.serverUrl}/calendarTriggerDates/${id}`, formData);
+  deleteReportingCalendarForPartner(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/calendarTriggerDates/${deletedRow}`);
   }
 
   createReportingCalendar(formData): Observable<any> {
