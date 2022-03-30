@@ -84,11 +84,19 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         }, error => console.log(error));
       });
 
-    this.programPartnersService.getProgramPartnersWithoutWorkPlan().subscribe(data => {
-      if (data !== null && data !== undefined) {
-        this.listOfPartners = data;
-      }
-    });
+    if(this.partnerSetupId!=undefined) {
+      this.programPartnersService.getProgramPartners().subscribe(data => {
+        if (data !== null && data !== undefined) {
+          this.listOfPartners = data;
+        }
+      });
+    } else {
+      this.programPartnersService.getProgramPartnersWithoutWorkPlan().subscribe(data => {
+        if (data !== null && data !== undefined) {
+          this.listOfPartners = data;
+        }
+      });
+    }
 
     this.dtOptions = {
       pagingType: "numbers",
@@ -415,13 +423,15 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   saveReportingCalendar(setupId) {
-    let values: { [key: string]: string }[] = []
+    let values: { [key: string]: any }[] = []
     this.calendar.reportingCalender.forEach((c) => {
       values.push({
         startDate: c.startDate,
         endDate: c.endDate,
         period: c.datePeriod,
-        partnerSetupId: setupId
+        partnerSetupId: setupId,
+        started: false,
+        completed: false
       });
     });
 

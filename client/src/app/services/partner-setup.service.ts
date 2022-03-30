@@ -41,4 +41,8 @@ export class PartnerSetupService {
   createReportingCalendar(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/calendarTriggerDates`, formData);
   }
+
+  updateReportingCalendarStatus(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/calendarTriggerDates/updateReportingCalendarStatus`, {params});
+  }
 }

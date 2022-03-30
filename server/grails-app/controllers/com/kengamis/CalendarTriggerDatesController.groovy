@@ -1,6 +1,8 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+import org.jooq.Transaction
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -28,6 +30,7 @@ class CalendarTriggerDatesController {
 
     @Transactional
     def save(CalendarTriggerDates calenderTriggerDates) {
+//        print calenderTriggerDates.errors
         if (calenderTriggerDates == null) {
             render status: NOT_FOUND
             return
@@ -80,6 +83,15 @@ class CalendarTriggerDatesController {
         CalendarTriggerDates.findAllByPartnerSetupId(id).each {it.delete()}
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def updateReportingCalendarStatus() {
+        def setupId = params.setupId as String
+        def completedStatus = params.completed=="yes"
+        def calendar = CalendarTriggerDates.findByPartnerSetupId(setupId)
+        calendar.completed = completedStatus
+        calendar.save(flush:true)
     }
 
     def getReportingCalendarByPartnerSetupId() {

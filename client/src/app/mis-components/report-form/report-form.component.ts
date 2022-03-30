@@ -588,6 +588,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
+
+    if(status=="completed") {
+      const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+      this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+        console.log('updated calendar status')
+      }, error => console.log('failed update calendar status', error));
+    }
   }
 
   onBackPressed() {

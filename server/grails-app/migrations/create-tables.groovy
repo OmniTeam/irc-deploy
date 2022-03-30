@@ -1835,6 +1835,14 @@ databaseChangeLog = {
             column(name: "end_date", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
+
+            column(name: "started", type: "boolean") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "completed", type: "boolean") {
+                constraints(nullable: "false")
+            }
         }
     }
 
