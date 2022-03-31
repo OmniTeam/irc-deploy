@@ -33,6 +33,7 @@ class KengaGroupController {
             list << [
                     id: grp.id,
                     name: grp.name,
+                    dateCreated: grp.dateCreated,
                     data_collectors: dataCollectors
             ]
         }

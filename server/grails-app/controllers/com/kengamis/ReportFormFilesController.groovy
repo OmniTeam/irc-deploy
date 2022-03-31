@@ -90,7 +90,7 @@ class ReportFormFilesController {
     }
 
     def getFilesForTask() {
-        def data = [files: ReportFormFiles.findAllByTaskId(params.taskId)]
+        def data = [files: ReportFormFiles.findAllByProcessInstanceId(params.processInstanceId)]
         respond data
     }
 }

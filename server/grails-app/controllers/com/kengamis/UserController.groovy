@@ -25,7 +25,14 @@ class UserController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 1000, 1000)
-        respond userService.list(params), model:[userCount: userService.count()]
+        def role = Role.findByAuthority("ROLE_DATA_COLLECTOR")
+        def users = UserRole.findAllByRoleNotEqual(role).collect{
+            def roles = it.user.authorities.collect { it.authority }.join(", ")
+            def groups = it.user.kengaGroups.collect { it.name }.join(", ")
+            [id: it.user.id, username: it.user.username, email: it.user.email, names: it.user.names,
+            groups: groups, roles: roles, enabled: it.user.enabled]
+        }
+        respond users
     }
 
     def show(String id) {
@@ -64,6 +71,8 @@ class UserController {
             respond user.errors
             return
         }
+        def userId =user.id
+        def userRole = params.role as String
 
         try {
             userService.save(user)

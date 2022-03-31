@@ -1774,4 +1774,92 @@ databaseChangeLog = {
         dropColumn(columnName: "user_id", tableName: "entity_view_filters")
     }
 
+    changeSet(author: "bruno (generated)", id: "20220901134564565-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220345345544245-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form_comments")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220923455325245-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form_files")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022023423424456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form_recommendations")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20223423423424445-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647332552353645-6") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "start_cycle", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647121252453463-43") {
+        dropColumn(columnName: "reporting_calendar", tableName: "partner_setup")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1647823423423123-1") {
+        createTable(tableName: "calendar_trigger_dates") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "calendar_trigger_datesPK")
+            }
+
+            column(name: "partner_setup_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "period", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "end_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "started", type: "boolean") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "completed", type: "boolean") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220345453535635-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202254345755353555-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_comments")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022067468764764745-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_files")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202205635635476456-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_recommendations")
+    }
+
 }

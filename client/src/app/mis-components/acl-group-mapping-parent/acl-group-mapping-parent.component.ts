@@ -17,17 +17,25 @@ import {AuthService} from "../../services/auth.service";
 import {FormService} from "../../services/form.service";
 import {AclGroupMappingService} from "../../services/acl-group-mapping.service";
 
+/*export interface queryFormArray{
+  group: string;
+  parent: string;
+  permission: number
+  form: string;
+  groupConditionQuery: string;
+}*/
+
 @Component({
-  selector: 'app-create-group',
-  templateUrl: './acl-group-mapping.component.html',
-  styleUrls: ['./acl-group-mapping.component.scss']
+  selector: 'app-acl-group-mapping-parent',
+  templateUrl: './acl-group-mapping-parent.component.html',
+  styleUrls: ['./acl-group-mapping-parent.component.scss']
 })
-export class AclGroupMappingComponent implements OnInit {
+export class AclGroupMappingParentComponent implements OnInit {
 
   constructor(
     private groupsService: GroupsService,
     private AalGroupMappingService: AclGroupMappingService,
-    private formsService: FormService,
+    private formService: FormService,
     private tagsService: TagService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -64,34 +72,32 @@ export class AclGroupMappingComponent implements OnInit {
       'name': 'ADMIN'
     },
   ]
+  dataVariable = [
+    {
+      'name': "Trace Kenya",
+    },
+    {
+      'name': "Young Domestic Worker (WOTESAWA)",
+    },
+    {
+      'name': "Foundation integrated for Rural Development( FIRD)",
+    },
+    {
+      'name': "Human Rights Democracy Link Africa (RIDE Africa)",
+    },
+  ]
+  dataContext = [
+    {
+      'name': "central_user_name",
+    },
+    {
+      'name': "submitterName",
+    },
+  ]
   operation = [
     {
       'sign': '=',
       'description':'EQUAL'
-    },
-    {
-      'sign': '>',
-      'description':'GREATER THAN'
-    },
-    {
-      'sign': '<',
-      'description':'LESS THAN'
-    },
-    {
-      'sign': '>=',
-      'description':'GREATER THAN OR EQUAL'
-    },
-    {
-      'sign': '<=',
-      'description':'LESS THAN OR EQUAL'
-    },
-    {
-      'sign': '<>',
-      'description':'NOT EQUAL'
-    },
-    {
-      'sign': 'BETWEEN',
-      'description':'BETWEEN'
     },
     {
       'sign': 'LIKE',
@@ -103,13 +109,18 @@ export class AclGroupMappingComponent implements OnInit {
     },
   ]
   forms: any
+  addQueryButtonText="Add Query To Table"
+  queryFormArray = []
+  groupConditionQuery=''
+  form=''
+  editIndex = -1;
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
-    this.formsService.getForms().subscribe(results => {
+    this.formService.getForms().subscribe(results => {
       this.forms = results
     }, error => {
       this.alertService.error("Failed to get Forms")
@@ -121,28 +132,48 @@ export class AclGroupMappingComponent implements OnInit {
     })
     this.formGroup = this.formBuilder.group({
       group: [null],
-      form: [null],
-      permissions: [null],
-      groupConditionQuery: [null]
+      parent: [null],
+      permissions: [1],
+      queryArray: this.formBuilder.array([]),
     });
+  }
+
+  getFormAndQuery(){
+    return this.formBuilder.group({
+      form: [this.form],
+      groupConditionQuery: [this.groupConditionQuery],
+
+    })
+  }
+
+  addQuery(){
+    const control = <FormArray>this.formGroup.get('queryArray')
+    if (this.editIndex === -1) {
+      control.push(this.getFormAndQuery())
+      this.form=''
+      this.groupConditionQuery=''
+    } else {
+      control.at(this.editIndex).patchValue(this.getFormAndQuery());
+      this.form=''
+      this.groupConditionQuery=''
+    }
+
+  }
+
+  get queryArray() {
+    return this.formGroup.get('queryArray').value;
   }
 
 
   createACLGROUPMAPPING() {
-    this.clicked = true;
-    this.submitted = true;
-    if (this.formGroup.invalid) {
-      console.log('Invalid');
-      return;
-    }
     const formData = this.formGroup.value;
     console.log(formData)
-    this.AalGroupMappingService.createGroupMapping(formData).subscribe((result) => {
+    this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);
       this.router.navigate(['/home']);
     }, error => {
-      this.alertService.error("Failed to Create the Group")
+      this.alertService.error("Failed to Create the ACL")
     });
   }
 }

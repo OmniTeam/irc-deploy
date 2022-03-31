@@ -4,7 +4,7 @@ class ReportFormFiles {
 
     String id
     String groupId
-    String processId
+    String processInstanceId
     String taskId
     String taskDefinitionKey
     String userId
@@ -12,6 +12,10 @@ class ReportFormFiles {
     String name
     Date dateCreated
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
+        groupId nullable: true
     }
 }

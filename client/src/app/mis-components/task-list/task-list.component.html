@@ -25,8 +25,9 @@
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
                       <th class='text-center'>Task Name</th>
+                      <th class='text-center'>Partner/Cluster</th>
                       <th class='text-center'>Start Date</th>
-                      <th class='text-center'>Date Created</th>
+                      <th class='text-center'>End Date</th>
                       <th class='text-center'>Status</th>
                       <th class='text-center'>Action</th>
                     </tr>
@@ -35,8 +36,9 @@
                     <tr *ngFor="let row of rows">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.taskName }}</td>
-                      <td class='text-center'>{{ row.startDate | date: 'medium' }}</td>
-                      <td class='text-center'>{{ row.dateCreated  | date: 'medium' }}</td>
+                      <td class='text-center'>{{ row.partnerName }}</td>
+                      <td class='text-center'>{{ row.startDate | date: 'mediumDate' }}</td>
+                      <td class='text-center'>{{ row.endDate  | date: 'mediumDate' }}</td>
                       <td class='text-center'
                           [style.color]="row.status=='completed' ? 'limegreen' :
                           row.status=='in_progress' ? 'orange' :

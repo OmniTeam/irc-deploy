@@ -14,6 +14,10 @@ export class ProgramPartnersService {
     return this.http.get(this.baseurl);
   }
 
+  getProgramPartnersWithoutWorkPlan(): Observable<any> {
+    return this.http.get(`${this.baseurl}/getProgramPartnersWithoutWorkPlan`);
+  }
+
   getPrograms(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/program/`);
   }

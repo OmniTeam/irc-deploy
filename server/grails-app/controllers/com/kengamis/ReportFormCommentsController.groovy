@@ -85,7 +85,7 @@ class ReportFormCommentsController {
     }
 
     def getCommentsForTask() {
-        def comments = [comments: ReportFormComments.findAllByTaskId(params.taskId)]
+        def comments = [comments: ReportFormComments.findAllByProcessInstanceId(params.processInstanceId)]
         respond comments
     }
 

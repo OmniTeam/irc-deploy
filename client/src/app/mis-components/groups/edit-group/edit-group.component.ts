@@ -110,29 +110,10 @@ export class EditGroupComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    // remove the old groups
     const params =new HttpParams()
       .set('id', this.route.snapshot.params.id)
       .set('data_collectors',submitData.data_collectors)
-    /*this.groupsService.deleteOldKengauserGroups(params).subscribe(result =>{
-      console.log(result)
-    })*/
 
-    /*//enter the new groups
-    console.log(submitData.data_collectors, "dataColectors")
-
-    //insert the new kenga_group_id and user_id data into the join table. This tracks users who belong to the group
-    for(let i=0; i<submitData.data_collectors.length; i++){
-      const KengaUserGroupData = new FormData()
-      KengaUserGroupData.append('kengaGroup', this.route.snapshot.params.id)
-      KengaUserGroupData.append('user', submitData.data_collectors[i])
-
-      this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
-        console.log(data ,"Kenga User Group details")
-      }, error => {this.alertService.error("failed to create Kenga User Groups")})
-    }*/
-
-    //updates the group name
     this.groupsService.updateGroup(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
       console.warn(result, 'Group Successfully');
       this.alertService.success(`Group: ${result.name} has been successfully updated`)

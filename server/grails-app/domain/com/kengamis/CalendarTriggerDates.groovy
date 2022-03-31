@@ -1,24 +1,22 @@
 package com.kengamis
 
-class PartnerSetup {
+class CalendarTriggerDates {
 
     String id
-    String userId
-    String partnerId
-    String programId
-    String setupValues
+    String partnerSetupId
+    String period
     String startDate
     String endDate
-    String reportingStartDate
-    String startCycle
-    String periodType
+    Boolean started
+    Boolean completed
     Date dateCreated
     Date lastUpdated
-
 
     static mapping = {
         id generator: 'uuid2'
     }
     static constraints = {
+        started defaultValue: false
+        completed defaultValue: false
     }
 }

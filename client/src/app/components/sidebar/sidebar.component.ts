@@ -161,6 +161,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'groups', title: 'Groups', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
       {path: 'roles', title: 'Roles', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
       {path: 'users', title: 'User Management', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+      {path: 'acl-group-mapping-parent', title: 'ACL Group Permissions With Parent', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
       {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}
     ]
   },

@@ -3,7 +3,7 @@
     <div class=" header-body">
       <div class=" row align-items-center py-4">
         <div class=" col-lg-6 col-7">
-          <h6 class=" h2 text-white d-inline-block mb-0">ACL Group Mapping</h6>
+          <h6 class=" h2 text-white d-inline-block mb-0">ACL Group Mapping With Parent</h6>
           <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
         </div>
         <div class=" col-lg-6 col-5 text-right">
@@ -57,7 +57,7 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
-                      Form
+                      Parent
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -69,13 +69,13 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Form"
-                                     formControlName="form"
+                                     placeholder="Parent"
+                                     formControlName="parent"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.id" *ngFor="let item of forms">
-                              {{item?.name}}
+                            <ng-option [value]="item.id" *ngFor="let item of parents">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -86,7 +86,7 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
-                      Permission
+                      Table
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -98,13 +98,14 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Permissions"
-                                     formControlName="permissions"
+                                     placeholder="Table"
+                                     [(ngModel)]="form"
+                                     [ngModelOptions]="{standalone: true}"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.permission" *ngFor="let item of permissions">
-                              {{item.name}}
+                            <ng-option [value]="item.id" *ngFor="let item of forms">
+                              {{item?.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -128,10 +129,46 @@
                                           placeholder="Group Condition Query"
                                           style="height: 144px;"
                                           type="text"
-                                          formControlName="groupConditionQuery"
+                                          [(ngModel)]="groupConditionQuery"
+                                          [ngModelOptions]="{standalone: true}"
+
                                         ></textarea>
                         </div>
+
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="padding-bottom: 16px;">
+                  <div class="col-md-12">
+                    <button class=" btn btn-default  fa-pull-right" type="button"
+                            (click)="addQuery()">
+                      {{addQueryButtonText}}
+                    </button>
+                  </div>
+
+                </div>
+                <div class="row" style="padding-bottom: 16px;">
+                  <div class="col-md-12">
+                    <div class=" table-responsive" style="width: 100%!important ;">
+                      <table class=" table align-items-center table-flush"
+                             style="width: 100%!important;table-layout:fixed;">
+                        <thead class=" thead-light">
+                        <tr>
+                          <th>Form</th>
+                          <th>Query</th>
+                        </tr>
+                        </thead>
+
+                        <tr *ngFor="let q of queryArray; let i = index;">
+                          <td style="white-space: break-spaces!important;">
+                            <p > {{q?.form}}</p>
+                          </td>
+                          <td style="white-space: break-spaces!important;">
+                            <p> {{q?.groupConditionQuery}}</p>
+                          </td>
+                        </tr>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -143,8 +180,9 @@
                   class=" btn btn-default"
                   type="submit"
                 >
-                  Save
+                  Create ACLs
                 </button>
+
               </div>
             </div>
           </form>
@@ -152,6 +190,4 @@
       </div>
     </div>
   </div>
-
-
 </div>

@@ -10,6 +10,7 @@ export class UsersService {
   baseurl = environment.serverUrl
   urlUsers = `${this.baseurl}/user/`
   urlUserGroup = `${this.baseurl}/KengaUserGroup/`
+  urlUserRole = `${this.baseurl}/UserRole/`
   urlDeleteOldRolesAndGroups = `${this.baseurl}/deleteOldRoleAndGroups/`
 
   constructor(private http: HttpClient) { }
@@ -49,5 +50,10 @@ export class UsersService {
   // this is for creating records in the user group table
   createUserGroup(userGroupData): Observable<any> {
     return this.http.post(this.urlUserGroup, userGroupData);
+  }
+
+  // this is for creating records in the user group table
+  createUserRole(userRoleData): Observable<any> {
+    return this.http.post(this.urlUserRole, userRoleData);
   }
 }
