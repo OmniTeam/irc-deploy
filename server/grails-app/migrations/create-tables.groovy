@@ -1862,4 +1862,10 @@ databaseChangeLog = {
         renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_recommendations")
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1648721492475-8") {
+        addColumn(tableName: "kenga_group") {
+            column(name: "parent_group_id", type: "varchar(255)")
+        }
+    }
+
 }

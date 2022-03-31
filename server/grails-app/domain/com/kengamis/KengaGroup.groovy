@@ -13,11 +13,13 @@ class KengaGroup {
     Date lastUpdated
 
     static hasMany = [kengaUserGroup: KengaUserGroup]
+    static belongsTo = [parentGroup: KengaGroup]
     static mapping = {
         id generator: 'uuid2'
     }
     static constraints = {
         name blank: false,unique: true
+        parentGroup nullable: true, unique: false
     }
 
     Set<User> getUsers() {

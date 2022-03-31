@@ -53,8 +53,7 @@ export class GroupsComponent implements OnInit {
   ngOnInit(): void {
     this.reloadTable()
   }
-
-
+  
   addGroup(){
     this.router.navigate(['group/create']);
   }
@@ -89,7 +88,8 @@ export class GroupsComponent implements OnInit {
     )
   }
   deleteGroup(row){
-    this.groupsService.deleteCurrentGroup(row).subscribe((result) => {
+    const currentId = row.id
+    this.groupsService.deleteCurrentGroup(currentId).subscribe((result) => {
       console.warn(result, 'Group has been deleted');
       this.router.navigate(['/groups']).then(() => {
         window.location.reload();
@@ -135,7 +135,6 @@ export class GroupsComponent implements OnInit {
   reloadTable() {
     this.groupsService.getGroups( ).subscribe((data) => {
       this.groups =data;
-      console.log(data)
       this.page.count = this.groups.length
     });
   }
