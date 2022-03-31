@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {TaskListService} from "../../services/task-list.service";
-import {TaskList} from "../../models/tasklist";
+import {ProgramPartnersService} from "../../services/program-partners.service";
 import {Subject} from "rxjs";
 
 @Component({
@@ -11,17 +11,36 @@ import {Subject} from "rxjs";
 })
 export class TaskListComponent implements OnInit {
 
-  rows: TaskList[] = [];
+  rows: any = [];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor( private router: Router, private taskListService: TaskListService) {
+  constructor(private router: Router, private taskListService: TaskListService, private programPartnersService: ProgramPartnersService) {
   }
 
   ngOnInit(): void {
-    this.taskListService.getTaskList().subscribe(data => {
-      this.rows = data;
-      this.dtTrigger.next();
+    this.taskListService.getTaskList().subscribe(tasks => {
+      let list = []
+
+      if (tasks != null) {
+        tasks.forEach((task) => {
+          this.programPartnersService.getCurrentProgramPartner(task.partnerId).subscribe((results: any) => {
+            if (results !== null && results !== undefined) {
+              list.push({
+                id: task.id,
+                taskName: task.taskName,
+                startDate: task.startDate,
+                endDate: task.endDate,
+                partner: results.name,
+                program: results.program,
+                status: task.status,
+              });
+            }
+          });
+        });
+        this.rows = list;
+        this.dtTrigger.next();
+      }
     }, error => console.log(error));
 
     this.dtOptions = {

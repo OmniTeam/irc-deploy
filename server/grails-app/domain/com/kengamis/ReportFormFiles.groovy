@@ -4,7 +4,7 @@ class ReportFormFiles {
 
     String id
     String groupId
-    String processId
+    String processInstanceId
     String taskId
     String taskDefinitionKey
     String userId

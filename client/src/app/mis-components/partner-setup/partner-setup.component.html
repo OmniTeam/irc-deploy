@@ -223,7 +223,7 @@
                     <tr>
                       <th class='text-center'>Budget Line</th>
                       <th class='text-center'>Approved amount</th>
-                      <th class='text-center'>Disburse</th>
+                      <th class='text-center'>Total Spent</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -238,9 +238,9 @@
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id+'-d'">
-                        <div>{{ row.disburse | number  }}
+                        <div>{{ row.totalSpent | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id+'-d', 'budget_disburse', row.disburse, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id+'-d', 'budget_disburse', row.totalSpent, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>

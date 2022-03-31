@@ -1835,7 +1835,31 @@ databaseChangeLog = {
             column(name: "end_date", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
+
+            column(name: "started", type: "boolean") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "completed", type: "boolean") {
+                constraints(nullable: "false")
+            }
         }
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220345453535635-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202254345755353555-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_comments")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022067468764764745-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_files")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202205635635476456-01") {
+        renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_recommendations")
     }
 
 }

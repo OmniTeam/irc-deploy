@@ -146,4 +146,27 @@ class ProjectMilestoneController {
         respond milestoneData
     }
 
+    def getMilestoneDataForReports() {
+        def milestone = []
+        def projectMilestone = projectMilestoneService.get(params.id)
+        def reportingQuery = projectMilestone.reportingQuery
+
+        try {
+            def query = "${reportingQuery}".toString()
+            def params = [params.startDate, params.endDate]
+
+            def quarter = AppHolder.withMisSql { rows(query, params) }.first()
+
+            def arr = query.split('and')
+            def cumulative = AppHolder.withMisSql { rows(arr[0]) }.first()
+
+            milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
+
+        } catch (Exception e) {
+            log.error("Error fetching data", e)
+        }
+
+        respond milestone
+    }
+
 }
