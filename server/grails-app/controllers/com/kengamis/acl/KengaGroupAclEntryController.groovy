@@ -116,45 +116,53 @@ class KengaGroupAclEntryController {
     }
 
     @Transactional
-    def saveGroupMappings2(){
+    def saveGroupMappingsWithParent(){
         def json=request.JSON
         print(json)
         def groupId = json.group
         def parentId = json.parent
-        def formId = json.form
+//        def formId = json.form
         def permission = json.permissions
-        def grpConditionQuery = json.groupConditionQuery
+//        def grpConditionQuery = json.groupConditionQuery
+        def queryArray = json.queryArray
 
-        def kengaGroup = KengaGroup.get(groupId)
-        def kengaGroupParent = KengaGroup.get(parentId)
-        def form = Form.get(formId)
-        def kengaDataTable = KengaDataTable.findByTableName(form.name)
 
-        //query records
-        def records = AppHolder.withMisSqlNonTx {
-            def query = "select * from ${form.name} ${grpConditionQuery}"
-            log.info(query)
-            rows(query.toString())
-        }
-        log.info("==============size${records.size()}")
+//        loop through the array and assign the acls per iteration
+        queryArray.each{ it ->
+            def formId = it.form
+            def grpConditionQuery = it.groupConditionQuery
 
-        // create entries
-        records.each {record->
-            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
-            new KengaGroupAclEntry(
-                    kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                    kengaGroup: kengaGroup,
-                    mask: permission
-            ).save(flush: true, failOnError: true)
-        }
-        if(parentId){
+            def kengaGroup = KengaGroup.get(groupId)
+            def kengaGroupParent = KengaGroup.get(parentId)
+            def form = Form.get(formId)
+            def kengaDataTable = KengaDataTable.findByTableName(form.name)
+
+            //query records
+            def records = AppHolder.withMisSqlNonTx {
+                def query = "select * from ${form.name} ${grpConditionQuery}"
+                log.info(query)
+                rows(query.toString())
+            }
+            log.info("==============size${records.size()}")
+
+            // create entries
             records.each {record->
                 def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
                 new KengaGroupAclEntry(
                         kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                        kengaGroup: kengaGroupParent,
+                        kengaGroup: kengaGroup,
                         mask: permission
                 ).save(flush: true, failOnError: true)
+            }
+            if(parentId){
+                records.each {record->
+                    def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
+                    new KengaGroupAclEntry(
+                            kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
+                            kengaGroup: kengaGroupParent,
+                            mask: permission
+                    ).save(flush: true, failOnError: true)
+                }
             }
         }
     }

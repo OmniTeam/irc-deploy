@@ -183,7 +183,7 @@ export class AclGroupMappingParentComponent implements OnInit {
       this.form=''
       this.groupConditionQuery=''
     }
-    
+
   }
   get queryArray() {
     return this.formGroup.get('queryArray').value;
@@ -199,20 +199,12 @@ export class AclGroupMappingParentComponent implements OnInit {
     }*/
     const formData = this.formGroup.value;
     console.log(formData)
-    // const formData = new FormData()
-    // formData.append('group', this.formGroup.controls.group.value)
-    // formData.append('parent', this.formGroup.controls.parent.value)
-    // formData.append('permissions', this.formGroup.controls.permissions.value)
-    // formData.append('queryArray', JSON.stringify(this.queryFormArray))
-    // console.log((this.queryFormArray).toString(), "object")
-
-
-    /*this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
+    this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);
       this.router.navigate(['/home']);
     }, error => {
       this.alertService.error("Failed to Create the ACL")
-    });*/
+    });
   }
 }
