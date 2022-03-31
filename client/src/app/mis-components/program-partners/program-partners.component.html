@@ -82,10 +82,12 @@
             <ngx-datatable-column name="City" prop="city"></ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button (click)="editProgramPartner(row);"  class="btn btn-default" style="padding: 1px 6px;">
+                <button (click)="editProgramPartner(row);"  class="btn btn-default" style="padding: 1px 6px;"
+                        *hasRole="['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']">
                   <i class="fa fa-pencil-alt"></i>
                 </button>
-                <button (click)="deleteProgramPartner(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                <button (click)="deleteProgramPartner(row)" class="btn btn-danger" style="padding: 1px 6px;"
+                        *hasRole="['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']">
                   <i class="fa fa-trash"></i>
                 </button>
               </ng-template>
