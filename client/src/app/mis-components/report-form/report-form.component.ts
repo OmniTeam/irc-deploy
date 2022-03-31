@@ -384,14 +384,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         case "quarterExpense":
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
-              if (item.id === rowId) item.quarter_expenses = value
-            });
-          }
-          break;
-        case "variance":
-          if (this.financialReport.some(x => x.id === rowId)) {
-            this.financialReport.forEach(function (item) {
-              if (item.id === rowId) item.variance = value
+              if (item.id === rowId) {
+                item.quarter_expenses = value
+                item.variance = item.expense_to_date - +value
+              }
             });
           }
           break;
