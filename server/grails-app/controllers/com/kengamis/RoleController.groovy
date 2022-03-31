@@ -27,6 +27,13 @@ class RoleController {
         respond roleService.get(id)
     }
 
+    def getUserRoles() {
+        def username = params.username as String
+        def user = User.findByUsername(username)
+        def roles = user.authorities.collect { it.authority }
+        respond roles
+    }
+
     @Transactional
     def save(Role role) {
         if (role == null) {

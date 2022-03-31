@@ -26,7 +26,7 @@ class TaskListController {
         taskListMapList.each{TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId, startDate, partnerId, programId, endDate, groupId, period
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
 
             variables['data'].each {
                 if(it.key=='PartnerSetupId') partnerSetupId = it.value
@@ -38,12 +38,17 @@ class TaskListController {
                 if(it.key=='GroupId') groupId = it.value
             }
 
+            def programPartner = ProgramPartner.findById(partnerId)
+            def program = Program.findById(programId)
+
             if(task.status != "completed") tasks << [id: task.id,
                                                     taskName : task.taskName,
                                                     partnerSetupId: partnerSetupId,
                                                     startDate : startDate,
                                                     partnerId : partnerId,
+                                                    partnerName : programPartner.name,
                                                     programId : programId,
+                                                    programName : program.title,
                                                     endDate : endDate,
                                                     groupId : groupId,
                                                     reportingPeriod : period,
@@ -61,7 +66,7 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId, startDate, partnerId, programId, endDate, groupId, period
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
 
         variables['data'].each {
             if(it.key=='PartnerSetupId') partnerSetupId = it.value
@@ -73,12 +78,17 @@ class TaskListController {
             if(it.key=='GroupId') groupId = it.value
         }
 
+        def programPartner = ProgramPartner.findById(partnerId)
+        def program = Program.findById(programId)
+
         def t = [id: task.id,
                 taskName : task.taskName,
                 partnerSetupId: partnerSetupId,
                 startDate : startDate,
                 partnerId : partnerId,
+                partnerName : programPartner.name,
                 programId : programId,
+                programName : program.title,
                 endDate : endDate,
                 groupId : groupId,
                 reportingPeriod : period,

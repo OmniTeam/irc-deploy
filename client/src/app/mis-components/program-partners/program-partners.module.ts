@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProgramPartnersRoutingModule } from './program-partners-routing.module';
 import {ProgramPartnersComponent} from "./program-partners.component";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {ComponentsModule} from "../../components/components.module";
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
   imports: [
     CommonModule,
     ProgramPartnersRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    ComponentsModule
   ]
 })
 export class ProgramPartnersModule { }

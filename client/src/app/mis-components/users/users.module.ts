@@ -7,11 +7,11 @@ import {UsersComponent} from "./users.component";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
-import {ReplacePipe} from "../../replace-pipe";
+import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 
 
 @NgModule({
-  declarations: [UsersComponent, ReplacePipe],
+  declarations: [UsersComponent],
     imports: [
         CommonModule,
         UsersRoutingModule,
@@ -19,6 +19,7 @@ import {ReplacePipe} from "../../replace-pipe";
         NgxDatatableModule,
         ReactiveFormsModule,
         NgSelectModule,
+        EntityViewTableModule,
     ]
 })
 export class UsersModule {
