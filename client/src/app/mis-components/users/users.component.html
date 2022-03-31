@@ -124,11 +124,18 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Names" prop="names"></ngx-datatable-column>
             <ngx-datatable-column name="Email" prop="email"></ngx-datatable-column>
-            <ngx-datatable-column name="Telephone" prop="telephone"></ngx-datatable-column>
-            <ngx-datatable-column name="Is Active?" prop="is_active"></ngx-datatable-column>
-            <ngx-datatable-column name="Mobile User ID" prop="mobile_user_id"></ngx-datatable-column>
-            <ngx-datatable-column name="Role" prop="role"></ngx-datatable-column>
-            <ngx-datatable-column name="Group" prop="group"></ngx-datatable-column>
+            <ngx-datatable-column name="Role" prop="roles">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+               {{value | replace: '_' : ' '}}
+
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Groups" prop="groups"></ngx-datatable-column>
+            <ngx-datatable-column name="Is Active?" prop="enabled">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.status ? 'Inactive':'Active'}}
+              </ng-template>
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

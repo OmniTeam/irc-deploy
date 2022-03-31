@@ -9,6 +9,7 @@ import {environment} from "../../environments/environment";
 export class AclGroupMappingService {
   baseurl = environment.serverUrl
   urlAcl = `${this.baseurl}/api/v1/aclGroupMapping/`
+  urlAcl2 = `${this.baseurl}/api/v1/aclGroupMapping-v2/`
 
   constructor(private http: HttpClient) { }
 
@@ -21,6 +22,9 @@ export class AclGroupMappingService {
 
   createGroupMapping(formData): Observable<any> {
     return this.http.post(this.urlAcl, formData);
+  }
+  createGroupMapping2(formData): Observable<any> {
+    return this.http.post(this.urlAcl2, formData);
   }
   getCurrentGroupMapping(id){
     return this.http.get(`${this.urlAcl}${id}/`)
