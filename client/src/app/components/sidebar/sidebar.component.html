@@ -78,7 +78,7 @@
                     class="nav-item"
                   >
                     <!--If is a single link-->
-                    <div *hasRole="menuitem.roles">
+                    <div *hasRole="childitems.roles">
                       <a
                         routerLinkActive="active"
                         [routerLink]="[menuitem.path, childitems.path]"
@@ -89,7 +89,7 @@
                       </a>
                     </div>
                     <!--If it have a submenu-->
-                    <div *hasRole="menuitem.roles">
+                    <div *hasRole="childitems.roles">
                       <a
                         data-toggle="collapse"
                         (click)="childitems.isCollapsed = !childitems.isCollapsed"
@@ -114,7 +114,7 @@
                           *ngFor="let childitem of childitems.children"
                           class="nav-item"
                         >
-                          <div *hasRole="menuitem.roles">
+                          <div *hasRole="childitem.roles">
                             <a [routerLink]="[childitems.path, childitem.path]"
                                class="nav-link"
                                routerLinkActive="active">

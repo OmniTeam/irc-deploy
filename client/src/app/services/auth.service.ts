@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable, of} from "rxjs";
 import {catchError, mapTo, tap} from "rxjs/operators";
 import {User} from "../models/user";
+import {Roles} from "../models/roles";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class AuthService {
   private readonly ROLES: any = [];
   private loggedUser: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   login(user: { username: string, password: string }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/api/login`, user)
@@ -87,5 +89,27 @@ export class AuthService {
 
   getUserRoles() {
     return localStorage.getItem(this.ROLES);
+  }
+
+  public getSession(): Promise<boolean> {
+    const session = localStorage.getItem(this.JWT_TOKEN);
+    return new Promise((resolve, reject) => {
+      if (session) {
+        return resolve(true);
+      } else {
+        return reject(false);
+      }
+    });
+  }
+
+  public areUserRolesAllowed(userRoles: string[], allowedUserRoles: Roles[]): boolean {
+    for (const role of userRoles) {
+      for (const allowedRole of allowedUserRoles) {
+        if (role.toLowerCase() === allowedRole.toLowerCase()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

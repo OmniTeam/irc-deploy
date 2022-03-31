@@ -330,7 +330,7 @@ export class EntityTablesComponent implements OnInit {
       if (formInputConfig['mandatory'] === 'Yes') {
         controlsConfig[formInputConfig['controlName']] = [data[formInputConfig['controlName']], Validators.required];
       } else {
-        controlsConfig[formInputConfig['fieldName']] = [data[formInputConfig['controlName']]];
+        controlsConfig[formInputConfig['controlName']] = [data[formInputConfig['controlName']]];
       }
     }
     this.editFormGroup = this.formBuilder.group(controlsConfig);
