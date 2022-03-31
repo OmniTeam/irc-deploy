@@ -66,7 +66,10 @@ class DataExporter {
             _queries.each { String table, String _query ->
                 AppHolder.withMisSql {
                     query(_query) { ResultSet rs ->
-                        exportedData << [data: getExportedData(rs), file: table]
+                        def data = getExportedData(rs)
+                        if (data.size() > 0) {
+                            exportedData << [data: data, file: table]
+                        }
                     }
                 }
             }
