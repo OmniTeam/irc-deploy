@@ -49,25 +49,27 @@ class ProgramPartnerController {
     def show(String id) {
         def programPartner = programPartnerService.get(id)
         def newProgramPartnerObject = [:]
-        def programId = programPartner.program.id
-        def program = Program.findById(programId)
-        newProgramPartnerObject['id'] = programPartner.id
-        newProgramPartnerObject['name'] = programPartner.name
-        newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
-        newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-        newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
-        newProgramPartnerObject['acronym'] = programPartner.acronym
-        newProgramPartnerObject['email'] = programPartner.email
-        newProgramPartnerObject['organisation'] = programPartner.organisation
-        newProgramPartnerObject['website'] = programPartner.website
-        newProgramPartnerObject['legal'] = programPartner.legal
-        newProgramPartnerObject['country'] = programPartner.country
-        newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
-        newProgramPartnerObject['city'] = programPartner.city
-        newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
-        newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
-        newProgramPartnerObject['program'] = program.title
-        newProgramPartnerObject['programId'] = program.id
+        if (programPartner != null) {
+            def programId = programPartner.program.id
+            def program = Program.findById(programId)
+            newProgramPartnerObject['id'] = programPartner.id
+            newProgramPartnerObject['name'] = programPartner.name
+            newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
+            newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
+            newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
+            newProgramPartnerObject['acronym'] = programPartner.acronym
+            newProgramPartnerObject['email'] = programPartner.email
+            newProgramPartnerObject['organisation'] = programPartner.organisation
+            newProgramPartnerObject['website'] = programPartner.website
+            newProgramPartnerObject['legal'] = programPartner.legal
+            newProgramPartnerObject['country'] = programPartner.country
+            newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+            newProgramPartnerObject['city'] = programPartner.city
+            newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
+            newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
+            newProgramPartnerObject['program'] = program.title
+            newProgramPartnerObject['programId'] = program.id
+        }
         respond newProgramPartnerObject
     }
 
@@ -90,7 +92,7 @@ class ProgramPartnerController {
             return
         }
 
-        respond programPartner, [status: CREATED, view:"show"]
+        respond programPartner, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -112,7 +114,7 @@ class ProgramPartnerController {
             return
         }
 
-        respond programPartner, [status: OK, view:"show"]
+        respond programPartner, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -136,7 +138,7 @@ class ProgramPartnerController {
         }
 
         programPartnerService.list(params).each { programPartner ->
-            if(!list.contains(programPartner.id)) {
+            if (!list.contains(programPartner.id)) {
                 def newProgramPartnerObject = [:]
                 def programId = programPartner.program.id
                 def program = Program.findById(programId)

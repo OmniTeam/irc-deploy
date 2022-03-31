@@ -12,6 +12,7 @@ import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {PartnerSetupService} from "../../services/partner-setup.service";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
 
 //import {SampleData} from "../../helpers/sample-data";
 
@@ -88,6 +89,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private fileUploadService: FileUploadService,
               private partnerSetupService: PartnerSetupService,
               private programPartnersService: ProgramPartnersService,
+              private projectMilestoneService: ProjectMilestoneService,
               public authService: AuthService) {
   }
 
@@ -212,14 +214,29 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
+          console.log("indicators", ind)
           ind.forEach((i) => {
-            if (!this.performanceReport.some(x => x.id === i.id)) {
-              this.performanceReport.push({
-                id: i.id,
-                output_indicators: i.name,
-                overall_target: i.overallTarget
-              });
-            }
+            let target = this.getTargetForThisQuarter(i.disaggregation);
+            const params = new HttpParams()
+              .set('id', i.milestoneId)
+              .set("startDate", this.taskRecord.startDate)
+              .set("endDate", this.taskRecord.endDate);
+            this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
+              if(milestone!=undefined) {
+                let percentageAchievement = (milestone.quaterAchievement/milestone.cumulativeAchievement)*100
+                if (!this.performanceReport.some(x => x.id === i.id)) {
+                  this.performanceReport.push({
+                    id: i.id,
+                    output_indicators: i.name,
+                    overall_target: i.overallTarget,
+                    cumulative_achievement: milestone.cumulativeAchievement,
+                    quarter_achievement: milestone.quaterAchievement,
+                    quarter_target: target,
+                    percentage_achievement: percentageAchievement
+                  });
+                }
+              }
+            }, error => console.log(error));
           });
         }
 
@@ -230,6 +247,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.saveReport(reportValues, 'draft');
       }
     }, error => console.log(error));
+  }
+
+  getTargetForThisQuarter(disaggregation : any) {
+    let value = 0
+    disaggregation.forEach((d)=>{
+      if(d.datePeriod==this.taskRecord.reportingPeriod) value = d.target;
+    });
+    return value;
   }
 
   setAttachments(params) {

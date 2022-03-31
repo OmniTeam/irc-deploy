@@ -133,13 +133,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
       if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
       if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
-    } else {
-      //this.calendar = SampleData.calendar;
-      //this.indicatorsChosen = SampleData.indicators;
-      //this.budget = SampleData.budget;
-      //this.disbursementPlan = SampleData.disbursementPlan;
-      //this.currentStatus = SampleData.currentStatus;
+      console.log("this.indicators", this.indicators);
     }
+
     this.dtTrigger.next();
   }
 
@@ -237,7 +233,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
       if (data !== null && data !== undefined) {
         this.milestones = data.milestones;
-        console.log('milestones', this.milestones);
       }
     });
   }
@@ -254,7 +249,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     let id = uuid();
-    this.indicators.push({id: id, name: '', overallTarget: '', disaggregation: []});
+    this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: []});
   }
 
   setDisaggregation(rowId) {
@@ -322,7 +317,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
 
-  saveCellValue = (value: string, key: string, rowId): void => {
+  saveCellValue = (value: string, key: string, rowId, extras): void => {
     if (value !== null && value !== undefined)
       switch (key) {
         case 'budget_approved_amt':
@@ -355,7 +350,10 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         case 'indicators':
           if (this.indicators.some(x => x.id === rowId)) {
             this.indicators.forEach(function (item) {
-              if (item.id === rowId) item.name = value
+              if (item.id === rowId) {
+                item.name = value
+                item.milestoneId = extras;
+              }
             });
           }
           this.setDisaggregation(rowId);
@@ -368,6 +366,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.error = false;
     this.success = false;
 
+    console.log("this.indicators", this.indicators);
     let values: { [key: string]: string } = {
       indicators: JSON.stringify(this.indicators),
       budget: this.budget,

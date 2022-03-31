@@ -31,6 +31,7 @@ class UrlMappings {
         get "/$controller/getReportingCalendarByPartnerSetupId(.$format)?"(action:"getReportingCalendarByPartnerSetupId")
         get "/$controller/getProgramPartnersWithoutWorkPlan(.$format)?"(action:"getProgramPartnersWithoutWorkPlan")
         get "/$controller/updateReportingCalendarStatus(.$format)?"(action:"updateReportingCalendarStatus")
+        get "/$controller/getMilestoneDataForReports(.$format)?"(action:"getMilestoneDataForReports")
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
         post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
         get "/$controller/runNow(.$format)?"(action:"runNow")
