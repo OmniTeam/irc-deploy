@@ -27,6 +27,8 @@ export class EditProjectMilestonesComponent implements OnInit {
   entries: number = 5;
   selected: any[] = [];
   activeRow: any;
+  selectedProgram = "";
+  selectedProgramCategory = "";
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
@@ -37,6 +39,9 @@ export class EditProjectMilestonesComponent implements OnInit {
   ngOnInit(): void {
     this.milestoneId = this.route.snapshot.params.id
     this.projectMilestoneService.getCurrentMilestone(this.milestoneId).subscribe((results: any) => {
+      this.selectedProgram = results?.programId;
+      this.getCategories(this.selectedProgram);
+      this.selectedProgramCategory = results?.categoryId;
       this.formGroup = this.formBuilder.group({
         program: [results?.programId, [Validators.required]],
         category: [results?.category, [Validators.required]],
@@ -52,6 +57,8 @@ export class EditProjectMilestonesComponent implements OnInit {
   }
 
   getCategories(value) {
+    this.selectedProgramCategory = null;
+    this.selectedProgram = value;
     const params = new HttpParams()
       .set('id', value);
     this.projectMilestoneService.getProgramCategories(params).subscribe(data => {

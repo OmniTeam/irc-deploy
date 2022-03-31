@@ -223,6 +223,7 @@
                     <tr>
                       <th class='text-center'>Budget Line</th>
                       <th class='text-center'>Approved amount</th>
+                      <th class='text-center'>Disburse</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -232,7 +233,14 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.approvedAmount | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id, 'budget', row.approvedAmount, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id, 'budget_approved_amt', row.approvedAmount, 'number')"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="row.id+'-d'">
+                        <div>{{ row.disburse | number  }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row.id, row.id+'-d', 'budget_disburse', row.disburse, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -242,6 +250,7 @@
                       <tr>
                         <td class="text-center">Total</td>
                         <td class="text-center">{{ totalApprovedAmount | number  }}</td>
+                        <td class="text-center">{{ totalBudgetDisburse | number  }}</td>
                       </tr>
                     </tfoot>
                   </table>
@@ -305,7 +314,7 @@
                       <div class="col">Start Reporting Cycle?</div>
                       <div class="col">
                         <label class="switch">
-                          <input type="checkbox" class="form-control" [(ngModel)]="currentStatus.startReportingCycle"/>
+                          <input type="checkbox" class="form-control" [(ngModel)]="startReportingCycle"/>
                           <span class="slider round"></span>
                         </label>
                         <br></div>

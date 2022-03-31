@@ -1,91 +1,89 @@
 package com.kengamis
 
-import com.kengamis.query.EntityQueryHelper
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class ReportFormController {
+class CalendarTriggerDatesController {
 
-    ReportFormService reportFormService
+    CalendarTriggerDatesService calendarTriggerDatesService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reportFormService.list(params), model:[reportFormCount: reportFormService.count()]
+        respond calendarTriggerDatesService.list(params), model:[calenderTriggerDatesCount: calendarTriggerDatesService.count()]
     }
 
     def show(Long id) {
-        respond reportFormService.get(id)
+        respond calendarTriggerDatesService.get(id)
     }
 
     @Transactional
-    def save(ReportForm reportForm) {
-        if (reportForm == null) {
+    def save(CalendarTriggerDates calenderTriggerDates) {
+        if (calenderTriggerDates == null) {
             render status: NOT_FOUND
             return
         }
-        if (reportForm.hasErrors()) {
+        if (calenderTriggerDates.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond reportForm.errors
+            respond calenderTriggerDates.errors
             return
         }
 
         try {
-            reportFormService.save(reportForm)
+            calendarTriggerDatesService.save(calenderTriggerDates)
         } catch (ValidationException e) {
-            respond reportForm.errors
+            respond calenderTriggerDates.errors
             return
         }
 
-        respond reportForm, [status: CREATED, view:"show"]
+        respond calenderTriggerDates, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(ReportForm reportForm) {
-        if (reportForm == null) {
+    def update(CalendarTriggerDates calenderTriggerDates) {
+        if (calenderTriggerDates == null) {
             render status: NOT_FOUND
             return
         }
-        if (reportForm.hasErrors()) {
+        if (calenderTriggerDates.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond reportForm.errors
+            respond calenderTriggerDates.errors
             return
         }
 
         try {
-            reportFormService.save(reportForm)
+            calendarTriggerDatesService.save(calenderTriggerDates)
         } catch (ValidationException e) {
-            respond reportForm.errors
+            respond calenderTriggerDates.errors
             return
         }
 
-        respond reportForm, [status: OK, view:"show"]
+        respond calenderTriggerDates, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
-        reportFormService.delete(id)
+        CalendarTriggerDates.findAllByPartnerSetupId(id).each {it.delete()}
 
         render status: NO_CONTENT
     }
 
-    def getReportForTask() {
-        def reportData = [report: ReportForm.findByTaskId(params.taskId)]
-        respond reportData
+    def getReportingCalendarByPartnerSetupId() {
+        def map = [calendar: CalendarTriggerDates.findAllByPartnerSetupId(params.setupId)]
+        respond map
     }
 }
