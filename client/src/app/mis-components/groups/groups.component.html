@@ -2,9 +2,6 @@
   <div class=" container-fluid">
     <div class=" header-body">
       <div class=" row align-items-center py-4">
-        <!--<div class=" col-lg-6 col-7">
-          <h6 class=" h2 text-white d-inline-block mb-0">Groups</h6>
-        </div>-->
         <div class="col-md-12">
           <div class=" card card-stats">
             <div class=" card-body">
@@ -98,10 +95,6 @@
                 <a>{{row.dateCreated | date: 'dd/M/yyyy'}}</a>
               </ng-template>
             </ngx-datatable-column>
-            <!--<ngx-datatable-column name="Parent" prop="parent"></ngx-datatable-column>
-            <ngx-datatable-column name="Permissions" prop="permissions"></ngx-datatable-column>
-            <ngx-datatable-column name="Data Collectors" prop="data_collectors"></ngx-datatable-column>
-            <ngx-datatable-column name="MIS Users" prop="mis_users"></ngx-datatable-column>-->
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <button

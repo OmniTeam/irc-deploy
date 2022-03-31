@@ -118,12 +118,9 @@ class KengaGroupAclEntryController {
     @Transactional
     def saveGroupMappingsWithParent(){
         def json=request.JSON
-        print(json)
         def groupId = json.group
         def parentId = json.parent
-//        def formId = json.form
         def permission = json.permissions
-//        def grpConditionQuery = json.groupConditionQuery
         def queryArray = json.queryArray
 
 
