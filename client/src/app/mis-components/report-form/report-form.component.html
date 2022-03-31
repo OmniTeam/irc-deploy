@@ -149,7 +149,7 @@
                       <th class='text-center'>Quarter Target</th>
                       <th class='text-center'>Quarter achievement</th>
                       <th class='text-center'>% achievement</th>
-                      <th class='text-center'>Comment</th>
+                      <th class='text-center'>Comment <span class="required-indicator">*</span></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -183,9 +183,9 @@
                       <th class='text-center'>Approved Budget</th>
                       <th class='text-center'>Total Advanced</th>
                       <th class='text-center'>Expense to-date</th>
-                      <th class='text-center'>Quarter Expenses</th>
+                      <th class='text-center'>Quarter Expenses <span class="required-indicator">*</span></th>
                       <th class='text-center'>Variance</th>
-                      <th class='text-center'>Reason for Variance</th>
+                      <th class='text-center'>Reason for Variance <span class="required-indicator">*</span></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -218,7 +218,7 @@
                 <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label>
+                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
@@ -231,7 +231,7 @@
                     </div>
                     <div class="form-group row">
                       <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
-                        report:</label></div>
+                        report: <span class="required-indicator">*</span></label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
                       <div class="col-sm-3" *ngIf="shortLink2">
@@ -242,7 +242,7 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label>
+                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report: <span class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)" /></div>

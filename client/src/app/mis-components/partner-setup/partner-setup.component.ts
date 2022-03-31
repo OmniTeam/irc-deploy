@@ -388,7 +388,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     if (this.setup) {
       this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
-        //this.saveReportingCalendar(this.setup.id);
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -401,7 +400,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     } else {
       this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
-        //if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
+        if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
