@@ -5,135 +5,145 @@
   (mouseover)="onMouseEnterSidenav()"
   (mouseout)="onMouseLeaveSidenav()"
 >
-<perfect-scrollbar  *ngIf="authService.isLoggedIn()">
-  <div class="scrollbar-inner">
-    <div class="sidenav-header d-flex align-items-center">
-      <a class="navbar-brand" [routerLink]="['/home']">
-        <img
-          src="../../../assets/img/brand/crvpf_logo.png"
-          class="navbar-brand-img"
-          alt="..."
-        />
-      </a>
-      <div class="ml-auto">
-        <!-- Sidenav toggler -->
-        <div
-          class="sidenav-toggler d-none d-xl-block"
-          data-action="sidenav-unpin"
-          data-target="#sidenav-main"
-          (click)="minimizeSidebar()"
-        >
-          <div class="sidenav-toggler-inner">
-            <i class="sidenav-toggler-line"></i>
-            <i class="sidenav-toggler-line"></i>
-            <i class="sidenav-toggler-line"></i>
+  <perfect-scrollbar *ngIf="authService.isLoggedIn()">
+    <div class="scrollbar-inner">
+      <div class="sidenav-header d-flex align-items-center">
+        <a class="navbar-brand" [routerLink]="['/home']">
+          <img
+            src="../../../assets/img/brand/crvpf_logo.png"
+            class="navbar-brand-img"
+            alt="..."
+          />
+        </a>
+        <div class="ml-auto">
+          <!-- Sidenav toggler -->
+          <div
+            class="sidenav-toggler d-none d-xl-block"
+            data-action="sidenav-unpin"
+            data-target="#sidenav-main"
+            (click)="minimizeSidebar()"
+          >
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="navbar-inner">
-      <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-        <!-- Collapse header -->
-        <ul class="navbar-nav">
-          <li *ngFor="let menuitem of menuItems" class="nav-item">
-            <!--If is a single link-->
-            <a
-              routerLinkActive="active"
-              [routerLink]="[menuitem.path]"
-              *ngIf="menuitem.type === 'link'"
-              class="nav-link"
-            >
-              <i class="ni {{ menuitem.icontype }}"></i>
-              <span class="nav-link-text">{{ menuitem.title }}</span>
-            </a>
-            <!--If it have a submenu-->
-            <a
-              data-toggle="collapse"
-              routerLinkActive="active"
-              *ngIf="menuitem.type === 'sub'"
-              (click)="menuitem.isCollapsed = !menuitem.isCollapsed"
-              [attr.aria-expanded]="!menuitem.isCollapsed"
-              [attr.aria-controls]="menuitem.collapse"
-              class="nav-link"
-            >
-              <i class="ni {{ menuitem.icontype }}"></i>
-              <span class="nav-link-text">{{ menuitem.title }}</span>
-            </a>
-
-            <!--Display the submenu items-->
-            <div
-              id="{{ menuitem.collapse }}"
-              class="collapse"
-              *ngIf="menuitem.type === 'sub'"
-              [collapse]="menuitem.isCollapsed"
-              [isAnimated]="true"
-            >
-              <ul class="nav nav-sm flex-column">
-                <li
-                  *ngFor="let childitems of menuitem.children"
-                  class="nav-item"
+      <div class="navbar-inner">
+        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+          <!-- Collapse header -->
+          <ul class="navbar-nav">
+            <li *ngFor="let menuitem of menuItems" class="nav-item">
+              <!--If is a single link-->
+              <div *hasRole="menuitem.roles">
+                <a
+                  routerLinkActive="active"
+                  [routerLink]="[menuitem.path]"
+                  *ngIf="menuitem.type === 'link'"
+                  class="nav-link"
                 >
-                  <!--If is a single link-->
-                  <a
-                    routerLinkActive="active"
-                    [routerLink]="[menuitem.path, childitems.path]"
-                    class="nav-link"
-                    *ngIf="childitems.type === 'link'"
-                  >
-                    {{ childitems.title }}
-                  </a>
+                  <i class="ni {{ menuitem.icontype }}"></i>
+                  <span class="nav-link-text">{{ menuitem.title }}</span>
+                </a>
+              </div>
+              <!--If it have a submenu-->
+              <div *hasRole="menuitem.roles">
+                <a
+                  data-toggle="collapse"
+                  routerLinkActive="active"
+                  *ngIf="menuitem.type === 'sub'"
+                  (click)="menuitem.isCollapsed = !menuitem.isCollapsed"
+                  [attr.aria-expanded]="!menuitem.isCollapsed"
+                  [attr.aria-controls]="menuitem.collapse"
+                  class="nav-link"
+                >
+                  <i class="ni {{ menuitem.icontype }}"></i>
+                  <span class="nav-link-text">{{ menuitem.title }}</span>
+                </a>
+              </div>
 
-                  <!-- if it is a direct link -->
-                  <a
-                    routerLinkActive="active"
-                    href="http://issdugdata.net:3000/"
-                    target="_blank"
-                    class="nav-link"
-                    *ngIf="childitems.type === 'analytics'"
+              <!--Display the submenu items-->
+              <div
+                id="{{ menuitem.collapse }}"
+                class="collapse"
+                *ngIf="menuitem.type === 'sub'"
+                [collapse]="menuitem.isCollapsed"
+                [isAnimated]="true"
+              >
+                <ul class="nav nav-sm flex-column">
+                  <li
+                    *ngFor="let childitems of menuitem.children"
+                    class="nav-item"
                   >
-                    {{ childitems.title }}
-                  </a>
-
-                  <!--If it have a submenu-->
-                  <a
-                    data-toggle="collapse"
-                    (click)="childitems.isCollapsed = !childitems.isCollapsed"
-                    [attr.aria-expanded]="!childitems.isCollapsed"
-                    [attr.aria-controls]="childitems.collapse"
-                    *ngIf="childitems.type === 'sub'"
-                    class="nav-link"
-                  >
-                    {{ childitems.title }}
-                  </a>
-                  <!--Display the submenu items-->
-                  <div
-                    id="{{ childitems.collapse }}"
-                    class="collapse"
-                    *ngIf="childitems.type === 'sub'"
-                    [collapse]="childitems.isCollapsed"
-                    [isAnimated]="true"
-                  >
-                    <ul class="nav">
-                      <li
-                        *ngFor="let childitem of childitems.children"
-                        class="nav-item"
+                    <!--If is a single link-->
+                    <div *hasRole="childitems.roles">
+                      <a
+                        routerLinkActive="active"
+                        [routerLink]="[menuitem.path, childitems.path]"
+                        class="nav-link"
+                        *ngIf="childitems.type === 'link'"
                       >
-                        <a [routerLink]="[childitems.path, childitem.path]"
-                           class="nav-link"
-                           routerLinkActive="active">
-                          {{ childitem.title }}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
+                        {{ childitems.title }}
+                      </a>
+                    </div>
+
+                    <div *hasRole="childitems.roles">
+                      <a
+                        routerLinkActive="active"
+                        href="http://issdugdata.net:3000/"
+                        target="_blank"
+                        class="nav-link"
+                        *ngIf="childitems.type === 'analytics'"
+                      >
+                        {{ childitems.title }}
+                      </a>
+                    </div>
+                    <!--If it have a submenu-->
+                    <div *hasRole="childitems.roles">
+                      <a
+                        data-toggle="collapse"
+                        (click)="childitems.isCollapsed = !childitems.isCollapsed"
+                        [attr.aria-expanded]="!childitems.isCollapsed"
+                        [attr.aria-controls]="childitems.collapse"
+                        *ngIf="childitems.type === 'sub'"
+                        class="nav-link"
+                      >
+                        {{ childitems.title }}
+                      </a>
+                    </div>
+                    <!--Display the submenu items-->
+                    <div
+                      id="{{ childitems.collapse }}"
+                      class="collapse"
+                      *ngIf="childitems.type === 'sub'"
+                      [collapse]="childitems.isCollapsed"
+                      [isAnimated]="true"
+                    >
+                      <ul class="nav">
+                        <li
+                          *ngFor="let childitem of childitems.children"
+                          class="nav-item"
+                        >
+                          <div *hasRole="childitem.roles">
+                            <a [routerLink]="[childitems.path, childitem.path]"
+                               class="nav-link"
+                               routerLinkActive="active">
+                              {{ childitem.title }}
+                            </a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</perfect-scrollbar>
+  </perfect-scrollbar>
 
 </nav>

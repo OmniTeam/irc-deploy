@@ -99,30 +99,6 @@ export class AclGroupMappingParentComponent implements OnInit {
       'sign': '=',
       'description':'EQUAL'
     },
-    /*{
-      'sign': '>',
-      'description':'GREATER THAN'
-    },
-    {
-      'sign': '<',
-      'description':'LESS THAN'
-    },
-    {
-      'sign': '>=',
-      'description':'GREATER THAN OR EQUAL'
-    },
-    {
-      'sign': '<=',
-      'description':'LESS THAN OR EQUAL'
-    },
-    {
-      'sign': '<>',
-      'description':'NOT EQUAL'
-    },
-    {
-      'sign': 'BETWEEN',
-      'description':'BETWEEN'
-    },*/
     {
       'sign': 'LIKE',
       'description':'SEARCH A PATTERN'
@@ -146,13 +122,11 @@ export class AclGroupMappingParentComponent implements OnInit {
   ngOnInit(): void {
     this.formService.getForms().subscribe(results => {
       this.forms = results
-      console.log(results)
     }, error => {
       this.alertService.error("Failed to get Forms")
     })
     this.groupsService.getGroups().subscribe(results => {
       this.parents = results
-      console.log(results)
     }, error => {
       this.alertService.error("Failed to get Groups")
     })
@@ -185,18 +159,13 @@ export class AclGroupMappingParentComponent implements OnInit {
     }
 
   }
+
   get queryArray() {
     return this.formGroup.get('queryArray').value;
   }
 
 
   createACLGROUPMAPPING() {
-    /*this.clicked = true;
-    this.submitted = true;
-    if (this.formGroup.invalid) {
-      console.log('Invalid');
-      return;
-    }*/
     const formData = this.formGroup.value;
     console.log(formData)
     this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {

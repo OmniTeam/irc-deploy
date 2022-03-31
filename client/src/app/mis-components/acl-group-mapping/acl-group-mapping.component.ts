@@ -23,7 +23,6 @@ import {AclGroupMappingService} from "../../services/acl-group-mapping.service";
   styleUrls: ['./acl-group-mapping.component.scss']
 })
 export class AclGroupMappingComponent implements OnInit {
-  ACD: boolean;
 
   constructor(
     private groupsService: GroupsService,
@@ -112,13 +111,11 @@ export class AclGroupMappingComponent implements OnInit {
   ngOnInit(): void {
     this.formsService.getForms().subscribe(results => {
       this.forms = results
-      console.log(results)
     }, error => {
       this.alertService.error("Failed to get Forms")
     })
     this.groupsService.getGroups().subscribe(results => {
       this.parents = results
-      console.log(results)
     }, error => {
       this.alertService.error("Failed to get Groups")
     })
@@ -143,26 +140,9 @@ export class AclGroupMappingComponent implements OnInit {
     this.AalGroupMappingService.createGroupMapping(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);
-
-      /*//insert kenga_group_id and user_id into table. This tracks users who belong to the group
-      for(let i=0; i<formData.data_collectors.length; i++){
-        const KengaUserGroupData = new FormData()
-        KengaUserGroupData.append('kengaGroup', result.id)
-        KengaUserGroupData.append('user', formData.data_collectors[i])
-
-        this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
-          console.log(data ,"Kenga User Group details")
-        }, error => {this.alertService.error("failed to create Kenga User Groups")})
-      }*/
-
       this.router.navigate(['/home']);
     }, error => {
       this.alertService.error("Failed to Create the Group")
     });
   }
-
-  /*goBack() {
-    this.router.navigate(['/groups'])
-  }*/
-
 }

@@ -15,6 +15,7 @@ import { RouterModule } from "@angular/router";
 import { CollapseModule } from "ngx-bootstrap/collapse";
 import { DxVectorMapModule, DxPieChartModule } from 'devextreme-angular';
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import {HasRoleDirective} from "../directives/has-role.directive";
 
 @NgModule({
   imports: [
@@ -29,12 +30,14 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
   declarations: [
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    HasRoleDirective
   ],
   exports: [
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    HasRoleDirective
   ],
   providers: [
     {

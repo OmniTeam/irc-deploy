@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProgramRoutingModule } from './program-routing.module';
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ProgramComponent} from "./program.component";
+import {ComponentsModule} from "../../components/components.module";
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import {ProgramComponent} from "./program.component";
   imports: [
     CommonModule,
     ProgramRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    ComponentsModule
   ]
 })
 export class ProgramModule { }

@@ -29,7 +29,6 @@
                   <div class="col-md-3">
                     <label>
                       Group
-<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -59,7 +58,6 @@
                   <div class="col-md-3">
                     <label>
                       Parent
-<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -89,7 +87,6 @@
                   <div class="col-md-3">
                     <label>
                       Table
-<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -116,42 +113,11 @@
                     </div>
                   </div>
                 </div>
-                <!--<div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Permission
-&lt;!&ndash;                      <span class="required-indicator">*</span>&ndash;&gt;
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Permissions"
-                                     formControlName="permissions"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.permission" *ngFor="let item of permissions">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>-->
                 <div class="row">
                   <div class="col-md-3">
                     <label>
                       Group Condition Query<br>
                       (Must be a valid mysql WHERE condition)
-<!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -182,96 +148,6 @@
                   </div>
 
                 </div>
-                <!--<div class="row">
-                  <div class="col-md-3">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Table"
-                                     formControlName="form"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.id" *ngFor="let item of forms">
-                              {{item?.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Context Variable"
-                                     formControlName="contextVariable"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of dataContext">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Operator"
-                                     formControlName="operator"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.sign" *ngFor="let item of operation">
-                              {{item.sign}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="true"
-                                     placeholder="Variable"
-                                     formControlName="variable"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of dataVariable">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>-->
                 <div class="row" style="padding-bottom: 16px;">
                   <div class="col-md-12">
                     <div class=" table-responsive" style="width: 100%!important ;">
@@ -298,11 +174,8 @@
                 </div>
               </div>
             </div>
-
             <div class="row">
               <div class="col-md-12 offset-6" style="padding-bottom: 15px; padding-left: 0px">
-                <!--<a class=" btn btn-danger"  type="button" (click)="goBack()" style="color: #ffffff">
-                  Cancel </a>-->
                 <button
                   class=" btn btn-default"
                   type="submit"
@@ -317,6 +190,4 @@
       </div>
     </div>
   </div>
-
-
 </div>

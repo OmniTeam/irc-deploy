@@ -54,6 +54,7 @@ class UrlMappings {
         get "/$controller/saveUserEntityViewFilter(.$format)?"(action:"saveUserEntityViewFilter")
         get "/$controller/exportEntityData(.$format)?"(action:"exportEntityData")
         get "/$controller/exportZippedFormData(.$format)?"(action:"getExportedZippedFormData")
+        get "/$controller/getUserRoles(.$format)?"(action:"getUserRoles")
 
 
         group "/odxRest/", {
