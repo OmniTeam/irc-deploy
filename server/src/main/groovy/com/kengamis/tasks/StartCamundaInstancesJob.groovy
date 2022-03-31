@@ -1,13 +1,12 @@
 package com.kengamis.tasks
 
-import com.kengamis.TaskList
+import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
+import com.kengamis.PartnerSetup
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
-import com.kengamis.PartnerSetup
 
 import java.text.SimpleDateFormat
 
@@ -20,42 +19,54 @@ class StartCamundaInstancesJob extends Script {
     @Override
     Object run() {
         PartnerSetup.findAllByStartCycle("true").each { setup ->
-            def allTasksForPartnerCompleted = allTasksCompleted(setup.id)
-            def calendar = CalendarTriggerDates.findAllByPartnerSetupId(setup.id)
+            boolean startInstance = true
 
-            calendar.each {
+            def query = "SELECT calendar_trigger_dates.id, " +
+                    "calendar_trigger_dates.start_date, " +
+                    "calendar_trigger_dates.end_date, " +
+                    "calendar_trigger_dates.period " +
+                    "FROM partner_setup " +
+                    "INNER JOIN calendar_trigger_dates ON partner_setup.id = calendar_trigger_dates.partner_setup_id " +
+                    "WHERE partner_setup.id='${setup.id}' " +
+                    "AND calendar_trigger_dates.end_date <= CURDATE() " +
+                    "AND calendar_trigger_dates.started = 1 " +
+                    "AND calendar_trigger_dates.completed = 0;"
 
-                def sdf = new SimpleDateFormat("yyyy-MM-dd")
-                def endDate = sdf.parse(it.endDate)
-                def currentDate = new Date()
+            def startedAndNotCompleted = AppHolder.withMisSql { rows(query.toString()) }
+            if (startedAndNotCompleted.size() != 0) startInstance = false
 
-                if (allTasksForPartnerCompleted && endDate <= currentDate) {
-                    boolean started = startProcessInstance([
-                            PartnerSetupId: setup.id,
-                            PartnerId     : setup.partnerId,
-                            ProgramId     : setup.programId,
-                            StartDate     : it.startDate,
-                            EndDate       : it.endDate,
-                            Period        : it.period,
-                            GroupId       : ""
-                    ], CIIF_MANAGEMENT_KEY)
+            if (startInstance) {
+                def query2 = "SELECT calendar_trigger_dates.id, " +
+                        "calendar_trigger_dates.start_date, " +
+                        "calendar_trigger_dates.end_date, " +
+                        "calendar_trigger_dates.period " +
+                        "FROM partner_setup " +
+                        "INNER JOIN calendar_trigger_dates ON partner_setup.id = calendar_trigger_dates.partner_setup_id " +
+                        "WHERE partner_setup.id='${setup.id}' " +
+                        "AND calendar_trigger_dates.end_date <= CURDATE() " +
+                        "AND calendar_trigger_dates.started = 0 " +
+                        "ORDER BY calendar_trigger_dates.period LIMIT 1;"
+                def result = AppHolder.withMisSql { rows(query2.toString()) }.first()
 
-                    if(started) {
-                        print "================ started the damn instance ================"
-                        it.started = true
-                        it.save()
-                    }
+                boolean started = startProcessInstance([
+                        PartnerSetupId: setup.id,
+                        PartnerId     : setup.partnerId,
+                        ProgramId     : setup.programId,
+                        StartDate     : result['start_date'],
+                        EndDate       : result['end_date'],
+                        Period        : result['period'],
+                        GroupId       : ""
+                ], CIIF_MANAGEMENT_KEY)
+
+                if (started) {
+                    print "================ started the damn instance ================"
+                    def calendar = CalendarTriggerDates.get(result['id'] as String)
+                    calendar.started = true
+                    calendar.save()
                 }
             }
-
         }
         return null
-    }
-
-    static boolean allTasksCompleted(setupId) {
-        def list = TaskList.where {status != 'completed'}.findAllByInputVariablesIlike('%' + setupId + '%')
-        print "list $list"
-        return list.size() == 0
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {
