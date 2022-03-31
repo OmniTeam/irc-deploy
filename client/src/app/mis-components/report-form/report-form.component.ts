@@ -12,6 +12,7 @@ import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {PartnerSetupService} from "../../services/partner-setup.service";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
 
 //import {SampleData} from "../../helpers/sample-data";
 
@@ -88,6 +89,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private fileUploadService: FileUploadService,
               private partnerSetupService: PartnerSetupService,
               private programPartnersService: ProgramPartnersService,
+              private projectMilestoneService: ProjectMilestoneService,
               public authService: AuthService) {
   }
 
@@ -109,7 +111,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
 
           const params = new HttpParams()
-            .set('taskId', this.taskId);
+            .set('processInstanceId', this.taskRecord.processInstanceId);
 
           //set organizational Info
           this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
@@ -205,21 +207,36 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               id: b.id,
               budget_line: b.budgetLine,
               approved_budget: b.approvedAmount,
-              total_advanced: b.disburse
+              expense_to_date: b.totalSpent
             });
           }
         });
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
+          console.log("indicators", ind)
           ind.forEach((i) => {
-            if (!this.performanceReport.some(x => x.id === i.id)) {
-              this.performanceReport.push({
-                id: i.id,
-                output_indicators: i.name,
-                overall_target: i.overallTarget
-              });
-            }
+            let target = this.getTargetForThisQuarter(i.disaggregation);
+            const params = new HttpParams()
+              .set('id', i.milestoneId)
+              .set("startDate", this.taskRecord.startDate)
+              .set("endDate", this.taskRecord.endDate);
+            this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
+              if(milestone!=undefined) {
+                let percentageAchievement = (milestone.quaterAchievement/milestone.cumulativeAchievement)*100
+                if (!this.performanceReport.some(x => x.id === i.id)) {
+                  this.performanceReport.push({
+                    id: i.id,
+                    output_indicators: i.name,
+                    overall_target: i.overallTarget,
+                    cumulative_achievement: milestone.cumulativeAchievement,
+                    quarter_achievement: milestone.quaterAchievement,
+                    quarter_target: target,
+                    percentage_achievement: percentageAchievement
+                  });
+                }
+              }
+            }, error => console.log(error));
           });
         }
 
@@ -230,6 +247,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.saveReport(reportValues, 'draft');
       }
     }, error => console.log(error));
+  }
+
+  getTargetForThisQuarter(disaggregation : any) {
+    let value = 0
+    disaggregation.forEach((d)=>{
+      if(d.datePeriod==this.taskRecord.reportingPeriod) value = d.target;
+    });
+    return value;
   }
 
   setAttachments(params) {
@@ -359,14 +384,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         case "quarterExpense":
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
-              if (item.id === rowId) item.quarter_expenses = value
-            });
-          }
-          break;
-        case "variance":
-          if (this.financialReport.some(x => x.id === rowId)) {
-            this.financialReport.forEach(function (item) {
-              if (item.id === rowId) item.variance = value
+              if (item.id === rowId) {
+                item.quarter_expenses = value
+                item.variance = item.expense_to_date - +value
+              }
             });
           }
           break;
@@ -387,7 +408,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   saveReport(reportValues: { [key: string]: string }, status) {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
-      processId: this.taskRecord.processInstanceId,
+      processInstanceId: this.taskRecord.processInstanceId,
       userId: this.authService.getLoggedInUsername(),
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -448,7 +469,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (attachment != null) {
         let fileRecord: { [key: string]: string } = {
           taskId: this.taskRecord.id,
-          processId: this.taskRecord.processInstanceId,
+          processInstanceId: this.taskRecord.processInstanceId,
           userId: this.authService.getLoggedInUsername(),
           groupId: this.taskRecord.groupId,
           taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -519,7 +540,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.processInstanceId,
+        processInstanceId: this.taskRecord.processInstanceId,
         userId: comment.user,
         groupId: this.taskRecord.groupId,
         taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -539,7 +560,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.recommendations.forEach((recommendation) => {
       let recommendationsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.processInstanceId,
+        processInstanceId: this.taskRecord.processInstanceId,
         userId: recommendation.user,
         groupId: this.taskRecord.groupId,
         taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -588,6 +609,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
+
+    if(status=="completed") {
+      const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+      this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+        console.log('updated calendar status')
+      }, error => console.log('failed update calendar status', error));
+    }
   }
 
   onBackPressed() {

@@ -36,13 +36,16 @@ export class CellEdit {
     else container1.style.display = 'block';
 
     if (status === "save") {
-      let newValue;
+      let newValue, extras;
       if (type == 'select') {
-        newValue = (document.getElementById("input-" + td_id) as HTMLSelectElement).value;
+        let select = (document.getElementById("input-" + td_id) as HTMLSelectElement)
+        newValue = select.value;
+        extras = document.querySelector('option[value="' + newValue +'"]').getAttribute('data-id');
       } else  {
         newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value;
       }
-      save(newValue, key, row_id);
+
+      save(newValue, key, row_id, extras);
       this.condition = false;
     } else if (status === "cancel") {
       (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = oldValue;
@@ -56,12 +59,12 @@ export class CellEdit {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
-      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined, "save"));
+      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, type, "save"));
       saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
-      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined, "cancel"));
+      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, type, "cancel"));
       cancelButton.id = "cancel_button" + td_id;
 
       const icon_check = document.createElement('i');
@@ -126,10 +129,9 @@ export class CellEdit {
   }
 
   getOptionsForSelect(data, oldValue): string {
-    console.log('data', data);
     let htmlString = "";
     data.forEach(function (row) {
-      if(row.name!==oldValue) htmlString += '<option value="' + row.name + '">\n' + row.name + '</option>\n';
+      if(row.name!==oldValue) htmlString += '<option data-id="' + row.id + '" value="' + row.name + '">\n' + row.name + '</option>\n';
     });
     return htmlString;
   }

@@ -40,7 +40,11 @@ class StartCamundaInstancesJob extends Script {
                             GroupId       : ""
                     ], CIIF_MANAGEMENT_KEY)
 
-                    if(started) print "================ started the damn instance ================"
+                    if(started) {
+                        print "================ started the damn instance ================"
+                        it.started = true
+                        it.save()
+                    }
                 }
             }
 

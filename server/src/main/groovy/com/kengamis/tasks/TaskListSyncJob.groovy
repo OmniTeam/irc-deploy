@@ -2,13 +2,11 @@ package com.kengamis.tasks
 
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
-import groovy.sql.Sql
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
 class TaskListSyncJob extends Script {
-    Sql sql = sql
     static def url = StartCamundaInstancesJob.camundaApiUrl
     static def path = '/get-tasks/CRVPF_REPORTING/'
 
