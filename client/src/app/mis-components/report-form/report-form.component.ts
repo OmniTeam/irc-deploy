@@ -216,7 +216,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
-          console.log("indicators", ind)
           ind.forEach((i) => {
             let target = this.getTargetForThisQuarter(i.disaggregation);
             const params = new HttpParams()
@@ -233,6 +232,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                 if (!this.performanceReport.some(x => x.id === i.id)) {
                   this.performanceReport.push({
                     id: i.id,
+                    milestoneId: i.milestoneId,
                     output_indicators: i.name,
                     overall_target: i.overallTarget,
                     cumulative_achievement: cumulative,
@@ -382,8 +382,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       switch (key) {
         case "summaryComment":
           if (this.performanceReport.some(x => x.id === rowId)) {
-            this.performanceReport.forEach(function (comment) {
-              if (comment.id === rowId) comment.comment_on_result = value
+            this.performanceReport.forEach(function (item) {
+              if (item.id === rowId) item.comment_on_result = value
+            });
+          }
+          break;
+        case "quarter_achievement":
+          if (this.performanceReport.some(x => x.id === rowId)) {
+            this.performanceReport.forEach(function (item) {
+              if (item.id === rowId) item.quarter_achievement = value
             });
           }
           break;
@@ -397,7 +404,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                   this.alertService.error(`Quarter expense should be less than Expense to date`);
                   return;
                 }
-                item.variance = item.expense_to_date - +value
+                item.variance = +item.total_advanced - +item.expense_to_date - +value
               }
             });
           }

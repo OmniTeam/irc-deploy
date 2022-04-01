@@ -159,7 +159,14 @@
                       <td class='text-center'>{{ row.overall_target }}</td>
                       <td class='text-center'>{{ row.cumulative_achievement }}</td>
                       <td class='text-center'>{{ row.quarter_target }}</td>
-                      <td class='text-center'>{{ row.quarter_achievement }}</td>
+                      <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement }}</td>
+                      <td class='text-center' *ngIf="row.milestoneId==undefined" id="1-{{row.id}}">
+                        <div>{{ row.quarter_achievement }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement)"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
                       <td class='text-center' id="0-{{row.id}}">
                         <div>{{ row.comment_on_result }}
