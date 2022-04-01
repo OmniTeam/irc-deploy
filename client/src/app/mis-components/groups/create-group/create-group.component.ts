@@ -15,6 +15,7 @@ import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
+import {HttpParams} from "@angular/common/http";
 
 
 @Component({
@@ -76,17 +77,18 @@ export class CreateGroupComponent implements OnInit {
     }
     const formData = this.formGroup.value;
     console.log(formData)
+
     this.groupsService.createGroup(formData).subscribe((result) => {
       console.warn(result, 'Group created Successfully');
       this.alertService.success(`Group has been created`);
 
-      console.log(formData.data_collectors, "Data Collectors")
+      console.log(formData.users, "Data Collectors")
 
       //insert kenga_group_id and user_id into table. This tracks users who belong to the group
-      for(let i=0; i<formData.data_collectors.length; i++){
+      for(let i=0; i<formData.users.length; i++){
         const KengaUserGroupData = new FormData()
         KengaUserGroupData.append('kengaGroup', result.id)
-        KengaUserGroupData.append('user', formData.data_collectors[i])
+        KengaUserGroupData.append('user', formData.users[i])
 
         this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
           console.log(data ,"Kenga User Group details")

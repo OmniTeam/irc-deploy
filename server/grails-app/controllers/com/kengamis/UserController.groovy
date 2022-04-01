@@ -42,6 +42,7 @@ class UserController {
         def users= [
                 id: user.id,
                 username: user.username,
+                password: user.password,
                 email: user.email,
                 names: user.names,
                 groups: kengaGroups,
