@@ -149,22 +149,25 @@ class ProjectMilestoneController {
     def getMilestoneDataForReports() {
         def milestone = []
         def projectMilestone = projectMilestoneService.get(params.id)
-        def reportingQuery = projectMilestone.reportingQuery
+        def reportingQuery
+        if(projectMilestone!=null) reportingQuery = projectMilestone.reportingQuery
 
-        try {
-            def queryC = "${reportingQuery}".toString()
-            def queryQ = queryC+" and activity_date between '${params.startDate}' and '${params.endDate}'"
+        if(reportingQuery!=null) {
+            try {
+                def queryC = "${reportingQuery}".toString()
+                def queryQ = queryC + " and activity_date between '${params.startDate}' and '${params.endDate}'"
 
-            println queryQ
+                println queryQ
 
-            def quarter = AppHolder.withMisSql { rows(queryQ) }.first()
+                def quarter = AppHolder.withMisSql { rows(queryQ) }.first()
 
-            def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
 
-            milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
+                milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
 
-        } catch (Exception e) {
-            log.error("Error fetching data", e)
+            } catch (Exception e) {
+                log.error("Error fetching data", e)
+            }
         }
 
         respond milestone

@@ -326,7 +326,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           this.updateBudgetAmount(rowId, value);
           break;
         case 'total_spent':
-          this.updateBudgetDisburse(rowId, value);
+          this.updateBudgetDisburse(rowId, value, true);
           break;
         case 'disbursementPlan':
           this.updateDisbursementPlanValues(rowId, value);
@@ -483,17 +483,19 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.totalApprovedAmount = total.toString();
   }
 
-  private updateBudgetDisburse(id, newValue) {
+  private updateBudgetDisburse(id, newValue, editing?:boolean) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach((item) => {
         if (item.id === id) {
-          if (+newValue <= +item.approvedAmount) {
-            item.totalSpent = newValue;
-          } else {
-            this.alertService.error(`Amount spent should be less than Amount Approved`);
-            return;
-          }
+          if(editing) {
+            if (+newValue <= +item.approvedAmount) {
+              item.totalSpent = newValue;
+            } else {
+              this.alertService.error(`Amount spent should be less than Amount Approved`);
+              return;
+            }
+          } else item.totalSpent = newValue;
         }
         total += +item.totalSpent;
       });

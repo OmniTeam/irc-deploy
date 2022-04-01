@@ -117,7 +117,7 @@ export class CellEdit {
       container.appendChild(saveButton);
       container.appendChild(cancelButton);
 
-      td.style.display = 'flex';
+      /*td.style.display = 'flex';*/
       td.style.justifyContent = 'center';
       td.appendChild(container);
     } else {

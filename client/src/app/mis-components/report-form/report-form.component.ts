@@ -225,19 +225,20 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               .set("endDate", this.taskRecord.endDate);
             this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
               if(milestone!=undefined) {
-                let percentageAchievement;
-                if(milestone.quaterAchievement!=undefined && milestone.cumulativeAchievement!= undefined) {
-                  percentageAchievement = (milestone.quaterAchievement/milestone.cumulativeAchievement)*100
-                } else percentageAchievement = ''
+
+                let cumulative = milestone.cumulativeAchievement ?? 0
+                let quarter = milestone.quaterAchievement ?? 0
+                let percentageAchievement = (cumulative/quarter)*100
+
                 if (!this.performanceReport.some(x => x.id === i.id)) {
                   this.performanceReport.push({
                     id: i.id,
                     output_indicators: i.name,
                     overall_target: i.overallTarget,
-                    cumulative_achievement: milestone.cumulativeAchievement,
-                    quarter_achievement: milestone.quaterAchievement,
+                    cumulative_achievement: cumulative,
+                    quarter_achievement: quarter,
                     quarter_target: target,
-                    percentage_achievement: percentageAchievement
+                    percentage_achievement: percentageAchievement>0 ? percentageAchievement : 0
                   });
                 }
               }
@@ -398,6 +399,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                 }
                 item.variance = item.expense_to_date - +value
               }
+            });
+          }
+          break;
+        case "totalAdvanced":
+          if (this.financialReport.some(x => x.id === rowId)) {
+            this.financialReport.forEach((item) => {
+              if (item.id === rowId) item.total_advanced = value
             });
           }
           break;
