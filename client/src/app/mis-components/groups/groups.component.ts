@@ -53,7 +53,7 @@ export class GroupsComponent implements OnInit {
   ngOnInit(): void {
     this.reloadTable()
   }
-  
+
   addGroup(){
     this.router.navigate(['group/create']);
   }
