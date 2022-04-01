@@ -227,7 +227,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
                 let cumulative = milestone.cumulativeAchievement ?? 0
                 let quarter = milestone.quaterAchievement ?? 0
-                let percentageAchievement = (cumulative/quarter)*100
+                let percentageAchievement : number;
+                let p = (cumulative/quarter)*100
+                if(p>0 && isFinite(p)) percentageAchievement = p; else percentageAchievement=0;
 
                 if (!this.performanceReport.some(x => x.id === i.id)) {
                   this.performanceReport.push({
@@ -238,7 +240,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                     cumulative_achievement: cumulative,
                     quarter_achievement: quarter,
                     quarter_target: target,
-                    percentage_achievement: percentageAchievement>0 ? percentageAchievement : 0
+                    percentage_achievement: percentageAchievement
                   });
                 }
               }
@@ -412,7 +414,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         case "totalAdvanced":
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
-              if (item.id === rowId) item.total_advanced = value
+              if (item.id === rowId) {
+                item.total_advanced = value
+                item.variance = +item.total_advanced - +item.expense_to_date - +value
+              }
             });
           }
           break;
@@ -424,6 +429,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           }
           break;
       }
+      let reportValues: { [key: string]: string } = {
+        financialReport: JSON.stringify(this.financialReport),
+        performanceReport: JSON.stringify(this.performanceReport),
+      }
+      this.saveReport(reportValues, 'draft');
   }
 
   cellEditor(row, td_id, key: string, oldValue, type?: string) {

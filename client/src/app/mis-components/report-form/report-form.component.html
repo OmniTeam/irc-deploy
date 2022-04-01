@@ -156,10 +156,10 @@
                     <tr *ngFor="let row of performance">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.output_indicators }}</td>
-                      <td class='text-center'>{{ row.overall_target }}</td>
-                      <td class='text-center'>{{ row.cumulative_achievement }}</td>
-                      <td class='text-center'>{{ row.quarter_target }}</td>
-                      <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement }}</td>
+                      <td class='text-center'>{{ row.overall_target | number }}</td>
+                      <td class='text-center'>{{ row.cumulative_achievement | number }}</td>
+                      <td class='text-center'>{{ row.quarter_target | number }}</td>
+                      <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
                       <td class='text-center' *ngIf="row.milestoneId==undefined" id="1-{{row.id}}">
                         <div>{{ row.quarter_achievement }}
                           <button class="btn btn-link"
@@ -199,8 +199,8 @@
                     <tr *ngFor="let row of financial">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.budget_line }}</td>
-                      <td class='text-center'>{{ row.approved_budget }}</td>
-                      <td class='text-center'>{{ row.expense_to_date }}</td>
+                      <td class='text-center'>{{ row.approved_budget | number }}</td>
+                      <td class='text-center'>{{ row.expense_to_date | number }}</td>
                       <td class='text-center'  id="td1-{{row.id}}">
                         <div>{{ row.total_advanced | number }}
                           <button class="btn btn-link"
@@ -235,7 +235,7 @@
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
-                      <div class="col-sm-3" *ngIf="shortLink1">
+                      <div class="col-sm-3">
                         <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -247,7 +247,7 @@
                         report: <span class="required-indicator">*</span></label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
-                      <div class="col-sm-3" *ngIf="shortLink2">
+                      <div class="col-sm-3">
                         <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -259,7 +259,7 @@
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)" /></div>
-                      <div class="col-sm-3" *ngIf="shortLink3">
+                      <div class="col-sm-3">
                         <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -280,7 +280,7 @@
                       <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
                       <div class="col-sm-4">{{attachment1}}</div>
                       <div class="col-sm-4">
-                        <button class="btn btn-link" *ngIf="shortLink1"><a href="{{shortLink1}}" style="font-size:15px;"
+                        <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -291,7 +291,7 @@
                       <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>
                       <div class="col-sm-4">{{attachment2}}</div>
                       <div class="col-sm-4">
-                        <button class="btn btn-link" *ngIf="shortLink2"><a href="{{shortLink2}}" style="font-size:15px;"
+                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -302,7 +302,7 @@
                       <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
                       <div class="col-sm-4">{{attachment3}}</div>
                       <div class="col-sm-4">
-                        <button class="btn btn-link" *ngIf="shortLink3"><a href="{{shortLink3}}" style="font-size:15px;"
+                        <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -319,7 +319,7 @@
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link" *ngIf="shortLink1"><a href="{{shortLink1}}"
+                          <button class="btn btn-link"><a href="{{shortLink1}}"
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
@@ -330,7 +330,7 @@
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link" *ngIf="shortLink2"><a href="{{shortLink2}}"
+                          <button class="btn btn-link"><a href="{{shortLink2}}"
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
@@ -341,7 +341,7 @@
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link" *ngIf="shortLink3"><a href="{{shortLink3}}"
+                          <button class="btn btn-link"><a href="{{shortLink3}}"
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
