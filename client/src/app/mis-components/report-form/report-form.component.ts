@@ -223,7 +223,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               .set("endDate", this.taskRecord.endDate);
             this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
               if(milestone!=undefined) {
-                let percentageAchievement = (milestone.quaterAchievement/milestone.cumulativeAchievement)*100
+                let percentageAchievement;
+                if(milestone.quaterAchievement!=undefined && milestone.cumulativeAchievement!= undefined) {
+                  percentageAchievement = (milestone.quaterAchievement/milestone.cumulativeAchievement)*100
+                } else percentageAchievement = ''
                 if (!this.performanceReport.some(x => x.id === i.id)) {
                   this.performanceReport.push({
                     id: i.id,
@@ -605,17 +608,16 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }
     if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
       this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioRecommendFund + '"}';
+      if(status=="completed") {
+        const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+        this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+          console.log('updated calendar status')
+        }, error => console.log('failed update calendar status', error));
+      }
     }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
-
-    if(status=="completed") {
-      const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-      this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
-        console.log('updated calendar status')
-      }, error => console.log('failed update calendar status', error));
-    }
   }
 
   onBackPressed() {

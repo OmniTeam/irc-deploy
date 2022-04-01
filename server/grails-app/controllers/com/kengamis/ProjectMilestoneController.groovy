@@ -152,13 +152,14 @@ class ProjectMilestoneController {
         def reportingQuery = projectMilestone.reportingQuery
 
         try {
-            def query = "${reportingQuery}".toString()
-            def params = [params.startDate, params.endDate]
+            def queryC = "${reportingQuery}".toString()
+            def queryQ = queryC+" and activity_date between '${params.startDate}' and '${params.endDate}'"
 
-            def quarter = AppHolder.withMisSql { rows(query, params) }.first()
+            println queryQ
 
-            def arr = query.split('and')
-            def cumulative = AppHolder.withMisSql { rows(arr[0]) }.first()
+            def quarter = AppHolder.withMisSql { rows(queryQ) }.first()
+
+            def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
 
             milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
 

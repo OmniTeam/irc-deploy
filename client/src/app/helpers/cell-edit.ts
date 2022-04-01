@@ -40,7 +40,8 @@ export class CellEdit {
       if (type == 'select') {
         let select = (document.getElementById("input-" + td_id) as HTMLSelectElement)
         newValue = select.value;
-        extras = document.querySelector('option[value="' + newValue +'"]').getAttribute('data-id');
+        let opt = document.querySelector('option[value="' + newValue +'"]');
+        if(opt!=null) extras = opt.getAttribute('data-id');
       } else  {
         newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value;
       }
