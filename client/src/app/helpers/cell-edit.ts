@@ -107,6 +107,7 @@ export class CellEdit {
         input.setAttribute('name', key);
 
         input.style.maxWidth = '400px';
+        input.style.minWidth = '200px';
       }
 
       saveButton.appendChild(icon_check);

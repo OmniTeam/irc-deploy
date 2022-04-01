@@ -13,6 +13,7 @@ import {HttpParams} from "@angular/common/http";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {PartnerSetupService} from "../../services/partner-setup.service";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {AlertService} from "../../services/alert";
 
 //import {SampleData} from "../../helpers/sample-data";
 
@@ -90,6 +91,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private partnerSetupService: PartnerSetupService,
               private programPartnersService: ProgramPartnersService,
               private projectMilestoneService: ProjectMilestoneService,
+              private alertService: AlertService,
               public authService: AuthService) {
   }
 
@@ -386,9 +388,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           break;
         case "quarterExpense":
           if (this.financialReport.some(x => x.id === rowId)) {
-            this.financialReport.forEach(function (item) {
+            this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                item.quarter_expenses = value
+                if(+value <= +item.expense_to_date){
+                  item.quarter_expenses = value
+                } else {
+                  this.alertService.error(`Quarter expense should be less than Expense to date`);
+                  return;
+                }
                 item.variance = item.expense_to_date - +value
               }
             });
