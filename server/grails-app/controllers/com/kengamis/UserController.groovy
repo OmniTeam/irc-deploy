@@ -72,8 +72,6 @@ class UserController {
             respond user.errors
             return
         }
-        def userId =user.id
-        def userRole = params.role as String
 
         try {
             userService.save(user)
@@ -145,6 +143,7 @@ class UserController {
         UserRole.deleteOldRecords(currentUser)
         KengaUserGroup.deleteOldRecordsUser(currentUser)
 
+//        def usersRole = params.roles as String
         UserRole.create(currentUser, currentRole, true)
 
         def userGroup = params.groups as String

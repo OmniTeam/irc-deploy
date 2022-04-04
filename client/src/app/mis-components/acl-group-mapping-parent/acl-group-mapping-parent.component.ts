@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -17,13 +17,6 @@ import {AuthService} from "../../services/auth.service";
 import {FormService} from "../../services/form.service";
 import {AclGroupMappingService} from "../../services/acl-group-mapping.service";
 
-/*export interface queryFormArray{
-  group: string;
-  parent: string;
-  permission: number
-  form: string;
-  groupConditionQuery: string;
-}*/
 
 @Component({
   selector: 'app-acl-group-mapping-parent',
@@ -112,8 +105,13 @@ export class AclGroupMappingParentComponent implements OnInit {
   addQueryButtonText="Add Query To Table"
   queryFormArray = []
   groupConditionQuery=''
-  form=''
+  form:any
   editIndex = -1;
+  isEditable = false
+  formName: any
+  i: any
+  greyOutGroupField = false
+  error=''
 
   get f() {
     return this.formGroup.controls;
@@ -122,6 +120,7 @@ export class AclGroupMappingParentComponent implements OnInit {
   ngOnInit(): void {
     this.formService.getForms().subscribe(results => {
       this.forms = results
+      const formsData = results
     }, error => {
       this.alertService.error("Failed to get Forms")
     })
@@ -156,13 +155,23 @@ export class AclGroupMappingParentComponent implements OnInit {
       this.form=''
       this.groupConditionQuery=''
     }
-
+    this.checkArray()
   }
 
   get queryArray() {
     return this.formGroup.get('queryArray').value;
   }
 
+  deleteQuestion(i) {
+    const control = <FormArray>this.formGroup.get('queryArray');
+    control.removeAt(i);
+    this.checkArray()
+  }
+
+  checkArray(){
+    const arrayData = this.formGroup.get('queryArray').value
+    this.greyOutGroupField = arrayData.length > 0;
+  }
 
   createACLGROUPMAPPING() {
     const formData = this.formGroup.value;

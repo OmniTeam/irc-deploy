@@ -44,6 +44,7 @@
                                      formControlName="group"
                                      [searchable]="true"
                                      [clearable]="true"
+                                     [readonly]="this.greyOutGroupField"
                           >
                             <ng-option [value]="item.id" *ngFor="let item of parents">
                               {{item.name}}
@@ -76,7 +77,7 @@
                                      [clearable]="true"
                           >
                             <ng-option [value]="item.id" *ngFor="let item of forms">
-                              {{item?.name}}
+                              {{item?.displayName}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -105,13 +106,15 @@
 
                                         ></textarea>
                         </div>
-
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="row" style="padding-bottom: 16px;">
                   <div class="col-md-12">
+                    <div class="form-row is-invalid" *ngIf="error!==''">
+                      <p style="color: red">{{error}}</p>
+                    </div>
                     <button class=" btn btn-default  fa-pull-right" type="button"
                             (click)="addQuery()">
                       {{addQueryButtonText}}
@@ -125,18 +128,55 @@
                       <table class=" table align-items-center table-flush"
                              style="width: 100%!important;table-layout:fixed;">
                         <thead class=" thead-light">
-                        <tr>
-                          <th>Form</th>
-                          <th>Query</th>
+                        <tr class="row">
+                          <th class="col-md-5">  &nbsp; &nbsp; Form</th>
+                          <th class="col-md-5">Query</th>
+                          <th class="col-md-2">Actions</th>
                         </tr>
                         </thead>
 
-                        <tr *ngFor="let q of queryArray; let i = index;">
-                          <td style="white-space: break-spaces!important;">
-                            <p > {{q?.form}}</p>
+                        <tr *ngFor="let q of queryArray; let i = index;" class="row">
+                          <td style="white-space: break-spaces!important;" class="col-md-5">
+                            <p *ngIf="!isEditable"> &nbsp;&nbsp;{{q?.form | formName: this.forms}}</p>
+                            <div *ngIf="isEditable">
+                              <ng-select class="form-control form-control-sm"
+                                         name="datatable_length"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Table"
+                                         [(ngModel)]="form"
+                                         [ngModelOptions]="{standalone: true}"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.id" *ngFor="let item of forms">
+                                  {{item?.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
                           </td>
-                          <td style="white-space: break-spaces!important;">
-                            <p> {{q?.groupConditionQuery}}</p>
+                          <td style="white-space: break-spaces!important;" class="col-md-5">
+                            <p *ngIf="!isEditable"> {{q?.groupConditionQuery}}</p>
+                            <div *ngIf="isEditable">
+                              <div class=" input-group input-group-merge">
+                                        <input
+                                          class="form-control"
+                                          placeholder="Group Condition Query"
+                                          style="height: 144px;"
+                                          type="text"
+                                          [(ngModel)]="groupConditionQuery"
+                                          [ngModelOptions]="{standalone: true}"
+                                        >
+                              </div>
+                            </div>
+                          </td>
+                          <td class="col-md-2" >
+                            <!--<i class="fa fa-pencil-alt text-info" (click)="editQuestion(i)"></i>
+                            &nbsp;-->
+
+                            <i class="fa fa-trash text-danger" (click)="deleteQuestion(i)"></i>
+
                           </td>
                         </tr>
                       </table>

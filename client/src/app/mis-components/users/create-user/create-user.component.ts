@@ -87,7 +87,6 @@ export class CreateUserComponent implements OnInit {
       role: [null],
       kengaGroup: [null],
       enabled: [true],
-      // data_collector_Type: [],
     });
   }
 
