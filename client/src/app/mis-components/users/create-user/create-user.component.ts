@@ -58,9 +58,11 @@ export class CreateUserComponent implements OnInit {
   user_Type: any;
   organizationRoles = [
     {position:'ED'},
-    {position:'Program'},
+    {position:'VAC Program Officer'},
+    {position:'AGPP Program Officer'},
+    {position:'YCD Program Officer'},
     {position:'Finance'},
-    {position:'Meal'}
+    {position:'MEAL'}
   ];
   partners: any;
   data_collector_Type = [
