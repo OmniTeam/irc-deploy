@@ -103,7 +103,6 @@ export class CreateUserComponent implements OnInit {
       partner: [null],
       kengaGroup: [null],
       enabled: [true],
-      // data_collector_Type: [],
     });
   }
 

@@ -1896,4 +1896,10 @@ databaseChangeLog = {
         addUniqueConstraint(columnNames: "program_partner_id, user_id", constraintName: "UKcda91fa4eda58b1b8453181e9ec6", tableName: "user_partner")
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1648721492475-8") {
+        addColumn(tableName: "kenga_group") {
+            column(name: "parent_group_id", type: "varchar(255)")
+        }
+    }
+
 }

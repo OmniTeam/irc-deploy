@@ -53,7 +53,7 @@ export class UsersService {
     return this.http.post(this.urlUserGroup, userGroupData);
   }
 
-  // this is for creating records in the user group table
+  // this is for creating records in the user role table
   createUserRole(userRoleData): Observable<any> {
     return this.http.post(this.urlUserRole, userRoleData);
   }

@@ -65,7 +65,6 @@
                             <div class="col-md-3">
                               <label>
                                 Parent
-<!--                                <span class="required-indicator">*</span>-->
                               </label>
                             </div>
                             <div class="col-md-9">
@@ -78,8 +77,8 @@
                                                style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                                [multiple]="false"
                                                placeholder="Parent"
-                                               formControlName="parent"
-                                               [ngClass]="{ 'is-invalid': submitted && f.parent.errors }"
+                                               formControlName="parentGroup"
+                                               [ngClass]="{ 'is-invalid': submitted && f.parentGroup.errors }"
                                                [searchable]="true"
                                                [clearable]="true"
                                     >
@@ -87,85 +86,18 @@
                                         {{item.name}}
                                       </ng-option>
                                     </ng-select>
-                                    <div *ngIf="submitted && f.parent.errors" class="invalid-feedback">
-                                      <div *ngIf="f.parent.errors.required" class="input-error">A Parent is required</div>
+                                    <div *ngIf="submitted && f.parentGroup.errors" class="invalid-feedback">
+                                      <div *ngIf="f.parentGroup.errors.required" class="input-error">A Parent is required</div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <!--<div class="col-md-12" style="padding-left: 10px">
-                            <div class="form-group">
-                              <div class=" input-group input-group-merge" style="padding-top: 15px">
-                                <label
-                                  style="
-                                                            padding-right: 95px;
-                                                            font-size: 1rem;
-                                                            font-weight: 400;
-                                                            margin-left: -9px;
-                                                            font-family: Open Sans, sans-serif;
-                                                            color: #525f7f;"
-                                >
-                                  Access to Central Data?
-                                </label>
-                                <label class=" custom-toggle custom-toggle-success mr-1">
-                                  <input
-                                    checked="checked"
-                                    type="checkbox"
-                                    formControlName="access_to_central_data"
-                                    (change)="changeCentralDataAccess()"
-                                  />
-
-                                  <span
-                                    class=" custom-toggle-slider rounded-circle"
-                                    data-label-off="No"
-                                    data-label-on="Yes"
-                                  >
-                                                        </span>
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>
-                                Permissions
-&lt;!&ndash;                                <span class="required-indicator">*</span>&ndash;&gt;
-                              </label>
-                            </div>
-                            <div class="col-md-9">
-                              <div class="col-md-12">
-                                <div class="form-group ">
-                                  <div class=" input-group input-group-merge">
-                                    <ng-select class="form-control form-control-sm"
-                                               name="datatable_length"
-                                               aria-controls="datatable"
-                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                               [multiple]="true"
-                                               placeholder="Permissions"
-                                               formControlName="permissions"
-                                               [ngClass]="{ 'is-invalid': submitted && f.parent.errors }"
-                                               [searchable]="true"
-                                               [clearable]="true"
-                                    >
-                                      <ng-option [value]="item.name" *ngFor="let item of permissions">
-                                        {{item.name}}
-                                      </ng-option>
-                                    </ng-select>
-                                    <div *ngIf="submitted && f.parent.errors" class="invalid-feedback">
-                                      <div *ngIf="f.parent.errors.required" class="input-error">A Parent is required</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>-->
                           <div class="row" >
                             <div class="col-md-3">
                               <label>
-                                Data Collectors
-                                <!--                      <span class="required-indicator">*</span>-->
+                                Users
                               </label>
                             </div>
                             <div class="col-md-9">
@@ -177,18 +109,18 @@
                                                aria-controls="datatable"
                                                style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                                [multiple]="true"
-                                               placeholder="Data Collectors"
-                                               formControlName="data_collectors"
-                                               [ngClass]="{ 'is-invalid': submitted && f.data_collectors.errors }"
+                                               placeholder="Users"
+                                               formControlName="users"
+                                               [ngClass]="{ 'is-invalid': submitted && f.users.errors }"
                                                [searchable]="true"
                                                [clearable]="true"
                                     >
-                                      <ng-option [value]="item.id" *ngFor="let item of dataCollectors">
+                                      <ng-option [value]="item.id" *ngFor="let item of users">
                                         {{item.username}}
                                       </ng-option>
                                     </ng-select>
-                                    <div *ngIf="submitted && f.data_collectors.errors" class="invalid-feedback">
-                                      <div *ngIf="f.data_collectors.errors.required" class="input-error">A Data Collector is required</div>
+                                    <div *ngIf="submitted && f.users.errors" class="invalid-feedback">
+                                      <div *ngIf="f.users.errors.required" class="input-error">A User is required</div>
                                     </div>
                                   </div>
                                 </div>

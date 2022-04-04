@@ -20,41 +20,36 @@ class KengaGroupController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index() {
-        /*params.max = Math.min(max ?: 1000, 1000)
-        respond kengaGroupService.list(params), model:[kengaGroupCount: kengaGroupService.count()]*/
-
         def kenga_Groups = kengaGroupService.list(params)
-        def list=[]
-        kenga_Groups.each{KengaGroup grp ->
-            def dataCollectors = []
-            dataCollectors = AppHolder.withMisSqlNonTx {
-                rows("SELECT user_id FROM kenga_user_group WHERE kenga_user_group.kenga_group_id = '$grp.id'")
-            }
+        def list = []
+        kenga_Groups.each { KengaGroup grp ->
+            def users = grp.users.collect {it.username}.join(",")
             list << [
-                    id: grp.id,
-                    name: grp.name,
-                    dateCreated: grp.dateCreated,
-                    data_collectors: dataCollectors
+                    id             : grp?.id,
+                    name           : grp?.name,
+                    dateCreated    : grp?.dateCreated,
+                    users: users
             ]
         }
         respond list
     }
 
     def show(String id) {
-        def list=[]
-        def data= kengaGroupService.get(id)
-        def dataCollectors = [:]
-        dataCollectors = AppHolder.withMisSqlNonTx {
-            rows("SELECT user_id FROM kenga_user_group WHERE kenga_user_group.kenga_group_id = '$id'")
-        }
-        def dataCollectorsAsArray = dataCollectors.collect{it -> it.user_id}
+        def kengaGroup = KengaGroup.get(id)
+        def list = []
+        def data = kengaGroupService.get(id)
+//        getting parent of the current group
+        def parent = kengaGroup.parentGroup.collect { it.id }.join(",")
+//        getting users associated with the group
+        def users = kengaGroup.users.collect { it.id }
+
         list << [
-                id: data.id,
-                name: data.name,
-                data_collectors: dataCollectorsAsArray
+                id         : data.id,
+                name       : data.name,
+                parentGroup: parent,
+                users      : users
         ]
         respond list
-//        respond kengaGroupService.get(id)
     }
 
     @Transactional
@@ -76,7 +71,7 @@ class KengaGroupController {
             return
         }
 
-        respond kengaGroup, [status: CREATED, view:"show"]
+        respond kengaGroup, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -99,7 +94,7 @@ class KengaGroupController {
             return
         }
 
-        respond kengaGroup, [status: OK, view:"show"]
+        respond kengaGroup, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -115,16 +110,16 @@ class KengaGroupController {
     }
 
     @Transactional
-    def updateKengaUserGroups(){
+    def updateKengaUserGroups() {
         def id = params.id as String
         def kengaGroup = KengaGroup.get(id)
         KengaUserGroup.deleteOldRecords(kengaGroup)
 
-        def dataCollectors = params.data_collectors as String
-        def listOfDataCollectors = dataCollectors ? dataCollectors.split(",") : []
-        listOfDataCollectors?.each{ myDataCollector ->
-            def currentCollector = User.get(myDataCollector)
-            KengaUserGroup.create(kengaGroup, currentCollector, true)
+        def groupUsers = params.users as String
+        def listOfGroupUsers = groupUsers ? groupUsers.split(",") : []
+        listOfGroupUsers?.each { myUser ->
+            def currentUser = User.get(myUser)
+            KengaUserGroup.create(kengaGroup, currentUser, true)
         }
     }
 }

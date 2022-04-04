@@ -15,6 +15,7 @@ import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
+import {HttpParams} from "@angular/common/http";
 
 
 @Component({
@@ -41,27 +42,8 @@ export class CreateGroupComponent implements OnInit {
   formGroup: FormGroup
   formData: any;
   submitted = false;
-  data_collector_Type = [
-    {
-      'name': 'Enumerator'
-    },
-    {
-      'name': 'Field Staff'
-    }
-  ];
   parents: any
-  permissions = [
-    {
-      'name': 'Data Tables'
-    },
-    {
-      'name': 'Task List'
-    },
-    {
-      'name': 'Reports'
-    },
-  ]
-  dataCollectors: any
+  users: any
 
   get f() {
     return this.formGroup.controls;
@@ -69,23 +51,19 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.usersService.getUsers().subscribe(results => {
-      this.dataCollectors = results
-      console.log(results)
+      this.users = results
     }, error => {
-      this.alertService.error("Failed to get data collectors")
+      this.alertService.error("Failed to get Users")
     })
     this.groupsService.getGroups().subscribe(results => {
       this.parents = results
-      console.log(results)
     }, error => {
-      this.alertService.error("Failed to get parents")
+      this.alertService.error("Failed to get Parents Groups")
     })
     this.formGroup = this.formBuilder.group({
       name: ['', [Validators.required]],
-      parent: [null],
-      access_to_central_data: [false],
-      permissions: [null],
-      data_collectors: [null]
+      parentGroup: [null],
+      users: [null]
     });
   }
 
@@ -99,17 +77,18 @@ export class CreateGroupComponent implements OnInit {
     }
     const formData = this.formGroup.value;
     console.log(formData)
+
     this.groupsService.createGroup(formData).subscribe((result) => {
       console.warn(result, 'Group created Successfully');
       this.alertService.success(`Group has been created`);
 
-      console.log(formData.data_collectors, "Data Collectors")
+      console.log(formData.users, "Data Collectors")
 
       //insert kenga_group_id and user_id into table. This tracks users who belong to the group
-      for(let i=0; i<formData.data_collectors.length; i++){
+      for(let i=0; i<formData.users.length; i++){
         const KengaUserGroupData = new FormData()
         KengaUserGroupData.append('kengaGroup', result.id)
-        KengaUserGroupData.append('user', formData.data_collectors[i])
+        KengaUserGroupData.append('user', formData.users[i])
 
         this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
           console.log(data ,"Kenga User Group details")
@@ -120,21 +99,8 @@ export class CreateGroupComponent implements OnInit {
     }, error => {
       this.alertService.error("Failed to Create the Group")
     });
+    this.router.navigate(['/groups']);
   }
-
-  /*// shows data collectors based on access to central data toggle
-  changeCentralDataAccess() {
-    this.ACD = this.f['access_to_central_data'].value
-    if (this.ACD === true) {
-      this.f['data_collectors'].reset()
-      document.getElementById('data_collectors').hidden = false
-    } else {
-      this.f['data_collectors'].reset()
-      document.getElementById('data_collectors').hidden = true
-    }
-
-
-  }*/
 
   goBack() {
     this.router.navigate(['/groups'])
