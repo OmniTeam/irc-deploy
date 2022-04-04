@@ -15,7 +15,9 @@ export class TaskListComponent implements OnInit {
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private router: Router, private taskListService: TaskListService, private programPartnersService: ProgramPartnersService) {
+  constructor(private router: Router,
+              private taskListService: TaskListService,
+              private programPartnersService: ProgramPartnersService) {
   }
 
   count = 0;
