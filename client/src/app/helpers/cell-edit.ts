@@ -40,7 +40,8 @@ export class CellEdit {
       if (type == 'select') {
         let select = (document.getElementById("input-" + td_id) as HTMLSelectElement)
         newValue = select.value;
-        extras = document.querySelector('option[value="' + newValue +'"]').getAttribute('data-id');
+        let opt = document.querySelector('option[value="' + newValue +'"]');
+        if(opt!=null) extras = opt.getAttribute('data-id');
       } else  {
         newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value;
       }
@@ -74,6 +75,8 @@ export class CellEdit {
 
       const container = document.createElement('div');
       container.id = "edit-cell-" + td_id;
+      container.style.display = 'flex';
+      container.style.justifyContent = 'center';
 
       let input;
       let selectInput;
@@ -105,7 +108,8 @@ export class CellEdit {
         input.setAttribute('value', oldValue);
         input.setAttribute('name', key);
 
-        input.style.maxWidth = '400px';
+        input.style.maxWidth = '300px';
+        input.style.minWidth = '100px';
       }
 
       saveButton.appendChild(icon_check);
@@ -115,7 +119,6 @@ export class CellEdit {
       container.appendChild(saveButton);
       container.appendChild(cancelButton);
 
-      td.style.display = 'flex';
       td.style.justifyContent = 'center';
       td.appendChild(container);
     } else {

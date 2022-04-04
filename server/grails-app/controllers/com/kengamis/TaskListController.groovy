@@ -41,22 +41,26 @@ class TaskListController {
             def programPartner = ProgramPartner.findById(partnerId)
             def program = Program.findById(programId)
 
-            if(task.status != "completed") tasks << [id: task.id,
-                                                    taskName : task.taskName,
-                                                    partnerSetupId: partnerSetupId,
-                                                    startDate : startDate,
-                                                    partnerId : partnerId,
-                                                    partnerName : programPartner.name,
-                                                    programId : programId,
-                                                    programName : program.title,
-                                                    endDate : endDate,
-                                                    groupId : groupId,
-                                                    reportingPeriod : period,
-                                                    outputVariables : task.outputVariables,
-                                                    processInstanceId : task.processInstanceId,
-                                                    taskDefinitionKey : task.taskDefinitionKey,
-                                                    dateCreated: task.dateCreated,
-                                                    status: task.status]
+            if(programPartner==null) programPartner = [name:'']
+            if(program==null) program = [title:'']
+
+            if(task.status != "completed")
+                tasks << [id: task.id,
+                        taskName : task.taskName,
+                        partnerSetupId: partnerSetupId,
+                        startDate : startDate,
+                        partnerId : partnerId,
+                        partnerName : programPartner.name,
+                        programId : programId,
+                        programName : program.title,
+                        endDate : endDate,
+                        groupId : groupId,
+                        reportingPeriod : period,
+                        outputVariables : task.outputVariables,
+                        processInstanceId : task.processInstanceId,
+                        taskDefinitionKey : task.taskDefinitionKey,
+                        dateCreated: task.dateCreated,
+                        status: task.status]
         }
         respond tasks
     }

@@ -18,6 +18,7 @@ import {UsernameValidator} from "../../../validators/username.validator";
 import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
 import {HttpParams} from "@angular/common/http";
+import {ProgramPartnersService} from "../../../services/program-partners.service";
 
 
 @Component({
@@ -35,6 +36,7 @@ export class CreateUserComponent implements OnInit {
     private alertService: AlertService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
+    private programPartnersService : ProgramPartnersService,
     private router: Router
   ) {
   }
@@ -54,6 +56,15 @@ export class CreateUserComponent implements OnInit {
   ];
   // represents the user roles
   user_Type: any;
+  organizationRoles = [
+    {position:'ED'},
+    {position:'VAC Program Officer'},
+    {position:'AGPP Program Officer'},
+    {position:'YCD Program Officer'},
+    {position:'Finance'},
+    {position:'MEAL'}
+  ];
+  partners: any;
   data_collector_Type = [
     {
       'name': 'Enumerator'
@@ -79,12 +90,17 @@ export class CreateUserComponent implements OnInit {
     }, error => {
       this.alertService.error("Failed to get Groups")
     })
+    this.programPartnersService.getProgramPartners().subscribe((data) => {
+      this.partners = data;
+    });
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
       email: [''/*, [Validators.required, Validators.email]*/],
       role: [null],
+      position: [null],
+      partner: [null],
       kengaGroup: [null],
       enabled: [true],
     });
@@ -102,7 +118,7 @@ export class CreateUserComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
-    console.log(formData)
+    console.log('formData', formData)
     const params = new HttpParams()
       .set('role', formData.role)
       .set('groups', formData.groups)
@@ -120,6 +136,15 @@ export class CreateUserComponent implements OnInit {
       this.userService.createUserRole(userRoleData).subscribe(data => {
         console.log(data, "User Role")
       }, error => {this.alertService.error("failed to create user role")})
+
+      //insert the user's partner in the user partner table
+      const userPartnerData = new FormData()
+      userPartnerData.append('user', result.id)
+      userPartnerData.append('programPartner', formData.partner)
+
+      this.userService.createUserPartner(userPartnerData).subscribe(data => {
+        console.log(data, "User Partner")
+      }, error => {this.alertService.error("failed to create user partner")})
 
       // inserts user_id group_id pairs into the user group table
       for(let i=0; i<formData.kengaGroup.length; i++){

@@ -11,6 +11,7 @@ export class UsersService {
   urlUsers = `${this.baseurl}/user/`
   urlUserGroup = `${this.baseurl}/KengaUserGroup/`
   urlUserRole = `${this.baseurl}/UserRole/`
+  urlUserPartner = `${this.baseurl}/UserPartner/`
   urlDeleteOldRolesAndGroups = `${this.baseurl}/deleteOldRoleAndGroups/`
 
   constructor(private http: HttpClient) { }
@@ -55,5 +56,9 @@ export class UsersService {
   // this is for creating records in the user role table
   createUserRole(userRoleData): Observable<any> {
     return this.http.post(this.urlUserRole, userRoleData);
+  }
+
+  createUserPartner(userPartnerData): Observable<any> {
+    return this.http.post(this.urlUserPartner, userPartnerData);
   }
 }

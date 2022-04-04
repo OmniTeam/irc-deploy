@@ -13,6 +13,7 @@ import {HttpParams} from "@angular/common/http";
 import {ProgramPartnersService} from "../../services/program-partners.service";
 import {PartnerSetupService} from "../../services/partner-setup.service";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {AlertService} from "../../services/alert";
 
 //import {SampleData} from "../../helpers/sample-data";
 
@@ -90,6 +91,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private partnerSetupService: PartnerSetupService,
               private programPartnersService: ProgramPartnersService,
               private projectMilestoneService: ProjectMilestoneService,
+              private alertService: AlertService,
               public authService: AuthService) {
   }
 
@@ -214,7 +216,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
-          console.log("indicators", ind)
           ind.forEach((i) => {
             let target = this.getTargetForThisQuarter(i.disaggregation);
             const params = new HttpParams()
@@ -223,14 +224,21 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               .set("endDate", this.taskRecord.endDate);
             this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
               if(milestone!=undefined) {
-                let percentageAchievement = (milestone.quaterAchievement/milestone.cumulativeAchievement)*100
+
+                let cumulative = milestone.cumulativeAchievement ?? 0
+                let quarter = milestone.quaterAchievement ?? 0
+                let percentageAchievement : number;
+                let p = (cumulative/quarter)*100
+                if(p>0 && isFinite(p)) percentageAchievement = p; else percentageAchievement=0;
+
                 if (!this.performanceReport.some(x => x.id === i.id)) {
                   this.performanceReport.push({
                     id: i.id,
+                    milestoneId: i.milestoneId,
                     output_indicators: i.name,
                     overall_target: i.overallTarget,
-                    cumulative_achievement: milestone.cumulativeAchievement,
-                    quarter_achievement: milestone.quaterAchievement,
+                    cumulative_achievement: cumulative,
+                    quarter_achievement: quarter,
                     quarter_target: target,
                     percentage_achievement: percentageAchievement
                   });
@@ -376,17 +384,39 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       switch (key) {
         case "summaryComment":
           if (this.performanceReport.some(x => x.id === rowId)) {
-            this.performanceReport.forEach(function (comment) {
-              if (comment.id === rowId) comment.comment_on_result = value
+            this.performanceReport.forEach(function (item) {
+              if (item.id === rowId) item.comment_on_result = value
+            });
+          }
+          break;
+        case "quarter_achievement":
+          if (this.performanceReport.some(x => x.id === rowId)) {
+            this.performanceReport.forEach(function (item) {
+              if (item.id === rowId) item.quarter_achievement = value
             });
           }
           break;
         case "quarterExpense":
           if (this.financialReport.some(x => x.id === rowId)) {
-            this.financialReport.forEach(function (item) {
+            this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                item.quarter_expenses = value
-                item.variance = item.expense_to_date - +value
+                if(+value <= +item.expense_to_date){
+                  item.quarter_expenses = value
+                } else {
+                  this.alertService.error(`Quarter expense should be less than Expense to date`);
+                  return;
+                }
+                item.variance = +item.total_advanced - +item.expense_to_date - +value
+              }
+            });
+          }
+          break;
+        case "totalAdvanced":
+          if (this.financialReport.some(x => x.id === rowId)) {
+            this.financialReport.forEach((item) => {
+              if (item.id === rowId) {
+                item.total_advanced = value
+                item.variance = +item.total_advanced - +item.expense_to_date - +value
               }
             });
           }
@@ -399,6 +429,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           }
           break;
       }
+      let reportValues: { [key: string]: string } = {
+        financialReport: JSON.stringify(this.financialReport),
+        performanceReport: JSON.stringify(this.performanceReport),
+      }
+      this.saveReport(reportValues, 'draft');
   }
 
   cellEditor(row, td_id, key: string, oldValue, type?: string) {
@@ -605,17 +640,16 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }
     if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
       this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioRecommendFund + '"}';
+      if(status=="completed") {
+        const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+        this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+          console.log('updated calendar status')
+        }, error => console.log('failed update calendar status', error));
+      }
     }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
-
-    if(status=="completed") {
-      const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-      this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
-        console.log('updated calendar status')
-      }, error => console.log('failed update calendar status', error));
-    }
   }
 
   onBackPressed() {
