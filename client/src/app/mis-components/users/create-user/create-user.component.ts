@@ -120,9 +120,7 @@ export class CreateUserComponent implements OnInit {
     }
     const formData = this.formGroup.value;
     console.log('formData', formData)
-    const params = new HttpParams()
-      .set('role', formData.role)
-      .set('groups', formData.groups)
+
     this.userService.createUser(formData).subscribe((result) => {
       this.alertService.success(`User is created successfully`);
 
@@ -130,13 +128,15 @@ export class CreateUserComponent implements OnInit {
       console.log(formData.role, "Role")
 
       //insert the user's role in the user role table
-      const userRoleData = new FormData()
-      userRoleData.append('user', result.id)
-      userRoleData.append('role', formData.role)
+      formData.role.forEach((role)=>{
+        const userRoleData = new FormData()
+        userRoleData.append('user', result.id)
+        userRoleData.append('role', role)
 
-      this.userService.createUserRole(userRoleData).subscribe(data => {
-        console.log(data, "User Role")
-      }, error => {this.alertService.error("failed to create user role")})
+        this.userService.createUserRole(userRoleData).subscribe(data => {
+          console.log(data, "User Role")
+        }, error => {this.alertService.error("failed to create user role")})
+      });
 
       //insert the user's partner in the user partner table
       const userPartnerData = new FormData()
