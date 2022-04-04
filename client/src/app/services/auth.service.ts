@@ -88,7 +88,7 @@ export class AuthService {
   }
 
   getUserRoles() {
-    return localStorage.getItem(this.ROLES);
+    return localStorage.getItem(this.ROLES).split(',');
   }
 
   public getSession(): Promise<boolean> {
