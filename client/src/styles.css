@@ -73,3 +73,6 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .form-control-sm {
   height: 36px !important;
 }
+.alertify-notifier .ajs-message.ajs-error{
+  color: #FFFFFF;
+}

@@ -39,6 +39,7 @@ class UserController {
         def user = User.get(id)
         def kengaGroups = user.kengaGroups.collect{it.id}
         def roles = user.authorities
+        def partner = user.getPartner()
         def users= [
                 id: user.id,
                 username: user.username,
@@ -46,6 +47,8 @@ class UserController {
                 names: user.names,
                 groups: kengaGroups,
                 role: roles,
+                position: user.position,
+                partner: partner.id,
                 enabled: user.enabled
         ]
         respond users

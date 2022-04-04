@@ -95,7 +95,10 @@ class CalendarTriggerDatesController {
     }
 
     def getReportingCalendarByPartnerSetupId() {
-        def map = [calendar: CalendarTriggerDates.findAllByPartnerSetupId(params.setupId)]
+        def query = "select id, period, start_date as startDate, end_date as endDate " +
+                "from calendar_trigger_dates where partner_setup_id='${params.setupId}' order by period"
+        def results = AppHolder.withMisSql { rows(query.toString()) }
+        def map = [calendar: results]
         respond map
     }
 }

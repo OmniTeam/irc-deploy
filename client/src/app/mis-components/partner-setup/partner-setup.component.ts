@@ -12,6 +12,7 @@ import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
 import {Indicator} from "../../models/indicator";
+import {AlertService} from "../../services/alert";
 
 @Component({
   selector: 'app-partner-setup',
@@ -62,7 +63,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
               private partnerSetupService: PartnerSetupService,
               public authService: AuthService,
               private programPartnersService: ProgramPartnersService,
-              private projectMilestoneService: ProjectMilestoneService) {
+              private projectMilestoneService: ProjectMilestoneService,
+              private alertService: AlertService) {
   }
 
   ngOnInit(): void {
@@ -84,7 +86,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         }, error => console.log(error));
       });
 
-    if(this.partnerSetupId!=undefined) {
+    if (this.partnerSetupId != undefined) {
       this.programPartnersService.getProgramPartners().subscribe(data => {
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
@@ -209,7 +211,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         }
       );
     });
-    if (this.setup!=undefined) this.saveReportingCalendar(this.setup.id);
+    if (this.setup != undefined) this.saveReportingCalendar(this.setup.id);
   }
 
   onPartnerChange() {
@@ -320,11 +322,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   saveCellValue = (value: string, key: string, rowId, extras): void => {
     if (value !== null && value !== undefined)
       switch (key) {
-        case 'budget_approved_amt':
+        case 'approved_amt':
           this.updateBudgetAmount(rowId, value);
           break;
-        case 'budget_disburse':
-          this.updateBudgetDisburse(rowId, value);
+        case 'total_spent':
+          this.updateBudgetDisburse(rowId, value, true);
           break;
         case 'disbursementPlan':
           this.updateDisbursementPlanValues(rowId, value);
@@ -481,11 +483,20 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.totalApprovedAmount = total.toString();
   }
 
-  private updateBudgetDisburse(id, newValue) {
+  private updateBudgetDisburse(id, newValue, editing?:boolean) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
-      this.budget.forEach(function (item) {
-        if (item.id === id) item.totalSpent = newValue;
+      this.budget.forEach((item) => {
+        if (item.id === id) {
+          if(editing) {
+            if (+newValue <= +item.approvedAmount) {
+              item.totalSpent = newValue;
+            } else {
+              this.alertService.error(`Amount spent should be less than Amount Approved`);
+              return;
+            }
+          } else item.totalSpent = newValue;
+        }
         total += +item.totalSpent;
       });
     }
