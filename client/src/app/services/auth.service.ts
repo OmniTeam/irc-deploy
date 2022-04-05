@@ -15,6 +15,7 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
   private readonly USERNAME = 'USERNAME';
   private readonly ROLES: any = [];
+  private readonly ORG_ROLE = 'ORG_ROLE';
   private loggedUser: string;
 
   constructor(private http: HttpClient) {
@@ -75,6 +76,7 @@ export class AuthService {
     localStorage.setItem(this.REFRESH_TOKEN, user.refresh_token);
     localStorage.setItem(this.USERNAME, this.loggedUser);
     localStorage.setItem(this.ROLES, user.roles);
+    localStorage.setItem(this.ORG_ROLE, user.org_role);
   }
 
   private removeTokens() {
@@ -89,6 +91,10 @@ export class AuthService {
 
   getUserRoles() {
     return localStorage.getItem(this.ROLES).split(',');
+  }
+
+  getUserOrganizationRole() {
+    return localStorage.getItem(this.ORG_ROLE);
   }
 
   public getSession(): Promise<boolean> {
