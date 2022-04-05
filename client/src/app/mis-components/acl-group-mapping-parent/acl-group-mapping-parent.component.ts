@@ -16,6 +16,7 @@ import {AlertService} from "../../services/alert";
 import {AuthService} from "../../services/auth.service";
 import {FormService} from "../../services/form.service";
 import {AclGroupMappingService} from "../../services/acl-group-mapping.service";
+import {CellEdit, OnUpdateCell} from "../../helpers/cell-edit";
 
 
 @Component({
@@ -24,6 +25,7 @@ import {AclGroupMappingService} from "../../services/acl-group-mapping.service";
   styleUrls: ['./acl-group-mapping-parent.component.scss']
 })
 export class AclGroupMappingParentComponent implements OnInit {
+  private grpQuery: any;
 
   constructor(
     private groupsService: GroupsService,
@@ -90,28 +92,27 @@ export class AclGroupMappingParentComponent implements OnInit {
   operation = [
     {
       'sign': '=',
-      'description':'EQUAL'
+      'description': 'EQUAL'
     },
     {
       'sign': 'LIKE',
-      'description':'SEARCH A PATTERN'
+      'description': 'SEARCH A PATTERN'
     },
     {
       'sign': 'IN',
-      'description':'MULTIPLE POSSIBLE VALUES IN'
+      'description': 'MULTIPLE POSSIBLE VALUES IN'
     },
   ]
   forms: any
-  addQueryButtonText="Add Query To Table"
+  addQueryButtonText = "Add Query To Table"
   queryFormArray = []
-  groupConditionQuery=''
-  form:any
+  groupConditionQuery = ''
+  form: any
   editIndex = -1;
-  isEditable = false
   formName: any
   i: any
   greyOutGroupField = false
-  error=''
+  error = ''
 
   get f() {
     return this.formGroup.controls;
@@ -120,7 +121,6 @@ export class AclGroupMappingParentComponent implements OnInit {
   ngOnInit(): void {
     this.formService.getForms().subscribe(results => {
       this.forms = results
-      const formsData = results
     }, error => {
       this.alertService.error("Failed to get Forms")
     })
@@ -136,26 +136,33 @@ export class AclGroupMappingParentComponent implements OnInit {
     });
   }
 
-  getFormAndQuery(){
+  getFormAndQuery() {
     return this.formBuilder.group({
       form: [this.form],
       groupConditionQuery: [this.groupConditionQuery],
-
+      show: [false]
     })
   }
 
-  addQuery(){
-    const control = <FormArray>this.formGroup.get('queryArray')
-    if (this.editIndex === -1) {
-      control.push(this.getFormAndQuery())
-      this.form=''
-      this.groupConditionQuery=''
+  addQuery() {
+    if (this.form === '' || (this.groupConditionQuery === '')) {
+      this.error = 'Please fill the required question fields';
     } else {
-      control.at(this.editIndex).patchValue(this.getFormAndQuery());
-      this.form=''
-      this.groupConditionQuery=''
+      const control = <FormArray>this.formGroup.get('queryArray')
+      if (this.editIndex === -1) {
+        console.log(this.getFormAndQuery(), "data")
+        control.push(this.getFormAndQuery())
+        this.form = ''
+        this.groupConditionQuery = ''
+      } else {
+        console.log(this.getFormAndQuery(), "data")
+        control.at(this.editIndex).patchValue(this.getFormAndQuery());
+        this.form = ''
+        this.groupConditionQuery = ''
+      }
+      this.error= null
+      this.checkArray()
     }
-    this.checkArray()
   }
 
   get queryArray() {
@@ -168,14 +175,14 @@ export class AclGroupMappingParentComponent implements OnInit {
     this.checkArray()
   }
 
-  checkArray(){
+  //checks if array is empty
+  checkArray() {
     const arrayData = this.formGroup.get('queryArray').value
     this.greyOutGroupField = arrayData.length > 0;
   }
 
   createACLGROUPMAPPING() {
     const formData = this.formGroup.value;
-    console.log(formData)
     this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);
@@ -184,4 +191,20 @@ export class AclGroupMappingParentComponent implements OnInit {
       this.alertService.error("Failed to Create the ACL")
     });
   }
+
+  editRow(i) {
+    this.queryArray[i].show = true
+  }
+
+  saveRow(i) {
+    this.queryArray[i].show = false
+    this.grpQuery = (<HTMLInputElement>document.getElementById(i)).value
+    this.queryArray[i].groupConditionQuery = this.grpQuery
+  }
+
+  cancelRow(i) {
+    this.queryArray[i].show = false
+  }
+
+
 }
