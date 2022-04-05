@@ -55,7 +55,7 @@ class StartCamundaInstancesJob extends Script {
                         StartDate     : result['start_date'],
                         EndDate       : result['end_date'],
                         Period        : result['period'],
-                        GroupId       : getGroupIds(setup.partnerId)
+                        GroupId       : "${getGroupIds(setup.partnerId)}"
                 ], CIIF_MANAGEMENT_KEY)
 
 
