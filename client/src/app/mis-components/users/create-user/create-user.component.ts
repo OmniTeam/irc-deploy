@@ -126,8 +126,8 @@ export class CreateUserComponent implements OnInit {
       console.log(formData.kengaGroup, "Groups")
       console.log(formData.role, "Role")
 
-      //insert the user's role in the user role table
       formData.role.forEach((role)=>{
+        //insert the user's role in the user role table
         const userRoleData = new FormData()
         userRoleData.append('user', result.id)
         userRoleData.append('role', role)
@@ -135,7 +135,10 @@ export class CreateUserComponent implements OnInit {
         this.userService.createUserRole(userRoleData).subscribe(data => {
           console.log(data, "User Role")
         }, error => {this.alertService.error("failed to create user role")})
-      });
+      })
+
+
+
 
       //insert the user's partner in the user partner table
       const userPartnerData = new FormData()

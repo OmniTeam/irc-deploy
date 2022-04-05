@@ -26,31 +26,21 @@ class UserController {
     def index(Integer max) {
         params.max = Math.min(max ?: 1000, 1000)
         def users = []
-        User.all.each {
-            def query = "SELECT USER.id, USER.username, USER.email, USER.names, USER.enabled, roleGroup.authority, roleGroup.name " +
-                    "FROM `user` INNER JOIN ( SELECT user_role.user_id, user_role.role_id, role.authority, grp.NAME FROM user_role " +
-                    "INNER JOIN role ON user_role.role_id = role.id " +
-                    "INNER JOIN ( SELECT kenga_group.NAME, kenga_user_group.user_id FROM `kenga_group` INNER JOIN kenga_user_group " +
-                    "ON kenga_group.id = kenga_user_group.kenga_group_id ) AS grp ON user_role.user_id = grp.user_id WHERE NOT role.authority = 'ROLE_DATA_COLLECTOR' " +
-                    ") AS roleGroup ON `user`.id = roleGroup.user_id WHERE USER.id = '${it.id}' "
-
-            def userData = AppHolder.withMisSql { rows(query.toString()) }
-            def roles = userData.collect { it.authority }.join(", ")
-            def groups = userData.collect { it.name }.join(", ")
-
-            if(roles.size()>0) {
-                users << [id: it.id, username: it.username, email: it.email, names: it.names,
-                          groups: groups, roles: roles, enabled: it.enabled]
+        User.all.each { user ->
+            def roles = user.authorities.collect {it.authority}.join(",")
+            def groups = user.kengaGroups.collect {it.name}.join(",")
+            if (!roles.contains("ROLE_DATA_COLLECTOR") ){
+                users << [id    : user.id, username: user.username, email: user.email, names: user.names,
+                          groups: groups, roles: roles, enabled: user.enabled]
             }
         }
-
         respond users
     }
 
     def show(String id) {
         def user = User.get(id)
         def kengaGroups = user.kengaGroups.collect{it.id}
-        def roles = user.authorities
+        def roles = user.authorities.collect {it.id}
         def partner = user.getPartner()
         def users= [
                 id: user.id,
@@ -61,7 +51,7 @@ class UserController {
                 groups: kengaGroups,
                 role: roles,
                 position: user.position,
-                partner: partner.id,
+                partner: partner?.id,
                 enabled: user.enabled
         ]
         respond users
@@ -153,13 +143,16 @@ class UserController {
     @Transactional
     def updateRolesAndGroups(userId, userRole){
         def currentUser = User.get(userId)
-        def currentRole = Role.get(userRole)
 
         UserRole.deleteOldRecords(currentUser)
         KengaUserGroup.deleteOldRecordsUser(currentUser)
 
-//        def usersRole = params.roles as String
-        UserRole.create(currentUser, currentRole, true)
+        def usersRole = params.role as String
+        def listOfUserRoles = usersRole ? usersRole.split(",") : []
+        listOfUserRoles?.each {myUserRole ->
+            def currentRole = Role.get(myUserRole)
+            UserRole.create(currentUser, currentRole, true)
+        }
 
         def userGroup = params.groups as String
         def listOfUserGroups = userGroup ? userGroup.split(",") : []

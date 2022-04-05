@@ -25,9 +25,9 @@ class KengaGroupController {
         kenga_Groups.each { KengaGroup grp ->
             def users = grp.users.collect {it.username}.join(",")
             list << [
-                    id             : grp?.id,
-                    name           : grp?.name,
-                    dateCreated    : grp?.dateCreated,
+                    id             : grp.id,
+                    name           : grp.name,
+                    dateCreated    : grp.dateCreated,
                     users: users
             ]
         }
