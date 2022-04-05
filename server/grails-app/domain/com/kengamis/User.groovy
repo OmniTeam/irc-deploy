@@ -51,7 +51,8 @@ class User {
     }
 
     ProgramPartner getPartner() {
-        (UserPartner.findByUser(this) as UserPartner).programPartner as ProgramPartner
+        def pp = (UserPartner.findByUser(this) as UserPartner)
+        pp ? pp.programPartner as ProgramPartner : null
     }
 
     Set<EntityViewFilters> getEntityViewFilters() {

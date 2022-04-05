@@ -81,7 +81,7 @@ export class EditUserComponent implements OnInit {
     this.programPartnersService.getProgramPartners().subscribe((data) => {
       this.partners = data;
     });
-    const params = new HttpParams().set('id',this.route.snapshot.params.id )
+
     this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
       console.log("user", results)
       this.formGroup = this.formBuilder.group({
@@ -89,7 +89,7 @@ export class EditUserComponent implements OnInit {
         names: [results?.names, [Validators.required]],
         email: [results?.email/*, [Validators.required, Validators.email]*/],
         password: [results?.password],
-        role: [results.role[0]?.id],
+        role: [results?.role],
         position: [results?.position],
         partner: [results?.partner],
         groups: [results?.groups],
