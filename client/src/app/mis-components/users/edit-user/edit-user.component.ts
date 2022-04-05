@@ -46,14 +46,6 @@ export class EditUserComponent implements OnInit {
   deactivate = false;
   submitted = false;
   fieldTextType: boolean;
-  organizationRoles = [
-    {position:'ED'},
-    {position:'VAC Program Officer'},
-    {position:'AGPP Program Officer'},
-    {position:'YCD Program Officer'},
-    {position:'Finance'},
-    {position:'MEAL'}
-  ];
   partners: any;
   data_collector_Type = [
     {
@@ -90,7 +82,6 @@ export class EditUserComponent implements OnInit {
         email: [results?.email/*, [Validators.required, Validators.email]*/],
         password: [results?.password],
         role: [results?.role],
-        position: [results?.position],
         partner: [results?.partner],
         groups: [results?.groups],
         enabled: [results?.enabled],

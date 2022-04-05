@@ -56,14 +56,6 @@ export class CreateUserComponent implements OnInit {
   ];
   // represents the user roles
   user_Type: any;
-  organizationRoles = [
-    {position:'ED'},
-    {position:'VAC Program Officer'},
-    {position:'AGPP Program Officer'},
-    {position:'YCD Program Officer'},
-    {position:'Finance'},
-    {position:'MEAL'}
-  ];
   partners: any;
   data_collector_Type = [
     {
@@ -99,7 +91,6 @@ export class CreateUserComponent implements OnInit {
       names: ['', [Validators.required]],
       email: [''/*, [Validators.required, Validators.email]*/],
       role: [null],
-      position: [null],
       partner: [null],
       kengaGroup: [null],
       enabled: [true],
@@ -136,8 +127,6 @@ export class CreateUserComponent implements OnInit {
           console.log(data, "User Role")
         }, error => {this.alertService.error("failed to create user role")})
       })
-
-
 
 
       //insert the user's partner in the user partner table

@@ -44,7 +44,11 @@ class TaskListController {
             if(programPartner==null) programPartner = [name:'']
             if(program==null) program = [title:'']
 
-            if(task.status != "completed")
+            User currentUser = AppHolder.currentUser()
+            def userGroup = UserRole.findAllByUser(currentUser).collect{it.role.authority}
+            def userPartner = UserPartner.findAllByUser(currentUser).collect{it.programPartner.id}
+
+            if(task.status != "completed" && userGroup.contains(groupId) || userPartner.contains(partnerId))
                 tasks << [id: task.id,
                         taskName : task.taskName,
                         partnerSetupId: partnerSetupId,

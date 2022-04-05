@@ -55,7 +55,7 @@ class StartCamundaInstancesJob extends Script {
                         StartDate     : result['start_date'],
                         EndDate       : result['end_date'],
                         Period        : result['period'],
-                        GroupId       : ""
+                        GroupId       : "ROLE_PROGRAM_OFFICER"
                 ], CIIF_MANAGEMENT_KEY)
 
                 if (started) {

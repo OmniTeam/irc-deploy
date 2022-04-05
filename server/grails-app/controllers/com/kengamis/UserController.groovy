@@ -50,7 +50,6 @@ class UserController {
                 names: user.names,
                 groups: kengaGroups,
                 role: roles,
-                position: user.position,
                 partner: partner?.id,
                 enabled: user.enabled
         ]
