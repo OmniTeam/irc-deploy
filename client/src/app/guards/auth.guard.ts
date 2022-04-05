@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
    * @returns {Promise<boolean>} True if user is authenticated otherwise false
    */
   public async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
-    const allowedUserRoles = this.getRoutePermissions(route);
+    const allowedUserRoles = AuthGuard.getRoutePermissions(route);
     return await this.checkPermission(allowedUserRoles);
   }
 
@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
    * @returns {Promise<boolean>} True if user is authenticated otherwise false
    */
   public async canActivateChild(route: ActivatedRouteSnapshot): Promise<boolean> {
-    const allowedUserRoles = this.getRoutePermissions(route);
+    const allowedUserRoles = AuthGuard.getRoutePermissions(route);
     return await this.checkPermission(allowedUserRoles);
   }
 
@@ -59,7 +59,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
    * @returns {string[]} All user roles that are allowed to access the route.
    */
 
-  private getRoutePermissions(route: ActivatedRouteSnapshot): Roles[] {
+  private static getRoutePermissions(route: ActivatedRouteSnapshot): Roles[] {
     if (route.data && route.data.userRoles) {
       return route.data.userRoles as Roles[];
     }
@@ -77,18 +77,14 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
         if (!allowedUserRoles || allowedUserRoles.length == 0) {
           return true;   // if no user roles has been set, all user are allowed to access the route
         } else {
-          this.currentUser = this.authService.getLoggedInUsername();
-          const params = new HttpParams()
-            .set('username', this.currentUser);
-          return this.rolesService.getAllUserRoles(params).then((userRoles: string[]) => {
-            if (this.authService.areUserRolesAllowed(userRoles, allowedUserRoles)) {
-              return true;
-            } else {
-              this.authService.doLogoutUser();
-              this.router.navigate(['/login']);
-              return false;
-            }
-          });
+          let userRoles = this.authService.getUserRoles()
+          if (this.authService.areUserRolesAllowed(userRoles, allowedUserRoles)) {
+            return true;
+          } else {
+            this.authService.doLogoutUser();
+            this.router.navigate(['/login']);
+            return false;
+          }
         }
       } else {
         return false;
