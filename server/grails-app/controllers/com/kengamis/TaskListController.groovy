@@ -46,8 +46,6 @@ class TaskListController {
             def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "
             def userPartnerProgram = AppHolder.withMisSql { rows(query.toString()) }
 
-            println query
-
             def userPartner = '', userProgram = ''
             if (userPartnerProgram.size() > 0) {
                 userPartner = userPartnerProgram.collect { it['partner_id'] }.join(",")
@@ -56,15 +54,24 @@ class TaskListController {
 
 
             //def c1 = userGroup.contains(groupId)
-            boolean c2
-            if (userRoles.contains("ROLE_PROGRAM_OFFICER")) {
-                def userGroupNames = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
-                c2 = userGroupNames.contains(taskProgram.title)
-            } else {
+            boolean c2 = false
+            if (task.taskDefinitionKey=="Review_Program_Report" || task.taskDefinitionKey=="Approve_Report") {
+                def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+                if(userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
+            } else if(task.taskDefinitionKey=="Submit_Report" || task.taskDefinitionKey=="Submit_Final_Report") {
                 c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
+            } else if(task.taskDefinitionKey=="Review_Performance_Report") {
+                c2 = userRoles.contains("ROLE_MEAL")
+            } else if(task.taskDefinitionKey=="Review_Finance_Report" || task.taskDefinitionKey=="Disburse_Funds") {
+                c2 = userRoles.contains("ROLE_FINANCE")
+            } else if(task.taskDefinitionKey=="Approve_Fund_Disbursement") {
+                c2 = userRoles.contains("ROLE_ED")
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
+
+            println "c2 $c2"
+            println "c3 $c3"
 
             if (c2 || c3) {
                 tasks << [id               : task.id,
