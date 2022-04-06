@@ -74,6 +74,8 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   searchValue = '';
   private map;
   formDataRecord: any;
+  uniqueDataCollectors: any;
+  tmpCordinates: any
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -115,14 +117,16 @@ export class FormDataComponent implements OnInit, AfterViewInit {
 
 
     this.formService.getFormData(params).subscribe((data) => {
+      console.log(data,"data ")
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
       this.users = this.userMappings(data.formDataCollectors);
-      this.numberOfRecords = data.resultListCount;
+      this.numberOfRecords = data.resultList.length;
       this.numberOfQuestions = data.numberOfQuestions;
-      this.numberOfDataCollectors = (data.formDataCollectors ? data.formDataCollectors.length : 0);
-      this.initCharts(data.formGraphData);
+      this.uniqueDataCollectors=[... new Set(data.resultList.map(a => a.submitterName ))]
+      this.numberOfDataCollectors = this.uniqueDataCollectors.length
+      this.initCharts(data.formGraphData.filter(a => this.uniqueDataCollectors.includes(a.user)));
       if (data['gpsCoordinates'].length === 0) {
         document.getElementById("map_div").style.display = "none";
       } else {
@@ -150,11 +154,11 @@ export class FormDataComponent implements OnInit, AfterViewInit {
   private initMap(): void {
     this.map = L.map('map', {
       center: [1.3733, 32.2903],
-      zoom: 7
+      zoom: 5.6
     });
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
-      minZoom: 7,
+      minZoom: 4,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
     });
     tiles.addTo(this.map);

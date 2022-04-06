@@ -138,22 +138,6 @@
                             <div> &nbsp;&nbsp;
                               {{row?.form | formName: this.forms}}
                             </div>
-                            <!--<div class=" input-group input-group-merge" *ngIf="isEditable">
-                              &nbsp;&nbsp;
-                              <ng-select class="form-control form-control-sm"
-                                         name="datatable_length"
-                                         aria-controls="datatable"
-                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                         [multiple]="false"
-                                         placeholder="Table"
-                                         [searchable]="true"
-                                         [clearable]="true"
-                              >
-                                <ng-option [value]="item.id" *ngFor="let item of forms">
-                                  {{item?.displayName}}
-                                </ng-option>
-                              </ng-select>
-                            </div>-->
                           </td>
                           <td style="white-space: break-spaces!important;" class="col-md-7">
                             <div *ngIf="!row.show">
