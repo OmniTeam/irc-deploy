@@ -18,12 +18,9 @@ class TaskListController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        //params.max = Math.min(max ?: 10, 100)
-
-        def taskListMapList = taskListService.list(params)
         def tasks = []
 
-        taskListMapList.each { TaskList task ->
+        TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
             def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
@@ -38,48 +35,55 @@ class TaskListController {
                 if (it.key == 'GroupId') groupId = it.value
             }
 
-            def programPartner = ProgramPartner.findById(partnerId)
-            def program = Program.findById(programId)
+            def taskPartner = ProgramPartner.findById(partnerId)
+            def taskProgram = Program.findById(programId)
 
-            if (programPartner == null) programPartner = [name: '']
-            if (program == null) program = [title: '']
+            if (taskPartner == null) taskPartner = [name: '']
+            if (taskProgram == null) taskProgram = [title: '']
 
             User currentUser = AppHolder.currentUser()
-            def userGroup = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
+            def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
             def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "
             def userPartnerProgram = AppHolder.withMisSql { rows(query.toString()) }
 
             println query
 
             def userPartner = '', userProgram = ''
-            if(userPartnerProgram.size()>0) {
+            if (userPartnerProgram.size() > 0) {
                 userPartner = userPartnerProgram.collect { it['partner_id'] }.join(",")
                 userProgram = userPartnerProgram.collect { it['program_id'] }.join(",")
             }
 
-            if (task.status != "completed")
-                def c1 = userGroup.contains(groupId)
-                def c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
-                def c3 = userGroup.contains("ROLE_SUPER_ADMIN")
 
-                if (c2 || c3) {
-                    tasks << [id               : task.id,
-                              taskName         : task.taskName,
-                              partnerSetupId   : partnerSetupId,
-                              startDate        : startDate,
-                              partnerId        : partnerId,
-                              partnerName      : programPartner.name,
-                              programId        : programId,
-                              programName      : program.title,
-                              endDate          : endDate,
-                              groupId          : groupId,
-                              reportingPeriod  : period,
-                              outputVariables  : task.outputVariables,
-                              processInstanceId: task.processInstanceId,
-                              taskDefinitionKey: task.taskDefinitionKey,
-                              dateCreated      : task.dateCreated,
-                              status           : task.status]
-                }
+            //def c1 = userGroup.contains(groupId)
+            boolean c2
+            if (userRoles.contains("ROLE_PROGRAM_OFFICER")) {
+                def userGroupNames = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+                c2 = userGroupNames.contains(taskProgram.title)
+            } else {
+                c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
+            }
+
+            boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
+
+            if (c2 || c3) {
+                tasks << [id               : task.id,
+                          taskName         : task.taskName,
+                          partnerSetupId   : partnerSetupId,
+                          startDate        : startDate,
+                          partnerId        : partnerId,
+                          partnerName      : taskPartner.name,
+                          programId        : programId,
+                          programName      : taskProgram.title,
+                          endDate          : endDate,
+                          groupId          : groupId,
+                          reportingPeriod  : period,
+                          outputVariables  : task.outputVariables,
+                          processInstanceId: task.processInstanceId,
+                          taskDefinitionKey: task.taskDefinitionKey,
+                          dateCreated      : task.dateCreated,
+                          status           : task.status]
+            }
         }
         respond tasks
     }

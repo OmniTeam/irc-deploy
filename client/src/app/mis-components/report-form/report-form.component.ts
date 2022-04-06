@@ -404,10 +404,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                if(+value <= +item.expense_to_date){
+                if(+value <= +item.total_advanced){
                   item.quarter_expenses = value
                 } else {
-                  this.alertService.error(`Quarter expense should be less than Expense to date`);
+                  this.alertService.error(`Quarter expense should be less than Total Advanced`);
                   return;
                 }
                 item.variance = +item.total_advanced - +value
