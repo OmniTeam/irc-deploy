@@ -13,7 +13,6 @@ class User {
     String email
     String username
     String password
-    String position
     boolean enabled = true
     boolean accountExpired = false
     boolean accountLocked = false
@@ -29,8 +28,6 @@ class User {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: true
-        position nullable: true
-
     }
 
     static mapping = {

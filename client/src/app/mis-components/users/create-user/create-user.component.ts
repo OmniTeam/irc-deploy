@@ -56,14 +56,6 @@ export class CreateUserComponent implements OnInit {
   ];
   // represents the user roles
   user_Type: any;
-  organizationRoles = [
-    {position:'ED'},
-    {position:'VAC Program Officer'},
-    {position:'AGPP Program Officer'},
-    {position:'YCD Program Officer'},
-    {position:'Finance'},
-    {position:'MEAL'}
-  ];
   partners: any;
   data_collector_Type = [
     {
@@ -99,7 +91,6 @@ export class CreateUserComponent implements OnInit {
       names: ['', [Validators.required]],
       email: [''/*, [Validators.required, Validators.email]*/],
       role: [null],
-      position: [null],
       partner: [null],
       kengaGroup: [null],
       enabled: [true],
@@ -138,8 +129,6 @@ export class CreateUserComponent implements OnInit {
       })
 
 
-
-
       //insert the user's partner in the user partner table
       const userPartnerData = new FormData()
       userPartnerData.append('user', result.id)
@@ -147,7 +136,7 @@ export class CreateUserComponent implements OnInit {
 
       this.userService.createUserPartner(userPartnerData).subscribe(data => {
         console.log(data, "User Partner")
-      }, error => {this.alertService.error("failed to create user partner")})
+      }, error => {console.log("Did not creatte partner", error)})
 
       // inserts user_id group_id pairs into the user group table
       for(let i=0; i<formData.kengaGroup.length; i++){

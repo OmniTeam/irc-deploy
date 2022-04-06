@@ -50,7 +50,6 @@ class UserController {
                 names: user.names,
                 groups: kengaGroups,
                 role: roles,
-                position: user.position,
                 partner: partner?.id,
                 enabled: user.enabled
         ]
@@ -146,6 +145,7 @@ class UserController {
 
         UserRole.deleteOldRecords(currentUser)
         KengaUserGroup.deleteOldRecordsUser(currentUser)
+        UserPartner.deleteOldRecords(currentUser)
 
         def usersRole = params.role as String
         def listOfUserRoles = usersRole ? usersRole.split(",") : []
@@ -159,6 +159,13 @@ class UserController {
         listOfUserGroups?.each{ myUserGroup ->
             def currentGroup = KengaGroup.get(myUserGroup)
             KengaUserGroup.create(currentGroup,currentUser, true)
+        }
+
+        def userPartner = params.partner as String
+        def listOfUserPartners = userPartner ? userPartner.split(",") : []
+        listOfUserPartners?.each{ myUserPartner ->
+            def currentPartner = ProgramPartner.get(myUserPartner)
+            UserPartner.create(currentPartner,currentUser, true)
         }
     }
 }

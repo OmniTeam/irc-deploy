@@ -106,11 +106,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
+          if (this.taskRecord.taskDefinitionKey === "Submit_Report" ||
+            this.taskRecord.taskDefinitionKey === "Submit_Final_Report") this.isSubmitVisible = true;
+          else if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
             this.taskRecord.taskDefinitionKey === "Review_Performance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Program_Report") this.isReviewVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
+            this.taskRecord.taskDefinitionKey === "Review_Program_Report" ||
+            this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.isReviewVisible = true;
+          else if (this.taskRecord.taskDefinitionKey === "Approve_Report" ||
+            this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") this.isApproveVisible = true;
+          else this.isSubmitVisible = true;
 
           const params = new HttpParams()
             .set('processInstanceId', this.taskRecord.processInstanceId);
@@ -400,13 +404,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                if(+value <= +item.expense_to_date){
+                if(+value <= +item.total_advanced){
                   item.quarter_expenses = value
                 } else {
-                  this.alertService.error(`Quarter expense should be less than Expense to date`);
+                  this.alertService.error(`Quarter expense should be less than Total Advanced`);
                   return;
                 }
-                item.variance = +item.total_advanced - +item.expense_to_date - +value
+                item.variance = +item.total_advanced - +value
               }
             });
           }
@@ -416,7 +420,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
                 item.total_advanced = value
-                item.variance = +item.total_advanced - +item.expense_to_date - +value
+                item.variance = +item.total_advanced - +item.quarter_expenses
               }
             });
           }
@@ -478,7 +482,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
     });
     setTimeout(() => {
-      if(status!="draft") this.location.back();
+      if(status!="draft") this.router.navigate(['/taskList']);
       this.success = false;
       this.error = false;
     }, 3000);
@@ -562,12 +566,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (status === "revise") {
       this.saveReport(reportValues, 'asked_for_revisions');
       this.updateTaskStatus("needs_revision");
-      this.location.back();
+      this.router.navigate(['/taskList']);
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'reviewed_and_submitted');
       this.updateTaskStatus("completed");
-      this.location.back();
+      this.router.navigate(['/taskList']);
     }
   }
 
@@ -627,7 +631,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     this.saveReport(reportValues, 'approved_report');
     this.updateTaskStatus("completed");
-    this.location.back();
+    this.router.navigate(['/taskList']);
   }
 
   updateTaskStatus(status) {
@@ -636,10 +640,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       this.taskRecord.outputVariables = "{}";
     }
     if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report") {
-      this.taskRecord.outputVariables = '{"Funding_Decision": "' + this.radioEndOfPartnership + '"}';
+      let ans = "No"
+      if(this.radioEndOfPartnership=="yes") ans = "Yes"
+      this.taskRecord.outputVariables = '{"Funding_Decision": "' + ans + '"}';
     }
     if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
-      this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioRecommendFund + '"}';
+      let ans = "No"
+      if(this.radioRecommendFund=="yes") ans = "Yes"
+      this.taskRecord.outputVariables = '{"Approve_Funding": "' + ans + '"}';
       if(status=="completed") {
         const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
         this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
@@ -653,6 +661,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   onBackPressed() {
-    this.location.back();
+    this.router.navigate(['/taskList']);
   }
 }

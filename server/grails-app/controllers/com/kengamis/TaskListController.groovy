@@ -18,49 +18,79 @@ class TaskListController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        //params.max = Math.min(max ?: 10, 100)
-
-        def taskListMapList = taskListService.list(params)
         def tasks = []
 
-        taskListMapList.each{TaskList task ->
+        TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
             def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
 
             variables['data'].each {
-                if(it.key=='PartnerSetupId') partnerSetupId = it.value
-                if(it.key=='Period') period = it.value
-                if(it.key=='StartDate') startDate = it.value
-                if(it.key=='PartnerId') partnerId = it.value
-                if(it.key=='ProgramId') programId = it.value
-                if(it.key=='EndDate') endDate = it.value
-                if(it.key=='GroupId') groupId = it.value
+                if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+                if (it.key == 'Period') period = it.value
+                if (it.key == 'StartDate') startDate = it.value
+                if (it.key == 'PartnerId') partnerId = it.value
+                if (it.key == 'ProgramId') programId = it.value
+                if (it.key == 'EndDate') endDate = it.value
+                if (it.key == 'GroupId') groupId = it.value
             }
 
-            def programPartner = ProgramPartner.findById(partnerId)
-            def program = Program.findById(programId)
+            def taskPartner = ProgramPartner.findById(partnerId)
+            def taskProgram = Program.findById(programId)
 
-            if(programPartner==null) programPartner = [name:'']
-            if(program==null) program = [title:'']
+            if (taskPartner == null) taskPartner = [name: '']
+            if (taskProgram == null) taskProgram = [title: '']
 
-            if(task.status != "completed")
-                tasks << [id: task.id,
-                        taskName : task.taskName,
-                        partnerSetupId: partnerSetupId,
-                        startDate : startDate,
-                        partnerId : partnerId,
-                        partnerName : programPartner.name,
-                        programId : programId,
-                        programName : program.title,
-                        endDate : endDate,
-                        groupId : groupId,
-                        reportingPeriod : period,
-                        outputVariables : task.outputVariables,
-                        processInstanceId : task.processInstanceId,
-                        taskDefinitionKey : task.taskDefinitionKey,
-                        dateCreated: task.dateCreated,
-                        status: task.status]
+            User currentUser = AppHolder.currentUser()
+            def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
+            def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "
+            def userPartnerProgram = AppHolder.withMisSql { rows(query.toString()) }
+
+            def userPartner = '', userProgram = ''
+            if (userPartnerProgram.size() > 0) {
+                userPartner = userPartnerProgram.collect { it['partner_id'] }.join(",")
+                userProgram = userPartnerProgram.collect { it['program_id'] }.join(",")
+            }
+
+
+            //def c1 = userGroup.contains(groupId)
+            boolean c2 = false
+            if (task.taskDefinitionKey=="Review_Program_Report" || task.taskDefinitionKey=="Approve_Report") {
+                def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+                if(userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
+            } else if(task.taskDefinitionKey=="Submit_Report" || task.taskDefinitionKey=="Submit_Final_Report") {
+                c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
+            } else if(task.taskDefinitionKey=="Review_Performance_Report") {
+                c2 = userRoles.contains("ROLE_MEAL")
+            } else if(task.taskDefinitionKey=="Review_Finance_Report" || task.taskDefinitionKey=="Disburse_Funds") {
+                c2 = userRoles.contains("ROLE_FINANCE")
+            } else if(task.taskDefinitionKey=="Approve_Fund_Disbursement") {
+                c2 = userRoles.contains("ROLE_ED")
+            }
+
+            boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
+
+            println "c2 $c2"
+            println "c3 $c3"
+
+            if (c2 || c3) {
+                tasks << [id               : task.id,
+                          taskName         : task.taskName,
+                          partnerSetupId   : partnerSetupId,
+                          startDate        : startDate,
+                          partnerId        : partnerId,
+                          partnerName      : taskPartner.name,
+                          programId        : programId,
+                          programName      : taskProgram.title,
+                          endDate          : endDate,
+                          groupId          : groupId,
+                          reportingPeriod  : period,
+                          outputVariables  : task.outputVariables,
+                          processInstanceId: task.processInstanceId,
+                          taskDefinitionKey: task.taskDefinitionKey,
+                          dateCreated      : task.dateCreated,
+                          status           : task.status]
+            }
         }
         respond tasks
     }
@@ -73,34 +103,37 @@ class TaskListController {
         def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
 
         variables['data'].each {
-            if(it.key=='PartnerSetupId') partnerSetupId = it.value
-            if(it.key=='Period') period = it.value
-            if(it.key=='StartDate') startDate = it.value
-            if(it.key=='PartnerId') partnerId = it.value
-            if(it.key=='ProgramId') programId = it.value
-            if(it.key=='EndDate') endDate = it.value
-            if(it.key=='GroupId') groupId = it.value
+            if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+            if (it.key == 'Period') period = it.value
+            if (it.key == 'StartDate') startDate = it.value
+            if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'ProgramId') programId = it.value
+            if (it.key == 'EndDate') endDate = it.value
+            if (it.key == 'GroupId') groupId = it.value
         }
 
         def programPartner = ProgramPartner.findById(partnerId)
         def program = Program.findById(programId)
 
-        def t = [id: task.id,
-                taskName : task.taskName,
-                partnerSetupId: partnerSetupId,
-                startDate : startDate,
-                partnerId : partnerId,
-                partnerName : programPartner.name,
-                programId : programId,
-                programName : program.title,
-                endDate : endDate,
-                groupId : groupId,
-                reportingPeriod : period,
-                outputVariables : task.outputVariables,
-                processInstanceId : task.processInstanceId,
-                taskDefinitionKey : task.taskDefinitionKey,
-                dateCreated: task.dateCreated,
-                status: task.status]
+        if (programPartner == null) programPartner = [name: '']
+        if (program == null) program = [title: '']
+
+        def t = [id               : task.id,
+                 taskName         : task.taskName,
+                 partnerSetupId   : partnerSetupId,
+                 startDate        : startDate,
+                 partnerId        : partnerId,
+                 partnerName      : programPartner.name,
+                 programId        : programId,
+                 programName      : program.title,
+                 endDate          : endDate,
+                 groupId          : groupId,
+                 reportingPeriod  : period,
+                 outputVariables  : task.outputVariables,
+                 processInstanceId: task.processInstanceId,
+                 taskDefinitionKey: task.taskDefinitionKey,
+                 dateCreated      : task.dateCreated,
+                 status           : task.status]
         respond t
     }
 
@@ -127,7 +160,7 @@ class TaskListController {
             return
         }
 
-        respond taskList, [status: CREATED, view:"show"]
+        respond taskList, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -149,7 +182,7 @@ class TaskListController {
             return
         }
 
-        respond taskList, [status: OK, view:"show"]
+        respond taskList, [status: OK, view: "show"]
     }
 
     @Transactional

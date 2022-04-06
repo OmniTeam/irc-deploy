@@ -18,4 +18,16 @@ class UserPartner {
     static constraints = {
         user unique: 'programPartner'
     }
+
+    static UserPartner create(ProgramPartner programPartner, User user, boolean flush = false) {
+        def instance = new UserPartner(user: user, programPartner: programPartner)
+        instance.save(flush: flush)
+        instance
+    }
+
+    static void deleteOldRecords(User e){
+        def filters = findAllByUser(e)
+        filters.each { it.delete(flush: true, failOnError: true) }
+    }
+
 }

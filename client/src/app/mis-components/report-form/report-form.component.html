@@ -68,19 +68,19 @@
           <div class="col-sm-12 justify-center">
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'"  (click)="changeForm('Submit')">Submit Report
+                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible"  (click)="changeForm('Submit')">Submit Report
               </button><!--[disabled]="!isSubmitVisible"-->
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'"  (click)="changeForm('Review')">Review Report
+                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible"  (click)="changeForm('Review')">Review Report
               </button><!--[disabled]="!isReviewVisible"-->
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'"  (click)="changeForm('Approve')">Approve Report
+                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible"  (click)="changeForm('Approve')">Approve Report
               </button><!--[disabled]="!isApproveVisible"-->
             </div>
           </div>
@@ -139,7 +139,7 @@
 
                 <h3 style="margin-left: 40px;">SUMMARY OF PERFORMANCE FOR THE REPORTING PERIOD</h3>
                 <div class="card">
-                  <table class="table table-striped table-bordered" id="summary">
+                  <table datatable class="table table-striped table-bordered" id="summary">
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
@@ -161,14 +161,14 @@
                       <td class='text-center'>{{ row.quarter_target | number }}</td>
                       <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
                       <td class='text-center' *ngIf="row.milestoneId==undefined" id="1-{{row.id}}">
-                        <div>{{ row.quarter_achievement }}
+                        <div>{{ row.quarter_achievement | number }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement)"><i
+                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
-                      <td class='text-center' id="0-{{row.id}}">
+                      <td class='text-center' style="white-space: pre;" id="0-{{row.id}}">
                         <div>{{ row.comment_on_result }}
                           <button class="btn btn-link"
                                   (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.comment_on_result)"><i
@@ -182,7 +182,7 @@
 
                 <h3 style="margin-left: 40px;">FINANCIAL REPORT</h3>
                 <div class="card">
-                  <table class="table table-striped table-bordered" id="financial">
+                  <table datatable class="table table-striped table-bordered" id="financial">
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
@@ -216,8 +216,8 @@
                         </div>
                       </td>
                       <td class='text-center'>{{ row.variance }}</td>
-                      <td class='text-center' [id]="'td3-'+row.id">
-                        <div>{{ row.reason_for_variance }}
+                      <td class='text-center' style="white-space: pre;" [id]="'td3-'+row.id">
+                        <div><p>{{ row.reason_for_variance }}</p>
                           <button class="btn btn-link"
                                   (click)="cellEditor(row,'td3-'+row.id, 'reason_for_variance',row.reason_for_variance)">
                             <i class="fas fa-pencil-alt"></i></button>
@@ -283,7 +283,7 @@
                         <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
+                          Attachment</a>
                         </button>
                       </div>
                     </div>
@@ -294,7 +294,7 @@
                         <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
+                          Attachment</a>
                         </button>
                       </div>
                     </div>
@@ -305,7 +305,7 @@
                         <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
+                          Attachment</a>
                         </button>
                       </div>
                     </div>
@@ -323,7 +323,7 @@
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
-                            Template</a>
+                            Attachment</a>
                           </button>
                         </div>
                       </div>
@@ -334,7 +334,7 @@
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
-                            Template</a>
+                            Attachment</a>
                           </button>
                         </div>
                       </div>
@@ -345,7 +345,7 @@
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
-                            Template</a>
+                            Attachment</a>
                           </button>
                         </div>
                       </div>
@@ -430,15 +430,25 @@
                       </div>
                     </div>
 
+                    <div class="col-sm-3">
+                      <div>
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View
+                          Recommendations
+                        </button>
+                        <br><br>
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div class="row">
                     <div class="col">
-                      <p>Comments (Partner)</p>
+                      <p>Comments For Partner </p>
                       <textarea class="form-control" rows="3" [(ngModel)]="reviewerComments"></textarea>
                     </div>
                     <div class="col">
-                      <p>Recommendations (Internal)</p>
+                      <p>Recommendations</p>
                       <textarea class="form-control" rows="3" [(ngModel)]="reviewerRecommendations"></textarea>
                     </div>
                   </div>
@@ -535,8 +545,8 @@
                 <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger" (click)="reviewReport('revise')">Ask for Revisions</button>
-                    <button class="btn btn-success" (click)="reviewReport('submit')">Approve Report</button>
+                    <button class="btn btn-warning" (click)="reviewReport('revise')">Save For Later</button>
+                    <button class="btn btn-success" (click)="reviewReport('submit')">Approve Review</button>
                   </div>
                 </div>
                 <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
