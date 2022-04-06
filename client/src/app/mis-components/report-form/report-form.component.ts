@@ -410,7 +410,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                   this.alertService.error(`Quarter expense should be less than Expense to date`);
                   return;
                 }
-                item.variance = +item.total_advanced - +item.expense_to_date - +value
+                item.variance = +item.total_advanced - +value
               }
             });
           }
@@ -420,7 +420,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
                 item.total_advanced = value
-                item.variance = +item.total_advanced - +item.expense_to_date - +value
+                item.variance = +item.total_advanced - +item.quarter_expenses
               }
             });
           }

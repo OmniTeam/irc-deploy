@@ -432,7 +432,7 @@
 
                     <div class="col-sm-3">
                       <div>
-                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View
                           Recommendations
                         </button>
                         <br><br>
