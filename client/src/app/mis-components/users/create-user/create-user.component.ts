@@ -136,7 +136,7 @@ export class CreateUserComponent implements OnInit {
 
       this.userService.createUserPartner(userPartnerData).subscribe(data => {
         console.log(data, "User Partner")
-      }, error => {this.alertService.error("failed to create user partner")})
+      }, error => {console.log("Did not creatte partner", error)})
 
       // inserts user_id group_id pairs into the user group table
       for(let i=0; i<formData.kengaGroup.length; i++){
