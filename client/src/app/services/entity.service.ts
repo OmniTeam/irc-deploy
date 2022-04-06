@@ -55,6 +55,7 @@ export class EntityService {
   }
 
   getCurrentEntityView(id): Observable<any> {
+
     return this.http.get(`${environment.serverUrl}/entityView/${id}`);
   }
 

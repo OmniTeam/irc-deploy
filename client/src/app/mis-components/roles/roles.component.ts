@@ -78,7 +78,7 @@ export class RolesComponent implements OnInit {
   }
 
   deleteRole(row){
-    this.rolesService.deleteCurrentRole(row).subscribe((result) => {
+    this.rolesService.deleteCurrentRole(row.id).subscribe((result) => {
       console.warn(result, 'Roles have been deleted');
       this.router.navigate(['/roles']).then(() => {
         window.location.reload();

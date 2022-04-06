@@ -233,14 +233,14 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.approvedAmount | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id, 'budget_approved_amt', row.approvedAmount, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id, 'approved_amt', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id+'-d'">
                         <div>{{ row.totalSpent | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id+'-d', 'budget_disburse', row.totalSpent, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id+'-d', 'total_spent', row.totalSpent, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>

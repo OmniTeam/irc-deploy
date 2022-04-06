@@ -120,7 +120,6 @@ class KengaGroupAclEntryController {
     def saveGroupMappingsWithParent(){
         def json=request.JSON
         def groupId = json.group
-        def parentId = json.parent
         def permission = json.permissions
         def queryArray = json.queryArray
 
@@ -131,7 +130,6 @@ class KengaGroupAclEntryController {
             def grpConditionQuery = it.groupConditionQuery
 
             def kengaGroup = KengaGroup.get(groupId)
-            def kengaGroupParent = KengaGroup.get(parentId)
             def form = Form.get(formId)
             def kengaDataTable = KengaDataTable.findByTableName(form.name)
 
@@ -152,15 +150,30 @@ class KengaGroupAclEntryController {
                         mask: permission
                 ).save(flush: true, failOnError: true)
             }
-            if(parentId){
+
+            // after creating the acls of the immediate group
+            // create the function that checks for the parent of groups
+            // until the last parent has no parent
+
+            def parentGroupId = kengaGroup.parentGroup.collect{it.id}[0]
+
+            while(parentGroupId !=null){
+                // getting the parent object which will be used to create the acl
+                def myCurrentObject = kengaGroup.get(parentGroupId)
+
+                // create acl for the parent
                 records.each {record->
                     def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
                     new KengaGroupAclEntry(
                             kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                            kengaGroup: kengaGroupParent,
+                            kengaGroup: myCurrentObject,
                             mask: permission
                     ).save(flush: true, failOnError: true)
                 }
+
+                // update the parent ID to the new parent of the current parent
+                parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
+
             }
         }
     }

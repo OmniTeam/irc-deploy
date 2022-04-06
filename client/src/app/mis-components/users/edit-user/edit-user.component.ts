@@ -16,6 +16,7 @@ import {AuthService} from "../../../services/auth.service";
 import {RolesService} from "../../../services/roles.service";
 import {GroupsService} from "../../../services/groups.service";
 import {HttpParams} from "@angular/common/http";
+import {ProgramPartnersService} from "../../../services/program-partners.service";
 
 @Component({
   selector: 'app-edit-user',
@@ -33,6 +34,7 @@ export class EditUserComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private programPartnersService : ProgramPartnersService,
     private router: Router,
   ) {
   }
@@ -44,6 +46,15 @@ export class EditUserComponent implements OnInit {
   deactivate = false;
   submitted = false;
   fieldTextType: boolean;
+  organizationRoles = [
+    {position:'ED'},
+    {position:'VAC Program Officer'},
+    {position:'AGPP Program Officer'},
+    {position:'YCD Program Officer'},
+    {position:'Finance'},
+    {position:'MEAL'}
+  ];
+  partners: any;
   data_collector_Type = [
     {
       'name': 'Enumerator'
@@ -67,15 +78,20 @@ export class EditUserComponent implements OnInit {
       this.groups = result
       console.log(result)
     }, error => {this.alertService.error("Failed to get Groups")})
-    const params = new HttpParams().set('id',this.route.snapshot.params.id )
+    this.programPartnersService.getProgramPartners().subscribe((data) => {
+      this.partners = data;
+    });
+
     this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
-      console.log(results, "user")
+      console.log("user", results)
       this.formGroup = this.formBuilder.group({
-        password: [null],
         username: [results?.username, [Validators.required]],
         names: [results?.names, [Validators.required]],
         email: [results?.email/*, [Validators.required, Validators.email]*/],
-        role: [results.role[0]?.id],
+        password: [results?.password],
+        role: [results?.role],
+        position: [results?.position],
+        partner: [results?.partner],
         groups: [results?.groups],
         enabled: [results?.enabled],
       });
@@ -108,12 +124,12 @@ export class EditUserComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
-    console.log(submitData)
+    console.log('submitData', submitData)
     const params = new HttpParams()
       .set('role', submitData.role)
       .set('groups', submitData.groups)
     this.userService.updateUser(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
-      console.warn(result, 'System User Updated Successfully');
+      console.log(result, 'System User Updated Successfully');
       this.alertService.success(`User: ${result.username} has been successfully updated`)
       this.router.navigate(['/users']);
     }, error => {

@@ -61,7 +61,7 @@ export class EditGroupComponent implements OnInit {
       'name': 'Reports'
     },
   ]
-  dataCollectors: any
+  users: any
 
 
   get f() {
@@ -71,18 +71,15 @@ export class EditGroupComponent implements OnInit {
   ngOnInit(): void {
     this.groupsService.getGroups().subscribe(data =>{
       this.parents=data
-      // console.log(this.parents)
     }, error => {this.alertService.error("Failed to get Parents")})
     this.usersService.getUsers().subscribe(data =>{
-      this.dataCollectors=data
-      console.log(this.dataCollectors)
-    }, error => {this.alertService.error("Failed to get Data Collectors")})
+      this.users=data
+    }, error => {this.alertService.error("Failed to get Users")})
     this.groupsService.getCurrentGroup(this.route.snapshot.params.id).subscribe((results: any) => {
-      console.log(results,"this group data")
       this.formGroup = this.formBuilder.group({
         name: [results[0]?.name],
-        parent: [results?.parent],
-        data_collectors: [results[0]?.data_collectors]
+        parentGroup: [results[0]?.parentGroup],
+        users: [results[0]?.users]
       });
     });
   }
@@ -109,13 +106,11 @@ export class EditGroupComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
-    console.log(submitData)
     const params =new HttpParams()
       .set('id', this.route.snapshot.params.id)
-      .set('data_collectors',submitData.data_collectors)
+      .set('users',submitData.users)
 
     this.groupsService.updateGroup(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
-      console.warn(result, 'Group Successfully');
       this.alertService.success(`Group: ${result.name} has been successfully updated`)
       this.router.navigate(['/groups']);
     }, error => {

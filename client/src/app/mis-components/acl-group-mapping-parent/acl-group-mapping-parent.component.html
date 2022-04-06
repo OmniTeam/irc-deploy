@@ -44,35 +44,7 @@
                                      formControlName="group"
                                      [searchable]="true"
                                      [clearable]="true"
-                          >
-                            <ng-option [value]="item.id" *ngFor="let item of parents">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Parent
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Parent"
-                                     formControlName="parent"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                                     [readonly]="this.greyOutGroupField"
                           >
                             <ng-option [value]="item.id" *ngFor="let item of parents">
                               {{item.name}}
@@ -105,7 +77,7 @@
                                      [clearable]="true"
                           >
                             <ng-option [value]="item.id" *ngFor="let item of forms">
-                              {{item?.name}}
+                              {{item?.displayName}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -134,19 +106,20 @@
 
                                         ></textarea>
                         </div>
-
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="row" style="padding-bottom: 16px;">
                   <div class="col-md-12">
+                    <div class="form-row is-invalid" *ngIf="error!==''">
+                      <p style="color: red">{{error}}</p>
+                    </div>
                     <button class=" btn btn-default  fa-pull-right" type="button"
                             (click)="addQuery()">
                       {{addQueryButtonText}}
                     </button>
                   </div>
-
                 </div>
                 <div class="row" style="padding-bottom: 16px;">
                   <div class="col-md-12">
@@ -154,18 +127,60 @@
                       <table class=" table align-items-center table-flush"
                              style="width: 100%!important;table-layout:fixed;">
                         <thead class=" thead-light">
-                        <tr>
-                          <th>Form</th>
-                          <th>Query</th>
+                        <tr class="row">
+                          <th class="col-md-3">  &nbsp; &nbsp; Form</th>
+                          <th class="col-md-8">Query</th>
+                          <th class="col-md-1">Actions</th>
                         </tr>
                         </thead>
-
-                        <tr *ngFor="let q of queryArray; let i = index;">
-                          <td style="white-space: break-spaces!important;">
-                            <p > {{q?.form}}</p>
+                        <tr *ngFor="let row of queryArray; let i = index;" class="row">
+                          <td style="white-space: break-spaces!important;" class="col-md-3">
+                            <div> &nbsp;&nbsp;
+                              {{row?.form | formName: this.forms}}
+                            </div>
+                            <!--<div class=" input-group input-group-merge" *ngIf="isEditable">
+                              &nbsp;&nbsp;
+                              <ng-select class="form-control form-control-sm"
+                                         name="datatable_length"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Table"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.id" *ngFor="let item of forms">
+                                  {{item?.displayName}}
+                                </ng-option>
+                              </ng-select>
+                            </div>-->
                           </td>
-                          <td style="white-space: break-spaces!important;">
-                            <p> {{q?.groupConditionQuery}}</p>
+                          <td style="white-space: break-spaces!important;" class="col-md-7">
+                            <div *ngIf="!row.show">
+                              {{row?.groupConditionQuery}}
+                            </div>
+                            <div *ngIf="row.show">
+                              <input
+                                class="form-control"
+                                placeholder="Query"
+                                type="text"
+                                style="padding-left: 10px;"
+                                id="{{i}}"
+                                [value] = row?.groupConditionQuery
+                              >
+                            </div>
+                          </td>
+                          <td class="col-md-1" >
+                            <button class="btn btn-link" type="button" *ngIf="row.show"
+                                    (click)="saveRow(i)"><i
+                              class="fas fa-check"></i></button> &nbsp;
+                            <button class="btn btn-link" type="button" *ngIf="row.show"
+                                    (click)="cancelRow(i)"><i
+                              class="fas fa-ban text-danger"></i></button>
+                            <button class="btn btn-link" type="button" *ngIf="!row.show"
+                                    (click)="editRow(i)"><i
+                              class="fas fa-pencil-alt"></i></button> &nbsp;
+                            <i class="fa fa-trash text-danger"  *ngIf="!row.show" (click)="deleteQuestion(i)"></i>
                           </td>
                         </tr>
                       </table>

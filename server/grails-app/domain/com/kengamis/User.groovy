@@ -13,6 +13,7 @@ class User {
     String email
     String username
     String password
+    String position
     boolean enabled = true
     boolean accountExpired = false
     boolean accountLocked = false
@@ -28,7 +29,7 @@ class User {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: true
-
+        position nullable: true
 
     }
 
@@ -47,6 +48,11 @@ class User {
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
+
+    ProgramPartner getPartner() {
+        def pp = (UserPartner.findByUser(this) as UserPartner)
+        pp ? pp.programPartner as ProgramPartner : null
     }
 
     Set<EntityViewFilters> getEntityViewFilters() {

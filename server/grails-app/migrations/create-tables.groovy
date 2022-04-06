@@ -1862,4 +1862,44 @@ databaseChangeLog = {
         renameColumn(columnDataType: "varchar(255)", newColumnName: "process_instance_id", oldColumnName:"process_id", tableName: "report_form_recommendations")
     }
 
+    changeSet(author: "bruno (generated)", id: "1649072075746-8") {
+        createTable(tableName: "user_partner") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "user_partnerPK")
+            }
+
+            column(name: "program_partner_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649072075746-9") {
+        addColumn(tableName: "user") {
+            column(name: "position", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649072075746-10") {
+        addUniqueConstraint(columnNames: "program_partner_id, user_id", constraintName: "UKcda91fa4eda58b1b8453181e9ec6", tableName: "user_partner")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1648721492475-8") {
+        addColumn(tableName: "kenga_group") {
+            column(name: "parent_group_id", type: "varchar(255)")
+        }
+    }
+
 }
