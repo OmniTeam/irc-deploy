@@ -46,18 +46,23 @@ class TaskListController {
 
             User currentUser = AppHolder.currentUser()
             def userGroup = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
-            def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id "
+            def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "
             def userPartnerProgram = AppHolder.withMisSql { rows(query.toString()) }
-            def userPartner = userPartnerProgram.collect { it['partner_id'] }.join(",")
-            def userProgram = userPartnerProgram.collect { it['program_id'] }.join(",")
+
+            println query
+
+            def userPartner = '', userProgram = ''
+            if(userPartnerProgram.size()>0) {
+                userPartner = userPartnerProgram.collect { it['partner_id'] }.join(",")
+                userProgram = userPartnerProgram.collect { it['program_id'] }.join(",")
+            }
 
             if (task.status != "completed")
                 def c1 = userGroup.contains(groupId)
-                def c2 = userPartner.contains(partnerId)
-                def c3 = userProgram.contains(programId)
-                def c4 = userGroup.contains("ROLE_SUPER_ADMIN")
+                def c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
+                def c3 = userGroup.contains("ROLE_SUPER_ADMIN")
 
-                if (c2 || c3 || c4) {
+                if (c2 || c3) {
                     tasks << [id               : task.id,
                               taskName         : task.taskName,
                               partnerSetupId   : partnerSetupId,
