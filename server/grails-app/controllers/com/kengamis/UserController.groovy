@@ -90,7 +90,6 @@ class UserController {
     @Transactional
     def update(User user) {
         def userId =user.id
-        def userRole = params.role as String
 
         if (user == null) {
             render status: NOT_FOUND
@@ -103,7 +102,7 @@ class UserController {
         }
 
         try {
-            updateRolesAndGroups(userId, userRole)
+            updateRolesAndGroups(userId)
             userService.save(user)
         } catch (ValidationException e) {
             respond user.errors
@@ -140,7 +139,7 @@ class UserController {
     }
 
     @Transactional
-    def updateRolesAndGroups(userId, userRole){
+    def updateRolesAndGroups(userId){
         def currentUser = User.get(userId)
 
         UserRole.deleteOldRecords(currentUser)

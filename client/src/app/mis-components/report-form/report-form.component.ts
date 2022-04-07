@@ -455,7 +455,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       status: status
     }
 
-    const params = new HttpParams().set('taskId', this.taskId);
+    const params = new HttpParams().set('processInstanceId', this.taskRecord.processInstanceId);
     this.reportFormService.getReportForTask(params).subscribe(data => {
       if (data.report !== null && data.report !== undefined) {
         this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {

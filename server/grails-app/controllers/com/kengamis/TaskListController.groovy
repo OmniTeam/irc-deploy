@@ -70,9 +70,6 @@ class TaskListController {
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
 
-            println "c2 $c2"
-            println "c3 $c3"
-
             if (c2 || c3) {
                 tasks << [id               : task.id,
                           taskName         : task.taskName,
