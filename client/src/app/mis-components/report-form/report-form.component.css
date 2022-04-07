@@ -75,3 +75,14 @@ ul>li {
   color:red;
 }
 
+.comment {
+  white-space: pre;
+  overflow: hidden;
+  max-width: 300px;
+  text-overflow: ellipsis;
+}
+
+table {
+  max-width: 100%;
+}
+
