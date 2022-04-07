@@ -75,7 +75,7 @@ ul>li {
   color:red;
 }
 
-.comment {
+tr td {
   white-space: pre;
   overflow: hidden;
   max-width: 300px;
@@ -83,6 +83,8 @@ ul>li {
 }
 
 table {
-  max-width: 100%;
+  width: 100%;
+  overflow: auto;
+  display: table;
+  table-layout: fixed;
 }
-

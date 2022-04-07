@@ -48,8 +48,9 @@ table tr th.select-checkbox.selected::after {
 table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before {
   margin-top: 3px !important;
 }
-.input-error{
-  color:red;
+
+.input-error {
+  color: red;
   font-size: 80%;
   font-weight: 400;
   font-family: Open Sans, sans-serif;
@@ -58,6 +59,7 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .invalid-feedback {
   color: red;
 }
+
 .was-validated .form-control:invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .custom-select.is-invalid {
   border-color: red !important;
 }
@@ -73,6 +75,11 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .form-control-sm {
   height: 36px !important;
 }
-.alertify-notifier .ajs-message.ajs-error{
+
+.alertify-notifier .ajs-message.ajs-error {
   color: #FFFFFF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
