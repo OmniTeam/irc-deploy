@@ -102,7 +102,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'tags', title: 'Tags', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]},
       {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]},
       {path: 'programPartner', title: 'Program Partner', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
-      {path: 'users', title: 'Users', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
+      {path: 'mis-users', title: 'Users', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
       {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
     ]
   },

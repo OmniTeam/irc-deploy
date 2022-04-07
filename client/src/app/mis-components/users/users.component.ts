@@ -122,10 +122,18 @@ export class UsersComponent implements OnInit {
   }
 
   reloadTable() {
-    this.usersService.getUsers().subscribe((data) => {
-      this.users = data;
-      console.log(data)
-    });
+    if(this.router.url.includes('mis-users')){
+      this.usersService.getMISUsers().subscribe((data) => {
+        this.users = data;
+        console.log(data,"mis users")
+      });
+
+    } else {
+      this.usersService.getUsers().subscribe((data) => {
+        this.users = data;
+      });
+    }
+
   }
 
   createUser() {

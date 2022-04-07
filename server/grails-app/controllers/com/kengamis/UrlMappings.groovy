@@ -74,6 +74,7 @@ class UrlMappings {
 
         "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
         "/api/v1/aclGroupMapping-v2"(controller: 'kengaGroupAclEntry', action:'saveGroupMappingsWithParent',method: 'POST' )
+        "/getMISUsers"(controller: 'user', action:'getMISUsers',method: 'GET' )
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')

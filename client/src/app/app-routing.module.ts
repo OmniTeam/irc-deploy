@@ -219,6 +219,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
       },
       {
+        path: 'mis-users', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
+      },
+      {
         path: 'user/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
