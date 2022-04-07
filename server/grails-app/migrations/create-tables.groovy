@@ -1886,12 +1886,6 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "bruno (generated)", id: "1649072075746-9") {
-        addColumn(tableName: "user") {
-            column(name: "position", type: "varchar(255)")
-        }
-    }
-
     changeSet(author: "bruno (generated)", id: "1649072075746-10") {
         addUniqueConstraint(columnNames: "program_partner_id, user_id", constraintName: "UKcda91fa4eda58b1b8453181e9ec6", tableName: "user_partner")
     }

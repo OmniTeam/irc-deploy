@@ -50,7 +50,6 @@ class UserController {
                 names: user.names,
                 groups: kengaGroups,
                 role: roles,
-                position: user.position,
                 partner: partner?.id,
                 enabled: user.enabled
         ]
@@ -104,7 +103,6 @@ class UserController {
     @Transactional
     def update(User user) {
         def userId =user.id
-        def userRole = params.role as String
 
         if (user == null) {
             render status: NOT_FOUND
@@ -117,7 +115,7 @@ class UserController {
         }
 
         try {
-            updateRolesAndGroups(userId, userRole)
+            updateRolesAndGroups(userId)
             userService.save(user)
         } catch (ValidationException e) {
             respond user.errors
@@ -154,11 +152,12 @@ class UserController {
     }
 
     @Transactional
-    def updateRolesAndGroups(userId, userRole){
+    def updateRolesAndGroups(userId){
         def currentUser = User.get(userId)
 
         UserRole.deleteOldRecords(currentUser)
         KengaUserGroup.deleteOldRecordsUser(currentUser)
+        UserPartner.deleteOldRecords(currentUser)
 
         def usersRole = params.role as String
         def listOfUserRoles = usersRole ? usersRole.split(",") : []
@@ -172,6 +171,13 @@ class UserController {
         listOfUserGroups?.each{ myUserGroup ->
             def currentGroup = KengaGroup.get(myUserGroup)
             KengaUserGroup.create(currentGroup,currentUser, true)
+        }
+
+        def userPartner = params.partner as String
+        def listOfUserPartners = userPartner ? userPartner.split(",") : []
+        listOfUserPartners?.each{ myUserPartner ->
+            def currentPartner = ProgramPartner.get(myUserPartner)
+            UserPartner.create(currentPartner,currentUser, true)
         }
     }
 }

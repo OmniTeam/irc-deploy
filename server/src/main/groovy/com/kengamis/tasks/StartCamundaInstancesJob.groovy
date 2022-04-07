@@ -55,8 +55,9 @@ class StartCamundaInstancesJob extends Script {
                         StartDate     : result['start_date'],
                         EndDate       : result['end_date'],
                         Period        : result['period'],
-                        GroupId       : ""
+                        GroupId       : "${getGroupIds(setup.partnerId)}"
                 ], CIIF_MANAGEMENT_KEY)
+
 
                 if (started) {
                     print "================ started the damn instance ================"
@@ -90,5 +91,26 @@ class StartCamundaInstancesJob extends Script {
     static def formatProcessVariables(Map processVariables, String processKey) {
         def toReturn = [processDefKey: processKey, variables: processVariables]
         return JsonOutput.toJson(toReturn)
+    }
+
+    static def getGroupIds(def partnerId) {
+        def query = "SELECT " +
+                "USER.id AS userId, " +
+                "USER.username, " +
+                "user_partner.program_partner_id, " +
+                "program_partner.`name` AS partner, " +
+                "program_partner.program_id, " +
+                "rr.authority " +
+                "FROM " +
+                "`user` " +
+                "INNER JOIN user_partner ON user_partner.user_id = USER.id " +
+                "INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id  " +
+                "INNER JOIN (SELECT user_role.user_id, role.authority FROM role INNER JOIN user_role ON user_role.role_id = role.id) as rr ON rr.user_id = user.id " +
+                "WHERE " +
+                "program_partner.id = '${partnerId}' " +
+                "AND rr.authority IN ('ROLE_MEAL','ROLE_PROGRAM_OFFICER','ROLE_ED','ROLE_FINANCE')";
+
+        def result = AppHolder.withMisSql { rows(query.toString()) }.collect {it['authority']}.join(',')
+        return result
     }
 }
