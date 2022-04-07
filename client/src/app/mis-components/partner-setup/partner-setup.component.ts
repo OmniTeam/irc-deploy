@@ -198,6 +198,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (this.staffChosen != undefined) {
       this.programStaffService.getCurrentProgramStaff(this.staffChosen).subscribe((results: any) => {
         if (results !== null && results !== undefined) {
+          console.log("results", results)
           this.organisationalInfo = results;
           this.programChosen = results.programId;
           if (this.programChosen != undefined) {
@@ -205,15 +206,12 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
               if (data !== null && data !== undefined) {
                 this.milestones = data.milestones;
-                //console.log('indicators', this.indicators);
               }
             });
           }
         }
       });
-    } /*else {
-      this.organisationalInfo = SampleData.organisationalInfo;
-    }*/
+    }
   }
 
   createNewIndicator() {

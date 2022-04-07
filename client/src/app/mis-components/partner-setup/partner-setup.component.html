@@ -59,7 +59,7 @@
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                              [multiple]="false"
-                             placeholder="Select Partner/Cluster"
+                             placeholder="Select Staff"
                              [searchable]="true"
                              [clearable]="true"
                              [(ngModel)]="staffChosen"
@@ -76,24 +76,13 @@
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
-                        <li>Physical Address: <b>{{organisationalInfo.physicalAddress}}</b></li>
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.leadCluster}}</b>
-                        </li>
-                        <li>Postal Address: <b>{{organisationalInfo.postalAddress}}</b></li>
-                        <li>Acronym Name: <b>{{organisationalInfo.acronym}}</b></li>
-                        <li>Email: <b>{{organisationalInfo.email}}</b></li>
+                        <li>Staff: <b>{{organisationalInfo.name}}</b></li>
+                        <li>Email of Staff: <b>{{organisationalInfo.email}}</b></li>
+                        <li>Name of Supervisor: <b>{{organisationalInfo.nameContactPerson}}</b></li>
+                        <li>Telephone: <b>{{organisationalInfo.personContact}}</b></li>
                       </ul>
                     </div>
-                    <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 16px">
-                        <li>Type of Organisation: <b>{{organisationalInfo.organisation}}</b></li>
-                        <li>Website: <b>{{organisationalInfo.website}}</b></li>
-                        <li>Legal Status: <b>{{organisationalInfo.legal}}</b></li>
-                        <li>Country: <b>{{organisationalInfo.country}}</b></li>
-                        <li>Name of Contact Person: <b>{{organisationalInfo.nameContactPerson}}</b></li>
-                        <li>City: <b>{{organisationalInfo.city}}</b></li>
-                      </ul>
-                    </div>
+                    <div class="col-sm-6"> </div>
                   </div>
                 </div>
 
