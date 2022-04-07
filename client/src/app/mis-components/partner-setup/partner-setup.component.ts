@@ -227,9 +227,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           }
         }
       });
-    } /*else {
-      this.organisationalInfo = SampleData.organisationalInfo;
-    }*/
+    }
   }
 
   setMilestones(program) {
@@ -239,21 +237,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         this.milestones = data.milestones;
       }
     });
-  }
-
-  createNewIndicator() {
-    if (this.calendar.reportingCalender == undefined) {
-      alert('No Calendar dates, Fill in reporting calendar');
-      return;
-    }
-
-    if (this.milestones == undefined || this.milestones.length == 0) {
-      alert('No Milestones found, Select Staff to proceed');
-      return;
-    }
-
-    let id = uuid();
-    this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: []});
   }
 
   setDisaggregation(rowId) {
@@ -269,19 +252,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             }
           );
         });
-        if (item.id === rowId) this.createNewBudgetItem(item);
       });
-    }
-  }
-
-  createNewBudgetItem(indicator: Indicator) {
-    if (this.budget.some(x => x.indicatorId === indicator.id)) {
-      this.budget.forEach(function (item) {
-        if (item.indicatorId === indicator.id) item.budgetLine = indicator.name;
-      });
-    } else {
-      let id = uuid();
-      this.budget.push({id: id, indicatorId: indicator.id, budgetLine: indicator.name, approvedAmount: ''});
     }
   }
 
@@ -309,21 +280,48 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  removeIndicator(indicator: Indicator) {
-    this.indicators = this.indicators.filter(item => item.id != indicator.id);
-    this.budget = this.budget.filter(item => item.budgetLine != indicator.name);
-    this.budget.forEach((data) => {
-      this.updateBudgetAmount(data.id, data.approvedAmount);
-    });
+  createNewIndicator() {
+    if (this.calendar.reportingCalender == undefined) {
+      alert('No Calendar dates, Fill in reporting calendar');
+      return;
+    }
+
+    if (this.milestones == undefined || this.milestones.length == 0) {
+      alert('No Milestones found, Select Staff to proceed');
+      return;
+    }
+
+    let id = uuid();
+    this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: []});
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue, type: string, selectList?: []) {
+  createNewBudgetItem() {
+    let id = uuid();
+    this.budget.push({id: id, budgetLine: '', approvedAmount: '', totalSpent: ''});
+  }
+
+  removeIndicator(indicator: Indicator) {
+    this.indicators = this.indicators.filter(item => item.id != indicator.id);
+  }
+
+  removeBudget(row) {
+    this.budget = this.budget.filter(item => item.id != row.id);
+  }
+
+  cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: []) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
 
   saveCellValue = (value: string, key: string, rowId, extras): void => {
     if (value !== null && value !== undefined)
       switch (key) {
+        case 'budget_line':
+          if (this.budget.some(x => x.id === rowId)) {
+            this.budget.forEach(function (item) {
+              if (item.id === rowId) item.budgetLine = value;
+            });
+          }
+          break;
         case 'approved_amt':
           this.updateBudgetAmount(rowId, value);
           break;
@@ -485,12 +483,12 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.totalApprovedAmount = total.toString();
   }
 
-  private updateBudgetDisburse(id, newValue, editing?:boolean) {
+  private updateBudgetDisburse(id, newValue, editing?: boolean) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach((item) => {
         if (item.id === id) {
-          if(editing) {
+          if (editing) {
             if (+newValue <= +item.approvedAmount) {
               item.totalSpent = newValue;
             } else {

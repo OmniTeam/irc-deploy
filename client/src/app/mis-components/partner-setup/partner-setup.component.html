@@ -161,7 +161,7 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;">OUTPUT INDICATORS</h3>
+                <h3 style="margin-left: 40px;">OUTPUT MILESTONES</h3>
                 <div class="card">
                   <button class="btn btn-success"
                           style="height: 37px;
@@ -170,34 +170,34 @@
                                   font-size: 12px;"
                           (click)="createNewIndicator()">
                     <i class="fas fa-plus"></i>
-                    Add Indicator
+                    Add Milestone
                   </button>
                   <br>
                   <table class="table table-striped table-bordered hover" id="indicators">
                     <thead>
                     <tr>
-                      <th class='text-center'>Indicator</th>
+                      <th class='text-center'>Milestone</th>
                       <th class='text-center'>Overall Target</th>
                       <th class='text-center'>Disaggregation</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let indicator of indicators">
-                      <td class='text-center' style="display: none;">{{indicator.id}}</td>
-                      <td class='text-center' [id]="indicator.id">
-                        <div>{{ indicator.name }}
+                    <tr *ngFor="let milestone of indicators">
+                      <td class='text-center' style="display: none;">{{milestone.id}}</td>
+                      <td class='text-center' [id]="milestone.id">
+                        <div>{{ milestone.name }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(indicator.id, indicator.id, 'indicators', indicator.name, 'select', milestones)"><i
+                                  (click)="cellEditor(milestone.id, milestone.id, 'indicators', milestone.name, 'select', milestones)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class="text-center">{{indicator.overallTarget | number }}</td>
+                      <td class="text-center">{{milestone.overallTarget | number }}</td>
                       <td class='text-center'>
-                        <button class="btn btn-link" [id]="'btn' + indicator.id"
-                                (click)="toggleDisaggregation('btn' + indicator.id, indicator)"><i
+                        <button class="btn btn-link" [id]="'btn' + milestone.id"
+                                (click)="toggleDisaggregation('btn' + milestone.id, milestone)"><i
                           class="text fas fa-plus"></i></button>
                         <button class="btn btn-link"
-                                (click)="removeIndicator(indicator)"><i
+                                (click)="removeIndicator(milestone)"><i
                           class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
                     </tr>
@@ -207,18 +207,35 @@
 
                 <h3 style="margin-left: 40px;">BUDGET</h3>
                 <div class="card">
+                  <button class="btn btn-success"
+                          style="height: 37px;
+                                  width: max-content;
+                                  padding: revert;
+                                  font-size: 12px;"
+                          (click)="createNewBudgetItem()">
+                    <i class="fas fa-plus"></i>
+                    Add Budget Line
+                  </button>
+                  <br>
                   <table class="table table-striped table-bordered hover" id="budget">
                     <thead>
                     <tr>
                       <th class='text-center'>Budget Line</th>
                       <th class='text-center'>Approved amount</th>
                       <th class='text-center'>Total Spent</th>
+                      <th class='text-center'>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let row of budget">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'>{{ row.budgetLine }}</td>
+                      <td class='text-center' [id]="row.id+'-b'">
+                        <div>{{ row.budgetLine }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine)"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.approvedAmount | number  }}
                           <button class="btn btn-link"
@@ -232,6 +249,11 @@
                                   (click)="cellEditor(row.id, row.id+'-d', 'total_spent', row.totalSpent, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
+                      </td>
+                      <td class='text-center'>
+                        <button class="btn btn-link"
+                                    (click)="removeBudget(row)"><i
+                        class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
                     </tr>
                     </tbody>
