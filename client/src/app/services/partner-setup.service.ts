@@ -29,4 +29,20 @@ export class PartnerSetupService {
   deletePartnerSetupRecord(deletedRow): Observable<any> {
     return this.http.delete(`${environment.serverUrl}/partnerSetup/${deletedRow}`);
   }
+
+  getReportingCalendarByPartnerSetupId(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/calendarTriggerDates/getReportingCalendarByPartnerSetupId`, {params});
+  }
+
+  deleteReportingCalendarForPartner(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/calendarTriggerDates/${deletedRow}`);
+  }
+
+  createReportingCalendar(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/calendarTriggerDates`, formData);
+  }
+
+  updateReportingCalendarStatus(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/calendarTriggerDates/updateReportingCalendarStatus`, {params});
+  }
 }

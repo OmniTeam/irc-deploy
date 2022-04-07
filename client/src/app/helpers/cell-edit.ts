@@ -36,13 +36,17 @@ export class CellEdit {
     else container1.style.display = 'block';
 
     if (status === "save") {
-      let newValue;
+      let newValue, extras;
       if (type == 'select') {
-        newValue = (document.getElementById("input-" + td_id) as HTMLSelectElement).value;
+        let select = (document.getElementById("input-" + td_id) as HTMLSelectElement)
+        newValue = select.value;
+        let opt = document.querySelector('option[value="' + newValue +'"]');
+        if(opt!=null) extras = opt.getAttribute('data-id');
       } else  {
         newValue = (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value;
       }
-      save(newValue, key, row_id);
+
+      save(newValue, key, row_id, extras);
       this.condition = false;
     } else if (status === "cancel") {
       (document.getElementById("input-" + td_id) as HTMLTextAreaElement).value = oldValue;
@@ -56,12 +60,12 @@ export class CellEdit {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
-      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined, "save"));
+      saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, type, "save"));
       saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
-      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, undefined, "cancel"));
+      cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, type, "cancel"));
       cancelButton.id = "cancel_button" + td_id;
 
       const icon_check = document.createElement('i');
@@ -71,6 +75,8 @@ export class CellEdit {
 
       const container = document.createElement('div');
       container.id = "edit-cell-" + td_id;
+      container.style.display = 'flex';
+      container.style.justifyContent = 'center';
 
       let input;
       let selectInput;
@@ -102,7 +108,8 @@ export class CellEdit {
         input.setAttribute('value', oldValue);
         input.setAttribute('name', key);
 
-        input.style.maxWidth = '400px';
+        input.style.maxWidth = '300px';
+        input.style.minWidth = '100px';
       }
 
       saveButton.appendChild(icon_check);
@@ -112,7 +119,6 @@ export class CellEdit {
       container.appendChild(saveButton);
       container.appendChild(cancelButton);
 
-      td.style.display = 'flex';
       td.style.justifyContent = 'center';
       td.appendChild(container);
     } else {
@@ -126,10 +132,9 @@ export class CellEdit {
   }
 
   getOptionsForSelect(data, oldValue): string {
-    console.log('data', data);
     let htmlString = "";
     data.forEach(function (row) {
-      if(row.name!==oldValue) htmlString += '<option value="' + row.name + '">\n' + row.name + '</option>\n';
+      if(row.name!==oldValue) htmlString += '<option data-id="' + row.id + '" value="' + row.name + '">\n' + row.name + '</option>\n';
     });
     return htmlString;
   }

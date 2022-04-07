@@ -212,7 +212,7 @@
                     <tr>
                       <th class='text-center'>Budget Line</th>
                       <th class='text-center'>Approved amount</th>
-                      <th class='text-center'>Disburse</th>
+                      <th class='text-center'>Total Spent</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -222,14 +222,14 @@
                       <td class='text-center' [id]="row.id">
                         <div>{{ row.approvedAmount | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id, 'budget_approved_amt', row.approvedAmount, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id, 'approved_amt', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id+'-d'">
-                        <div>{{ row.disburse | number  }}
+                        <div>{{ row.totalSpent | number  }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id+'-d', 'budget_disburse', row.disburse, 'number')"><i
+                                  (click)="cellEditor(row.id, row.id+'-d', 'total_spent', row.totalSpent, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -303,7 +303,7 @@
                       <div class="col">Start Reporting Cycle?</div>
                       <div class="col">
                         <label class="switch">
-                          <input type="checkbox" class="form-control" [(ngModel)]="currentStatus.startReportingCycle"/>
+                          <input type="checkbox" class="form-control" [(ngModel)]="startReportingCycle"/>
                           <span class="slider round"></span>
                         </label>
                         <br></div>
