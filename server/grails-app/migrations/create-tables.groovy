@@ -1894,6 +1894,58 @@ databaseChangeLog = {
         modifyDataType(columnName: "reporting_calendar", newDataType: "LONGTEXT", tableName: "partner_setup")
     }
 
+    changeSet(author: "bruno (generated)", id: "1649327928652-35") {
+        dropColumn(columnName: "reporting_calendar", tableName: "partner_setup")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649327928652-3") {
+        createTable(tableName: "calendar_trigger_dates") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "calendar_trigger_datesPK")
+            }
+
+            column(name: "partner_setup_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "period", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "started", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "completed", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "end_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649327928652-4") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "start_cycle", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
     changeSet(author: "DELL (generated)", id: "1649655031191-84") {
         createTable(tableName: "clients") {
             column(name: "id", type: "VARCHAR(255)") {

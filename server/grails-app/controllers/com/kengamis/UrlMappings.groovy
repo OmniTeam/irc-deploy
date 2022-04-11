@@ -28,6 +28,10 @@ class UrlMappings {
         get "/$controller/getRecommendationById(.$format)?"(action:"getRecommendationById")
         get "/$controller/getCommentById(.$format)?"(action:"getCommentById")
         get "/$controller/getAllTagsByTagType(.$format)?"(action:"getAllTagsByTagType")
+        get "/$controller/getReportingCalendarByPartnerSetupId(.$format)?"(action:"getReportingCalendarByPartnerSetupId")
+        get "/$controller/getProgramStaffWithoutWorkPlan(.$format)?"(action:"getProgramStaffWithoutWorkPlan")
+        get "/$controller/updateReportingCalendarStatus(.$format)?"(action:"updateReportingCalendarStatus")
+        get "/$controller/getMilestoneDataForReports(.$format)?"(action:"getMilestoneDataForReports")
         post "/$controller/tagEntityRecord(.$format)?"(action:"tagEntityRecord")
         post "/$controller/removeTagEntityRecord(.$format)?"(action:"removeTagEntityRecord")
         get "/$controller/runNow(.$format)?"(action:"runNow")
@@ -68,6 +72,17 @@ class UrlMappings {
             'import-users'(controller: 'user', action: 'uploadUsers', method: 'POST')
         }
 
+        group "/api/v1/userApi/", {
+            'users'(controller: 'userApi', action:'users',method: 'GET' )
+            'group-users'(controller: 'userApi', action:'group-users',method: 'GET' )
+            'groups'(controller: 'userApi', action:'groups',method: 'GET' )
+            'user-groups'(controller: 'userApi', action:'user-groups',method: 'GET' )
+            'one-user'(controller: 'userApi', action:'one-user',method: 'GET' )
+            'getLoginUser'(controller: 'userApi', action:'getLoginUser',method: 'GET' )
+        }
+
+        "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
+        "/api/v1/aclGroupMapping-v2"(controller: 'kengaGroupAclEntry', action:'saveGroupMappingsWithParent',method: 'POST' )
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')

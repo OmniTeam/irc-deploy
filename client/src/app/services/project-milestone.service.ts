@@ -34,6 +34,10 @@ export class ProjectMilestoneService {
     return this.http.get(`${this.baseurl}/${id}/`);
   }
 
+  getMilestoneDataForReports(params): Observable<any> {
+    return this.http.get(`${this.baseurl}/getMilestoneDataForReports`, {params});
+  }
+
   updateMilestone(id, formData): Observable<any> {
     return this.http.put(`${this.baseurl}/${id}/`, formData);
   }

@@ -1,6 +1,5 @@
 package com.kengamis
 
-
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -17,37 +16,45 @@ class TaskListController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        //params.max = Math.min(max ?: 10, 100)
-
-        def taskListMapList = taskListService.list(params)
         def tasks = []
 
-        taskListMapList.each{TaskList task ->
+        TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
 
             variables['data'].each {
-                if(it.key=='PartnerSetupId') partnerSetupId = it.value
-                if(it.key=='StartDate') startDate = it.value
-                if(it.key=='PartnerId') partnerId = it.value
-                if(it.key=='ProgramId') programId = it.value
-                if(it.key=='EndDate') endDate = it.value
-                if(it.key=='GroupId') groupId = it.value
+                if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+                if (it.key == 'Period') period = it.value
+                if (it.key == 'StartDate') startDate = it.value
+                if (it.key == 'PartnerId') partnerId = it.value
+                if (it.key == 'ProgramId') programId = it.value
+                if (it.key == 'EndDate') endDate = it.value
+                if (it.key == 'GroupId') groupId = it.value
             }
 
-            tasks << [id: task.id,
-                      taskName : task.taskName,
-                      partnerSetupId: partnerSetupId,
-                      startDate : startDate,
-                      partnerId : partnerId,
-                      programId : programId,
-                      endDate : endDate,
-                      groupId : groupId,
-                      processInstanceId : task.processInstanceId,
-                      taskDefinitionKey : task.taskDefinitionKey,
-                      dateCreated: task.dateCreated,
-                      status: task.status]
+            def taskPartner = ProgramStaff.findById(partnerId)
+            def taskProgram = Program.findById(programId)
+
+            if (taskPartner == null) taskPartner = [name: '']
+            if (taskProgram == null) taskProgram = [title: '']
+
+                tasks << [id               : task.id,
+                          taskName         : task.taskName,
+                          partnerSetupId   : partnerSetupId,
+                          startDate        : startDate,
+                          partnerId        : partnerId,
+                          partnerName      : taskPartner.name,
+                          programId        : programId,
+                          programName      : taskProgram.title,
+                          endDate          : endDate,
+                          groupId          : groupId,
+                          reportingPeriod  : period,
+                          outputVariables  : task.outputVariables,
+                          processInstanceId: task.processInstanceId,
+                          taskDefinitionKey: task.taskDefinitionKey,
+                          dateCreated      : task.dateCreated,
+                          status           : task.status]
         }
         respond tasks
     }
@@ -57,29 +64,40 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId, startDate, partnerId, programId, endDate, groupId
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
 
         variables['data'].each {
-            if(it.key=='PartnerSetupId') partnerSetupId = it.value
-            if(it.key=='StartDate') startDate = it.value
-            if(it.key=='PartnerId') partnerId = it.value
-            if(it.key=='ProgramId') programId = it.value
-            if(it.key=='EndDate') endDate = it.value
-            if(it.key=='GroupId') groupId = it.value
+            if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+            if (it.key == 'Period') period = it.value
+            if (it.key == 'StartDate') startDate = it.value
+            if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'ProgramId') programId = it.value
+            if (it.key == 'EndDate') endDate = it.value
+            if (it.key == 'GroupId') groupId = it.value
         }
 
-        def t = [id: task.id,
-                 taskName : task.taskName,
-                 partnerSetupId: partnerSetupId,
-                 startDate : startDate,
-                 partnerId : partnerId,
-                 programId : programId,
-                 endDate : endDate,
-                 groupId : groupId,
-                 processInstanceId : task.processInstanceId,
-                 taskDefinitionKey : task.taskDefinitionKey,
-                 dateCreated: task.dateCreated,
-                 status: task.status]
+        def programPartner = ProgramStaff.findById(partnerId)
+        def program = Program.findById(programId)
+
+        if (programPartner == null) programPartner = [name: '']
+        if (program == null) program = [title: '']
+
+        def t = [id               : task.id,
+                 taskName         : task.taskName,
+                 partnerSetupId   : partnerSetupId,
+                 startDate        : startDate,
+                 partnerId        : partnerId,
+                 partnerName      : programPartner.name,
+                 programId        : programId,
+                 programName      : program.title,
+                 endDate          : endDate,
+                 groupId          : groupId,
+                 reportingPeriod  : period,
+                 outputVariables  : task.outputVariables,
+                 processInstanceId: task.processInstanceId,
+                 taskDefinitionKey: task.taskDefinitionKey,
+                 dateCreated      : task.dateCreated,
+                 status           : task.status]
         respond t
     }
 
