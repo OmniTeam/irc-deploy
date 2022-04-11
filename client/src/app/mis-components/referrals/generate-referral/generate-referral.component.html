@@ -41,7 +41,7 @@
             <div class="col-lg-4 text-right" style="margin-top: 0px;">
               <div
                 class=" btn btn-success fa fa-plus"
-                (click)="createReferral()"
+                (click)="createClient()"
               >
                 Add Client
 
@@ -54,7 +54,7 @@
 <!--          <button (click)="printPage()" style="align-items: end">Add Client</button>-->
         </div>
         <div class="card-body">
-          <form [formGroup]="formGroup" (ngSubmit)="runJobNow('Start Camunda Instances Job')" *ngIf="formGroup" style="padding:30px">
+          <form [formGroup]="formGroup" (ngSubmit)="createReferral()" *ngIf="formGroup" style="padding:30px">
             <div class="row" style="padding-left: 30px;padding-top: 15px">
               <div class="col-lg-6">
 

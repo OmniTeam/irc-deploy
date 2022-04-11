@@ -220,22 +220,22 @@ export class GenerateReferralComponent implements OnInit {
   //   this.router.navigate(['/referrals-list']);
   // }
 
-  runJobNow(taskName) {
-    console.log(taskName)
-    this.createReferral()
-    const params = new HttpParams()
-      .set('taskName', taskName);
-    this.scheduledTasksService.runScheduledTask(params).subscribe((data) => {
-      // this.reloadTable();
-      this.alertService.success(`${taskName} has been triggered`);
-    }, error => {
-      this.alertService.error(`${taskName} has not been triggered`);
-    });
-  }
-
-  // actionReferral() {
-  //   this.router.navigate(['action-referral']);
+  // runJobNow(taskName) {
+  //   console.log(taskName)
+  //   this.createReferral()
+  //   const params = new HttpParams()
+  //     .set('taskName', taskName);
+  //   this.scheduledTasksService.runScheduledTask(params).subscribe((data) => {
+  //     // this.reloadTable();
+  //     this.alertService.success(`${taskName} has been triggered`);
+  //   }, error => {
+  //     this.alertService.error(`${taskName} has not been triggered`);
+  //   });
   // }
+
+  createClient() {
+    this.router.navigate(['/create-referral']);
+  }
 
   createReferral() {
     this.clicked = true;
