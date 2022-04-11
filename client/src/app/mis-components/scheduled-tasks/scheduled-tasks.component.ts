@@ -32,6 +32,7 @@ export class ScheduledTasksComponent implements OnInit {
 
   reloadTable() {
     this.scheduledTasksService.getScheduledTasks().subscribe((data) => {
+      console.log("tasks",data)
       this.scheduledTasks = data['taskdef'];
       this.allJobs = data['jobs'];
       this.runningJobs = data['runningJobs'];

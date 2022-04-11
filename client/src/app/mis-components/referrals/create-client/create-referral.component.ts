@@ -10,6 +10,7 @@ import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
 import {ReferralsService} from "../../../services/referrals.service";
 import {CountriesService} from "../../../services/countries.service";
+import {ClientService} from "../../../services/client.service";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class CreateReferralComponent implements OnInit {
   constructor(
     private userService: UsersService,
     private CountriesService: CountriesService,
-    private referralsService: ReferralsService,
+    private clientService: ClientService,
     private groupsService: GroupsService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -36,22 +37,13 @@ export class CreateReferralComponent implements OnInit {
   currentDashboards: any
   formGroup: FormGroup
   submitted = false;
-  reason_for_referral = [
+  register_status = [
     {
-      'name': 'Food amd Shelter'
+      'name': 'Yes'
     },
     {
-      'name': 'Formal Education'
-    },
-    {
-      'name': 'Insecurity'
-    },
-    {
-      'name': 'Resettlement'
-    },
-    {
-      'name': 'LGBTI'
-    },
+      'name': 'No'
+    }
   ];
   nationality_status = [
     {
@@ -87,36 +79,57 @@ export class CreateReferralComponent implements OnInit {
       'name': '60 years and above'
     },
   ];
-  organization_referred_to = [
+  gender = [
     {
-      'name': 'AVSI FOUNDATION'
+      'name': 'Male'
     },
     {
-      'name': 'JRS'
+      'name': 'Female'
+    }
+  ];
+  district_list = [
+    {
+      'name': 'Kampala'
     },
     {
-      'name': 'REFUGEPOINT'
+      'name': 'Mukono'
+    },
+    {
+      'name': 'Wakiso'
+    },
+    {
+      'name': 'Entebbe'
+    },
+    {
+      'name': 'Mbale'
+    },
+    {
+      'name': 'Mbarara'
     },
   ];
-  identification_document = [
+
+  division_list = [
     {
-      'name': 'National ID'
+      'name': 'Rubaga'
     },
     {
-      'name': 'Alien Card'
+      'name': 'Makindye'
     },
     {
-      'name': 'Asylum Card'
+      'name': 'Central'
+    }
+  ];
+
+  parish_list = [
+    {
+      'name': 'Rubaga'
     },
     {
-      'name': 'Waiting card'
+      'name': 'Makindye'
     },
     {
-      'name': 'UNHCR Mandate'
-    },
-    {
-      'name': 'Minors Pass'
-    },
+      'name': 'Central'
+    }
   ];
   country_of_origin: any;
 
@@ -131,24 +144,21 @@ export class CreateReferralComponent implements OnInit {
       this.alertService.error("Failed to get Countries")
     })
     this.formGroup = this.formBuilder.group({
-      dateOfReferral: [''],
-      nameOfReferringOfficer: [''],
-      nameOfClientBeingReferred: [''],
-      phoneNumber: [''],
-      dateOfBirth: [''],
+      dateOfRegistration: [''],
+      caseId: [''],
+      partnerName: [''],
       ageCategory: [null],
       countryOfOrigin: [null],
-      identificationDocument: [null],
-      identificationNumber: [],
-      reasonForReferral: [null],
-      nationalityStatus: [null],
-      organizationReferredTo: [null],
+      district: [null],
+      division: [null],
+      parish: [null],
+      gender: [null],
       disability: [''],
-      status: ['Pending'],
+      registrationStatus: [''],
     });
   }
 
-  createReferral() {
+  createClient() {
     this.clicked = true;
     this.submitted = true;
     if (this.formGroup.invalid) {
@@ -157,11 +167,11 @@ export class CreateReferralComponent implements OnInit {
     }
     const formData = this.formGroup.value;
     console.log(formData, "submitted data")
-    this.referralsService.createReferral(formData).subscribe((result) => {
+    this.clientService.createClient(formData).subscribe((result) => {
       this.alertService.success(`Client is created successfully`);
       this.router.navigate(['/referrals-list']);
     }, error => {
-      this.alertService.error("Failed to Create Referral")
+      this.alertService.error("Failed to Create Client")
     });
   }
 

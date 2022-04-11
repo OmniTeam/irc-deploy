@@ -550,6 +550,36 @@
                   </div>
                 </div>
               </div>
+              <div id="assignee" [hidden]="true">
+                <div class="row">
+                  <label>
+                    Assign staff
+                    <!--                      <span class="required-indicator">*</span>-->
+                  </label>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group ">
+                      <div class=" input-group input-group-merge">
+                        <ng-select class="form-control form-control-sm"
+                                   name="datatable_length"
+                                   aria-controls="datatable"
+                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Assign Staff"
+                                   formControlName="assignee"
+                                   [searchable]="true"
+                                   [clearable]="true"
+                        >
+                          <ng-option [value]="item.email" *ngFor="let item of this.staffs">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">

@@ -12,6 +12,7 @@ import {CountriesService} from "../../../services/countries.service";
 import {parseDate} from "devextreme/localization";
 import {format} from "d3";
 import {DatePipe} from "@angular/common";
+import {ProgramStaffService} from "../../../services/program-staff.service";
 
 
 @Component({
@@ -23,11 +24,13 @@ export class ActionReferralComponent implements OnInit {
   private referrals: any;
   private nationalityValue = '';
   private followUpValue = '';
+  private staffs: any;
 
   constructor(
     private userService: UsersService,
     private datePipe: DatePipe,
     private CountriesService: CountriesService,
+    private programStaffService: ProgramStaffService,
     private referralsService: ReferralsService,
     private alertService: AlertService,
     private authService: AuthService,
@@ -175,6 +178,7 @@ export class ActionReferralComponent implements OnInit {
     this.referralsService.getCurrentReferral(this.route.snapshot.params.id).subscribe(data => {
       console.log(data, "referral data")
 
+      this.loadProgramStaff();
       this.referrals = data
       this.formGroup = this.formBuilder.group({
         dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
@@ -196,6 +200,7 @@ export class ActionReferralComponent implements OnInit {
         followupAreas: [this.referrals?.followupAreas],
         followupOrganization: [this.referrals?.followupOrganization],
         disability: [this.referrals?.disability],
+        assignee: [''],
         status: ['Actioned'],
       });
 
@@ -210,7 +215,7 @@ export class ActionReferralComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
-    console.log(submitData)
+    console.log("formdata",submitData)
     this.referralsService.updateReferral(this.route.snapshot.params.id, submitData).subscribe((result) => {
       console.warn(result, 'Referral Updated Successfully');
       this.alertService.success(`Referral has been successfully updated`)
@@ -222,6 +227,13 @@ export class ActionReferralComponent implements OnInit {
 
   close() {
     this.router.navigate(['/referrals-list'])
+  }
+
+  loadProgramStaff(){
+    this.programStaffService.getProgramStaffs().subscribe((data) => {
+      this.staffs = data;
+      console.log(data)
+    });
   }
 
   onChangeCountry(event) {
@@ -247,18 +259,23 @@ export class ActionReferralComponent implements OnInit {
       this.followUpValue = ''
       document.getElementById('followupAreas').hidden = true
       document.getElementById('followupOrganization').hidden = true
+      document.getElementById('assignee').hidden = true
       this.formGroup.controls['followupAreas'].reset();
       this.formGroup.controls['followupOrganization'].reset();
+      this.formGroup.controls['assignee'].reset();
     } else {
       this.followUpValue = event;
       if (this.followUpValue === "No") {
         document.getElementById('followupAreas').hidden = true
         document.getElementById('followupOrganization').hidden = true
+        document.getElementById('assignee').hidden = true
         this.formGroup.controls['followupAreas'].reset();
         this.formGroup.controls['followupOrganization'].reset();
+        this.formGroup.controls['assignee'].reset();
       } else {
         document.getElementById('followupAreas').hidden = false
         document.getElementById('followupOrganization').hidden = false
+        document.getElementById('assignee').hidden = false
       }
 
     }
