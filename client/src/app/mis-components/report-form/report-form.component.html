@@ -88,29 +88,16 @@
             <div class=" row">
               <div class=" col">
 
-                <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
+                <h3 style="margin-left: 40px;">STAFF INFORMATION</h3>
                 <div class="card">
                   <div class="row" style="margin: 10px;">
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
-                        <li>Physical Address: <b>{{organisationalInfo.physicalAddress}}</b></li>
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.leadCluster}}</b>
-                        </li>
-                        <li>Postal Address: <b>{{organisationalInfo.postalAddress}}</b></li>
-                        <li>Acronym Name: <b>{{organisationalInfo.acronym}}</b></li>
-                        <li>Email: <b>{{organisationalInfo.email}}</b></li>
-                      </ul>
-                    </div>
-                    <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 16px">
-                        <li>Partner: <b>{{organisationalInfo.name}}</b></li>
-                        <li>Type of Organisation: <b>{{organisationalInfo.organisation}}</b></li>
-                        <li>Website: <b>{{organisationalInfo.website}}</b></li>
-                        <li>Legal Status: <b>{{organisationalInfo.legal}}</b></li>
-                        <li>Country: <b>{{organisationalInfo.country}}</b></li>
-                        <li>Name of Contact Person: <b>{{organisationalInfo.nameContactPerson}}</b></li>
-                        <li>City: <b>{{organisationalInfo.city}}</b></li>
+                        <li>Email: <b>{{organisationalInfo.name}}</b></li>
+                        <li>Email of Staff: <b>{{organisationalInfo.email}}</b></li>
+                        <li>Name of Supervisor: <b>{{organisationalInfo.nameContactPerson}}</b></li>
+                        <li>Telephone: <b>{{organisationalInfo.personContact}}</b></li>
                       </ul>
                     </div>
                   </div>
@@ -128,7 +115,7 @@
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Total Grant Amount: <b> </b></li>
+                        <li>Total Budget Allocated: <b>{{totalAmountCommitted}}</b></li>
                         <li>Amount Transferred in the reporting period: <b> </b></li>
                         <li>Amount Utilized in the period: <b> </b></li>
                         <li>Balance Spent/Overspent: <b> </b></li>
@@ -143,7 +130,7 @@
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
-                      <th class='text-center'>Output Indicators</th>
+                      <th class='text-center'>Milestone</th>
                       <th class='text-center'>Overall Target</th>
                       <th class='text-center'>Cumulative achievement</th>
                       <th class='text-center'>Quarter Target</th>
@@ -188,9 +175,9 @@
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
                       <th class='text-center'>Budget Line</th>
-                      <th class='text-center'>Approved Budget</th>
+                      <th class='text-center'>Budget Allocated</th>
                       <th class='text-center'>Expense-to-date</th>
-                      <th class='text-center'>Total Advanced <span class="required-indicator">*</span></th>
+                      <th class='text-center'>Cumulative Spending Plan<span class="required-indicator">*</span></th>
                       <th class='text-center'>Quarter Expenses <span class="required-indicator">*</span></th>
                       <th class='text-center'>Variance</th>
                       <th class='text-center'>Reason for Variance <span class="required-indicator">*</span></th>
@@ -256,18 +243,6 @@
                         </button>
                       </div>
                     </div>
-                    <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report: <span class="required-indicator">*</span></label>
-                      </div>
-                      <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)" /></div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
-                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
-                        </button>
-                      </div>
-                    </div>
                   </form>
 
                   <!--Flag variable is used here-->
@@ -300,17 +275,6 @@
                         </button>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-4">{{attachment3}}</div>
-                      <div class="col-sm-4">
-                        <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
-                                                                           class="text fas fa-file-download"
-                                                                           target="_blank" download>&nbsp;&nbsp;Download
-                          Attachment</a>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -333,17 +297,6 @@
                         <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink2}}"
-                                                                             style="font-size:15px;"
-                                                                             class="text fas fa-file-download"
-                                                                             target="_blank" download>&nbsp;&nbsp;Download
-                            Attachment</a>
-                          </button>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                        <div class="col-sm-6">
-                          <button class="btn btn-link"><a href="{{shortLink3}}"
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
