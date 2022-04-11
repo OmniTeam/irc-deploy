@@ -87,8 +87,8 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   color: #FFFFFF;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+.main-content, .sidenav {
+  font-family: "Poppins Medium", Poppins Medium, "Poppins Medium", serif !important;
 }
 
 

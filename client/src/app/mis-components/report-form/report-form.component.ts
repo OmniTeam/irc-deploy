@@ -66,6 +66,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   taskId: string;
   taskRecord: any;
   reportValues: [];
+  totalAmountCommitted: string;
 
   shortLink1: string = "";
   shortLink2: string = "";
@@ -206,6 +207,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
+
+        this.totalAmountCommitted = values.currentStatus.totalAmountCommitted;
 
         values.budget.forEach((b) => {
           if (!this.financialReport.some(x => x.id === b.id)) {

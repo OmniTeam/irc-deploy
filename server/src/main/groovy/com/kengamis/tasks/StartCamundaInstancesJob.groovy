@@ -1,5 +1,7 @@
 package com.kengamis.tasks
 
+import com.kengamis.AppHolder
+import com.kengamis.CalendarTriggerDates
 import com.kengamis.PartnerSetup
 import com.kengamis.TaskList
 import groovy.json.JsonOutput
@@ -17,17 +19,53 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
-        def partnerSetup = PartnerSetup.all.each {
-            def list = TaskList.findAllByInputVariablesIlike('%' + it.partnerId + '%')
-            if (list.size() == 0) {
+        PartnerSetup.findAllByStartCycle("true").each {setup ->
+            boolean startInstance = true
+
+            def query = "SELECT calendar_trigger_dates.id, " +
+                    "calendar_trigger_dates.start_date, " +
+                    "calendar_trigger_dates.end_date, " +
+                    "calendar_trigger_dates.period " +
+                    "FROM partner_setup " +
+                    "INNER JOIN calendar_trigger_dates ON partner_setup.id = calendar_trigger_dates.partner_setup_id " +
+                    "WHERE partner_setup.id='${setup.id}' " +
+                    "AND calendar_trigger_dates.end_date <= CURDATE() " +
+                    "AND calendar_trigger_dates.started = 1 " +
+                    "AND calendar_trigger_dates.completed = 0;"
+
+            def startedAndNotCompleted = AppHolder.withMisSql { rows(query.toString()) }
+            if (startedAndNotCompleted.size() != 0) startInstance = false
+
+            if (startInstance) {
+                def query2 = "SELECT calendar_trigger_dates.id, " +
+                        "calendar_trigger_dates.start_date, " +
+                        "calendar_trigger_dates.end_date, " +
+                        "calendar_trigger_dates.period " +
+                        "FROM partner_setup " +
+                        "INNER JOIN calendar_trigger_dates ON partner_setup.id = calendar_trigger_dates.partner_setup_id " +
+                        "WHERE partner_setup.id='${setup.id}' " +
+                        "AND calendar_trigger_dates.end_date <= CURDATE() " +
+                        "AND calendar_trigger_dates.started = 0 " +
+                        "ORDER BY calendar_trigger_dates.period LIMIT 1;"
+                def result = AppHolder.withMisSql { rows(query2.toString()) }.first()
+
                 boolean started = startProcessInstance([
-                        PartnerSetupId: it.id,
-                        PartnerId     : it.partnerId,
-                        ProgramId     : it.programId,
-                        StartDate     : it.reportingStartDate,
-                        EndDate       : it.endDate,
+                        PartnerSetupId: setup.id,
+                        PartnerId     : setup.partnerId,
+                        ProgramId     : setup.programId,
+                        StartDate     : result['start_date'],
+                        EndDate       : result['end_date'],
+                        Period        : result['period'],
                         GroupId       : ""
                 ], CIIF_MANAGEMENT_KEY)
+
+
+                if (started) {
+                    print "================ started the damn instance ================"
+                    def calendar = CalendarTriggerDates.get(result['id'] as String)
+                    calendar.started = true
+                    calendar.save()
+                }
             }
         }
         return null
