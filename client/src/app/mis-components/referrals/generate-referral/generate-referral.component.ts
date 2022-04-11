@@ -1,34 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../../../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import {UsersService} from "../../../services/users.service";
-import {AlertService} from "../../../services/alert";
-import {ReferralsService} from "../../../services/referrals.service";
-import {CountriesService} from "../../../services/countries.service";
-import {parseDate} from "devextreme/localization";
-import {format} from "d3";
 import {DatePipe} from "@angular/common";
 import {ProgramStaffService} from "../../../services/program-staff.service";
-import {TaskListService} from "../../../services/task-list.service";
+import {ReferralsService} from "../../../services/referrals.service";
+import {AlertService} from "../../../services/alert";
+import {CountriesService} from "../../../services/countries.service";
+import {AuthService} from "../../../services/auth.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ScheduledTasksService} from "../../../services/scheduled-tasks.service";
 import {HttpParams} from "@angular/common/http";
-
+import {ClientService} from "../../../services/client.service";
 
 @Component({
-  selector: 'app-createReferral',
-  templateUrl: './action-referral.component.html',
-  styleUrls: ['./action-referral.component.scss']
+  selector: 'app-generate-referral',
+  templateUrl: './generate-referral.component.html',
+  styleUrls: ['./generate-referral.component.css']
 })
-export class ActionReferralComponent implements OnInit {
+export class GenerateReferralComponent implements OnInit {
+
   private referrals: any;
   private nationalityValue = '';
   private followUpValue = '';
+  private searchValue = '';
+  private clients:any;
   private staffs: any;
-  private taskId : string;
-  taskRecord : any;
+  runningJobs = [];
+  allJobs = [];
+  scheduledTasks: Object[];
 
 
   constructor(
@@ -38,10 +37,11 @@ export class ActionReferralComponent implements OnInit {
     private programStaffService: ProgramStaffService,
     private referralsService: ReferralsService,
     private alertService: AlertService,
+    private scheduledTasksService: ScheduledTasksService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private taskService: TaskListService,
     private route: ActivatedRoute,
+    private clientService: ClientService,
     private router: Router
   ) {
   }
@@ -176,55 +176,68 @@ export class ActionReferralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.taskId = this.route.snapshot.params.id;
-    const params = new HttpParams().set('id', this.taskId);
-    this.taskService.getTaskRecord(params).subscribe((data) =>{
-      console.log("Data id",data)
-      this.taskRecord = data;
-
-      this.referralsService.getCurrentReferral(this.taskRecord.referralId).subscribe(data => {
-        console.log(data, "referral data")
-
-        this.loadProgramStaff();
-        this.referrals = data
-        this.formGroup = this.formBuilder.group({
-          dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
-          nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
-          nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
-          phoneNumber: [this.referrals?.phoneNumber],
-          dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
-          ageCategory: [this.referrals?.ageCategory],
-          countryOfOrigin: [this.referrals?.countryOfOrigin],
-          identificationDocument: [this.referrals?.identificationDocument],
-          identificationNumber: [this.referrals?.identificationNumber],
-          reasonForReferral: [this.referrals?.reasonForReferral],
-          organizationReferredTo: [this.referrals?.organizationReferredTo],
-          receivedFeedback: [this.referrals?.receivedFeedback],
-          feedbackGiven: [this.referrals?.feedbackGiven],
-          dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
-          nationalityStatus: [this.referrals?.nationalityStatus],
-          followupNeeded: [this.referrals?.followupNeeded],
-          followupAreas: [this.referrals?.followupAreas],
-          followupOrganization: [this.referrals?.followupOrganization],
-          disability: [this.referrals?.disability],
-          assignee: [''],
-          status: ['Actioned'],
-        });
-
-      })
-
-    })
-
-
     this.CountriesService.getCountries().subscribe(data => {
       this.country_of_origin = data
     }, error => {
       this.alertService.error("Failed to get Countries")
     })
 
+    this.startReferralProcess()
+    // this.referralsService.getCurrentReferral(this.route.snapshot.params.id).subscribe(data => {
+    //   console.log(data, "referral data")
+
+      this.loadProgramStaff();
+      this.loadClients();
+      // this.referrals = data
+      this.formGroup = this.formBuilder.group({
+        dateOfReferral: [(this.datePipe.transform('', 'yyyy-MM-dd'))],
+        nameOfReferringOfficer: [''],
+        nameOfClientBeingReferred: ['' || this.clients?.caseId],
+        phoneNumber: [''],
+        // dateOfBirth: [this.datePipe.transform('', 'yyyy-MM-dd')],
+        ageCategory: [''],
+        countryOfOrigin: [''],
+        identificationDocument: [''],
+        identificationNumber: [''],
+        reasonForReferral: [''],
+        organizationReferredTo: [''],
+        // receivedFeedback: [''],
+        // feedbackGiven: [''],
+        // dateOfFeedback: [this.datePipe.transform('', 'yyyy-MM-dd')],
+        nationalityStatus: [''],
+        followupNeeded: [''],
+        // followupAreas: [''],
+        // followupOrganization: [''],
+        disability: [''],
+        assignee: [''],
+        status: ['Pending'],
+      });
+
+    // })
   }
 
-  actionReferral() {
+  // createReferral() {
+  //   this.router.navigate(['/referrals-list']);
+  // }
+
+  // runJobNow(taskName) {
+  //   console.log(taskName)
+  //   this.createReferral()
+  //   const params = new HttpParams()
+  //     .set('taskName', taskName);
+  //   this.scheduledTasksService.runScheduledTask(params).subscribe((data) => {
+  //     // this.reloadTable();
+  //     this.alertService.success(`${taskName} has been triggered`);
+  //   }, error => {
+  //     this.alertService.error(`${taskName} has not been triggered`);
+  //   });
+  // }
+
+  createClient() {
+    this.router.navigate(['/create-referral']);
+  }
+
+  createReferral() {
     this.clicked = true;
     this.submitted = true;
     if (this.formGroup.invalid) {
@@ -233,13 +246,12 @@ export class ActionReferralComponent implements OnInit {
     }
     const submitData = this.formGroup.value;
     console.log("formdata",submitData)
-    this.referralsService.updateReferral(this.taskRecord.referralId, submitData).subscribe((result) => {
-      console.warn(result, 'Referral Updated Successfully');
-      this.updateTask("completed")
-      this.alertService.success(`Referral has been successfully updated`)
+    this.referralsService.createReferral(submitData).subscribe((result) => {
+      console.warn(result, 'Referral Created Successfully');
+      this.alertService.success(`Referral has been successfully created`)
       this.router.navigate(['/referrals-list']);
     }, error => {
-      this.alertService.error(`Failed to update Referral`)
+      this.alertService.error(`Failed to create Referral`)
     });
   }
 
@@ -252,6 +264,13 @@ export class ActionReferralComponent implements OnInit {
       this.staffs = data;
       console.log(data)
     });
+  }
+
+  loadClients(){
+    this.clientService.getClients().subscribe((data) =>{
+      this.clients = data;
+      console.log(data)
+    })
   }
 
   onChangeCountry(event) {
@@ -271,39 +290,37 @@ export class ActionReferralComponent implements OnInit {
     }
   }
 
-
-  updateTask(status){
-    this.taskRecord.status = status;
-    this.taskRecord.groupId = this.taskRecord.groupId ?? '';
-    let followupNeeded = this.formGroup.value.followupNeeded;
-    this.taskRecord.outputVariables = '{"actionedResponse": "'+ followupNeeded +'"}'
-    this.taskService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
-      console.log('successfully updated task');
-    }, error => console.log('update task', error));
+  startReferralProcess(){
+    this.scheduledTasksService.getScheduledTasks().subscribe((data) => {
+      console.log("tasks",data)
+      this.scheduledTasks = data['taskdef'];
+      this.allJobs = data['jobs'];
+      this.runningJobs = data['runningJobs'];
+    })
   }
 
   onChangeFollowUp(event) {
     console.log(event, "nationality")
     if (!event) {
       this.followUpValue = ''
-      document.getElementById('followupAreas').hidden = true
-      document.getElementById('followupOrganization').hidden = true
+      // document.getElementById('followupAreas').hidden = true
+      // document.getElementById('followupOrganization').hidden = true
       document.getElementById('assignee').hidden = true
-      this.formGroup.controls['followupAreas'].reset();
-      this.formGroup.controls['followupOrganization'].reset();
+      // this.formGroup.controls['followupAreas'].reset();
+      // this.formGroup.controls['followupOrganization'].reset();
       this.formGroup.controls['assignee'].reset();
     } else {
       this.followUpValue = event;
       if (this.followUpValue === "No") {
-        document.getElementById('followupAreas').hidden = true
-        document.getElementById('followupOrganization').hidden = true
+        // document.getElementById('followupAreas').hidden = true
+        // document.getElementById('followupOrganization').hidden = true
         document.getElementById('assignee').hidden = true
-        this.formGroup.controls['followupAreas'].reset();
-        this.formGroup.controls['followupOrganization'].reset();
+        // this.formGroup.controls['followupAreas'].reset();
+        // this.formGroup.controls['followupOrganization'].reset();
         this.formGroup.controls['assignee'].reset();
       } else {
-        document.getElementById('followupAreas').hidden = false
-        document.getElementById('followupOrganization').hidden = false
+        // document.getElementById('followupAreas').hidden = false
+        // document.getElementById('followupOrganization').hidden = false
         document.getElementById('assignee').hidden = false
       }
 
@@ -324,5 +341,21 @@ export class ActionReferralComponent implements OnInit {
     }
   }
 
+  reloadForm(){
+    this.ngOnInit();
+  }
 
+  onChangeSearch(event) {
+    console.log(event)
+    this.clientService.getCurrentClient(event).subscribe(data =>{
+      this.clients = data;
+      this.reloadForm()
+    })
+    // this.searchValue = event.target.value
+    // if(!this.searchValue){
+    //   // this.reloadTable()
+    // } else {
+    //   this.clients = this.clients.filter(a => a.name_of_client_being_referred.toUpperCase().includes(this.searchValue.toUpperCase()))
+    // }
+  }
 }

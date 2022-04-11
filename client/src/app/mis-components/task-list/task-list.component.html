@@ -47,8 +47,12 @@
                           <i class="far fa-check-circle" style="color: limegreen; font-size: 12px"
                              [style.display]="row.status=='completed' ? 'block' : 'none'"></i></div>
                       </td>
-                      <td class='text-center'><a [routerLink]="['/reportForm', row.id]" style="font-size:20px;"
-                                                 class="text fas fa-external-link-square-alt"></a></td>
+                      <td class='text-center'>
+                        <a *ngIf="row.processDefKey=='IRC_REFERRAL' "  [routerLink]="['/action-referral', row.id]" style="font-size:20px;"
+                                                 class="text fas fa-external-link-square-alt"></a>
+                        <a *ngIf="row.processDefKey=='CRVPF_REPORTING' "  [routerLink]="['/reportForm', row.id]" style="font-size:20px;"
+                           class="text fas fa-external-link-square-alt"></a>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

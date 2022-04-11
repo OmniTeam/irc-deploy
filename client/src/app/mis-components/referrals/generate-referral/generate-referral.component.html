@@ -18,67 +18,52 @@
   <div class=" row justify-content-center">
     <div class=" col-lg-10 card-wrapper">
       <div class="card">
-        <div class="card-header" style="padding: 10px">
-          <h3 style="font-family: Open Sans, sans-serif;">Action Referral</h3>
+        <div class="card-header " style="padding: 10px">
+          <div class="row ">
+            <div class="col-lg-4 text-left" > <h3 style="font-family: Open Sans, sans-serif;">Generate Referral</h3></div>
+            <div class="col-lg-4 ">
+              <div class="dataTables_length" >
+                <ng-select class="form-control form-control-sm"
+                           name="datatable_length"
+                           aria-controls="datatable"
+                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                           [multiple]="false"
+                           (change)="onChangeSearch($event)"
+                           placeholder="Search Clients"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of clients">
+                    {{item?.district}}
+                  </ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-lg-4 text-right" style="margin-top: 0px;">
+              <div
+                class=" btn btn-success fa fa-plus"
+                (click)="createClient()"
+              >
+                Add Client
+
+              </div>
+            </div>
+          </div>
+
+<!--          <a [routerLink]="['/create-referral']" style="color: green!important;">-->
+<!--            <i class="fa fa-list"></i>&nbsp; &nbsp;Add Client</a>-->
+<!--          <button (click)="printPage()" style="align-items: end">Add Client</button>-->
         </div>
         <div class="card-body">
-          <form [formGroup]="formGroup" (ngSubmit)="actionReferral()" *ngIf="formGroup" style="padding:30px">
+          <form [formGroup]="formGroup" (ngSubmit)="createReferral()" *ngIf="formGroup" style="padding:30px">
             <div class="row" style="padding-left: 30px;padding-top: 15px">
               <div class="col-lg-6">
-                <div>
-                  <div class="row">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Date of Referral
-<!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="date"
-                            formControlName="dateOfReferral"
-                            [readOnly]="true"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="row">
-                    <label>
-                      Name of Referring Officer
-<!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Name Of Referring Officer"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="nameOfReferringOfficer"
-                            [readOnly]="true"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+
                 <div>
                   <div class="row">
                     <label>
                       Name Of Client Being Referred
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -98,60 +83,37 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
-                    <label>
-                      Phone Number
-<!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Phone Number"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="phoneNumber"
-                            [readOnly]="true"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="row">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Date of Birth
-<!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="date"
-                            formControlName="dateOfBirth"
-                            [readOnly]="true"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+<!--                <div>-->
+<!--                  <div class="row">-->
+<!--                    <label-->
+<!--                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;-->
+<!--                                                    line-height: 1.5; text-align: left;"-->
+<!--                    >-->
+<!--                      Date of Birth-->
+<!--                      &lt;!&ndash;                      <span class="required-indicator">*</span>&ndash;&gt;-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-md-12">-->
+<!--                      <div class="form-group">-->
+<!--                        <div class=" input-group input-group-merge">-->
+<!--                          <input-->
+<!--                            class=" form-control"-->
+<!--                            type="date"-->
+<!--                            formControlName="dateOfBirth"-->
+<!--                            [readOnly]="true"-->
+<!--                          />-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div>
                   <div class="row">
                     <label>
                       Age Category
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -181,7 +143,7 @@
                   <div class="row">
                     <label>
                       Nationality Status
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -209,11 +171,11 @@
                     </div>
                   </div>
                 </div>
-                <div id="country_of_origin" [hidden]="true">
+                <div id="country_of_origin">
                   <div class="row">
                     <label>
                       Country of Origin
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -244,7 +206,7 @@
                   <div class="row">
                     <label>
                       Identification Document
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -275,7 +237,7 @@
                   <div class="row">
                     <label>
                       Identification Number
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -299,7 +261,7 @@
                   <div class="row">
                     <label>
                       Disability
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -325,8 +287,82 @@
                 <div>
                   <div class="row">
                     <label>
+                      Phone Number
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Phone Number"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="phoneNumber"
+                            [readOnly]="false"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="row">
+                    <label>
+                      Name of Referring Officer
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Name Of Referring Officer"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="nameOfReferringOfficer"
+                            [readOnly]="false"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label
+                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
+                                                    line-height: 1.5; text-align: left;"
+                    >
+                      Date of Referral
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class=" form-control"
+                            type="date"
+                            formControlName="dateOfReferral"
+                            [readOnly]="false"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
                       Reason for Referral
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -342,9 +378,9 @@
                                      formControlName="reasonForReferral"
                                      [searchable]="true"
                                      [clearable]="false"
-                                     [readonly]="true"
+                                     [readonly]="false"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of reason_for_referral" [disabled]="true">
+                            <ng-option [value]="item.name" *ngFor="let item of reason_for_referral" >
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -357,7 +393,7 @@
                   <div class="row">
                     <label>
                       Organization Referred to
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -372,10 +408,10 @@
                                      formControlName="organizationReferredTo"
                                      [searchable]="false"
                                      [clearable]="false"
-                                     [readonly]="true"
+                                     [readonly]="false"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of organization_referred_to"
-                                       [disabled]="true" >
+                                        >
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -384,11 +420,11 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div [hidden]="true">
+                  <div class="row" [hidden]="true">
                     <label>
                       Received Feedback After Referral?
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -413,11 +449,11 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div [hidden]="true">
+                  <div class="row" >
                     <label>
                       Feedback Given
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -436,17 +472,17 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div [hidden]="true" >
+                  <div class="row" >
                     <label
                       style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date of Feedback
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="row" >
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class=" input-group input-group-merge">
@@ -494,7 +530,7 @@
                   <div class="row">
                     <label>
                       Follow Up Area?
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -523,7 +559,7 @@
                   <div class="row">
                     <label>
                       Follow Up Organization
-<!--                      <span class="required-indicator">*</span>-->
+                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="row">
@@ -549,7 +585,7 @@
                     </div>
                   </div>
                 </div>
-                <div id="assignee" [hidden]="true">
+                <div id="assignee" >
                   <div class="row">
                     <label>
                       Assign staff
@@ -580,7 +616,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
             <div class="row">
               <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">

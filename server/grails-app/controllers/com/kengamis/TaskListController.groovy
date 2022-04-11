@@ -21,7 +21,7 @@ class TaskListController {
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '',referralId = ''
 
             variables['data'].each {
                 if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -30,6 +30,7 @@ class TaskListController {
                 if (it.key == 'PartnerId') partnerId = it.value
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
+                if (it.key == 'ReferralId') referralId = it.value
                 if (it.key == 'GroupId') groupId = it.value
             }
 
@@ -50,6 +51,8 @@ class TaskListController {
                           endDate          : endDate,
                           groupId          : groupId,
                           reportingPeriod  : period,
+                          referralId       : referralId,
+                          processDefKey    : task.processDefKey,
                           outputVariables  : task.outputVariables,
                           processInstanceId: task.processInstanceId,
                           taskDefinitionKey: task.taskDefinitionKey,
@@ -64,7 +67,7 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId=''
 
         variables['data'].each {
             if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -72,6 +75,7 @@ class TaskListController {
             if (it.key == 'StartDate') startDate = it.value
             if (it.key == 'PartnerId') partnerId = it.value
             if (it.key == 'ProgramId') programId = it.value
+            if (it.key == 'ReferralId') referralId = it.value
             if (it.key == 'EndDate') endDate = it.value
             if (it.key == 'GroupId') groupId = it.value
         }
@@ -92,7 +96,9 @@ class TaskListController {
                  programName      : program.title,
                  endDate          : endDate,
                  groupId          : groupId,
+                 referralId       : referralId,
                  reportingPeriod  : period,
+                 processDefKey    : task.processDefKey,
                  outputVariables  : task.outputVariables,
                  processInstanceId: task.processInstanceId,
                  taskDefinitionKey: task.taskDefinitionKey,
@@ -129,6 +135,7 @@ class TaskListController {
 
     @Transactional
     def update(TaskList taskList) {
+        println taskList.errors
         if (taskList == null) {
             render status: NOT_FOUND
             return

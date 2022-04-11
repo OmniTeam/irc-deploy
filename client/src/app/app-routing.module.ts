@@ -201,7 +201,14 @@ const routes: Routes = [
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
         },
-        loadChildren: ()=> import('./mis-components/referrals/create-referral/create-referral.module').then(m => m.CreateReferralModule)
+        loadChildren: ()=> import('./mis-components/referrals/create-client/create-referral.module').then(m => m.CreateReferralModule)
+      },
+      {
+        path: 'generate-referral', canActivate:[AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/referrals/generate-referral/generate-referral.module').then(m => m.GenerateReferralModule)
       },
       {
         path: 'action-referral/:id', canActivate:[AuthGuard],
