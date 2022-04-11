@@ -1894,4 +1894,34 @@ databaseChangeLog = {
         modifyDataType(columnName: "reporting_calendar", newDataType: "LONGTEXT", tableName: "partner_setup")
     }
 
+    changeSet(author: "DELL (generated)", id: "1649655031191-84") {
+        createTable(tableName: "clients") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "clientsPK")
+            }
+
+            column(name: "disability", type: "VARCHAR(255)")
+
+            column(name: "division", type: "VARCHAR(255)")
+
+            column(name: "case_id", type: "VARCHAR(255)")
+
+            column(name: "partner_name", type: "VARCHAR(255)")
+
+            column(name: "register_status", type: "VARCHAR(255)")
+
+            column(name: "parish", type: "VARCHAR(255)")
+
+            column(name: "gender", type: "VARCHAR(255)")
+
+            column(name: "district", type: "VARCHAR(255)")
+
+            column(name: "nationality", type: "VARCHAR(255)")
+
+            column(name: "date_of_registration", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }
