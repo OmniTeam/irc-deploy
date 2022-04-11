@@ -30,12 +30,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   totalBudgetDisburse: string;
   totalDisbursement: string;
   startReportingCycle: boolean = false;
-  disbursementPlan: any = [];
+  quarterlyCommitment: any = [];
   currentStatus: any = {};
   indicators: Indicator[] = [];
 
   setup: any;
   indicatorForDisaggregation: Indicator;
+  budgetForDisaggregation: any;
   organisationalInfo: any = [];
   listOfPartners: any = [];
   milestones: any = [];
@@ -50,6 +51,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   errorMessage: string;
   successMessage: string;
   showDisaggregation: boolean;
+  showQuarterlyBudget: boolean;
   btn_id: string;
 
   periodItems = [
@@ -120,10 +122,17 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.startReportingCycle = data.startCycle == "true";
       if (this.staffChosen != undefined) this.onPartnerChange()
 
-      if (setupValues.disbursementPlan != undefined) {
-        this.disbursementPlan = setupValues.disbursementPlan;
-        this.disbursementPlan.forEach((data) => {
-          this.updateDisbursementPlanValues(data.id, data.disbursement);
+      if (setupValues.quarterlyCommitment != undefined) {
+        this.quarterlyCommitment = setupValues.quarterlyCommitment;
+        this.quarterlyCommitment.forEach((data) => {
+          let totalD: number = 0;
+          if (this.quarterlyCommitment.some(x => x.id === data.id)) {
+            this.quarterlyCommitment.forEach(function (item) {
+              if (item.id === data.id) item.commitment = data.commitment
+              totalD += +item.commitment;
+            });
+          }
+          this.totalDisbursement = totalD.toString()
         });
       }
 
@@ -160,9 +169,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   generateCalendar(event) {
-    if (this.disbursementPlan.length > 0 || this.indicators.length > 0 || this.budget.length > 0) {
+    if (this.quarterlyCommitment.length > 0 || this.indicators.length > 0 || this.budget.length > 0) {
       if (confirm('This action will clear the targets and disbursement entered')) {
-        this.disbursementPlan = [];
+        this.quarterlyCommitment = [];
         this.indicators = [];
         this.budget = [];
         this.calendarDates();
@@ -203,13 +212,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     //set disbursement
     this.calendar.reportingCalender.forEach((period) => {
-      this.disbursementPlan.push(
+      this.quarterlyCommitment.push(
         {
           id: uuid(),
           datePeriod: period.datePeriod,
           startDate: period.startDate,
           endDate: period.endDate,
-          disbursement: ''
+          commitment: ''
         }
       );
     });
@@ -239,7 +248,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     });
   }
 
-  setDisaggregation(rowId) {
+  setMilestoneDisaggregation(rowId) {
     if (this.indicators.some(x => x.id === rowId)) {
       this.indicators.forEach((item) => {
         this.calendar.reportingCalender.forEach((c) => {
@@ -249,6 +258,23 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             {
               datePeriod: c.datePeriod,
               target: ''
+            }
+          );
+        });
+      });
+    }
+  }
+
+  setBudgetDisaggregation(rowId) {
+    if (this.budget.some(x => x.id === rowId)) {
+      this.budget.forEach((item) => {
+        this.calendar.reportingCalender.forEach((c) => {
+          let exists = false;
+          if (item.quarterlyBudget.some(x => x.datePeriod === c.datePeriod)) exists = true;
+          if (!exists) item.quarterlyBudget.push(
+            {
+              datePeriod: c.datePeriod,
+              amount: ''
             }
           );
         });
@@ -280,6 +306,30 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
+  toggleQuarterly(btn_id, data) {
+    this.showQuarterlyBudget = !this.showQuarterlyBudget;
+    this.openPopup = this.showQuarterlyBudget;
+    this.btn_id = btn_id;
+    const button = (document.getElementById(btn_id) as HTMLButtonElement);
+
+    const minus_icon = document.createElement('i');
+    minus_icon.classList.add('text', 'fas', 'fa-minus');
+    minus_icon.style.fontSize = '20px';
+    minus_icon.style.color = 'red';
+
+    const plus_icon = document.createElement('i');
+    plus_icon.classList.add('text', 'fas', 'fa-plus');
+    plus_icon.style.fontSize = '20px';
+
+    if (this.showQuarterlyBudget) {
+      button.firstChild.replaceWith(minus_icon);
+      //set disaggregation values
+      this.budgetForDisaggregation = data;
+    } else {
+      button.firstChild.replaceWith(plus_icon);
+    }
+  }
+
   createNewIndicator() {
     if (this.calendar.reportingCalender == undefined) {
       alert('No Calendar dates, Fill in reporting calendar');
@@ -297,7 +347,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   createNewBudgetItem() {
     let id = uuid();
-    this.budget.push({id: id, budgetLine: '', approvedAmount: '', totalSpent: ''});
+    this.budget.push({id: id, budgetLine: '', approvedAmount: '', totalSpent: '', quarterlyBudget: []});
+    this.setBudgetDisaggregation(id);
   }
 
   removeIndicator(indicator: Indicator) {
@@ -322,14 +373,27 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             });
           }
           break;
-        case 'approved_amt':
-          this.updateBudgetAmount(rowId, value);
+        case 'quartery_budget':
+          let approvedAmount: number = 0;
+          let array = rowId.split(' ');
+          let period = array[0];
+          let budgetId = array[1];
+          this.budget.forEach((item) => {
+            if (item.id === budgetId) {
+              if (item.quarterlyBudget.some(x => x.datePeriod === period)) {
+                item.quarterlyBudget.forEach(function (item) {
+                  if (item.datePeriod === period) item.amount = value
+                  if (item.amount.length != 0) approvedAmount += +item.amount;
+                });
+                item.approvedAmount = approvedAmount.toString();
+                this.budgetForDisaggregation = item;
+              }
+            }
+          });
+          this.updateQuarterlyCommitmentValues(period, value);
           break;
         case 'total_spent':
           this.updateBudgetDisburse(rowId, value, true);
-          break;
-        case 'disbursementPlan':
-          this.updateDisbursementPlanValues(rowId, value);
           break;
         case 'disaggregation':
           let overallTarget: number = 0;
@@ -358,7 +422,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
               }
             });
           }
-          this.setDisaggregation(rowId);
+          this.setMilestoneDisaggregation(rowId);
           break;
       }
     this.savePlan();
@@ -372,7 +436,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     let values: { [key: string]: string } = {
       indicators: JSON.stringify(this.indicators),
       budget: this.budget,
-      disbursementPlan: this.disbursementPlan,
+      quarterlyCommitment: this.quarterlyCommitment,
       currentStatus: this.currentStatus
     }
 
@@ -501,17 +565,16 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     }
     this.totalBudgetDisburse = total.toString();
-    this.currentStatus.totalAmountDisbursed = total;
+    this.currentStatus.totalAmountSpent = total;
   }
 
-  private updateDisbursementPlanValues(id, newValue) {
+  private updateQuarterlyCommitmentValues(period, newValue) {
     let totalD: number = 0;
-    if (this.disbursementPlan.some(x => x.id === id)) {
-      this.disbursementPlan.forEach(function (item) {
-        if (item.id === id) item.disbursement = newValue
-        totalD += +item.disbursement;
+      this.quarterlyCommitment.forEach(function (item) {
+        if (item.datePeriod === period) item.commitment = +item.commitment + +newValue
+        totalD += +item.commitment;
       });
-    }
-    this.totalDisbursement = totalD.toString()
+    this.totalDisbursement = totalD.toString();
+    this.currentStatus.totalAmountCommitted = totalD;
   }
 }

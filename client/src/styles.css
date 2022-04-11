@@ -83,4 +83,12 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   color: #ffffff!important;
 }
 
+.alertify-notifier .ajs-message.ajs-error {
+  color: #FFFFFF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
+
 
