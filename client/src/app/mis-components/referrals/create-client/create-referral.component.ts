@@ -131,6 +131,27 @@ export class CreateReferralComponent implements OnInit {
       'name': 'Central'
     }
   ];
+
+  identification_document = [
+    {
+      'name': 'National ID'
+    },
+    {
+      'name': 'Alien Card'
+    },
+    {
+      'name': 'Asylum Card'
+    },
+    {
+      'name': 'Waiting card'
+    },
+    {
+      'name': 'UNHCR Mandate'
+    },
+    {
+      'name': 'Minors Pass'
+    },
+  ];
   country_of_origin: any;
 
   get f() {
@@ -149,12 +170,15 @@ export class CreateReferralComponent implements OnInit {
       partnerName: [''],
       ageCategory: [null],
       countryOfOrigin: [null],
+      identificationDocument: [null],
+      identificationNumber: [null],
+      nationality: [null],
       district: [null],
       division: [null],
       parish: [null],
       gender: [null],
       disability: [''],
-      registrationStatus: [''],
+      registerStatus: [''],
     });
   }
 

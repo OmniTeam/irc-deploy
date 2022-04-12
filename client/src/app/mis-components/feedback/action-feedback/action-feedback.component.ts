@@ -10,6 +10,8 @@ import {AlertService} from "../../../services/alert";
 import {CountriesService} from "../../../services/countries.service";
 import {DatePipe} from "@angular/common";
 import {FeedbackService} from "../../../services/feedback.service";
+import {HttpParams} from "@angular/common/http";
+import {TaskListService} from "../../../services/task-list.service";
 
 
 @Component({
@@ -20,6 +22,8 @@ import {FeedbackService} from "../../../services/feedback.service";
 export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   feedback: any;
   FBROS: any;
+  taskId: any;
+  taskRecord: any;
 
   constructor(
     private userService: UsersService,
@@ -30,6 +34,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private taskService: TaskListService,
     private router: Router
   ) {
   }
@@ -181,48 +186,55 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    this.feedbackService.getCurrentFeedback(this.route.snapshot.params.id).subscribe(data => {
-      console.log(data, "referral data")
+    this.taskId = this.route.snapshot.params.id;
+    const params = new HttpParams().set('id', this.taskId);
 
-      this.feedback = data
-      let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
-      console.log(myDate, " this is the date formatted")
-      this.formGroup = this.formBuilder.group({
-        dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
-        nameOfRegister: [this.feedback?.nameOfRegister],
-        staffDesignation: [this.feedback?.staffDesignation],
-        typeOfFeedback: [this.feedback?.typeOfFeedback],
-        currentStatusOfFeedback: [this.feedback?.currentStatusOfFeedback],
-        location: [this.feedback?.location],
-        projectSector: [this.feedback?.projectSector],
-        subSector: [this.feedback?.subSector],
-        nameOfClient: [this.feedback?.nameOfClient],
-        remainAnonymous: [this.feedback?.remainAnonymous],
-        nationalityStatus: [this.feedback?.nationalityStatus],
-        clientType: [this.feedback?.clientType],
-        preferredChannel: [this.feedback?.preferredChannel],
-        phoneNumber: [this.feedback?.phoneNumber],
-        serialNumber: [this.feedback?.serialNumber],
-        feedbackCategory: [this.feedback?.feedbackCategory],
-        feedbackPriority: [this.feedback?.feedbackPriority],
-        feedbackReferredShared: [this.feedback?.feedbackReferredShared],
-        feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
-        referredPersonName: [this.feedback?.referredPersonName],
-        referredPersonPosition: [this.feedback?.referredPersonPosition],
-        referredOrganization: [this.feedback?.referredOrganization],
-        dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
-        responseTypeRequired: [this.feedback?.responseTypeRequired],
-        actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
-        inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
-        dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
-        actionTaken: [this.feedback?.actionTaken],
-        staffProvidedResponse: [this.feedback?.staffProvidedResponse],
-        responseSummary: [this.feedback?.responseSummary],
-        supervisor: [this.feedback?.supervisor],
-        dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
-      });
+    this.taskService.getTaskRecord(params).subscribe((data) =>{
+      this.taskRecord = data;
+      this.feedbackService.getCurrentFeedback(this.taskRecord.referralId).subscribe(data => {
+        console.log(data, "referral data")
 
-    })
+        this.feedback = data
+        let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
+        console.log(myDate, " this is the date formatted")
+        this.formGroup = this.formBuilder.group({
+          dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
+          nameOfRegister: [this.feedback?.nameOfRegister],
+          staffDesignation: [this.feedback?.staffDesignation],
+          typeOfFeedback: [this.feedback?.typeOfFeedback],
+          currentStatusOfFeedback: [this.feedback?.currentStatusOfFeedback],
+          location: [this.feedback?.location],
+          projectSector: [this.feedback?.projectSector],
+          subSector: [this.feedback?.subSector],
+          nameOfClient: [this.feedback?.nameOfClient],
+          remainAnonymous: [this.feedback?.remainAnonymous],
+          nationalityStatus: [this.feedback?.nationalityStatus],
+          clientType: [this.feedback?.clientType],
+          preferredChannel: [this.feedback?.preferredChannel],
+          phoneNumber: [this.feedback?.phoneNumber],
+          serialNumber: [this.feedback?.serialNumber],
+          feedbackCategory: [this.feedback?.feedbackCategory],
+          feedbackPriority: [this.feedback?.feedbackPriority],
+          feedbackReferredShared: [this.feedback?.feedbackReferredShared],
+          feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
+          referredPersonName: [this.feedback?.referredPersonName],
+          referredPersonPosition: [this.feedback?.referredPersonPosition],
+          referredOrganization: [this.feedback?.referredOrganization],
+          dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
+          responseTypeRequired: [this.feedback?.responseTypeRequired],
+          actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
+          inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
+          dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
+          actionTaken: [this.feedback?.actionTaken],
+          staffProvidedResponse: [this.feedback?.staffProvidedResponse],
+          responseSummary: [this.feedback?.responseSummary],
+          supervisor: [this.feedback?.supervisor],
+          dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
+        });
+
+      })
+    });
+
   }
 
   ngAfterContentInit(): void{
@@ -259,12 +271,24 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
     console.log(submitData)
     this.feedbackService.updateFeedback(this.route.snapshot.params.id, submitData).subscribe((result) => {
       console.warn(result, 'Feedback Updated Successfully');
+      this.updateTask("completed")
       this.alertService.success(`Feedback has been successfully updated`)
       this.router.navigate(['/feedback-list']);
     }, error => {
       this.alertService.error(`Failed to update feedback`)
     });
   }
+
+  updateTask(status){
+    this.taskRecord.status = status;
+    this.taskRecord.groupId = this.taskRecord.groupId ?? '';
+    let followupNeeded = this.formGroup.value.actionFollowupNeeded;
+    this.taskRecord.outputVariables = '{"actionedResponse": "'+ followupNeeded +'"}'
+    this.taskService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
+      console.log('successfully updated task');
+    }, error => console.log('update task', error));
+  }
+
 
   close() {
     this.router.navigate(['/feedback-list'])

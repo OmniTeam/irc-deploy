@@ -172,6 +172,36 @@
                     </div>
                   </div>
                 </div>
+                <div class="row" [hidden]="false">
+                  <div class="col-md-3">
+                    <label>
+                      Gender
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Gender of client"
+                                     formControlName="gender"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of gender">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-3">
                     <label>
@@ -190,7 +220,7 @@
                                      [multiple]="false"
                                      (change)="onChangeCountry($event)"
                                      placeholder="Nationality Status"
-                                     formControlName="nationality_status"
+                                     formControlName="nationality"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -328,6 +358,61 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
+                      Identification Document
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Identification Document"
+                                     formControlName="identificationDocument"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of identification_document">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Identification Number
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Identification Number"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="identificationNumber"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
                       Disability
 <!--                      <span class="required-indicator">*</span>-->
                     </label>
@@ -348,36 +433,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row" [hidden]="false">
-                  <div class="col-md-3">
-                    <label>
-                      Gender
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Gender of client"
-                                     formControlName="gender"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of gender">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="row" [hidden]="false">
                   <div class="col-md-3">
                     <label>
@@ -395,7 +451,7 @@
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
                                      placeholder="Registration Status"
-                                     formControlName="registrationStatus"
+                                     formControlName="registerStatus"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
