@@ -3,6 +3,7 @@ package com.kengamis.acl
 import com.kengamis.AppHolder
 import com.kengamis.Form
 import com.kengamis.KengaGroup
+import grails.converters.JSON
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -175,5 +176,14 @@ class KengaGroupAclEntryController {
 
             }
         }
+    }
+
+    def allMisTables() {
+        def tables = AppHolder.withMisSqlNonTx {
+            def query = "show tables;"
+            rows(query)
+        }
+
+        render tables as JSON
     }
 }
