@@ -72,6 +72,15 @@ class UrlMappings {
             'import-users'(controller: 'user', action: 'uploadUsers', method: 'POST')
         }
 
+        group "/api/v1/userApi/", {
+            'users'(controller: 'userApi', action:'users',method: 'GET' )
+            'group-users'(controller: 'userApi', action:'group-users',method: 'GET' )
+            'groups'(controller: 'userApi', action:'groups',method: 'GET' )
+            'user-groups'(controller: 'userApi', action:'user-groups',method: 'GET' )
+            'one-user'(controller: 'userApi', action:'one-user',method: 'GET' )
+            'getLoginUser'(controller: 'userApi', action:'getLoginUser',method: 'GET' )
+        }
+
         "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
         "/api/v1/aclGroupMapping-v2"(controller: 'kengaGroupAclEntry', action:'saveGroupMappingsWithParent',method: 'POST' )
         "/api/v1/aclGroupMapping/tables"(controller: 'kengaGroupAclEntry', action:'allMisTables')

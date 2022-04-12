@@ -17,6 +17,7 @@ import grails.gorm.transactions.Transactional
 class RequestMapController {
 
     RequestMapService requestMapService
+    def springSecurityService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -44,6 +45,7 @@ class RequestMapController {
 
         try {
             requestMapService.save(requestMap)
+            springSecurityService.clearCachedRequestmaps()
         } catch (ValidationException e) {
             respond requestMap.errors
             return

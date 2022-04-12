@@ -75,3 +75,16 @@ ul>li {
   color:red;
 }
 
+tr td {
+  white-space: pre;
+  overflow: hidden;
+  max-width: 300px;
+  text-overflow: ellipsis;
+}
+
+table {
+  width: 100%;
+  overflow: auto;
+  display: table;
+  table-layout: fixed;
+}
