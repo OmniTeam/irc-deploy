@@ -76,10 +76,10 @@ ul>li {
 }
 
 tr td {
-  white-space: pre;
   overflow: hidden;
   max-width: 300px;
   text-overflow: ellipsis;
+  white-space: normal;
 }
 
 table {
