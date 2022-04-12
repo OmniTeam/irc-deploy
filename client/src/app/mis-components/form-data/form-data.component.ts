@@ -426,7 +426,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       marker.bindPopup('Loading....');
       marker.on('click', (e) => {
         let popup = e.target.getPopup();
-        this.makePopUp(c['__id'], formtable, popup);
+        this.makePopUp(c['id'], formtable, popup);
       });
       marker.addTo(map);
     }

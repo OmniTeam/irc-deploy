@@ -183,6 +183,7 @@ export class AclGroupMappingParentComponent implements OnInit {
 
   createACLGROUPMAPPING() {
     const formData = this.formGroup.value;
+    console.log(formData)
     this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);

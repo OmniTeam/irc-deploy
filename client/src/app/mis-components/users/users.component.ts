@@ -87,8 +87,8 @@ export class UsersComponent implements OnInit {
       this.roleValue = ''
       this.reloadTable()
     } else {
-      this.roleValue = event;
-      this.users=this.users.filter(a => a.role === this.roleValue)
+      this.roleValue = event
+      this.users=this.users.filter(a => a.roles.includes(this.roleValue))
     }
 
   }
@@ -100,7 +100,7 @@ export class UsersComponent implements OnInit {
       this.reloadTable()
     } else {
       this.groupValue = event;
-      this.users = this.users.filter(a => a.groups === this.groupValue)
+      this.users = this.users.filter(a => a.groups.includes(this.groupValue))
     }
 
   }

@@ -76,7 +76,7 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.id" *ngFor="let item of forms">
+                            <ng-option [value]="item.name" *ngFor="let item of forms">
                               {{item?.displayName}}
                             </ng-option>
                           </ng-select>
@@ -128,7 +128,7 @@
                              style="width: 100%!important;table-layout:fixed;">
                         <thead class=" thead-light">
                         <tr class="row">
-                          <th class="col-md-3">  &nbsp; &nbsp; Form</th>
+                          <th class="col-md-3">  &nbsp; &nbsp; Form Name</th>
                           <th class="col-md-8">Query</th>
                           <th class="col-md-1">Actions</th>
                         </tr>
@@ -136,7 +136,7 @@
                         <tr *ngFor="let row of queryArray; let i = index;" class="row">
                           <td style="white-space: break-spaces!important;" class="col-md-3">
                             <div> &nbsp;&nbsp;
-                              {{row?.form | formName: this.forms}}
+                              {{row?.form}}
                             </div>
                           </td>
                           <td style="white-space: break-spaces!important;" class="col-md-7">
