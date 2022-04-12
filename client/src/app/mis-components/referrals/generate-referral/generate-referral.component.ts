@@ -19,12 +19,12 @@ import {ClientService} from "../../../services/client.service";
 })
 export class GenerateReferralComponent implements OnInit {
 
-  private referrals: any;
-  private nationalityValue = '';
-  private followUpValue = '';
-  private searchValue = '';
-  private clients:any;
-  private staffs: any;
+  referrals: any;
+  nationalityValue = '';
+  followUpValue = '';
+  searchValue = '';
+  clients:any;
+  staffs: any;
   runningJobs = [];
   allJobs = [];
   scheduledTasks: Object[];
