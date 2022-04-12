@@ -15,6 +15,7 @@ class TaskListSyncJob extends Script {
     Object run() {
         downloadTasks(url + '/get-tasks/CRVPF_REPORTING/' + '0/50')
         downloadTasks(url + '/get-tasks/IRC_REFERRAL/' + '0/50')
+        downloadTasks(url + '/get-tasks/IRC_FEEDBACK/' + '0/50')
         //send data to workflow
         def data = TaskList.where {status == 'completed' && synced == 'false' }.findAll()
         data.each {  sendTasksToWorkflow(it as TaskList) }

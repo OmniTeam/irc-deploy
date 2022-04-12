@@ -1,6 +1,11 @@
 package com.kengamis
 
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.validation.ValidationException
+import groovyx.net.http.ContentType
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -52,7 +57,36 @@ class FeedbackController {
             return
         }
 
+        boolean startIrcInstance = startProcessInstance([
+                ReferralId    : feedback.id,
+                StartDate     : feedback.dateFeedbackReceived,
+                EndDate       : ""
+
+        ])
+
+        if(startIrcInstance){
+            println("FEEDBACK PROCESS STARTED")
+        }
+
         respond feedback, [status: CREATED, view:"show"]
+    }
+
+    static boolean startProcessInstance(Map processVariables) {
+        def http = new HTTPBuilder(StartCamundaInstancesJob.camundaApiUrl + "/start-instance")
+        boolean toReturn = false
+        http.request(Method.POST, ContentType.JSON) { req ->
+            body = StartCamundaInstancesJob.formatProcessVariables(processVariables, 'IRC_FEEDBACK')
+            headers.Accept = 'application/json'
+            requestContentType = ContentType.JSON
+            response.success = { resp, json ->
+                println("Camunda :: startProcessInstance() True [ " + json.text + " ]")
+                toReturn = true
+            }
+            response.failure = { resp ->
+                println("Camunda :: startProcessInstance() False [ " + resp.status + " ]")
+            }
+        }
+        return toReturn
     }
 
     @Transactional

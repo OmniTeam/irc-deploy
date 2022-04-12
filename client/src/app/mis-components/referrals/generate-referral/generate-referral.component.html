@@ -29,11 +29,11 @@
                            style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                            [multiple]="false"
                            (change)="onChangeSearch($event)"
-                           placeholder="Search Clients"
+                           placeholder="Search Clients Case Id"
                            [searchable]="true"
                            [clearable]="true">
                   <ng-option [value]="item.id" *ngFor="let item of clients">
-                    {{item?.district}}
+                    {{item?.caseId}}
                   </ng-option>
                 </ng-select>
               </div>
@@ -62,7 +62,7 @@
                 <div>
                   <div class="row">
                     <label>
-                      Name Of Client Being Referred
+                      Client Case Id
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
@@ -72,7 +72,7 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Name Of Client Being Referred"
+                            placeholder="Case Id Of Client Being Referred"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="nameOfClientBeingReferred"
@@ -84,31 +84,30 @@
                   </div>
                 </div>
 
-<!--                <div>-->
-<!--                  <div class="row">-->
-<!--                    <label-->
-<!--                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;-->
-<!--                                                    line-height: 1.5; text-align: left;"-->
-<!--                    >-->
-<!--                      Date of Birth-->
-<!--                      &lt;!&ndash;                      <span class="required-indicator">*</span>&ndash;&gt;-->
-<!--                    </label>-->
-<!--                  </div>-->
-<!--                  <div class="row">-->
-<!--                    <div class="col-md-12">-->
-<!--                      <div class="form-group">-->
-<!--                        <div class=" input-group input-group-merge">-->
-<!--                          <input-->
-<!--                            class=" form-control"-->
-<!--                            type="date"-->
-<!--                            formControlName="dateOfBirth"-->
-<!--                            [readOnly]="true"-->
-<!--                          />-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
+                <div>
+                  <div class="row">
+                    <label
+
+                    >
+                      Partner Name
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class=" form-control"
+                            type="text"
+                            formControlName="partnerName"
+                            [readOnly]="true"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div>
                   <div class="row">
                     <label>
@@ -126,6 +125,126 @@
                                      [multiple]="false"
                                      placeholder="Age Category"
                                      formControlName="ageCategory"
+                                     [searchable]="false"
+                                     [clearable]="false"
+                                     [readonly]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of age_category" [disabled]="true">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      Gender
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Gender"
+                                     formControlName="gender"
+                                     [searchable]="false"
+                                     [clearable]="false"
+                                     [readonly]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of age_category" [disabled]="true">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      District
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="District"
+                                     formControlName="district"
+                                     [searchable]="false"
+                                     [clearable]="false"
+                                     [readonly]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of age_category" [disabled]="true">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      Division
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Division"
+                                     formControlName="division"
+                                     [searchable]="false"
+                                     [clearable]="false"
+                                     [readonly]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of age_category" [disabled]="true">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="row">
+                    <label>
+                      Parish
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Parish"
+                                     formControlName="parish"
                                      [searchable]="false"
                                      [clearable]="false"
                                      [readonly]="true"

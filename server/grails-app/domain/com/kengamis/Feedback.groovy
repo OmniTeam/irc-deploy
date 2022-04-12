@@ -36,6 +36,10 @@ class Feedback {
     String responseSummary
     String supervisor
     String dataEntryFocalPoint
+    String email
+    String feedbackDetails
+    String project
+    String assignee
 
     static mapping = {
         id generator: 'uuid2'
@@ -76,6 +80,10 @@ class Feedback {
         responseSummary nullable: true
         supervisor nullable: true
         dataEntryFocalPoint nullable: true
+        email nullable: true
+        project nullable: true
+        feedbackDetails nullable: true
+        assignee nullable: true
     }
 
     @Override

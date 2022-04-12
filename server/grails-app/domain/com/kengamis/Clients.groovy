@@ -12,6 +12,10 @@ class Clients {
     String gender
     String disability
     String registerStatus
+    String ageCategory
+    String identificationDocument
+    String identificationNumber
+    String countryOfOrigin
 
     static mapping = {
         id generator: 'uuid2'
@@ -28,6 +32,10 @@ class Clients {
         partnerName nullable: true
         disability nullable: true
         registerStatus nullable: true
+        ageCategory nullable: true
+        countryOfOrigin nullable: true
+        identificationDocument nullable: true
+        identificationNumber nullable: true
     }
 
     @Override

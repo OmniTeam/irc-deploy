@@ -1976,4 +1976,52 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1649754406006-91") {
+        addColumn(tableName: "clients") {
+            column(name: "age_category", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-92") {
+        addColumn(tableName: "clients") {
+            column(name: "country_of_origin", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-93") {
+        addColumn(tableName: "clients") {
+            column(name: "identification_document", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-94") {
+        addColumn(tableName: "clients") {
+            column(name: "identification_number", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-95") {
+        addColumn(tableName: "feedback") {
+            column(name: "assignee", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-96") {
+        addColumn(tableName: "feedback") {
+            column(name: "email", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-97") {
+        addColumn(tableName: "feedback") {
+            column(name: "feedback_details", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-98") {
+        addColumn(tableName: "feedback") {
+            column(name: "project", type: "varchar(255)")
+        }
+    }
+
 }
