@@ -28,31 +28,24 @@ export class HasRoleDirective implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.currentUser = this.authService.getLoggedInUsername();
-    const params = new HttpParams()
-      .set('username',  this.currentUser);
-    this.subscription.push(
-      this.rolesService.getUserRoles(params).subscribe((roles: any) => {
-        if (!roles) {
-          // Remove element from DOM
-          this.viewContainerRef.clear();
-        }
-        // user Role are checked by a Roles mention in DOM
-        if (this.hasRole) {
-          const idx = roles.findIndex((element) => this.hasRole.indexOf(element) !== -1);
-          if (idx < 0) {
-            this.viewContainerRef.clear();
-          } else {
-            // appends the ref element to DOM
-            this.viewContainerRef.createEmbeddedView(this.templateRef);
-          }
-        }
-        else {
-          // Remove element from DOM
-          this.viewContainerRef.clear();
-        }
-      })
-    );
+    let roles = this.authService.getUserRoles();
+    if (!roles) {
+      // Remove element from DOM
+      this.viewContainerRef.clear();
+    }
+    // user Role are checked by a Roles mention in DOM
+    if (this.hasRole) {
+      const idx = roles.findIndex((element) => this.hasRole.indexOf(element) !== -1);
+      if (idx < 0) {
+        this.viewContainerRef.clear();
+      } else {
+        // appends the ref element to DOM
+        this.viewContainerRef.createEmbeddedView(this.templateRef);
+      }
+    } else {
+      // Remove element from DOM
+      this.viewContainerRef.clear();
+    }
   }
 
   /**

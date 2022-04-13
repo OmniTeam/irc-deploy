@@ -77,18 +77,14 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
         if (!allowedUserRoles || allowedUserRoles.length == 0) {
           return true;   // if no user roles has been set, all user are allowed to access the route
         } else {
-          this.currentUser = this.authService.getLoggedInUsername();
-          const params = new HttpParams()
-            .set('username', this.currentUser);
-          return this.rolesService.getAllUserRoles(params).then((userRoles: string[]) => {
-            if (this.authService.areUserRolesAllowed(userRoles, allowedUserRoles)) {
-              return true;
-            } else {
-              this.authService.doLogoutUser();
-              this.router.navigate(['/login']);
-              return false;
-            }
-          });
+          let userRoles = this.authService.getUserRoles()
+          if (this.authService.areUserRolesAllowed(userRoles, allowedUserRoles)) {
+            return true;
+          } else {
+            this.authService.doLogoutUser();
+            this.router.navigate(['/login']);
+            return false;
+          }
         }
       } else {
         return false;
