@@ -269,7 +269,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    this.feedbackService.updateFeedback(this.route.snapshot.params.id, submitData).subscribe((result) => {
+    this.feedbackService.updateFeedback(this.taskRecord.referralId, submitData).subscribe((result) => {
       console.warn(result, 'Feedback Updated Successfully');
       this.updateTask("completed")
       this.alertService.success(`Feedback has been successfully updated`)
