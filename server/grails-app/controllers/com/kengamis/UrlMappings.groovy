@@ -84,6 +84,8 @@ class UrlMappings {
         "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
         "/api/v1/aclGroupMapping-v2"(controller: 'kengaGroupAclEntry', action:'saveGroupMappingsWithParent',method: 'POST' )
         "/"(controller: 'application', action:'index')
+        "/api/v1/data/clients-from-remote"(controller: 'data', action:'loadIrcClientDataFrmFeed')
+        "/api/v1/data/clients-from-remote2"(controller: 'data', action:'loadIrcClientDataFrmFeed2')
         "500"(view: '/error')
         "404"(view: '/notFound')
     }

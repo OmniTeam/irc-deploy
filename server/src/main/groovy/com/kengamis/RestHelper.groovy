@@ -1,5 +1,6 @@
 package com.kengamis
 
+import groovyx.net.http.RESTClient
 import org.omni.rest.odkcentral.CentralRestClient
 
 class RestHelper {
