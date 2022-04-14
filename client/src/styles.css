@@ -83,3 +83,7 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .main-content, .sidenav {
   font-family: "Poppins Medium", "Helvetica", sans-serif !important;
 }
+
+button {
+  font-family: "Poppins Light", "Helvetica", sans-serif !important;
+}
