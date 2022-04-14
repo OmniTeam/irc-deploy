@@ -5,10 +5,18 @@
         <div class="col-lg-6 col-7">
           <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">SUBMIT
             PROGRESS REPORT</h6></div>
+          <div [style.display]="isSubmitFinalVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
+            SUBMIT FINAL
+            PROGRESS REPORT</h6></div>
           <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">REVIEW
             PROGRESS REPORT</h6></div>
           <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
             APPROVE PROGRESS REPORT</h6></div>
+          <div [style.display]="isDisburseFunds ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
+            DISBURSE FUNDS</h6></div>
+          <div [style.display]="isApproveFundDisbursement ? 'block' : 'none'"><h6
+            class="h2 text-white d-inline-block mb-0">
+            APPROVE FUND DISBURSEMENT</h6></div>
         </div>
       </div>
     </div>
@@ -46,14 +54,16 @@
     <div class="row">
       <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
       <div class="col-sm-11">
-        <textarea class="form-control" id="addRecommendation" placeholder="Add a recommendation" cols="50" rows="3"></textarea>
+        <textarea class="form-control" id="addRecommendation" placeholder="Add a recommendation" cols="50"
+                  rows="3"></textarea>
         <div style="display: flex; justify-content: end;">
           <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addRecommendation()">Send</button>
         </div>
       </div>
     </div>
     <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
-    <app-comments [comments]="recommendations" (commentsChanged)="recommendationsChangedHandler($event)" [isRecommendation]=true></app-comments>
+    <app-comments [comments]="recommendations" (commentsChanged)="recommendationsChangedHandler($event)"
+                  [isRecommendation]=true></app-comments>
   </div>
   <div class="card-footer" style="text-align: end">
     <button class="btn btn-dark comment_btn" (click)="viewRecommendations()">Close</button>
@@ -65,25 +75,6 @@
     <div class=" col">
       <div class=" card">
         <div class="row">
-          <div class="col-sm-12 justify-center">
-            <div class="col-sm-3 justify-center">
-              <button class="btn btn-light"
-                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible"  (click)="changeForm('Submit')">Submit Report
-              </button><!--[disabled]="!isSubmitVisible"-->
-            </div>
-            <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
-            <div class="col-sm-3 justify-center">
-              <button class="btn btn-light"
-                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible"  (click)="changeForm('Review')">Review Report
-              </button><!--[disabled]="!isReviewVisible"-->
-            </div>
-            <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
-            <div class="col-sm-3 justify-center">
-              <button class="btn btn-light"
-                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible"  (click)="changeForm('Approve')">Approve Report
-              </button><!--[disabled]="!isApproveVisible"-->
-            </div>
-          </div>
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
               <div class=" col">
@@ -137,6 +128,15 @@
                   </div>
                 </div>
 
+                <div class="card" [style.display]="isSubmitFinalVisible ? 'block' : 'none'">
+                  <div class="row text-right">
+                    <div class="col-sm-9">&nbsp;</div>
+                    <div class="col-sm-3">
+                      <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                    </div>
+                  </div>
+                </div>
+
                 <h3 style="margin-left: 40px;">SUMMARY OF PERFORMANCE FOR THE REPORTING PERIOD</h3>
                 <div class="card">
                   <table class="table table-striped table-bordered" id="summary">
@@ -159,12 +159,14 @@
                       <td class='text-center'>{{ row.overall_target | number }}</td>
                       <td class='text-center'>{{ row.cumulative_achievement | number }}</td>
                       <td class='text-center'>{{ row.quarter_target | number }}</td>
-                      <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
+                      <td class='text-center'
+                          *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
                       <td class='text-center' *ngIf="row.milestoneId==undefined" id="1-{{row.id}}">
                         <div>{{ row.quarter_achievement | number }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
@@ -202,18 +204,20 @@
                       <td class='text-center'>{{ row.budget_line }}</td>
                       <td class='text-center'>{{ row.approved_budget | number }}</td>
                       <td class='text-center'>{{ row.expense_to_date | number }}</td>
-                      <td class='text-center'  id="td1-{{row.id}}">
+                      <td class='text-center' id="td1-{{row.id}}">
                         <div>{{ row.total_advanced | number }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' id="td2-{{row.id}}">
                         <div>{{ row.quarter_expenses | number }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center'>{{ row.variance }}</td>
@@ -230,10 +234,11 @@
                   </table>
                 </div>
 
-                <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">
+                <div class="card" [style.display]="isSubmitVisible || isSubmitFinalVisible ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span class="required-indicator">*</span></label>
+                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span
+                        class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
@@ -257,10 +262,11 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report: <span class="required-indicator">*</span></label>
+                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report: <span
+                        class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)" /></div>
+                                                   type="file" (change)="handleFileInput($event)"/></div>
                       <div class="col-sm-3">
                         <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
@@ -274,6 +280,7 @@
                   <div class="container" *ngIf="loading">***
                     <h3>Uploading attachment, please wait ...</h3>
                   </div>
+
                 </div>
 
                 <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
@@ -283,8 +290,8 @@
                       <div class="col-sm-4">{{attachment1}}</div>
                       <div class="col-sm-4">
                         <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
-                                                                           class="text fas fa-file-download"
-                                                                           target="_blank" download>&nbsp;&nbsp;Download
+                                                        class="text fas fa-file-download"
+                                                        target="_blank" download>&nbsp;&nbsp;Download
                           Attachment</a>
                         </button>
                       </div>
@@ -294,8 +301,8 @@
                       <div class="col-sm-4">{{attachment2}}</div>
                       <div class="col-sm-4">
                         <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
-                                                                           class="text fas fa-file-download"
-                                                                           target="_blank" download>&nbsp;&nbsp;Download
+                                                        class="text fas fa-file-download"
+                                                        target="_blank" download>&nbsp;&nbsp;Download
                           Attachment</a>
                         </button>
                       </div>
@@ -305,8 +312,8 @@
                       <div class="col-sm-4">{{attachment3}}</div>
                       <div class="col-sm-4">
                         <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
-                                                                           class="text fas fa-file-download"
-                                                                           target="_blank" download>&nbsp;&nbsp;Download
+                                                        class="text fas fa-file-download"
+                                                        target="_blank" download>&nbsp;&nbsp;Download
                           Attachment</a>
                         </button>
                       </div>
@@ -314,17 +321,20 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;" [style.display]="isApproveVisible ? 'block' : 'none'">GROUP NAME</h3>
-                <div class="card" [style.display]="isApproveVisible ? 'block' : 'none'">
+                <h3 style="margin-left: 40px;"
+                    [style.display]="isApproveVisible || isDisburseFunds || isApproveFundDisbursement ? 'block' : 'none'">
+                  GROUP NAME</h3>
+                <div class="card"
+                     [style.display]="isApproveVisible || isDisburseFunds || isApproveFundDisbursement  ? 'block' : 'none'">
                   <div class="row">
                     <div class="col">
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink1}}"
-                                                                             style="font-size:15px;"
-                                                                             class="text fas fa-file-download"
-                                                                             target="_blank" download>&nbsp;&nbsp;Download
+                                                          style="font-size:15px;"
+                                                          class="text fas fa-file-download"
+                                                          target="_blank" download>&nbsp;&nbsp;Download
                             Attachment</a>
                           </button>
                         </div>
@@ -333,9 +343,9 @@
                         <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink2}}"
-                                                                             style="font-size:15px;"
-                                                                             class="text fas fa-file-download"
-                                                                             target="_blank" download>&nbsp;&nbsp;Download
+                                                          style="font-size:15px;"
+                                                          class="text fas fa-file-download"
+                                                          target="_blank" download>&nbsp;&nbsp;Download
                             Attachment</a>
                           </button>
                         </div>
@@ -344,9 +354,9 @@
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink3}}"
-                                                                             style="font-size:15px;"
-                                                                             class="text fas fa-file-download"
-                                                                             target="_blank" download>&nbsp;&nbsp;Download
+                                                          style="font-size:15px;"
+                                                          class="text fas fa-file-download"
+                                                          target="_blank" download>&nbsp;&nbsp;Download
                             Attachment</a>
                           </button>
                         </div>
@@ -372,7 +382,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="expenses_realistic" [(ngModel)]="radioExpensesRealistic"
-                                   value="{{item.value}}" />
+                                   value="{{item.value}}"/>
                             {{item.name}}
                           </li>
                         </ul>
@@ -382,7 +392,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="attachments_verified" [(ngModel)]="radioAttachmentsVerified"
-                                   value="{{item.value}}" />
+                                   value="{{item.value}}"/>
                             {{item.name}}
                           </li>
                         </ul>
@@ -392,7 +402,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="figures_realistic" [(ngModel)]="radioFiguresRealistic"
-                                   value="{{item.value}}" />
+                                   value="{{item.value}}"/>
                             {{item.name}}
                           </li>
                         </ul>
@@ -405,7 +415,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="narrative_align" [(ngModel)]="radioNarrativeAlign"
-                                   value="{{item.value}}" />
+                                   value="{{item.value}}"/>
                             {{item.name}}
                           </li>
                         </ul>
@@ -415,7 +425,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="inline_with_targets" [(ngModel)]="radioInlineWithTargets"
-                                   value="{{item.value}}" />
+                                   value="{{item.value}}"/>
                             {{item.name}}
                           </li>
                         </ul>
@@ -425,7 +435,7 @@
                         <ul class="list-group list-group-flush">
                           <li class="list-group-item" *ngFor="let item of items">
                             <input type="radio" name="evidence_satisfactory" [(ngModel)]="radioEvidenceSatisfactory"
-                                   value="{{item.value}}" />
+                                   value="{{item.value}}"/>
                             {{item.name}}
                           </li>
                         </ul>
@@ -434,7 +444,8 @@
 
                     <div class="col-sm-3">
                       <div>
-                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()"
+                                *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View
                           Recommendations
                         </button>
                         <br><br>
@@ -463,7 +474,8 @@
                         <div class="col-sm-12"><p>Has the partner satisfactorily affected the suggested changes?</p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioSuggestedChangesSatisfactory"
+                              <input type="radio" name="suggested_changes_satisfactory"
+                                     [(ngModel)]="radioSuggestedChangesSatisfactory"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -497,7 +509,7 @@
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
                               <input type="radio" name="end_of_partnership" [(ngModel)]="radioEndOfPartnership"
-                                     value="{{item.value}}" />
+                                     value="{{item.value}}"/>
                               {{item.name}}
                             </li>
                           </ul>
@@ -519,15 +531,88 @@
 
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                     <div class="col"><p>Amount of Funds to be disbursed:</p></div>
-                    <div class="col text-left"><input type="text" class="form-control" [(ngModel)]="amountOfFundsDisbursed"/><br></div>
+                    <div class="col text-left"><input type="text" class="form-control"
+                                                      [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                   </div>
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                     <div class="col"><p>Provide any recommendations (Internal):</p></div>
-                    <div class="col text-left"><textarea class="form-control" [(ngModel)]="provideAnyRecommendations"></textarea></div>
+                    <div class="col text-left"><textarea class="form-control"
+                                                         [(ngModel)]="provideAnyRecommendations"></textarea></div>
                   </div>
                 </div>
 
-                <div *ngIf="error || success" class="row align-items-center text-center" style="display: flex; justify-content: center;">
+                <div class="card" [style.display]="isDisburseFunds ? 'block' : 'none'">
+                  <div class="row">
+                    <div class="col-sm-9">
+                      <div class="row">
+                        <div class="col"><p>How would you like to proceed?</p></div>
+                        <div class="col text-left">
+                          <ul style="list-style: none;">
+                            <li *ngFor="let item of proceed">
+                              <input type="radio" name="how_to_proceed" [(ngModel)]="radioHowToProceed"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col"><p>Provide any recommendations (Internal):</p></div>
+                        <div class="col text-left"><textarea class="form-control"
+                                                             [(ngModel)]="provideAnyRecommendations"></textarea></div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                      <div>
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View
+                          Recommendations
+                        </button>
+                        <br><br>
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="card" [style.display]="isApproveFundDisbursement ? 'block' : 'none'">
+                  <div class="row">
+                    <div class="col-sm-9">
+                      <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col"><p>Amount of Funds to disbursed:</p></div>
+                        <div class="col text-left"><input type="number" class="form-control"
+                                                          [(ngModel)]="amountOfFundsDisbursed"/><br></div>
+                      </div>
+                      <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col"><p>Date disbursed:</p></div>
+                        <div class="col text-left"><input type="date" class="form-control"
+                                                          [(ngModel)]="dateDisbursed"/><br></div>
+                      </div>
+                      <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col"><p>Amount of Funds Remaining</p></div>
+                        <div class="col text-left"><input type="number" class="form-control"
+                                                          [(ngModel)]="amountOfFundsRemaining"/></div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                      <div>
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View
+                          Recommendations
+                        </button>
+                        <br><br>
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div *ngIf="error || success" class="row align-items-center text-center"
+                     style="display: flex; justify-content: center;">
                   <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
                     <strong>Error:</strong> {{errorMessage}}
                   </div>
@@ -536,7 +621,7 @@
                   </div>
                 </div>
 
-                <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
+                <div class="row" [style.display]="isSubmitVisible || isSubmitFinalVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
@@ -551,7 +636,8 @@
                     <button class="btn btn-success" (click)="reviewReport('submit')">Approve Review</button>
                   </div>
                 </div>
-                <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">
+                <div class="row"
+                     [style.display]="isApproveVisible || isApproveFundDisbursement || isDisburseFunds ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
