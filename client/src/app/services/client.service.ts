@@ -9,6 +9,7 @@ import {Observable} from "rxjs";
  export class ClientService {
   baseurl = environment.serverUrl
   urlClient = `${this.baseurl}/Clients/`
+  urlClient2 = `${this.baseurl}/api/v1/data/clients-from-remote2/`
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +19,10 @@ import {Observable} from "rxjs";
 
   createClient(formData): Observable<any> {
     return this.http.post(this.urlClient, formData);
+  }
+
+  downloadClientData(): Observable<any>{
+    return this.http.get(this.urlClient2)
   }
 
   getCurrentClient(id){
