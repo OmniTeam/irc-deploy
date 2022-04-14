@@ -61,6 +61,22 @@ export class ScheduledTasksComponent implements OnInit {
     });
   }
 
+  runGetOdataClients(){
+    this.scheduledTasksService.getClientsDataOdata().subscribe((data) =>{
+      this.alertService.success(`Clients Data has been updated`);
+    }, error => {
+      this.alertService.success(`Error while updating client data`);
+    })
+  }
+
+  runGetOdataServices(){
+    this.scheduledTasksService.getServicesDataOdata().subscribe((data) =>{
+      this.alertService.success(`Service Data has been updated`);
+    }, error => {
+      this.alertService.success(`Error while updating service data`);
+    })
+  }
+
 
   entriesChange($event) {
     this.entries = $event.target.value;

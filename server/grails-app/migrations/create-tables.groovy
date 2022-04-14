@@ -2024,4 +2024,22 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1649919180335-99") {
+        createTable(tableName: "services") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "servicesPK")
+            }
+
+            column(name: "case_id", type: "VARCHAR(255)")
+
+            column(name: "partner_name", type: "VARCHAR(255)")
+
+            column(name: "date_of_service", type: "VARCHAR(255)")
+
+            column(name: "client_case_id", type: "VARCHAR(255)")
+
+            column(name: "service_provided", type: "VARCHAR(255)")
+        }
+    }
+
 }

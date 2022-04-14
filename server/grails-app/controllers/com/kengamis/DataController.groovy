@@ -191,8 +191,13 @@ class DataController {
 //                    TODO discuss with Cathy these fields
                     withMisSqlNonTx {
                         def query = """
-                            insert into clients(case_id,
+                            insert into services(id,case_id,partner_name,date_of_service,
+                            client_case_id,service_provided)
+                            values(?,?,?,?,?,?)
                         """
+
+                        executeUpdate(query.toString(),[UUID.randomUUID().toString(),record.caseid,record."Partner that provided service",
+                        record."Date of service",record."client caseid",record."Service provided"])
                     }
                 }
             }
