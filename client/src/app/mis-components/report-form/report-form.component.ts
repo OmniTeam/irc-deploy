@@ -36,8 +36,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   successMessage: string;
 
   isSubmitVisible: boolean;
+  isSubmitFinalVisible: boolean;
   isReviewVisible: boolean;
   isApproveVisible: boolean;
+  isDisburseFunds: boolean;
+  isApproveFundDisbursement: boolean;
+
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
   openPopup: boolean;
@@ -60,7 +64,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   radioReportsWellAligned: string;
   radioRecommendFund: string;
   radioEndOfPartnership: string;
+  radioHowToProceed: string;
   amountOfFundsDisbursed: string;
+  dateDisbursed: string;
+  amountOfFundsRemaining: string;
   provideAnyRecommendations: string;
 
   taskId: string;
@@ -77,6 +84,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   organisationalInfo: any;
   performanceReport = [];
   financialReport = [];
+  proceed = [
+    {name: 'Approve disbursement of funds', value: 'Yes'},
+    {name: 'Reject Fund Disbursement request', value: 'No'}
+  ];
   items = [
     {name: 'Yes', value: 'yes'},
     {name: 'No', value: 'no'}
@@ -99,6 +110,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
+    this.isSubmitFinalVisible = false;
+    this.isDisburseFunds = false;
+    this.isApproveFundDisbursement = false;
 
     this.route.params
       .subscribe(p => {
@@ -106,15 +120,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report" ||
-            this.taskRecord.taskDefinitionKey === "Submit_Final_Report") this.isSubmitVisible = true;
-          else if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
+          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Final_Report") this.isSubmitFinalVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
             this.taskRecord.taskDefinitionKey === "Review_Performance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Program_Report" ||
-            this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.isReviewVisible = true;
-          else if (this.taskRecord.taskDefinitionKey === "Approve_Report" ||
-            this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") this.isApproveVisible = true;
-          else this.isSubmitVisible = true;
+            this.taskRecord.taskDefinitionKey === "Review_Program_Report") this.isReviewVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.isDisburseFunds = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") this.isApproveFundDisbursement = true;
 
           const params = new HttpParams()
             .set('processInstanceId', this.taskRecord.processInstanceId);
@@ -190,8 +203,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.radioReportsWellAligned = this.approverInformation.reports_well_aligned;
           this.radioRecommendFund = this.approverInformation.recommend_fund;
           this.radioEndOfPartnership = this.approverInformation.end_of_partnership;
+          this.radioHowToProceed = this.approverInformation.how_to_proceed;
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
+          this.amountOfFundsRemaining = this.approverInformation.amountOfFundsRemaining;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
+          this.dateDisbursed = this.approverInformation.dateDisbursed;
         }
       }
 
@@ -624,7 +640,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         reports_well_aligned: this.radioReportsWellAligned,
         recommend_fund: this.radioRecommendFund,
         end_of_partnership: this.radioEndOfPartnership,
+        how_to_proceed: this.radioHowToProceed,
         amountOfFundsDisbursed: this.amountOfFundsDisbursed,
+        amountOfFundsRemaining: this.amountOfFundsRemaining,
+        dateDisbursed: this.dateDisbursed,
         provideAnyRecommendations: this.provideAnyRecommendations
       })
     }
