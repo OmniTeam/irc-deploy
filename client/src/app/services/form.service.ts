@@ -14,11 +14,13 @@ export class FormService {
   getForms(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/form`);
   }
+  getTableNames(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/api/v1/aclGroupMapping/tables`);
+  }
 
   getEnabledForms(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/form/getEnabledForms`);
   }
-
 
   getFormData(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/data`, {params});

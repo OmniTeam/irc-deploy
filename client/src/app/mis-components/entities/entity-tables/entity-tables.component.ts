@@ -148,6 +148,10 @@ export class EntityTablesComponent implements OnInit {
     });
   }
 
+  createTag(){
+    this.router.navigate(['/tags']);
+  }
+
   getTags(tagTypeId) {
     const params = new HttpParams()
       .set('id', tagTypeId);
