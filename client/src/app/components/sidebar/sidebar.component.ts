@@ -117,6 +117,7 @@ export const ROUTES: RouteInfo[] = [
     isCollapsed: true,
     roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER", ],
     children: [
+<<<<<<< Updated upstream
       {
         path: 'tags',
         title: 'Tags',
@@ -147,6 +148,14 @@ export const ROUTES: RouteInfo[] = [
         type: 'analytics',
         roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
       },
+=======
+      {path: 'grantProcess', title: 'Grant Process', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+      {path: 'tags', title: 'Tags', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]},
+      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]},
+      {path: 'programPartner', title: 'Program Partner', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
+      {path: 'users', title: 'Users', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
+      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
+>>>>>>> Stashed changes
     ]
   },
 

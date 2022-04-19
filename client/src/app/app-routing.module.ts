@@ -152,6 +152,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
       {
+        path: 'grantProcess', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
+      },
+      {
         path: 'reportForm/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [
