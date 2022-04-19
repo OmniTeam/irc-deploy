@@ -250,7 +250,7 @@ export class SidebarComponent implements OnInit {
       this.isCollapsed = true;
     });
     if (this.authService.isLoggedIn()) {
-      this.formService.getMyForms().subscribe(data => {
+      this.formService.getEnabledForms().subscribe(data => {
         for (let form of data) {
           let formObject = {};
           let formSettingObject = {};
