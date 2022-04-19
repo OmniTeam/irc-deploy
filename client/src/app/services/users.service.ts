@@ -9,6 +9,7 @@ import {environment} from "../../environments/environment";
 export class UsersService {
   baseurl = environment.serverUrl
   urlUsers = `${this.baseurl}/user/`
+  urlMISUsers = `${this.baseurl}/getMISUsers/`
   urlUserGroup = `${this.baseurl}/KengaUserGroup/`
   urlUserRole = `${this.baseurl}/UserRole/`
   urlUserPartner = `${this.baseurl}/UserPartner/`
@@ -18,6 +19,10 @@ export class UsersService {
 
   getUsers(): Observable<any> {
     return this.http.get(this.urlUsers);
+  }
+
+  getMISUsers(): Observable<any> {
+    return this.http.get(this.urlMISUsers);
   }
 
   getDataCollectors(): Observable<any> {

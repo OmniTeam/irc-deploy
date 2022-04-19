@@ -26,6 +26,7 @@ import {CellEdit, OnUpdateCell} from "../../helpers/cell-edit";
 })
 export class AclGroupMappingParentComponent implements OnInit {
   private grpQuery: any;
+  private tableNames: any;
 
   constructor(
     private groupsService: GroupsService,
@@ -119,10 +120,11 @@ export class AclGroupMappingParentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formService.getForms().subscribe(results => {
+
+    this.formService.getTableNames().subscribe(results => {
       this.forms = results
     }, error => {
-      this.alertService.error("Failed to get Forms")
+      this.alertService.error("Failed to get Tables")
     })
     this.groupsService.getGroups().subscribe(results => {
       this.parents = results
@@ -183,6 +185,7 @@ export class AclGroupMappingParentComponent implements OnInit {
 
   createACLGROUPMAPPING() {
     const formData = this.formGroup.value;
+    console.log(formData)
     this.AalGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);

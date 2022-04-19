@@ -27,18 +27,29 @@ class KengaGroupAclJob extends Script {
     }
 
     def createKengaDataTablesFrmForm() {
-        Form.list().each { form ->
+        def tables = AppHolder.withMisSql {
+            rows("SHOW TABLES".toString()).collect {it.Tables_in_kengamis}
+        }
+
+        tables.each {tab ->
+                if (tableExists(tab.toString())) {
+                    KengaDataTable.findByTableName(tab.toString())?: new KengaDataTable(tableName: tab, idLabel: '__id').save(flush: true, failOnError: true)
+                }
+        }
+
+        /*Form.list().each { form ->
             def tableName = form.name
             if(tableExists(tableName)){
                 KengaDataTable.findByTableName(form.name)?:new KengaDataTable(tableName: tableName, idLabel: '__id').save(flush: true, failOnError: true)
             }
-        }
+        }*/
     }
 
     def generateKengaAclRecordIdentities(KengaDataTable kengaDataTable) {
         def records = AppHolder.withMisSqlNonTx {
             rows("select __id from ${kengaDataTable.tableName}".toString())
         }
+
         records.each { record ->
             KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
                     kengaDataTable: kengaDataTable,

@@ -117,7 +117,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
 
 
     this.formService.getFormData(params).subscribe((data) => {
-      console.log(data,"data ")
+      console.log(data,"Data")
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
@@ -426,7 +426,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       marker.bindPopup('Loading....');
       marker.on('click', (e) => {
         let popup = e.target.getPopup();
-        this.makePopUp(c['__id'], formtable, popup);
+        this.makePopUp(c['id'], formtable, popup);
       });
       marker.addTo(map);
     }

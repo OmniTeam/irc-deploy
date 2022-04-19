@@ -87,8 +87,8 @@ export class UsersComponent implements OnInit {
       this.roleValue = ''
       this.reloadTable()
     } else {
-      this.roleValue = event;
-      this.users=this.users.filter(a => a.role === this.roleValue)
+      this.roleValue = event
+      this.users=this.users.filter(a => a.roles.includes(this.roleValue))
     }
 
   }
@@ -100,7 +100,7 @@ export class UsersComponent implements OnInit {
       this.reloadTable()
     } else {
       this.groupValue = event;
-      this.users = this.users.filter(a => a.groups === this.groupValue)
+      this.users = this.users.filter(a => a.groups.includes(this.groupValue))
     }
 
   }
@@ -122,10 +122,18 @@ export class UsersComponent implements OnInit {
   }
 
   reloadTable() {
-    this.usersService.getUsers().subscribe((data) => {
-      this.users = data;
-      console.log(data)
-    });
+    if(this.router.url.includes('mis-users')){
+      this.usersService.getMISUsers().subscribe((data) => {
+        this.users = data;
+        console.log(data,"mis users")
+      });
+
+    } else {
+      this.usersService.getUsers().subscribe((data) => {
+        this.users = data;
+      });
+    }
+
   }
 
   createUser() {

@@ -126,16 +126,16 @@ class KengaGroupAclEntryController {
 
 //        loop through the array and assign the acls per iteration
         queryArray.each{ it ->
-            def formId = it.form
+            def formName = it.form
             def grpConditionQuery = it.groupConditionQuery
 
             def kengaGroup = KengaGroup.get(groupId)
-            def form = Form.get(formId)
-            def kengaDataTable = KengaDataTable.findByTableName(form.name)
+//            def form = Form.get(formId)
+            def kengaDataTable = KengaDataTable.findByTableName(formName)
 
             //query records
             def records = AppHolder.withMisSqlNonTx {
-                def query = "select * from ${form.name} ${grpConditionQuery}"
+                def query = "select * from ${formName} ${grpConditionQuery}"
                 log.info(query)
                 rows(query.toString())
             }

@@ -99,7 +99,7 @@ class DataController {
         }
 
         if (log.traceEnabled) log.trace(points)
-        return points.collect { [__id: it['__id'], point: it['point'].toString().split(",")] }
+        return kengaGroupsService.postFilter(points.collect { [id: it['__id'], point: it['point'].toString().split(",")] },Permission.READ)
     }
 
     def getPointDetails() {
