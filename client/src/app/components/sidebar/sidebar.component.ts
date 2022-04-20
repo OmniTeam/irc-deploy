@@ -190,6 +190,7 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
+  usersRoles: any;
 
   constructor(private router: Router, public authService: AuthService, private formService: FormService,
               private entityService: EntityService,
@@ -197,6 +198,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usersRoles = this.authService.getUserRoles()
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
@@ -209,8 +211,33 @@ export class SidebarComponent implements OnInit {
           formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
-          formObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
-          formsMenu.children.push(formObject);
+          // formObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
+          // formsMenu.children.push(formObject);
+
+          const currentString = formObject['title'].slice(0, 3)
+          const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '))
+
+          this.usersRoles.forEach((a) => {
+            const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
+            if (cleanRole.includes(currentString)) {
+              if(formsMenu.children.length == 0){
+                formObject['roles'] = this.usersRoles
+                formsMenu.children.push(formObject);
+              } else {
+                for(let i=0; i<formsMenu.children.length; i++){
+                  if(!(currentTitle.includes(formsMenu.children[i].title)) ){
+                    formObject['roles'] = this.usersRoles
+                    formsMenu.children.push(formObject);
+                  }
+                }
+              }
+            }
+          })
+
+          if(this.usersRoles.includes("ROLE_SUPER_ADMIN")||this.usersRoles.includes("ROLE_ADMIN")||this.usersRoles.includes("ROLE_STAFF_DATA_VIEWER")){
+            formObject['roles'] = (this.usersRoles)
+            formsMenu.children.push(formObject);
+          }
 
           formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formSettingObject['path'] = form.name.toString();
@@ -226,8 +253,33 @@ export class SidebarComponent implements OnInit {
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
-          entityObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
-          listsMenu.children.push(entityObject);
+          // entityObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
+          // listsMenu.children.push(entityObject);
+          const entityTitleTrancated = entityObject['title'].slice(0, 3)
+          const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '))
+
+          this.usersRoles.forEach((a) => {
+            const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
+            if (cleanRole.includes(entityTitleTrancated)) {
+              let myArray = listsMenu.children
+              if(myArray.length == 0){
+                entityObject['roles'] = this.usersRoles
+                listsMenu.children.push(entityObject);
+              } else {
+                for(let i=0; i<myArray.length; i++){
+                  if(!(myArray[i].title == entityTitle) ){
+                    entityObject['roles'] = this.usersRoles
+                    listsMenu.children.push(entityObject);
+                  }
+                }
+              }
+            }
+          })
+
+          if(this.usersRoles.includes("ROLE_SUPER_ADMIN")||this.usersRoles.includes("ROLE_ADMIN")){
+            entityObject['roles'] = this.usersRoles
+            listsMenu.children.push(entityObject);
+          }
         }
       }, error => console.log(error));
 
