@@ -14,19 +14,25 @@
         <div class="row">
 
           <div style="width: 100%; text-align: -webkit-center; display: block;">
-            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
-            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LETTER OF INTEREST</h6></div>
-            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PLANNING AND LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewLearningGrant ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">REVIEW LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
+            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">REVIEW LETTER OF INTEREST</h6></div>
+            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">PLANNING AND LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewLearningGrant ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
+              REVIEW LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">APPROVE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">PROVIDE PLANNING AND LEARNING GRANT</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
 
               <div *ngIf="isSubmitLetterOfInterest" class=" col">
-                <application-letter></application-letter>
+                <long-term-application></long-term-application>
               </div>
 
               <div *ngIf="!isSubmitLetterOfInterest" class=" col">

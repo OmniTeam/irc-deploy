@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-grant-process',
-  templateUrl: './grant-process.component.html',
-  styleUrls: ['./grant-process.component.css']
+  selector: 'app-long-term-grant',
+  templateUrl: './long-term-grant.component.html',
+  styleUrls: ['../grant-process.component.css']
 })
-export class GrantProcessComponent implements OnInit {
+export class LongTermGrantComponent implements OnInit {
   isSubmitLetterOfInterest: boolean;
   isReviewLetterOfInterest: boolean;
   isPlanningLearningApplication: boolean;

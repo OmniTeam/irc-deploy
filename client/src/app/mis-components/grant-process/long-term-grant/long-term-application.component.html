@@ -6,8 +6,7 @@
       <p></p>
     </div>
 
-  <h4 style="margin-left: 40px;">The Proposed Planning/Learning Grant</h4>
-    <div class="row" style="margin: 20px;">
+    <div class="row" style="margin: 10px;">
       <div class="col-sm-4">Select the program you wish to apply for:<span class="required-indicator">*</span></div>
       <div class="col-sm-4">
         <div style="margin-bottom: 30px;">
@@ -388,6 +387,74 @@
                 formControlName="attachment"
                 [ngClass]="{ 'is-invalid': submitted && f.attachment.errors }"
               >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+
+        <div class="col-sm-6"><label>Organization annual Budget for the current year and expenditure in the previous year ( attach audit books if available ): :</label></div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                formControlName="budget"
+                [ngClass]="{ 'is-invalid': submitted && f.budget.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+
+        <div class="col-sm-6"><label>Other donors /sources of funding( list all your funders and amount from each):</label></div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                formControlName="donors"
+                [ngClass]="{ 'is-invalid': submitted && f.donors.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+
+        <div class="col-sm-6"><label>If submitting a Cluster, Name other cluster organizations and their contacts.</label></div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                formControlName="other_organization"
+                [ngClass]="{ 'is-invalid': submitted && f.other_organization.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+
+        <div class="col-sm-6"><label>Bank Details Name of the bank :<br> Bank Address Title of the Account:<br> Account Number:</label></div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                formControlName="bank_details"
+                [ngClass]="{ 'is-invalid': submitted && f.bank_details.errors }"
+              ></textarea>
             </div>
           </div>
         </div>
