@@ -4,23 +4,25 @@ import {CountriesService} from "../../services/countries.service";
 
 @Component({
   selector: 'application-letter',
-  templateUrl: './application-letter.component.html'
+  templateUrl: './application-letter.component.html',
+  styleUrls: ['./grant-process.component.css']
 })
 
 export class ApplicationLetterComponent implements OnInit {
 
   formGroup: FormGroup;
   submitted = false;
-  organizationType: [
+  organizationType = [
     {id:"1", name:"my type"}
   ] ;
   countries: any;
   cities: any;
-  programs: [
+  programs = [
     {id:"1", name:"Adolescent Girl Power Program"},
     {id:"2", name:"Youth Capacity Development Program"},
     {id:"3", name:"Prevention of Violence Against Children and Adolescents"},
   ] ;
+  radioEndOfPartnership: any;
 
   constructor(
     private countriesService: CountriesService,
