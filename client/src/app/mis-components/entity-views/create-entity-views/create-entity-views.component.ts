@@ -45,9 +45,12 @@ export class CreateEntityViewsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
     });
+    const params = new HttpParams()
+      .set('id', this.entityId);
     this.entityService.getCurrentEntity(this.entityId).subscribe((data) => {
       this.entityRecord = data;
     }, error => console.log(error));
+
 
     this.formGroupField = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -148,6 +151,14 @@ export class CreateEntityViewsComponent implements OnInit {
   deleteField(deletedRow) {
     this.rows = this.removeElementFormArray(this.rows, deletedRow.name);
     this.rows = [...this.rows];
+
+    let entityViewFieldId = deletedRow.id;
+    this.entityService.deleteEntityViewField(entityViewFieldId).subscribe((result) => {
+        this.alertService.warning(`Entity View Field has been  deleted `);
+      }, error => {
+        this.alertService.error(`Entity View Field could not be deleted`);
+      }
+    );
   }
 
   onReset() {

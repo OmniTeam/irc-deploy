@@ -109,7 +109,7 @@ export class ReferralsComponent implements OnInit {
   }
 
   createReferral() {
-    this.router.navigate(['create-referral']);
+    this.router.navigate(['generate-referral']);
   }
 
   actionReferral() {

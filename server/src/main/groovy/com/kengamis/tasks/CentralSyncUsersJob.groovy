@@ -43,6 +43,9 @@ class CentralSyncUsersJob extends Script {
                 def oldUser = User.get(user.id)
                 oldUser.username = centralUserName
                 oldUser.save(flush: true, failOnError: true)
+                if (!oldUser.authorities.contains(role)) {
+                    UserRole.create user, role
+                }
                 log.info("Saving central ID for  user : $oldUser.username into mis")
             } else {
                 def newUser = new User(

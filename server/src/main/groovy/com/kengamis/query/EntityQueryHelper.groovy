@@ -2,6 +2,7 @@ package com.kengamis.query
 
 import com.kengamis.EntityFields
 import com.kengamis.MisEntity
+import com.kengamis.Tag
 import com.kengamis.TagType
 import com.kengamis.User
 import groovy.util.logging.Log4j
@@ -9,6 +10,8 @@ import groovy.util.logging.Log4j
 import static com.kengamis.AppHolder.withMisSql
 import static com.kengamis.AppHolder.withMisSqlNonTx
 import static com.kengamis.Util.escapeField
+import static com.kengamis.Util.escapeSql
+import static com.kengamis.Util.escapeSql
 import static com.kengamis.Util.extractId
 
 @Log4j
@@ -19,6 +22,7 @@ class EntityQueryHelper {
     User currentUser
     List<TagType> tagTypes
     String entityTable
+    Boolean enableTagging
 
     EntityQueryHelper(Map params, User currentUser) {
         init(params, currentUser)
@@ -31,6 +35,7 @@ class EntityQueryHelper {
         headers = EntityFields.findAllByMisEntity(misEntity, [sort: "orderOfDisplay", order: "asc"])
         tagTypes = TagType.findAllByMisEntity(misEntity)
         entityTable = misEntity.tableName
+        enableTagging = misEntity.enableTagging
 
     }
 
@@ -83,13 +88,61 @@ class EntityQueryHelper {
     }
 
     private String _query(Closure generateFields) {
+        def finalWhereClause = getWhereClause()
         def q = "SELECT ${generateFields()} FROM ${createFromExpression()} "
+        if (finalWhereClause) q = "$q WHERE ${finalWhereClause} "
         return q
     }
 
     private String createFromExpression() {
         def tableField = escapeField(entityTable)
         return tableField
+    }
+
+    String getWhereClause(def defaultValue = "") {
+        def tagTypeFilter = getTagTypeFilter()
+        def tagFilter = getTagFilter()
+        def finalWhereClause
+        if (tagFilter && !tagTypeFilter) {
+            finalWhereClause = [tagFilter].findAll().join(' AND ')?.trim()
+        } else if (tagTypeFilter && !tagFilter) {
+            finalWhereClause = [tagTypeFilter].findAll().join(' AND ')?.trim()
+        } else {
+            finalWhereClause = [tagFilter].findAll().join(' AND ')?.trim()
+        }
+
+        if (!finalWhereClause) return defaultValue
+        return finalWhereClause
+    }
+
+    private String getTagTypeFilter() {
+        def tagWhereClause = ""
+        if (params.tagTypeFilter && enableTagging) {
+            def id = params.tagTypeFilter as String
+            def tagType = TagType.get(id)
+            def tags = Tag.findAllByTagType(tagType).collect { it.name }
+            if (tags) {
+                def t = []
+                tags.each {
+                    t << " (_tag like '%${it}%') "
+                }
+                tagWhereClause = t.join(" OR ")
+            } else { tagWhereClause = "(_tag is null)" }
+        }
+        return tagWhereClause
+    }
+
+    private String getTagFilter() {
+        def tagWhereClause = ""
+        if (params.tagFilter && enableTagging) {
+            def id = params.tagFilter as String
+            def tag = Tag.get(id).name
+            if (tag) {
+                tagWhereClause = " (_tag like '%${tag}%')"
+            } else
+                tagWhereClause = "(_tag is null)"
+        }
+        return tagWhereClause
     }
 
 }

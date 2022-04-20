@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class ProgramCategoryService {
 
-  baseurl = `${environment.serverUrl}/programCategory/`
+  baseurl = `${environment.serverUrl}/programCategory`
   constructor(private http: HttpClient) { }
 
   getProgramCategories(): Observable<any> {
@@ -24,14 +24,14 @@ export class ProgramCategoryService {
   }
 
   getCurrentProgramCategory(id) {
-    return this.http.get(`${this.baseurl}${id}/`);
+    return this.http.get(`${this.baseurl}/${id}/`);
   }
 
   updateProgramCategory(id, formData): Observable<any> {
-    return this.http.put(`${this.baseurl}${id}/`, formData);
+    return this.http.put(`${this.baseurl}/${id}/`, formData);
   }
 
   deleteProgramCategory(id): Observable<any> {
-    return this.http.delete(`${this.baseurl}${id}/`);
+    return this.http.delete(`${this.baseurl}/${id}/`);
   }
 }

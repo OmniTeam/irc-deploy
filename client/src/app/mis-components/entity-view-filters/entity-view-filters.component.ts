@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {EntityViewFiltersService} from "../../services/entity-view-filters.service";
@@ -27,26 +27,26 @@ export class EntityViewFiltersComponent implements OnInit {
               private router: Router,
               private alertService: AlertService,
               private entityViewFiltersService: EntityViewFiltersService,
-              private entityService: EntityService) {
-  }
+              private entityService: EntityService) { }
 
   ngOnInit(): void {
     this.reloadTable();
+    this.entityService.getEntityViews().subscribe((data) => {
+      this.entityViews = data;
+    });
+
   }
 
   reloadTable() {
     this.entityViewFiltersService.getEntityViewFilters().subscribe((data) => {
       this.filters = data;
     });
-    this.entityService.getEntityViews().subscribe((data) => {
-      this.entityViews = data;
-    });
   }
 
   editEntityViewFilter(row) {
     const id = row.id;
-    const entityViewId = row.entityView.id;
-    this.router.navigate(['/entityViewFilter/edit/' + entityViewId + '/' + id]);
+    const entityViewId = row.entityViewId;
+    this.router.navigate(['/entityViewFilter/edit/'+ entityViewId + '/' + id]);
   }
 
   deleteEntityViewFilter(row) {
@@ -62,6 +62,20 @@ export class EntityViewFiltersComponent implements OnInit {
       );
     }
   }
+
+  getFilteredFilters(value) {
+    if (value) {
+      const params = new HttpParams()
+        .set('id', value);
+      this.entityViewFiltersService.filterFiltersByEntityView(params).subscribe(data => {
+        this.filters = data;
+      }, error => console.log(error));
+    }
+    else {
+      this.reloadTable();
+    }
+  }
+
 
   entriesChange($event) {
     this.entries = $event.target.value;
@@ -91,11 +105,4 @@ export class EntityViewFiltersComponent implements OnInit {
     this.reloadTable();
   }
 
-  getFilteredFilters(value) {
-    const params = new HttpParams()
-      .set('id', value);
-    this.entityViewFiltersService.filterFiltersByEntityView(params).subscribe(data => {
-      this.filters = data;
-    }, error => console.log(error));
-  }
 }

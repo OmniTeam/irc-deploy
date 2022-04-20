@@ -84,14 +84,56 @@
                       Filter Query
                     </label>
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-md-7">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <textarea class="form-control" rows="5" formControlName="filterQuery">
-
+                          <textarea class="form-control"
+                                    id="query"
+                                    rows="5"
+                                    formControlName="filterQuery"
+                                    [ngClass]="{ 'is-invalid': submittedViewQuery && f.filterQuery.errors }">
                           </textarea>
+                          <div *ngIf="submittedViewQuery && f.filterQuery.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.filterQuery.errors.isEmpty">Query is required
+                            </div>
+                            <div *ngIf="f.filterQuery.errors.queryError">Query is returning empty results
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <button class=" btn btn-default" type="button" (click)="runFilterQueryNow()">
+                      <i class="fa fa-play fa-sm" style="margin-right: 10px"></i>
+                      RUN NOW
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Data Collector
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="true"
+                                   placeholder="  Data Collector"
+                                   formControlName="users"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.id" *ngFor="let item of dataCollectors">
+                            {{item.names}}
+                          </ng-option>
+                        </ng-select>
                       </div>
                     </div>
                   </div>
@@ -110,3 +152,82 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #showQueryData let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title w-100 text-center">DATA VIEW DATA</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class=" col-md-12 col-sm-12" style="margin-top: 5px;">
+        <div class=" row">
+          <div class=" col">
+            <div class=" card">
+              <div class="dataTables_wrapper py-4">
+                <div class="row">
+                  <div class="col-sm-12 col-md-2">
+                    <div class="dataTables_length" id="datatable_length">
+                      <label>
+                        Show
+                        <select
+                          name="datatable_length"
+                          aria-controls="datatable"
+                          class="form-control form-control-sm"
+                          (change)="entriesChange($event)"
+                        >
+                          <option value="5" [selected]="entries == 5">5</option>
+                          <option value="10" [selected]="entries == 10">10</option>
+                          <option value="25" [selected]="entries == 25">25</option>
+                          <option value="50" [selected]="entries == 50">50</option>
+                          <option value="-1" [selected]="entries == -1">All</option>
+                        </select>
+                        entries
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4">
+                    <div id="datatable_filter" class="dataTables_filter">
+                      <label>
+                        <input
+                          type="search"
+                          class="form-control form-control-sm"
+                          placeholder="Search data"
+                          aria-controls="datatable"
+                          (keyup)="filterTable($event)"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable
+                  class="bootstrap selection-cell"
+                  [columnMode]="'force'"
+                  [headerHeight]="50"
+                  [footerHeight]="50"
+                  [rowHeight]="'auto'"
+                  [scrollbarH]="true"
+                  [limit]="entries != -1 ? entries : undefined"
+                  [rows]="rows"
+                  (activate)="onActivate($event)"
+                >
+                  <ngx-datatable-column *ngFor="let col of columns; let i = index;" name="{{col.name}}"
+                                        prop="{{col.prop}}">
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close('Close click')">
+      Close
+    </button>
+  </div>
+</ng-template>

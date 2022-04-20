@@ -27,6 +27,8 @@ export class TagTypeComponent implements OnInit {
   rowData: any;
   submitted = false;
   misEntities = [];
+  rows: Object[];
+  temp: Object[];
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -121,18 +123,22 @@ export class TagTypeComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
     this.tagService.getTagTypes().subscribe((data) => {
-      this.tagTypes = data;
+      this.temp = [...data];
+      this.rows = data;
     });
   }
 
@@ -153,5 +159,9 @@ export class TagTypeComponent implements OnInit {
   onSelect({selected}) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 }

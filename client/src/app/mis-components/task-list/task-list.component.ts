@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, DoCheck, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {TaskListService} from "../../services/task-list.service";
-import {TaskList} from "../../models/taskList";
 import {Subject} from "rxjs";
 
 @Component({
@@ -11,17 +10,18 @@ import {Subject} from "rxjs";
 })
 export class TaskListComponent implements OnInit {
 
-  rows: TaskList[] = [];
+  rows: any = [];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor( private router: Router, private taskListService: TaskListService) {
+  constructor(private router: Router, private taskListService: TaskListService) {
   }
 
+  count = 0;
+
   ngOnInit(): void {
-    this.taskListService.getTaskList().subscribe(data => {
-      console.log(data);
-      this.rows = data;
+    this.taskListService.getTaskList().subscribe(tasks => {
+      this.rows = tasks;
       this.dtTrigger.next();
     }, error => console.log(error));
 

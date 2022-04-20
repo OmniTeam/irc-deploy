@@ -12,6 +12,9 @@ import {CountriesService} from "../../../services/countries.service";
 import {parseDate} from "devextreme/localization";
 import {format} from "d3";
 import {DatePipe} from "@angular/common";
+import {ProgramStaffService} from "../../../services/program-staff.service";
+import {TaskListService} from "../../../services/task-list.service";
+import {HttpParams} from "@angular/common/http";
 
 
 @Component({
@@ -23,15 +26,21 @@ export class ActionReferralComponent implements OnInit {
   private referrals: any;
   private nationalityValue = '';
   private followUpValue = '';
+  private staffs: any;
+  private taskId : string;
+  taskRecord : any;
+
 
   constructor(
     private userService: UsersService,
     private datePipe: DatePipe,
     private CountriesService: CountriesService,
+    private programStaffService: ProgramStaffService,
     private referralsService: ReferralsService,
     private alertService: AlertService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
+    private taskService: TaskListService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -167,39 +176,52 @@ export class ActionReferralComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.taskId = this.route.snapshot.params.id;
+    const params = new HttpParams().set('id', this.taskId);
+    this.taskService.getTaskRecord(params).subscribe((data) =>{
+      console.log("Data id",data)
+      this.taskRecord = data;
+
+      this.referralsService.getCurrentReferral(this.taskRecord.referralId).subscribe(data => {
+        console.log(data, "referral data")
+
+        this.loadProgramStaff();
+        this.referrals = data
+        this.formGroup = this.formBuilder.group({
+          dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
+          nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
+          nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
+          phoneNumber: [this.referrals?.phoneNumber],
+          dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
+          ageCategory: [this.referrals?.ageCategory],
+          countryOfOrigin: [this.referrals?.countryOfOrigin],
+          identificationDocument: [this.referrals?.identificationDocument],
+          identificationNumber: [this.referrals?.identificationNumber],
+          reasonForReferral: [this.referrals?.reasonForReferral],
+          organizationReferredTo: [this.referrals?.organizationReferredTo],
+          receivedFeedback: [this.referrals?.receivedFeedback],
+          feedbackGiven: [this.referrals?.feedbackGiven],
+          dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
+          nationalityStatus: [this.referrals?.nationalityStatus],
+          followupNeeded: [this.referrals?.followupNeeded],
+          followupAreas: [this.referrals?.followupAreas],
+          followupOrganization: [this.referrals?.followupOrganization],
+          disability: [this.referrals?.disability],
+          assignee: [''],
+          status: ['Actioned'],
+        });
+
+      })
+
+    })
+
+
     this.CountriesService.getCountries().subscribe(data => {
       this.country_of_origin = data
     }, error => {
       this.alertService.error("Failed to get Countries")
     })
-    this.referralsService.getCurrentReferral(this.route.snapshot.params.id).subscribe(data => {
-      console.log(data, "referral data")
 
-      this.referrals = data
-      this.formGroup = this.formBuilder.group({
-        dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
-        nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
-        nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
-        phoneNumber: [this.referrals?.phoneNumber],
-        dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
-        ageCategory: [this.referrals?.ageCategory],
-        countryOfOrigin: [this.referrals?.countryOfOrigin],
-        identificationDocument: [this.referrals?.identificationDocument],
-        identificationNumber: [this.referrals?.identificationNumber],
-        reasonForReferral: [this.referrals?.reasonForReferral],
-        organizationReferredTo: [this.referrals?.organizationReferredTo],
-        receivedFeedback: [this.referrals?.receivedFeedback],
-        feedbackGiven: [this.referrals?.feedbackGiven],
-        dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
-        nationalityStatus: [this.referrals?.nationalityStatus],
-        followupNeeded: [this.referrals?.followupNeeded],
-        followupAreas: [this.referrals?.followupAreas],
-        followupOrganization: [this.referrals?.followupOrganization],
-        disability: [this.referrals?.disability],
-        status: ['Actioned'],
-      });
-
-    })
   }
 
   actionReferral() {
@@ -210,9 +232,10 @@ export class ActionReferralComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
-    console.log(submitData)
-    this.referralsService.updateReferral(this.route.snapshot.params.id, submitData).subscribe((result) => {
+    console.log("formdata",submitData)
+    this.referralsService.updateReferral(this.taskRecord.referralId, submitData).subscribe((result) => {
       console.warn(result, 'Referral Updated Successfully');
+      this.updateTask("completed")
       this.alertService.success(`Referral has been successfully updated`)
       this.router.navigate(['/referrals-list']);
     }, error => {
@@ -222,6 +245,13 @@ export class ActionReferralComponent implements OnInit {
 
   close() {
     this.router.navigate(['/referrals-list'])
+  }
+
+  loadProgramStaff(){
+    this.programStaffService.getProgramStaffs().subscribe((data) => {
+      this.staffs = data;
+      console.log(data)
+    });
   }
 
   onChangeCountry(event) {
@@ -241,24 +271,40 @@ export class ActionReferralComponent implements OnInit {
     }
   }
 
+
+  updateTask(status){
+    this.taskRecord.status = status;
+    this.taskRecord.groupId = this.taskRecord.groupId ?? '';
+    let followupNeeded = this.formGroup.value.followupNeeded;
+    this.taskRecord.outputVariables = '{"actionedResponse": "'+ followupNeeded +'"}'
+    this.taskService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
+      console.log('successfully updated task');
+    }, error => console.log('update task', error));
+  }
+
   onChangeFollowUp(event) {
     console.log(event, "nationality")
     if (!event) {
       this.followUpValue = ''
       document.getElementById('followupAreas').hidden = true
       document.getElementById('followupOrganization').hidden = true
+      document.getElementById('assignee').hidden = true
       this.formGroup.controls['followupAreas'].reset();
       this.formGroup.controls['followupOrganization'].reset();
+      this.formGroup.controls['assignee'].reset();
     } else {
       this.followUpValue = event;
       if (this.followUpValue === "No") {
         document.getElementById('followupAreas').hidden = true
         document.getElementById('followupOrganization').hidden = true
+        document.getElementById('assignee').hidden = true
         this.formGroup.controls['followupAreas'].reset();
         this.formGroup.controls['followupOrganization'].reset();
+        this.formGroup.controls['assignee'].reset();
       } else {
         document.getElementById('followupAreas').hidden = false
         document.getElementById('followupOrganization').hidden = false
+        document.getElementById('assignee').hidden = false
       }
 
     }

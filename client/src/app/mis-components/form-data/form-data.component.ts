@@ -140,6 +140,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     this.dateFrom = '';
     this.searchValue = '';
     this.selectedUser = '';
+    this.getFormData();
   }
 
   ngAfterViewInit(): void {
@@ -368,15 +369,12 @@ export class FormDataComponent implements OnInit, AfterViewInit {
           if (record['xformtype'] === "repeat") {
             recordObject['repeatRows'] = record['value']['resultList'];
             recordObject['repeatColumns'] = this.formDataRecordColumnMappings(record['value']['headerList']);
-          }
-          else if(record['xformtype'] === "select") {
+          } else if (record['xformtype'] === "select") {
             recordObject['selectOptions'] = record.value;
-          }
-          else if(record['xformtype'] === "picture") {
+          } else if (record['xformtype'] === "picture") {
             let image = `${environment.serverUrl}/data/getFormDataImage?path=${record.value}`;
             recordObject['image'] = image;
-          }
-          else {
+          } else {
             recordObject['value'] = record.value;
           }
           this.formDataRecord.push(recordObject);
@@ -441,9 +439,8 @@ export class FormDataComponent implements OnInit, AfterViewInit {
             let key = detail['question'];
             let image = `${environment.serverUrl}/data/getFormDataImage?path=${detail['answer']}`;
             html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
-              + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'><img  src='"+image+"' style='width: 250px; height: 150px;' alt='Form Data Image'/></td> </tr>";
-          }
-          else {
+              + "</td><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'><img  src='" + image + "' style='width: 250px; height: 150px;' alt='Form Data Image'/></td> </tr>";
+          } else {
             let key = detail['question'];
             let value = detail['answer'] ? detail['answer'] : '';
             html = html + "<tr><td style='text-align:left;font-size:14px; padding: 8px; border: 1px solid #dddddd;'>" + key.replace(/_/g, " ")
@@ -512,6 +509,14 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       .set('formtable', `${this.formtable}`);
     this.formService.exportFormData(params).subscribe((data) => {
       this.exportService.exportToCsv(data['data'], data['file']);
+    }, error => console.log(error));
+  }
+
+  exportZippedCSVFormData() {
+    const params = new HttpParams()
+      .set('formtable', `${this.formtable}`);
+    this.formService.exportZippedFormData(params).subscribe((data) => {
+      this.exportService.exportToZippedFile(data['data'], data['file']);
     }, error => console.log(error));
   }
 }

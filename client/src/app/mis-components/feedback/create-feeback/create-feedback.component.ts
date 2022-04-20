@@ -11,6 +11,7 @@ import {GroupsService} from "../../../services/groups.service";
 import {ReferralsService} from "../../../services/referrals.service";
 import {CountriesService} from "../../../services/countries.service";
 import {FeedbackService} from "../../../services/feedback.service";
+import {ProgramStaffService} from "../../../services/program-staff.service";
 
 
 @Component({
@@ -26,6 +27,7 @@ export class CreateFeedbackComponent implements OnInit {
     private feedbackService: FeedbackService,
     private groupsService: GroupsService,
     private alertService: AlertService,
+    private programStaff: ProgramStaffService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -36,6 +38,7 @@ export class CreateFeedbackComponent implements OnInit {
   currentDashboards: any
   formGroup: FormGroup
   submitted = false;
+  staffs: any
 
   staff_Designation =[
     {
@@ -186,21 +189,15 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'Other'
     },
   ];
-  reason_for_referral = [
+  gender_list = [
     {
-      'name': 'Food amd Shelter'
+      'name': 'Male'
     },
     {
-      'name': 'Formal Education'
+      'name': 'Female'
     },
     {
-      'name': 'Insecurity'
-    },
-    {
-      'name': 'Resettlement'
-    },
-    {
-      'name': 'LGBTI'
+      'name': 'Not disclosed'
     },
   ];
 
@@ -210,6 +207,7 @@ export class CreateFeedbackComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadProgramStaff();
     this.formGroup = this.formBuilder.group({
       dateFeedbackReceived: [''],
       nameOfRegister: [''],
@@ -225,6 +223,13 @@ export class CreateFeedbackComponent implements OnInit {
       clientType: [null],
       preferredChannel: [null],
       phoneNumber: [''],
+      email:[''],
+      age:[''],
+      serialNumber:[''],
+      gender:[''],
+      project:[''],
+      assignee:[''],
+      feedbackDetails:['']
     });
   }
 
@@ -250,6 +255,13 @@ export class CreateFeedbackComponent implements OnInit {
     this.formGroup.reset()
     this.clicked = false
     this.submitted = false
+  }
+
+  loadProgramStaff(){
+    this.programStaff.getProgramStaffs().subscribe((data) => {
+      this.staffs = data;
+      console.log(data)
+    });
   }
 
 }

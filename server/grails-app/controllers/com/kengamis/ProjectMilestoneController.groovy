@@ -1,6 +1,9 @@
 package com.kengamis
 
 import grails.validation.ValidationException
+
+import static fuzzycsv.FuzzyCSVTable.tbl
+import static fuzzycsv.FuzzyCSVTable.toCSV
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -56,7 +59,7 @@ class ProjectMilestoneController {
         newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
         newProjectMilestoneObject['category'] = category.name
         newProjectMilestoneObject['program'] = program.title
-        newProjectMilestoneObject['programId'] = program.title
+        newProjectMilestoneObject['programId'] = program.id
         respond newProjectMilestoneObject
     }
 
@@ -116,6 +119,13 @@ class ProjectMilestoneController {
         render status: NO_CONTENT
     }
 
+    def getMilestonesByProgram() {
+        def programId = params.program as String
+        def programMilestones = ProjectMilestone.findAllByProgram(programId);
+        def data = [milestones: programMilestones]
+        respond data
+    }
+
     def runQuery() {
         def milestoneData
         def milestoneQuery = params.query as String
@@ -135,4 +145,34 @@ class ProjectMilestoneController {
         }
         respond milestoneData
     }
+
+    def getMilestoneDataForReports() {
+        def milestone = []
+        def projectMilestone = projectMilestoneService.get(params.id)
+        def reportingQuery
+        if(projectMilestone!=null) reportingQuery = projectMilestone.reportingQuery
+
+        if(reportingQuery!=null) {
+            try {
+                def queryC = "${reportingQuery}".toString()
+                def clause = queryC.contains("where") ? " and" : " where"
+                def queryQ = queryC + clause + " activity_date between '${params.startDate}' and '${params.endDate}'"
+
+                println queryQ
+
+                def quarter = AppHolder.withMisSql { rows(queryQ) }.first()
+
+                def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+
+                milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
+
+            } catch (Exception e) {
+                log.error("Error fetching data", e)
+            }
+        }
+
+        respond milestone
+    }
+
+
 }

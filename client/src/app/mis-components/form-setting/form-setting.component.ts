@@ -16,8 +16,10 @@ export class FormSettingComponent implements OnInit {
   selected: any[] = [];
   activeRow: any;
   rows: Object[];
+  temp: Object[];
   editing = {};
   formData: any;
+  formTable: any;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -28,11 +30,12 @@ export class FormSettingComponent implements OnInit {
     this.entries = $event.target.value;
   }
 
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function(d) {
-      for (var key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
+  filterTable(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -51,7 +54,8 @@ export class FormSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.getFormSettingData(params.formtable);
+      this.formTable = params.formtable;
+      this.getFormSettingData(this.formTable);
     });
   }
 
@@ -61,6 +65,7 @@ export class FormSettingComponent implements OnInit {
 
     this.formSettingService.getFormSettings(params).subscribe((data) => {
       this.formName = new ReplacePipe().transform(data['form_name'], '_', ' ');
+      this.temp = [...data['data']];
       this.rows = data['data'];
     }, error => console.log(error));
   }
@@ -72,7 +77,10 @@ export class FormSettingComponent implements OnInit {
     let settingId = this.rows[rowIndex]['id'];
     this.formData = this.rows[rowIndex];
     this.formSettingService.updateFormSettings(settingId, this.formData).subscribe((data) => {
-      console.log(data);
     }, error => console.log(error));
+  }
+
+  onSearch(event) {
+    this.getFormSettingData(this.formTable);
   }
 }

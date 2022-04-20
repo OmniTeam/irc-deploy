@@ -1,0 +1,138 @@
+.col > .card, .container {
+  padding: 20px;
+  margin: 20px;
+}
+
+.card > div, form {
+  margin: 20px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  border: 0;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+ul>li {
+  margin: 0 0 10px 0;
+}
+
+
+.window__container {
+  display: block;
+  position: fixed;
+  margin: 0 auto;
+  min-width: 40%;
+  min-height: 40%;
+  top: 50%;
+  max-height: 80%;
+  left: 50%;
+  padding: 20px;
+  overflow: auto;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  z-index: 10001;
+}
+
+#dark_container {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  position: absolute;
+  background-color: rgba(22,22,22,0.12); /* complimenting your modal colors */
+  z-index: 10000;
+}
+
+.in-line-cell {
+  min-height: 35px;
+  margin: auto;
+  width: auto;
+  height: auto;
+}
+
+.required-indicator{
+  color:red;
+}
+
+tfoot {
+  display: table-footer-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+tfoot>tr>td {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+tr td {
+  overflow: hidden;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+table {
+  width: 100%;
+  overflow: auto;
+  display: table;
+  table-layout: fixed;
+}

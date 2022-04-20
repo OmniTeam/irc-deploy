@@ -1,16 +1,6 @@
-
-
 <div class="header bg-success pb-6">
   <div class="container-fluid">
     <div class="header-body">
-      <div *ngIf="error || success" class="row align-items-center text-center" style="display: flex; justify-content: center;">
-        <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
-          <strong>Error:</strong> {{errorMessage}}
-        </div>
-        <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
-          <strong>Success:</strong> {{successMessage}}
-        </div>
-      </div>
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
           <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">SUBMIT
@@ -78,48 +68,36 @@
           <div class="col-sm-12 justify-center">
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible">Submit Report
-              </button>
+                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible"  (click)="changeForm('Submit')">Submit Report
+              </button><!--[disabled]="!isSubmitVisible"-->
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible">Review Report
-              </button>
+                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible"  (click)="changeForm('Review')">Review Report
+              </button><!--[disabled]="!isReviewVisible"-->
             </div>
             <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
             <div class="col-sm-3 justify-center">
               <button class="btn btn-light"
-                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible">Approve Report
-              </button>
+                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible"  (click)="changeForm('Approve')">Approve Report
+              </button><!--[disabled]="!isApproveVisible"-->
             </div>
           </div>
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
               <div class=" col">
 
-                <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
+                <h3 style="margin-left: 40px;">STAFF INFORMATION</h3>
                 <div class="card">
                   <div class="row" style="margin: 10px;">
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
                         <li>Program: <b>{{organisationalInfo.program}}</b></li>
-                        <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.cluster_organization}}</b>
-                        </li>
-                        <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
-                        <li>Acronym Name: <b>{{organisationalInfo.acronym_name}}</b></li>
-                        <li>Email: <b>{{organisationalInfo.email}}</b></li>
-                      </ul>
-                    </div>
-                    <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 16px">
-                        <li>Type of Organisation: <b>{{organisationalInfo.organization_type}}</b></li>
-                        <li>Website: <b>{{organisationalInfo.website}}</b></li>
-                        <li>Legal Status: <b>{{organisationalInfo.legal_status}}</b></li>
-                        <li>Country: <b>{{organisationalInfo.country}}</b></li>
-                        <li>Name of Contact Person: <b>{{organisationalInfo.contact_person}}</b></li>
-                        <li>City: <b>{{organisationalInfo.city}}</b></li>
+                        <li>Email: <b>{{organisationalInfo.name}}</b></li>
+                        <li>Email of Staff: <b>{{organisationalInfo.email}}</b></li>
+                        <li>Name of Supervisor: <b>{{organisationalInfo.nameContactPerson}}</b></li>
+                        <li>Telephone: <b>{{organisationalInfo.personContact}}</b></li>
                       </ul>
                     </div>
                   </div>
@@ -130,17 +108,17 @@
                   <div class="row" style="margin: 20px;">
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Reporting Period: <b>{{projectInfo.reporting_period}}</b></li>
-                        <li>Grant Start Date: <b>{{projectInfo.grant_start_date}}</b></li>
-                        <li>Grant End Date: <b>{{projectInfo.grant_end_date}}</b></li>
+                        <li>Reporting Period: <b>{{taskRecord.reportingPeriod}}</b></li>
+                        <li>Start Date: <b>{{taskRecord.startDate | date: 'mediumDate' }}</b></li>
+                        <li>End Date: <b>{{taskRecord.endDate | date: 'mediumDate' }}</b></li>
                       </ul>
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Total Grant Amount: <b>{{projectInfo.total_grant_amount}}</b></li>
-                        <li>Amount Transferred in the reporting period: <b>{{projectInfo.amount_transferred}}</b></li>
-                        <li>Amount Utilized in the period: <b>{{projectInfo.amount_utilized}}</b></li>
-                        <li>Balance Spent/Overspent: <b>{{projectInfo.balance_spent_overspend}}</b></li>
+                        <li>Total Budget Allocated: <b>{{totalAmountCommitted}}</b></li>
+                        <li>Amount Transferred in the reporting period: <b> </b></li>
+                        <li>Amount Utilized in the period: <b> </b></li>
+                        <li>Balance Spent/Overspent: <b> </b></li>
                       </ul>
                     </div>
                   </div>
@@ -148,31 +126,38 @@
 
                 <h3 style="margin-left: 40px;">SUMMARY OF PERFORMANCE FOR THE REPORTING PERIOD</h3>
                 <div class="card">
-                  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                         class="table table-striped table-bordered" id="summary">
+                  <table class="table table-striped table-bordered" id="summary">
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
-                      <th class='text-center'>Output Indicators</th>
+                      <th class='text-center'>Milestone</th>
                       <th class='text-center'>Overall Target</th>
-                      <th class='text-center'>Cumulative ach'mnt</th>
+                      <th class='text-center'>Cumulative achievement</th>
                       <th class='text-center'>Quarter Target</th>
-                      <th class='text-center'>Quarter ach'mnt</th>
-                      <th class='text-center'>% ach'mnt</th>
-                      <th class='text-center'>Comment</th>
+                      <th class='text-center'>Quarter achievement</th>
+                      <th class='text-center'>% achievement</th>
+                      <th class='text-center'>Comment <span class="required-indicator">*</span></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let row of performance">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.output_indicators }}</td>
-                      <td class='text-center'>{{ row.overall_target }}</td>
-                      <td class='text-center'>{{ row.cumulative_achievement }}</td>
-                      <td class='text-center'>{{ row.quarter_target }}</td>
-                      <td class='text-center'>{{ row.quarter_achievement }}</td>
+                      <td class='text-center'>{{ row.overall_target | number }}</td>
+                      <td class='text-center'>{{ row.cumulative_achievement | number }}</td>
+                      <td class='text-center'>{{ row.quarter_target | number }}</td>
+                      <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
+                      <td class='text-center' *ngIf="row.milestoneId==undefined" id="1-{{row.id}}">
+                        <div>{{ row.quarter_achievement | number }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
-                      <td class='text-center' id="0-{{row.id}}">
-                        <div>{{ row.comment_on_result }}
+                      <td class='text-center comment' id="0-{{row.id}}">
+                        {{ row.comment_on_result }}
+                        <div>
                           <button class="btn btn-link"
                                   (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.comment_on_result)"><i
                             class="fas fa-pencil-alt"></i></button>
@@ -185,44 +170,45 @@
 
                 <h3 style="margin-left: 40px;">FINANCIAL REPORT</h3>
                 <div class="card">
-                  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                         class="table table-striped table-bordered" id="financial">
+                  <table class="table table-striped table-bordered" id="financial">
                     <thead>
                     <tr>
                       <th class='text-center' style="display: none;">Id</th>
                       <th class='text-center'>Budget Line</th>
-                      <th class='text-center'>Approved Budget</th>
-                      <th class='text-center'>Total Advanced</th>
-                      <th class='text-center'>Expense to-date</th>
-                      <th class='text-center'>Quarter Expenses</th>
+                      <th class='text-center'>Budget Allocated</th>
+                      <th class='text-center'>Expense-to-date</th>
+                      <th class='text-center'>Cumulative Spending Plan<span class="required-indicator">*</span></th>
+                      <th class='text-center'>Quarter Expenses <span class="required-indicator">*</span></th>
                       <th class='text-center'>Variance</th>
-                      <th class='text-center'>Reason for Variance</th>
+                      <th class='text-center'>Reason for Variance <span class="required-indicator">*</span></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngFor="let row of financial">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.budget_line }}</td>
-                      <td class='text-center'>{{ row.approved_budget }}</td>
-                      <td class='text-center'>{{ row.total_advanced }}</td>
-                      <td class='text-center'>{{ row.expense_to_date }}</td>
-                      <td class='text-center' id="0-{{row.id}}">
-                        <div>{{ row.quarter_expenses }}
+                      <td class='text-center'>{{ row.approved_budget | number }}</td>
+                      <td class='text-center'>{{ row.expense_to_date | number }}</td>
+                      <td class='text-center'  id="td1-{{row.id}}">
+                        <div>{{ row.total_advanced | number }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'0-'+row.id, 'quarterExpense', row.quarter_expenses)"><i
+                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class='text-center' id="1-{{row.id}}">
-                        <div>{{ row.variance }}
-                          <button class="btn btn-link" (click)="cellEditor(row,'1-'+row.id, 'variance', row.variance)">
-                            <i class="fas fa-pencil-alt"></i></button>
+                      <td class='text-center' id="td2-{{row.id}}">
+                        <div>{{ row.quarter_expenses | number }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')"><i
+                            class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class='text-center' id="2-{{row.id}}">
-                        <div>{{ row.reason_for_variance }}
+                      <td class='text-center'>{{ row.variance }}</td>
+                      <td class='text-center comment' [id]="'td3-'+row.id">
+                        {{ row.reason_for_variance }}
+                        <div>
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'2-'+row.id, 'reason_for_variance',row.reason_for_variance)">
+                                  (click)="cellEditor(row,'td3-'+row.id, 'reason_for_variance',row.reason_for_variance)">
                             <i class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -234,11 +220,11 @@
                 <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report:</label>
+                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
-                      <div class="col-sm-3" *ngIf="shortLink1">
+                      <div class="col-sm-3">
                         <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
@@ -247,23 +233,11 @@
                     </div>
                     <div class="form-group row">
                       <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
-                        report:</label></div>
+                        report: <span class="required-indicator">*</span></label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
                                                    type="file" (change)="handleFileInput($event)"/></div>
-                      <div class="col-sm-3" *ngIf="shortLink2">
+                      <div class="col-sm-3">
                         <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
-                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report:</label>
-                      </div>
-                      <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)" /></div>
-                      <div class="col-sm-3" *ngIf="shortLink3">
-                        <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
                                                         class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
                           Template</a>
                         </button>
@@ -272,8 +246,8 @@
                   </form>
 
                   <!--Flag variable is used here-->
-                  <div class="container" *ngIf="loading">
-                    <h3>Loading ...</h3>
+                  <div class="container" *ngIf="loading">***
+                    <h3>Uploading attachment, please wait ...</h3>
                   </div>
                 </div>
 
@@ -283,10 +257,10 @@
                       <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
                       <div class="col-sm-4">{{attachment1}}</div>
                       <div class="col-sm-4">
-                        <button class="btn btn-link" *ngIf="shortLink1"><a href="{{shortLink1}}" style="font-size:15px;"
+                        <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
+                          Attachment</a>
                         </button>
                       </div>
                     </div>
@@ -294,21 +268,10 @@
                       <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>
                       <div class="col-sm-4">{{attachment2}}</div>
                       <div class="col-sm-4">
-                        <button class="btn btn-link" *ngIf="shortLink2"><a href="{{shortLink2}}" style="font-size:15px;"
+                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
                                                                            class="text fas fa-file-download"
                                                                            target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
-                      <div class="col-sm-4">{{attachment3}}</div>
-                      <div class="col-sm-4">
-                        <button class="btn btn-link" *ngIf="shortLink3"><a href="{{shortLink3}}" style="font-size:15px;"
-                                                                           class="text fas fa-file-download"
-                                                                           target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
+                          Attachment</a>
                         </button>
                       </div>
                     </div>
@@ -322,33 +285,22 @@
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link" *ngIf="shortLink1"><a href="{{shortLink1}}"
+                          <button class="btn btn-link"><a href="{{shortLink1}}"
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
-                            Template</a>
+                            Attachment</a>
                           </button>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
-                          <button class="btn btn-link" *ngIf="shortLink2"><a href="{{shortLink2}}"
+                          <button class="btn btn-link"><a href="{{shortLink2}}"
                                                                              style="font-size:15px;"
                                                                              class="text fas fa-file-download"
                                                                              target="_blank" download>&nbsp;&nbsp;Download
-                            Template</a>
-                          </button>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
-                        <div class="col-sm-6">
-                          <button class="btn btn-link" *ngIf="shortLink3"><a href="{{shortLink3}}"
-                                                                             style="font-size:15px;"
-                                                                             class="text fas fa-file-download"
-                                                                             target="_blank" download>&nbsp;&nbsp;Download
-                            Template</a>
+                            Attachment</a>
                           </button>
                         </div>
                       </div>
@@ -433,15 +385,25 @@
                       </div>
                     </div>
 
+                    <div class="col-sm-3">
+                      <div>
+                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View
+                          Recommendations
+                        </button>
+                        <br><br>
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div class="row">
                     <div class="col">
-                      <p>Comments (Partner)</p>
+                      <p>Comments For Partner </p>
                       <textarea class="form-control" rows="3" [(ngModel)]="reviewerComments"></textarea>
                     </div>
                     <div class="col">
-                      <p>Recommendations (Internal)</p>
+                      <p>Recommendations</p>
                       <textarea class="form-control" rows="3" [(ngModel)]="reviewerRecommendations"></textarea>
                     </div>
                   </div>
@@ -518,6 +480,15 @@
                   </div>
                 </div>
 
+                <div *ngIf="error || success" class="row align-items-center text-center" style="display: flex; justify-content: center;">
+                  <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+                    <strong>Error:</strong> {{errorMessage}}
+                  </div>
+                  <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+                    <strong>Success:</strong> {{successMessage}}
+                  </div>
+                </div>
+
                 <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
@@ -529,8 +500,8 @@
                 <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-danger" (click)="reviewReport('revise')">Ask for Revisions</button>
-                    <button class="btn btn-success" (click)="reviewReport('submit')">Approve Report</button>
+                    <button class="btn btn-warning" (click)="reviewReport('revise')">Save For Later</button>
+                    <button class="btn btn-success" (click)="reviewReport('submit')">Approve Review</button>
                   </div>
                 </div>
                 <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">

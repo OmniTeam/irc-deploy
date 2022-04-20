@@ -50,7 +50,7 @@ export class CreateEntitiesComponent implements OnInit {
       mandatory: ['Yes', [Validators.required]],
       fieldType: ['', [Validators.required]],
       orderOfDisplay: [1, [Validators.required]],
-    });
+    })
     this.formGroup = this.formBuilder.group({
       name: ['', [Validators.required]],
       prefix: ['', [Validators.required]],
@@ -135,6 +135,10 @@ export class CreateEntitiesComponent implements OnInit {
         this.submitFields = false;
       }, 100);
     }
+  }
+
+  editField() {
+
   }
 
   deleteField(deletedRow) {

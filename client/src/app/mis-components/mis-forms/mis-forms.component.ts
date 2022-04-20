@@ -17,6 +17,7 @@ export class MisFormsComponent implements OnInit {
   selected: any[] = [];
   activeRow: any;
   rows: Object[];
+  temp: Object[];
   editing = {};
   formData: any;
 
@@ -28,11 +29,12 @@ export class MisFormsComponent implements OnInit {
   entriesChange($event) {
     this.entries = $event.target.value;
   }
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function(d) {
-      for (var key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
+  onChangeSearch(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -53,6 +55,7 @@ export class MisFormsComponent implements OnInit {
 
   reloadTable() {
     this.formService.getForms().subscribe(data => {
+      this.temp = [...data];
       this.rows = data;
     }, error => console.log(error));
   }
@@ -80,5 +83,9 @@ export class MisFormsComponent implements OnInit {
         }
       );
     }
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 }

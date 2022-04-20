@@ -1,5 +1,6 @@
 package com.kengamis
 
+import com.kengamis.exporter.EntityDataExporter
 import com.kengamis.query.EntityQueryHelper
 import grails.converters.JSON
 import grails.validation.ValidationException
@@ -38,7 +39,10 @@ class MisEntityController {
     }
 
     def show(String id) {
-        respond misEntityService.get(id)
+        def misEntity = MisEntity.get(id)
+        def entityFields = misEntity.entityFields
+        def misEntityReturned = [id: misEntity.id, name: misEntity.name, tableName: misEntity.tableName, prefix: misEntity.prefix, enableTagging: misEntity.enableTagging, entityFields: entityFields]
+        respond misEntityReturned
     }
 
     @Transactional
@@ -111,7 +115,8 @@ class MisEntityController {
             }
         }
 
-        def deleteTablesQuery = """ DROP TABLE ${entityTable}, ${prefixTable}, ${taggingTable}""".toString()
+        def tables = [entityTable?:null, prefixTable?:null, taggingTable?:null].findAll { it != null }.join(", ")
+        def deleteTablesQuery = """ DROP TABLE ${tables}""".toString()
         def results = AppHolder.withMisSqlNonTx { execute(deleteTablesQuery) }
         if (!results) {
             log.info("Tables successfully deleted")
@@ -239,6 +244,34 @@ class MisEntityController {
         respond message
     }
 
+    @Transactional
+    def updateEntityRecord() {
+        def message = ["Entity Record Updated"]
+        try {
+            def misEntity = MisEntity.get(params.entityId)
+            def recordId = params.id as String
+            def postRequest = request.JSON
+            def updateQuery = "UPDATE ${escapeField misEntity.tableName} set "
+            def setConditions = []
+            if (postRequest) {
+                postRequest.each { key, value ->
+                    setConditions << "${key}='${value}'"
+                }
+            }
+            updateQuery += setConditions.join(", ") + " where id='${recordId}'"
+            // Update into Entity Table
+            log.trace(updateQuery)
+            def result = AppHolder.withMisSql { execute(updateQuery.toString()) }
+            if (!result) {
+                log.trace("Table ${misEntity.tableName} successfully updated a record")
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace()
+        }
+        respond message
+    }
+
     def getEntityFields() {
         def entityFields = []
         try {
@@ -300,6 +333,24 @@ class MisEntityController {
         }
         def message = ["Entity Record Deleted"]
         respond message
+    }
+
+    def exportEntityData() {
+        def entityData = []
+        def id = params.id as String
+        try {
+            def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
+            def dataExporter = new EntityDataExporter(id, params)
+            def exportedData = dataExporter.exportToExcel(q.data)
+            def fileName = dataExporter.setFileName()
+            entityData = [data: exportedData, file: fileName]
+        }
+        catch (Exception e) {
+            flash.error = "Data Might Not Be Available For This entity."
+            log.error("Error fetching data", e)
+            entityData = [data: [], file: MisEntity.findById(id).name]
+        }
+        respond entityData
     }
 
 }

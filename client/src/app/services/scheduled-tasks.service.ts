@@ -26,4 +26,13 @@ export class ScheduledTasksService {
   unScheduleTask(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/taskDef/unScheduleTask`, {params});
   }
+
+
+  getClientsDataOdata(): Observable<any>{
+    return  this.http.get(`${environment.serverUrl}/api/v1/data/clients-from-remote2/`)
+  }
+
+  getServicesDataOdata(): Observable<any>{
+    return  this.http.get(`${environment.serverUrl}/api/v1/data/clients-from-remote/`)
+  }
 }

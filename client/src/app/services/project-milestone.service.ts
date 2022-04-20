@@ -7,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ProjectMilestoneService {
-  baseurl = `${environment.serverUrl}/projectMilestone/`
+  baseurl = `${environment.serverUrl}/projectMilestone`
   constructor(private http: HttpClient) { }
 
   getMilestones(): Observable<any> {
@@ -22,24 +22,31 @@ export class ProjectMilestoneService {
     return this.http.get(`${environment.serverUrl}/programCategory/getCategoriesByProgram`, {params});
   }
 
+  getMilestonesByProgram(params): Observable<any> {
+    return this.http.get(`${this.baseurl}/getMilestonesByProgram`, {params});
+  }
+
   createMilestone(formData): Observable<any> {
     return this.http.post(this.baseurl, formData);
   }
 
   getCurrentMilestone(id) {
-    return this.http.get(`${this.baseurl}${id}/`);
+    return this.http.get(`${this.baseurl}/${id}/`);
+  }
+
+  getMilestoneDataForReports(params): Observable<any> {
+    return this.http.get(`${this.baseurl}/getMilestoneDataForReports`, {params});
   }
 
   updateMilestone(id, formData): Observable<any> {
-    return this.http.put(`${this.baseurl}${id}/`, formData);
+    return this.http.put(`${this.baseurl}/${id}/`, formData);
   }
 
   deleteMilestone(id): Observable<any> {
-    return this.http.delete(`${this.baseurl}${id}/`);
+    return this.http.delete(`${this.baseurl}/${id}/`);
   }
 
   runQuery(params) {
     return this.http.get(`${this.baseurl}/runQuery`, {params});
   }
-
 }

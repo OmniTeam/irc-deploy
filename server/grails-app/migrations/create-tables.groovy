@@ -1772,4 +1772,274 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "LENOVO (generated)", id: "1647253541462-1") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "user_id", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-1") {
+        createTable(tableName: "user_entity_view_filters") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "user_entity_view_filtersPK")
+            }
+
+            column(name: "entity_view_filters_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-2") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-3") {
+        addColumn(tableName: "entity_view_filters") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-4") {
+        addUniqueConstraint(columnNames: "entity_view_filters_id, user_id", constraintName: "UK28e93280ffd3817340e71f819e6b", tableName: "user_entity_view_filters")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-5") {
+        addForeignKeyConstraint(baseColumnNames: "user_id", baseTableName: "user_entity_view_filters", constraintName: "FK660sr1x5pypub18iwh087qrc2", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "user", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647848110366-6") {
+        addForeignKeyConstraint(baseColumnNames: "entity_view_filters_id", baseTableName: "user_entity_view_filters", constraintName: "FKl1y77w88879q3g1di522fyby4", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view_filters", validate: "true")
+    }
+
+    changeSet(author: "Bryan (generated)", id: "1647585031314-43") {
+        dropColumn(columnName: "user_id", tableName: "entity_view_filters")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220901124635-01") {
+        modifyDataType(columnName: "input_variables", newDataType: "LONGTEXT", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202209011224245-01") {
+        modifyDataType(columnName: "output_variables", newDataType: "LONGTEXT", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-1") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "end_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-2") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "period_type", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-3") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "program_id", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-4") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_calendar", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-5") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_start_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1648452203322-6") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "start_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022090343454245-01") {
+        modifyDataType(columnName: "reporting_calendar", newDataType: "LONGTEXT", tableName: "partner_setup")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649327928652-35") {
+        dropColumn(columnName: "reporting_calendar", tableName: "partner_setup")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649327928652-3") {
+        createTable(tableName: "calendar_trigger_dates") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "calendar_trigger_datesPK")
+            }
+
+            column(name: "partner_setup_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "period", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "started", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "completed", type: "BIT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "end_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1649327928652-4") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "start_cycle", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649655031191-84") {
+        createTable(tableName: "clients") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "clientsPK")
+            }
+
+            column(name: "disability", type: "VARCHAR(255)")
+
+            column(name: "division", type: "VARCHAR(255)")
+
+            column(name: "case_id", type: "VARCHAR(255)")
+
+            column(name: "partner_name", type: "VARCHAR(255)")
+
+            column(name: "register_status", type: "VARCHAR(255)")
+
+            column(name: "parish", type: "VARCHAR(255)")
+
+            column(name: "gender", type: "VARCHAR(255)")
+
+            column(name: "district", type: "VARCHAR(255)")
+
+            column(name: "nationality", type: "VARCHAR(255)")
+
+            column(name: "date_of_registration", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-91") {
+        addColumn(tableName: "clients") {
+            column(name: "age_category", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-92") {
+        addColumn(tableName: "clients") {
+            column(name: "country_of_origin", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-93") {
+        addColumn(tableName: "clients") {
+            column(name: "identification_document", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649754406006-94") {
+        addColumn(tableName: "clients") {
+            column(name: "identification_number", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-95") {
+        addColumn(tableName: "feedback") {
+            column(name: "assignee", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-96") {
+        addColumn(tableName: "feedback") {
+            column(name: "email", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-97") {
+        addColumn(tableName: "feedback") {
+            column(name: "feedback_details", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649767799905-98") {
+        addColumn(tableName: "feedback") {
+            column(name: "project", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1649919180335-99") {
+        createTable(tableName: "services") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "servicesPK")
+            }
+
+            column(name: "case_id", type: "VARCHAR(255)")
+
+            column(name: "partner_name", type: "VARCHAR(255)")
+
+            column(name: "date_of_service", type: "VARCHAR(255)")
+
+            column(name: "client_case_id", type: "VARCHAR(255)")
+
+            column(name: "service_provided", type: "VARCHAR(255)")
+        }
+    }
+
 }

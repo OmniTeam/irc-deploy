@@ -15,6 +15,7 @@ export class EditProgramStaffComponent implements OnInit {
   submitted = false;
   formData: any;
   programs = [];
+  staff = [];
   programStaffId: any;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -28,13 +29,16 @@ export class EditProgramStaffComponent implements OnInit {
       this.formGroup = this.formBuilder.group({
         program: [results?.programId, [Validators.required]],
         name: [results?.name, [Validators.required]],
-        email: [results?.email],
+        email: [results?.email, [Validators.required]],
         nameContactPerson: [results?.nameContactPerson],
         personContact: [results?.personContact]
       });
     });
     this.programStaffService.getPrograms().subscribe((data) => {
       this.programs = data;
+    });
+    this.programStaffService.getProgramStaffs().subscribe((data) => {
+      this.staff = data;
     });
   }
 

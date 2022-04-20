@@ -44,6 +44,7 @@
                     placeholder="Search Entities"
                     aria-controls="datatable"
                     (keyup)="onChangeSearch($event)"
+                    (search)="onSearch($event)"
                   />
                 </label>
               </div>
@@ -101,9 +102,11 @@
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Entity Views" prop="entityViews"></ngx-datatable-column>
-            <ngx-datatable-column name="Linked Forms" prop="linkedForms"></ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <button (click)="editEntityData(row)" class="btn btn-default" style="padding: 1px 6px;">
+                  <i class="fa fa-pencil-alt"></i>
+                </button>
                 <button (click)="showEntityData(row)" class="btn btn-info" style="padding: 1px 6px;">
                   <i class="fa fa-eye"></i>
                 </button>

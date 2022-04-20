@@ -1,6 +1,5 @@
 package com.kengamis
 
-
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -17,32 +16,95 @@ class TaskListController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        //params.max = Math.min(max ?: 10, 100)
-
-        def taskListMapList = taskListService.list(params)
         def tasks = []
 
-        taskListMapList.each{TaskList task ->
+        TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
-            def variables = slurper.parseText(task.outputVariables)
+            def variables = slurper.parseText(task.inputVariables)
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '',referralId = ''
 
-            def description = (variables['data'].value.toString()).replaceAll("\\[", "").replaceAll("\\]","")
+            variables['data'].each {
+                if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+                if (it.key == 'Period') period = it.value
+                if (it.key == 'StartDate') startDate = it.value
+                if (it.key == 'PartnerId') partnerId = it.value
+                if (it.key == 'ProgramId') programId = it.value
+                if (it.key == 'EndDate') endDate = it.value
+                if (it.key == 'ReferralId') referralId = it.value
+                if (it.key == 'GroupId') groupId = it.value
+            }
 
-            tasks << [id: task.id,
-                    taskName : task.taskName,
-                    description : description,
-                    processInstanceId : task.processInstanceId,
-                    taskDefinitionKey : task.taskDefinitionKey,
-                    groupId : task.groupId,
-                    dateCreated: task.dateCreated,
-                    status: task.status]
+            def taskPartner = ProgramStaff.findById(partnerId)
+            def taskProgram = Program.findById(programId)
+
+            if (taskPartner == null) taskPartner = [name: '']
+            if (taskProgram == null) taskProgram = [title: '']
+
+                tasks << [id               : task.id,
+                          taskName         : task.taskName,
+                          partnerSetupId   : partnerSetupId,
+                          startDate        : startDate,
+                          partnerId        : partnerId,
+                          partnerName      : taskPartner.name,
+                          programId        : programId,
+                          programName      : taskProgram.title,
+                          endDate          : endDate,
+                          groupId          : groupId,
+                          reportingPeriod  : period,
+                          referralId       : referralId,
+                          processDefKey    : task.processDefKey,
+                          outputVariables  : task.outputVariables,
+                          processInstanceId: task.processInstanceId,
+                          taskDefinitionKey: task.taskDefinitionKey,
+                          dateCreated      : task.dateCreated,
+                          status           : task.status]
         }
         respond tasks
     }
 
     def getTaskRecord() {
         def task = TaskList.get(params.id)
-        respond task
+
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId=''
+
+        variables['data'].each {
+            if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+            if (it.key == 'Period') period = it.value
+            if (it.key == 'StartDate') startDate = it.value
+            if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'ProgramId') programId = it.value
+            if (it.key == 'ReferralId') referralId = it.value
+            if (it.key == 'EndDate') endDate = it.value
+            if (it.key == 'GroupId') groupId = it.value
+        }
+
+        def programPartner = ProgramStaff.findById(partnerId)
+        def program = Program.findById(programId)
+
+        if (programPartner == null) programPartner = [name: '']
+        if (program == null) program = [title: '']
+
+        def t = [id               : task.id,
+                 taskName         : task.taskName,
+                 partnerSetupId   : partnerSetupId,
+                 startDate        : startDate,
+                 partnerId        : partnerId,
+                 partnerName      : programPartner.name,
+                 programId        : programId,
+                 programName      : program.title,
+                 endDate          : endDate,
+                 groupId          : groupId,
+                 referralId       : referralId,
+                 reportingPeriod  : period,
+                 processDefKey    : task.processDefKey,
+                 outputVariables  : task.outputVariables,
+                 processInstanceId: task.processInstanceId,
+                 taskDefinitionKey: task.taskDefinitionKey,
+                 dateCreated      : task.dateCreated,
+                 status           : task.status]
+        respond t
     }
 
     def show(Long id) {
@@ -73,6 +135,7 @@ class TaskListController {
 
     @Transactional
     def update(TaskList taskList) {
+        println taskList.errors
         if (taskList == null) {
             render status: NOT_FOUND
             return

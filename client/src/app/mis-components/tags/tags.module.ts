@@ -7,6 +7,7 @@ import {TagsComponent} from "./tags.component";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {ComponentsModule} from "../../components/components.module";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {NgSelectModule} from "@ng-select/ng-select";
     DataTablesModule,
     NgxDatatableModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
+    ComponentsModule
   ]
 })
 export class TagsModule { }

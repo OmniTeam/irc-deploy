@@ -10,7 +10,12 @@ import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {SampleData} from "../../helpers/sample-data";
+import {ProgramStaffService} from "../../services/program-staff.service";
+import {PartnerSetupService} from "../../services/partner-setup.service";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {AlertService} from "../../services/alert";
+
+//import {SampleData} from "../../helpers/sample-data";
 
 @Component({
   selector: 'app-report-form',
@@ -19,8 +24,6 @@ import {SampleData} from "../../helpers/sample-data";
 })
 
 export class ReportFormComponent implements OnInit, OnUpdateCell {
-
-  @ViewChild(CellEdit) cellEdit;
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -63,6 +66,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   taskId: string;
   taskRecord: any;
   reportValues: [];
+  totalAmountCommitted: string;
 
   shortLink1: string = "";
   shortLink2: string = "";
@@ -72,7 +76,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   attachment3: string;
 
   organisationalInfo: any;
-  projectInfo: any;
   performanceReport = [];
   financialReport = [];
   items = [
@@ -80,7 +83,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'No', value: 'no'}
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private location: Location, private reportFormService: ReportFormService, private taskListService: TaskListService, private fileUploadService: FileUploadService, public authService: AuthService) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private location: Location,
+              private reportFormService: ReportFormService,
+              private taskListService: TaskListService,
+              private fileUploadService: FileUploadService,
+              private partnerSetupService: PartnerSetupService,
+              private programStaffService: ProgramStaffService,
+              private projectMilestoneService: ProjectMilestoneService,
+              private alertService: AlertService,
+              public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -88,23 +101,31 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.isReviewVisible = false;
     this.isApproveVisible = false;
 
-    this.organisationalInfo = SampleData.organisationalInfo;
-    this.projectInfo = SampleData.projectInfo;
-
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmitVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
+          if (this.taskRecord.taskDefinitionKey === "Submit_Report" ||
+            this.taskRecord.taskDefinitionKey === "Submit_Final_Report") this.isSubmitVisible = true;
+          else if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
             this.taskRecord.taskDefinitionKey === "Review_Performance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Program_Report") this.isReviewVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Approve_Report") this.isApproveVisible = true;
+            this.taskRecord.taskDefinitionKey === "Review_Program_Report" ||
+            this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.isReviewVisible = true;
+          else if (this.taskRecord.taskDefinitionKey === "Approve_Report" ||
+            this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") this.isApproveVisible = true;
+          else this.isSubmitVisible = true;
 
           const params = new HttpParams()
-            .set('taskId', this.taskId);
+            .set('processInstanceId', this.taskRecord.processInstanceId);
+
+          //set organizational Info
+          this.programStaffService.getCurrentProgramStaff(this.taskRecord.partnerId).subscribe((results: any) => {
+            if (results !== null && results !== undefined) {
+              this.organisationalInfo = results;
+            }
+          });
 
           this.setAttachments(params);
 
@@ -148,9 +169,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (data.report !== null && data.report !== undefined) {
         this.report = data.report;
         let reports = JSON.parse(data.report.reportValues);
+
         this.financialReport = JSON.parse(reports.financialReport);
         this.performanceReport = JSON.parse(reports.performanceReport);
-
 
         if (reports.reviewerInformation !== null && reports.reviewerInformation !== undefined) {
           this.reviewerInformation = JSON.parse(reports.reviewerInformation);
@@ -173,13 +194,82 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
-      } /*else {
-        this.financialReport = SampleData.financialReport;
-        this.performanceReport = SampleData.performanceReport;
-      }*/
+      }
+
+      this.setReportsFromPartnerSetup();
 
       this.dtTrigger.next();
     }, error => console.log("Error getting reports", error));
+  }
+
+  setReportsFromPartnerSetup() {
+    const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+    this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
+      if (data.setup != undefined && data.setup.setupValues != undefined) {
+        let values = JSON.parse(data.setup.setupValues);
+
+        this.totalAmountCommitted = values.currentStatus.totalAmountCommitted;
+
+        values.budget.forEach((b) => {
+          if (!this.financialReport.some(x => x.id === b.id)) {
+            this.financialReport.push({
+              id: b.id,
+              budget_line: b.budgetLine,
+              approved_budget: b.approvedAmount,
+              expense_to_date: b.totalSpent
+            });
+          }
+        });
+
+        if (values.indicators != undefined) {
+          let ind = JSON.parse(values.indicators);
+          ind.forEach((i) => {
+            let target = this.getTargetForThisQuarter(i.disaggregation);
+            const params = new HttpParams()
+              .set('id', i.milestoneId)
+              .set("startDate", this.taskRecord.startDate)
+              .set("endDate", this.taskRecord.endDate);
+            this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
+              if(milestone!=undefined) {
+
+                let cumulative = milestone.cumulativeAchievement ?? 0
+                let quarter = milestone.quaterAchievement ?? 0
+                let percentageAchievement : number;
+                let p = (cumulative/quarter)*100
+                if(p>0 && isFinite(p)) percentageAchievement = p; else percentageAchievement=0;
+
+                if (!this.performanceReport.some(x => x.id === i.id)) {
+                  this.performanceReport.push({
+                    id: i.id,
+                    milestoneId: i.milestoneId,
+                    output_indicators: i.name,
+                    overall_target: i.overallTarget,
+                    cumulative_achievement: cumulative,
+                    quarter_achievement: quarter,
+                    quarter_target: target,
+                    percentage_achievement: percentageAchievement
+                  });
+                }
+              }
+            }, error => console.log(error));
+          });
+        }
+
+        let reportValues: { [key: string]: string } = {
+          financialReport: JSON.stringify(this.financialReport),
+          performanceReport: JSON.stringify(this.performanceReport),
+        }
+        this.saveReport(reportValues, 'draft');
+      }
+    }, error => console.log(error));
+  }
+
+  getTargetForThisQuarter(disaggregation : any) {
+    let value = 0
+    disaggregation.forEach((d)=>{
+      if(d.datePeriod==this.taskRecord.reportingPeriod) value = d.target;
+    });
+    return value;
   }
 
   setAttachments(params) {
@@ -212,7 +302,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }
     return answers;
   }
-
 
   commentsChangedHandler(comments: Array<CommentNode>) {
     this.comments = comments;
@@ -252,7 +341,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     );
   }
 
-/*  changeForm(formName) {
+  changeForm(formName) {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
     this.isApproveVisible = false;
@@ -261,7 +350,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (formName == 'Approve') this.isApproveVisible = true;
     window.scroll(0, 0);
     this.success = false;
-  }*/
+  }
 
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
@@ -298,28 +387,44 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {
-    //save
-    console.log("newValue", value);
     if (value !== null && value !== undefined)
       switch (key) {
         case "summaryComment":
           if (this.performanceReport.some(x => x.id === rowId)) {
-            this.performanceReport.forEach(function (comment) {
-              if (comment.id === rowId) comment.comment_on_result = value
+            this.performanceReport.forEach(function (item) {
+              if (item.id === rowId) item.comment_on_result = value
+            });
+          }
+          break;
+        case "quarter_achievement":
+          if (this.performanceReport.some(x => x.id === rowId)) {
+            this.performanceReport.forEach(function (item) {
+              if (item.id === rowId) item.quarter_achievement = value
             });
           }
           break;
         case "quarterExpense":
           if (this.financialReport.some(x => x.id === rowId)) {
-            this.financialReport.forEach(function (item) {
-              if (item.id === rowId) item.quarter_expenses = value
+            this.financialReport.forEach((item) => {
+              if (item.id === rowId) {
+                if(+value <= +item.total_advanced){
+                  item.quarter_expenses = value
+                } else {
+                  this.alertService.error(`Quarter expense should be less than Total Advanced`);
+                  return;
+                }
+                item.variance = +item.total_advanced - +value
+              }
             });
           }
           break;
-        case "variance":
+        case "totalAdvanced":
           if (this.financialReport.some(x => x.id === rowId)) {
-            this.financialReport.forEach(function (item) {
-              if (item.id === rowId) item.variance = value
+            this.financialReport.forEach((item) => {
+              if (item.id === rowId) {
+                item.total_advanced = value
+                item.variance = +item.total_advanced - +item.quarter_expenses
+              }
             });
           }
           break;
@@ -331,47 +436,56 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           }
           break;
       }
+      let reportValues: { [key: string]: string } = {
+        financialReport: JSON.stringify(this.financialReport),
+        performanceReport: JSON.stringify(this.performanceReport),
+      }
+      this.saveReport(reportValues, 'draft');
   }
 
-  cellEditor(row, td_id, key: string, oldValue) {
-    new CellEdit().edit(row.id, td_id, '', oldValue, key, this.saveCellValue);
+  cellEditor(row, td_id, key: string, oldValue, type?: string) {
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
-      processId: this.taskRecord.processInstanceId,
+      processInstanceId: this.taskRecord.processInstanceId,
       userId: this.authService.getLoggedInUsername(),
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
       reportValues: JSON.stringify(reportValues),
       status: status
     }
-    if (this.report) {
-      this.reportFormService.updateReport(reportRecord, this.report.id).subscribe((data) => {
-        this.error = false;
-        this.success = true;
-        this.successMessage = "Updated Report";
-      }, error => {
-        this.error = true;
-        this.errorMessage = "Failed to update Report";
-        this.success = false;
-        console.log(error);
-      });
-    } else {
-      this.reportFormService.createReport(reportRecord).subscribe((data) => {
-        this.error = false;
-        this.success = true;
-        this.successMessage = "Saved Report";
-      }, error => {
-        this.error = true;
-        this.errorMessage = "Failed to save Report";
-        this.success = false;
-        console.log(error);
-      });
-    }
 
+    const params = new HttpParams().set('processInstanceId', this.taskRecord.processInstanceId);
+    this.reportFormService.getReportForTask(params).subscribe(data => {
+      if (data.report !== null && data.report !== undefined) {
+        this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Updated Report";
+        }, error => {
+          this.error = true;
+          this.errorMessage = "Failed to update Report";
+          this.success = false;
+          console.log(error);
+        });
+      } else {
+        this.reportFormService.createReport(reportRecord).subscribe((data) => {
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Saved Report";
+        }, error => {
+          this.error = true;
+          this.errorMessage = "Failed to save Report";
+          this.success = false;
+          console.log(error);
+        });
+      }
+    });
     setTimeout(() => {
+      if(status!="draft") this.router.navigate(['/taskList']);
       this.success = false;
       this.error = false;
     }, 3000);
@@ -397,7 +511,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (attachment != null) {
         let fileRecord: { [key: string]: string } = {
           taskId: this.taskRecord.id,
-          processId: this.taskRecord.processInstanceId,
+          processInstanceId: this.taskRecord.processInstanceId,
           userId: this.authService.getLoggedInUsername(),
           groupId: this.taskRecord.groupId,
           taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -411,14 +525,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (record == null) {
             this.reportFormService.saveFile(fileRecord).subscribe((data) => {
               console.log('saved file successfully')
-            }, error => console.log('file', error));
+            }, error => console.log('fileError', error));
           } else {
-            console.log('record', record);
             this.reportFormService.updateFile(fileRecord, record.id).subscribe((data) => {
               console.log('updated file successfully')
-            }, error => console.log('file', error));
+            }, error => console.log('fileError', error));
           }
-          console.log('file', record);
         }, error => console.log(error));
 
       }
@@ -427,12 +539,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (status === "save") {
       this.saveReport(reportValues, 'saved_for_later');
       this.updateTaskStatus("in_progress");
-      this.location.back();
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'final_submission');
       this.updateTaskStatus("completed");
-      this.location.back();
     }
   }
 
@@ -459,12 +569,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (status === "revise") {
       this.saveReport(reportValues, 'asked_for_revisions');
       this.updateTaskStatus("needs_revision");
-      this.location.back();
+      this.router.navigate(['/taskList']);
     }
     if (status === "submit") {
       this.saveReport(reportValues, 'reviewed_and_submitted');
       this.updateTaskStatus("completed");
-      this.location.back();
+      this.router.navigate(['/taskList']);
     }
   }
 
@@ -472,7 +582,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.processInstanceId,
+        processInstanceId: this.taskRecord.processInstanceId,
         userId: comment.user,
         groupId: this.taskRecord.groupId,
         taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -492,7 +602,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.recommendations.forEach((recommendation) => {
       let recommendationsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
-        processId: this.taskRecord.processInstanceId,
+        processInstanceId: this.taskRecord.processInstanceId,
         userId: recommendation.user,
         groupId: this.taskRecord.groupId,
         taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -524,17 +634,36 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     this.saveReport(reportValues, 'approved_report');
     this.updateTaskStatus("completed");
-    this.location.back();
+    this.router.navigate(['/taskList']);
   }
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
+    if (this.taskRecord.taskDefinitionKey === "Submit_Report") {
+      this.taskRecord.outputVariables = "{}";
+    }
+    if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report") {
+      let ans = "No"
+      if(this.radioEndOfPartnership=="yes") ans = "Yes"
+      this.taskRecord.outputVariables = '{"Funding_Decision": "' + ans + '"}';
+    }
+    if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
+      let ans = "No"
+      if(this.radioRecommendFund=="yes") ans = "Yes"
+      this.taskRecord.outputVariables = '{"Approve_Funding": "' + ans + '"}';
+      if(status=="completed") {
+        const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+        this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+          console.log('updated calendar status')
+        }, error => console.log('failed update calendar status', error));
+      }
+    }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
   }
 
   onBackPressed() {
-    this.location.back();
+    this.router.navigate(['/taskList']);
   }
 }

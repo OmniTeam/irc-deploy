@@ -1,6 +1,5 @@
 package com.kengamis.tasks
 
-
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
 import groovy.sql.Sql
@@ -11,11 +10,12 @@ import groovyx.net.http.Method
 class TaskListSyncJob extends Script {
     Sql sql = sql
     static def url = StartCamundaInstancesJob.camundaApiUrl
-    static def path = '/get-tasks/CRVPF_REPORTING/'
 
     @Override
     Object run() {
-        downloadTasks(url + path + '0/50')
+        downloadTasks(url + '/get-tasks/CRVPF_REPORTING/' + '0/50')
+        downloadTasks(url + '/get-tasks/IRC_REFERRAL/' + '0/50')
+        downloadTasks(url + '/get-tasks/IRC_FEEDBACK/' + '0/50')
         //send data to workflow
         def data = TaskList.where {status == 'completed' && synced == 'false' }.findAll()
         data.each {  sendTasksToWorkflow(it as TaskList) }
@@ -31,8 +31,8 @@ class TaskListSyncJob extends Script {
                 taskId: "${task['id']}",
                 userId: "${task['assigne']}",
                 groupId: "${task['group']}",
-                inputVariables: "${task['outputs']}",
-                outputVariables: variables as String,
+                inputVariables: "$variables",
+                outputVariables: "${task['outputs']}",
                 status: status,
                 taskName: "${task['name']}",
                 processInstanceId: "${task['process_instance_id']}",

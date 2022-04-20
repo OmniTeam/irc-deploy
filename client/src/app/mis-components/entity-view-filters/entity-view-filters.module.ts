@@ -9,11 +9,11 @@ import {NgSelectModule} from "@ng-select/ng-select";
 
 @NgModule({
   declarations: [EntityViewFiltersComponent],
-    imports: [
-        CommonModule,
-        EntityViewFiltersRoutingModule,
-        NgxDatatableModule,
-        NgSelectModule
-    ]
+  imports: [
+    CommonModule,
+    EntityViewFiltersRoutingModule,
+    NgxDatatableModule,
+    NgSelectModule
+  ]
 })
 export class EntityViewFiltersModule { }

@@ -19,6 +19,8 @@ export class ProjectMilestonesComponent implements OnInit {
   milestones: any
   submitted = false;
   activeRow: any;
+  rows: Object[];
+  temp: Object[];
   constructor(private route: ActivatedRoute,
               private router: Router,
               private alertService: AlertService,
@@ -29,7 +31,8 @@ export class ProjectMilestonesComponent implements OnInit {
   }
   reloadTable() {
     this.projectMilestoneService.getMilestones().subscribe((data) => {
-      this.milestones = data;
+      this.temp = [...data];
+      this.rows = data;
     });
   }
 
@@ -76,11 +79,19 @@ export class ProjectMilestonesComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  onSearch(event) {
     this.reloadTable();
   }
 

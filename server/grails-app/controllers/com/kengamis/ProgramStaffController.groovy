@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
@@ -40,17 +41,19 @@ class ProgramStaffController {
     def show(String id) {
         def programStaff = programStaffService.get(id)
         def newProgramStaffObject = [:]
-        def programId = programStaff.program.id
-        def program = Program.findById(programId)
-        newProgramStaffObject['id'] = programStaff.id
-        newProgramStaffObject['name'] = programStaff.name
-        newProgramStaffObject['email'] = programStaff.email
-        newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
-        newProgramStaffObject['personContact'] = programStaff.personContact
-        newProgramStaffObject['dateCreated'] = programStaff.dateCreated
-        newProgramStaffObject['lastUpdated'] = programStaff.lastUpdated
-        newProgramStaffObject['program'] = program.title
-        newProgramStaffObject['programId'] = program.id
+        if (programStaff != null) {
+            def programId = programStaff.program.id
+            def program = Program.findById(programId)
+            newProgramStaffObject['id'] = programStaff.id
+            newProgramStaffObject['name'] = programStaff.name
+            newProgramStaffObject['email'] = programStaff.email
+            newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
+            newProgramStaffObject['personContact'] = programStaff.personContact
+            newProgramStaffObject['dateCreated'] = programStaff.dateCreated
+            newProgramStaffObject['lastUpdated'] = programStaff.lastUpdated
+            newProgramStaffObject['program'] = program.title
+            newProgramStaffObject['programId'] = program.id
+        }
         respond newProgramStaffObject
     }
 
@@ -108,5 +111,33 @@ class ProgramStaffController {
         programStaffService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getProgramStaffWithoutWorkPlan() {
+        def programPartners = []
+        def list = []
+
+        PartnerSetup.all.each {
+            list << it.partnerId
+        }
+
+        programStaffService.list(params).each { programStaff ->
+            if (!list.contains(programStaff.id)) {
+                def newProgramStaffObject = [:]
+                def programId = programStaff.program.id
+                def program = Program.findById(programId)
+                newProgramStaffObject['id'] = programStaff.id
+                newProgramStaffObject['name'] = programStaff.name
+                newProgramStaffObject['email'] = programStaff.email
+                newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
+                newProgramStaffObject['personContact'] = programStaff.personContact
+                newProgramStaffObject['dateCreated'] = programStaff.dateCreated
+                newProgramStaffObject['lastUpdated'] = programStaff.lastUpdated
+                newProgramStaffObject['program'] = program.title
+                newProgramStaffObject['programId'] = program.id
+                programPartners << newProgramStaffObject
+            }
+        }
+        respond programPartners
     }
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {HttpParams} from "@angular/common/http";
@@ -8,7 +8,8 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";
 import {TagService} from "../../../services/tags";
-import {Subject} from "rxjs";
+import {NgSelectComponent} from "@ng-select/ng-select";
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-entity-tables',
@@ -16,7 +17,7 @@ import {Subject} from "rxjs";
   styleUrls: ['./entity-tables.component.css']
 })
 export class EntityTablesComponent implements OnInit {
-
+  @ViewChild('editEntityRecordModal') editEntityRecordModal: any;
   entityName = "";
   entries = 10;
   selected = [];
@@ -28,20 +29,28 @@ export class EntityTablesComponent implements OnInit {
   SelectionType = SelectionType;
   closeModal: string;
   formInputConfigs: any;
+  editFormInputConfigs: any;
   formGroup: FormGroup;
+  editFormGroup: FormGroup;
   tagFormGroup: FormGroup;
   submitted = false;
+  editSubmit = false;
   tagTypes = [];
   tags = [];
+  tagFilters = [];
   enableTagging: any;
   enableTagButton = false;
   enableRemoveTagButton = false;
+  selectedTagTypeFilter = "";
+  selectedTagFilter = "";
+  recordId = "";
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private entityService: EntityService,
               private modalService: NgbModal,
               private formBuilder: FormBuilder,
+              private exportService: ExportService,
               private alertService: AlertService,
               private tagService: TagService) {
   }
@@ -85,6 +94,10 @@ export class EntityTablesComponent implements OnInit {
     return this.formGroup.controls;
   }
 
+  get fEdit() {
+    return this.editFormGroup.controls;
+  }
+
   get fTag() {
     return this.tagFormGroup.controls;
   }
@@ -92,8 +105,10 @@ export class EntityTablesComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.entityId = params.id;
+      this.selectedTagTypeFilter = null;
+      this.selectedTagFilter = null;
+      this.getEntityData();
     });
-    this.getEntityData();
     this.tagFormGroup = this.formBuilder.group({
       tagType: ['', Validators.required],
       tag: ['', Validators.required]
@@ -141,12 +156,6 @@ export class EntityTablesComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  deleteRecord() {
-  }
-
-  exportToExcel() {
-  }
-
   addNewEntityRecord() {
     const params = new HttpParams()
       .set('id', this.entityId);
@@ -170,6 +179,40 @@ export class EntityTablesComponent implements OnInit {
       setTimeout(() => {
         this.formGroup.reset();
         this.submitted = false;
+      }, 100);
+    }
+  }
+
+  editEntityDataRecordButton(row) {
+    this.editFormInputConfigs = this.generateEditFormInputConfigs(row, this.formInputConfigs);
+    this.recordId = row['id'];
+    this.openFormModal(this.editEntityRecordModal);
+  }
+
+  editEntityDataRecord() {
+    const params = new HttpParams()
+      .set('id', this.recordId)
+      .set('entityId', this.entityId);
+
+    this.editSubmit = true;
+    if (this.editFormGroup.invalid) {
+      return;
+    }
+
+    const entityRecord = this.editFormGroup.value;
+    this.entityService.updateEntityRecord(entityRecord, params).subscribe((data) => {
+      this.getEntityData();
+      this.alertService.success(`Record has been successfully updated `);
+    }, error => {
+      this.alertService.error(`Record has not been successfully updated `);
+    });
+    this.modalService.dismissAll('Dismissed after saving data');
+    this.router.navigate(['/entity/showData/' + this.entityId]);
+
+    if (this.editFormGroup.valid) {
+      setTimeout(() => {
+        this.editFormGroup.reset();
+        this.editSubmit = false;
       }, 100);
     }
   }
@@ -268,6 +311,7 @@ export class EntityTablesComponent implements OnInit {
         inputProperties['label'] = question['displayName'];
         inputProperties['type'] = this.getInputType(question['dataType']);
         inputProperties['controlName'] = question['fieldName'];
+        inputProperties['mandatory'] = question['mandatory'];
         configs.push(inputProperties);
         if (question['mandatory'] === 'Yes') {
           controlsConfig[question['fieldName']] = ['', Validators.required];
@@ -278,6 +322,19 @@ export class EntityTablesComponent implements OnInit {
     }
     this.formGroup = this.formBuilder.group(controlsConfig);
     return configs
+  }
+
+  generateEditFormInputConfigs(data: any, formInputConfigs: any) {
+    const controlsConfig = {};
+    for (const formInputConfig of formInputConfigs) {
+      if (formInputConfig['mandatory'] === 'Yes') {
+        controlsConfig[formInputConfig['controlName']] = [data[formInputConfig['controlName']], Validators.required];
+      } else {
+        controlsConfig[formInputConfig['controlName']] = [data[formInputConfig['controlName']]];
+      }
+    }
+    this.editFormGroup = this.formBuilder.group(controlsConfig);
+    return formInputConfigs
   }
 
   getInputType(dataType: string): string {
@@ -306,5 +363,75 @@ export class EntityTablesComponent implements OnInit {
     }
   }
 
+  onChangeTagType(value) {
+    this.selectedTagFilter = null;
+    this.getTagFilters(value);
+    this.selectedTagTypeFilter = value;
+    this.getFilteredEntityData();
+  }
 
+  getTagFilters(tagTypeId) {
+    const params = new HttpParams()
+      .set('id', tagTypeId);
+    this.tagService.getTagsByTagType(params).subscribe((data) => {
+      this.tagFilters = data;
+    }, error => console.log(error));
+  }
+
+  onChangeTag(value) {
+    this.selectedTagFilter = value;
+    this.getFilteredEntityData();
+  }
+
+  getFilteredEntityData() {
+    if (!this.selectedTagTypeFilter) {
+      this.selectedTagTypeFilter = "";
+    }
+    if (!this.selectedTagFilter) {
+      this.selectedTagFilter = "";
+    }
+    const params = new HttpParams()
+      .set('id', this.entityId)
+      .set('tagTypeFilter', this.selectedTagTypeFilter)
+      .set('tagFilter', this.selectedTagFilter);
+    this.entityService.getEntityData(params).subscribe((data) => {
+      this.temp = [...data.resultList];
+      this.rows = data.resultList;
+      this.columns = this.columnMappings(data.headerList);
+    }, error => console.log(error));
+  }
+
+  exportExcelFormData() {
+    if (!this.selectedTagTypeFilter) {
+      this.selectedTagTypeFilter = "";
+    }
+    if (!this.selectedTagFilter) {
+      this.selectedTagFilter = "";
+    }
+    const params = new HttpParams()
+      .set('id', this.entityId)
+      .set('tagTypeFilter', this.selectedTagTypeFilter)
+      .set('tagFilter', this.selectedTagFilter);
+
+    this.entityService.exportEntityData(params).subscribe((data) => {
+      this.exportService.exportJsonToExcel(data['data'], data['file']);
+    }, error => console.log(error));
+  }
+
+  exportCSVFormData() {
+    if (!this.selectedTagTypeFilter) {
+      this.selectedTagTypeFilter = "";
+    }
+    if (!this.selectedTagFilter) {
+      this.selectedTagFilter = "";
+    }
+    const params = new HttpParams()
+      .set('id', this.entityId)
+      .set('tagTypeFilter', this.selectedTagTypeFilter)
+      .set('tagFilter', this.selectedTagFilter);
+
+    this.entityService.exportEntityData(params).subscribe((data) => {
+      this.exportService.exportToCsv(data['data'], data['file']);
+    }, error => console.log(error));
+  }
 }

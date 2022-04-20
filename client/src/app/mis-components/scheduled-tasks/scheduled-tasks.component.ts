@@ -32,6 +32,7 @@ export class ScheduledTasksComponent implements OnInit {
 
   reloadTable() {
     this.scheduledTasksService.getScheduledTasks().subscribe((data) => {
+      console.log("tasks",data)
       this.scheduledTasks = data['taskdef'];
       this.allJobs = data['jobs'];
       this.runningJobs = data['runningJobs'];
@@ -58,6 +59,22 @@ export class ScheduledTasksComponent implements OnInit {
     }, error => {
       this.alertService.error(`${taskName} has not been unscheduled`);
     });
+  }
+
+  runGetOdataClients(){
+    this.scheduledTasksService.getClientsDataOdata().subscribe((data) =>{
+      this.alertService.success(`Clients Data has been updated`);
+    }, error => {
+      this.alertService.success(`Error while updating client data`);
+    })
+  }
+
+  runGetOdataServices(){
+    this.scheduledTasksService.getServicesDataOdata().subscribe((data) =>{
+      this.alertService.success(`Service Data has been updated`);
+    }, error => {
+      this.alertService.success(`Error while updating service data`);
+    })
   }
 
 

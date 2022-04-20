@@ -44,11 +44,15 @@ export class EntitiesComponent implements OnInit {
     this.router.navigate(['entityView/create/' + this.entityId]);
   }
 
+  editEntityData(row) {
+    let entityId = row.id;
+    this.router.navigate(['/entity/edit/' + entityId]);
+  }
+
   showEntityData(row) {
     let entityId = row.id;
     this.router.navigate(['/entity/showData/' + entityId]);
   }
-
 
   getGroupEntityViews(entityViews): string {
     let d = [];
@@ -130,5 +134,9 @@ export class EntitiesComponent implements OnInit {
     if (selected) {
       this.entityId = this.selected[0].id
     }
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 }

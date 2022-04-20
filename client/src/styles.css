@@ -83,4 +83,12 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   color: #ffffff!important;
 }
 
+.alertify-notifier .ajs-message.ajs-error {
+  color: #FFFFFF;
+}
+
+.main-content, .sidenav {
+  font-family: "Poppins Medium", "Helvetica", sans-serif !important;
+}
+
 

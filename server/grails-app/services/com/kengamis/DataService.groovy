@@ -6,6 +6,8 @@ import com.omnitech.oxd.jooq.tables.records.FormDataRecord
 import grails.gorm.transactions.Transactional
 import org.jooq.DSLContext
 import org.openxdata.markup.XformType
+import wslite.http.auth.HTTPBasicAuthorization
+import wslite.rest.RESTClient
 
 import static com.kengamis.Form.*
 
@@ -39,5 +41,11 @@ class DataService {
         else {
             return ""
         }
+    }
+
+    RESTClient initRESTClient(String url,String username, String password) {
+        RESTClient client = new RESTClient(url)
+        client.authorization = new HTTPBasicAuthorization(username, password)
+        return client
     }
 }

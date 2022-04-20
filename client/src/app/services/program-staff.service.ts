@@ -14,6 +14,10 @@ export class ProgramStaffService {
     return this.http.get(this.baseurl);
   }
 
+  getProgramStaffWithoutWorkPlan(): Observable<any> {
+    return this.http.get(`${this.baseurl}/getProgramStaffWithoutWorkPlan`);
+  }
+
   getPrograms(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/program/`);
   }
