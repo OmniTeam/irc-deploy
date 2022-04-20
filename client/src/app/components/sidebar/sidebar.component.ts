@@ -259,7 +259,7 @@ export class SidebarComponent implements OnInit {
       this.isCollapsed = true;
     });
     if (this.authService.isLoggedIn()) {
-      this.formService.getMyForms().subscribe(data => {
+      this.formService.getForms().subscribe(data => {
         for (let form of data) {
           let formObject = {};
           let formSettingObject = {};
@@ -396,6 +396,12 @@ export class SidebarComponent implements OnInit {
             isCollapsed: true,
             roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER", ],
             children: [
+              {
+                path: 'grantProcess',
+                title: 'Grant Process',
+                type: 'link',
+                roles: ["ROLE_SUPER_ADMIN"]
+              },
               {
                 path: 'tags',
                 title: 'Tags',

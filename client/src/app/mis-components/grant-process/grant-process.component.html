@@ -29,6 +29,7 @@
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
               <div class=" col">
+                <form [formGroup]="formGroup" (ngSubmit)="submitLetter()">
 
                 <h3 style="margin-left: 40px;">1. Submission Instructions</h3>
                 <div class="card">
@@ -40,15 +41,42 @@
                 <h3 style="margin-left: 40px;">2. The Proposed Planning/Learning Grant</h3>
                 <div class="card">
                   <div class="row" style="margin: 10px;">
-                    <p></p>
+                    <div class="col-sm-4">Select the program you wish to apply for:<span class="required-indicator">*</span></div>
+                    <div class="col-sm-4">
+                      <div style="margin-bottom: 30px;">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item" *ngFor="let item of programs">
+                            <input
+                              class="form-control"
+                              placeholder="Program"
+                              type="radio"
+                              style="padding-left: 10px;"
+                              formControlName="program"
+                              value="{{item.id}}"
+                              [ngClass]="{ 'is-invalid': submitted && f.program.errors }"
+                            >
+                            {{item.name}}
+                          </li>
+                        </ul>
+                        <div *ngIf="submitted && f.program.errors" class="invalid-feedback">
+                          <div *ngIf="f.program.errors.required" class="input-error">Program is
+                            required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <button class="btn btn-link"><a href="#" style="font-size:15px;"
+                                                      class="text fas fa-file-download"
+                                                      target="_blank" download>&nbsp;&nbsp;Download Application Template</a>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 <h3 style="margin-left: 40px;">3. Organisational Information</h3>
                 <div class="card">
                   <div class="card-body">
-                    <form [formGroup]="formGroup" (ngSubmit)="submitLetter()">
-
                       <div class="row" style="margin: 10px;">
                         <div class="col-sm-6"><label>Name of the Lead Cluster Organisation:<span
                           class="required-indicator">*</span></label></div>
@@ -320,7 +348,7 @@
                             <div class=" input-group input-group-merge">
                               <input
                                 class="form-control"
-                                placeholder="Phone Number"
+                                placeholder="Website"
                                 type="text"
                                 style="padding-left: 10px;"
                                 formControlName="website"
@@ -345,15 +373,16 @@
                                          name="datatable_length"
                                          aria-controls="datatable"
                                          style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                         [multiple]="true"
+                                         [multiple]="false"
                                          placeholder="Country"
                                          formControlName="country"
+                                         (ngModelChange)="onSelectCountry($event)"
                                          [ngClass]="{ 'is-invalid': submitted && f.country.errors }"
                                          [searchable]="true"
                                          [clearable]="true"
                               >
-                                <ng-option [value]="item.name" *ngFor="let item of countries">
-                                  {{item.name}}
+                                <ng-option [value]="country" *ngFor="let country of countries">
+                                  {{country}}
                                 </ng-option>
                               </ng-select>
                             </div>
@@ -370,15 +399,15 @@
                                          name="datatable_length"
                                          aria-controls="datatable"
                                          style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                         [multiple]="true"
+                                         [multiple]="false"
                                          placeholder="City"
                                          formControlName="city"
                                          [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
                                          [searchable]="true"
                                          [clearable]="true"
                               >
-                                <ng-option [value]="item.name" *ngFor="let item of cities">
-                                  {{item.name}}
+                                <ng-option [value]="city" *ngFor="let city of cities">
+                                  {{city}}
                                 </ng-option>
                               </ng-select>
                             </div>
@@ -387,33 +416,28 @@
                       </div>
 
                       <div class="row" style="margin: 10px;">
-                        <div class="col-sm-6"><label>Attach Letter of Interest:<span
-                          class="required-indicator">*</span></label></div>
+
+                        <div class="col-sm-6"><label>Attach Letter of Interest:</label></div>
                         <div class="col-sm-6">
                           <div class="form-group ">
                             <div class=" input-group input-group-merge">
                               <input
                                 class="form-control"
-                                placeholder="Phone Number"
+                                placeholder="Attachment"
                                 type="file"
                                 style="padding-left: 10px;"
-                                formControlName="contact_person_number"
-                                [ngClass]="{ 'is-invalid': submitted && f.contact_person_number.errors }"
+                                formControlName="attachment"
+                                [ngClass]="{ 'is-invalid': submitted && f.attachment.errors }"
                               >
-                              <div *ngIf="submitted && f.contact_person_number.errors" class="invalid-feedback">
-                                <div *ngIf="f.contact_person_number.errors.required" class="input-error">Phone Number is
-                                  required
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                    </form>
                   </div>
                 </div>
 
+                </form>
               </div>
             </div>
           </div>
