@@ -226,7 +226,7 @@
                   </table>
                 </div>
 
-                <div class="card" [style.display]="isSubmitVisible || isSubmitFinalVisible ? 'block' : 'none'">
+                <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
                       <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span
@@ -275,7 +275,7 @@
 
                 </div>
 
-                <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
+                <div class="card" [style.display]="isReviewVisible || isSubmitFinalVisible ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
                       <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
@@ -354,13 +354,13 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col">
+                   <!-- <div class="col">
                       <p>Balance brought forward from previous period: </p>
                       <p>Total funds received during reporting period: </p>
                       <p>Actual expenditure for current reporting period: </p>
                       <p>Funds available at end of current reporting period: </p>
-                      <p>Disbursement cycle due: Cycle - Q4: Amount - </p>
-                    </div>
+                      <p>Disbursement cycle due: Amount </p>
+                    </div>-->
                   </div>
                 </div>
 
@@ -532,7 +532,7 @@
                   </div>
                 </div>
 
-                <div class="card" [style.display]="isDisburseFunds ? 'block' : 'none'">
+                <div class="card" [style.display]="isApproveFundDisbursement ? 'block' : 'none'">
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
@@ -568,11 +568,11 @@
 
                 </div>
 
-                <div class="card" [style.display]="isApproveFundDisbursement ? 'block' : 'none'">
+                <div class="card" [style.display]="isDisburseFunds ? 'block' : 'none'">
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                        <div class="col"><p>Amount of Funds to disbursed:</p></div>
+                        <div class="col"><p>Amount of Funds to be disbursed:</p></div>
                         <div class="col text-left"><input type="number" class="form-control"
                                                           [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                       </div>

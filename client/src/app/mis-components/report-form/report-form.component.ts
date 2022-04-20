@@ -89,8 +89,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'Reject Fund Disbursement request', value: 'No'}
   ];
   items = [
-    {name: 'Yes', value: 'yes'},
-    {name: 'No', value: 'no'}
+    {name: 'Yes', value: 'Yes'},
+    {name: 'No', value: 'No'}
   ];
 
   constructor(private router: Router,
@@ -658,25 +658,29 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (this.taskRecord.taskDefinitionKey === "Submit_Report") {
       this.taskRecord.outputVariables = "{}";
     }
-    if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report") {
-      let ans = "No"
-      if(this.radioEndOfPartnership=="yes") ans = "Yes"
-      this.taskRecord.outputVariables = '{"Funding_Decision": "' + ans + '"}';
+    if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") {
+      this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioHowToProceed + '"}';
     }
     if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
-      let ans = "No"
-      if(this.radioRecommendFund=="yes") ans = "Yes"
-      this.taskRecord.outputVariables = '{"Approve_Funding": "' + ans + '"}';
-      if(status=="completed") {
-        const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-        this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
-          console.log('updated calendar status')
-        }, error => console.log('failed update calendar status', error));
-      }
+      this.taskRecord.outputVariables = '{"Funding_Decision": "' + this.radioRecommendFund + '"}';
     }
+
+    if(status=="completed") {
+      if (this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.updateCalendarStatus();
+      if (this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioRecommendFund == "Yes")  this.updateCalendarStatus();
+      if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed == "No") this.updateCalendarStatus();
+    }
+
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
+  }
+
+  updateCalendarStatus() {
+    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+    this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+      console.log('updated calendar status')
+    }, error => console.log('failed update calendar status', error));
   }
 
   onBackPressed() {
