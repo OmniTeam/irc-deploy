@@ -64,6 +64,16 @@ export class LongTermApplicationComponent implements OnInit {
       amount_requested: [null],
       funding: [null],
 
+      completed: [null],
+      mel_framework: [null],
+      financial: [null],
+      registration: [null],
+      list_members: [null],
+      assessment_report: [null],
+      strategic_plan: [null],
+      annual_work_plan: [null],
+      child_policy: [null],
+      structure: [null],
 
     });
   }
