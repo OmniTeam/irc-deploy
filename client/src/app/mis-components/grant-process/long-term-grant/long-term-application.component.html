@@ -12,7 +12,8 @@
         <div style="margin-bottom: 30px;">
           <ul class="list-group list-group-flush">
             <li class="list-group-item" *ngFor="let item of programs">
-              <input type="radio" formControlName="program" value="{{item.id}}" [ngClass]="{ 'is-invalid': submitted && f.program.errors }">
+              <input type="radio" formControlName="program" value="{{item.id}}"
+                     [ngClass]="{ 'is-invalid': submitted && f.program.errors }">
               {{item.name}}
             </li>
           </ul>
@@ -394,7 +395,8 @@
 
       <div class="row" style="margin: 10px;">
 
-        <div class="col-sm-6"><label>Organization annual Budget for the current year and expenditure in the previous year ( attach audit books if available ): :</label></div>
+        <div class="col-sm-6"><label>Organization annual Budget for the current year and expenditure in the previous
+          year ( attach audit books if available ): :</label></div>
         <div class="col-sm-6">
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -411,7 +413,8 @@
 
       <div class="row" style="margin: 10px;">
 
-        <div class="col-sm-6"><label>Other donors /sources of funding( list all your funders and amount from each):</label></div>
+        <div class="col-sm-6"><label>Other donors /sources of funding( list all your funders and amount from
+          each):</label></div>
         <div class="col-sm-6">
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -428,7 +431,8 @@
 
       <div class="row" style="margin: 10px;">
 
-        <div class="col-sm-6"><label>If submitting a Cluster, Name other cluster organizations and their contacts.</label></div>
+        <div class="col-sm-6"><label>If submitting a Cluster, Name other cluster organizations and their
+          contacts.</label></div>
         <div class="col-sm-6">
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -445,7 +449,8 @@
 
       <div class="row" style="margin: 10px;">
 
-        <div class="col-sm-6"><label>Bank Details Name of the bank :<br> Bank Address Title of the Account:<br> Account Number:</label></div>
+        <div class="col-sm-6"><label>Bank Details Name of the bank :<br> Bank Address Title of the Account:<br> Account
+          Number:</label></div>
         <div class="col-sm-6">
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -460,6 +465,343 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">C. The Proposed Project</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col">
+
+          <div class="row">
+            <div class="col-sm-6"><label>Proposed duration of the project:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Project Duration"
+                    type="text"
+                    style="padding-left: 10px;"
+                    formControlName="project_duration"
+                    [ngClass]="{ 'is-invalid': submitted && f.project_duration.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+            <label>Project location /area of operation:</label>
+          <div class="row" style="margin: 10px;">
+            <div class="col-sm-6"><label>Country:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <ng-select class="form-control form-control-sm"
+                             name="datatable_length"
+                             aria-controls="datatable"
+                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                             [multiple]="false"
+                             placeholder="Country"
+                             formControlName="project_country"
+                             (ngModelChange)="onSelectProjectCountry($event)"
+                             [ngClass]="{ 'is-invalid': submitted && f.project_country.errors }"
+                             [searchable]="true"
+                             [clearable]="true"
+                  >
+                    <ng-option [value]="country" *ngFor="let country of pCountries">
+                      {{country}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin: 10px;">
+            <div class="col-sm-6"><label>City:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <ng-select class="form-control form-control-sm"
+                             name="datatable_length"
+                             aria-controls="datatable"
+                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                             [multiple]="false"
+                             placeholder="City"
+                             formControlName="project_city"
+                             [ngClass]="{ 'is-invalid': submitted && f.project_city.errors }"
+                             [searchable]="true"
+                             [clearable]="true"
+                  >
+                    <ng-option [value]="city" *ngFor="let city of pCities">
+                      {{city}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6"><label>Project proposed start date ( DD MM YEAR):</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Project proposed"
+                    type="text"
+                    style="padding-left: 10px;"
+                    formControlName="project_proposed"
+                    [ngClass]="{ 'is-invalid': submitted && f.project_proposed.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6"><label>Total project amount:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Amount"
+                    type="text"
+                    style="padding-left: 10px;"
+                    formControlName="project_amount"
+                    [ngClass]="{ 'is-invalid': submitted && f.project_amount.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6"><label>Amount requested from CRVPF:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Amount"
+                    type="number"
+                    style="padding-left: 10px;"
+                    formControlName="amount_requested"
+                    [ngClass]="{ 'is-invalid': submitted && f.amount_requested.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6"><label>Other sources and amount of funding on this particular Project if any:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <textarea
+                    class="form-control"
+                    placeholder="Funding"
+                    style="padding-left: 10px;"
+                    formControlName="funding"
+                    [ngClass]="{ 'is-invalid': submitted && f.funding.errors }"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">D. Attachments</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col">
+          <div class="row">
+            <div class="col-sm-6"><label>Duly Completed Application:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="completed"
+                    [ngClass]="{ 'is-invalid': submitted && f.completed.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>Please attach MEL framework, Work plan and Budget</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="mel_framework"
+                    [ngClass]="{ 'is-invalid': submitted && f.mel_framework.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>A copy of financial audited reports or organizational
+              financial report. if you have</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="financial"
+                    [ngClass]="{ 'is-invalid': submitted && f.financial.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>A copy of the registration certificate</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="registration"
+                    [ngClass]="{ 'is-invalid': submitted && f.registration.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>List of members of governing body their affiliations,
+              skills and experience
+            </label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="list_members"
+                    [ngClass]="{ 'is-invalid': submitted && f.list_members.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>Organizational capacity assessment report
+              if available:
+            </label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="assessment_report"
+                    [ngClass]="{ 'is-invalid': submitted && f.assessment_report.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>Organization strategic plan if available:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="strategic_plan"
+                    [ngClass]="{ 'is-invalid': submitted && f.strategic_plan.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>Organizational annual work plan and budget::</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="annual_work_plan"
+                    [ngClass]="{ 'is-invalid': submitted && f.annual_work_plan.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>Child safe guard policy /manual if available:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="child_policy"
+                    [ngClass]="{ 'is-invalid': submitted && f.child_policy.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6"><label>Organization structure/organogram:</label></div>
+            <div class="col-sm-6">
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    formControlName="structure"
+                    [ngClass]="{ 'is-invalid': submitted && f.structure.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -16,7 +16,9 @@ export class LongTermApplicationComponent implements OnInit {
     {id:"1", name:"my type"}
   ] ;
   countries: any;
+  pCountries: any;
   cities: any;
+  pCities: any;
   programs = [
     {id:"1", name:"Adolescent Girl Power Program"},
     {id:"2", name:"Youth Capacity Development Program"},
@@ -53,6 +55,16 @@ export class LongTermApplicationComponent implements OnInit {
       country: [null],
       city: [null],
       attachment: [null],
+
+      project_duration: [null],
+      project_country: [null],
+      project_city: [null],
+      project_proposed: [null],
+      project_amount: [null],
+      amount_requested: [null],
+      funding: [null],
+
+
     });
   }
 
@@ -69,6 +81,12 @@ export class LongTermApplicationComponent implements OnInit {
   onSelectCountry(country){
     this.countriesService.getCitiesForCountry(country).subscribe((response)=>{
       this.cities = response.data;
+    }, error => console.log(error))
+  }
+
+  onSelectProjectCountry(country){
+    this.countriesService.getCitiesForCountry(country).subscribe((response)=>{
+      this.pCities = response.data;
     }, error => console.log(error))
   }
 
