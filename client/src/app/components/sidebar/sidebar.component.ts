@@ -117,7 +117,6 @@ export const ROUTES: RouteInfo[] = [
     isCollapsed: true,
     roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER", ],
     children: [
-<<<<<<< Updated upstream
       {
         path: 'tags',
         title: 'Tags',
@@ -148,14 +147,6 @@ export const ROUTES: RouteInfo[] = [
         type: 'analytics',
         roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
       },
-=======
-      {path: 'grantProcess', title: 'Grant Process', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
-      {path: 'tags', title: 'Tags', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]},
-      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]},
-      {path: 'programPartner', title: 'Program Partner', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
-      {path: 'users', title: 'Users', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
-      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER","ROLE_STAFF_DATA_MANAGER"]},
->>>>>>> Stashed changes
     ]
   },
 
@@ -246,6 +237,7 @@ export class SidebarComponent implements OnInit {
   usersRoles: any;
   my_routes = [];
   private lengthOfChildren: number;
+   childrenArray: any;
 
   constructor(private router: Router, public authService: AuthService, private formService: FormService,
               private entityService: EntityService,
@@ -259,7 +251,7 @@ export class SidebarComponent implements OnInit {
       this.isCollapsed = true;
     });
     if (this.authService.isLoggedIn()) {
-      this.formService.getForms().subscribe(data => {
+      this.formService.getEnabledForms().subscribe(data => {
         for (let form of data) {
           let formObject = {};
           let formSettingObject = {};
@@ -273,13 +265,12 @@ export class SidebarComponent implements OnInit {
           this.usersRoles.forEach((a) => {
             const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
             if (cleanRole.includes(currentString)) {
-              let myArray = formsMenu.children
-              if(myArray.length == 0){
+              if(formsMenu.children.length == 0){
                 formObject['roles'] = this.usersRoles
                 formsMenu.children.push(formObject);
               } else {
-                for(let i=0; i<myArray.length; i++){
-                  if(!(myArray[i].title == currentTitle) ){
+                for(let i=0; i<formsMenu.children.length; i++){
+                  if(!(currentTitle.includes(formsMenu.children[i].title)) ){
                     formObject['roles'] = this.usersRoles
                     formsMenu.children.push(formObject);
                   }
@@ -288,7 +279,7 @@ export class SidebarComponent implements OnInit {
             }
           })
 
-          if(this.usersRoles.includes("ROLE_SUPER_ADMIN")||this.usersRoles.includes("ROLE_ADMIN")){
+          if(this.usersRoles.includes("ROLE_SUPER_ADMIN")||this.usersRoles.includes("ROLE_ADMIN")||this.usersRoles.includes("ROLE_STAFF_DATA_VIEWER")){
             formObject['roles'] = (this.usersRoles)
             formsMenu.children.push(formObject);
           }
@@ -307,7 +298,7 @@ export class SidebarComponent implements OnInit {
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
-          entityObject['roles'] = [
+          /*entityObject['roles'] = [
             "ROLE_SUPER_ADMIN",
             "ROLE_ADMIN",
             "ROLE_YCD_PARTNER_DATA_MANAGER",
@@ -320,7 +311,7 @@ export class SidebarComponent implements OnInit {
             "ROLE_AGPP_STAFF_DATA_MANAGER",
             "ROLE_YCD_STAFF_DATA_MANAGER",
             "ROLE_STAFF_DATA_VIEWER"
-          ];
+          ];*/
 
           const entityTitleTrancated = entityObject['title'].slice(0, 3)
           const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '))
@@ -377,14 +368,33 @@ export class SidebarComponent implements OnInit {
             title: 'Tasks',
             type: 'sub',
             icontype: 'fas fa-tasks text-pink',
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"],
+            roles: [
+              "ROLE_SUPER_ADMIN",
+              "ROLE_ADMIN",
+              "ROLE_YCD_PARTNER_DATA_MANAGER",
+              "ROLE_VAC_PARTNER_DATA_MANAGER",
+              "ROLE_AGPP_PARTNER_DATA_MANAGER",
+              "ROLE_VAC_STAFF_DATA_MANAGER",
+              "ROLE_AGPP_STAFF_DATA_MANAGER",
+              "ROLE_YCD_STAFF_DATA_MANAGER",
+              "ROLE_STAFF_DATA_VIEWER"
+            ],
             isCollapsed: true,
             children: [
               {
                 path: 'taskList',
                 title: 'Task List',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
+                roles: [
+                  "ROLE_SUPER_ADMIN", "ROLE_ADMIN",
+                  "ROLE_YCD_PARTNER_DATA_MANAGER",
+                  "ROLE_VAC_PARTNER_DATA_MANAGER",
+                  "ROLE_AGPP_PARTNER_DATA_MANAGER",
+                  "ROLE_VAC_STAFF_DATA_MANAGER",
+                  "ROLE_AGPP_STAFF_DATA_MANAGER",
+                  "ROLE_YCD_STAFF_DATA_MANAGER",
+                  "ROLE_STAFF_DATA_VIEWER"
+                ]
               },
             ]
           },
@@ -394,23 +404,23 @@ export class SidebarComponent implements OnInit {
             type: 'sub',
             icontype: 'fas fa-user-cog',
             isCollapsed: true,
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER", ],
+            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"],
             children: [
               {
                 path: 'tags',
                 title: 'Tags',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]
+                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
               },
               {
                 path: 'partnerSetupList',
                 title: 'Work Plan',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]
+                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
               },
               {
                 path: 'programPartner',
-                title: 'Program Partner',
+                title: 'Partner',
                 type: 'link',
                 roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN",  "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
               },
