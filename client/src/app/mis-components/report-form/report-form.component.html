@@ -2,22 +2,6 @@
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
-        <div class="col-lg-6 col-7">
-          <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">SUBMIT
-            PROGRESS REPORT</h6></div>
-          <div [style.display]="isSubmitFinalVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
-            SUBMIT FINAL
-            PROGRESS REPORT</h6></div>
-          <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">REVIEW
-            PROGRESS REPORT</h6></div>
-          <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
-            APPROVE PROGRESS REPORT</h6></div>
-          <div [style.display]="isDisburseFunds ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
-            DISBURSE FUNDS</h6></div>
-          <div [style.display]="isApproveFundDisbursement ? 'block' : 'none'"><h6
-            class="h2 text-white d-inline-block mb-0">
-            APPROVE FUND DISBURSEMENT</h6></div>
-        </div>
       </div>
     </div>
   </div>
@@ -75,6 +59,16 @@
     <div class=" col">
       <div class=" card">
         <div class="row">
+
+          <div style="width: 100%; text-align: -webkit-center; display: block;">
+            <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT PROGRESS REPORT</h6></div>
+            <div [style.display]="isSubmitFinalVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT FINAL PROGRESS REPORT</h6></div>
+            <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW PROGRESS REPORT</h6></div>
+            <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE PROGRESS REPORT</h6></div>
+            <div [style.display]="isDisburseFunds ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">DISBURSE FUNDS</h6></div>
+            <div [style.display]="isApproveFundDisbursement ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE FUND DISBURSEMENT</h6></div>
+          </div>
+
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
               <div class=" col">
@@ -234,7 +228,7 @@
                   </table>
                 </div>
 
-                <div class="card" [style.display]="isSubmitVisible || isSubmitFinalVisible ? 'block' : 'none'">
+                <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
                       <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span
@@ -262,7 +256,7 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach narrative to the program report: <span
+                      <div class="col-sm-3"><label for="attachment3">Attach receipts and supporting documents: <span
                         class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
@@ -283,10 +277,10 @@
 
                 </div>
 
-                <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">
+                <div class="card" [style.display]="isReviewVisible || isSubmitFinalVisible ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
-                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-4"><p>Attached narrative to the program report:</p></div>
                       <div class="col-sm-4">{{attachment1}}</div>
                       <div class="col-sm-4">
                         <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"
@@ -297,7 +291,7 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>
+                      <div class="col-sm-4"><p>Attached narrative duly signed financial report:</p></div>
                       <div class="col-sm-4">{{attachment2}}</div>
                       <div class="col-sm-4">
                         <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
@@ -308,7 +302,7 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
+                      <div class="col-sm-4"><p>Attached receipts and supporting documents:</p></div>
                       <div class="col-sm-4">{{attachment3}}</div>
                       <div class="col-sm-4">
                         <button class="btn btn-link"><a href="{{shortLink3}}" style="font-size:15px;"
@@ -329,7 +323,7 @@
                   <div class="row">
                     <div class="col">
                       <div class="row">
-                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
+                        <div class="col-sm-6"><p>Attached narrative to the program report:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink1}}"
                                                           style="font-size:15px;"
@@ -340,7 +334,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>
+                        <div class="col-sm-6"><p>Attached narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink2}}"
                                                           style="font-size:15px;"
@@ -351,7 +345,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>
+                        <div class="col-sm-6"><p>Attached receipts and supporting documents:</p></div>
                         <div class="col-sm-6">
                           <button class="btn btn-link"><a href="{{shortLink3}}"
                                                           style="font-size:15px;"
@@ -362,13 +356,13 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col">
+                   <!-- <div class="col">
                       <p>Balance brought forward from previous period: </p>
                       <p>Total funds received during reporting period: </p>
                       <p>Actual expenditure for current reporting period: </p>
                       <p>Funds available at end of current reporting period: </p>
-                      <p>Disbursement cycle due: Cycle - Q4: Amount - </p>
-                    </div>
+                      <p>Disbursement cycle due: Amount </p>
+                    </div>-->
                   </div>
                 </div>
 
@@ -540,7 +534,7 @@
                   </div>
                 </div>
 
-                <div class="card" [style.display]="isDisburseFunds ? 'block' : 'none'">
+                <div class="card" [style.display]="isApproveFundDisbursement ? 'block' : 'none'">
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
@@ -576,11 +570,11 @@
 
                 </div>
 
-                <div class="card" [style.display]="isApproveFundDisbursement ? 'block' : 'none'">
+                <div class="card" [style.display]="isDisburseFunds ? 'block' : 'none'">
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                        <div class="col"><p>Amount of Funds to disbursed:</p></div>
+                        <div class="col"><p>Amount of Funds to be disbursed:</p></div>
                         <div class="col text-left"><input type="number" class="form-control"
                                                           [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                       </div>

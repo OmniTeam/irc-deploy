@@ -436,6 +436,17 @@ export class SidebarComponent implements OnInit {
                 type: 'analytics',
                 roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN",  "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
               },
+              {
+                path: '',
+                title: 'Grant Process',
+                type: 'sub',
+                isCollapsed: true,
+                roles: ["ROLE_SUPER_ADMIN"],
+                children: [
+                  {path: 'grantProcess', title: 'Short Term', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+                  {path: 'grantProcess-longTerm', title: 'Long Term', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+                ]
+              },
             ]
           },
 
@@ -451,12 +462,7 @@ export class SidebarComponent implements OnInit {
                 path: '', title: 'Program', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
                 children: [
                   {path: 'program', title: 'Add Program', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-                  {
-                    path: 'programCategory',
-                    title: 'Add Program Category',
-                    type: 'link',
-                    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]
-                  },
+                  {path: 'programCategory', title: 'Add Program Category', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
                 ]
               },
               {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}
