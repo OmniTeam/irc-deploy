@@ -80,7 +80,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Home',
     type: 'link',
     icontype: 'fas fa-home',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
+    roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN']
   },
   formsMenu,
   listsMenu,
@@ -89,14 +89,14 @@ export const ROUTES: RouteInfo[] = [
     title: 'Referrals List',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN'],
   },
   {
     path: 'feedback-list',
     title: 'FeedBack List',
     type: 'link',
     icontype: 'fa fa-comment-dots',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN'],
   },
   {
     path: '/',
@@ -104,9 +104,9 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tasks text-pink',
     isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN'],
     children: [
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN'], },
     ]
   },
 
@@ -116,13 +116,13 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-user-cog',
     isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN'],
     children: [
-      {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']},
-      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']},
-      {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']},
-      {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']},
-      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']},
+      {path: 'tags', title: 'Tags', type: 'link', roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN']},
+      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN']},
+      {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN']},
+      {path: 'users', title: 'Users', type: 'link', roles:  ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN']},
+      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['BUDGET_HOLDER','ROLE_REBUILD_DATA_VIEWER','ROLE_REBUILD_DATA_MANAGER','ROLE_SUPER_ADMIN','ROLE_DATA_COLLECTOR','ROLE_ADMIN']},
     ]
   },
 
@@ -215,8 +215,6 @@ export class SidebarComponent implements OnInit {
           formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
-          // formObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
-          // formsMenu.children.push(formObject);
 
           const currentString = formObject['title'].slice(0, 3);
           const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
@@ -250,15 +248,12 @@ export class SidebarComponent implements OnInit {
           formSettingsMenu.children.push(formSettingObject);
         }
       }, error => console.log(error));
-
       this.entityService.getEntities().subscribe((data) => {
         for (const entity of data) {
           const entityObject = {};
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
-          // entityObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
-          // listsMenu.children.push(entityObject);
           const entityTitleTrancated = entityObject['title'].slice(0, 3);
           const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
 
@@ -286,7 +281,6 @@ export class SidebarComponent implements OnInit {
           }
         }
       }, error => console.log(error));
-
     }
   }
 
