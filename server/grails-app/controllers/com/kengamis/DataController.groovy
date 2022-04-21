@@ -174,7 +174,7 @@ class DataController {
         }
     }
 
-    def loadIrcClientDataFrmFeed() {
+    def loadIrcServicesDataFrmFeed() {
         String url = "https://www.commcarehq.org"
         String username = "ccathy@omnitech.co.ug"
         String password = "omnitech123"
@@ -207,7 +207,7 @@ class DataController {
             render([msg: "Failed", status: 500] as JSON)
         }
     }
-    def loadIrcClientDataFrmFeed2() {
+    def loadIrcClientDataFrmFeed() {
 //        TODO these should be stored in an external file
         String url = "https://www.commcarehq.org"
         String username = "ccathy@omnitech.co.ug"
