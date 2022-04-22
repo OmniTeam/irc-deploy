@@ -255,7 +255,8 @@
                     <thead>
                     <tr>
                       <th class='text-center'>Budget Line</th>
-                      <th class='text-center'>Budget Allocated</th>
+                      <th class='text-center'>Total Budget Allocated</th>
+                      <th class='text-center'>Quarterly Sending Plan</th>
                       <th class='text-center'>Total Spent</th>
                       <th class='text-center'>Action</th>
                     </tr>
@@ -271,14 +272,16 @@
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id">{{ row.approvedAmount | number  }}
-                        <button class="btn btn-link" [id]="'btn' + row.id"
-                                (click)="toggleQuarterly('btn' + row.id, row)"><i
-                          class="text fas fa-plus"></i></button>
-              <!--          <div>
+                        <div>
                           <button class="btn btn-link"
                                   (click)="cellEditor(row.id, row.id, 'approved_amt', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
-                        </div>-->
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="row.id">{{ row.quarterlySpendingPlan | number  }}
+                        <button class="btn btn-link" [id]="'btn' + row.id"
+                                (click)="toggleQuarterly('btn' + row.id, row)"><i
+                          class="text fas fa-plus"></i></button>
                       </td>
                       <td class='text-center' [id]="row.id+'-d'">
                         <div>{{ row.totalSpent | number  }}
@@ -298,6 +301,7 @@
                       <tr>
                         <td class="text-center">Total</td>
                         <td class="text-center">{{ totalApprovedAmount | number  }}</td>
+                        <td class="text-center">{{ totalQuarterlyPlanAmount | number  }}</td>
                         <td class="text-center">{{ totalBudgetDisburse | number  }}</td>
                       </tr>
                     </tfoot>
