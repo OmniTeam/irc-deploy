@@ -21,6 +21,21 @@ const formsMenu: any = {
   ]
 };
 
+const dataMenu: any = {
+  path: 'dataView/showData',
+  title: 'Data',
+  type: 'sub',
+  icontype: 'ni-single-copy-04 text-red',
+  isCollapsed: true,
+  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+  children: [
+    {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red',
+      roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
+      {path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6', title: 'Services', type: 'link', icontype: 'ni-single-copy-04 text-red',
+      roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
+  ]
+};
+
 const listsMenu: any = {
   path: 'entity/showData/',
   title: 'Lists',
@@ -28,8 +43,6 @@ const listsMenu: any = {
   icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
   children: [
-    {path: 'clients', title: 'Clients', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
-    {path: 'services', title: 'Services', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
   ],
   roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
 };
@@ -82,7 +95,8 @@ export const ROUTES: RouteInfo[] = [
     icontype: 'fas fa-home',
     roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
   },
-  formsMenu,
+  // formsMenu,
+  dataMenu,
   listsMenu,
   {
     path: 'referrals-list',
@@ -208,48 +222,47 @@ export class SidebarComponent implements OnInit {
       this.isCollapsed = true;
     });
     if (this.authService.isLoggedIn()) {
-      this.formService.getEnabledForms().subscribe(data => {
-        for (const form of data) {
-          const formObject = {};
-          const formSettingObject = {};
-          formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
-          formObject['path'] = form.name.toString();
-          formObject['type'] = 'link';
-          // formObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
-          // formsMenu.children.push(formObject);
 
-          const currentString = formObject['title'].slice(0, 3);
-          const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
-
-          this.usersRoles.forEach((a) => {
-            const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
-            if (cleanRole.includes(currentString)) {
-              if (formsMenu.children.length === 0) {
-                formObject['roles'] = this.usersRoles;
-                formsMenu.children.push(formObject);
-              } else {
-                for (let i = 0; i < formsMenu.children.length; i++) {
-                  if (!(currentTitle.includes(formsMenu.children[i].title)) ) {
-                    formObject['roles'] = this.usersRoles;
-                    formsMenu.children.push(formObject);
-                  }
-                }
-              }
-            }
-          });
-
-          if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN') || this.usersRoles.includes('ROLE_STAFF_DATA_VIEWER')) {
-            formObject['roles'] = (this.usersRoles);
-            formsMenu.children.push(formObject);
-          }
-
-          formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
-          formSettingObject['path'] = form.name.toString();
-          formSettingObject['type'] = 'link';
-          formObject['roles'] = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'];
-          formSettingsMenu.children.push(formSettingObject);
-        }
-      }, error => console.log(error));
+      // this.formService.getEnabledForms().subscribe(data => {
+      //   for (const form of data) {
+      //     const formObject = {};
+      //     const formSettingObject = {};
+      //     formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
+      //     formObject['path'] = form.name.toString();
+      //     formObject['type'] = 'link';
+      //
+      //     const currentString = formObject['title'].slice(0, 3);
+      //     const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
+      //
+      //     this.usersRoles.forEach((a) => {
+      //       const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
+      //       if (cleanRole.includes(currentString)) {
+      //         if (formsMenu.children.length === 0) {
+      //           formObject['roles'] = this.usersRoles;
+      //           formsMenu.children.push(formObject);
+      //         } else {
+      //           for (let i = 0; i < formsMenu.children.length; i++) {
+      //             if (!(currentTitle.includes(formsMenu.children[i].title)) ) {
+      //               formObject['roles'] = this.usersRoles;
+      //               formsMenu.children.push(formObject);
+      //             }
+      //           }
+      //         }
+      //       }
+      //     });
+      //
+      //     if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN') || this.usersRoles.includes('ROLE_STAFF_DATA_VIEWER')) {
+      //       formObject['roles'] = (this.usersRoles);
+      //       formsMenu.children.push(formObject);
+      //     }
+      //
+      //     formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
+      //     formSettingObject['path'] = form.name.toString();
+      //     formSettingObject['type'] = 'link';
+      //     formObject['roles'] = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'];
+      //     formSettingsMenu.children.push(formSettingObject);
+      //   }
+      // }, error => console.log(error));
 
       this.entityService.getEntities().subscribe((data) => {
         for (const entity of data) {
@@ -257,8 +270,6 @@ export class SidebarComponent implements OnInit {
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
-          // entityObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_PARTNER_DATA_MANAGER", "ROLE_PARTNER_DATA_VIEWER", "ROLE_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"];
-          // listsMenu.children.push(entityObject);
           const entityTitleTrancated = entityObject['title'].slice(0, 3);
           const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
 
@@ -266,12 +277,12 @@ export class SidebarComponent implements OnInit {
             const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
             if (cleanRole.includes(entityTitleTrancated)) {
               const myArray = listsMenu.children;
-              if (myArray.length == 0) {
+              if (myArray.length === 0) {
                 entityObject['roles'] = this.usersRoles;
                 listsMenu.children.push(entityObject);
               } else {
                 for (let i = 0; i < myArray.length; i++) {
-                  if (!(myArray[i].title == entityTitle) ) {
+                  if (!(myArray[i].title === entityTitle) ) {
                     entityObject['roles'] = this.usersRoles;
                     listsMenu.children.push(entityObject);
                   }
