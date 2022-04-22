@@ -26,6 +26,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   calendar: any = {};
   budget: any = [];
+  totalQuarterlyPlanAmount: string;
   totalApprovedAmount: string;
   totalBudgetDisburse: string;
   totalDisbursement: string;
@@ -139,6 +140,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       if (setupValues.budget != undefined) {
         this.budget = setupValues.budget;
         this.budget.forEach((data) => {
+          this.updateQuarterlyPlanAmount(data.id, data.quarterlySpendingPlan);
           this.updateBudgetAmount(data.id, data.approvedAmount);
           this.updateBudgetDisburse(data.id, data.totalSpent);
         });
@@ -373,8 +375,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             });
           }
           break;
+        case 'approved_amt':
+          this.updateBudgetAmount(rowId, value);
+          break;
         case 'quartery_budget':
-          let approvedAmount: number = 0;
+          let amt: number = 0;
           let array = rowId.split(' ');
           let period = array[0];
           let budgetId = array[1];
@@ -383,9 +388,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
               if (item.quarterlyBudget.some(x => x.datePeriod === period)) {
                 item.quarterlyBudget.forEach(function (item) {
                   if (item.datePeriod === period) item.amount = value
-                  if (item.amount.length != 0) approvedAmount += +item.amount;
+                  if (item.amount.length != 0) amt += +item.amount;
                 });
-                item.approvedAmount = approvedAmount.toString();
+                item.quarterlySpendingPlan = amt.toString();
                 this.budgetForDisaggregation = item;
               }
             }
@@ -545,6 +550,17 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     }
     this.totalApprovedAmount = total.toString();
+  }
+
+  private updateQuarterlyPlanAmount (id, newValue) {
+    let total: number = 0;
+    if (this.budget.some(x => x.id === id)) {
+      this.budget.forEach(function (item) {
+        if (item.id === id) item.quarterlySpendingPlan = newValue;
+        total += +item.quarterlySpendingPlan;
+      });
+    }
+    this.totalQuarterlyPlanAmount = total.toString();
   }
 
   private updateBudgetDisburse(id, newValue, editing?: boolean) {

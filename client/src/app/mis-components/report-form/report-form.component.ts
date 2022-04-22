@@ -56,10 +56,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   reviewerComments: string;
   reviewerRecommendations: string;
 
-  radioSuggestedChangesSatisfactory: string;
-  radioReportsWellAligned: string;
-  radioRecommendFund: string;
-  radioEndOfPartnership: string;
+  radioReportSatisfactory: string;
+  radioExpenditureMatches: string;
+  radioActivitiesConducted: string;
+  radioBudgetExpenditure: string;
+  radioCommentsSatisfactory: string;
+  radioHowToProceed: string;
   amountOfFundsDisbursed: string;
   provideAnyRecommendations: string;
 
@@ -81,6 +83,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   items = [
     {name: 'Yes', value: 'yes'},
     {name: 'No', value: 'no'}
+  ];
+  items2 = [
+    {name: 'Approve', value: 'yes'},
+    {name: 'Ask for Review', value: 'no'}
   ];
 
   constructor(private router: Router,
@@ -187,10 +193,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
         if (reports.approverInformation !== null && reports.approverInformation !== undefined) {
           this.approverInformation = JSON.parse(reports.approverInformation);
-          this.radioSuggestedChangesSatisfactory = this.approverInformation.suggested_changes_satisfactory;
-          this.radioReportsWellAligned = this.approverInformation.reports_well_aligned;
-          this.radioRecommendFund = this.approverInformation.recommend_fund;
-          this.radioEndOfPartnership = this.approverInformation.end_of_partnership;
+          this.radioReportSatisfactory = this.approverInformation.suggested_changes_satisfactory;
+          this.radioExpenditureMatches = this.approverInformation.reports_well_aligned;
+          this.radioActivitiesConducted = this.approverInformation.recommend_fund;
+          this.radioBudgetExpenditure = this.approverInformation.end_of_partnership;
+          this.radioCommentsSatisfactory = this.approverInformation.commentsSatisfactory;
+          this.radioHowToProceed = this.approverInformation.howToProceed;
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
@@ -579,6 +587,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   approveReport() {
+    if(this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed=="undefined") {
+      this.alertService.error('How would you like to proceed? is Required');
+      return;
+    }
+    if(this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed=="undefined") {
+      this.alertService.error('Do you recommend for further fund disbursement? is Required');
+      return;
+    }
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
@@ -623,10 +639,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       performanceReport: JSON.stringify(this.performanceReport),
       reviewerInformation: JSON.stringify(this.reviewerInformation),
       approverInformation: JSON.stringify({
-        suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
-        reports_well_aligned: this.radioReportsWellAligned,
-        recommend_fund: this.radioRecommendFund,
-        end_of_partnership: this.radioEndOfPartnership,
+        suggested_changes_satisfactory: this.radioReportSatisfactory,
+        reports_well_aligned: this.radioExpenditureMatches,
+        recommend_fund: this.radioActivitiesConducted,
+        end_of_partnership: this.radioBudgetExpenditure,
+        commentsSatisfactory: this.radioCommentsSatisfactory,
+        howToProceed: this.radioHowToProceed,
         amountOfFundsDisbursed: this.amountOfFundsDisbursed,
         provideAnyRecommendations: this.provideAnyRecommendations
       })
@@ -642,25 +660,29 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (this.taskRecord.taskDefinitionKey === "Submit_Report") {
       this.taskRecord.outputVariables = "{}";
     }
-    if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report") {
-      let ans = "No"
-      if(this.radioEndOfPartnership=="yes") ans = "Yes"
-      this.taskRecord.outputVariables = '{"Funding_Decision": "' + ans + '"}';
+    if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") {
+      this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioHowToProceed + '"}';
     }
     if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
-      let ans = "No"
-      if(this.radioRecommendFund=="yes") ans = "Yes"
-      this.taskRecord.outputVariables = '{"Approve_Funding": "' + ans + '"}';
-      if(status=="completed") {
-        const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-        this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
-          console.log('updated calendar status')
-        }, error => console.log('failed update calendar status', error));
-      }
+      this.taskRecord.outputVariables = '{"Funding_Decision": "' + this.radioHowToProceed + '"}';
     }
+
+    if(status=="completed") {
+      if (this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.updateCalendarStatus();
+      if (this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
+      if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed == "No") this.updateCalendarStatus();
+    }
+
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
+  }
+
+  updateCalendarStatus() {
+    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+    this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+      console.log('updated calendar status')
+    }, error => console.log('failed update calendar status', error));
   }
 
   onBackPressed() {
