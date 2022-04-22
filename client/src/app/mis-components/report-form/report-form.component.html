@@ -2,14 +2,6 @@
   <div class="container-fluid">
     <div class="header-body">
       <div class="row align-items-center py-4">
-        <div class="col-lg-6 col-7">
-          <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">SUBMIT
-            PROGRESS REPORT</h6></div>
-          <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">REVIEW
-            PROGRESS REPORT</h6></div>
-          <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
-            APPROVE PROGRESS REPORT</h6></div>
-        </div>
       </div>
     </div>
   </div>
@@ -66,23 +58,12 @@
       <div class=" card">
         <div class="row">
           <div class="col-sm-12 justify-center">
-            <div class="col-sm-3 justify-center">
-              <button class="btn btn-light"
-                      [style.background-color]="isSubmitVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isSubmitVisible"  (click)="changeForm('Submit')">Submit Report
-              </button><!--[disabled]="!isSubmitVisible"-->
-            </div>
-            <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
-            <div class="col-sm-3 justify-center">
-              <button class="btn btn-light"
-                      [style.background-color]="isReviewVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isReviewVisible"  (click)="changeForm('Review')">Review Report
-              </button><!--[disabled]="!isReviewVisible"-->
-            </div>
-            <div class="arrow-right"><i class="fas fa-long-arrow-alt-right"></i></div>
-            <div class="col-sm-3 justify-center">
-              <button class="btn btn-light"
-                      [style.background-color]="isApproveVisible ? '#2dce89' : '#adb5bd'" [disabled]="!isApproveVisible"  (click)="changeForm('Approve')">Approve Report
-              </button><!--[disabled]="!isApproveVisible"-->
-            </div>
+            <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT
+              PROGRESS REPORT</h6></div>
+            <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
+              PROGRESS REPORT</h6></div>
+            <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              APPROVE QUARTERLY REPORT</h6></div>
           </div>
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
@@ -116,8 +97,8 @@
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
                         <li>Total Budget Allocated: <b>{{totalAmountCommitted}}</b></li>
-                        <li>Amount Transferred in the reporting period: <b> </b></li>
-                        <li>Amount Utilized in the period: <b> </b></li>
+                        <li>Total spending plan for the reporting period: <b> </b></li>
+                        <li>Total amount committed in the reporting period: <b> </b></li>
                         <li>Balance Spent/Overspent: <b> </b></li>
                       </ul>
                     </div>
@@ -278,7 +259,7 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;" [style.display]="isApproveVisible ? 'block' : 'none'">GROUP NAME</h3>
+                <h3 style="margin-left: 40px;" [style.display]="isApproveVisible ? 'block' : 'none'">ATTACHMENTS</h3>
                 <div class="card" [style.display]="isApproveVisible ? 'block' : 'none'">
                   <div class="row">
                     <div class="col">
@@ -305,13 +286,13 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col">
+     <!--               <div class="col">
                       <p>Balance brought forward from previous period: </p>
                       <p>Total funds received during reporting period: </p>
                       <p>Actual expenditure for current reporting period: </p>
                       <p>Funds available at end of current reporting period: </p>
                       <p>Disbursement cycle due: Cycle - Q4: Amount - </p>
-                    </div>
+                    </div>-->
                   </div>
                 </div>
 
@@ -385,7 +366,7 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-3">
+      <!--              <div class="col-sm-3">
                       <div>
                         <button class="btn btn-success comment_btn" (click)="viewRecommendations()" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View
                           Recommendations
@@ -393,7 +374,7 @@
                         <br><br>
                         <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
                       </div>
-                    </div>
+                    </div>-->
 
                   </div>
 
@@ -413,10 +394,10 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
-                        <div class="col-sm-12"><p>Has the partner satisfactorily affected the suggested changes?</p>
+                        <div class="col-sm-12"><p>Is the report submitted for this quarter satisfactory?</p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioSuggestedChangesSatisfactory"
+                              <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioReportSatisfactory"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -424,10 +405,10 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Are the financial, performance and narrative reports well aligned?</p>
+                        <div class="col-sm-12"><p>Budget expenditure matches the activities </p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="reports_well_aligned" [(ngModel)]="radioReportsWellAligned"
+                              <input type="radio" name="reports_well_aligned" [(ngModel)]="radioExpenditureMatches"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -435,10 +416,10 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Do you recommend for further fund disbursement?</p>
+                        <div class="col-sm-12"><p>The activities conducted are in line with the work plan</p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommendFund"
+                              <input type="radio" name="recommend_fund" [(ngModel)]="radioActivitiesConducted"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -446,10 +427,32 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Is this the end of this partnership?</p>
+                        <div class="col-sm-12"><p>Budget expenditure is in line with the work plan</p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
-                              <input type="radio" name="end_of_partnership" [(ngModel)]="radioEndOfPartnership"
+                              <input type="radio" name="end_of_partnership" [(ngModel)]="radioBudgetExpenditure"
+                                     value="{{item.value}}" />
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12"><p>Comments/Explanations are satisfactory </p>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items">
+                              <input type="radio" name="commentsSatisfactory" [(ngModel)]="radioCommentsSatisfactory"
+                                     value="{{item.value}}" />
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12"><p>How do you want to proceed?</p>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let item of items2">
+                              <input type="radio" name="how_to_proceed" [(ngModel)]="radioHowToProceed"
                                      value="{{item.value}}" />
                               {{item.name}}
                             </li>
@@ -458,15 +461,13 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-3">
-                      <div>
+                    <!--  <div>
                         <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View
                           Recommendations
                         </button>
                         <br><br>
                         <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
-                      </div>
-                    </div>
+                      </div>-->
 
                   </div>
 
@@ -475,7 +476,7 @@
                     <div class="col text-left"><input type="text" class="form-control" [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                   </div>
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                    <div class="col"><p>Provide any recommendations (Internal):</p></div>
+                    <div class="col"><p>Comment/Recommendations/Suggestions:</p></div>
                     <div class="col text-left"><textarea class="form-control" [(ngModel)]="provideAnyRecommendations"></textarea></div>
                   </div>
                 </div>

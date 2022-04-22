@@ -225,6 +225,20 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/feedback/feedback.module').then(m => m.FeedbackModule)
       },
       {
+        path: 'activity-list', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+        },
+        loadChildren: () => import('./mis-components/activity-report/activity-report.module').then(m => m.ActivityReportModule)
+      },
+      {
+        path: 'activity-create', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+        },
+        loadChildren: () => import('./mis-components/activity-report/create-activity-report/create-activity-report.module').then(m => m.CreateActivityReportModule)
+      },
+      {
         path: 'action-feedback/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
