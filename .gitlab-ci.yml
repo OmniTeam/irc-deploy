@@ -3,6 +3,7 @@ image: node:12
 variables:
   SERVER_HOST: "157.230.227.3"
   WEBAPP_FOLDER: "/var/www/kengamis/"
+  RUNNABLE_JARS_FOLDER: "/opt/runnable-jars/kengamis-server/"
 
 before_script:
   - apt-get update -qq && apt-get install -y -qq unzip
@@ -20,12 +21,17 @@ deploy:
   only:
     - crvpf
   script:
+    - cd ..
+    - gradlew clean
+    - gradlew build -x test -x integrationTest
+    - scp server/build/libs/crvpf-server.jar root@$SERVER_HOST:$RUNNABLE_JARS_FOLDER
+    - ssh root@$SERVER_HOST "cd $RUNNABLE_JARS_FOLDER && ./start-kengamis.sh"
+    - echo "Done Deploying crvpf server :)"
+    - cd client
     - ng build --prod --base-href kengamis
-    - cd dist
+    - cd dist/kengamis/
     - sshpass -V
     - export SSHPASS=$USER_PASS
     - echo "Copying to server..."
     - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
-    - echo "Done Deploying kengamis :)"
-
-
+    - echo "Done Deploying crvpf client :)"
