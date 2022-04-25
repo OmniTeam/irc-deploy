@@ -1,18 +1,18 @@
-image: node:12
+build:stage:
+  image: node:12
 
-variables:
-  SERVER_HOST: "157.230.227.3"
-  WEBAPP_FOLDER: "/var/www/ircmis/"
+  variables:
+    SERVER_HOST: "157.230.227.3"
+    WEBAPP_FOLDER: "/var/www/ircmis/"
 
-before_script:
-  - apt-get update -qq && apt-get install -y -qq unzip
-  - apt-get install zip
-  - apt-get install sshpass
-  - cd client
-  - npm install
-  - npm install -g @angular/cli
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq unzip
+    - apt-get install zip
+    - apt-get install sshpass
+    - cd client
+    - npm install
+    - npm install -g @angular/cli
 
-deploy:
   artifacts:
     paths:
       - dist/
@@ -28,4 +28,37 @@ deploy:
     - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
     - echo "Done Deploying ircmis :)"
 
+build:deploy:
+  image: java:8
+
+  variables:
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+    GRADLE_VERSION: "5.1.1"
+    KENGAMIS_SERVER_HOST: "157.230.227.3"
+    KENGAMIS_WEBAPP_FOLDER: "/opt/runnable-jars/ircmis-server/"
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq unzip
+    - apt-get install zip
+    - curl -sSL https://get.sdkman.io | bash
+    - echo sdkman_auto_answer=true > /root/.sdkman/etc/config
+    - source /root/.sdkman/bin/sdkman-init.sh
+
+    - sdk install gradle $GRADLE_VERSION < /dev/null
+    - sdk use gradle $GRADLE_VERSION
+    - apt-get install sshpass
+
+  artifacts:
+    paths:
+      - unicef-api/build/libs/*.jar
+  stage: deploy
+  only:
+    - irc
+  script:
+    - gradle --build-cache bootJar
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no -r unicef-api/build/libs/*.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
+    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-ircmis.sh &"
+    - echo "Done Deploying ircmis App :)" 
 
