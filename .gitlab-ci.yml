@@ -27,6 +27,7 @@ test:server:
   script: 
     - grails test-app -integration server/src/integration-test/groovy/com/kengamis/DbConnectionSpec.groovy
 
+
 # build:server:
 #   artifacts:
 #     paths:
