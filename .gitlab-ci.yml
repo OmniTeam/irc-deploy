@@ -24,8 +24,8 @@ deploy:
     - cd ..
     - gradlew clean
     - gradlew build -x test -x integrationTest
-    - scp server/build/libs/crvpf-server.jar root@$SERVER_HOST:$RUNNABLE_JARS_FOLDER
-    - ssh root@$SERVER_HOST "cd $RUNNABLE_JARS_FOLDER && ./start-kengamis.sh"
+    - sshpass -p $USER_PASS scp server/build/libs/crvpf-server.jar root@$SERVER_HOST:$RUNNABLE_JARS_FOLDER
+    - sshpass -p $USER_PASS ssh root@$SERVER_HOST "cd $RUNNABLE_JARS_FOLDER && ./start-kengamis.sh"
     - echo "Done Deploying crvpf server :)"
     - cd client
     - ng build --prod --base-href kengamis
