@@ -21,15 +21,15 @@ deploy:
   only:
     - crvpf
   script:
-    - cd ..
-    - gradlew clean
-    - gradlew build -x test -x integrationTest
-    - sshpass -p $USER_PASS scp server/build/libs/crvpf-server.jar root@$SERVER_HOST:$RUNNABLE_JARS_FOLDER
-    - sshpass -p $USER_PASS ssh root@$SERVER_HOST "cd $RUNNABLE_JARS_FOLDER && ./start-kengamis.sh"
-    - echo "Done Deploying crvpf server :)"
-    - cd client
+    #- cd ..
+    #- gradlew clean
+   # - gradlew build -x test -x integrationTest
+   # - sshpass -p $USER_PASS scp server/build/libs/crvpf-server.jar root@$SERVER_HOST:$RUNNABLE_JARS_FOLDER
+    #- sshpass -p $USER_PASS ssh root@$SERVER_HOST "cd $RUNNABLE_JARS_FOLDER && ./start-kengamis.sh"
+   # - echo "Done Deploying crvpf server :)"
+   # - cd client
     - ng build --prod --base-href kengamis
-    - cd dist/kengamis/
+    - cd dist/kenga_mis/
     - sshpass -V
     - export SSHPASS=$USER_PASS
     - echo "Copying to server..."
