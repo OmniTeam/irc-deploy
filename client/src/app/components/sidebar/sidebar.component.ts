@@ -124,7 +124,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Activity Report',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
   },
   // formsMenu,
   dataMenu,
