@@ -24,7 +24,6 @@ deploy:
     - cd dist
     - sshpass -V
     - export SSHPASS=$USER_PASS
-    #copy to MOH
     - echo "Copying to server..."
     - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
     - echo "Done Deploying ircmis :)"
