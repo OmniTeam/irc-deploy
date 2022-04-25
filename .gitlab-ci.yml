@@ -16,7 +16,8 @@ before_script:
 
   - echo grailsVersion=$GRAILS_VERSION > gradle.properties
   - echo gradleWrapperVersion=2.14 >> gradle.properties
-  #- ./gradlew --refresh-dependencies
+  - chmod +x gradlew
+  - ./gradlew --refresh-dependencies
 
   - sdk install gradle $GRADLE_VERSION < /dev/null
   - sdk use gradle $GRADLE_VERSION
