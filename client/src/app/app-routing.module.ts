@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {CommonModule} from "@angular/common";
-import {BrowserModule} from "@angular/platform-browser";
+import {CommonModule} from '@angular/common';
+import {BrowserModule} from '@angular/platform-browser';
 import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
-import {AuthGuard} from "./guards/auth.guard";
-import {LoggedInGuard} from "./guards/loggedin.guard";
-import {Roles} from "./models/roles";
+import {AuthGuard} from './guards/auth.guard';
+import {LoggedInGuard} from './guards/loggedin.guard';
+import {Roles} from './models/roles';
 const routes: Routes = [
   {
     path: '',
@@ -52,7 +52,7 @@ const routes: Routes = [
       {
         path: 'forms/data/:formtable', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/form-data/form-data.module').then(m => m.FormDataModule)
       },
@@ -66,42 +66,42 @@ const routes: Routes = [
       {
         path: 'partnerSetup', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
       },
       {
         path: 'partnerSetup/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
       },
       {
         path: 'partnerSetupList', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/partner-setup/partner-list/partner-list.module').then(m => m.PartnerListModule)
       },
       {
         path: 'taskList', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
       {
         path: 'reportForm/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
       },
       {
         path: 'entity', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN,  Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
@@ -122,7 +122,7 @@ const routes: Routes = [
       {
         path: 'entity/showData/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
       },
@@ -164,14 +164,14 @@ const routes: Routes = [
       {
         path: 'tags', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/tags/tags.module').then(m => m.TagsModule)
       },
       {
         path: 'tags/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN,  Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/tags/edit-tags/edit-tags.module').then(m => m.EditTagsModule)
       },
@@ -192,26 +192,29 @@ const routes: Routes = [
       {
         path: 'referrals-list', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.BUDGET_HOLDER]
         },
-        loadChildren: ()=> import('./mis-components/referrals/referrals.module').then(m => m.ReferralsModule)
+        loadChildren: () => import('./mis-components/referrals/referrals.module').then(m => m.ReferralsModule)
       },
       {
         path: 'create-referral', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
-        loadChildren: ()=> import('./mis-components/referrals/create-client/create-referral.module').then(m => m.CreateReferralModule)
+        loadChildren: () => import('./mis-components/referrals/create-client/create-referral.module').then(m => m.CreateReferralModule)
       },
       {
-        path: 'generate-referral', canActivate:[AuthGuard],
+        path: 'generate-referral', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
         loadChildren: () => import('./mis-components/referrals/generate-referral/generate-referral.module').then(m => m.GenerateReferralModule)
       },
       {
-        path: 'action-referral/:id', canActivate:[AuthGuard],
+        path: 'action-referral/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -220,7 +223,7 @@ const routes: Routes = [
       {
         path: 'feedback-list', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/feedback/feedback.module').then(m => m.FeedbackModule)
       },
@@ -255,19 +258,19 @@ const routes: Routes = [
       {
         path: 'action-feedback/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/feedback/action-feedback/action-feedback.module').then(m => m.ActionFeedbackModule)
       },
       {
         path: 'create-feedback', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/feedback/create-feeback/create-feedback.module').then(m => m.CreateFeedbackModule)
       },
       {
-        path:'groups', canActivate: [AuthGuard],
+        path: 'groups', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -285,7 +288,7 @@ const routes: Routes = [
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
-        loadChildren:() => import('./mis-components/groups/edit-group/edit-group.module').then(m => m.EditGroupModule)
+        loadChildren: () => import('./mis-components/groups/edit-group/edit-group.module').then(m => m.EditGroupModule)
       },
       {
         path: 'users', canActivate: [AuthGuard],
@@ -307,15 +310,16 @@ const routes: Routes = [
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
         loadChildren: () => import('./mis-components/users/edit-user/edit-user.module').then(m => m.EditUserModule)
-      },{
-        path:'roles', canActivate: [AuthGuard],
+      },
+      {
+        path: 'roles', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
         loadChildren: () => import('./mis-components/roles/roles.module').then(m => m.RolesModule)
       },
       {
-        path:'role/create', canActivate: [AuthGuard],
+        path: 'role/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -343,7 +347,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/request-maps/request-maps.module').then(m => m.RequestMapsModule)
       },
       {
-        path:'requestMaps/create', canActivate: [AuthGuard],
+        path: 'requestMaps/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -364,7 +368,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/program/program.module').then(m => m.ProgramModule)
       },
       {
-        path:'program/create', canActivate: [AuthGuard],
+        path: 'program/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -385,7 +389,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/program-category/program-category.module').then(m => m.ProgramCategoryModule)
       },
       {
-        path:'programCategory/create', canActivate: [AuthGuard],
+        path: 'programCategory/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -406,7 +410,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/project-milestones/project-milestones.module').then(m => m.ProjectMilestonesModule)
       },
       {
-        path:'milestones/create', canActivate: [AuthGuard],
+        path: 'milestones/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -423,21 +427,22 @@ const routes: Routes = [
       {
         path: 'programStaff', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER,
+          ]
         },
         loadChildren: () => import('./mis-components/program-staff/program-staff.module').then(m => m.ProgramStaffModule)
       },
       {
-        path:'programStaff/create', canActivate: [AuthGuard],
+        path: 'programStaff/create', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/program-staff/create-program-staff/create-program-staff.module').then(m => m.CreateProgramStaffModule)
       },
       {
         path: 'programStaff/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/program-staff/edit-program-staff/edit-program-staff.module').then(m => m.EditProgramStaffModule)
       },
@@ -450,7 +455,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entity-view-filters/entity-view-filters.module').then(m => m.EntityViewFiltersModule)
       },
       {
-        path:'entityViewFilter/create/:id', canActivate: [AuthGuard],
+        path: 'entityViewFilter/create/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -471,7 +476,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/data-views/data-views.module').then(m => m.DataViewsModule)
       },
       {
-        path:'dataView/create', canActivate: [AuthGuard],
+        path: 'dataView/create', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
@@ -487,7 +492,7 @@ const routes: Routes = [
       {
         path: 'dataView/showData/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.BUDGET_HOLDER]
         },
         loadChildren: () => import('./mis-components/data-views/data-view-table/data-view-table.module').then(m => m.DataViewTableModule)
       },

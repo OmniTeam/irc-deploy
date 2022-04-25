@@ -56,6 +56,7 @@ class UserRole implements Serializable {
 		instance
 	}
 
+
 	static boolean remove(User u, Role r) {
 		if (u != null && r != null) {
 			where { user == u && role == r }.deleteAll()
@@ -68,6 +69,11 @@ class UserRole implements Serializable {
 
 	static int removeAll(Role r) {
 		r == null ? 0 : where { role == r }.deleteAll() as int
+	}
+
+	static void deleteOldRecords(User e){
+		def filters = findAllByUser(e)
+		filters.each { it.delete(flush: true, failOnError: true) }
 	}
 
 	static constraints = {

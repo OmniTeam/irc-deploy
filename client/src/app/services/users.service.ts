@@ -7,8 +7,9 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class UsersService {
-  baseurl = environment.serverUrl
-  urlUsers = `${this.baseurl}/user/`
+  baseurl = environment.serverUrl;
+  urlUsers = `${this.baseurl}/user/`;
+  urlUserRole = `${this.baseurl}/UserRole/`;
 
   constructor(private http: HttpClient) { }
 
@@ -29,15 +30,19 @@ export class UsersService {
     return this.http.post(this.urlUsers, formData);
   }
 
-  updateUser(id, groupData): Observable<any> {
+  updateUser(id, groupData, params): Observable<any> {
     return this.http.put(`${this.urlUsers}${id}/`, groupData);
   }
 
-  getCurrentUser(id){
-    return this.http.get(`${this.urlUsers}${id}`)
+  getCurrentUser(id) {
+    return this.http.get(`${this.urlUsers}${id}`);
   }
 
   deleteCurrentUser(p): Observable<any> {
     return this.http.delete(`${this.urlUsers}${p}/`);
+  }
+  // this is for creating records in the user role table
+  createUserRole(userRoleData): Observable<any> {
+    return this.http.post(this.urlUserRole, userRoleData);
   }
 }
