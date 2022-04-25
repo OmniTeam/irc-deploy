@@ -29,7 +29,7 @@ build:stage:
     - echo "Done Deploying ircmis :)"
 
 build:deploy:
-  image: java:8
+  image: java:11
 
   variables:
     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
@@ -50,7 +50,7 @@ build:deploy:
 
   artifacts:
     paths:
-      - unicef-api/build/libs/*.jar
+      - server/build/libs/irc-server.jar
   stage: deploy
   only:
     - irc
@@ -58,7 +58,7 @@ build:deploy:
     - gradle --build-cache bootJar
     - sshpass -V
     - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no -r unicef-api/build/libs/*.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
+    - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/irc-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
     - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-ircmis.sh &"
     - echo "Done Deploying ircmis App :)" 
 
