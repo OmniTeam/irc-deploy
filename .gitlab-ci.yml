@@ -1,63 +1,73 @@
-build:deploy:
-  image: java:8
+image: java:8
 
-  variables:
-    GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-    GRADLE_VERSION: "5.1.1"
-    KENGAMIS_SERVER_HOST: "157.230.227.3"
-    KENGAMIS_WEBAPP_FOLDER: "/opt/runnable-jars/kengamis-server/"
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_VERSION: "5.1.1"
+  GRAILS_VERSION: "4.0.3"
+  KENGAMIS_SERVER_HOST: "157.230.227.3"
+  KENGAMIS_WEBAPP_FOLDER: "/opt/runnable-jars/kengamis-server/"
 
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq unzip
-    - apt-get install zip
-    - curl -sSL https://get.sdkman.io | bash
-    - echo sdkman_auto_answer=true > /root/.sdkman/etc/config
-    - source /root/.sdkman/bin/sdkman-init.sh
+before_script:
+  - apt-get update -qq && apt-get install -y -qq unzip
+  - apt-get install zip
+  - curl -sSL https://get.sdkman.io | bash
+  - echo sdkman_auto_answer=true > /root/.sdkman/etc/config
+  - source /root/.sdkman/bin/sdkman-init.sh
 
-    - sdk install gradle $GRADLE_VERSION < /dev/null
-    - sdk use gradle $GRADLE_VERSION
-    - apt-get install sshpass
+  - echo grailsVersion=$GRAILS_VERSION > gradle.properties
+  - echo gradleWrapperVersion=2.14 >> gradle.properties
+  - ./gradlew --refresh-dependencies
 
-  artifacts:
-    paths:
-      - server/build/libs/crvpf-server.jar
-  stage: deploy
-  only:
-    - crvpf
-  script:
-    - gradle --build-cache bootJar
-    - sshpass -V
-    - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
-    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh &"
-    - echo "Done Deploying crvpf server :)" 
+  - sdk install gradle $GRADLE_VERSION < /dev/null
+  - sdk use gradle $GRADLE_VERSION
+  - apt-get install sshpass
 
-build:stage:
-  image: node:12
+test:server:
+  stage: test
+  script: 
+    - grails test-app -integration server/src/integration-test/groovy/com/kengamis/DbConnectionSpec.groovy
 
-  variables:
-    SERVER_HOST: "157.230.227.3"
-    WEBAPP_FOLDER: "/var/www/kengamis/"
+# build:server:
+#   artifacts:
+#     paths:
+#       - server/build/libs/crvpf-server.jar
+#   stage: deploy
+#   only:
+#     - crvpf
+#   script:
+#     - gradle --build-cache bootJar
+#     - sshpass -V
+#     - export SSHPASS=$USER_PASS
+#     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
+#     - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh &"
+#     - echo "Done Deploying crvpf server :)" 
 
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq unzip
-    - apt-get install zip
-    - apt-get install sshpass
-    - cd client
-    - npm install
-    - npm install -g @angular/cli
+# build:client:
+#   image: node:12
 
-  artifacts:
-    paths:
-      - dist/
-  stage: deploy
-  only:
-    - crvpf
-  script:
-    - ng build --prod --base-href kengamis
-    - cd dist/kenga_mis/
-    - sshpass -V
-    - export SSHPASS=$USER_PASS
-    - echo "Copying to server..."
-    - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
-    - echo "Done Deploying crvpf client :)"
+#   variables:
+#     SERVER_HOST: "157.230.227.3"
+#     WEBAPP_FOLDER: "/var/www/kengamis/"
+
+#   before_script:
+#     - apt-get update -qq && apt-get install -y -qq unzip
+#     - apt-get install zip
+#     - apt-get install sshpass
+#     - cd client
+#     - npm install
+#     - npm install -g @angular/cli
+
+#   artifacts:
+#     paths:
+#       - dist/
+#   stage: deploy
+#   only:
+#     - crvpf
+#   script:
+#     - ng build --prod --base-href kengamis
+#     - cd dist/kenga_mis/
+#     - sshpass -V
+#     - export SSHPASS=$USER_PASS
+#     - echo "Copying to server..."
+#     - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
+#     - echo "Done Deploying crvpf client :)"
