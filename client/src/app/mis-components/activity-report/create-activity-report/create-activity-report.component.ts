@@ -7,6 +7,7 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
 import {ActivityReportService} from "../../../services/activity-report.service";
+import {PartnerSetupService} from "../../../services/partner-setup.service";
 
 @Component({
   selector: 'app-create-activity-report',
@@ -45,6 +46,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               private alertService: AlertService,
               private fileUploadService: FileUploadService,
               private activityReportService: ActivityReportService,
+              private partnerSetup: PartnerSetupService,
               private router: Router,
               private programStaffService: ProgramStaffService) { }
 
