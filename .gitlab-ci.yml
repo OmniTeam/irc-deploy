@@ -23,10 +23,10 @@ before_script:
   - chmod +x gradlew
   - ./gradlew --refresh-dependencies
 
-test:
-  stage: test
-  script: 
-    - grails test-app -integration server/src/integration-test/groovy/com/kengamis/DbConnectionSpec.groovy
+# test:
+#   stage: test
+#   script: 
+#     - grails test-app -integration server/src/integration-test/groovy/com/kengamis/DbConnectionSpec.groovy
 
 deploy:
   stage: deploy
