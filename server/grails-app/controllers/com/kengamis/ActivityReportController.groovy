@@ -11,74 +11,74 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class ClientsController {
+class ActivityReportController {
 
-    ClientsService clientsService
+    ActivityReportService activityReportService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 1000, 6000)
-        respond clientsService.list(params), model:[clientsCount: clientsService.count()]
+        params.max = Math.min(max ?: 10, 100)
+        respond activityReportService.list(params), model:[activityReportCount: activityReportService.count()]
     }
 
-    def show(String id) {
-        respond clientsService.get(id)
+    def show(Long id) {
+        respond activityReportService.get(id)
     }
 
     @Transactional
-    def save(Clients clients) {
-        if (clients == null) {
+    def save(ActivityReport activityReport) {
+        if (activityReport == null) {
             render status: NOT_FOUND
             return
         }
-        if (clients.hasErrors()) {
+        if (activityReport.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond clients.errors
+            respond activityReport.errors
             return
         }
 
         try {
-            clientsService.save(clients)
+            activityReportService.save(activityReport)
         } catch (ValidationException e) {
-            respond clients.errors
+            respond activityReport.errors
             return
         }
 
-        respond clients, [status: CREATED, view:"show"]
+        respond activityReport, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(Clients clients) {
-        if (clients == null) {
+    def update(ActivityReport activityReport) {
+        if (activityReport == null) {
             render status: NOT_FOUND
             return
         }
-        if (clients.hasErrors()) {
+        if (activityReport.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond clients.errors
+            respond activityReport.errors
             return
         }
 
         try {
-            clientsService.save(clients)
+            activityReportService.save(activityReport)
         } catch (ValidationException e) {
-            respond clients.errors
+            respond activityReport.errors
             return
         }
 
-        respond clients, [status: OK, view:"show"]
+        respond activityReport, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(String id) {
+    def delete(Long id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
-        clientsService.delete(id)
+        activityReportService.delete(id)
 
         render status: NO_CONTENT
     }

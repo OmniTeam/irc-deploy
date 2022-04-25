@@ -276,7 +276,7 @@ export class ActionReferralComponent implements OnInit {
     this.taskRecord.status = status;
     this.taskRecord.groupId = this.taskRecord.groupId ?? '';
     let followupNeeded = this.formGroup.value.followupNeeded;
-    this.taskRecord.outputVariables = '{"actionedResponse": "'+ followupNeeded +'"}'
+    this.taskRecord.outputVariables = '{"actionedResponse": "'+ followupNeeded +'","groupId:"""}'
     this.taskService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));

@@ -12,6 +12,7 @@ import {DatePipe} from "@angular/common";
 import {FeedbackService} from "../../../services/feedback.service";
 import {HttpParams} from "@angular/common/http";
 import {TaskListService} from "../../../services/task-list.service";
+import {ProgramStaffService} from "../../../services/program-staff.service";
 
 
 @Component({
@@ -34,6 +35,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private programStaff: ProgramStaffService,
     private taskService: TaskListService,
     private router: Router
   ) {
@@ -44,6 +46,8 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   formGroup: FormGroup
   submitted = false;
   showDiv:boolean
+  staffs: any
+  followUpValue = '';
 
 
   feedback_category = [
@@ -188,6 +192,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.taskId = this.route.snapshot.params.id;
     const params = new HttpParams().set('id', this.taskId);
+    this.loadProgramStaff()
 
     this.taskService.getTaskRecord(params).subscribe((data) =>{
       this.taskRecord = data;
@@ -230,6 +235,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
           responseSummary: [this.feedback?.responseSummary],
           supervisor: [this.feedback?.supervisor],
           dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
+          assignee:[''],
         });
 
       })
@@ -328,5 +334,35 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
 
   }
 
+  loadProgramStaff(){
+    this.programStaff.getProgramStaffs().subscribe((data) => {
+      this.staffs = data;
+      console.log(data)
+    });
+  }
+
+
+  onChangeFollowUp(event) {
+    console.log(event, "nationality")
+    if (!event) {
+      this.followUpValue = ''
+      document.getElementById('loop').hidden = false
+      document.getElementById('assignee').hidden = true
+      this.formGroup.controls['loop'].reset();
+      this.formGroup.controls['assignee'].reset();
+    } else {
+      this.followUpValue = event;
+      if (this.followUpValue === "No") {
+        document.getElementById('loop').hidden = false
+        document.getElementById('assignee').hidden = true
+        this.formGroup.controls['loop'].reset();
+        this.formGroup.controls['assignee'].reset();
+      } else {
+        document.getElementById('loop').hidden = true
+        document.getElementById('assignee').hidden = false
+      }
+
+    }
+  }
 
 }
