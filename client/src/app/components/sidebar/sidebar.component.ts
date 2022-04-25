@@ -27,7 +27,7 @@ const formsMenu: any = {
 
 const dataMenu: any = {
   path: 'dataView/showData',
-  title: 'Data',
+  title: 'Lists',
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
@@ -54,7 +54,7 @@ const dataMenu: any = {
 
 const listsMenu: any = {
   path: 'entity/showData/',
-  title: 'Lists',
+  title: 'Entities',
   type: 'sub',
   icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
@@ -119,19 +119,26 @@ export const ROUTES: RouteInfo[] = [
       'ROLE_ADMIN'
     ]
   },
+  {
+    path: 'activity-list',
+    title: 'Activity Report',
+    type: 'link',
+    icontype: 'ni-single-copy-04 text-pink',
+    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+  },
   // formsMenu,
   dataMenu,
   listsMenu,
   {
     path: 'referrals-list',
-    title: 'Referrals List',
+    title: 'Referrals',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
     roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
   },
   {
     path: 'feedback-list',
-    title: 'FeedBack List',
+    title: 'FeedBack',
     type: 'link',
     icontype: 'fa fa-comment-dots',
     roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],

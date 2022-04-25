@@ -2042,4 +2042,66 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1650785981661-104") {
+        createTable(tableName: "activity_report") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "activity_reportPK")
+            }
+
+            column(name: "challenges", type: "VARCHAR(255)")
+
+            column(name: "attach_photo", type: "VARCHAR(255)")
+
+            column(name: "lessons_learned", type: "VARCHAR(255)")
+
+            column(name: "budget_line", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "location", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "activity_results", type: "VARCHAR(255)")
+
+            column(name: "designation", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "attach_story", type: "VARCHAR(255)")
+
+            column(name: "people_reached", type: "VARCHAR(255)")
+
+            column(name: "end_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "attach_list", type: "VARCHAR(255)")
+
+            column(name: "start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "cost_associated", type: "VARCHAR(255)")
+
+            column(name: "activity_undertaken", type: "VARCHAR(255)")
+
+            column(name: "activity_objectives", type: "VARCHAR(255)")
+
+            column(name: "key_achievements", type: "VARCHAR(255)")
+
+            column(name: "assignee", type: "VARCHAR(255)")
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "milestone", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "budget_progress", type: "VARCHAR(255)")
+        }
+    }
+
 }

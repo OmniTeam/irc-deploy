@@ -1,0 +1,524 @@
+<!--<div class="header bg-success pb-6">-->
+<!--  <div class="container-fluid">-->
+<!--    <div class="header-body">-->
+<!--      <div class="row align-items-center py-4">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>-->
+<!--<div *ngIf="openCommentsPopup" class="card window__container">-->
+<!--  <div class="card-header" style="text-align: center">-->
+<!--    <h3>Comments</h3>-->
+<!--  </div>-->
+<!--  <div class="card-body d-flex flex-column">-->
+<!--    <div class="row">-->
+<!--      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>-->
+<!--      <div class="col-sm-11">-->
+<!--        <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>-->
+<!--        <div style="display: flex;justify-content: end;">-->
+<!--          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addComment()">Send</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>-->
+<!--    <app-comments [comments]="comments" (commentsChanged)="commentsChangedHandler($event)"></app-comments>-->
+<!--  </div>-->
+<!--  <div class="card-footer" style="text-align: end">-->
+<!--    <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div *ngIf="openRecommendationsPopup" class="card window__container">-->
+<!--  <div class="card-header" style="text-align: center">-->
+<!--    <h3>Recommendations</h3>-->
+<!--  </div>-->
+<!--  <div class="card-body d-flex flex-column">-->
+<!--    <div class="row">-->
+<!--      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>-->
+<!--      <div class="col-sm-11">-->
+<!--        <textarea class="form-control" id="addRecommendation" placeholder="Add a recommendation" cols="50" rows="3"></textarea>-->
+<!--        <div style="display: flex; justify-content: end;">-->
+<!--          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addRecommendation()">Send</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>-->
+<!--    <app-comments [comments]="recommendations" (commentsChanged)="recommendationsChangedHandler($event)" [isRecommendation]=true></app-comments>-->
+<!--  </div>-->
+<!--  <div class="card-footer" style="text-align: end">-->
+<!--    <button class="btn btn-dark comment_btn" (click)="viewRecommendations()">Close</button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div class=" container-fluid mt&#45;&#45;6">-->
+<!--  <div class=" row">-->
+<!--    <div class=" col">-->
+<!--      <div class=" card">-->
+<!--        <div class="row">-->
+<!--          <div class="col-sm-12 justify-center">-->
+<!--            <div [style.display]="isSubmitVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT-->
+<!--              PROGRESS REPORT</h6></div>-->
+<!--            <div [style.display]="isReviewVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW-->
+<!--              PROGRESS REPORT</h6></div>-->
+<!--            <div [style.display]="isApproveVisible ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">-->
+<!--              APPROVE QUARTERLY REPORT</h6></div>-->
+<!--          </div>-->
+<!--          <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">-->
+<!--            <div class=" row">-->
+<!--              <div class=" col">-->
+
+<!--                <h3 style="margin-left: 40px;">STAFF INFORMATION</h3>-->
+<!--                <div class="card">-->
+<!--                  <div class="row" style="margin: 10px;">-->
+<!--                    <div class="col-sm-6">-->
+<!--                      <ul style="list-style: none; font-size: 16px">-->
+<!--                        <li>Program: <b>{{organisationalInfo.program}}</b></li>-->
+<!--                        <li>Email: <b>{{organisationalInfo.name}}</b></li>-->
+<!--                        <li>Email of Staff: <b>{{organisationalInfo.email}}</b></li>-->
+<!--                        <li>Name of Supervisor: <b>{{organisationalInfo.nameContactPerson}}</b></li>-->
+<!--                        <li>Telephone: <b>{{organisationalInfo.personContact}}</b></li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <h3 style="margin-left: 40px;">PROJECT OVERVIEW</h3>-->
+<!--                <div class="card">-->
+<!--                  <div class="row" style="margin: 20px;">-->
+<!--                    <div class="col-sm-6">-->
+<!--                      <ul style="list-style: none; font-size: 15px">-->
+<!--                        <li>Reporting Period: <b>{{taskRecord.reportingPeriod}}</b></li>-->
+<!--                        <li>Start Date: <b>{{taskRecord.startDate | date: 'mediumDate' }}</b></li>-->
+<!--                        <li>End Date: <b>{{taskRecord.endDate | date: 'mediumDate' }}</b></li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                    <div class="col-sm-6">-->
+<!--                      <ul style="list-style: none; font-size: 15px">-->
+<!--                        <li>Total Budget Allocated: <b>{{totalAmountCommitted}}</b></li>-->
+<!--                        <li>Total spending plan for the reporting period: <b> </b></li>-->
+<!--                        <li>Total amount committed in the reporting period: <b> </b></li>-->
+<!--                        <li>Balance Spent/Overspent: <b> </b></li>-->
+<!--                      </ul>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <h3 style="margin-left: 40px;">SUMMARY OF PERFORMANCE FOR THE REPORTING PERIOD</h3>-->
+<!--                <div class="card">-->
+<!--                  <table class="table table-striped table-bordered" id="summary">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                      <th class='text-center' style="display: none;">Id</th>-->
+<!--                      <th class='text-center'>Milestone</th>-->
+<!--                      <th class='text-center'>Overall Target</th>-->
+<!--                      <th class='text-center'>Cumulative achievement</th>-->
+<!--                      <th class='text-center'>Quarter Target</th>-->
+<!--                      <th class='text-center'>Quarter achievement</th>-->
+<!--                      <th class='text-center'>% achievement</th>-->
+<!--                      <th class='text-center'>Comment <span class="required-indicator">*</span></th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr *ngFor="let row of performance">-->
+<!--                      <td class='text-center' style="display: none;">{{row.id}}</td>-->
+<!--                      <td class='text-center'>{{ row.output_indicators }}</td>-->
+<!--                      <td class='text-center'>{{ row.overall_target | number }}</td>-->
+<!--                      <td class='text-center'>{{ row.cumulative_achievement | number }}</td>-->
+<!--                      <td class='text-center'>{{ row.quarter_target | number }}</td>-->
+<!--                      <td class='text-center' *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>-->
+<!--                      <td class='text-center' *ngIf="row.milestoneId==undefined" id="1-{{row.id}}">-->
+<!--                        <div>{{ row.quarter_achievement | number }}-->
+<!--                          <button class="btn btn-link"-->
+<!--                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')"><i-->
+<!--                            class="fas fa-pencil-alt"></i></button>-->
+<!--                        </div>-->
+<!--                      </td>-->
+<!--                      <td class='text-center'>{{ row.percentage_achievement }}</td>-->
+<!--                      <td class='text-center comment' id="0-{{row.id}}">-->
+<!--                        {{ row.comment_on_result }}-->
+<!--                        <div>-->
+<!--                          <button class="btn btn-link"-->
+<!--                                  (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.comment_on_result)"><i-->
+<!--                            class="fas fa-pencil-alt"></i></button>-->
+<!--                        </div>-->
+<!--                      </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                  </table>-->
+<!--                </div>-->
+
+<!--                <h3 style="margin-left: 40px;">FINANCIAL REPORT</h3>-->
+<!--                <div class="card">-->
+<!--                  <table class="table table-striped table-bordered" id="financial">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                      <th class='text-center' style="display: none;">Id</th>-->
+<!--                      <th class='text-center'>Budget Line</th>-->
+<!--                      <th class='text-center'>Budget Allocated</th>-->
+<!--                      <th class='text-center'>Expense-to-date</th>-->
+<!--                      <th class='text-center'>Cumulative Spending Plan<span class="required-indicator">*</span></th>-->
+<!--                      <th class='text-center'>Quarter Expenses <span class="required-indicator">*</span></th>-->
+<!--                      <th class='text-center'>Variance</th>-->
+<!--                      <th class='text-center'>Reason for Variance <span class="required-indicator">*</span></th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr *ngFor="let row of financial">-->
+<!--                      <td class='text-center' style="display: none;">{{row.id}}</td>-->
+<!--                      <td class='text-center'>{{ row.budget_line }}</td>-->
+<!--                      <td class='text-center'>{{ row.approved_budget | number }}</td>-->
+<!--                      <td class='text-center'>{{ row.expense_to_date | number }}</td>-->
+<!--                      <td class='text-center'  id="td1-{{row.id}}">-->
+<!--                        <div>{{ row.total_advanced | number }}-->
+<!--                          <button class="btn btn-link"-->
+<!--                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')"><i-->
+<!--                            class="fas fa-pencil-alt"></i></button>-->
+<!--                        </div>-->
+<!--                      </td>-->
+<!--                      <td class='text-center' id="td2-{{row.id}}">-->
+<!--                        <div>{{ row.quarter_expenses | number }}-->
+<!--                          <button class="btn btn-link"-->
+<!--                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')"><i-->
+<!--                            class="fas fa-pencil-alt"></i></button>-->
+<!--                        </div>-->
+<!--                      </td>-->
+<!--                      <td class='text-center'>{{ row.variance }}</td>-->
+<!--                      <td class='text-center comment' [id]="'td3-'+row.id">-->
+<!--                        {{ row.reason_for_variance }}-->
+<!--                        <div>-->
+<!--                          <button class="btn btn-link"-->
+<!--                                  (click)="cellEditor(row,'td3-'+row.id, 'reason_for_variance',row.reason_for_variance)">-->
+<!--                            <i class="fas fa-pencil-alt"></i></button>-->
+<!--                        </div>-->
+<!--                      </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                  </table>-->
+<!--                </div>-->
+
+<!--                <div class="card" [style.display]="isSubmitVisible ? 'block' : 'none'">-->
+<!--                  <form>-->
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span class="required-indicator">*</span></label>-->
+<!--                      </div>-->
+<!--                      <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"-->
+<!--                                                   type="file" (change)="handleFileInput($event)"/></div>-->
+<!--                      <div class="col-sm-3">-->
+<!--                        <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"-->
+<!--                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download-->
+<!--                          Template</a>-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial-->
+<!--                        report: <span class="required-indicator">*</span></label></div>-->
+<!--                      <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"-->
+<!--                                                   type="file" (change)="handleFileInput($event)"/></div>-->
+<!--                      <div class="col-sm-3">-->
+<!--                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"-->
+<!--                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download-->
+<!--                          Template</a>-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </form>-->
+
+<!--                  &lt;!&ndash;Flag variable is used here&ndash;&gt;-->
+<!--                  <div class="container" *ngIf="loading">***-->
+<!--                    <h3>Uploading attachment, please wait ...</h3>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">-->
+<!--                  <div class="container">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>-->
+<!--                      <div class="col-sm-4">{{attachment1}}</div>-->
+<!--                      <div class="col-sm-4">-->
+<!--                        <button class="btn btn-link"><a href="{{shortLink1}}" style="font-size:15px;"-->
+<!--                                                        class="text fas fa-file-download"-->
+<!--                                                        target="_blank" download>&nbsp;&nbsp;Download-->
+<!--                          Attachment</a>-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>-->
+<!--                      <div class="col-sm-4">{{attachment2}}</div>-->
+<!--                      <div class="col-sm-4">-->
+<!--                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"-->
+<!--                                                        class="text fas fa-file-download"-->
+<!--                                                        target="_blank" download>&nbsp;&nbsp;Download-->
+<!--                          Attachment</a>-->
+<!--                        </button>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <h3 style="margin-left: 40px;" [style.display]="isApproveVisible ? 'block' : 'none'">ATTACHMENTS</h3>-->
+<!--                <div class="card" [style.display]="isApproveVisible ? 'block' : 'none'">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col">-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-6"><p>Attach narrative to the program report:</p></div>-->
+<!--                        <div class="col-sm-6">-->
+<!--                          <button class="btn btn-link"><a href="{{shortLink1}}"-->
+<!--                                                          style="font-size:15px;"-->
+<!--                                                          class="text fas fa-file-download"-->
+<!--                                                          target="_blank" download>&nbsp;&nbsp;Download-->
+<!--                            Attachment</a>-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-6"><p>Attach narrative duly signed financial report:</p></div>-->
+<!--                        <div class="col-sm-6">-->
+<!--                          <button class="btn btn-link"><a href="{{shortLink2}}"-->
+<!--                                                          style="font-size:15px;"-->
+<!--                                                          class="text fas fa-file-download"-->
+<!--                                                          target="_blank" download>&nbsp;&nbsp;Download-->
+<!--                            Attachment</a>-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash;               <div class="col">-->
+<!--                                     <p>Balance brought forward from previous period: </p>-->
+<!--                                     <p>Total funds received during reporting period: </p>-->
+<!--                                     <p>Actual expenditure for current reporting period: </p>-->
+<!--                                     <p>Funds available at end of current reporting period: </p>-->
+<!--                                     <p>Disbursement cycle due: Cycle - Q4: Amount - </p>-->
+<!--                                   </div>&ndash;&gt;-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <h3 style="margin-left: 40px;" [style.display]="isReviewVisible ? 'block' : 'none'">REVIEWER-->
+<!--                  INFORMATION</h3>-->
+<!--                <div class="card" [style.display]="isReviewVisible ? 'block' : 'none'">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col">-->
+<!--                      <div style="margin-bottom: 30px;">-->
+<!--                        <p>Are the expenses realistic?</p>-->
+<!--                        <ul class="list-group list-group-flush">-->
+<!--                          <li class="list-group-item" *ngFor="let item of items">-->
+<!--                            <input type="radio" name="expenses_realistic" [(ngModel)]="radioExpensesRealistic"-->
+<!--                                   value="{{item.value}}" />-->
+<!--                            {{item.name}}-->
+<!--                          </li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                      <div style="margin-bottom: 30px;">-->
+<!--                        <p>Have the attachments been verified?</p>-->
+<!--                        <ul class="list-group list-group-flush">-->
+<!--                          <li class="list-group-item" *ngFor="let item of items">-->
+<!--                            <input type="radio" name="attachments_verified" [(ngModel)]="radioAttachmentsVerified"-->
+<!--                                   value="{{item.value}}" />-->
+<!--                            {{item.name}}-->
+<!--                          </li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                      <div>-->
+<!--                        <p>Are the figures provided realistic?</p>-->
+<!--                        <ul class="list-group list-group-flush">-->
+<!--                          <li class="list-group-item" *ngFor="let item of items">-->
+<!--                            <input type="radio" name="figures_realistic" [(ngModel)]="radioFiguresRealistic"-->
+<!--                                   value="{{item.value}}" />-->
+<!--                            {{item.name}}-->
+<!--                          </li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="col">-->
+<!--                      <div style="margin-bottom: 30px;">-->
+<!--                        <p>Does the narrative align with the objectives of the project?</p>-->
+<!--                        <ul class="list-group list-group-flush">-->
+<!--                          <li class="list-group-item" *ngFor="let item of items">-->
+<!--                            <input type="radio" name="narrative_align" [(ngModel)]="radioNarrativeAlign"-->
+<!--                                   value="{{item.value}}" />-->
+<!--                            {{item.name}}-->
+<!--                          </li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                      <div style="margin-bottom: 30px;">-->
+<!--                        <p>Are they in line with the targets?</p>-->
+<!--                        <ul class="list-group list-group-flush">-->
+<!--                          <li class="list-group-item" *ngFor="let item of items">-->
+<!--                            <input type="radio" name="inline_with_targets" [(ngModel)]="radioInlineWithTargets"-->
+<!--                                   value="{{item.value}}" />-->
+<!--                            {{item.name}}-->
+<!--                          </li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                      <div>-->
+<!--                        <p>Is the evidence of the activities satisfactory?</p>-->
+<!--                        <ul class="list-group list-group-flush">-->
+<!--                          <li class="list-group-item" *ngFor="let item of items">-->
+<!--                            <input type="radio" name="evidence_satisfactory" [(ngModel)]="radioEvidenceSatisfactory"-->
+<!--                                   value="{{item.value}}" />-->
+<!--                            {{item.name}}-->
+<!--                          </li>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash;              <div class="col-sm-3">-->
+<!--                                    <div>-->
+<!--                                      <button class="btn btn-success comment_btn" (click)="viewRecommendations()" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER']">View-->
+<!--                                        Recommendations-->
+<!--                                      </button>-->
+<!--                                      <br><br>-->
+<!--                                      <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>-->
+<!--                                    </div>-->
+<!--                                  </div>&ndash;&gt;-->
+
+<!--                  </div>-->
+
+<!--                  <div class="row">-->
+<!--                    <div class="col">-->
+<!--                      <p>Comments For Partner </p>-->
+<!--                      <textarea class="form-control" rows="3" [(ngModel)]="reviewerComments"></textarea>-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                      <p>Recommendations</p>-->
+<!--                      <textarea class="form-control" rows="3" [(ngModel)]="reviewerRecommendations"></textarea>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="card" [style.display]="isApproveVisible ? 'block' : 'none'">-->
+<!--                  <div class="row">-->
+<!--                    <div class="col-sm-9">-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-12"><p>Is the report submitted for this quarter satisfactory?</p>-->
+<!--                          <ul class="list-group list-group-flush">-->
+<!--                            <li class="list-group-item" *ngFor="let item of items">-->
+<!--                              <input type="radio" name="suggested_changes_satisfactory" [(ngModel)]="radioReportSatisfactory"-->
+<!--                                     value="{{item.value}}"/>-->
+<!--                              {{item.name}}-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-12"><p>Budget expenditure matches the activities </p>-->
+<!--                          <ul class="list-group list-group-flush">-->
+<!--                            <li class="list-group-item" *ngFor="let item of items">-->
+<!--                              <input type="radio" name="reports_well_aligned" [(ngModel)]="radioExpenditureMatches"-->
+<!--                                     value="{{item.value}}"/>-->
+<!--                              {{item.name}}-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-12"><p>The activities conducted are in line with the work plan</p>-->
+<!--                          <ul class="list-group list-group-flush">-->
+<!--                            <li class="list-group-item" *ngFor="let item of items">-->
+<!--                              <input type="radio" name="recommend_fund" [(ngModel)]="radioActivitiesConducted"-->
+<!--                                     value="{{item.value}}"/>-->
+<!--                              {{item.name}}-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-12"><p>Budget expenditure is in line with the work plan</p>-->
+<!--                          <ul class="list-group list-group-flush">-->
+<!--                            <li class="list-group-item" *ngFor="let item of items">-->
+<!--                              <input type="radio" name="end_of_partnership" [(ngModel)]="radioBudgetExpenditure"-->
+<!--                                     value="{{item.value}}" />-->
+<!--                              {{item.name}}-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-12"><p>Comments/Explanations are satisfactory </p>-->
+<!--                          <ul class="list-group list-group-flush">-->
+<!--                            <li class="list-group-item" *ngFor="let item of items">-->
+<!--                              <input type="radio" name="commentsSatisfactory" [(ngModel)]="radioCommentsSatisfactory"-->
+<!--                                     value="{{item.value}}" />-->
+<!--                              {{item.name}}-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="row">-->
+<!--                        <div class="col-sm-12"><p>How do you want to proceed?</p>-->
+<!--                          <ul class="list-group list-group-flush">-->
+<!--                            <li class="list-group-item" *ngFor="let item of items2">-->
+<!--                              <input type="radio" name="how_to_proceed" [(ngModel)]="radioHowToProceed"-->
+<!--                                     value="{{item.value}}" />-->
+<!--                              {{item.name}}-->
+<!--                            </li>-->
+<!--                          </ul>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash;  <div>-->
+<!--                        <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View-->
+<!--                          Recommendations-->
+<!--                        </button>-->
+<!--                        <br><br>-->
+<!--                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>-->
+<!--                      </div>&ndash;&gt;-->
+
+<!--                  </div>-->
+
+<!--                  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">-->
+<!--                    <div class="col"><p>Amount of Funds to be disbursed:</p></div>-->
+<!--                    <div class="col text-left"><input type="text" class="form-control" [(ngModel)]="amountOfFundsDisbursed"/><br></div>-->
+<!--                  </div>-->
+<!--                  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">-->
+<!--                    <div class="col"><p>Comment/Recommendations/Suggestions:</p></div>-->
+<!--                    <div class="col text-left"><textarea class="form-control" [(ngModel)]="provideAnyRecommendations"></textarea></div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div *ngIf="error || success" class="row align-items-center text-center" style="display: flex; justify-content: center;">-->
+<!--                  <div class="alert alert-danger" style="width: 40%;" *ngIf="error">-->
+<!--                    <strong>Error:</strong> {{errorMessage}}-->
+<!--                  </div>-->
+<!--                  <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">-->
+<!--                    <strong>Success:</strong> {{successMessage}}-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="row" [style.display]="isSubmitVisible ? 'block' : 'none'">-->
+<!--                  <div class="col-lg-12 bottom_buttons_row"-->
+<!--                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">-->
+<!--                    <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>-->
+<!--                    <button class="btn btn-warning" (click)="submitReport('save')">Save For Later</button>-->
+<!--                    <button class="btn btn-success" (click)="submitReport('submit')">Submit Report</button>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">-->
+<!--                  <div class="col-lg-12 bottom_buttons_row"-->
+<!--                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">-->
+<!--                    <button class="btn btn-warning" (click)="reviewReport('revise')">Save For Later</button>-->
+<!--                    <button class="btn btn-success" (click)="reviewReport('submit')">Approve Review</button>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="row" [style.display]="isApproveVisible ? 'block' : 'none'">-->
+<!--                  <div class="col-lg-12 bottom_buttons_row"-->
+<!--                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">-->
+<!--                    <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>-->
+<!--                    <button class="btn btn-success" (click)="approveReport()">Approve Report</button>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
