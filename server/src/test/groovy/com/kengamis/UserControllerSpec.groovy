@@ -14,10 +14,9 @@ class UserControllerSpec extends Specification implements ControllerUnitTest<Use
 
     def populateValidParams(params) {
         assert params != null
-
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
-        assert false, "TODO: Provide a populateValidParams() implementation for this generated test suite"
+        params["username"] = 'test_user'
+        params["password"] = 'test@1234'
+        assert false
     }
 
     void "Test the index action returns the correct response"() {
