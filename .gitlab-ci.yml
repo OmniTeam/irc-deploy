@@ -29,7 +29,7 @@ build:stage:
     - echo "Done Deploying crvpf client :)"
 
 build:deploy:
-  image: java:11
+  image: java:8
 
   variables:
     GRADLE_OPTS: "-Dorg.gradle.daemon=false"
