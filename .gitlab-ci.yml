@@ -15,7 +15,7 @@ before_script:
 deploy:
   artifacts:
     paths:
-      - dist/
+      - dist/kengamis/
   stage: deploy
   only:
     - irc
