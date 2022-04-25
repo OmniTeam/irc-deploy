@@ -69,7 +69,7 @@ export class EditUserComponent implements OnInit {
     this.userService.getCurrentUser(this.route.snapshot.params.id).subscribe((results: any) => {
       console.log(results);
       this.formGroup = this.formBuilder.group({
-        password: [null],
+        password: [results?.password, [Validators.required]],
         username: [results?.username, [Validators.required]],
         names: [results?.names, [Validators.required]],
         email: [results?.email/*, [Validators.required, Validators.email]*/],
