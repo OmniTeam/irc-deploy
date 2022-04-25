@@ -21,7 +21,7 @@
           <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Activity Report</h3>
         </div>
         <div class="card-body" style="font-size: 0.9rem;">
-          <form [formGroup]="formGroup" (ngSubmit)="createProgramStaff()" *ngIf="formGroup">
+          <form [formGroup]="formGroup" (ngSubmit)="createActivityReport()" *ngIf="formGroup">
             <div class="row">
               <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
                 <div class="form-row">
@@ -43,7 +43,7 @@
                                    [ngClass]="{ 'is-invalid': submitted && f.budgetLine.errors }"
                                    [searchable]="true"
                                    [clearable]="true">
-                          <ng-option [value]="item.id" *ngFor="let item of programs">
+                          <ng-option [value]="item.title" *ngFor="let item of programs">
                             {{item.title}}
                           </ng-option>
                         </ng-select>
@@ -75,7 +75,7 @@
                                      [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
                                      [searchable]="true"
                                      [clearable]="true">
-                            <ng-option [value]="item.id" *ngFor="let item of staff">
+                            <ng-option [value]="item.nameContactPerson" *ngFor="let item of staff">
                               {{item.nameContactPerson}}
                             </ng-option>
                           </ng-select>
@@ -127,10 +127,10 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Designation"
+                            placeholder=""
                             type="date"
                             style="padding-left: 10px;"
-                            formControlName="dataFrom"
+                            formControlName="startDate"
                           >
                         </div>
                       </div>
@@ -151,10 +151,10 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Designation"
+                            placeholder=""
                             type="date"
                             style="padding-left: 10px;"
-                            formControlName="dateTo"
+                            formControlName="endDate"
                           >
                         </div>
                       </div>
@@ -179,7 +179,7 @@
                                    formControlName="milestone"
                                    [searchable]="true"
                                    [clearable]="true">
-                          <ng-option [value]="item.id" *ngFor="let item of staff">
+                          <ng-option [value]="item.nameContactPerson" *ngFor="let item of staff">
                             {{item.nameContactPerson}}
                           </ng-option>
                         </ng-select>
@@ -343,7 +343,141 @@
                   </div>
                 </div>
 
-                <h3 style="margin-left: 40px;">BUDGET</h3>
+                <h5 style="margin-left: 40px;">Number of people reached with service or referred</h5>
+                <div class="card">
+                  <br>
+                  <table class="table table-striped table-bordered hover" id="people">
+                    <thead>
+                    <tr>
+                      <th colspan="2" class='text-center'>18-35 yrs old</th>
+                      <th colspan="2" class='text-center'>36+ yrs old</th>
+                      <th colspan="2" class='text-center'>Nationals</th>
+                      <th colspan="2"  class='text-center'>Refugees</th>
+                      <th colspan="2" class='text-center'>PWD</th>
+                    </tr>
+                    <tr>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td class='text-center' style="display: none;">1</td>
+                      <td class='text-center' [id]="1">
+                        <div> {{this.total1835}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(1, 1, 'updatePeople', this.total1835,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="2">
+                        <div> {{this.total1835M}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(2, 2, 'updatePeople', this.total1835M,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <!--                      <td class='text-center' [id]="row.id">{{ row.quarterlySpendingPlan | number  }}-->
+                      <!--                        <button class="btn btn-link" [id]="'btn' + row.id"-->
+                      <!--                                ><i-->
+                      <!--                          class="text fas fa-plus"></i></button>-->
+                      <!--                      </td>-->
+                      <td class='text-center' [id]="3">
+                        <div> {{this.total36F}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(3, 3, 'updatePeople', this.total36F,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="4">
+
+                        <div> {{this.total36M}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(4, 4, 'updatePeople', this.total36M,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="5">
+                        <div> {{this.totalNationalF}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(5, 5, 'updatePeople', this.totalNationalF,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="6">
+
+                        <div>{{this.totalNationalM}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(6, 6, 'updatePeople', this.totalNationalM,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="7">
+                        <div> {{this.totalRefugeeF}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(7, 7, 'updatePeople', this.totalRefugeeF,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="8">
+
+                        <div>{{this.totalRefugeeM}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(8, 8, 'updatePeople', this.totalRefugeeM,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="9">
+                        <div>{{this.totalPwdF}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(9, 9, 'updatePeople', this.totalPwdF,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="10">
+
+                        <div>{{this.totalPwdM}}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(10, 10, 'updatePeople', this.totalPwdM,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+<!--                    <tr>-->
+<!--                      <td class="text-center">Total</td>-->
+<!--                      <td class="text-center">{{ totalApprovedAmount | number  }}</td>-->
+<!--                      <td class="text-center">{{ totalBudgetDisburse | number  }}</td>-->
+<!--                    </tr>-->
+                    </tfoot>
+                  </table>
+                </div>
+
+                <h5 style="margin-left: 40px;">Costs associated with implementing this activity:</h5>
                 <div class="card">
                   <button class="btn btn-success"
                           style="height: 37px;
@@ -396,7 +530,7 @@
                       </td>
                       <td class='text-center'>
                         <button class="btn btn-link"
-                                ><i
+                                (click)="removeBudget(row)"><i
                           class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
                     </tr>

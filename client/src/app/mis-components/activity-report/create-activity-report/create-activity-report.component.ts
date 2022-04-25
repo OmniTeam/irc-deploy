@@ -6,6 +6,7 @@ import {v4 as uuid} from 'uuid';
 import {ProgramStaffService} from "../../../services/program-staff.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
+import {ActivityReportService} from "../../../services/activity-report.service";
 
 @Component({
   selector: 'app-create-activity-report',
@@ -26,6 +27,16 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   loading: boolean = false;
   calendar: any = {};
   totalApprovedAmount: string;
+  total1835: string;
+  total1835M: string;
+  total36M: string;
+  total36F: string;
+  totalNationalF: string;
+  totalNationalM: string;
+  totalRefugeeM: string;
+  totalRefugeeF: string;
+  totalPwdF: string;
+  totalPwdM: string;
   indicatorForDisaggregation: any;
   budgetForDisaggregation: any;
   totalBudgetDisburse: string;
@@ -33,6 +44,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               private route: ActivatedRoute,
               private alertService: AlertService,
               private fileUploadService: FileUploadService,
+              private activityReportService: ActivityReportService,
               private router: Router,
               private programStaffService: ProgramStaffService) { }
 
@@ -40,10 +52,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     this.formGroup = this.formBuilder.group({
       budgetLine: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      dateFrom:[''],
-      dateTo:[''],
+      startDate:[''],
+      endDate:[''],
       designation: ['', [Validators.required]],
-      activityDate: [''],
       location: [''],
       milestone: [''],
       activityObjective:[''],
@@ -72,26 +83,26 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     return this.formGroup.controls;
   }
 
-  createProgramStaff() {
+  createActivityReport() {
     this.submitted = true;
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;
     }
-    const programStaff = this.formGroup.value;
-    this.programStaffService.createProgramStaff(programStaff).subscribe(results => {
-      this.router.navigate(['/programStaff']);
-      this.alertService.success(`${programStaff.name} has been successfully created `);
+    const activityReport = this.formGroup.value;
+    this.activityReportService.createActivityReport(activityReport).subscribe(results => {
+      this.router.navigate(['/activity-list']);
+      this.alertService.success(`${activityReport.name} has been successfully created `);
     }, error => {
-      this.alertService.error(`${programStaff.name} could not be created`);
+      this.alertService.error(`${activityReport.name} could not be created`);
     });
 
-    if (this.formGroup.valid) {
-      setTimeout(() => {
-        this.formGroup.reset();
-        this.submitted = false;
-      }, 100);
-    }
+    // if (this.formGroup.valid) {
+    //   setTimeout(() => {
+    //     this.formGroup.reset();
+    //     this.submitted = false;
+    //   }, 100);
+    // }
   }
 
   /** Budget line functions*/
@@ -103,9 +114,13 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   }
 
 
+  removeBudget(row) {
+    this.budget = this.budget.filter(item => item.id != row.id);
+  }
   cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: []) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
+
 
   saveCellValue = (value: string, key: string, rowId): void => {
     if (value !== null && value !== undefined)
@@ -123,6 +138,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
         case 'total_spent':
           this.updateBudgetDisburse(rowId, value, true);
           break;
+        case 'updatePeople':
+          this.update1835(rowId, value);
+          break;
       }
     // this.savePlan();
   }
@@ -139,6 +157,42 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   //     currentStatus: this.currentStatus
   //   }
   // }
+
+  private update1835(id, newValue) {
+    switch (id) {
+      case 1:
+        this.total1835 = newValue;
+        break;
+      case 2:
+        this.total1835M = newValue;
+        break;
+      case 3:
+        this.total36F = newValue;
+        break;
+      case 4:
+        this.total36M = newValue;
+        break;
+      case 5:
+        this.totalNationalF = newValue;
+        break;
+      case 6:
+        this.totalNationalM = newValue;
+        break;
+      case 7:
+        this.totalRefugeeF = newValue;
+        break;
+      case 8:
+        this.totalRefugeeM = newValue;
+        break;
+      case 9:
+        this.totalPwdF = newValue;
+        break;
+      case 10:
+        this.totalPwdM = newValue;
+        break;
+    }
+
+  }
 
   private updateBudgetAmount(id, newValue) {
     let total: number = 0;
@@ -171,6 +225,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     this.totalBudgetDisburse = total.toString();
     // this.currentStatus.totalAmountSpent = total;
   }
+
 
   // private updateBudgetDisburse(id, newValue) {
   //   let total: number = 0;
@@ -207,5 +262,6 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   onReset() {
     this.formGroup.reset();
   }
+
 
 }
