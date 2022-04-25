@@ -487,7 +487,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Do you recommend for further fund disbursement?</p>
+                        <div class="col-sm-12"><p>Do you recommend for further fund disbursement?<span class="required-indicator">*</span></p>
                           <ul class="list-group list-group-flush">
                             <li class="list-group-item" *ngFor="let item of items">
                               <input type="radio" name="recommend_fund" [(ngModel)]="radioRecommendFund"
@@ -538,7 +538,7 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
-                        <div class="col"><p>How would you like to proceed?</p></div>
+                        <div class="col"><p>How would you like to proceed?<span class="required-indicator">*</span></p></div>
                         <div class="col text-left">
                           <ul style="list-style: none;">
                             <li *ngFor="let item of proceed">
