@@ -11,12 +11,12 @@ import {
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
-import {UsersService} from "../../../services/users.service";
-import {TagService} from "../../../services/tags";
-import {AlertService} from "../../../services/alert";
-import {UsernameValidator} from "../../../validators/username.validator";
-import {RolesService} from "../../../services/roles.service";
-import {GroupsService} from "../../../services/groups.service";
+import {UsersService} from '../../../services/users.service';
+import {TagService} from '../../../services/tags';
+import {AlertService} from '../../../services/alert';
+import {UsernameValidator} from '../../../validators/username.validator';
+import {RolesService} from '../../../services/roles.service';
+import {GroupsService} from '../../../services/groups.service';
 
 
 @Component({
@@ -39,8 +39,8 @@ export class CreateUserComponent implements OnInit {
   }
 
   clicked = false;
-  currentDashboards: any
-  formGroup: FormGroup
+  currentDashboards: any;
+  formGroup: FormGroup;
   submitted = false;
   fieldTextType: boolean;
   sex = [
@@ -68,12 +68,12 @@ export class CreateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.rolesService.getRoles().subscribe( data =>{
-      this.user_Type = data
-    }, error => {this.alertService.error("Failed to get Roles")})
-    this.groupsService.getGroups().subscribe( data =>{
-      this.groups = data
-    }, error => {this.alertService.error("Failed to get Groups")})
+    this.rolesService.getRoles().subscribe( data => {
+      this.user_Type = data;
+    }, error => {this.alertService.error('Failed to get Roles'); });
+    this.groupsService.getGroups().subscribe( data => {
+      this.groups = data;
+    }, error => {this.alertService.error('Failed to get Groups'); });
     this.formGroup = this.formBuilder.group({
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
@@ -99,16 +99,30 @@ export class CreateUserComponent implements OnInit {
       return;
     }
      const formData = this.formGroup.value;
+    console.log(formData, 'data');
     this.userService.createUser(formData).subscribe((result) => {
         this.alertService.success(`User is created successfully`);
+      // console.log(formData.kengaGroup, 'Groups');
+      console.log(formData.role, 'Role');
+
+      formData.role.forEach((role) => {
+        // insert the user's role in the user role table
+        const userRoleData = new FormData();
+        userRoleData.append('user', result.id);
+        userRoleData.append('role', role);
+
+        this.userService.createUserRole(userRoleData).subscribe(data => {
+          console.log(data, 'User Role');
+        }, error => {this.alertService.error('failed to create user role'); });
+      });
         this.router.navigate(['/users']);
-    },error => {this.alertService.error("Failed to Create the User")});
+    }, error => {this.alertService.error('Failed to Create the User'); });
   }
 
   resetForm() {
-    this.formGroup.reset()
-    this.clicked =  false
-    this.submitted = false
+    this.formGroup.reset();
+    this.clicked =  false;
+    this.submitted = false;
   }
 
 }

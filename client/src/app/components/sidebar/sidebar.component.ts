@@ -16,7 +16,11 @@ const formsMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+  roles: [
+    'BUDGET_HOLDER',
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN'
+  ],
   children: [
   ]
 };
@@ -27,12 +31,24 @@ const dataMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+  roles: [
+    'BUDGET_HOLDER',
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN'
+  ],
   children: [
     {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red',
-      roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
+      roles: [
+        'BUDGET_HOLDER',
+        'ROLE_SUPER_ADMIN',
+        'ROLE_ADMIN'
+      ], },
       {path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6', title: 'Services', type: 'link', icontype: 'ni-single-copy-04 text-red',
-      roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
+      roles: [
+        'BUDGET_HOLDER',
+        'ROLE_SUPER_ADMIN',
+        'ROLE_ADMIN'
+      ], },
   ]
 };
 
@@ -44,7 +60,11 @@ const listsMenu: any = {
   isCollapsed: true,
   children: [
   ],
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
+  roles: [
+    'BUDGET_HOLDER',
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN'
+  ]
 };
 
 
@@ -93,14 +113,18 @@ export const ROUTES: RouteInfo[] = [
     title: 'Home',
     type: 'link',
     icontype: 'fas fa-home',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
+    roles: [
+      'BUDGET_HOLDER',
+      'ROLE_SUPER_ADMIN',
+      'ROLE_ADMIN'
+    ]
   },
   {
     path: 'activity-list',
     title: 'Activity Report',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
   },
   // formsMenu,
   dataMenu,
@@ -110,14 +134,14 @@ export const ROUTES: RouteInfo[] = [
     title: 'Referrals',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
   },
   {
     path: 'feedback-list',
     title: 'FeedBack',
     type: 'link',
     icontype: 'fa fa-comment-dots',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
   },
   {
     path: '/',
@@ -125,9 +149,9 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tasks text-pink',
     isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'], },
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'], },
     ]
   },
 
@@ -137,13 +161,13 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-user-cog',
     isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
-      {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_PARTNER_DATA_VIEWER', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']},
-      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']},
-      {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']},
-      {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']},
-      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']},
+      {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
     ]
   },
 
@@ -224,6 +248,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.usersRoles = this.authService.getUserRoles();
+    console.log(this.usersRoles, 'user role');
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
@@ -304,7 +329,6 @@ export class SidebarComponent implements OnInit {
           }
         }
       }, error => console.log(error));
-
     }
   }
 
