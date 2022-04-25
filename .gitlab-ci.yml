@@ -21,7 +21,7 @@ deploy:
     - irc
   script:
     - ng build --prod --base-href ircmis
-    - cd dist
+    - cd dist/kengamis
     - sshpass -V
     - export SSHPASS=$USER_PASS
     - echo "Copying to server..."
