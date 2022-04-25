@@ -15,12 +15,11 @@ before_script:
 deploy:
   artifacts:
     paths:
-      - client/dist/
+      - dist/
   stage: deploy
   only:
     - irc
   script:
-    - cd client
     - ng build --prod --base-href ircmis
     - cd dist
     - sshpass -V
