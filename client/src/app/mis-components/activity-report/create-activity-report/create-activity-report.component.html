@@ -373,7 +373,7 @@
                       <td class='text-center' style="display: none;">1</td>
                       <td class='text-center' [id]="1">
                         <div> {{this.total1835}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(1, 1, 'updatePeople', this.total1835,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -382,20 +382,20 @@
                       </td>
                       <td class='text-center' [id]="2">
                         <div> {{this.total1835M}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(2, 2, 'updatePeople', this.total1835M,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <!--                      <td class='text-center' [id]="row.id">{{ row.quarterlySpendingPlan | number  }}-->
-                      <!--                        <button class="btn btn-link" [id]="'btn' + row.id"-->
+                      <!--                        <button class="btn btn-link" type="button" [id]="'btn' + row.id"-->
                       <!--                                ><i-->
                       <!--                          class="text fas fa-plus"></i></button>-->
                       <!--                      </td>-->
                       <td class='text-center' [id]="3">
                         <div> {{this.total36F}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(3, 3, 'updatePeople', this.total36F,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -405,7 +405,7 @@
                       <td class='text-center' [id]="4">
 
                         <div> {{this.total36M}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(4, 4, 'updatePeople', this.total36M,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -413,7 +413,7 @@
                       </td>
                       <td class='text-center' [id]="5">
                         <div> {{this.totalNationalF}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(5, 5, 'updatePeople', this.totalNationalF,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -423,7 +423,7 @@
                       <td class='text-center' [id]="6">
 
                         <div>{{this.totalNationalM}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(6, 6, 'updatePeople', this.totalNationalM,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -431,7 +431,7 @@
                       </td>
                       <td class='text-center' [id]="7">
                         <div> {{this.totalRefugeeF}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(7, 7, 'updatePeople', this.totalRefugeeF,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -441,7 +441,7 @@
                       <td class='text-center' [id]="8">
 
                         <div>{{this.totalRefugeeM}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(8, 8, 'updatePeople', this.totalRefugeeM,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -449,7 +449,7 @@
                       </td>
                       <td class='text-center' [id]="9">
                         <div>{{this.totalPwdF}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(9, 9, 'updatePeople', this.totalPwdF,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -459,7 +459,7 @@
                       <td class='text-center' [id]="10">
 
                         <div>{{this.totalPwdM}}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(10, 10, 'updatePeople', this.totalPwdM,'number')"
                           ><i
                             class="fas fa-pencil-alt"></i></button>
@@ -484,6 +484,7 @@
                                   width: max-content;
                                   padding: revert;
                                   font-size: 12px;"
+                          type="button"
                           (click)="createNewBudgetItem()">
                     <i class="fas fa-plus"></i>
                     Add Budget Item
@@ -504,32 +505,32 @@
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center' [id]="row.id+'-b'">
                         <div>{{ row.budgetLine }}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id">{{ row.approvedAmount | number  }}
                         <div>
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(row.id, row.id, 'approved_amt', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
 <!--                      <td class='text-center' [id]="row.id">{{ row.quarterlySpendingPlan | number  }}-->
-<!--                        <button class="btn btn-link" [id]="'btn' + row.id"-->
+<!--                        <button class="btn btn-link" type="button" [id]="'btn' + row.id"-->
 <!--                                ><i-->
 <!--                          class="text fas fa-plus"></i></button>-->
 <!--                      </td>-->
                       <td class='text-center' [id]="row.id+'-d'">
                         <div>{{ row.totalSpent | number  }}
-                          <button class="btn btn-link"
+                          <button class="btn btn-link" type="button"
                                   (click)="cellEditor(row.id, row.id+'-d', 'total_spent', row.totalSpent, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center'>
-                        <button class="btn btn-link"
+                        <button class="btn btn-link" type="button"
                                 (click)="removeBudget(row)"><i
                           class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
