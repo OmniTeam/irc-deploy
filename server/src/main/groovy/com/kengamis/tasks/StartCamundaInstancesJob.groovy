@@ -46,24 +46,31 @@ class StartCamundaInstancesJob extends Script {
                         "AND calendar_trigger_dates.end_date <= CURDATE() " +
                         "AND calendar_trigger_dates.started = 0 " +
                         "ORDER BY calendar_trigger_dates.period LIMIT 1;"
-                def result = AppHolder.withMisSql { rows(query2.toString()) }.first()
+                def r = AppHolder.withMisSql { rows(query2.toString()) }
 
-                boolean started = startProcessInstance([
-                        PartnerSetupId: setup.id,
-                        PartnerId     : setup.partnerId,
-                        ProgramId     : setup.programId,
-                        StartDate     : result['start_date'],
-                        EndDate       : result['end_date'],
-                        Period        : result['period'],
-                        GroupId       : "${getGroupIds(setup.partnerId)}"
-                ], CIIF_MANAGEMENT_KEY)
+                try {
+                    if (r.size() > 0) {
+                        def result = r.first()
+                        boolean started = startProcessInstance([
+                                PartnerSetupId: setup.id,
+                                PartnerId     : setup.partnerId,
+                                ProgramId     : setup.programId,
+                                StartDate     : result['start_date'],
+                                EndDate       : result['end_date'],
+                                Period        : result['period'],
+                                GroupId       : "${getGroupIds(setup.partnerId)}"
+                        ], CIIF_MANAGEMENT_KEY)
 
 
-                if (started) {
-                    print "================ started the damn instance ================"
-                    def calendar = CalendarTriggerDates.get(result['id'] as String)
-                    calendar.started = true
-                    calendar.save()
+                        if (started) {
+                            print "================ started the damn instance ================"
+                            def calendar = CalendarTriggerDates.get(result['id'] as String)
+                            calendar.started = true
+                            calendar.save()
+                        }
+                    }
+                } catch (e) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -110,7 +117,7 @@ class StartCamundaInstancesJob extends Script {
                 "program_partner.id = '${partnerId}' " +
                 "AND rr.authority IN ('ROLE_MEAL','ROLE_PROGRAM_OFFICER','ROLE_ED','ROLE_FINANCE')";
 
-        def result = AppHolder.withMisSql { rows(query.toString()) }.collect {it['authority']}.join(',')
+        def result = AppHolder.withMisSql { rows(query.toString()) }.collect { it['authority'] }.join(',')
         return result
     }
 }

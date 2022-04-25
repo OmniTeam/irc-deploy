@@ -592,6 +592,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   approveReport() {
+    if(this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed=="undefined") {
+      this.alertService.error('How would you like to proceed? is Required');
+      return;
+    }
+    if(this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioRecommendFund=="undefined") {
+      this.alertService.error('Do you recommend for further fund disbursement? is Required');
+      return;
+    }
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
