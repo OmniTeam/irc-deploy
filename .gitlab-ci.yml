@@ -23,53 +23,52 @@ before_script:
   - chmod +x gradlew
   - ./gradlew --refresh-dependencies
 
-test:server:
+test:
   stage: test
   script: 
     - grails test-app -integration server/src/integration-test/groovy/com/kengamis/DbConnectionSpec.groovy
 
+deploy:
+  stage: deploy
+  artifacts:
+    paths:
+      - server/build/libs/crvpf-server.jar
+  only:
+    - crvpf
+  script:
+    - gradle --build-cache bootJar
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
+    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh &"
+    - echo "Done Deploying crvpf server :)" 
 
-# build:server:
-#   artifacts:
-#     paths:
-#       - server/build/libs/crvpf-server.jar
-#   stage: deploy
-#   only:
-#     - crvpf
-#   script:
-#     - gradle --build-cache bootJar
-#     - sshpass -V
-#     - export SSHPASS=$USER_PASS
-#     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
-#     - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh &"
-#     - echo "Done Deploying crvpf server :)" 
+build:client:
+  image: node:12
 
-# build:client:
-#   image: node:12
+  variables:
+    SERVER_HOST: "157.230.227.3"
+    WEBAPP_FOLDER: "/var/www/kengamis/"
 
-#   variables:
-#     SERVER_HOST: "157.230.227.3"
-#     WEBAPP_FOLDER: "/var/www/kengamis/"
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq unzip
+    - apt-get install zip
+    - apt-get install sshpass
+    - cd client
+    - npm install
+    - npm install -g @angular/cli
 
-#   before_script:
-#     - apt-get update -qq && apt-get install -y -qq unzip
-#     - apt-get install zip
-#     - apt-get install sshpass
-#     - cd client
-#     - npm install
-#     - npm install -g @angular/cli
-
-#   artifacts:
-#     paths:
-#       - dist/
-#   stage: deploy
-#   only:
-#     - crvpf
-#   script:
-#     - ng build --prod --base-href kengamis
-#     - cd dist/kenga_mis/
-#     - sshpass -V
-#     - export SSHPASS=$USER_PASS
-#     - echo "Copying to server..."
-#     - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
-#     - echo "Done Deploying crvpf client :)"
+  artifacts:
+    paths:
+      - dist/
+  stage: deploy
+  only:
+    - crvpf
+  script:
+    - ng build --prod --base-href kengamis
+    - cd dist/kenga_mis/
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - echo "Copying to server..."
+    - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
+    - echo "Done Deploying crvpf client :)"
