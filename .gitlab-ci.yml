@@ -1,33 +1,3 @@
-# build:stage:
-#   image: node:12
-
-#   variables:
-#     SERVER_HOST: "157.230.227.3"
-#     WEBAPP_FOLDER: "/var/www/ircmis/"
-
-#   before_script:
-#     - apt-get update -qq && apt-get install -y -qq unzip
-#     - apt-get install zip
-#     - apt-get install sshpass
-#     - cd client
-#     - npm install
-#     - npm install -g @angular/cli
-
-#   artifacts:
-#     paths:
-#       - dist/
-#   stage: deploy
-#   only:
-#     - irc
-#   script:
-#     - ng build --prod --base-href ircmis
-#     - cd dist/kenga_mis/
-#     - sshpass -V
-#     - export SSHPASS=$USER_PASS
-#     - echo "Copying to server..."
-#     - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
-#     - echo "Done Deploying ircmis :)"
-
 build:deploy:
   image: java:8
 
@@ -60,5 +30,34 @@ build:deploy:
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/irc-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
     - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-ircmis.sh &"
-    - echo "Done Deploying ircmis App :)" 
+    - echo "Done Deploying ircmis server :)" 
 
+build:stage:
+  image: node:12
+
+  variables:
+    SERVER_HOST: "157.230.227.3"
+    WEBAPP_FOLDER: "/var/www/ircmis/"
+
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq unzip
+    - apt-get install zip
+    - apt-get install sshpass
+    - cd client
+    - npm install
+    - npm install -g @angular/cli
+
+  artifacts:
+    paths:
+      - dist/
+  stage: deploy
+  only:
+    - irc
+  script:
+    - ng build --prod --base-href ircmis
+    - cd dist/kenga_mis/
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - echo "Copying to server..."
+    - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
+    - echo "Done Deploying ircmis client :)"
