@@ -14,14 +14,13 @@ before_script:
   - echo sdkman_auto_answer=true > /root/.sdkman/etc/config
   - source /root/.sdkman/bin/sdkman-init.sh
 
-  - echo grailsVersion=$GRAILS_VERSION > gradle.properties
-  - echo gradleWrapperVersion=2.14 >> gradle.properties
-  - chmod +x gradlew
-  - ./gradlew --refresh-dependencies
-
   - sdk install gradle $GRADLE_VERSION < /dev/null
   - sdk use gradle $GRADLE_VERSION
   - apt-get install sshpass
+
+  - echo grailsVersion=$GRAILS_VERSION > gradle.properties
+  - echo gradleWrapperVersion=2.14 >> gradle.properties
+  - ./gradlew --refresh-dependencies
 
 test:server:
   stage: test
