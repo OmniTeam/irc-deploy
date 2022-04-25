@@ -33,28 +33,34 @@ class KengaGroupAclJob extends Script {
 
         tables.each {tab ->
                 if (tableExists(tab.toString())) {
-                    KengaDataTable.findByTableName(tab.toString())?: new KengaDataTable(tableName: tab, idLabel: '__id').save(flush: true, failOnError: true)
+                    String idLabel = "id"
+                    if(tab.toString().startsWith("__")){
+                        idLabel = "__id"
+                    }
+                    def dataTable = KengaDataTable.findByTableName(tab.toString()) ?: new KengaDataTable(tableName: tab, idLabel: idLabel)
+                    dataTable.idLabel = idLabel
+                    dataTable.save(flush: true, failOnError: true)
                 }
         }
 
-        /*Form.list().each { form ->
-            def tableName = form.name
-            if(tableExists(tableName)){
-                KengaDataTable.findByTableName(form.name)?:new KengaDataTable(tableName: tableName, idLabel: '__id').save(flush: true, failOnError: true)
-            }
-        }*/
     }
 
     def generateKengaAclRecordIdentities(KengaDataTable kengaDataTable) {
-        def records = AppHolder.withMisSqlNonTx {
-            rows("select __id from ${kengaDataTable.tableName}".toString())
-        }
+        try {
+            def records = AppHolder.withMisSqlNonTx {
+                def query = "select $kengaDataTable.idLabel from ${kengaDataTable.tableName}"
+                log.info(query)
+                rows(query.toString())
+            }
 
-        records.each { record ->
-            KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
-                    kengaDataTable: kengaDataTable,
-                    dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
-            ).save(flush: true, failOnError: true)
+            records.each { record ->
+                KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
+                        kengaDataTable: kengaDataTable,
+                        dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
+                ).save(flush: true, failOnError: true)
+            }
+        } catch (Exception ex) {
+            log.error(ex.getMessage())
         }
     }
 
