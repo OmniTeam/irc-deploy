@@ -1,6 +1,11 @@
 package com.kengamis
 
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.validation.ValidationException
+import groovyx.net.http.ContentType
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -46,7 +51,38 @@ class ActivityReportController {
             return
         }
 
+        boolean startIrcInstance = startProcessInstance([
+                ActivityId    : activityReport.id,
+                StartDate     : activityReport.startDate,
+                EndDate       : activityReport.endDate,
+                Assignee      : activityReport.assignee
+
+        ])
+
+        if(startIrcInstance){
+            println("IRC PROCESS STARTED")
+        }
+
+
         respond activityReport, [status: CREATED, view:"show"]
+    }
+
+    static boolean startProcessInstance(Map processVariables) {
+        def http = new HTTPBuilder(StartCamundaInstancesJob.camundaApiUrl + "/start-instance")
+        boolean toReturn = false
+        http.request(Method.POST, ContentType.JSON) { req ->
+            body = StartCamundaInstancesJob.formatProcessVariables(processVariables, 'ACTIVITY_REPORTING')
+            headers.Accept = 'application/json'
+            requestContentType = ContentType.JSON
+            response.success = { resp, json ->
+                println("Camunda :: startProcessInstance() True [ " + json.text + " ]")
+                toReturn = true
+            }
+            response.failure = { resp ->
+                println("Camunda :: startProcessInstance() False [ " + resp.status + " ]")
+            }
+        }
+        return toReturn
     }
 
     @Transactional
