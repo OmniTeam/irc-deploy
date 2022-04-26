@@ -40,6 +40,7 @@ class Feedback {
     String feedbackDetails
     String project
     String assignee
+    String status
     Date dateCreated
     Date lastUpdated
 
@@ -86,6 +87,7 @@ class Feedback {
         project nullable: true
         feedbackDetails nullable: true
         assignee nullable: true
+        status nullable: false
     }
 
     @Override

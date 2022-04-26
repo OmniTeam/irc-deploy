@@ -2164,6 +2164,14 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1650988417405-120") {
+        addColumn(tableName: "feedback") {
+            column(name: "status", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
     changeSet(author: "bruno (generated)", id: "16462913453652-27") {
         dropColumn(columnName: "group_role", tableName: "user_group")
     }
