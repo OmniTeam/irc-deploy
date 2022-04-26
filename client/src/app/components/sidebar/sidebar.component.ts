@@ -151,7 +151,7 @@ export const ROUTES: RouteInfo[] = [
     isCollapsed: true,
     roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'], },
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'], },
     ]
   },
 
@@ -161,10 +161,10 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-user-cog',
     isCollapsed: true,
-    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
       {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
-      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'partnerSetupList', title: 'Work Plan', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
