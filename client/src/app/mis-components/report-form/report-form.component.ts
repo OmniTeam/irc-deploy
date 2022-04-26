@@ -10,7 +10,7 @@ import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {ProgramStaffService} from "../../services/program-staff.service";
+import {UsersService} from "../../services/users.service";
 import {PartnerSetupService} from "../../services/partner-setup.service";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
 import {AlertService} from "../../services/alert";
@@ -96,7 +96,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private taskListService: TaskListService,
               private fileUploadService: FileUploadService,
               private partnerSetupService: PartnerSetupService,
-              private programStaffService: ProgramStaffService,
+              private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
               private alertService: AlertService,
               public authService: AuthService) {
@@ -127,7 +127,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             .set('processInstanceId', this.taskRecord.processInstanceId);
 
           //set organizational Info
-          this.programStaffService.getCurrentProgramStaff(this.taskRecord.partnerId).subscribe((results: any) => {
+          this.usersService.getCurrentUserStaff(this.taskRecord.partnerId).subscribe((results: any) => {
             if (results !== null && results !== undefined) {
               this.organisationalInfo = results;
             }

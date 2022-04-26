@@ -4,7 +4,7 @@ import {FeedbackService} from "../../services/feedback.service";
 import {TaskListService} from "../../services/task-list.service";
 import {ActivityReportService} from "../../services/activity-report.service";
 import {OngoingTask} from "../../models/ongoing-task";
-import {ProgramStaffService} from "../../services/program-staff.service";
+import {UsersService} from "../../services/users.service";
 
 @Component({
   selector: 'app-home',
@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
     private feedbackService: FeedbackService,
     private taskListService: TaskListService,
     private activityReportService: ActivityReportService,
-    private programStaffService: ProgramStaffService,
+    private usersService: UsersService,
   ) {
   }
 
@@ -78,8 +78,9 @@ export class HomeComponent implements OnInit {
       console.log('referrals', data)
       let results = [];
       if (data != null) {
+        this.getReferralStats(data);
         data.forEach((item) => {
-          results.push(this.getRow(item.nameOfClientBeingReferred, 'Referral', item.reasonForReferral, item.dateCreated, item.dateOfReferral))
+          results.push(this.getRow(item.assignee, 'Referral', item.reasonForReferral, item.dateCreated, item.dateOfReferral))
         });
       }
       this.referrals = results;
@@ -131,12 +132,25 @@ export class HomeComponent implements OnInit {
   }
 
   getStaff(id): any {
-    this.programStaffService.getCurrentProgramStaff(id).subscribe((results: any) => {
+    this.usersService.getCurrentUserStaff(id).subscribe((results: any) => {
       if (results !== null && results !== undefined) {
         return results;
       }
     });
     return null
+  }
+
+  getReferralStats(data): any {
+    let pending = data.filter(item => item.status == "Pending");
+    let actioned = data.filter(item => item.status == "Actioned");
+    return (
+      {
+        referralsAssigned: data.length,
+        referralsActioned: actioned.length,
+        referralsPending: pending.length,
+        AverageTimeToCompleteReferral: 4,
+      }
+    );
   }
 
   onChangeSearch(event) {

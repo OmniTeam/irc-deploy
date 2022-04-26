@@ -18,6 +18,11 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
+        ircReportingJob()
+        return null
+    }
+
+    static void ircReportingJob(){
         PartnerSetup.findAllByStartCycle("true").each { setup ->
             boolean startInstance = true
 
@@ -74,7 +79,6 @@ class StartCamundaInstancesJob extends Script {
                 }
             }
         }
-        return null
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {

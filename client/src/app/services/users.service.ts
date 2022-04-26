@@ -17,6 +17,22 @@ export class UsersService {
     return this.http.get(this.urlUsers);
   }
 
+  getUserStaffs(): Observable<any> {
+    return this.http.get(`${this.baseurl}/userStaffs`);
+  }
+
+  getUsersWithoutWorkPlan(): Observable<any> {
+    return this.http.get(`${this.baseurl}/getUsersWithoutWorkPlan`);
+  }
+
+  getCurrentUserStaff(id) {
+    return this.http.get(`${this.baseurl}/userStaffsShow/${id}/`);
+  }
+
+  getPrograms(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/program/`);
+  }
+
   getDataCollectors(): Observable<any> {
     return this.http.get(`${this.urlUsers}/getDataCollectors`);
   }

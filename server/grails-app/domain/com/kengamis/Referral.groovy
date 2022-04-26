@@ -2,6 +2,7 @@ package com.kengamis
 
 class Referral {
     String id
+    String assignee
     String dateOfReferral
     String nameOfReferringOfficer
     String nameOfClientBeingReferred

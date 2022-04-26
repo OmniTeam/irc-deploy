@@ -150,4 +150,71 @@ class UserController {
             UserRole.create(currentUser, currentRole, true)
         }
     }
+
+    def userStaffs(){
+        def programStaffs = []
+        userService.list(params).each { user ->
+            def newProgramStaffObject = [:]
+            def programName = (UserGroup.findByUser(user).group).name
+            def program = Program.findByTitle(programName)
+            newProgramStaffObject['id'] = user.id
+            newProgramStaffObject['name'] = user.names
+            newProgramStaffObject['email'] = user.email
+            //newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
+            //newProgramStaffObject['personContact'] = programStaff.personContact
+            newProgramStaffObject['dateCreated'] = user.dateCreated
+            newProgramStaffObject['lastUpdated'] = user.lastUpdated
+            newProgramStaffObject['program'] = program.title
+            newProgramStaffObject['programId'] = program.id
+            programStaffs << newProgramStaffObject
+        }
+        respond programStaffs
+    }
+
+    def userStaffsShow(String id) {
+        def userStaff = userService.get(id)
+        def newProgramStaffObject = [:]
+        if (userStaff != null) {
+            def programName = (UserGroup.findByUser(userStaff).group).name
+            def program = Program.findByTitle(programName)
+            newProgramStaffObject['id'] = userStaff.id
+            newProgramStaffObject['name'] = userStaff.names
+            newProgramStaffObject['email'] = userStaff.email
+            //newProgramStaffObject['nameContactPerson'] = userStaff.nameContactPerson
+            //newProgramStaffObject['personContact'] = userStaff.personContact
+            newProgramStaffObject['dateCreated'] = userStaff.dateCreated
+            newProgramStaffObject['lastUpdated'] = userStaff.lastUpdated
+            newProgramStaffObject['program'] = program.title
+            newProgramStaffObject['programId'] = program.id
+        }
+        respond newProgramStaffObject
+    }
+
+    def getUsersWithoutWorkPlan() {
+        def programPartners = []
+        def list = []
+
+        PartnerSetup.all.each {
+            list << it.partnerId
+        }
+
+        userService.list(params).each { user ->
+            if (!list.contains(user.id)) {
+                def newProgramStaffObject = [:]
+                def programName = (UserGroup.findByUser(user).group).name
+                def program = Program.findByTitle(programName)
+                newProgramStaffObject['id'] = user.id
+                newProgramStaffObject['name'] = user.names
+                newProgramStaffObject['email'] = user.email
+                //newProgramStaffObject['nameContactPerson'] = user.nameContactPerson
+                //newProgramStaffObject['personContact'] = user.personContact
+                newProgramStaffObject['dateCreated'] = user.dateCreated
+                newProgramStaffObject['lastUpdated'] = user.lastUpdated
+                newProgramStaffObject['program'] = program.title
+                newProgramStaffObject['programId'] = program.id
+                programPartners << newProgramStaffObject
+            }
+        }
+        respond programPartners
+    }
 }
