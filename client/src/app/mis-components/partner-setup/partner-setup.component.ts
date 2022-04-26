@@ -75,18 +75,20 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.route.params
       .subscribe(p => {
         this.partnerSetupId = p['id'];
-        const params = new HttpParams().set('id', this.partnerSetupId);
-        this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
-          this.editing = true;
-          this.setPartnerSetupInfo(data.setup);
-          this.calendar = {
-            periodType: data.setup.periodType,
-            grantStartDate: data.setup.startDate,
-            grantEndDate: data.setup.endDate,
-            projectReportingStartDate: data.setup.reportingStartDate,
-            reportingCalender: this.getCalendarForSetup(data.setup.id)
-          };
-        }, error => console.log(error));
+        if(this.partnerSetupId!=undefined || this.partnerSetupId!=null) {
+          const params = new HttpParams().set('id', this.partnerSetupId);
+          this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
+            this.editing = true;
+            this.setPartnerSetupInfo(data.setup);
+            this.calendar = {
+              periodType: data.setup.periodType,
+              grantStartDate: data.setup.startDate,
+              grantEndDate: data.setup.endDate,
+              projectReportingStartDate: data.setup.reportingStartDate,
+              reportingCalender: this.getCalendarForSetup(data.setup.id)
+            };
+          }, error => console.log(error));
+        }
       });
 
     if (this.partnerSetupId != undefined) {

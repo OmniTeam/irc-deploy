@@ -2163,4 +2163,8 @@ databaseChangeLog = {
             column(name: "status", type: "varchar(255)")
         }
     }
+
+    changeSet(author: "bruno (generated)", id: "16462913453652-27") {
+        dropColumn(columnName: "group_role", tableName: "user_group")
+    }
 }
