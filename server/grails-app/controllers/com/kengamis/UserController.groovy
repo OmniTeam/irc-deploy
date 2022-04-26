@@ -27,11 +27,11 @@ class UserController {
         params.max = Math.min(max ?: 1000, 1000)
         def users = []
         User.all.each { user ->
-            def roles = user.authorities.collect {it.authority}.join(",")
-//            def groups = user.kengaGroups.collect {it.name}.join(",")
+            def roles = user.authorities.collect { it.authority }.join(",")
+            def groups = user.groups.collect { it.name }.join(",")
 
             users << [id    : user.id, username: user.username, email: user.email, names: user.names,
-                      /*groups: groups,*/ roles: roles, enabled: user.enabled]
+                      groups: groups, roles: roles, enabled: user.enabled]
 
         }
         respond users
@@ -42,28 +42,30 @@ class UserController {
         def userRoles = UserRole.findAllByRole(role)
         def dataCollectors = userRoles.collect { userRole ->
             def user = userRole.user
-            [names: user.names, id: user.id] }
+            [names: user.names, id: user.id]
+        }
         respond dataCollectors
     }
 
 
     def show(String id) {
-
         def user = User.get(id)
-//        def kengaGroups = user.kengaGroups.collect{it.id}
-        def roles = user.authorities.collect {it.id}
-//        def partner = user.getPartner()
-        def users= [
-                id: user.id,
-                username: user.username,
-                password: user.password,
-                email: user.email,
-                names: user.names,
-//                groups: kengaGroups,
-                role: roles,
-//                partner: partner?.id,
-                enabled: user.enabled
-        ]
+        def users = []
+        if (user != null) {
+            def kengaGroups = user.groups.collect { it.id }
+            def roles = user.authorities.collect { it.id }
+
+            users = [
+                    id      : user.id,
+                    username: user.username,
+                    password: user.password,
+                    email   : user.email,
+                    names   : user.names,
+                    groups  : kengaGroups,
+                    role    : roles,
+                    enabled : user.enabled
+            ]
+        }
         respond users
     }
 
@@ -86,12 +88,13 @@ class UserController {
             return
         }
 
-        respond user, [status: CREATED, view:"show"]
+        respond user, [status: CREATED, view: "show"]
     }
 
     @Transactional
     def update(User user) {
-        def userId =user.id
+        println user.errors
+        def userId = user.id
         if (user == null) {
             render status: NOT_FOUND
             return
@@ -110,7 +113,7 @@ class UserController {
             return
         }
 
-        respond user, [status: OK, view:"show"]
+        respond user, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -127,20 +130,19 @@ class UserController {
 
     @Transactional
     def uploadUsers() {
-        println("===================")
-        try{
+        try {
             MultipartFile file = request.getFile('users')
             String fileType = file.getContentType()
             println fileType
             userService.importUsers(file)
             render([code: HttpStatus.SC_OK, msg: "Successfully uploaded users."] as JSON)
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace()
         }
     }
 
     @Transactional
-    def updateRolesAndGroups(userId){
+    def updateRolesAndGroups(userId) {
         def currentUser = User.get(userId)
 
         UserRole.deleteOldRecords(currentUser)
@@ -148,20 +150,17 @@ class UserController {
 
         def usersRole = params.role as String
         def listOfUserRoles = usersRole ? usersRole.split(",") : []
-        listOfUserRoles?.each {myUserRole ->
+        listOfUserRoles?.each { myUserRole ->
             def currentRole = Role.get(myUserRole)
             UserRole.create(currentUser, currentRole, true)
         }
 
         def userGroup = params.groups as String
-        def listOfUserGroups = userGroup ? userGroup.split(",") : []
-        listOfUserGroups?.each{ myUserGroup ->
-            def currentGroup = KengaGroup.get(myUserGroup)
-            UserGroup.create(currentGroup,currentUser, true)
-        }
+        def currentGroup = KengaGroup.findByName(userGroup)
+        UserGroup.create(currentGroup, currentUser, true)
     }
 
-    def userStaffs(){
+    def userStaffs() {
         def programStaffs = []
         userService.list(params).each { user ->
             def newProgramStaffObject = [:]
@@ -185,17 +184,20 @@ class UserController {
         def userStaff = userService.get(id)
         def newProgramStaffObject = [:]
         if (userStaff != null) {
-            def programName = (UserGroup.findByUser(userStaff).group).name
-            def program = Program.findByTitle(programName)
-            newProgramStaffObject['id'] = userStaff.id
-            newProgramStaffObject['name'] = userStaff.names
-            newProgramStaffObject['email'] = userStaff.email
-            //newProgramStaffObject['nameContactPerson'] = userStaff.nameContactPerson
-            //newProgramStaffObject['personContact'] = userStaff.personContact
-            newProgramStaffObject['dateCreated'] = userStaff.dateCreated
-            newProgramStaffObject['lastUpdated'] = userStaff.lastUpdated
-            newProgramStaffObject['program'] = program.title
-            newProgramStaffObject['programId'] = program.id
+            def userGroup = UserGroup.findByUser(userStaff)
+            if (userGroup != null) {
+                def programName = (userGroup.group).name
+                def program = Program.findByTitle(programName)
+                newProgramStaffObject['id'] = userStaff.id
+                newProgramStaffObject['name'] = userStaff.names
+                newProgramStaffObject['email'] = userStaff.email
+                //newProgramStaffObject['nameContactPerson'] = userStaff.nameContactPerson
+                //newProgramStaffObject['personContact'] = userStaff.personContact
+                newProgramStaffObject['dateCreated'] = userStaff.dateCreated
+                newProgramStaffObject['lastUpdated'] = userStaff.lastUpdated
+                newProgramStaffObject['program'] = program.title
+                newProgramStaffObject['programId'] = program.id
+            }
         }
         respond newProgramStaffObject
     }
@@ -211,18 +213,21 @@ class UserController {
         userService.list(params).each { user ->
             if (!list.contains(user.id)) {
                 def newProgramStaffObject = [:]
-                def programName = (UserGroup.findByUser(user).group).name
-                def program = Program.findByTitle(programName)
-                newProgramStaffObject['id'] = user.id
-                newProgramStaffObject['name'] = user.names
-                newProgramStaffObject['email'] = user.email
-                //newProgramStaffObject['nameContactPerson'] = user.nameContactPerson
-                //newProgramStaffObject['personContact'] = user.personContact
-                newProgramStaffObject['dateCreated'] = user.dateCreated
-                newProgramStaffObject['lastUpdated'] = user.lastUpdated
-                newProgramStaffObject['program'] = program.title
-                newProgramStaffObject['programId'] = program.id
-                programPartners << newProgramStaffObject
+                def userGroup = UserGroup.findByUser(user)
+                if (userGroup != null) {
+                    def programName = (userGroup.group).name
+                    def program = Program.findByTitle(programName)
+                    newProgramStaffObject['id'] = user.id
+                    newProgramStaffObject['name'] = user.names
+                    newProgramStaffObject['email'] = user.email
+                    //newProgramStaffObject['nameContactPerson'] = user.nameContactPerson
+                    //newProgramStaffObject['personContact'] = user.personContact
+                    newProgramStaffObject['dateCreated'] = user.dateCreated
+                    newProgramStaffObject['lastUpdated'] = user.lastUpdated
+                    newProgramStaffObject['program'] = program.title
+                    newProgramStaffObject['programId'] = program.id
+                    programPartners << newProgramStaffObject
+                }
             }
         }
         respond programPartners

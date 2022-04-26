@@ -37,25 +37,27 @@
                               <div class="col-md-12">
                                 <div class="form-group ">
                                   <div class=" input-group input-group-merge">
-                                    <div class=" input-group-prepend">
-                                                <span class="input-group-text" style="padding-right: 10px;">
-                                                    <i class=" fas fa-user"></i>
-                                                </span>
-                                    </div>
-                                    <input
-                                      class="form-control"
-                                      placeholder="Group Name"
-                                      type="text"
-                                      style="padding-left: 10px;"
-                                      formControlName="name"
-                                      [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                                    <ng-select class="form-control form-control-sm"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="false"
+                                               placeholder="Parent"
+                                               formControlName="name"
+                                               [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                                               [searchable]="true"
+                                               [clearable]="true"
                                     >
+                                      <ng-option [value]="item.title" *ngFor="let item of programs">
+                                        {{item?.title}}
+                                      </ng-option>
+                                    </ng-select>
                                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                                       <div *ngIf="f.name.errors.required" class="input-error">A Group Name is required</div>
                                     </div>
                                   </div>
-                                  <!--<div *ngIf="f.username.hasError('alreadyExist')" >
-                                      <div class="input-error">Username is already taken</div>
+                                 <!-- <div *ngIf="f.name.hasError('alreadyExist')" >
+                                    <div class="input-error">Group already exists</div>
                                   </div>-->
                                 </div>
                               </div>

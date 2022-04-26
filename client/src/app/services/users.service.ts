@@ -64,6 +64,11 @@ export class UsersService {
   }
 
   createUserGroup(userGroupData): Observable<any> {
-    return this.http.post(this.urlUserRole, userGroupData);
+    return this.http.post(this.urlUserGroup, userGroupData);
   }
+
+  getGroups(): Observable<any> {
+    return this.http.get(`${this.baseurl}/KengaGroup/`);
+  }
+
 }

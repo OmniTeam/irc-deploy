@@ -108,7 +108,7 @@ export class EditUserComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
-    console.log(submitData.role, 'role data');
+    console.log(submitData, 'submitData');
     const params = new HttpParams()
       .set('role', submitData.role)
       .set('groups', submitData.groups);
