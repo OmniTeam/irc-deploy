@@ -2104,4 +2104,57 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1650978880608-117") {
+        addColumn(tableName: "activity_report") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-118") {
+        addColumn(tableName: "feedback") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-119") {
+        addColumn(tableName: "referral") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-120") {
+        addColumn(tableName: "activity_report") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-121") {
+        addColumn(tableName: "feedback") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-122") {
+        addColumn(tableName: "referral") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-123") {
+        addColumn(tableName: "activity_report") {
+            column(name: "status", type: "varchar(255)")
+        }
+    }
 }

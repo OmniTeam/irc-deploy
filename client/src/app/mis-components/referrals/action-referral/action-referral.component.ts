@@ -248,7 +248,7 @@ export class ActionReferralComponent implements OnInit {
   }
 
   loadProgramStaff(){
-    this.programStaffService.getProgramStaffs().subscribe((data) => {
+    this.userService.getUsers().subscribe((data) => {
       this.staffs = data;
       console.log(data)
     });

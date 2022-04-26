@@ -36,8 +36,11 @@ class PartnerSetupController {
 
             list << [id         : setup.id,
                      partner    : partner.name,
+                     staffId    : setup.partnerId,
                      lastUpdated: setup.lastUpdated,
-                     dateCreated: setup.dateCreated]
+                     dateCreated: setup.dateCreated,
+                     setupValues: setup.setupValues
+            ]
         }
         respond list
     }
