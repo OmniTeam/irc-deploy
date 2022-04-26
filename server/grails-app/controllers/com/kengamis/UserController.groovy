@@ -52,9 +52,6 @@ class UserController {
         def user = User.get(id)
 //        def kengaGroups = user.kengaGroups.collect{it.id}
         def roles = user.authorities.collect {it.id}
-        print('=========')
-        print(roles)
-        print('======')
 //        def partner = user.getPartner()
         def users= [
                 id: user.id,
@@ -142,18 +139,10 @@ class UserController {
         }
     }
 
-    /*def createUserRole(User user) {
-        def role = Role.findByAuthority('ROLE_ADMIN') ?: new Role(authority: 'ROLE_ADMIN')
-        if (!user.authorities.contains(role)) {
-            UserRole.create user, role
-        }
-    }*/
-
     @Transactional
     def updateRolesAndGroups(userId){
         def currentUser = User.get(userId)
         UserRole.deleteOldRecords(currentUser)
-
         def usersRole = params.role as String
         def listOfUserRoles = usersRole ? usersRole.split(",") : []
         listOfUserRoles?.each {myUserRole ->

@@ -25,11 +25,11 @@ build:deploy:
   only:
     - irc
   script:
-    - gradle --build-cache bootJar
+    - gradle build -x test -x integrationTest
     - sshpass -V
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/irc-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
-    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-ircmis.sh &"
+    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./stop-ircmis.sh && ./start-ircmis.sh"
     - echo "Done Deploying ircmis server :)" 
 
 build:stage:
