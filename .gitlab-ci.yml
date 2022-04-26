@@ -36,7 +36,7 @@ deploy:
   only:
     - crvpf
   script:
-    - gradle --build-cache bootJar
+    - gradle build -x test -x integrationTest
     - sshpass -V
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
