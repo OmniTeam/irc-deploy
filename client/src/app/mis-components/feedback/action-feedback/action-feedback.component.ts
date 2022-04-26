@@ -335,7 +335,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   }
 
   loadProgramStaff(){
-    this.programStaff.getProgramStaffs().subscribe((data) => {
+    this.userService.getUsers().subscribe((data) => {
       this.staffs = data;
       console.log(data)
     });

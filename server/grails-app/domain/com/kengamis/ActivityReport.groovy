@@ -22,6 +22,9 @@ class ActivityReport {
     String attachPhoto
     String attachList
     String attachStory
+    String status
+    Date dateCreated
+    Date lastUpdated
 
 
     static mapping = {
@@ -49,5 +52,6 @@ class ActivityReport {
          attachPhoto nullable: true
          attachList nullable: true
          attachStory nullable: true
+         status nullable: true
     }
 }

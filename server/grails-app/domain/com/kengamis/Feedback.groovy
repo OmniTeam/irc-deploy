@@ -40,6 +40,8 @@ class Feedback {
     String feedbackDetails
     String project
     String assignee
+    Date dateCreated
+    Date lastUpdated
 
     static mapping = {
         id generator: 'uuid2'

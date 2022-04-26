@@ -258,7 +258,7 @@ export class CreateFeedbackComponent implements OnInit {
   }
 
   loadProgramStaff(){
-    this.programStaff.getProgramStaffs().subscribe((data) => {
+    this.userService.getUsers().subscribe((data) => {
       this.staffs = data;
       console.log(data)
     });

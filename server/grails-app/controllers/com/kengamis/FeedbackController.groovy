@@ -60,6 +60,7 @@ class FeedbackController {
         boolean startIrcInstance = startProcessInstance([
                 FeedbackId    : feedback.id,
                 StartDate     : feedback.dateFeedbackReceived,
+                assignee      : feedback.assignee,
                 EndDate       : ""
 
         ])
