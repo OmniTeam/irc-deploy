@@ -111,7 +111,7 @@ export class EditUserComponent implements OnInit {
     console.log(submitData.role, 'role data');
     const params = new HttpParams()
       .set('role', submitData.role)
-      .set('groups', submitData.groups)
+      .set('groups', submitData.groups);
     this.userService.updateUser(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
       console.warn(result, 'System User Updated Successfully');
       this.alertService.success(`User: ${result.username} has been successfully updated`);
