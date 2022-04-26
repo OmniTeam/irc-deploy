@@ -115,6 +115,16 @@ export class CreateUserComponent implements OnInit {
           console.log(data, 'User Role');
         }, error => {this.alertService.error('failed to create user role'); });
       });
+
+      // inserts user_id group_id pairs into the user group table
+        const userGroupData = new FormData()
+        userGroupData.append('user', result.id)
+        userGroupData.append('group', formData.groups)
+
+        this.userService.createUserGroup(userGroupData).subscribe(data => {
+          console.log(data ,"User group")
+        }, error => {this.alertService.error("failed to create user groups")})
+
         this.router.navigate(['/users']);
     }, error => {this.alertService.error('Failed to Create the User'); });
   }

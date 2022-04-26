@@ -10,6 +10,7 @@ export class UsersService {
   baseurl = environment.serverUrl;
   urlUsers = `${this.baseurl}/user/`;
   urlUserRole = `${this.baseurl}/UserRole/`;
+  urlUserGroup = `${this.baseurl}/UserGroup/`;
 
   constructor(private http: HttpClient) { }
 
@@ -60,5 +61,9 @@ export class UsersService {
   // this is for creating records in the user role table
   createUserRole(userRoleData): Observable<any> {
     return this.http.post(this.urlUserRole, userRoleData);
+  }
+
+  createUserGroup(userGroupData): Observable<any> {
+    return this.http.post(this.urlUserRole, userGroupData);
   }
 }
