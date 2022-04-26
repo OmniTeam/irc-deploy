@@ -142,12 +142,22 @@ class UserController {
     @Transactional
     def updateRolesAndGroups(userId){
         def currentUser = User.get(userId)
+
         UserRole.deleteOldRecords(currentUser)
+        UserGroup.deleteOldRecordsUser(currentUser)
+
         def usersRole = params.role as String
         def listOfUserRoles = usersRole ? usersRole.split(",") : []
         listOfUserRoles?.each {myUserRole ->
             def currentRole = Role.get(myUserRole)
             UserRole.create(currentUser, currentRole, true)
+        }
+
+        def userGroup = params.groups as String
+        def listOfUserGroups = userGroup ? userGroup.split(",") : []
+        listOfUserGroups?.each{ myUserGroup ->
+            def currentGroup = KengaGroup.get(myUserGroup)
+            UserGroup.create(currentGroup,currentUser, true)
         }
     }
 
