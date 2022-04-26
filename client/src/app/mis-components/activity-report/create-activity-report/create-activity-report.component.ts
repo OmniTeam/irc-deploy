@@ -8,6 +8,8 @@ import {FileUploadService} from "../../../services/file-upload.service";
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
 import {ActivityReportService} from "../../../services/activity-report.service";
 import {PartnerSetupService} from "../../../services/partner-setup.service";
+import {AuthService} from "../../../services/auth.service";
+import {UsersService} from "../../../services/users.service";
 
 @Component({
   selector: 'app-create-activity-report',
@@ -28,22 +30,25 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   loading: boolean = false;
   calendar: any = {};
   totalApprovedAmount: string;
-  total1835: string;
-  total1835M: string;
-  total36M: string;
-  total36F: string;
-  totalNationalF: string;
+  totalBalance:any;
   totalNationalM: string;
-  totalRefugeeM: string;
-  totalRefugeeF: string;
-  totalPwdF: string;
-  totalPwdM: string;
-  indicatorForDisaggregation: any;
-  budgetForDisaggregation: any;
-  totalBudgetDisburse: string;
+  choosenBudget: string;
+  budgetHolderId: string
+  totalBudgetDisburse: any;
+  budgetLines: any;
+  totalSpent: any;
+  getTotalApproved: any;
+  getListBudgetLine = [];
+  getMilestone = [];
+  budgetAmount: any;
+  budgetHolder: any;
+  milestones: any;
+  peopleSurvey:any = {};
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
+              private authService: AuthService,
               private alertService: AlertService,
+              private userService: UsersService,
               private fileUploadService: FileUploadService,
               private activityReportService: ActivityReportService,
               private partnerSetup: PartnerSetupService,
@@ -51,6 +56,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               private programStaffService: ProgramStaffService) { }
 
   ngOnInit(): void {
+    this.getBudgetLines()
     this.formGroup = this.formBuilder.group({
       budgetLine: ['', [Validators.required]],
       name: ['', [Validators.required]],
@@ -72,11 +78,12 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       attachPhoto:[''],
       attachList:[''],
       attachStories:[''],
+      status:['Pending']
     });
     this.programStaffService.getPrograms().subscribe((data) => {
       this.programs = data;
     });
-    this.programStaffService.getProgramStaffs().subscribe((data) => {
+    this.userService.getUsers().subscribe((data) => {
       this.staff = data;
     });
   }
@@ -86,25 +93,53 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   }
 
   createActivityReport() {
+
+
+    let values: {[key: string]: string} = {
+      budget: this.budget,
+      people: this.peopleSurvey,
+      balance: this.totalBalance
+    }
+
     this.submitted = true;
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;
     }
     const activityReport = this.formGroup.value;
-    this.activityReportService.createActivityReport(activityReport).subscribe(results => {
+    let statusSave = 'Started'
+
+    let savedActivityRecord: {[key:string]: string} = {
+
+      name: activityReport.name,
+      costAssociated: JSON.stringify(values),
+      achievedResults: activityReport.achievedResults,
+      activitiesUndertaken: activityReport.activitiesUndertaken,
+      activityObjective: activityReport.activityObjective,
+      assignee: activityReport.assignee,
+      attachList: activityReport.attachList,
+      attachPhoto: activityReport.attachPhoto,
+      attachStories: activityReport.attachStories,
+      budgetLine: activityReport.budgetLine,
+      budgetProgress: activityReport.budgetProgress,
+      challenges: activityReport.challenges,
+      designation: activityReport.designation,
+      endDate: activityReport.endDate,
+      keyAchievements: activityReport.keyAchievements,
+      lessonsLearned: activityReport.lessonsLearned,
+      location: activityReport.location,
+      milestone: activityReport.milestone,
+      startDate: activityReport.startDate,
+      status: statusSave
+    }
+    console.log(savedActivityRecord)
+    this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully created `);
     }, error => {
       this.alertService.error(`${activityReport.name} could not be created`);
     });
 
-    // if (this.formGroup.valid) {
-    //   setTimeout(() => {
-    //     this.formGroup.reset();
-    //     this.submitted = false;
-    //   }, 100);
-    // }
   }
 
   /** Budget line functions*/
@@ -161,39 +196,39 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   // }
 
   private update1835(id, newValue) {
+    let values: {[key: string]: string};
     switch (id) {
       case 1:
-        this.total1835 = newValue;
+       this.peopleSurvey.total1835 = newValue;
         break;
       case 2:
-        this.total1835M = newValue;
+        this.peopleSurvey.total1835M = newValue;
         break;
       case 3:
-        this.total36F = newValue;
+        this.peopleSurvey.total36F = newValue;
         break;
       case 4:
-        this.total36M = newValue;
+        this.peopleSurvey.total36M = newValue;
         break;
       case 5:
-        this.totalNationalF = newValue;
+        this.peopleSurvey.totalNationalF = newValue;
         break;
       case 6:
-        this.totalNationalM = newValue;
+        this.peopleSurvey.totalNationalM = newValue;
         break;
       case 7:
-        this.totalRefugeeF = newValue;
+        this.peopleSurvey.totalRefugeeF = newValue;
         break;
       case 8:
-        this.totalRefugeeM = newValue;
+        this.peopleSurvey.totalRefugeeM = newValue;
         break;
       case 9:
-        this.totalPwdF = newValue;
+        this.peopleSurvey.totalPwdF = newValue;
         break;
       case 10:
-        this.totalPwdM = newValue;
+        this.peopleSurvey.totalPwdM = newValue;
         break;
     }
-
   }
 
   private updateBudgetAmount(id, newValue) {
@@ -225,6 +260,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       });
     }
     this.totalBudgetDisburse = total.toString();
+    this.totalBalance = parseInt(this.getTotalApproved) - (parseInt(this.totalSpent) + parseInt(this.totalBudgetDisburse))
     // this.currentStatus.totalAmountSpent = total;
   }
 
@@ -265,5 +301,98 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     this.formGroup.reset();
   }
 
+  getBudgetLines(){
+    this.partnerSetup.getPartnerSetup().subscribe((data) =>{
+      console.log(data)
+      this.budgetHolder = data
+    })
+  }
 
+
+  onBudgetLineChange() {
+    let rowNumber = ''
+     rowNumber = this.choosenBudget ;
+    if (this.getListBudgetLine.some(x => x.id === rowNumber)) {
+      this.getListBudgetLine.forEach( (item) => {
+        if (item.id === rowNumber) {
+          this.getTotalApproved = item.approvedAmount
+          this.totalSpent = item.totalSpent
+        }
+      });
+    }
+  }
+
+  getBudgetHolderBudgetLines() {
+    let staffId = this.budgetHolderId
+    console.log(staffId)
+    let newBudgetLine: any = []
+    let newMilestone: any = []
+      this.budgetHolder.forEach((d) => {
+        if (d.staffId === staffId) {
+        let values = JSON.parse(d.setupValues)
+        this.milestones = JSON.parse(values.indicators)
+        this.budgetLines = values.budget
+        this.budgetLines.forEach((item) => {
+          newBudgetLine.push(item)
+          this.getListBudgetLine = newBudgetLine;
+        })
+       this.milestones.forEach((mile) =>{
+         newMilestone.push(mile)
+         this.getMilestone = newMilestone;
+         console.log(this.getMilestone)
+       })
+      }
+      })
+
+  }
+
+
+
+  saveReport() {
+
+    let values: {[key: string]: string} = {
+      budget: this.budget,
+      people: this.peopleSurvey,
+      balance: this.totalBalance
+    }
+
+
+    if (this.formGroup.invalid) {
+      console.log('Invalid');
+      return;
+    }
+    const activityReport = this.formGroup.value;
+    let statusSave = 'Pending'
+
+    let savedActivityRecord: {[key:string]: string} = {
+      name: activityReport.name,
+      costAssociated: JSON.stringify(values),
+      achievedResults: activityReport.achievedResults,
+      activitiesUndertaken: activityReport.activitiesUndertaken,
+      activityObjective: activityReport.activityObjective,
+      assignee: activityReport.assignee,
+      attachList: activityReport.attachList,
+      attachPhoto: activityReport.attachPhoto,
+      attachStories: activityReport.attachStories,
+      budgetLine: activityReport.budgetLine,
+      budgetProgress: activityReport.budgetProgress,
+      challenges: activityReport.challenges,
+      designation: activityReport.designation,
+      endDate: activityReport.endDate,
+      keyAchievements: activityReport.keyAchievements,
+      lessonsLearned: activityReport.lessonsLearned,
+      location: activityReport.location,
+      milestone: activityReport.milestone,
+      startDate: activityReport.startDate,
+      status: statusSave
+    }
+    console.log(savedActivityRecord)
+    this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
+      this.router.navigate(['/activity-list']);
+      this.alertService.success(`${activityReport.name} has been successfully created `);
+    }, error => {
+      this.alertService.error(`${activityReport.name} could not be created`);
+    });
+
+  }
 }

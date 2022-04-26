@@ -14,6 +14,7 @@ import {UsersService} from "../../../services/users.service";
 import {AlertService} from "../../../services/alert";
 import {AuthService} from "../../../services/auth.service";
 import {GroupsService} from "../../../services/groups.service";
+import {GroupValidator} from "../../../validators/group.validator";
 
 @Component({
   selector: 'app-edit-group',
@@ -49,6 +50,7 @@ export class EditGroupComponent implements OnInit {
     }
   ];
   parents:any
+  programs:any;
   permissions =[
     {
       'name': 'Data Tables'
@@ -73,6 +75,12 @@ export class EditGroupComponent implements OnInit {
       console.log(data)
     }, error => {
       this.alertService.error("Failed to get Parents")
+    })
+    this.usersService.getPrograms().subscribe(data => {
+      this.programs = data
+      console.log(data)
+    }, error => {
+      this.alertService.error("Failed to get Programs")
     })
     this.usersService.getUsers().subscribe(data => {
       this.dataCollectors = data

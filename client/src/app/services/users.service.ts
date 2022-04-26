@@ -10,11 +10,28 @@ export class UsersService {
   baseurl = environment.serverUrl;
   urlUsers = `${this.baseurl}/user/`;
   urlUserRole = `${this.baseurl}/UserRole/`;
+  urlUserGroup = `${this.baseurl}/UserGroup/`;
 
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
     return this.http.get(this.urlUsers);
+  }
+
+  getUserStaffs(): Observable<any> {
+    return this.http.get(`${this.urlUsers}/userStaffs`);
+  }
+
+  getUsersWithoutWorkPlan(): Observable<any> {
+    return this.http.get(`${this.urlUsers}/getUsersWithoutWorkPlan`);
+  }
+
+  getCurrentUserStaff(id) {
+    return this.http.get(`${this.urlUsers}/userStaffsShow/${id}/`);
+  }
+
+  getPrograms(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/program/`);
   }
 
   getDataCollectors(): Observable<any> {
@@ -45,4 +62,13 @@ export class UsersService {
   createUserRole(userRoleData): Observable<any> {
     return this.http.post(this.urlUserRole, userRoleData);
   }
+
+  createUserGroup(userGroupData): Observable<any> {
+    return this.http.post(this.urlUserGroup, userGroupData);
+  }
+
+  getGroups(): Observable<any> {
+    return this.http.get(`${this.baseurl}/KengaGroup/`);
+  }
+
 }

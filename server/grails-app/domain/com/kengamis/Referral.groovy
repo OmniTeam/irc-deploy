@@ -2,6 +2,7 @@ package com.kengamis
 
 class Referral {
     String id
+    String assignee
     String dateOfReferral
     String nameOfReferringOfficer
     String nameOfClientBeingReferred
@@ -22,6 +23,8 @@ class Referral {
     String followupAreas
     String followupOrganization
     String status
+    Date dateCreated
+    Date lastUpdated
 
     static mapping = {
         id generator: 'uuid2'

@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {HttpParams} from "@angular/common/http";
 import {EntityService} from "../../../services/entity.service";
-import {ReplacePipe} from "../../../replace-pipe";
+import {ReplacePipe} from "../../../pipes/replace-pipe";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";

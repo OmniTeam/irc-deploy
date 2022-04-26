@@ -21,7 +21,7 @@ class TaskListController {
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '',referralId = ''
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '',referralId = '',activityId = '',feedbackId = ''
 
             variables['data'].each {
                 if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -31,6 +31,8 @@ class TaskListController {
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
                 if (it.key == 'ReferralId') referralId = it.value
+                if (it.key == 'ActivityId') activityId = it.value
+                if (it.key == 'FeedbackId') feedbackId = it.value
                 if (it.key == 'GroupId') groupId = it.value
             }
 
@@ -40,6 +42,32 @@ class TaskListController {
             if (taskPartner == null) taskPartner = [name: '']
             if (taskProgram == null) taskProgram = [title: '']
 
+            User currentUser = AppHolder.currentUser()
+            def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
+            def assignee = []
+            def taskCase = ''
+
+            def referral = Referral.findById(referralId)
+            if (referralId != null && referral !=null) {
+                assignee << referral.assignee
+                taskCase = referral.organizationReferredTo
+            }
+
+            def activityReport = ActivityReport.findById(activityId)
+            if (activityId != null && activityReport!=null) {
+                assignee << activityReport.assignee
+                taskCase = activityReport.milestone
+            }
+
+            def feedback = Feedback.findById(feedbackId)
+            if (feedbackId != null && feedback!=null) {
+                assignee << feedback.assignee
+                taskCase = feedback.typeOfFeedback
+            }
+
+            boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
+
+            if(assignee.contains(currentUser.email) || c2)
                 tasks << [id               : task.id,
                           taskName         : task.taskName,
                           partnerSetupId   : partnerSetupId,
@@ -52,6 +80,10 @@ class TaskListController {
                           groupId          : groupId,
                           reportingPeriod  : period,
                           referralId       : referralId,
+                          activityId       : activityId,
+                          feedbackId       : feedbackId,
+                          case             : taskCase,
+                          assignee         : assignee.join(','),
                           processDefKey    : task.processDefKey,
                           outputVariables  : task.outputVariables,
                           processInstanceId: task.processInstanceId,
@@ -67,7 +99,7 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId=''
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId='',activityId = '',feedbackId = ''
 
         variables['data'].each {
             if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -76,6 +108,8 @@ class TaskListController {
             if (it.key == 'PartnerId') partnerId = it.value
             if (it.key == 'ProgramId') programId = it.value
             if (it.key == 'ReferralId') referralId = it.value
+            if (it.key == 'ActivityId') activityId = it.value
+            if (it.key == 'FeedbackId') feedbackId = it.value
             if (it.key == 'EndDate') endDate = it.value
             if (it.key == 'GroupId') groupId = it.value
         }
@@ -86,7 +120,34 @@ class TaskListController {
         if (programPartner == null) programPartner = [name: '']
         if (program == null) program = [title: '']
 
-        def t = [id               : task.id,
+        User currentUser = AppHolder.currentUser()
+        def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
+        def assignee = []
+        def taskCase = ''
+
+        def referral = Referral.findById(referralId)
+        if (referralId != null && referral !=null) {
+            assignee << referral.assignee
+            taskCase = referral.organizationReferredTo
+        }
+
+        def activityReport = ActivityReport.findById(activityId)
+        if (activityId != null && activityReport!=null) {
+            assignee << activityReport.assignee
+            taskCase = activityReport.milestone
+        }
+
+        def feedback = Feedback.findById(feedbackId)
+        if (feedbackId != null && feedback!=null) {
+            assignee << feedback.assignee
+            taskCase = feedback.typeOfFeedback
+        }
+
+        boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
+
+        def t = null
+        if(assignee.contains(currentUser.email) || c2)
+            t = [id               : task.id,
                  taskName         : task.taskName,
                  partnerSetupId   : partnerSetupId,
                  startDate        : startDate,
@@ -97,7 +158,11 @@ class TaskListController {
                  endDate          : endDate,
                  groupId          : groupId,
                  referralId       : referralId,
+                 activityId       : activityId,
+                 feedbackId       : feedbackId,
+                 case             : taskCase,
                  reportingPeriod  : period,
+                 assignee         : assignee.join(','),
                  processDefKey    : task.processDefKey,
                  outputVariables  : task.outputVariables,
                  processInstanceId: task.processInstanceId,
