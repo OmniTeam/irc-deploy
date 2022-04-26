@@ -2,6 +2,7 @@ package com.kengamis
 
 import com.kengamis.exporter.EntityDataExporter
 import com.kengamis.query.EntityQueryHelper
+import com.kengamis.query.security.Permission
 import grails.converters.JSON
 import grails.validation.ValidationException
 import groovy.json.JsonSlurper
@@ -25,6 +26,7 @@ class MisEntityController {
 
     MisEntityService misEntityService
     def springSecurityService
+    def kengaGroupsService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -181,8 +183,14 @@ class MisEntityController {
         def entityData = []
         try {
             def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
-            entityData = [headerList : q.headers, resultList: q.data, resultListCount: q.count, entity: q.misEntity,
-                          tagTypeList: q.tagTypes, enableTagging: q.misEntity.enableTagging]
+            entityData = [
+                    headerList : q.headers,
+                    resultList: kengaGroupsService.postFilter(q.data, Permission.READ),
+                    resultListCount: q.count,
+                    entity: q.misEntity,
+                    tagTypeList: q.tagTypes,
+                    enableTagging: q.misEntity.enableTagging
+            ]
         }
         catch (Exception e) {
             flash.error = "Data Might Not Be Available For This entity."
