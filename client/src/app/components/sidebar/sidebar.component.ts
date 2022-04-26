@@ -17,7 +17,7 @@ const formsMenu: any = {
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
   roles: [
-    'BUDGET_HOLDER',
+    'ROLE_BUDGET_HOLDER',
     'ROLE_SUPER_ADMIN',
     'ROLE_ADMIN'
   ],
@@ -32,20 +32,20 @@ const dataMenu: any = {
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
   roles: [
-    'BUDGET_HOLDER',
+    'ROLE_BUDGET_HOLDER',
     'ROLE_SUPER_ADMIN',
     'ROLE_ADMIN'
   ],
   children: [
     {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red',
       roles: [
-        'BUDGET_HOLDER',
+        'ROLE_BUDGET_HOLDER',
         'ROLE_SUPER_ADMIN',
         'ROLE_ADMIN'
       ], },
       {path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6', title: 'Services', type: 'link', icontype: 'ni-single-copy-04 text-red',
       roles: [
-        'BUDGET_HOLDER',
+        'ROLE_BUDGET_HOLDER',
         'ROLE_SUPER_ADMIN',
         'ROLE_ADMIN'
       ], },
@@ -61,7 +61,7 @@ const listsMenu: any = {
   children: [
   ],
   roles: [
-    'BUDGET_HOLDER',
+    'ROLE_BUDGET_HOLDER',
     'ROLE_SUPER_ADMIN',
     'ROLE_ADMIN'
   ]
@@ -114,7 +114,7 @@ export const ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'fas fa-home',
     roles: [
-      'BUDGET_HOLDER',
+      'ROLE_BUDGET_HOLDER',
       'ROLE_SUPER_ADMIN',
       'ROLE_ADMIN'
     ]
@@ -134,14 +134,14 @@ export const ROUTES: RouteInfo[] = [
     title: 'Referrals',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
   },
   {
     path: 'feedback-list',
     title: 'FeedBack',
     type: 'link',
     icontype: 'fa fa-comment-dots',
-    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
   },
   {
     path: '/',
@@ -149,7 +149,7 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tasks text-pink',
     isCollapsed: true,
-    roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
       {path: 'taskList', title: 'Task List', type: 'link', roles: ['BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'], },
     ]
@@ -297,6 +297,7 @@ export class SidebarComponent implements OnInit {
       // }, error => console.log(error));
 
       this.entityService.getEntities().subscribe((data) => {
+
         for (const entity of data) {
           const entityObject = {};
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
@@ -305,22 +306,37 @@ export class SidebarComponent implements OnInit {
           const entityTitleTrancated = entityObject['title'].slice(0, 3);
           const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
 
+          this.usersRoles = this.authService.getUserRoles();
           this.usersRoles.forEach((a) => {
             const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
-            if (cleanRole.includes(entityTitleTrancated)) {
+            const myArray = listsMenu.children;
+            if (myArray.length === 0) {
+              entityObject['roles'] = this.usersRoles;
+              listsMenu.children.push(entityObject);
+            } else {
+              for (let i = 0; i < myArray.length; i++) {
+                if (!(myArray[i].title === entityTitle) ) {
+                  entityObject['roles'] = this.usersRoles;
+                  listsMenu.children.push(entityObject);
+                }
+              }
+            }
+            /*if (cleanRole.includes(entityTitleTrancated)) {
               const myArray = listsMenu.children;
               if (myArray.length === 0) {
+                console.log(this.usersRoles, 'User Roles');
                 entityObject['roles'] = this.usersRoles;
                 listsMenu.children.push(entityObject);
               } else {
                 for (let i = 0; i < myArray.length; i++) {
                   if (!(myArray[i].title === entityTitle) ) {
+                    console.log(this.usersRoles, 'User Roles');
                     entityObject['roles'] = this.usersRoles;
                     listsMenu.children.push(entityObject);
                   }
                 }
               }
-            }
+            }*/
           });
 
           if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN')) {
