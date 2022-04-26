@@ -45,9 +45,25 @@ class TaskListController {
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
             def assignee = []
-            if (referralId != null && Referral.findById(referralId)!=null) assignee << Referral.findById(referralId).assignee
-            if (activityId != null && ActivityReport.findById(activityId)!=null) assignee << ActivityReport.findById(activityId).assignee
-            if (feedbackId != null && Feedback.findById(feedbackId)!=null) assignee << Feedback.findById(feedbackId).assignee
+            def taskCase = ''
+
+            def referral = Referral.findById(referralId)
+            if (referralId != null && referral !=null) {
+                assignee << referral.assignee
+                taskCase = referral.organizationReferredTo
+            }
+
+            def activityReport = ActivityReport.findById(activityId)
+            if (activityId != null && activityReport!=null) {
+                assignee << activityReport.assignee
+                taskCase = activityReport.milestone
+            }
+
+            def feedback = Feedback.findById(feedbackId)
+            if (feedbackId != null && feedback!=null) {
+                assignee << feedback.assignee
+                taskCase = feedback.typeOfFeedback
+            }
 
             boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
 
@@ -66,8 +82,8 @@ class TaskListController {
                           referralId       : referralId,
                           activityId       : activityId,
                           feedbackId       : feedbackId,
-                          activity         : referralId ? 'Referral' : activityId ? 'Activity' : feedbackId ? 'Feedback' : '',
-                          assignee         : currentUser.email,
+                          case             : taskCase,
+                          assignee         : assignee.join(','),
                           processDefKey    : task.processDefKey,
                           outputVariables  : task.outputVariables,
                           processInstanceId: task.processInstanceId,
@@ -107,9 +123,25 @@ class TaskListController {
         User currentUser = AppHolder.currentUser()
         def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
         def assignee = []
-        if (referralId != null && Referral.findById(referralId)!=null) assignee << Referral.findById(referralId).assignee
-        if (activityId != null && ActivityReport.findById(activityId)!=null) assignee << ActivityReport.findById(activityId).assignee
-        if (feedbackId != null && Feedback.findById(feedbackId)!=null) assignee << Feedback.findById(feedbackId).assignee
+        def taskCase = ''
+
+        def referral = Referral.findById(referralId)
+        if (referralId != null && referral !=null) {
+            assignee << referral.assignee
+            taskCase = referral.organizationReferredTo
+        }
+
+        def activityReport = ActivityReport.findById(activityId)
+        if (activityId != null && activityReport!=null) {
+            assignee << activityReport.assignee
+            taskCase = activityReport.milestone
+        }
+
+        def feedback = Feedback.findById(feedbackId)
+        if (feedbackId != null && feedback!=null) {
+            assignee << feedback.assignee
+            taskCase = feedback.typeOfFeedback
+        }
 
         boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
 
@@ -128,9 +160,9 @@ class TaskListController {
                  referralId       : referralId,
                  activityId       : activityId,
                  feedbackId       : feedbackId,
+                 case             : taskCase,
                  reportingPeriod  : period,
-                 activity         : referralId ? 'Referral' : activityId ? 'Activity' : feedbackId ? 'Feedback' : '',
-                 assignee         : currentUser.email,
+                 assignee         : assignee.join(','),
                  processDefKey    : task.processDefKey,
                  outputVariables  : task.outputVariables,
                  processInstanceId: task.processInstanceId,
