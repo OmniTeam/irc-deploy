@@ -2104,6 +2104,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "16497677232405-98") {
+        addColumn(tableName: "referral") {
+            column(name: "assignee", type: "varchar(255)")
+        }
+    }
+
     changeSet(author: "DELL (generated)", id: "1650978880608-117") {
         addColumn(tableName: "activity_report") {
             column(name: "date_created", type: "datetime") {

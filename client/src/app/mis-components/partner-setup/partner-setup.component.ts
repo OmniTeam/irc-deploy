@@ -3,7 +3,6 @@ import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {v4 as uuid} from 'uuid';
 import {PartnerSetupService} from "../../services/partner-setup.service";
-import {ProgramStaffService} from "../../services/program-staff.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
@@ -13,6 +12,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
 import {Indicator} from "../../models/indicator";
 import {AlertService} from "../../services/alert";
+import {UsersService} from "../../services/users.service";
 
 @Component({
   selector: 'app-partner-setup',
@@ -65,7 +65,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
               private location: Location,
               private partnerSetupService: PartnerSetupService,
               public authService: AuthService,
-              private programStaffService: ProgramStaffService,
+              private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
               private alertService: AlertService) {
   }
@@ -90,14 +90,14 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
 
     if (this.partnerSetupId != undefined) {
-      this.programStaffService.getProgramStaffs().subscribe(data => {
+      this.usersService.getUserStaffs().subscribe(data => {
         console.log(data)
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
         }
       });
     } else {
-      this.programStaffService.getProgramStaffWithoutWorkPlan().subscribe(data => {
+      this.usersService.getUsersWithoutWorkPlan().subscribe(data => {
         console.log(data)
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
@@ -229,7 +229,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   onPartnerChange() {
     if (this.staffChosen != undefined) {
-      this.programStaffService.getCurrentProgramStaff(this.staffChosen).subscribe((results: any) => {
+      this.usersService.getCurrentUserStaff(this.staffChosen).subscribe((results: any) => {
         if (results !== null && results !== undefined) {
           this.organisationalInfo = results;
           this.programChosen = results.programId;
