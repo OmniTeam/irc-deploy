@@ -5,15 +5,16 @@ import { HomeRoutingModule } from './home-routing.module';
 import {HomeComponent} from "./home.component";
 import {ComponentsModule} from "../../components/components.module";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {DateAgoPipe} from "../../pipes/date-ago.pipe";
 
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, DateAgoPipe],
     imports: [
         CommonModule,
         HomeRoutingModule,
         ComponentsModule,
-        NgxDatatableModule
+        NgxDatatableModule,
     ]
 })
 export class HomeModule { }

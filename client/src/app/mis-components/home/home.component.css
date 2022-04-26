@@ -29,3 +29,15 @@ table {
 .required-indicator{
   color:red;
 }
+
+.btn-default_btn {
+  color: #7851a9;
+  background-color: #fff;
+  border-color: #e6d7fd;
+}
+
+.active_btn {
+  color: #fff;
+  background-color: #7851a9;
+  border-color: #7851a9;
+}

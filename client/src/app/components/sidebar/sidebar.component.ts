@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {FormService} from '../../services/form.service';
-import {ReplacePipe} from '../../replace-pipe';
+import {ReplacePipe} from '../../pipes/replace-pipe';
 import {EntityService} from '../../services/entity.service';
 import {TitleCasePipe} from '@angular/common';
 
