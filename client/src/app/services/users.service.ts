@@ -30,8 +30,8 @@ export class UsersService {
     return this.http.post(this.urlUsers, formData);
   }
 
-  updateUser(id, groupData, params): Observable<any> {
-    return this.http.put(`${this.urlUsers}${id}/`, groupData, params);
+  updateUser(id, submitData, params): Observable<any> {
+    return this.http.put(`${this.urlUsers}${id}/`, submitData, {params});
   }
 
   getCurrentUser(id) {
