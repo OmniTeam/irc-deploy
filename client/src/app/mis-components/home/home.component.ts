@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
   isActivityReport: boolean;
 
   ngOnInit(): void {
+    this.isReferrals = true;
     this.reloadTable();
   }
 
