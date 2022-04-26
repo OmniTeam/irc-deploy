@@ -93,19 +93,53 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   }
 
   createActivityReport() {
+
+
+    let values: {[key: string]: string} = {
+      budget: this.budget,
+      people: this.peopleSurvey,
+      balance: this.totalBalance
+    }
+
     this.submitted = true;
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;
     }
     const activityReport = this.formGroup.value;
-    console.log(activityReport)
-    this.activityReportService.createActivityReport(activityReport).subscribe(results => {
+    let statusSave = 'Started'
+
+    let savedActivityRecord: {[key:string]: string} = {
+
+      name: activityReport.name,
+      costAssociated: JSON.stringify(values),
+      achievedResults: activityReport.achievedResults,
+      activitiesUndertaken: activityReport.activitiesUndertaken,
+      activityObjective: activityReport.activityObjective,
+      assignee: activityReport.assignee,
+      attachList: activityReport.attachList,
+      attachPhoto: activityReport.attachPhoto,
+      attachStories: activityReport.attachStories,
+      budgetLine: activityReport.budgetLine,
+      budgetProgress: activityReport.budgetProgress,
+      challenges: activityReport.challenges,
+      designation: activityReport.designation,
+      endDate: activityReport.endDate,
+      keyAchievements: activityReport.keyAchievements,
+      lessonsLearned: activityReport.lessonsLearned,
+      location: activityReport.location,
+      milestone: activityReport.milestone,
+      startDate: activityReport.startDate,
+      status: statusSave
+    }
+    console.log(savedActivityRecord)
+    this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully created `);
     }, error => {
       this.alertService.error(`${activityReport.name} could not be created`);
     });
+
   }
 
   /** Budget line functions*/

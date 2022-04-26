@@ -229,7 +229,8 @@ export class CreateFeedbackComponent implements OnInit {
       gender:[''],
       project:[''],
       assignee:[''],
-      feedbackDetails:['']
+      feedbackDetails:[''],
+      status:['Pending']
     });
   }
 

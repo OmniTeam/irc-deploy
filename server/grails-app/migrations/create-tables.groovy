@@ -2163,4 +2163,12 @@ databaseChangeLog = {
             column(name: "status", type: "varchar(255)")
         }
     }
+
+    changeSet(author: "DELL (generated)", id: "1650988417405-120") {
+        addColumn(tableName: "feedback") {
+            column(name: "status", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
 }

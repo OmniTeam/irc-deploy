@@ -1,8 +1,11 @@
 package com.kengamis.tasks
 
+import com.kengamis.ActivityReport
 import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
+import com.kengamis.Feedback
 import com.kengamis.PartnerSetup
+import com.kengamis.Referral
 import groovy.json.JsonOutput
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
@@ -14,11 +17,17 @@ class StartCamundaInstancesJob extends Script {
     static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
 //    static String camundaApiUrl = "http://localhost:8181/mis/rest"
     static String CIIF_MANAGEMENT_KEY = "IRC_REPORTING"
+    static String IRC_ACTIVITY_REPORT = "ACTIVITY_REPORTING"
+    static String IRC_REFERRAL = "IRC_REFERRAL"
+    static String IRC_FEEDBACK = "IRC_FEEDBACK"
     static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
     @Override
     Object run() {
         ircReportingJob()
+        ircActivityReportingJob()
+        ircReferralJob()
+        ircFeedbackJob()
         return null
     }
 
@@ -74,6 +83,90 @@ class StartCamundaInstancesJob extends Script {
                             calendar.save()
                         }
                     }
+                } catch (e) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    static void ircActivityReportingJob(){
+        ActivityReport.findAllByStatus("Started").each { activity ->
+            boolean startInstance = true
+
+            if (startInstance) {
+                try {
+
+                        boolean started = startProcessInstance([
+                                ActivityId    : activity.id,
+                                StartDate     : activity.startDate,
+                                EndDate       : activity.endDate,
+                                Assignee      : activity.assignee
+
+                        ], IRC_REFERRAL)
+
+
+                        if (started) {
+                            print "================ Yes Here We Go!!! ================"
+                            println("IRC PROCESS STARTED")
+                        }
+
+                } catch (e) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    static void ircReferralJob(){
+        Referral.findAllByStatus("Pending").each { referral ->
+            boolean startInstance = true
+
+            if (startInstance) {
+                try {
+
+                    boolean started = startProcessInstance([
+                            ReferralId    : referral.id,
+                            StartDate     : referral.dateOfReferral,
+                            EndDate       : referral.lastUpdated,
+                            Assignee      : referral.assignee
+
+                    ], IRC_ACTIVITY_REPORT)
+
+
+                    if (started) {
+                        print "================ Yes Here We Go!!! ================"
+                        println("IRC PROCESS STARTED")
+                    }
+
+                } catch (e) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    static void ircFeedbackJob(){
+        Feedback.findAllByStatus("Pending").each { feed ->
+            boolean startInstance = true
+
+            if (startInstance) {
+                try {
+
+                    boolean started = startProcessInstance([
+                            FeedbackId    : feed.id,
+                            StartDate     : feed.dateFeedbackReceived,
+                            EndDate       : feed.lastUpdated,
+                            Assignee      : feed.assignee
+
+                    ], IRC_FEEDBACK)
+
+
+                    if (started) {
+                        print "================ Yes Here We Go!!! ================"
+                        println("IRC PROCESS STARTED")
+                    }
+
                 } catch (e) {
                     e.printStackTrace()
                 }
