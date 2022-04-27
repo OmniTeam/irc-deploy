@@ -186,4 +186,9 @@ class KengaGroupAclEntryController {
 
         render tables as JSON
     }
+
+    def listAllACLS (){
+        def proof = (" ia m here")
+        return proof
+    }
 }

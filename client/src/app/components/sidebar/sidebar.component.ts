@@ -1,44 +1,44 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from "../../services/auth.service";
-import {FormService} from "../../services/form.service";
-import {ReplacePipe} from "../../replace-pipe";
-import {EntityService} from "../../services/entity.service";
-import {TitleCasePipe} from "@angular/common";
+import {AuthService} from '../../services/auth.service';
+import {FormService} from '../../services/form.service';
+import {ReplacePipe} from '../../replace-pipe';
+import {EntityService} from '../../services/entity.service';
+import {TitleCasePipe} from '@angular/common';
 
-let misc: any = {
+const misc: any = {
   sidebar_mini_active: true
 };
 
-let formsMenu: any = {
+const formsMenu: any = {
   path: 'forms/data',
   title: 'Data',
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"],
+  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_VIEWER', 'ROLE_YCD_PARTNER_DATA_VIEWER', 'ROLE_AGPP_PARTNER_DATA_VIEWER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
   children: []
-}
+};
 
-let listsMenu: any = {
+const listsMenu: any = {
   path: 'entity/showData/',
   title: 'Lists',
   type: 'sub',
   icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
   children: [],
-  roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER",  "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER","ROLE_AGPP_STAFF_DATA_MANAGER", "ROLE_YCD_STAFF_DATA_MANAGER" , "ROLE_STAFF_DATA_VIEWER"]
-}
+  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_VIEWER', 'ROLE_AGPP_PARTNER_DATA_VIEWER',  'ROLE_YCD_PARTNER_DATA_VIEWER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER' , 'ROLE_STAFF_DATA_VIEWER']
+};
 
 
-let formSettingsMenu: any = {
+const formSettingsMenu: any = {
   path: 'formSettings/form',
   title: 'Form Settings',
   type: 'sub',
   isCollapsed: true,
-  roles: ["ROLE_SUPER_ADMIN"],
+  roles: ['ROLE_SUPER_ADMIN'],
   children: []
-}
+};
 
 export interface RouteInfo {
   path: string;
@@ -245,56 +245,56 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.usersRoles = this.authService.getUserRoles()
+    this.usersRoles = this.authService.getUserRoles();
 
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
     if (this.authService.isLoggedIn()) {
       this.formService.getEnabledForms().subscribe(data => {
-        for (let form of data) {
-          let formObject = {};
-          let formSettingObject = {};
+        for (const form of data) {
+          const formObject = {};
+          const formSettingObject = {};
           formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
 
-          const currentString = formObject['title'].slice(0, 3)
-          const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '))
+          const currentString = formObject['title'].slice(0, 3);
+          const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
 
           this.usersRoles.forEach((a) => {
             const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
             if (cleanRole.includes(currentString)) {
-              if(formsMenu.children.length == 0){
-                formObject['roles'] = this.usersRoles
+              if (formsMenu.children.length === 0) {
+                formObject['roles'] = this.usersRoles;
                 formsMenu.children.push(formObject);
               } else {
-                for(let i=0; i<formsMenu.children.length; i++){
-                  if(!(currentTitle.includes(formsMenu.children[i].title)) ){
-                    formObject['roles'] = this.usersRoles
+                for (let i = 0; i < formsMenu.children.length; i++) {
+                  if (!(currentTitle.includes(formsMenu.children[i].title)) ) {
+                    formObject['roles'] = this.usersRoles;
                     formsMenu.children.push(formObject);
                   }
                 }
               }
             }
-          })
+          });
 
-          if(this.usersRoles.includes("ROLE_SUPER_ADMIN")||this.usersRoles.includes("ROLE_ADMIN")||this.usersRoles.includes("ROLE_STAFF_DATA_VIEWER")){
-            formObject['roles'] = (this.usersRoles)
+          if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN') || this.usersRoles.includes('ROLE_STAFF_DATA_VIEWER')) {
+            formObject['roles'] = (this.usersRoles);
             formsMenu.children.push(formObject);
           }
 
           formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formSettingObject['path'] = form.name.toString();
           formSettingObject['type'] = 'link';
-          formSettingObject['roles'] = ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"];
+          formSettingObject['roles'] = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'];
           formSettingsMenu.children.push(formSettingObject);
         }
       }, error => console.log(error));
 
       this.entityService.getEntities().subscribe((data) => {
-        for (let entity of data) {
-          let entityObject = {};
+        for (const entity of data) {
+          const entityObject = {};
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
@@ -313,34 +313,34 @@ export class SidebarComponent implements OnInit {
             "ROLE_STAFF_DATA_VIEWER"
           ];*/
 
-          const entityTitleTrancated = entityObject['title'].slice(0, 3)
-          const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '))
+          const entityTitleTrancated = entityObject['title'].slice(0, 3);
+          const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
 
           this.usersRoles.forEach((a) => {
             const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
             if (cleanRole.includes(entityTitleTrancated)) {
-              let myArray = listsMenu.children
-              if(myArray.length == 0){
-                entityObject['roles'] = this.usersRoles
+              const myArray = listsMenu.children;
+              if (myArray.length === 0) {
+                entityObject['roles'] = this.usersRoles;
                 listsMenu.children.push(entityObject);
               } else {
-                for(let i=0; i<myArray.length; i++){
-                  if(!(myArray[i].title == entityTitle) ){
-                    entityObject['roles'] = this.usersRoles
+                for (let i = 0; i < myArray.length; i++) {
+                  if (!(myArray[i].title === entityTitle) ) {
+                    entityObject['roles'] = this.usersRoles;
                     listsMenu.children.push(entityObject);
                   }
                 }
               }
             }
-          })
+          });
 
-          if(this.usersRoles.includes("ROLE_SUPER_ADMIN")||this.usersRoles.includes("ROLE_ADMIN")){
-            entityObject['roles'] = this.usersRoles
+          if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN')) {
+            entityObject['roles'] = this.usersRoles;
             listsMenu.children.push(entityObject);
           }
         }
 
-        this.lengthOfChildren = listsMenu.children.length
+        this.lengthOfChildren = listsMenu.children.length;
         this.my_routes.push(
           {
             path: '/',
@@ -348,18 +348,18 @@ export class SidebarComponent implements OnInit {
             type: 'link',
             icontype: 'fas fa-home',
             roles: [
-              "ROLE_SUPER_ADMIN",
-              "ROLE_ADMIN",
-              "ROLE_VAC_PARTNER_DATA_MANAGER",
-              "ROLE_AGPP_PARTNER_DATA_MANAGER",
-              "ROLE_YCD_PARTNER_DATA_MANAGER",
-              "ROLE_VAC_PARTNER_DATA_VIEWER",
-              "ROLE_AGPP_PARTNER_DATA_VIEWER",
-              "ROLE_YCD_PARTNER_DATA_VIEWER",
-              "ROLE_VAC_STAFF_DATA_MANAGER",
-              "ROLE_AGPP_STAFF_DATA_MANAGER",
-              "ROLE_YCD_STAFF_DATA_MANAGER",
-              "ROLE_STAFF_DATA_VIEWER",
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_VAC_PARTNER_DATA_MANAGER',
+              'ROLE_AGPP_PARTNER_DATA_MANAGER',
+              'ROLE_YCD_PARTNER_DATA_MANAGER',
+              'ROLE_VAC_PARTNER_DATA_VIEWER',
+              'ROLE_AGPP_PARTNER_DATA_VIEWER',
+              'ROLE_YCD_PARTNER_DATA_VIEWER',
+              'ROLE_VAC_STAFF_DATA_MANAGER',
+              'ROLE_AGPP_STAFF_DATA_MANAGER',
+              'ROLE_YCD_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER',
             ]
           },
           formsMenu,
@@ -369,15 +369,15 @@ export class SidebarComponent implements OnInit {
             type: 'sub',
             icontype: 'fas fa-tasks text-pink',
             roles: [
-              "ROLE_SUPER_ADMIN",
-              "ROLE_ADMIN",
-              "ROLE_YCD_PARTNER_DATA_MANAGER",
-              "ROLE_VAC_PARTNER_DATA_MANAGER",
-              "ROLE_AGPP_PARTNER_DATA_MANAGER",
-              "ROLE_VAC_STAFF_DATA_MANAGER",
-              "ROLE_AGPP_STAFF_DATA_MANAGER",
-              "ROLE_YCD_STAFF_DATA_MANAGER",
-              "ROLE_STAFF_DATA_VIEWER"
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_YCD_PARTNER_DATA_MANAGER',
+              'ROLE_VAC_PARTNER_DATA_MANAGER',
+              'ROLE_AGPP_PARTNER_DATA_MANAGER',
+              'ROLE_VAC_STAFF_DATA_MANAGER',
+              'ROLE_AGPP_STAFF_DATA_MANAGER',
+              'ROLE_YCD_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER'
             ],
             isCollapsed: true,
             children: [
@@ -386,14 +386,14 @@ export class SidebarComponent implements OnInit {
                 title: 'Task List',
                 type: 'link',
                 roles: [
-                  "ROLE_SUPER_ADMIN", "ROLE_ADMIN",
-                  "ROLE_YCD_PARTNER_DATA_MANAGER",
-                  "ROLE_VAC_PARTNER_DATA_MANAGER",
-                  "ROLE_AGPP_PARTNER_DATA_MANAGER",
-                  "ROLE_VAC_STAFF_DATA_MANAGER",
-                  "ROLE_AGPP_STAFF_DATA_MANAGER",
-                  "ROLE_YCD_STAFF_DATA_MANAGER",
-                  "ROLE_STAFF_DATA_VIEWER"
+                  'ROLE_SUPER_ADMIN', 'ROLE_ADMIN',
+                  'ROLE_YCD_PARTNER_DATA_MANAGER',
+                  'ROLE_VAC_PARTNER_DATA_MANAGER',
+                  'ROLE_AGPP_PARTNER_DATA_MANAGER',
+                  'ROLE_VAC_STAFF_DATA_MANAGER',
+                  'ROLE_AGPP_STAFF_DATA_MANAGER',
+                  'ROLE_YCD_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
                 ]
               },
             ]
@@ -404,47 +404,47 @@ export class SidebarComponent implements OnInit {
             type: 'sub',
             icontype: 'fas fa-user-cog',
             isCollapsed: true,
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"],
+            roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER'],
             children: [
               {
                 path: 'tags',
                 title: 'Tags',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
               },
               {
                 path: 'partnerSetupList',
                 title: 'Work Plan',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
               },
               {
                 path: 'programPartner',
                 title: 'Partner',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN",  "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
               },
               {
                 path: 'mis-users',
                 title: 'Users',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN",  "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
               },
               {
                 path: 'issdugdata.net:3000',
                 title: 'Analytics',
                 type: 'analytics',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN",  "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
               },
               {
                 path: '',
                 title: 'Grant Process',
                 type: 'sub',
                 isCollapsed: true,
-                roles: ["ROLE_SUPER_ADMIN"],
+                roles: ['ROLE_SUPER_ADMIN'],
                 children: [
-                  {path: 'grantProcess', title: 'Short Term', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
-                  {path: 'grantProcess-longTerm', title: 'Long Term', type: 'link', roles: ["ROLE_SUPER_ADMIN"]},
+                  {path: 'grantProcess', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+                  {path: 'grantProcess-longTerm', title: 'Long Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
                 ]
               },
             ]
@@ -455,17 +455,17 @@ export class SidebarComponent implements OnInit {
             title: 'Set-Up',
             type: 'sub',
             icontype: 'fas fa-cog text-blue',
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
+            roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             isCollapsed: true,
             children: [
               {
-                path: '', title: 'Program', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
+                path: '', title: 'Program', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
                 children: [
-                  {path: 'program', title: 'Add Program', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-                  {path: 'programCategory', title: 'Add Program Category', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+                  {path: 'program', title: 'Add Program', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+                  {path: 'programCategory', title: 'Add Program Category', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
                 ]
               },
-              {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}
+              {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']}
             ]
           },
 
@@ -475,26 +475,26 @@ export class SidebarComponent implements OnInit {
             type: 'sub',
             icontype: 'fas fa-tools text-purple',
             isCollapsed: true,
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
+            roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             children: [
-              {path: 'forms', title: 'Forms', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+              {path: 'forms', title: 'Forms', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
               formSettingsMenu,
               {
-                path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
+                path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
                 children: [
-                  {path: 'entity', title: 'Entities', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-                  {path: 'entityView', title: 'Entity Views', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+                  {path: 'entity', title: 'Entities', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+                  {path: 'entityView', title: 'Entity Views', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
                   {
                     path: 'entityViewFilter',
                     title: 'Entity View Filters',
                     type: 'link',
-                    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]
+                    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']
                   },
-                  {path: 'dataView', title: 'Data View', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+                  {path: 'dataView', title: 'Data View', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
                 ]
               },
-              {path: 'tagType', title: 'Tag Type', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-              {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+              {path: 'tagType', title: 'Tag Type', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+              {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
             ]
           },
           {
@@ -502,26 +502,26 @@ export class SidebarComponent implements OnInit {
             title: 'User',
             type: 'sub',
             icontype: 'fas fa-user-tie text-green',
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
+            roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             isCollapsed: true,
             children: [
               // {path: 'acl-group-mapping', title: 'ACL Group Permissions', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-              {path: 'groups', title: 'Groups', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-              {path: 'roles', title: 'Roles', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-              {path: 'users', title: 'User Management', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+              {path: 'groups', title: 'Groups', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+              {path: 'roles', title: 'Roles', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+              {path: 'users', title: 'User Management', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
               {
-                path: 'acl-group-mapping-parent',
-                title: 'ACL Group Permissions With Parent',
+                path: 'acl-group-mapping-lists',
+                title: 'Access Control Lists',
                 type: 'link',
-                roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']
               },
-              {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
+              {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
             ]
           }
-        )
+        );
 
-        if(this.lengthOfChildren > 0){
-          this.my_routes.splice(2, 0,listsMenu)
+        if (this.lengthOfChildren > 0) {
+          this.my_routes.splice(2, 0, listsMenu);
         }
 
         this.menuItems = this.my_routes.filter(menuItem => menuItem);
