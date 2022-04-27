@@ -6,31 +6,31 @@ import {HttpClient} from "@angular/common/http";
 @Injectable({
   providedIn: 'root'
 })
-export class PartnerSetupService {
+export class WorkPlanService {
 
   constructor(private http: HttpClient) { }
 
-  getPartnerSetup(): Observable<any> {
+  getWorkPlan(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/partnerSetup`);
   }
 
-  createPartnerSetup(formData): Observable<any> {
+  createWorkPlan(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/partnerSetup`, formData);
   }
 
-  updatePartnerSetup(formData, id): Observable<any> {
+  updateWorkPlan(formData, id): Observable<any> {
     return this.http.put(`${environment.serverUrl}/partnerSetup/${id}`, formData);
   }
 
-  getPartnerSetupRecord(params: any): Observable<any> {
+  getWorkPlanRecord(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/partnerSetup/getPartnerSetupRecord`, {params});
   }
 
-  deletePartnerSetupRecord(deletedRow): Observable<any> {
+  deleteWorkPlanRecord(deletedRow): Observable<any> {
     return this.http.delete(`${environment.serverUrl}/partnerSetup/${deletedRow}`);
   }
 
-  getReportingCalendarByPartnerSetupId(params: any): Observable<any> {
+  getReportingCalendarByWorkPlanId(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/calendarTriggerDates/getReportingCalendarByPartnerSetupId`, {params});
   }
 

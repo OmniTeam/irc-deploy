@@ -47,7 +47,7 @@
                                      (ngModelChange)="getBudgetHolderBudgetLines()"
                                      [clearable]="true">
                             <ng-option [value]="item.staffId" *ngFor="let item of budgetHolder">
-                              {{item.partner}}
+                              {{item.staff}}
                             </ng-option>
                           </ng-select>
                           <div *ngIf="submitted && f.name.errors"

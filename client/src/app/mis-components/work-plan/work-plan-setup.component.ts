@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {v4 as uuid} from 'uuid';
-import {PartnerSetupService} from "../../services/partner-setup.service";
+import {WorkPlanService} from "../../services/work-plan-setup.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
@@ -15,11 +15,11 @@ import {AlertService} from "../../services/alert";
 import {UsersService} from "../../services/users.service";
 
 @Component({
-  selector: 'app-partner-setup',
-  templateUrl: './partner-setup.component.html',
-  styleUrls: ['./partner-setup.component.css']
+  selector: 'app-work-plan',
+  templateUrl: './work-plan-setup.component.html',
+  styleUrls: ['./work-plan-setup.component.css']
 })
-export class PartnerSetupComponent implements OnInit, OnUpdateCell {
+export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -43,7 +43,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   milestones: any = [];
   staffChosen: string;
   programChosen: string;
-  partnerSetupId: string;
+  workPlanId: string;
 
   openPopup: boolean;
   editing: boolean;
@@ -63,7 +63,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   constructor(private router: Router, private route: ActivatedRoute,
               private location: Location,
-              private partnerSetupService: PartnerSetupService,
+              private workPlanService: WorkPlanService,
               public authService: AuthService,
               private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
@@ -74,12 +74,12 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.editing = false;
     this.route.params
       .subscribe(p => {
-        this.partnerSetupId = p['id'];
-        if(this.partnerSetupId!=undefined || this.partnerSetupId!=null) {
-          const params = new HttpParams().set('id', this.partnerSetupId);
-          this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
+        this.workPlanId = p['id'];
+        if(this.workPlanId!=undefined || this.workPlanId!=null) {
+          const params = new HttpParams().set('id', this.workPlanId);
+          this.workPlanService.getWorkPlanRecord(params).subscribe(data => {
             this.editing = true;
-            this.setPartnerSetupInfo(data.setup);
+            this.setWorkPlanInfo(data.setup);
             this.calendar = {
               periodType: data.setup.periodType,
               grantStartDate: data.setup.startDate,
@@ -91,7 +91,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         }
       });
 
-    if (this.partnerSetupId != undefined) {
+    if (this.workPlanId != undefined) {
       this.usersService.getUserStaffs().subscribe(data => {
         console.log(data)
         if (data !== null && data !== undefined) {
@@ -117,7 +117,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     };
   }
 
-  setPartnerSetupInfo(data) {
+  setWorkPlanInfo(data) {
     this.setup = data;
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
@@ -159,7 +159,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   getCalendarForSetup(id): any {
     let reportingCalendar: { [key: string]: string }[] = [];
     const params = new HttpParams().set('setupId', id);
-    this.partnerSetupService.getReportingCalendarByPartnerSetupId(params).subscribe(data => {
+    this.workPlanService.getReportingCalendarByWorkPlanId(params).subscribe(data => {
       data.calendar.forEach((cal) => {
         reportingCalendar.push({
           id: cal.id,
@@ -447,7 +447,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       currentStatus: this.currentStatus
     }
 
-    let partnerSetupRecord: { [key: string]: string } = {
+    let workPlanRecord: { [key: string]: string } = {
       userId: this.authService.getLoggedInUsername(),
       partnerId: this.staffChosen,
       programId: this.programChosen,
@@ -460,8 +460,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     if (this.setup) {
-      this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
-        this.setPartnerSetupInfo(data);
+      this.workPlanService.updateWorkPlan(workPlanRecord, this.setup.id).subscribe((data) => {
+        this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
         this.successMessage = "Updated Partner Setup";
@@ -472,9 +472,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         console.log(error);
       });
     } else {
-      this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
+      this.workPlanService.createWorkPlan(workPlanRecord).subscribe((data) => {
         if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
-        this.setPartnerSetupInfo(data);
+        this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
         this.successMessage = "Saved Partner Setup";
@@ -507,9 +507,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     });
 
     if (values.length != 0) {
-      this.partnerSetupService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
+      this.workPlanService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
         values.forEach((value) => {
-          this.partnerSetupService.createReportingCalendar(value).subscribe((data) => {
+          this.workPlanService.createReportingCalendar(value).subscribe((data) => {
             console.log("saved reporting calendar", data);
             if (this.calendar.reportingCalender.some(x => x.id === data.id)) {
               this.calendar.reportingCalender.forEach(function (item) {

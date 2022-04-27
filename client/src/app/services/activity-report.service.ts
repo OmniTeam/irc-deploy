@@ -19,6 +19,10 @@ export class ActivityReportService {
     return this.http.get(this.urlActivityReport);
   }
 
+  getBudgetLine(params: any): Observable<any> {
+    return this.http.get(`${this.urlActivityReport}/getBudgetLine`, {params});
+  }
+
   updateActivityReport(formData, id): Observable<any> {
     return this.http.put(`${this.urlActivityReport}${id}/`, formData);
   }
