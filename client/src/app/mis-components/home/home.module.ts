@@ -6,6 +6,7 @@ import {HomeComponent} from "./home.component";
 import {ComponentsModule} from "../../components/components.module";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {DateAgoPipe} from "../../pipes/date-ago.pipe";
+import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import {DateAgoPipe} from "../../pipes/date-ago.pipe";
         HomeRoutingModule,
         ComponentsModule,
         NgxDatatableModule,
+        EntityViewTableModule,
     ]
 })
 export class HomeModule { }
