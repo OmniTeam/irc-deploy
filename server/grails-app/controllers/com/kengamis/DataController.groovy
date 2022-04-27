@@ -64,15 +64,13 @@ class DataController {
                         if (formDataValue.multiSelectOptions.size() > 0) {
                             formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.multiSelectOptions]
                         }
-                    }
-                    else if (formDataValue.formSetting.xformType == XformType.REPEAT.value) {
+                    } else if (formDataValue.formSetting.xformType == XformType.REPEAT.value) {
                         def headers = formDataValue.repeatHeaders
                         def resultList = formDataValue.repeatData
                         if (headers.size() > 0) {
                             formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
                         }
-                    }
-                    else {
+                    } else {
                         formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.humanReadableValue]
                     }
                 }
@@ -168,8 +166,7 @@ class DataController {
         if (file.exists()) {
             IOUtils.copy(file.newDataInputStream(), response.outputStream)
             response.outputStream.flush()
-        }
-        else {
+        } else {
             render([msg: "File doesnt exist", status: 500] as JSON)
         }
     }
@@ -184,21 +181,24 @@ class DataController {
         try {
             response = client.get(path: path)
             assert response.statusCode == 200
-            def resp =  response.json
-            if(resp) {
-                resp.value.each{record->
+            def resp = response.json
+            if (resp) {
+                resp.value.each { record ->
 //                    insert into clients table
-//                    TODO discuss with Cathy these fields
-                    withMisSqlNonTx {
-                        def query = """
-                            insert into services(id,case_id,partner_name,date_of_service,
-                            client_case_id,service_provided)
-                            values(?,?,?,?,?,?)
+                    def tagType = TagType.findByName("Services")
+                    def existingTag = Tag.findByName(record."Service provided")
+                    if (!existingTag) {
+                        withMisSqlNonTx {
+                            def query = """
+                            insert into tag(id,tag_type_id,date_created,last_updated,name)
+                            values(?,?,?,?,?)
                         """
 
-                        executeUpdate(query.toString(),[UUID.randomUUID().toString(),record.caseid,record."Partner that provided service",
-                        record."Date of service",record."client caseid",record."Service provided"])
+                            executeUpdate(query.toString(), [UUID.randomUUID().toString(), tagType.id, new Date(),
+                                                             new Date(), record."Service provided"])
+                        }
                     }
+
                 }
             }
             render([msg: "Success", status: 200] as JSON)
@@ -207,6 +207,7 @@ class DataController {
             render([msg: "Failed", status: 500] as JSON)
         }
     }
+
     def loadIrcClientDataFrmFeed() {
 //        TODO these should be stored in an external file
         String url = "https://www.commcarehq.org"
@@ -218,21 +219,23 @@ class DataController {
         try {
             response = client.get(path: path)
             assert response.statusCode == 200
-            def resp =  response.json
-            if(resp) {
-                resp.value.each{record->
+            def resp = response.json
+            if (resp) {
+                resp.value.each { record ->
 //                    insert into clients table
 //                    TODO discuss with Cathy these fields
 //                    TODO check for duplicates
                     withMisSqlNonTx {
                         def query = """
-                            insert into clients(id,partner_name,case_id,division,gender,date_of_registration,
-                            district,parish,age_category,country_of_origin,disability,register_status)
-                            values(?,?,?,?,?,?,?,?,?,?,?,?)
+                            insert into entity_clients(id,submitterName,date_created,unique_id,_partner_name,_case_id,_division,_gender,_date_of_registration,
+                            _district,_parish,_age_category,_country_of_origin,_disability,_register_status)
+                            values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                         """
-                        executeUpdate(query.toString(),[UUID.randomUUID().toString(),record."Partner name",record.caseid,record.Division,
-                        record.Gender,record."Date of registration",record.District,record.Parish,record.Age,
-                        record.Nationality,record."Have disability",record."Registered?"])
+
+                        def idStr = UUID.randomUUID().toString()
+                        executeUpdate(query.toString(), [idStr, 'super', new Date(), idStr, record."Partner name", record.caseid, record.Division,
+                                                         record.Gender, record."Date of registration", record.District, record.Parish, record.Age,
+                                                         record.Nationality, record."Have disability", record."Registered?"])
                     }
                 }
             }

@@ -116,7 +116,9 @@ export const ROUTES: RouteInfo[] = [
     roles: [
       'ROLE_BUDGET_HOLDER',
       'ROLE_SUPER_ADMIN',
-      'ROLE_ADMIN'
+      'ROLE_ADMIN',
+      'ROLE_REBUILD_DATA_VIEWER',
+      'ROLE_REBUILD_DATA_MANAGER'
     ]
   },
   {
@@ -124,7 +126,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Activity Report',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
+    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER'],
   },
   // formsMenu,
   dataMenu,
@@ -134,14 +136,14 @@ export const ROUTES: RouteInfo[] = [
     title: 'Referrals',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
   },
   {
     path: 'feedback-list',
     title: 'FeedBack',
     type: 'link',
     icontype: 'fa fa-comment-dots',
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
   },
   {
     path: '/',
@@ -149,9 +151,9 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tasks text-pink',
     isCollapsed: true,
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
     children: [
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'], },
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'], },
     ]
   },
 
