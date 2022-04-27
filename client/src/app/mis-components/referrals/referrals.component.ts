@@ -8,6 +8,7 @@ import {UsersService} from "../../services/users.service";
 import {RolesService} from "../../services/roles.service";
 import * as XLSX from 'xlsx';
 import {ReferralsService} from "../../services/referrals.service";
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-users',
@@ -44,11 +45,13 @@ export class ReferralsComponent implements OnInit {
   private groupValue = '';
   users: any;
   referrals: any;
+  userRole: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private alertService: AlertService,
+    private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
     private usersService: UsersService,
@@ -60,6 +63,7 @@ export class ReferralsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userRole = this.authService.getUserRoles();
     this.reloadTable();
   }
 
