@@ -196,6 +196,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
 
     this.taskService.getTaskRecord(params).subscribe((data) =>{
       this.taskRecord = data;
+      console.log(this.taskRecord, "this.taskRecord")
       this.feedbackService.getCurrentFeedback(this.taskRecord.feedbackId).subscribe(data => {
         console.log(data, "feedback data")
 
@@ -244,25 +245,29 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void{
-    this.feedbackService.getCurrentFeedback(this.route.snapshot.params.id).subscribe(data => {
-      this.FBROS = data
-      console.log(this.FBROS.feedbackReferredShared)
-      if (this.FBROS?.feedbackReferredShared === 'Yes') {
-        document.getElementById("internalExternal").hidden = false
-        document.getElementById('personName').hidden = false
-        document.getElementById('personPosition').hidden = false
-        document.getElementById('organizationReferred').hidden = false
-      } else {
-        this.f['feedbackInternallyExternally'].reset()
-        this.f['referredPersonName'].reset()
-        this.f['referredPersonPosition'].reset()
-        this.f['referredOrganization'].reset()
-        document.getElementById('internalExternal').hidden = true
-        document.getElementById('personName').hidden = true
-        document.getElementById('personPosition').hidden = true
-        document.getElementById('organizationReferred').hidden = true
+    this.taskId = this.route.snapshot.params.id;
+    const params = new HttpParams().set('id', this.taskId);
+    this.taskService.getTaskRecord(params).subscribe((data) => {
+      this.feedbackService.getCurrentFeedback(data.feedbackId).subscribe(data => {
+        this.FBROS = data
+        console.log(this.FBROS.feedbackReferredShared)
+        if (this.FBROS?.feedbackReferredShared === 'Yes') {
+          document.getElementById("internalExternal").hidden = false
+          document.getElementById('personName').hidden = false
+          document.getElementById('personPosition').hidden = false
+          document.getElementById('organizationReferred').hidden = false
+        } else {
+          this.f['feedbackInternallyExternally'].reset()
+          this.f['referredPersonName'].reset()
+          this.f['referredPersonPosition'].reset()
+          this.f['referredOrganization'].reset()
+          document.getElementById('internalExternal').hidden = true
+          document.getElementById('personName').hidden = true
+          document.getElementById('personPosition').hidden = true
+          document.getElementById('organizationReferred').hidden = true
 
-      }
+        }
+      })
     })
   }
 
