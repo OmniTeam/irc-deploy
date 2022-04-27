@@ -293,13 +293,13 @@ export class ActivityFormComponent implements OnInit {
 
   updateTask(status){
     this.taskRecord.status = status;
-    this.taskRecord.groupId = this.taskRecord.groupId ?? '';
+    this.taskRecord.groupId = '[]';
     if (this.isReview) {
       let actionRequired = this.formGroup.value.actionRequired;
-      this.taskRecord.outputVariables = '{"changesRequested": "' + actionRequired + '","groupId:"""}'
+      this.taskRecord.outputVariables = '{"changesRequested": "' + actionRequired + '"}'
     }
     if(this.isApprove) {
-      this.taskRecord.outputVariables = '{"archiveReport": "' + "Yes" + '","groupId:"""}'
+      this.taskRecord.outputVariables = '{"archiveReport": "' + "Yes" + '"}'
     }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');

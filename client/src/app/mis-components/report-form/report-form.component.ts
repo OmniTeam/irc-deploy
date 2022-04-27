@@ -655,6 +655,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
+    this.taskRecord.groupId = '[]';
     if (this.isSubmit) {
       this.taskRecord.outputVariables = "{}";
     }
