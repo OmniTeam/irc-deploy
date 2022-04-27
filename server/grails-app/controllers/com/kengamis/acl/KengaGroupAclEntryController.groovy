@@ -188,7 +188,14 @@ class KengaGroupAclEntryController {
     }
 
     def listAllACLS (){
-        def proof = (" ia m here")
-        return proof
+        def acls = []
+        KengaGroupAclEntry.all.each {aclEntry ->
+            acls << [
+                    id: aclEntry.id,
+                    group: aclEntry.kengaGroup.name,
+                    table: aclEntry.kengaAclTableRecordIdentity.kengaDataTable.tableName
+            ]
+        }
+        respond acls
     }
 }

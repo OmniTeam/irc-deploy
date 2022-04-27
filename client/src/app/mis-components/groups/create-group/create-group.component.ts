@@ -95,15 +95,15 @@ export class CreateGroupComponent implements OnInit {
         }, error => {this.alertService.error("failed to create Kenga User Groups")})
       }
 
-      this.router.navigate(['/groups']);
+      this.router.navigate(['/aclsEntries']);
     }, error => {
       this.alertService.error("Failed to Create the Group")
     });
-    this.router.navigate(['/groups']);
+    this.router.navigate(['/aclsEntries']);
   }
 
   goBack() {
-    this.router.navigate(['/groups'])
+    this.router.navigate(['/aclsEntries'])
   }
 
 }

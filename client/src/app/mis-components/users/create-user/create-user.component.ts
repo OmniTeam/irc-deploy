@@ -146,7 +146,7 @@ export class CreateUserComponent implements OnInit {
 
         this.userService.createUserGroup(userGroupData).subscribe(data => {
           console.log(data ,"User group")
-        }, error => {this.alertService.error("failed to create user groups")})
+        }, error => {this.alertService.error("failed to create user aclsEntries")})
       }
 
       this.router.navigate(['/users']);

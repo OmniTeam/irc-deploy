@@ -90,7 +90,7 @@ export class EditGroupComponent implements OnInit {
         this.groupsService.deleteCurrentGroup(this.route.snapshot.params.id).subscribe((result) => {
             console.warn(result, 'Group has been deleted');
             this.alertService.warning(`Group has been deleted`)
-            this.router.navigate(['/groups']);
+            this.router.navigate(['/aclsEntries']);
           }, error => {
             this.alertService.error(`Failed to delete Group: ${this.formGroup.controls.name.value}`)
           }
@@ -112,7 +112,7 @@ export class EditGroupComponent implements OnInit {
 
     this.groupsService.updateGroup(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
       this.alertService.success(`Group: ${result.name} has been successfully updated`)
-      this.router.navigate(['/groups']);
+      this.router.navigate(['/aclsEntries']);
     }, error => {
       this.alertService.error(`Failed to update group: ${this.formGroup.controls.name.value}`)
     });

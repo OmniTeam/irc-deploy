@@ -80,7 +80,7 @@ export class GroupsComponent implements OnInit {
     deletedRow.forEach((p) => {
         this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
           console.warn(result, 'Groups have been deleted');
-          this.router.navigate(['/groups']).then(() => {
+          this.router.navigate(['/aclsEntries']).then(() => {
             window.location.reload();
           });
         })
@@ -91,7 +91,7 @@ export class GroupsComponent implements OnInit {
     const currentId = row.id
     this.groupsService.deleteCurrentGroup(currentId).subscribe((result) => {
       console.warn(result, 'Group has been deleted');
-      this.router.navigate(['/groups']).then(() => {
+      this.router.navigate(['/aclsEntries']).then(() => {
         window.location.reload();
       });
       this.alertService.warning("Group has been deleted")

@@ -32,17 +32,38 @@
                         </label>
                       </div>
                     </div>
-                    <div class="col-sm-12 col-md-5 offset-md-3">
-                      <div id="datatable_filter" class="dataTables_filter">
-                        <label>
-                          <input
-                            type="search"
-                            class="form-control form-control-sm"
-                            placeholder="Search Groups"
-                            aria-controls="datatable"
-                            (keyup)="onChangeSearch($event)"
-                          />
-                        </label>
+                    <div class="col-sm-12 col-md-4">
+                      <div class="dataTables_length">
+                        <ng-select class="form-control form-control-sm"
+                                   name="datatable_length"
+                                   aria-controls="datatable"
+                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   (change)="onChangeGroup($event)"
+                                   placeholder="Group"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.name" *ngFor="let item of groups">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                      <div class="dataTables_length">
+                        <ng-select class="form-control form-control-sm"
+                                   name="datatable_length"
+                                   aria-controls="datatable"
+                                   style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   (change)="onChangeTable($event)"
+                                   placeholder="Table"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.Tables_in_kengamis" *ngFor="let item of kengaDataTables">
+                            {{item.Tables_in_kengamis}}
+                          </ng-option>
+                        </ng-select>
                       </div>
                     </div>
                   </div>
@@ -73,7 +94,7 @@
             [headerHeight]="50"
             [footerHeight]="50"
             [rowHeight]="'auto'"
-            [rows]="groups"
+            [rows]="aclsEntries"
             [count]="page.count"
             [limit]="entries!= -1 ? entries : undefined"
           >
@@ -81,34 +102,20 @@
               [width]="15"
               prop="id"
             >
+              <!--<ng-template
+                ngx-datatable-header-template
+                let-value="value"
+                let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn"
+              >
+                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+              </ng-template>-->
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Group Name" prop="name">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/group/edit/{{row.id}}">{{row.name}}</a>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Date Created" prop="dateCreated">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <a>{{row.dateCreated | date: 'dd/M/yyyy'}}</a>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Action" sortable="false">
-              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button
-                  (click)="editGroup(row);"
-                  class="btn btn-default"
-                  style="padding: 1px 6px;">
-                  <i class="fa fa-pencil-alt"></i>
-                </button>
-                <button (click)="deleteGroup(row)" class="btn btn-danger" style="padding: 1px 6px;">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </ng-template>
-
-            </ngx-datatable-column>
+            <ngx-datatable-column name="Group Name" prop="group"></ngx-datatable-column>
+            <ngx-datatable-column name="Table Name" prop="table"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>
