@@ -226,13 +226,15 @@ class DataController {
 //                    TODO check for duplicates
                     withMisSqlNonTx {
                         def query = """
-                            insert into clients(id,partner_name,case_id,division,gender,date_of_registration,
-                            district,parish,age_category,country_of_origin,disability,register_status)
-                            values(?,?,?,?,?,?,?,?,?,?,?,?)
+                            insert into entity_clients(id,submitterName,date_created,unique_id,_partner_name,_case_id,_division,_gender,_date_of_registration,
+                            _district,_parish,_age_category,_country_of_origin,_disability,_register_status)
+                            values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                         """
-                        executeUpdate(query.toString(),[UUID.randomUUID().toString(),record."Partner name",record.caseid,record.Division,
-                        record.Gender,record."Date of registration",record.District,record.Parish,record.Age,
-                        record.Nationality,record."Have disability",record."Registered?"])
+
+                        def idStr = UUID.randomUUID().toString()
+                        executeUpdate(query.toString(),[idStr,'super',new Date(),idStr, record."Partner name", record.caseid, record.Division,
+                                                        record.Gender, record."Date of registration", record.District, record.Parish, record.Age,
+                                                        record.Nationality, record."Have disability", record."Registered?"])
                     }
                 }
             }
