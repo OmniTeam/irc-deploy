@@ -34,7 +34,7 @@ export class WorkPlanListComponent implements OnInit {
         {
           text: '<i class="text fas fa-plus" style="color: cornflowerblue;"></i>&nbsp;&nbsp;Add Work Plan',
           action: (e, dt, node, config) => {
-            this.router.navigate(['/WorkPlan']);
+            this.router.navigate(['/workPlan']);
           }
         },
         {

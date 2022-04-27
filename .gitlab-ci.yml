@@ -30,7 +30,7 @@ build:deploy:
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/irc-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
     - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./stop-ircmis.sh && ./start-ircmis.sh"
-    - echo "Done Deploying ircmis server :)" 
+    - echo "Done Deploying ircmis server :)"
 
 build:stage:
   image: node:12
