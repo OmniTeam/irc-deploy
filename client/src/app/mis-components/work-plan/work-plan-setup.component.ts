@@ -43,7 +43,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   milestones: any = [];
   staffChosen: string;
   programChosen: string;
-  WorkPlanId: string;
+  workPlanId: string;
 
   openPopup: boolean;
   editing: boolean;
@@ -74,9 +74,9 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.editing = false;
     this.route.params
       .subscribe(p => {
-        this.WorkPlanId = p['id'];
-        if(this.WorkPlanId!=undefined || this.WorkPlanId!=null) {
-          const params = new HttpParams().set('id', this.WorkPlanId);
+        this.workPlanId = p['id'];
+        if(this.workPlanId!=undefined || this.workPlanId!=null) {
+          const params = new HttpParams().set('id', this.workPlanId);
           this.workPlanService.getWorkPlanRecord(params).subscribe(data => {
             this.editing = true;
             this.setWorkPlanInfo(data.setup);
@@ -91,7 +91,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         }
       });
 
-    if (this.WorkPlanId != undefined) {
+    if (this.workPlanId != undefined) {
       this.usersService.getUserStaffs().subscribe(data => {
         console.log(data)
         if (data !== null && data !== undefined) {
@@ -447,7 +447,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       currentStatus: this.currentStatus
     }
 
-    let WorkPlanRecord: { [key: string]: string } = {
+    let workPlanRecord: { [key: string]: string } = {
       userId: this.authService.getLoggedInUsername(),
       partnerId: this.staffChosen,
       programId: this.programChosen,
@@ -460,7 +460,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     }
 
     if (this.setup) {
-      this.workPlanService.updateWorkPlan(WorkPlanRecord, this.setup.id).subscribe((data) => {
+      this.workPlanService.updateWorkPlan(workPlanRecord, this.setup.id).subscribe((data) => {
         this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
@@ -472,7 +472,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         console.log(error);
       });
     } else {
-      this.workPlanService.createWorkPlan(WorkPlanRecord).subscribe((data) => {
+      this.workPlanService.createWorkPlan(workPlanRecord).subscribe((data) => {
         if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
         this.setWorkPlanInfo(data);
         this.error = false;
@@ -500,7 +500,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         startDate: c.startDate,
         endDate: c.endDate,
         period: c.datePeriod,
-        WorkPlanId: setupId,
+        partnerSetupId: setupId,
         started: false,
         completed: false
       });

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {ProgramStaffService} from "../../services/program-staff.service";
 import {ActivityReportService} from "../../services/activity-report.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-activity-report',
@@ -25,8 +26,9 @@ export class ActivityReportComponent implements OnInit {
     private router: Router,
     private alertService: AlertService,
     private activityReportService: ActivityReportService,
-    private programStaffService : ProgramStaffService
-  ) { }
+    private programStaffService: ProgramStaffService
+  ) {
+  }
 
   ngOnInit(): void {
     this.reloadTable();
@@ -35,12 +37,30 @@ export class ActivityReportComponent implements OnInit {
 
   reloadTable() {
     this.activityReportService.getActivityReport().subscribe((data) => {
-      console.log("JHerer",data)
       this.activity = data;
+      console.log("results", this.activity)
     });
   }
 
-  getStaff(){
+  getResults() {
+    let results: any = []
+    this.activity.forEach((data) => {
+      const params = new HttpParams().set('budgetLineId', data.budgetLine);
+      this.activityReportService.getBudgetLine(params).subscribe((item) => {
+        results.push({
+          budgetLine: item,
+          designation: data.designation,
+          location: data.location,
+          milestone: data.milestone,
+          startDate: data.startDate,
+          endDate: data.endDate
+        })
+      });
+    })
+    return results
+  }
+
+  getStaff() {
     this.programStaffService.getProgramStaffs().subscribe((data) => {
       console.log()
       this.staffs = data;
@@ -53,7 +73,7 @@ export class ActivityReportComponent implements OnInit {
 
   editActivityReport(row) {
     const id = row.id;
-    this.router.navigate(['/activityReport/edit/'+ id]);
+    this.router.navigate(['/activityReport/edit/' + id]);
   }
 
   deleteActivityReport(row) {

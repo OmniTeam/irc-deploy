@@ -55,7 +55,7 @@ class UrlMappings {
         get "/$controller/exportEntityData(.$format)?"(action:"exportEntityData")
         get "/$controller/exportZippedFormData(.$format)?"(action:"getExportedZippedFormData")
         get "/$controller/getUserRoles(.$format)?"(action:"getUserRoles")
-
+        get "/$controller/getBudgetLine(.$format)?"(action:"getBudgetLine")
         get "/$controller/userStaffsShow/$id(.$format)?"(action:"userStaffsShow")
         get "/$controller/userStaffs(.$format)?"(action:"userStaffs")
         get "/$controller/getUsersWithoutWorkPlan(.$format)?"(action:"getUsersWithoutWorkPlan")

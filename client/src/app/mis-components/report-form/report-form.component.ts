@@ -95,7 +95,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private reportFormService: ReportFormService,
               private taskListService: TaskListService,
               private fileUploadService: FileUploadService,
-              private WorkPlanService: WorkPlanService,
+              private workPlanService: WorkPlanService,
               private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
               private alertService: AlertService,
@@ -211,8 +211,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   setReportsFromWorkPlan() {
-    const params2 = new HttpParams().set('id', this.taskRecord.WorkPlanId);
-    this.WorkPlanService.getWorkPlanRecord(params2).subscribe(data => {
+    const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+    this.workPlanService.getWorkPlanRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
@@ -679,8 +679,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   updateCalendarStatus() {
-    const params = new HttpParams().set('setupId', this.taskRecord.WorkPlanId).set('completed', "yes");
-    this.WorkPlanService.updateReportingCalendarStatus(params).subscribe((data)=>{
+    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+    this.workPlanService.updateReportingCalendarStatus(params).subscribe((data)=>{
       console.log('updated calendar status')
     }, error => console.log('failed update calendar status', error));
   }

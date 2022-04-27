@@ -51,7 +51,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               private userService: UsersService,
               private fileUploadService: FileUploadService,
               private activityReportService: ActivityReportService,
-              private WorkPlan: WorkPlanService,
+              private workPlanService: WorkPlanService,
               private router: Router,
               private programStaffService: ProgramStaffService) { }
 
@@ -302,7 +302,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   }
 
   getBudgetLines(){
-    this.WorkPlan.getWorkPlan().subscribe((data) =>{
+    this.workPlanService.getWorkPlan().subscribe((data) =>{
       console.log(data)
       this.budgetHolder = data
     })

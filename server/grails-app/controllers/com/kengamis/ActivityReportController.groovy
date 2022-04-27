@@ -1,19 +1,12 @@
 package com.kengamis
 
-import com.kengamis.tasks.StartCamundaInstancesJob
-import grails.validation.ValidationException
-import groovyx.net.http.ContentType
-import groovyx.net.http.HTTPBuilder
-import groovyx.net.http.Method
-
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
-
+import com.kengamis.AppHolder
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+import groovy.json.JsonSlurper
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class ActivityReportController {
@@ -25,7 +18,7 @@ class ActivityReportController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond activityReportService.list(params), model:[activityReportCount: activityReportService.count()]
+        respond activityReportService.list(params), model: [activityReportCount: activityReportService.count()]
     }
 
     def show(String id) {
@@ -51,9 +44,8 @@ class ActivityReportController {
             return
         }
 
-        respond activityReport, [status: CREATED, view:"show"]
+        respond activityReport, [status: CREATED, view: "show"]
     }
-
 
 
     @Transactional
@@ -75,7 +67,7 @@ class ActivityReportController {
             return
         }
 
-        respond activityReport, [status: OK, view:"show"]
+        respond activityReport, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -88,5 +80,24 @@ class ActivityReportController {
         activityReportService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getBudgetLine() {
+        def budgetLine = ''
+        def id = params.budgetLineId as String
+
+        if (id != "undefined") {
+            def slurper = new JsonSlurper()
+            def query = "SELECT * FROM `partner_setup` WHERE setup_values LIKE '%${id}%'"
+            def v = AppHolder.withMisSql { rows(query.toString()) }
+            if(v.size() > 0){
+                def setup = v.first()
+                def variables = slurper.parseText(setup['setup_values'] as String)
+                variables['budget'].each {
+                    if (it.id == id) budgetLine = it.budgetLine
+                }
+            }
+        }
+        budgetLine
     }
 }
