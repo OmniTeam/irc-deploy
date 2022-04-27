@@ -36,7 +36,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   successMessage: string;
 
   isSubmit: boolean;
-  isMakeCorrections: boolean;
+  isMakeCorrectionsMandE: boolean;
+  isMakeCorrectionsSupervisor: boolean;
   isReview: boolean;
   isApprove: boolean;
 
@@ -115,9 +116,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
-          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_MandE" ||
-            this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrections = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmit = true;
+          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_MandE") this.isMakeCorrectionsMandE = true;
+          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
           if (this.taskRecord.taskDefinitionKey === "Approve_Quarterly_Report") this.isApprove = true;
 

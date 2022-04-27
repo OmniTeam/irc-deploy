@@ -14,7 +14,7 @@
                 <div class=" row">
                   <div class=" col">
                     <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Forms
+                      Referrals
                     </h3>
 
                     <span class=" h2 font-weight-bold mb-0"> 5 </span>
@@ -38,7 +38,7 @@
                 <div class=" row">
                   <div class=" col">
                     <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Users
+                      Feedback
                     </h3>
 
                     <span class=" h2 font-weight-bold mb-0"> 23 </span>
@@ -62,7 +62,7 @@
                 <div class=" row">
                   <div class=" col">
                     <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Approved
+                      Progress Report
                     </h3>
 
                     <span class=" h2 font-weight-bold mb-0"> 100 </span>
@@ -86,79 +86,7 @@
                 <div class=" row">
                   <div class=" col">
                     <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Flagged
-                    </h3>
-
-                    <span class=" h2 font-weight-bold mb-0"> 17 </span>
-                  </div>
-
-                  <div class=" col-auto">
-                    <div
-                      class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                    >
-                      <i class=" ni ni-tag"> </i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class=" row">
-          <div class=" col-xl-3 col-md-6">
-            <div class=" card card-stats">
-              <div >
-                <div class=" row">
-                  <div class=" col">
-                    <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Resolved
-                    </h3>
-
-                    <span class=" h2 font-weight-bold mb-0"> 94 </span>
-                  </div>
-
-                  <div class=" col-auto">
-                    <div
-                      class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                    >
-                      <i class=" ni ni-basket"> </i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class=" col-xl-3 col-md-6">
-            <div class=" card card-stats">
-              <div >
-                <div class=" row">
-                  <div class=" col">
-                    <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Rejected
-                    </h3>
-
-                    <span class=" h2 font-weight-bold mb-0"> 56 </span>
-                  </div>
-
-                  <div class=" col-auto">
-                    <div
-                      class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
-                    >
-                      <i class=" ni ni-fat-delete"> </i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class=" col-xl-3 col-md-6">
-            <div class=" card card-stats">
-              <div >
-                <div class=" row">
-                  <div class=" col">
-                    <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Not Actioned
+                      Activity Report
                     </h3>
 
                     <span class=" h2 font-weight-bold mb-0"> 17 </span>
@@ -187,90 +115,136 @@
       <div class=" card">
         <div class="row">
 
-          <div class="card-header col-sm-12">
-            <div class="justify-center" style="display: block; width: 100%;">
-              <h6 class="h2">ONGOING TASKS</h6>
-            </div>
-          </div>
-
-          <div class="card-body col-sm-12">
-            <div class="row">
-
-              <div class="dataTables_wrapper py-4">
-                <div class="row" style="display: flex; width: 100%">
-                    <div class="col-sm-6">
-                      <div class="dataTables_length" id="datatable_length">
-                        <label>
-                          Show
-                          <select
-                            name="datatable_length"
-                            aria-controls="datatable"
-                            class="form-control form-control-sm"
-                            (change)="entriesChange($event)"
-                            style="width: 200%;"
-                          >
-                            <option value="10" [selected]="entries == 10">10</option>
-                            <option value="25" [selected]="entries == 25">25</option>
-                            <option value="50" [selected]="entries == 50">50</option>
-                            <option value="-1" [selected]="entries == -1">All</option>
-                          </select>
-                          entries
-                        </label>
-                      </div>
+          <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+            <div class=" row">
+              <div class=" col">
+<!--                <h3 style="margin-left: 40px;"></h3>-->
+                <div class="card">
+                  <div class="card-body col-sm-12">
+                    <div class="row">
+                      <button class="btn btn-default" (click)="createReferral()">New Referral</button>
+                      <button class="btn btn-default" (click)="createActivityReport()">New Activity Report</button>
+                      <button class="btn btn-default" (click)="createFeedback()">New Feedback</button>
                     </div>
-                    <div class="col-sm-6">
-                      <div id="datatable_filter" class="dataTables_filter">
-                        <label>
-                          <input
-                            type="search"
-                            class="form-control form-control-sm"
-                            placeholder="Search Ongoing Tasks"
-                            aria-controls="datatable"
-                            (keyup)="onChangeSearch($event)"
-                            (search)="onSearch($event)"
-                            style="width: 200%;"
-                          />
-                        </label>
-                      </div>
-                    </div>
-                </div>
-
-                <div class="row" style="display: flex; margin-top: 10px; margin-bottom: 20px;">
-                  <div class="btn-group" role="group" aria-label="switch_button" style="margin-left: 20px;">
-                    <button type="button" class="btn btn-default_btn" [class.active_btn]="isReferrals" (click)="switchRowsData('referrals')">Referrals</button>
-                    <button type="button" class="btn btn-default_btn" [class.active_btn]="isFeedback" (click)="switchRowsData('feedback')">Feedback</button>
-                    <button type="button" class="btn btn-default_btn" [class.active_btn]="isQuarterlyReport" (click)="switchRowsData('quarterly_report')">Quarterly Report</button>
-                    <button type="button" class="btn btn-default_btn" [class.active_btn]="isActivityReport" (click)="switchRowsData('activity_report')">Activity Report</button>
                   </div>
                 </div>
-
-                <ngx-datatable
-                  class="bootstrap selection-cell"
-                  [columnMode]="'force'"
-                  [headerHeight]="50"
-                  [footerHeight]="50"
-                  [rowHeight]="'auto'"
-                  [limit]="entries != -1 ? entries : undefined"
-                  [rows]="rows">
-                  <ngx-datatable-column name="Name of Assignee" prop="assignee"></ngx-datatable-column>
-                  <ngx-datatable-column name="Task Name" prop="task_name"></ngx-datatable-column>
-                  <ngx-datatable-column name="Type of Task" prop="task_type"></ngx-datatable-column>
-                  <ngx-datatable-column name="Date assigned" prop="date_assigned">
-                    <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
-                      {{ value | date: 'medium' }}
-                    </ng-template>
-                  </ngx-datatable-column>
-                  <ngx-datatable-column name="Task Age" prop="task_age">
-                    <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
-                      {{ value | dateAgo }}
-                    </ng-template>
-                  </ngx-datatable-column>
-                </ngx-datatable>
-
               </div>
             </div>
           </div>
-        </div>
+
+          <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+            <div class=" row">
+              <div class=" col">
+                <h3 style="margin-left: 40px;">ONGOING TASKS</h3>
+                <div class="card">
+                  <div class="card-body col-sm-12">
+                    <div class="row">
+
+                      <div class="dataTables_wrapper py-4">
+                        <div class="row" style="display: flex; width: 100%">
+                          <div class="col-sm-6">
+                            <div class="dataTables_length" id="datatable_length">
+                              <label>
+                                Show
+                                <select
+                                  name="datatable_length"
+                                  aria-controls="datatable"
+                                  class="form-control form-control-sm"
+                                  (change)="entriesChange($event)"
+                                  style="width: 200%;"
+                                >
+                                  <option value="10" [selected]="entries == 10">10</option>
+                                  <option value="25" [selected]="entries == 25">25</option>
+                                  <option value="50" [selected]="entries == 50">50</option>
+                                  <option value="-1" [selected]="entries == -1">All</option>
+                                </select>
+                                entries
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div id="datatable_filter" class="dataTables_filter">
+                              <label>
+                                <input
+                                  type="search"
+                                  class="form-control form-control-sm"
+                                  placeholder="Search Ongoing Tasks"
+                                  aria-controls="datatable"
+                                  (keyup)="onChangeSearch($event)"
+                                  (search)="onSearch($event)"
+                                  style="width: 200%;"
+                                />
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row" style="display: flex; margin-top: 10px; margin-bottom: 20px;">
+                          <div class="btn-group" role="group" aria-label="switch_button" style="margin-left: 20px;">
+                            <button type="button" class="btn btn-default_btn" [class.active_btn]="isReferrals"
+                                    (click)="switchRowsData('referrals')">Referrals
+                            </button>
+                            <button type="button" class="btn btn-default_btn" [class.active_btn]="isFeedback"
+                                    (click)="switchRowsData('feedback')">Feedback
+                            </button>
+                            <button type="button" class="btn btn-default_btn" [class.active_btn]="isQuarterlyReport"
+                                    (click)="switchRowsData('quarterly_report')">Progress Report
+                            </button>
+                            <button type="button" class="btn btn-default_btn" [class.active_btn]="isActivityReport"
+                                    (click)="switchRowsData('activity_report')">Activity Report
+                            </button>
+                          </div>
+                        </div>
+
+                        <ngx-datatable
+                          class="bootstrap selection-cell"
+                          [columnMode]="'force'"
+                          [headerHeight]="50"
+                          [footerHeight]="50"
+                          [rowHeight]="'auto'"
+                          [limit]="entries != -1 ? entries : undefined"
+                          [rows]="rows">
+
+                          <ngx-datatable-column name="Activity" prop="task_type">
+                            <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                         ngx-datatable-cell-template>
+                              {{value | replace: '_' : ' '}}
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Task Name" prop="task_name">
+                            <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                         ngx-datatable-cell-template>
+                              {{value | replace: '_' : ' '}}
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Assignee" prop="assignee"></ngx-datatable-column>
+                          <ngx-datatable-column name="Date assigned" prop="date_assigned">
+                            <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                         ngx-datatable-cell-template>
+                              {{ value | date: 'medium' }}
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Date created" prop="date_created">
+                            <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                         ngx-datatable-cell-template>
+                              {{ value | date: 'medium' }}
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Task Age" prop="task_age">
+                            <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                         ngx-datatable-cell-template>
+                              {{ value | dateAgo }}
+                            </ng-template>
+                          </ngx-datatable-column>
+                        </ngx-datatable>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>

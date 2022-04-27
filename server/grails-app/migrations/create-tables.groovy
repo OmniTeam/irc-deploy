@@ -2179,4 +2179,8 @@ databaseChangeLog = {
     changeSet(author: "DELL (generated)", id: "20220901124635-12056") {
         modifyDataType(columnName: "cost_associated", newDataType: "text", tableName: "activity_report")
     }
+
+    changeSet(author: "BrunoJay (generated)", id: "1641534534539-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "assignee", tableName: "referral")
+    }
 }

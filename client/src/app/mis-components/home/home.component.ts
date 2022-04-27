@@ -5,6 +5,7 @@ import {TaskListService} from "../../services/task-list.service";
 import {ActivityReportService} from "../../services/activity-report.service";
 import {OngoingTask} from "../../models/ongoing-task";
 import {UsersService} from "../../services/users.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import {UsersService} from "../../services/users.service";
 export class HomeComponent implements OnInit {
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private referralsService: ReferralsService,
     private feedbackService: FeedbackService,
     private taskListService: TaskListService,
@@ -75,58 +78,36 @@ export class HomeComponent implements OnInit {
   }
 
   reloadTable() {
-    this.referralsService.getReferrals().subscribe((data) => {
-      console.log('referrals', data)
-      let results = [];
-      if (data != null) {
-        this.getReferralStats(data);
-        data.forEach((item) => {
-          results.push(this.getRow(item.assignee, 'Referral', item.reasonForReferral, item.dateCreated, item.dateOfReferral))
-        });
-      }
-      this.referrals = results;
-    });
-    this.feedbackService.getFeedback().subscribe((data) => {
-      console.log('feedback', data)
-      let results = [];
-      if (data != null) {
-        data.forEach((item) => {
-          results.push(this.getRow(item.assignee, 'Action Feedback', item.typeOfFeedback, item.dateCreated, item.startDate))
-        });
-      }
-      this.feedback = results;
-    });
     this.taskListService.getTaskList().subscribe(data => {
-      console.log('reporting', data)
-      let results = [];
+      console.log('data', data)
+      let results1 = [];
+      let results2 = [];
+      let results3 = [];
+      let results4 = [];
       if (data != null) {
         data.forEach((item) => {
           let staff = this.getStaff(item.partnerId);
-          results.push(this.getRow(staff ? staff.name : '', item.taskName, 'Reporting', item.dateCreated, item.startDate))
+          if(item.processDefKey=="IRC_REPORTING") results1.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
+          if(item.processDefKey=="IRC_REFERRAL") results2.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
+          if(item.processDefKey=="ACTIVITY_REPORTING") results3.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
+          if(item.processDefKey=="IRC_FEEDBACK") results4.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
         });
       }
-      this.quarterly_report = results;
-    });
-    this.activityReportService.getActivityReport().subscribe((data) => {
-      console.log('activity_report', data)
-      let results = [];
-      if (data != null) {
-        data.forEach((item) => {
-          let staff = this.getStaff(item.assignee);
-          results.push(this.getRow(staff ? staff.name : '', item.name, 'Activity Report', item.dateCreated, item.startDate))
-        });
-      }
-      this.activity_report = results;
+      this.quarterly_report = results1;
+      this.referrals = results2;
+      this.activity_report = results3;
+      this.feedback = results4;
     });
   }
 
-  getRow(assignee, taskName, type, dateAssigned, startDate): OngoingTask {
+  getRow(assignee, taskName, type, dateAssigned, dateCreated, startDate): OngoingTask {
     return (
       {
         assignee: assignee,
         task_name: taskName,
         task_type: type,
         date_assigned: dateAssigned,
+        date_created: dateCreated,
         task_age: startDate
       }
     );
@@ -165,6 +146,18 @@ export class HomeComponent implements OnInit {
       }
       return false;
     });
+  }
+
+  createActivityReport() {
+    this.router.navigate(['activity-create']);
+  }
+
+  createFeedback() {
+    this.router.navigate(['create-feedback']);
+  }
+
+  createReferral() {
+    this.router.navigate(['generate-referral']);
   }
 
   onSearch(event) {
