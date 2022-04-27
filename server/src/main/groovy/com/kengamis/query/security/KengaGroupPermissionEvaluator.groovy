@@ -3,6 +3,7 @@ package com.kengamis.query.security
 import com.kengamis.KengaGroup
 import com.kengamis.KengaUserGroup
 import com.kengamis.acl.KengaAclTableRecordIdentity
+import com.kengamis.acl.KengaDataTable
 import com.kengamis.acl.KengaGroupAclEntry
 import grails.plugin.springsecurity.acl.AclObjectIdentity
 import groovy.util.logging.Slf4j
@@ -23,17 +24,25 @@ class KengaGroupPermissionEvaluator implements IKengaGroupPermissionEvaluator {
     private PermissionFactory permissionFactory = new DefaultPermissionFactory()
 
     @Override
-    boolean hasPermission(Authentication authentication, Object dataObject, Permission permission) {
+    boolean hasPermission(Authentication authentication, Object dataObject, Permission permission, String tableName = "") {
         if (dataObject == null) {
             return false
         }
-        KengaAclTableRecordIdentity recordIdentity = getRecordIdentity(dataObject)
+        KengaAclTableRecordIdentity recordIdentity = getRecordIdentity(dataObject,tableName)
         return checkPermission(authentication, recordIdentity, permission)
     }
 
-    KengaAclTableRecordIdentity getRecordIdentity(Object dataObject) {
-//        assmumes the id field for the datatable is id
-        def dataRecordId = dataObject.id
+    KengaAclTableRecordIdentity getRecordIdentity(Object dataObject, String tableName = "") {
+
+        def dataRecordId = ""
+        if(!tableName.isEmpty()){
+            def kengaDataTable = KengaDataTable.findByTableName(tableName)
+            if(kengaDataTable){
+                dataRecordId = dataObject."$kengaDataTable.idLabel"
+            }
+        }else{
+            dataRecordId = dataObject?.id
+        }
         def query = KengaAclTableRecordIdentity
                 .where { dataTableRecordId == dataRecordId }
         KengaAclTableRecordIdentity tableRecordIdentity = query.find()

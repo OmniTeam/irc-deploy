@@ -14,9 +14,9 @@ class KengaGroupsService {
 
     KengaGroupPermissionEvaluator kengaGroupPermissionEvaluator
 
-    List<Object> postFilter(List<Object> data, Permission permission) {
+    List<Object> postFilter(List<Object> data, Permission permission, String tableName = "") {
         Authentication authentication = springSecurityService.authentication
-        List<Object> accessible = data.findAll { kengaGroupPermissionEvaluator.hasPermission(authentication, it, permission) }
+        List<Object> accessible = data.findAll { kengaGroupPermissionEvaluator.hasPermission(authentication, it, permission, tableName) }
         return  accessible
     }
 
