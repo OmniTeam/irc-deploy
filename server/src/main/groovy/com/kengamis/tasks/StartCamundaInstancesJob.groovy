@@ -96,16 +96,13 @@ class StartCamundaInstancesJob extends Script {
 
             if (startInstance) {
                 try {
-
                         boolean started = startProcessInstance([
                                 ActivityId    : activity.id,
                                 StartDate     : activity.startDate,
                                 EndDate       : activity.endDate,
                                 Assignee      : activity.assignee
 
-                        ], IRC_REFERRAL)
-
-
+                        ], IRC_ACTIVITY_REPORT)
                         if (started) {
                             print "================ Yes Here We Go!!! ================"
                             println("IRC PROCESS STARTED")
@@ -131,7 +128,7 @@ class StartCamundaInstancesJob extends Script {
                             EndDate       : referral.lastUpdated,
                             Assignee      : referral.assignee
 
-                    ], IRC_ACTIVITY_REPORT)
+                    ], IRC_REFERRAL)
 
 
                     if (started) {

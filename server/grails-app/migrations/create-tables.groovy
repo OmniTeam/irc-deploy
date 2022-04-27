@@ -2175,4 +2175,8 @@ databaseChangeLog = {
     changeSet(author: "bruno (generated)", id: "16462913453652-27") {
         dropColumn(columnName: "group_role", tableName: "user_group")
     }
+
+    changeSet(author: "DELL (generated)", id: "20220901124635-12056") {
+        modifyDataType(columnName: "cost_associated", newDataType: "text", tableName: "activity_report")
+    }
 }
