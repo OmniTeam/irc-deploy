@@ -35,10 +35,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   errorMessage: string;
   successMessage: string;
 
-  isSubmitVisible: boolean;
-  isSubmitFinalVisible: boolean;
-  isReviewVisible: boolean;
-  isApproveVisible: boolean;
+  isSubmit: boolean;
+  isMakeCorrections: boolean;
+  isReview: boolean;
+  isApprove: boolean;
 
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
@@ -105,9 +105,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   ngOnInit(): void {
-    this.isSubmitVisible = false;
-    this.isReviewVisible = false;
-    this.isApproveVisible = false;
+    this.isSubmit = false;
+    this.isReview = false;
+    this.isApprove = false;
 
     this.route.params
       .subscribe(p => {
@@ -115,11 +115,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmitVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
           if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_M&E" ||
-            this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isSubmitFinalVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReviewVisible = true;
-          if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") this.isApproveVisible = true;
+            this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrections = true;
+          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") this.isApprove = true;
 
           const params = new HttpParams()
             .set('processInstanceId', this.taskRecord.processInstanceId);
@@ -348,12 +348,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   changeForm(formName) {
-    this.isSubmitVisible = false;
-    this.isReviewVisible = false;
-    this.isApproveVisible = false;
-    if (formName == 'Submit') this.isSubmitVisible = true;
-    if (formName == 'Review') this.isReviewVisible = true;
-    if (formName == 'Approve') this.isApproveVisible = true;
+    this.isSubmit = false;
+    this.isReview = false;
+    this.isApprove = false;
+    if (formName == 'Submit') this.isSubmit = true;
+    if (formName == 'Review') this.isReview = true;
+    if (formName == 'Approve') this.isApprove = true;
     window.scroll(0, 0);
     this.success = false;
   }
@@ -655,18 +655,18 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
-    if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") {
+    if (this.isSubmit) {
       this.taskRecord.outputVariables = "{}";
     }
-    if (this.taskRecord.taskDefinitionKey === "Review_Report") {
+    if (this.isReview) {
       this.taskRecord.outputVariables = '{"changesRequested": "' + this.radioHowToProceed + '"}';
     }
-    if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") {
+    if (this.isApprove) {
       this.taskRecord.outputVariables = '{"approved": "' + this.radioHowToProceed + '"}';
     }
 
     if(status=="completed") {
-      if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report" && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
+      if (this.isApprove && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
     }
 
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {

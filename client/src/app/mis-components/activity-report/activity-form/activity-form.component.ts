@@ -296,7 +296,7 @@ export class ActivityFormComponent implements OnInit {
     this.taskRecord.groupId = this.taskRecord.groupId ?? '';
     if (this.isReview) {
       let actionRequired = this.formGroup.value.actionRequired;
-      this.taskRecord.outputVariables = '{"approveReport": "' + actionRequired + '","groupId:"""}'
+      this.taskRecord.outputVariables = '{"changesRequested": "' + actionRequired + '","groupId:"""}'
     }
     if(this.isApprove) {
       this.taskRecord.outputVariables = '{"archiveReport": "' + "Yes" + '","groupId:"""}'
