@@ -40,6 +40,9 @@ class Feedback {
     String feedbackDetails
     String project
     String assignee
+    String status
+    Date dateCreated
+    Date lastUpdated
 
     static mapping = {
         id generator: 'uuid2'
@@ -84,6 +87,7 @@ class Feedback {
         project nullable: true
         feedbackDetails nullable: true
         assignee nullable: true
+        status nullable: false
     }
 
     @Override

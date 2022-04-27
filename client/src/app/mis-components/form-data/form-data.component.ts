@@ -4,7 +4,7 @@ import {FormService} from '../../services/form.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {ModalDismissReasons, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ReplacePipe} from '../../replace-pipe';
+import {ReplacePipe} from '../../pipes/replace-pipe';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 import * as crossfilter from 'crossfilter2/crossfilter';

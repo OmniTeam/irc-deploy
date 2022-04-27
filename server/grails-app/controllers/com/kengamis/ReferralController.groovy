@@ -51,38 +51,8 @@ class ReferralController {
             return
         }
 
-        boolean startIrcInstance = startProcessInstance([
-                ReferralId    : referral.id,
-                StartDate     : referral.dateOfReferral,
-                EndDate       : ""
-
-        ])
-
-        if(startIrcInstance){
-            println("IRC PROCESS STARTED")
-        }
 
         respond referral, [status: CREATED, view:"show"]
-    }
-
-
-
-    static boolean startProcessInstance(Map processVariables) {
-        def http = new HTTPBuilder(StartCamundaInstancesJob.camundaApiUrl + "/start-instance")
-        boolean toReturn = false
-        http.request(Method.POST, ContentType.JSON) { req ->
-            body = StartCamundaInstancesJob.formatProcessVariables(processVariables, 'IRC_REFERRAL')
-            headers.Accept = 'application/json'
-            requestContentType = ContentType.JSON
-            response.success = { resp, json ->
-                println("Camunda :: startProcessInstance() True [ " + json.text + " ]")
-                toReturn = true
-            }
-            response.failure = { resp ->
-                println("Camunda :: startProcessInstance() False [ " + resp.status + " ]")
-            }
-        }
-        return toReturn
     }
 
     @Transactional

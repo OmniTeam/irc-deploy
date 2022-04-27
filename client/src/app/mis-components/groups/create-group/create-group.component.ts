@@ -15,6 +15,8 @@ import {UsersService} from "../../../services/users.service";
 import {TagService} from "../../../services/tags";
 import {AlertService} from "../../../services/alert";
 import {GroupsService} from "../../../services/groups.service";
+import {UsernameValidator} from "../../../validators/username.validator";
+import {GroupValidator} from "../../../validators/group.validator";
 
 
 @Component({
@@ -50,6 +52,7 @@ export class CreateGroupComponent implements OnInit {
     }
   ];
   parents:any;
+  programs:any;
   permissions =[
     {
       'name': 'Data Tables'
@@ -74,6 +77,12 @@ export class CreateGroupComponent implements OnInit {
     }, error => {
       this.alertService.error("Failed to get Parents")
     })
+    this.usersService.getPrograms().subscribe(data => {
+      this.programs = data
+      console.log(data)
+    }, error => {
+      this.alertService.error("Failed to get Programs")
+    })
     this.usersService.getUsers().subscribe(data => {
       this.dataCollectors = data
       console.log(this.dataCollectors)
@@ -82,7 +91,7 @@ export class CreateGroupComponent implements OnInit {
     })
 
     this.formGroup = this.formBuilder.group({
-      name: ['',[Validators.required]],
+      name: ['',[Validators.required, GroupValidator.validateGroup(this.groupsService)]],
       parent: [null],
       access_to_central_data: [false],
       permissions: [null],

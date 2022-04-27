@@ -2,8 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {v4 as uuid} from 'uuid';
-import {PartnerSetupService} from "../../services/partner-setup.service";
-import {ProgramStaffService} from "../../services/program-staff.service";
+import {WorkPlanService} from "../../services/work-plan-setup.service";
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
 import {Location} from "@angular/common";
 import {AuthService} from "../../services/auth.service";
@@ -13,19 +12,21 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
 import {Indicator} from "../../models/indicator";
 import {AlertService} from "../../services/alert";
+import {UsersService} from "../../services/users.service";
 
 @Component({
-  selector: 'app-partner-setup',
-  templateUrl: './partner-setup.component.html',
-  styleUrls: ['./partner-setup.component.css']
+  selector: 'app-work-plan',
+  templateUrl: './work-plan-setup.component.html',
+  styleUrls: ['./work-plan-setup.component.css']
 })
-export class PartnerSetupComponent implements OnInit, OnUpdateCell {
+export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
   calendar: any = {};
   budget: any = [];
+  totalQuarterlyPlanAmount: string;
   totalApprovedAmount: string;
   totalBudgetDisburse: string;
   totalDisbursement: string;
@@ -42,7 +43,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   milestones: any = [];
   staffChosen: string;
   programChosen: string;
-  partnerSetupId: string;
+  workPlanId: string;
 
   openPopup: boolean;
   editing: boolean;
@@ -62,9 +63,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   constructor(private router: Router, private route: ActivatedRoute,
               private location: Location,
-              private partnerSetupService: PartnerSetupService,
+              private workPlanService: WorkPlanService,
               public authService: AuthService,
-              private programStaffService: ProgramStaffService,
+              private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
               private alertService: AlertService) {
   }
@@ -73,30 +74,32 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.editing = false;
     this.route.params
       .subscribe(p => {
-        this.partnerSetupId = p['id'];
-        const params = new HttpParams().set('id', this.partnerSetupId);
-        this.partnerSetupService.getPartnerSetupRecord(params).subscribe(data => {
-          this.editing = true;
-          this.setPartnerSetupInfo(data.setup);
-          this.calendar = {
-            periodType: data.setup.periodType,
-            grantStartDate: data.setup.startDate,
-            grantEndDate: data.setup.endDate,
-            projectReportingStartDate: data.setup.reportingStartDate,
-            reportingCalender: this.getCalendarForSetup(data.setup.id)
-          };
-        }, error => console.log(error));
+        this.workPlanId = p['id'];
+        if(this.workPlanId!=undefined || this.workPlanId!=null) {
+          const params = new HttpParams().set('id', this.workPlanId);
+          this.workPlanService.getWorkPlanRecord(params).subscribe(data => {
+            this.editing = true;
+            this.setWorkPlanInfo(data.setup);
+            this.calendar = {
+              periodType: data.setup.periodType,
+              grantStartDate: data.setup.startDate,
+              grantEndDate: data.setup.endDate,
+              projectReportingStartDate: data.setup.reportingStartDate,
+              reportingCalender: this.getCalendarForSetup(data.setup.id)
+            };
+          }, error => console.log(error));
+        }
       });
 
-    if (this.partnerSetupId != undefined) {
-      this.programStaffService.getProgramStaffs().subscribe(data => {
+    if (this.workPlanId != undefined) {
+      this.usersService.getUserStaffs().subscribe(data => {
         console.log(data)
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
         }
       });
     } else {
-      this.programStaffService.getProgramStaffWithoutWorkPlan().subscribe(data => {
+      this.usersService.getUsersWithoutWorkPlan().subscribe(data => {
         console.log(data)
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
@@ -114,7 +117,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     };
   }
 
-  setPartnerSetupInfo(data) {
+  setWorkPlanInfo(data) {
     this.setup = data;
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
@@ -139,6 +142,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       if (setupValues.budget != undefined) {
         this.budget = setupValues.budget;
         this.budget.forEach((data) => {
+          this.updateQuarterlyPlanAmount(data.id, data.quarterlySpendingPlan);
           this.updateBudgetAmount(data.id, data.approvedAmount);
           this.updateBudgetDisburse(data.id, data.totalSpent);
         });
@@ -155,7 +159,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   getCalendarForSetup(id): any {
     let reportingCalendar: { [key: string]: string }[] = [];
     const params = new HttpParams().set('setupId', id);
-    this.partnerSetupService.getReportingCalendarByPartnerSetupId(params).subscribe(data => {
+    this.workPlanService.getReportingCalendarByWorkPlanId(params).subscribe(data => {
       data.calendar.forEach((cal) => {
         reportingCalendar.push({
           id: cal.id,
@@ -227,7 +231,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   onPartnerChange() {
     if (this.staffChosen != undefined) {
-      this.programStaffService.getCurrentProgramStaff(this.staffChosen).subscribe((results: any) => {
+      this.usersService.getCurrentUserStaff(this.staffChosen).subscribe((results: any) => {
         if (results !== null && results !== undefined) {
           this.organisationalInfo = results;
           this.programChosen = results.programId;
@@ -373,8 +377,11 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
             });
           }
           break;
+        case 'approved_amt':
+          this.updateBudgetAmount(rowId, value);
+          break;
         case 'quartery_budget':
-          let approvedAmount: number = 0;
+          let amt: number = 0;
           let array = rowId.split(' ');
           let period = array[0];
           let budgetId = array[1];
@@ -383,9 +390,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
               if (item.quarterlyBudget.some(x => x.datePeriod === period)) {
                 item.quarterlyBudget.forEach(function (item) {
                   if (item.datePeriod === period) item.amount = value
-                  if (item.amount.length != 0) approvedAmount += +item.amount;
+                  if (item.amount.length != 0) amt += +item.amount;
                 });
-                item.approvedAmount = approvedAmount.toString();
+                item.quarterlySpendingPlan = amt.toString();
                 this.budgetForDisaggregation = item;
               }
             }
@@ -440,7 +447,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       currentStatus: this.currentStatus
     }
 
-    let partnerSetupRecord: { [key: string]: string } = {
+    let workPlanRecord: { [key: string]: string } = {
       userId: this.authService.getLoggedInUsername(),
       partnerId: this.staffChosen,
       programId: this.programChosen,
@@ -453,8 +460,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
 
     if (this.setup) {
-      this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
-        this.setPartnerSetupInfo(data);
+      this.workPlanService.updateWorkPlan(workPlanRecord, this.setup.id).subscribe((data) => {
+        this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
         this.successMessage = "Updated Partner Setup";
@@ -465,9 +472,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         console.log(error);
       });
     } else {
-      this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
+      this.workPlanService.createWorkPlan(workPlanRecord).subscribe((data) => {
         if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
-        this.setPartnerSetupInfo(data);
+        this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
         this.successMessage = "Saved Partner Setup";
@@ -500,9 +507,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     });
 
     if (values.length != 0) {
-      this.partnerSetupService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
+      this.workPlanService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
         values.forEach((value) => {
-          this.partnerSetupService.createReportingCalendar(value).subscribe((data) => {
+          this.workPlanService.createReportingCalendar(value).subscribe((data) => {
             console.log("saved reporting calendar", data);
             if (this.calendar.reportingCalender.some(x => x.id === data.id)) {
               this.calendar.reportingCalender.forEach(function (item) {
@@ -545,6 +552,17 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
     }
     this.totalApprovedAmount = total.toString();
+  }
+
+  private updateQuarterlyPlanAmount (id, newValue) {
+    let total: number = 0;
+    if (this.budget.some(x => x.id === id)) {
+      this.budget.forEach(function (item) {
+        if (item.id === id) item.quarterlySpendingPlan = newValue;
+        total += +item.quarterlySpendingPlan;
+      });
+    }
+    this.totalQuarterlyPlanAmount = total.toString();
   }
 
   private updateBudgetDisburse(id, newValue, editing?: boolean) {

@@ -26,8 +26,10 @@ class UserGroup {
         }.get()
     }
 
-    static UserGroup create(User user, KengaGroup group, String groupRole, boolean flush = false) {
-        new UserGroup(user: user, group: group, groupRole: groupRole).save(flush: flush, insert: true)
+    static UserGroup create(KengaGroup kengaGroup, User user, boolean flush = false) {
+        def instance = new UserGroup(group: kengaGroup, user: user)
+        instance.save(flush: flush)
+        instance
     }
 
     static boolean remove(User user, KengaGroup group, boolean flush = false) {
@@ -35,6 +37,16 @@ class UserGroup {
             user == User.load(user.id) && group == KengaGroup.load(group.id)
         }.deleteAll()
         rowCount > 0
+    }
+
+    static void deleteOldRecords(KengaGroup e){
+        def filters = findAllByGroup(e)
+        print(filters)
+        filters.each { it.delete(flush: true, failOnError: true) }
+    }
+    static void deleteOldRecordsUser(User e){
+        def filters = findAllByUser(e)
+        filters.each { it.delete(flush: true, failOnError: true) }
     }
 
     static void removeAll(User u) {

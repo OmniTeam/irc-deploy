@@ -21,6 +21,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskListService.getTaskList().subscribe(tasks => {
+      console.log(tasks)
       this.rows = tasks;
       this.dtTrigger.next();
     }, error => console.log(error));

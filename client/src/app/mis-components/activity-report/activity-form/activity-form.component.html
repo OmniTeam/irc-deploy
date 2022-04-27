@@ -1,0 +1,718 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Activity Report</h6>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+        </div>
+        <div class=" col-lg-6 col-5 text-right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row justify-content-center">
+    <div class=" col-lg-10 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Activity Report</h3>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem;">
+          <form [formGroup]="formGroup" (ngSubmit)="createActivityReport()" *ngIf="formGroup">
+            <div class="row">
+              <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Budget Holder
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Search Staff.."
+                                     formControlName="name"
+                                     [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                                     [searchable]="true"
+                                     [readonly]="true"
+                                     [clearable]="false">
+                            <ng-option [value]="item.staffId" *ngFor="let item of budgetHolder">
+                              {{item.partner}}
+                            </ng-option>
+                          </ng-select>
+                          <div *ngIf="submitted && f.name.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.name.errors.required">Staff is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Budget Line
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Select Budget Line"
+                                   formControlName="budgetLine"
+                                   [ngClass]="{ 'is-invalid': submitted && f.budgetLine.errors }"
+                                   [searchable]="true"
+                                   [readonly]="true"
+                                   [clearable]="false">
+                          <ng-option [value]="item.id" *ngFor="let item of getListBudgetLine">
+                            {{item.budgetLine}}
+                          </ng-option>
+                        </ng-select>
+                        <div *ngIf="submitted && f.budgetLine.errors" class="invalid-feedback">
+                          <div *ngIf="f.budgetLine.errors.required">Budget Line is required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Designation
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Designation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="designation"
+                            [readOnly]="true"
+
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Activity Report Start Date
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder=""
+                            type="date"
+                            style="padding-left: 10px;"
+                            formControlName="startDate"
+                            [readOnly]="true"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Activity Report End Date
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder=""
+                            type="date"
+                            style="padding-left: 10px;"
+                            formControlName="endDate"
+                            [readOnly]="true"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Select Related Milestone
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Select Milestone"
+                                   formControlName="milestone"
+                                   [searchable]="true"
+                                   [readonly]="true"
+                                   [clearable]="false">
+                          <ng-option [value]="item.name" *ngFor="let item of this.getMilestone">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Location
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Location"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="location"
+                            [readOnly]="true"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Activity Objectives
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder=""
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="activityObjective"
+                            [readOnly]="true"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Give the key results achieved (Outputs / achievements)
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder=""
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="achievedResults"
+                            [readOnly]="true"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Key activities undertaken during the field activity
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder=""
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="activitiesUndertaken"
+                            [readOnly]="true"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Challenges
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder=""
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="challenges"
+                            [readOnly]="true"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Lessons Learned
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder=""
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="lessonsLearned"
+                            [readOnly]="true"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Key achievements and clients reached
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder=""
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="keyAchievements"
+                            [readOnly]="true"
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <h3 style="margin-left: 40px;">Number of people reached with service or referred</h3>
+                <div class="card">
+                  <br>
+                  <table class="table table-striped table-bordered hover" id="people">
+                    <thead>
+                    <tr>
+                      <th colspan="2" class='text-center'>18-35 yrs old</th>
+                      <th colspan="2" class='text-center'>36+ yrs old</th>
+                      <th colspan="2" class='text-center'>Nationals</th>
+                      <th colspan="2"  class='text-center'>Refugees</th>
+                      <th colspan="2" class='text-center'>PWD</th>
+                    </tr>
+                    <tr>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                      <th>F</th>
+                      <th>M</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td class='text-center' style="display: none;">1</td>
+                      <td class='text-center' [id]="1">
+                        <div> {{this.peopleSurvey.total1835}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(1, 1, 'updatePeople', this.peopleSurvey.total1835,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="2">
+                        <div> {{this.peopleSurvey.total1835M}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(2, 2, 'updatePeople', this.peopleSurvey.total1835M,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="3">
+                        <div> {{this.peopleSurvey.total36F}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(3, 3, 'updatePeople', this.peopleSurvey.total36F,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="4">
+
+                        <div> {{this.peopleSurvey.total36M}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(4, 4, 'updatePeople', this.peopleSurvey.total36M,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="5">
+                        <div> {{this.peopleSurvey.totalNationalF}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(5, 5, 'updatePeople', this.peopleSurvey.totalNationalF,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="6">
+
+                        <div>{{this.peopleSurvey.totalNationalM}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(6, 6, 'updatePeople', this.peopleSurvey.totalNationalM,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="7">
+                        <div> {{this.peopleSurvey.totalRefugeeF}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(7, 7, 'updatePeople', this.peopleSurvey.totalRefugeeF,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="8">
+
+                        <div>{{this.peopleSurvey.totalRefugeeM}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(8, 8, 'updatePeople', this.peopleSurvey.totalRefugeeM,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="9">
+                        <div>{{this.peopleSurvey.totalPwdF}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(9, 9, 'updatePeople', this.peopleSurvey.totalPwdF,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td class='text-center' [id]="10">
+
+                        <div>{{this.peopleSurvey.totalPwdM}}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(10, 10, 'updatePeople', this.peopleSurvey.totalPwdM,'number')"
+                          ><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h3 style="margin-left: 40px;">Costs associated with implementing this activity:</h3>
+                <div class="card">
+                  <button class="btn btn-success"
+                          style="height: 37px;
+                                  width: max-content;
+                                  padding: revert;
+                                  font-size: 12px;"
+                          type="button"
+                          (click)="createNewBudgetItem()">
+                    <i class="fas fa-plus"></i>
+                    Add Budget Item
+                  </button>
+                  <br>
+                  <table class="table table-striped table-bordered hover" id="budget">
+                    <thead>
+                    <tr>
+                      <th class='text-center'>Budget Item</th>
+                      <th class='text-center'>Planned expenses</th>
+                      <!--                      <th class='text-center'>Quarterly Sending Plan</th>-->
+                      <th class='text-center'>Actual expense</th>
+                      <th class='text-center'>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let row of budget">
+                      <td class='text-center' style="display: none;">{{row.id}}</td>
+                      <td class='text-center' [id]="row.id+'-b'">
+                        <div>{{ row.budgetLine }}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine)"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center' [id]="row.id">{{ row.approvedAmount | number  }}
+                        <div>
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(row.id, row.id, 'approved_amt', row.approvedAmount, 'number')"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <!--                      <td class='text-center' [id]="row.id">{{ row.quarterlySpendingPlan | number  }}-->
+                      <!--                        <button class="btn btn-link" type="button" [id]="'btn' + row.id"-->
+                      <!--                                ><i-->
+                      <!--                          class="text fas fa-plus"></i></button>-->
+                      <!--                      </td>-->
+                      <td class='text-center' [id]="row.id+'-d'">
+                        <div>{{ row.totalSpent | number  }}
+                          <button class="btn btn-link" type="button"
+                                  (click)="cellEditor(row.id, row.id+'-d', 'total_spent', row.totalSpent, 'number')"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
+                      <td class='text-center'>
+                        <button class="btn btn-link" type="button"
+                                (click)="removeBudget(row)"><i
+                          class="text fas fa-trash-alt" style="color: red"></i></button>
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <td class="text-center">Total</td>
+                      <td class="text-center">{{ totalApprovedAmount | number  }}</td>
+                      <td class="text-center">{{ totalBudgetDisburse | number  }}</td>
+                    </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+                <h3 style="margin-left: 40px;">Progress Against Budget</h3>
+                <div class="card">
+                  <table class="table table-striped table-bordered hover" id="disbursement_plan">
+                    <tbody>
+                    <tr>
+                      <td class='text-center'>Budget</td>
+                      <td class='text-center'>{{this.getTotalApproved | number}}</td>
+                    </tr><tr>
+                      <td class='text-center'>Expenses to date</td>
+                      <td class='text-center'>{{this.totalSpent | number}}</td>
+                    </tr><tr>
+                      <td class='text-center'>Current Expenses</td>
+                      <td class='text-center'>{{this.totalBudgetDisburse | number}}</td>
+                    </tr><tr>
+                      <td class='text-center'>Balance</td>
+                      <td class='text-center'>{{totalBalance || 'Balance'}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Attachment 1: Activity Photos
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input class="form-control" id="attachment1"
+                                 placeholder="upload document"
+                                 formControlName="keyAchievements"
+                                 type="file" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Attachment 2: Attendance Lists
+
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input class="form-control" id="attachment2"
+                                 placeholder="upload document"
+                                 formControlName="attachList"
+                                 type="file" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Attachment 3: Stories
+
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input class="form-control" id="attachment3"
+                                 placeholder="upload document"
+                                 formControlName="attachStories"
+                                 type="file" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isReview" class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Action Required
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Search Staff"
+                                   formControlName="actionRequired"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.value" *ngFor="let item of followup_needed">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <div class="form-row">
+                    <div class="col-md-3" style="padding-top: 10px;">
+                      <label>
+                        Comments
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="col-md-12">
+                        <div class="form-group ">
+                          <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder="Comments"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="lessonsLearned"
+
+                          ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="isReview" class="form-row">
+                    <div class="col-md-3" style="padding-top: 10px;">
+                      <label>
+                        Forwarded To
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="col-md-12">
+                        <div class="form-group ">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Search Staff"
+                                     formControlName="assignee"
+                                     [searchable]="true"
+                                     [clearable]="true">
+                            <ng-option [value]="item.email" *ngFor="let item of staff">
+                              {{item.names}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="row">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+
+                <button class=" btn btn-danger" type="reset" (click)="onReset()">Cancel</button>
+<!--                <button class=" btn btn-warning" type="button" (click)="saveReport()">Save For Later</button>-->
+                <button class=" btn btn-success" type="submit">Submit Review</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

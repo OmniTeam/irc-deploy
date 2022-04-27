@@ -32,12 +32,15 @@ class PartnerSetupController {
         def list = []
 
         partnerSetups.each { PartnerSetup setup ->
-            def partner = ProgramStaff.findById(setup.partnerId)
+            def user = User.findById(setup.partnerId)
 
             list << [id         : setup.id,
-                     partner    : partner.name,
+                     staff       : user.names,
+                     staffId    : setup.partnerId,
                      lastUpdated: setup.lastUpdated,
-                     dateCreated: setup.dateCreated]
+                     dateCreated: setup.dateCreated,
+                     setupValues: setup.setupValues
+            ]
         }
         respond list
     }

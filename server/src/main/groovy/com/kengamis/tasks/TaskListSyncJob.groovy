@@ -13,7 +13,8 @@ class TaskListSyncJob extends Script {
 
     @Override
     Object run() {
-        downloadTasks(url + '/get-tasks/CRVPF_REPORTING/' + '0/50')
+        downloadTasks(url + '/get-tasks/ACTIVITY_REPORTING/' + '0/50')
+        downloadTasks(url + '/get-tasks/IRC_REPORTING/' + '0/50')
         downloadTasks(url + '/get-tasks/IRC_REFERRAL/' + '0/50')
         downloadTasks(url + '/get-tasks/IRC_FEEDBACK/' + '0/50')
         //send data to workflow

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PartnerListComponent } from './partner-list.component';
-import { PartnerListRoutingModule } from './partner-list-routing.module';
+import { WorkPlanListComponent } from './work-plan-list.component';
+import { WorkPlanListRoutingModule } from './work-plan-list-routing.module';
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../../components/components.module";
@@ -10,10 +10,10 @@ import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableModule} from "../../entity-views/entity-view-table/entity-view-table.module";
 
 @NgModule({
-  declarations: [PartnerListComponent],
+  declarations: [WorkPlanListComponent],
   imports: [
     CommonModule,
-    PartnerListRoutingModule,
+    WorkPlanListRoutingModule,
     FormsModule,
     NgxDatatableModule,
     ComponentsModule,
@@ -21,4 +21,4 @@ import {EntityViewTableModule} from "../../entity-views/entity-view-table/entity
     EntityViewTableModule,
   ]
 })
-export class PartnerListModule { }
+export class WorkPlanListModule { }

@@ -2042,4 +2042,141 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1650785981661-104") {
+        createTable(tableName: "activity_report") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "activity_reportPK")
+            }
+
+            column(name: "challenges", type: "VARCHAR(255)")
+
+            column(name: "attach_photo", type: "VARCHAR(255)")
+
+            column(name: "lessons_learned", type: "VARCHAR(255)")
+
+            column(name: "budget_line", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "location", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "activity_results", type: "VARCHAR(255)")
+
+            column(name: "designation", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "attach_story", type: "VARCHAR(255)")
+
+            column(name: "people_reached", type: "VARCHAR(255)")
+
+            column(name: "end_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "attach_list", type: "VARCHAR(255)")
+
+            column(name: "start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "cost_associated", type: "VARCHAR(255)")
+
+            column(name: "activity_undertaken", type: "VARCHAR(255)")
+
+            column(name: "activity_objectives", type: "VARCHAR(255)")
+
+            column(name: "key_achievements", type: "VARCHAR(255)")
+
+            column(name: "assignee", type: "VARCHAR(255)")
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "milestone", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "budget_progress", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16497677232405-98") {
+        addColumn(tableName: "referral") {
+            column(name: "assignee", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-117") {
+        addColumn(tableName: "activity_report") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-118") {
+        addColumn(tableName: "feedback") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-119") {
+        addColumn(tableName: "referral") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-120") {
+        addColumn(tableName: "activity_report") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-121") {
+        addColumn(tableName: "feedback") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-122") {
+        addColumn(tableName: "referral") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650978880608-123") {
+        addColumn(tableName: "activity_report") {
+            column(name: "status", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1650988417405-120") {
+        addColumn(tableName: "feedback") {
+            column(name: "status", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16462913453652-27") {
+        dropColumn(columnName: "group_role", tableName: "user_group")
+    }
+
+    changeSet(author: "DELL (generated)", id: "20220901124635-12056") {
+        modifyDataType(columnName: "cost_associated", newDataType: "text", tableName: "activity_report")
+    }
 }

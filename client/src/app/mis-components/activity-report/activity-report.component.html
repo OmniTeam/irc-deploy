@@ -1,0 +1,83 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Activity Report</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class="dataTables_wrapper py-4">
+          <div class="row">
+            <div class="col-sm-12 col-md-4">
+              <div class="dataTables_length" id="datatable_length">
+                <label>
+                  Show
+                  <select
+                    name="datatable_length"
+                    aria-controls="datatable"
+                    class="form-control form-control-sm"
+                    (change)="entriesChange($event)"
+                  >
+                    <option value="10" [selected]="entries == 10">10</option>
+                    <option value="25" [selected]="entries == 25">25</option>
+                    <option value="50" [selected]="entries == 50">50</option>
+                    <option value="-1" [selected]="entries == -1">All</option>
+                  </select>
+                  entries
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="padding: 11px;">
+            <div class="col-lg-12 col-5 text-right">
+              <a class=" btn btn-default" (click)="createActivityReport()" style="color: white">Create Activity Report </a>
+            </div>
+          </div>
+          <ngx-datatable
+            class="bootstrap selection-cell"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [limit]="entries != -1 ? entries : undefined"
+            [rows]="activity"
+            (activate)="onActivate($event)"
+          >
+            <ngx-datatable-column name="Budget Line" prop="budgetLine" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="Designation" prop="designation" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="Location" prop="location" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="Milestone" prop="milestone" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="Start Date" prop="startDate" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="End Date" prop="endDate" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="Action" sortable="false" [width]="250">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <button (click)="editActivityReport(row);"  class="btn btn-default" style="padding: 1px 6px;"
+
+                >
+
+                  <i class="fa fa-pencil-alt"></i>
+                </button>
+                <button (click)="deleteActivityReport(row)" class="btn btn-danger" style="padding: 1px 6px;"
+                        >
+                  <i class="fa fa-trash"></i>
+                </button>
+<!--                *hasRole="['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']"-->
+<!--                *hasRole="['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']"-->
+              </ng-template>
+
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

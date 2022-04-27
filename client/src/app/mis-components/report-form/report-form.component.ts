@@ -10,8 +10,8 @@ import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {ProgramStaffService} from "../../services/program-staff.service";
-import {PartnerSetupService} from "../../services/partner-setup.service";
+import {UsersService} from "../../services/users.service";
+import {WorkPlanService} from "../../services/work-plan-setup.service";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
 import {AlertService} from "../../services/alert";
 
@@ -35,9 +35,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   errorMessage: string;
   successMessage: string;
 
-  isSubmitVisible: boolean;
-  isReviewVisible: boolean;
-  isApproveVisible: boolean;
+  isSubmit: boolean;
+  isMakeCorrections: boolean;
+  isReview: boolean;
+  isApprove: boolean;
+
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
   openPopup: boolean;
@@ -56,10 +58,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   reviewerComments: string;
   reviewerRecommendations: string;
 
-  radioSuggestedChangesSatisfactory: string;
-  radioReportsWellAligned: string;
-  radioRecommendFund: string;
-  radioEndOfPartnership: string;
+  radioReportSatisfactory: string;
+  radioExpenditureMatches: string;
+  radioActivitiesConducted: string;
+  radioBudgetExpenditure: string;
+  radioCommentsSatisfactory: string;
+  radioHowToProceed: string;
   amountOfFundsDisbursed: string;
   provideAnyRecommendations: string;
 
@@ -82,6 +86,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     {name: 'Yes', value: 'yes'},
     {name: 'No', value: 'no'}
   ];
+  items2 = [
+    {name: 'Approve', value: 'yes'},
+    {name: 'Ask for Review', value: 'no'}
+  ];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -89,17 +97,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private reportFormService: ReportFormService,
               private taskListService: TaskListService,
               private fileUploadService: FileUploadService,
-              private partnerSetupService: PartnerSetupService,
-              private programStaffService: ProgramStaffService,
+              private workPlanService: WorkPlanService,
+              private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
               private alertService: AlertService,
               public authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.isSubmitVisible = false;
-    this.isReviewVisible = false;
-    this.isApproveVisible = false;
+    this.isSubmit = false;
+    this.isReview = false;
+    this.isApprove = false;
 
     this.route.params
       .subscribe(p => {
@@ -107,21 +115,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report" ||
-            this.taskRecord.taskDefinitionKey === "Submit_Final_Report") this.isSubmitVisible = true;
-          else if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Performance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Program_Report" ||
-            this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.isReviewVisible = true;
-          else if (this.taskRecord.taskDefinitionKey === "Approve_Report" ||
-            this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") this.isApproveVisible = true;
-          else this.isSubmitVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
+          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_M&E" ||
+            this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrections = true;
+          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") this.isApprove = true;
 
           const params = new HttpParams()
             .set('processInstanceId', this.taskRecord.processInstanceId);
 
           //set organizational Info
-          this.programStaffService.getCurrentProgramStaff(this.taskRecord.partnerId).subscribe((results: any) => {
+          this.usersService.getCurrentUserStaff(this.taskRecord.partnerId).subscribe((results: any) => {
             if (results !== null && results !== undefined) {
               this.organisationalInfo = results;
             }
@@ -187,24 +191,26 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
         if (reports.approverInformation !== null && reports.approverInformation !== undefined) {
           this.approverInformation = JSON.parse(reports.approverInformation);
-          this.radioSuggestedChangesSatisfactory = this.approverInformation.suggested_changes_satisfactory;
-          this.radioReportsWellAligned = this.approverInformation.reports_well_aligned;
-          this.radioRecommendFund = this.approverInformation.recommend_fund;
-          this.radioEndOfPartnership = this.approverInformation.end_of_partnership;
+          this.radioReportSatisfactory = this.approverInformation.suggested_changes_satisfactory;
+          this.radioExpenditureMatches = this.approverInformation.reports_well_aligned;
+          this.radioActivitiesConducted = this.approverInformation.recommend_fund;
+          this.radioBudgetExpenditure = this.approverInformation.end_of_partnership;
+          this.radioCommentsSatisfactory = this.approverInformation.commentsSatisfactory;
+          this.radioHowToProceed = this.approverInformation.howToProceed;
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
       }
 
-      this.setReportsFromPartnerSetup();
+      this.setReportsFromWorkPlan();
 
       this.dtTrigger.next();
     }, error => console.log("Error getting reports", error));
   }
 
-  setReportsFromPartnerSetup() {
+  setReportsFromWorkPlan() {
     const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
-    this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
+    this.workPlanService.getWorkPlanRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
@@ -342,12 +348,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   changeForm(formName) {
-    this.isSubmitVisible = false;
-    this.isReviewVisible = false;
-    this.isApproveVisible = false;
-    if (formName == 'Submit') this.isSubmitVisible = true;
-    if (formName == 'Review') this.isReviewVisible = true;
-    if (formName == 'Approve') this.isApproveVisible = true;
+    this.isSubmit = false;
+    this.isReview = false;
+    this.isApprove = false;
+    if (formName == 'Submit') this.isSubmit = true;
+    if (formName == 'Review') this.isReview = true;
+    if (formName == 'Approve') this.isApprove = true;
     window.scroll(0, 0);
     this.success = false;
   }
@@ -579,6 +585,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   approveReport() {
+    if(this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed=="undefined") {
+      this.alertService.error('How would you like to proceed? is Required');
+      return;
+    }
+    if(this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed=="undefined") {
+      this.alertService.error('Do you recommend for further fund disbursement? is Required');
+      return;
+    }
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
@@ -623,10 +637,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       performanceReport: JSON.stringify(this.performanceReport),
       reviewerInformation: JSON.stringify(this.reviewerInformation),
       approverInformation: JSON.stringify({
-        suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
-        reports_well_aligned: this.radioReportsWellAligned,
-        recommend_fund: this.radioRecommendFund,
-        end_of_partnership: this.radioEndOfPartnership,
+        suggested_changes_satisfactory: this.radioReportSatisfactory,
+        reports_well_aligned: this.radioExpenditureMatches,
+        recommend_fund: this.radioActivitiesConducted,
+        end_of_partnership: this.radioBudgetExpenditure,
+        commentsSatisfactory: this.radioCommentsSatisfactory,
+        howToProceed: this.radioHowToProceed,
         amountOfFundsDisbursed: this.amountOfFundsDisbursed,
         provideAnyRecommendations: this.provideAnyRecommendations
       })
@@ -639,28 +655,30 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
-    if (this.taskRecord.taskDefinitionKey === "Submit_Report") {
+    if (this.isSubmit) {
       this.taskRecord.outputVariables = "{}";
     }
-    if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report") {
-      let ans = "No"
-      if(this.radioEndOfPartnership=="yes") ans = "Yes"
-      this.taskRecord.outputVariables = '{"Funding_Decision": "' + ans + '"}';
+    if (this.isReview) {
+      this.taskRecord.outputVariables = '{"changesRequested": "' + this.radioHowToProceed + '"}';
     }
-    if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
-      let ans = "No"
-      if(this.radioRecommendFund=="yes") ans = "Yes"
-      this.taskRecord.outputVariables = '{"Approve_Funding": "' + ans + '"}';
-      if(status=="completed") {
-        const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-        this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
-          console.log('updated calendar status')
-        }, error => console.log('failed update calendar status', error));
-      }
+    if (this.isApprove) {
+      this.taskRecord.outputVariables = '{"approved": "' + this.radioHowToProceed + '"}';
     }
+
+    if(status=="completed") {
+      if (this.isApprove && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
+    }
+
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
+  }
+
+  updateCalendarStatus() {
+    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+    this.workPlanService.updateReportingCalendarStatus(params).subscribe((data)=>{
+      console.log('updated calendar status')
+    }, error => console.log('failed update calendar status', error));
   }
 
   onBackPressed() {

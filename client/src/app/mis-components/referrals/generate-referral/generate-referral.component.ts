@@ -28,6 +28,7 @@ export class GenerateReferralComponent implements OnInit {
   runningJobs = [];
   allJobs = [];
   scheduledTasks: Object[];
+  users: any;
 
 
   constructor(
@@ -183,8 +184,6 @@ export class GenerateReferralComponent implements OnInit {
     })
 
     this.startReferralProcess()
-    // this.referralsService.getCurrentReferral(this.route.snapshot.params.id).subscribe(data => {
-    //   console.log(data, "referral data")
 
       this.loadProgramStaff();
       this.loadClients();
@@ -194,7 +193,6 @@ export class GenerateReferralComponent implements OnInit {
         nameOfReferringOfficer: [''],
         nameOfClientBeingReferred: ['' || this.clients?.caseId],
         phoneNumber: [''],
-        // dateOfBirth: [this.datePipe.transform('', 'yyyy-MM-dd')],
         ageCategory: ['' || this.clients?.ageCategory],
         countryOfOrigin: ['' || this.clients?.countryOfOrigin],
         district: ['' || this.clients?.district],
@@ -206,13 +204,8 @@ export class GenerateReferralComponent implements OnInit {
         identificationNumber: ['' || this.clients?.identificationNumber],
         reasonForReferral: ['' ],
         organizationReferredTo: [''],
-        // receivedFeedback: [''],
-        // feedbackGiven: [''],
-        // dateOfFeedback: [this.datePipe.transform('', 'yyyy-MM-dd')],
         nationalityStatus: ['' || this.clients?.nationality],
         followupNeeded: [''],
-        // followupAreas: [''],
-        // followupOrganization: [''],
         disability: ['' || this.clients?.disability],
         assignee: [''],
         status: ['Pending'],
@@ -265,7 +258,7 @@ export class GenerateReferralComponent implements OnInit {
   }
 
   loadProgramStaff(){
-    this.programStaffService.getProgramStaffs().subscribe((data) => {
+    this.userService.getUsers().subscribe((data) => {
       this.staffs = data;
       console.log(data)
     });
@@ -274,7 +267,6 @@ export class GenerateReferralComponent implements OnInit {
   loadClients(){
     this.clientService.getClients().subscribe((data) =>{
       this.clients = data;
-      console.log(data)
     })
   }
 
