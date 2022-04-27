@@ -116,10 +116,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
           if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
-          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_M&E" ||
+          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_MandE" ||
             this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrections = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
-          if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") this.isApprove = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Quarterly_Report") this.isApprove = true;
 
           const params = new HttpParams()
             .set('processInstanceId', this.taskRecord.processInstanceId);
