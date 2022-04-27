@@ -24,7 +24,7 @@ export class FeedbackService {
   }
 
   updateFeedback(id, groupData): Observable<any> {
-    return this.http.put(`${this.urlFeedback}${id}/`, groupData);
+    return this.http.put(`${this.urlFeedback}${id}`, groupData);
   }
 
   getCurrentFeedback(id){

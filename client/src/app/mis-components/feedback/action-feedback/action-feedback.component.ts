@@ -196,8 +196,8 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
 
     this.taskService.getTaskRecord(params).subscribe((data) =>{
       this.taskRecord = data;
-      this.feedbackService.getCurrentFeedback(this.taskRecord.referralId).subscribe(data => {
-        console.log(data, "referral data")
+      this.feedbackService.getCurrentFeedback(this.taskRecord.feedbackId).subscribe(data => {
+        console.log(data, "feedback data")
 
         this.feedback = data
         let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
@@ -275,7 +275,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
     }
     const submitData = this.formGroup.value;
     console.log(submitData)
-    this.feedbackService.updateFeedback(this.taskRecord.referralId, submitData).subscribe((result) => {
+    this.feedbackService.updateFeedback(this.taskRecord.feedbackId, submitData).subscribe((result) => {
       console.warn(result, 'Feedback Updated Successfully');
       this.updateTask("completed")
       this.alertService.success(`Feedback has been successfully updated`)
@@ -287,7 +287,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
 
   updateTask(status){
     this.taskRecord.status = status;
-    this.taskRecord.groupId = this.taskRecord.groupId ?? '';
+    this.taskRecord.groupId = '[]';
     let followupNeeded = this.formGroup.value.actionFollowupNeeded;
     this.taskRecord.outputVariables = '{"actionedResponse": "'+ followupNeeded +'"}'
     this.taskService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
