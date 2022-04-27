@@ -186,4 +186,16 @@ class KengaGroupAclEntryController {
 
         render tables as JSON
     }
+
+    def listAllACLS (){
+        def acls = []
+        KengaGroupAclEntry.all.each {aclEntry ->
+            acls << [
+                    id: aclEntry.id,
+                    group: aclEntry.kengaGroup.name,
+                    table: aclEntry.kengaAclTableRecordIdentity.kengaDataTable.tableName
+            ]
+        }
+        respond acls
+    }
 }

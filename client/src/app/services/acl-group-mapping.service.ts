@@ -7,11 +7,15 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class AclGroupMappingService {
-  baseurl = environment.serverUrl
-  urlAcl = `${this.baseurl}/api/v1/aclGroupMapping/`
-  urlAcl2 = `${this.baseurl}/api/v1/aclGroupMapping-v2/`
+  baseurl = environment.serverUrl;
+  urlAcl = `${this.baseurl}/api/v1/aclGroupMapping/`;
+  urlAcl2 = `${this.baseurl}/api/v1/aclGroupMapping-v2/`;
 
   constructor(private http: HttpClient) { }
+
+  listAllACLS(): Observable<any> {
+    return this.http.get(`${this.baseurl}/listAllACLS/`);
+  }
 
   getGroupMapping(): Observable<any> {
     return this.http.get(this.urlAcl);
@@ -26,8 +30,8 @@ export class AclGroupMappingService {
   createGroupMapping2(formData): Observable<any> {
     return this.http.post(this.urlAcl2, formData);
   }
-  getCurrentGroupMapping(id){
-    return this.http.get(`${this.urlAcl}${id}/`)
+  getCurrentGroupMapping(id) {
+    return this.http.get(`${this.urlAcl}${id}/`);
   }
 
   updateGroupMapping(id, submitData): Observable<any> {

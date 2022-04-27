@@ -284,7 +284,7 @@ const routes: Routes = [
             Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
             Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
             Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,]
+            Roles.ROLE_YCD_STAFF_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/tags/edit-tags/edit-tags.module').then(m => m.EditTagsModule)
       },
@@ -389,7 +389,17 @@ const routes: Routes = [
       },
       {
         path: 'acl-group-mapping-parent', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN]
+        },
         loadChildren: () => import('./mis-components/acl-group-mapping-parent/acl-group-mapping-parent.module').then(m => m.AclGroupMappingParentModule)
+      },
+      {
+        path: 'acl-group-mapping-lists', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/acl-group-mapping-lists/acl-group-mapping-lists.module').then(m => m.AclGroupMappingListsModule)
       },
       {
         path: 'requestMaps', canActivate: [AuthGuard],

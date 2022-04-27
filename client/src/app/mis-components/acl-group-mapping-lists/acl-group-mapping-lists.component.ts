@@ -1,24 +1,25 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../services/alert";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TagService} from "../../services/tags";
-import {HttpParams} from "@angular/common/http";
-import {GroupsService} from "../../services/groups.service";
+import {Subject} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../services/alert';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TagService} from '../../services/tags';
+import {HttpParams} from '@angular/common/http';
+import {GroupsService} from '../../services/groups.service';
+import {AclGroupMappingService} from '../../services/acl-group-mapping.service';
+import {KengaDataTablesService} from '../../services/kenga-data-tables.service';
 
 @Component({
   selector: 'app-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.css']
+  templateUrl: './acl-group-mapping-lists.component.html',
+  styleUrls: ['./acl-group-mapping-lists.component.css']
 })
-export class GroupsComponent implements OnInit {
+export class AclGroupMappingListsComponent implements OnInit {
 
-  entries: number = 10;
+  entries = 10;
   selected: any[] = [];
   groupId = '';
-  search = '';
   page = {
     limit: this.entries,
     count: 0,
@@ -26,20 +27,25 @@ export class GroupsComponent implements OnInit {
     orderBy: 'title',
     orderDir: 'desc'
   };
-  private searchValue = '';
-  tags: any
+  tags: any;
   closeResult: string;
   formGroup: FormGroup;
   formGp: FormGroup;
   rowData: any;
   submitted = false;
-  private selectedTags=[];
+  private selectedEntries = [];
   private checkedRow: any;
+  aclsEntries: any;
   groups: any;
+  kengaDataTables: any;
+  private groupValue = '';
+  private tableValue = '';
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
+              private AclGroupMappingService: AclGroupMappingService,
               private alertService: AlertService,
+              private kengaDataTablesService: KengaDataTablesService,
               private router: Router,
               private modalService: NgbModal,
               private groupsService: GroupsService
@@ -51,15 +57,17 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reloadTable()
+    this.groupsService.getGroups().subscribe(data => {
+      this.groups = data;
+    }, error => this.alertService.error('Failed to get Groups'));
+    this.kengaDataTablesService.getTables().subscribe(data => {
+      this.kengaDataTables = data;
+    }, error => this.alertService.error('Failed to get Data Tables'));
+    this.reloadTable();
   }
 
-  addGroup(){
-    this.router.navigate(['group/create']);
-  }
-
-  editGroup(row) {
-    this.router.navigate(['group/edit/' + row.id]);
+  addNewAcls() {
+    this.router.navigate(['acl-group-mapping-parent']);
   }
 
   onSelected(event) {
@@ -67,35 +75,25 @@ export class GroupsComponent implements OnInit {
     /*If it is checked*/
     if (event.target.checked) {
       this.checkedRow = event.target.value;
-      this.selectedTags.push(this.checkedRow)
+      this.selectedEntries.push(this.checkedRow);
     } else { /*if it is not checked*/
-      const x = this.selectedTags.indexOf(this.checkedRow);
-      this.selectedTags.splice(x, 1);
+      const x = this.selectedEntries.indexOf(this.checkedRow);
+      this.selectedEntries.splice(x, 1);
     }
-    console.log(this.selectedTags);
+    console.log(this.selectedEntries);
   }
 
-  deleteGroups() {
-    const deletedRow = this.selectedTags;
+  deleteACLS() {
+    const deletedRow = this.selectedEntries;
     deletedRow.forEach((p) => {
         this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
           console.warn(result, 'Groups have been deleted');
           this.router.navigate(['/aclsEntries']).then(() => {
             window.location.reload();
           });
-        })
+        });
       }
-    )
-  }
-  deleteGroup(row){
-    const currentId = row.id
-    this.groupsService.deleteCurrentGroup(currentId).subscribe((result) => {
-      console.warn(result, 'Group has been deleted');
-      this.router.navigate(['/aclsEntries']).then(() => {
-        window.location.reload();
-      });
-      this.alertService.warning("Group has been deleted")
-    }, error => {this.alertService.error("Failed to delete Group")})
+    );
   }
 
   /*Responsible for the opening of the Modals*/
@@ -122,25 +120,38 @@ export class GroupsComponent implements OnInit {
     }
   }
 
-  onChangeSearch(event) {
-    console.log(event.target.value)
-    this.searchValue = event.target.value
-    if(!this.searchValue){
-      this.reloadTable()
+  onChangeGroup(event) {
+    console.log(event);
+    if (!event) {
+      this.groupValue = '';
+      this.reloadTable();
     } else {
-      this.groups = this.groups.filter(a => a.name.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.groupValue = event;
+      this.aclsEntries = this.aclsEntries.filter(a => a.group.includes(this.groupValue))
     }
+
+  }
+  onChangeTable(event) {
+    console.log(event);
+    if (!event) {
+      this.tableValue = '';
+      this.reloadTable();
+    } else {
+      this.tableValue = event;
+      this.aclsEntries = this.aclsEntries.filter(a => a.table.includes(this.tableValue));
+    }
+
   }
 
   reloadTable() {
-    this.groupsService.getGroups( ).subscribe((data) => {
-      this.groups =data;
-      this.page.count = this.groups.length
+    this.AclGroupMappingService.listAllACLS().subscribe((data) => {
+      this.aclsEntries = data;
+      this.page.count = this.aclsEntries.length;
     });
   }
 
   entriesChange($event) {
-    console.log($event.target.value)
+    console.log($event.target.value);
     this.entries = $event.target.value;
   }
 
