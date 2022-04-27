@@ -36,8 +36,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   successMessage: string;
 
   isSubmitVisible: boolean;
+  isSubmitFinalVisible: boolean;
   isReviewVisible: boolean;
   isApproveVisible: boolean;
+
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
   openPopup: boolean;
@@ -113,15 +115,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report" ||
-            this.taskRecord.taskDefinitionKey === "Submit_Final_Report") this.isSubmitVisible = true;
-          else if (this.taskRecord.taskDefinitionKey === "Review_Finance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Performance_Report" ||
-            this.taskRecord.taskDefinitionKey === "Review_Program_Report" ||
-            this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.isReviewVisible = true;
-          else if (this.taskRecord.taskDefinitionKey === "Approve_Report" ||
-            this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") this.isApproveVisible = true;
-          else this.isSubmitVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmitVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_M&E" ||
+            this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isSubmitFinalVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReviewVisible = true;
+          if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") this.isApproveVisible = true;
 
           const params = new HttpParams()
             .set('processInstanceId', this.taskRecord.processInstanceId);
@@ -657,20 +655,18 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
-    if (this.taskRecord.taskDefinitionKey === "Submit_Report") {
+    if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") {
       this.taskRecord.outputVariables = "{}";
     }
-    if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement") {
-      this.taskRecord.outputVariables = '{"Approve_Funding": "' + this.radioHowToProceed + '"}';
+    if (this.taskRecord.taskDefinitionKey === "Review_Report") {
+      this.taskRecord.outputVariables = '{"changesRequested": "' + this.radioHowToProceed + '"}';
     }
-    if (this.taskRecord.taskDefinitionKey === "Approve_Report") {
-      this.taskRecord.outputVariables = '{"Funding_Decision": "' + this.radioHowToProceed + '"}';
+    if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report") {
+      this.taskRecord.outputVariables = '{"approved": "' + this.radioHowToProceed + '"}';
     }
 
     if(status=="completed") {
-      if (this.taskRecord.taskDefinitionKey === "Disburse_Funds") this.updateCalendarStatus();
-      if (this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
-      if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed == "No") this.updateCalendarStatus();
+      if (this.taskRecord.taskDefinitionKey === "Approve_Quartely_Report" && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
     }
 
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
