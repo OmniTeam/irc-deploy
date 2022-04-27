@@ -165,6 +165,7 @@
               <div
                 class=" btn btn-success fa fa-plus"
                 (click)="createReferral()"
+                *ngIf="this.userRole != 'ROLE_REBUILD_DATA_VIEWER'"
               >
                 Add Referral
 

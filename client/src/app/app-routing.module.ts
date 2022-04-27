@@ -87,7 +87,7 @@ const routes: Routes = [
       {
         path: 'taskList', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER, Roles.ROLE_REBUILD_DATA_VIEWER]
         },
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
@@ -195,77 +195,82 @@ const routes: Routes = [
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
-            Roles.ROLE_BUDGET_HOLDER]
+            Roles.ROLE_BUDGET_HOLDER,
+            Roles.ROLE_REBUILD_DATA_VIEWER,
+            Roles.ROLE_REBUILD_DATA_MANAGER
+          ]
         },
         loadChildren: () => import('./mis-components/referrals/referrals.module').then(m => m.ReferralsModule)
       },
       {
         path: 'create-referral', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/referrals/create-client/create-referral.module').then(m => m.CreateReferralModule)
       },
       {
         path: 'generate-referral', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/referrals/generate-referral/generate-referral.module').then(m => m.GenerateReferralModule)
       },
       {
         path: 'action-referral/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/referrals/action-referral/action-referral.module').then(m => m.ActionReferralModule)
       },
       {
         path: 'feedback-list', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER,
+            Roles.ROLE_REBUILD_DATA_VIEWER,
+            Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/feedback/feedback.module').then(m => m.FeedbackModule)
       },
       {
         path: 'activity-list', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/activity-report/activity-report.module').then(m => m.ActivityReportModule)
       },
       {
         path: 'activity-create', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/activity-report/create-activity-report/create-activity-report.module').then(m => m.CreateActivityReportModule)
       },
       {
         path: 'activityReport/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/activity-report/edit-activity-report/edit-activity-report.module').then(m => m.EditActivityReportModule)
       },
       {
         path: 'activityForm/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/activity-report/activity-form/activity-form.module').then(m => m.ActivityFormModule)
       },
       {
         path: 'action-feedback/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/feedback/action-feedback/action-feedback.module').then(m => m.ActionFeedbackModule)
       },
       {
         path: 'create-feedback', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/feedback/create-feeback/create-feedback.module').then(m => m.CreateFeedbackModule)
       },
@@ -335,7 +340,7 @@ const routes: Routes = [
       {
         path: 'scheduledTasks', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
       },
