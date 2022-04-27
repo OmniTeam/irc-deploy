@@ -4,7 +4,7 @@ import {Location} from "@angular/common";
 import {ReportFormService} from "../../../services/report-form.service";
 import {TaskListService} from "../../../services/task-list.service";
 import {FileUploadService} from "../../../services/file-upload.service";
-import {PartnerSetupService} from "../../../services/partner-setup.service";
+import {WorkPlanService} from "../../../services/work-plan-setup.service";
 import {UsersService} from "../../../services/users.service";
 import {ProjectMilestoneService} from "../../../services/project-milestone.service";
 import {AlertService} from "../../../services/alert";
@@ -64,7 +64,7 @@ export class ActivityFormComponent implements OnInit {
     private reportFormService: ReportFormService,
     private taskListService: TaskListService,
     private fileUploadService: FileUploadService,
-    private partnerSetupService: PartnerSetupService,
+    private WorkPlanService: WorkPlanService,
     private usersService: UsersService,
     private projectMilestoneService: ProjectMilestoneService,
     private alertService: AlertService,

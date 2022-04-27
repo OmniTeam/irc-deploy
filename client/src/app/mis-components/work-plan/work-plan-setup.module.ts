@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PartnerSetupComponent } from './partner-setup.component';
-import { PartnerSetupRoutingModule } from './partner-setup-routing.module';
+import { WorkPlanComponent } from './work-plan-setup.component';
+import { WorkPlanSetupRoutingModule } from './work-plan-setup-routing.module';
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
@@ -11,10 +11,10 @@ import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-vi
 import {NgSelectModule} from "@ng-select/ng-select";
 
 @NgModule({
-  declarations: [PartnerSetupComponent],
+  declarations: [WorkPlanComponent],
     imports: [
         CommonModule,
-        PartnerSetupRoutingModule,
+        WorkPlanSetupRoutingModule,
         FormsModule,
         NgxDatatableModule,
         ComponentsModule,
@@ -23,4 +23,4 @@ import {NgSelectModule} from "@ng-select/ng-select";
         NgSelectModule,
     ]
 })
-export class PartnerSetupModule { }
+export class WorkPlanSetupModule { }

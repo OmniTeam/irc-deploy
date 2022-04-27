@@ -11,7 +11,7 @@ import {AuthService} from "../../services/auth.service";
 import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {UsersService} from "../../services/users.service";
-import {PartnerSetupService} from "../../services/partner-setup.service";
+import {WorkPlanService} from "../../services/work-plan-setup.service";
 import {ProjectMilestoneService} from "../../services/project-milestone.service";
 import {AlertService} from "../../services/alert";
 
@@ -95,7 +95,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private reportFormService: ReportFormService,
               private taskListService: TaskListService,
               private fileUploadService: FileUploadService,
-              private partnerSetupService: PartnerSetupService,
+              private WorkPlanService: WorkPlanService,
               private usersService: UsersService,
               private projectMilestoneService: ProjectMilestoneService,
               private alertService: AlertService,
@@ -204,15 +204,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         }
       }
 
-      this.setReportsFromPartnerSetup();
+      this.setReportsFromWorkPlan();
 
       this.dtTrigger.next();
     }, error => console.log("Error getting reports", error));
   }
 
-  setReportsFromPartnerSetup() {
-    const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
-    this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
+  setReportsFromWorkPlan() {
+    const params2 = new HttpParams().set('id', this.taskRecord.WorkPlanId);
+    this.WorkPlanService.getWorkPlanRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
@@ -679,8 +679,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   updateCalendarStatus() {
-    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-    this.partnerSetupService.updateReportingCalendarStatus(params).subscribe((data)=>{
+    const params = new HttpParams().set('setupId', this.taskRecord.WorkPlanId).set('completed', "yes");
+    this.WorkPlanService.updateReportingCalendarStatus(params).subscribe((data)=>{
       console.log('updated calendar status')
     }, error => console.log('failed update calendar status', error));
   }

@@ -64,25 +64,25 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
       },
       {
-        path: 'partnerSetup', canActivate: [AuthGuard],
+        path: 'workPlan', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
         },
-        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+        loadChildren: () => import('./mis-components/work-plan/work-plan-setup.module').then(m => m.WorkPlanSetupModule)
       },
       {
-        path: 'partnerSetup/:id', canActivate: [AuthGuard],
+        path: 'workPlan/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
         },
-        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
+        loadChildren: () => import('./mis-components/work-plan/work-plan-setup.module').then(m => m.WorkPlanSetupModule)
       },
       {
-        path: 'partnerSetupList', canActivate: [AuthGuard],
+        path: 'workPlanList', canActivate: [AuthGuard],
         data: {
           userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
         },
-        loadChildren: () => import('./mis-components/partner-setup/partner-list/partner-list.module').then(m => m.PartnerListModule)
+        loadChildren: () => import('./mis-components/work-plan/work-plan-list/work-plan-list.module').then(m => m.WorkPlanListModule)
       },
       {
         path: 'taskList', canActivate: [AuthGuard],

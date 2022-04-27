@@ -164,18 +164,21 @@ class UserController {
         def programStaffs = []
         userService.list(params).each { user ->
             def newProgramStaffObject = [:]
-            def programName = (UserGroup.findByUser(user).group).name
-            def program = Program.findByTitle(programName)
-            newProgramStaffObject['id'] = user.id
-            newProgramStaffObject['name'] = user.names
-            newProgramStaffObject['email'] = user.email
-            //newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
-            //newProgramStaffObject['personContact'] = programStaff.personContact
-            newProgramStaffObject['dateCreated'] = user.dateCreated
-            newProgramStaffObject['lastUpdated'] = user.lastUpdated
-            newProgramStaffObject['program'] = program.title
-            newProgramStaffObject['programId'] = program.id
-            programStaffs << newProgramStaffObject
+            def userGroup = UserGroup.findByUser(user)
+            if (userGroup != null) {
+                def programName = (userGroup.group).name
+                def program = Program.findByTitle(programName)
+                newProgramStaffObject['id'] = user.id
+                newProgramStaffObject['name'] = user.names
+                newProgramStaffObject['email'] = user.email
+                //newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
+                //newProgramStaffObject['personContact'] = programStaff.personContact
+                newProgramStaffObject['dateCreated'] = user.dateCreated
+                newProgramStaffObject['lastUpdated'] = user.lastUpdated
+                newProgramStaffObject['program'] = program.title
+                newProgramStaffObject['programId'] = program.id
+                programStaffs << newProgramStaffObject
+            }
         }
         respond programStaffs
     }

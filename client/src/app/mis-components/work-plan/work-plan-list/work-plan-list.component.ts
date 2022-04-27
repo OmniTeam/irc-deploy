@@ -1,25 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
-import {PartnerSetupService} from "../../../services/partner-setup.service";
+import {WorkPlanService} from "../../../services/work-plan-setup.service";
 import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'app-partner-list',
-  templateUrl: './partner-list.component.html',
-  styleUrls: ['./partner-list.component.css']
+  templateUrl: './work-plan-list.component.html',
+  styleUrls: ['./work-plan-list.component.css']
 })
-export class PartnerListComponent implements OnInit {
+export class WorkPlanListComponent implements OnInit {
 
   rows: any;
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private router: Router, private partnerSetupService: PartnerSetupService, private alertService: AlertService) {
+  constructor(private router: Router, private workPlanService: WorkPlanService, private alertService: AlertService) {
   }
 
   ngOnInit(): void {
-    this.partnerSetupService.getPartnerSetup().subscribe(data => {
+    this.workPlanService.getWorkPlan().subscribe(data => {
       this.rows = data;
       this.dtTrigger.next();
     }, error => console.log(error));
@@ -34,7 +34,7 @@ export class PartnerListComponent implements OnInit {
         {
           text: '<i class="text fas fa-plus" style="color: cornflowerblue;"></i>&nbsp;&nbsp;Add Work Plan',
           action: (e, dt, node, config) => {
-            this.router.navigate(['/partnerSetup']);
+            this.router.navigate(['/WorkPlan']);
           }
         },
         {
@@ -53,7 +53,7 @@ export class PartnerListComponent implements OnInit {
 
   deleteRecord(id) {
     if (confirm('Are you sure to delete this Partner Setup Record?')) {
-      this.partnerSetupService.deletePartnerSetupRecord(id).subscribe((result) => {
+      this.workPlanService.deleteWorkPlanRecord(id).subscribe((result) => {
           this.alertService.warning(`Partner Setup Record has been  deleted `);
           this.reloadTableData();
         }, error => {
@@ -64,7 +64,7 @@ export class PartnerListComponent implements OnInit {
   }
 
   private reloadTableData() {
-    this.partnerSetupService.getPartnerSetup().subscribe(data => {
+    this.workPlanService.getWorkPlan().subscribe(data => {
       this.rows = data;
     }, error => console.log(error));
   }

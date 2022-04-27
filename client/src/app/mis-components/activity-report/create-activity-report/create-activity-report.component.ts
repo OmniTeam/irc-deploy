@@ -7,7 +7,7 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
 import {ActivityReportService} from "../../../services/activity-report.service";
-import {PartnerSetupService} from "../../../services/partner-setup.service";
+import {WorkPlanService} from "../../../services/work-plan-setup.service";
 import {AuthService} from "../../../services/auth.service";
 import {UsersService} from "../../../services/users.service";
 
@@ -51,7 +51,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               private userService: UsersService,
               private fileUploadService: FileUploadService,
               private activityReportService: ActivityReportService,
-              private partnerSetup: PartnerSetupService,
+              private WorkPlan: WorkPlanService,
               private router: Router,
               private programStaffService: ProgramStaffService) { }
 
@@ -302,7 +302,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   }
 
   getBudgetLines(){
-    this.partnerSetup.getPartnerSetup().subscribe((data) =>{
+    this.WorkPlan.getWorkPlan().subscribe((data) =>{
       console.log(data)
       this.budgetHolder = data
     })
