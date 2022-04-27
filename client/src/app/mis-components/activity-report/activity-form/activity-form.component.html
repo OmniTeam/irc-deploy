@@ -626,7 +626,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-row">
+                <div *ngIf="isReview" class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Action Required
@@ -674,7 +674,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-row">
+                  <div *ngIf="isReview" class="form-row">
                     <div class="col-md-3" style="padding-top: 10px;">
                       <label>
                         Forwarded To

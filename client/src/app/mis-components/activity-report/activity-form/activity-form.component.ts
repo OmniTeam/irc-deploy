@@ -57,6 +57,10 @@ export class ActivityFormComponent implements OnInit {
       'value': 'No'
     },
   ];
+  isReview: boolean;
+  isMakeCorrections: boolean;
+  isApprove: boolean;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -82,6 +86,10 @@ export class ActivityFormComponent implements OnInit {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) =>{
           this.taskRecord = data;
+
+          this.isReview = this.taskRecord.taskDefinitionKey=="Conduct_Financial_Review"
+          this.isMakeCorrections = (this.taskRecord.taskDefinitionKey=="Make_Changes_from_Finance" && this.taskRecord.taskDefinitionKey=="Make_Changes_from_Supervisor")
+          this.isApprove = this.taskRecord.taskDefinitionKey=="Approve Activity Report"
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
             this.activity = data;
@@ -286,8 +294,13 @@ export class ActivityFormComponent implements OnInit {
   updateTask(status){
     this.taskRecord.status = status;
     this.taskRecord.groupId = this.taskRecord.groupId ?? '';
-    let actionRequired = this.formGroup.value.actionRequired;
-    this.taskRecord.outputVariables = '{"approveReport": "'+ actionRequired +'","groupId:"""}'
+    if (this.isReview) {
+      let actionRequired = this.formGroup.value.actionRequired;
+      this.taskRecord.outputVariables = '{"approveReport": "' + actionRequired + '","groupId:"""}'
+    }
+    if(this.isApprove) {
+      this.taskRecord.outputVariables = '{"archiveReport": "' + "Yes" + '","groupId:"""}'
+    }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
