@@ -89,7 +89,7 @@ export class ActivityFormComponent implements OnInit {
 
           this.isReview = this.taskRecord.taskDefinitionKey=="Conduct_Financial_Review"
           this.isMakeCorrections = (this.taskRecord.taskDefinitionKey=="Make_Changes_from_Finance" && this.taskRecord.taskDefinitionKey=="Make_Changes_from_Supervisor")
-          this.isApprove = this.taskRecord.taskDefinitionKey=="Approve Activity Report"
+          this.isApprove = this.taskRecord.taskDefinitionKey=="Approve_Activity_Report"
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
             this.activity = data;
