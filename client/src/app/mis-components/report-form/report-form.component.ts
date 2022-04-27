@@ -116,7 +116,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmit = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
           if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_MandE") this.isMakeCorrectionsMandE = true;
           if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
