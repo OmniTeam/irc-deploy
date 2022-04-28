@@ -1,5 +1,6 @@
 package com.kengamis
 
+import com.kengamis.acl.KengaGroupAclEntry
 import grails.validation.ValidationException
 
 import static org.springframework.http.HttpStatus.CREATED
@@ -104,6 +105,7 @@ class KengaGroupController {
             return
         }
 
+        deletedGroupsACLS(id)
         kengaGroupService.delete(id)
 
         render status: NO_CONTENT
@@ -121,5 +123,12 @@ class KengaGroupController {
             def currentUser = User.get(myUser)
             KengaUserGroup.create(kengaGroup, currentUser, true)
         }
+    }
+
+    @Transactional
+    def deletedGroupsACLS(id){
+        def groupObject = KengaGroup.get(id)
+        print(groupObject)
+        KengaGroupAclEntry.deleteACLByGroup(groupObject)
     }
 }

@@ -1896,4 +1896,9 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "Marvin (generated)", id: "20220428102310-19987") {
+        modifyDataType(columnName: "config_attribute", newDataType: "text", tableName: "request_map")
+    }
+
+
 }

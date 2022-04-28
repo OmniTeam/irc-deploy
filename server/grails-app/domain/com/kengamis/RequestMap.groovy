@@ -23,6 +23,7 @@ class RequestMap implements Serializable {
 
     static mapping = {
         id generator: 'uuid2'
+        configAttribute type: "text"
         cache true
     }
 }
