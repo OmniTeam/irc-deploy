@@ -1,6 +1,7 @@
 package com.kengamis.acl
 
 import com.kengamis.KengaGroup
+import com.kengamis.User
 
 class KengaGroupAclEntry {
     KengaAclTableRecordIdentity kengaAclTableRecordIdentity
@@ -15,5 +16,10 @@ class KengaGroupAclEntry {
     static constraints = {
         kengaAclTableRecordIdentity nullable: false
         kengaGroup nullable: false
+    }
+
+    static void deleteACLByGroup(KengaGroup  e){
+        def filters = findAllByKengaGroup(e)
+        filters.each { it.delete(flush: true, failOnError: true) }
     }
 }

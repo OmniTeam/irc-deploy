@@ -188,7 +188,7 @@ export class AclGroupMappingParentComponent implements OnInit {
     this.AclGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/acl-group-mapping-lists']);
     }, error => {
       this.alertService.error('Failed to Create the ACL');
     });
