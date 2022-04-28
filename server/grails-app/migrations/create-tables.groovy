@@ -2183,4 +2183,12 @@ databaseChangeLog = {
     changeSet(author: "BrunoJay (generated)", id: "1641534534539-1") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "assignee", tableName: "referral")
     }
+
+    changeSet(author: "BrunoJay (generated)", id: "164123423423539-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "process_id", tableName: "report_form")
+    }
+
+    changeSet(author: "BrunoJay (generated)", id: "16535345343669-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form")
+    }
 }
