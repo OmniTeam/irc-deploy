@@ -87,7 +87,7 @@ export class HomeComponent implements OnInit {
       if (data != null) {
         data.forEach((item) => {
           let staff = this.getStaff(item.partnerId);
-          if(item.processDefKey=="IRC_REPORTING") results1.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
+          if(item.processDefKey=="QUATERLY_REPORTING") results1.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
           if(item.processDefKey=="IRC_REFERRAL") results2.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
           if(item.processDefKey=="ACTIVITY_REPORTING") results3.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
           if(item.processDefKey=="IRC_FEEDBACK") results4.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))

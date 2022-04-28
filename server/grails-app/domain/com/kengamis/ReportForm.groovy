@@ -17,5 +17,7 @@ class ReportForm {
         id generator: 'uuid2'
     }
     static constraints = {
+        processId nullable: true
+        groupId nullable: true
     }
 }

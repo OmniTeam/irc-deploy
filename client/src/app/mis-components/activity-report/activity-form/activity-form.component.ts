@@ -93,7 +93,6 @@ export class ActivityFormComponent implements OnInit {
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
             this.activity = data;
-            console.log(this.activity)
             this.formGroup = this.formBuilder.group({
               budgetLine: [this.activity?.budgetLine, [Validators.required]],
               name: [this.activity?.name, [Validators.required]],
@@ -127,6 +126,13 @@ export class ActivityFormComponent implements OnInit {
           })
         })
 
+  }
+
+  getActivityDetails(){
+    this.activity.forEach((d) => {
+      let values = JSON.parse(d.costAssociated)
+      console.log(values)
+    })
   }
 
   get f() {

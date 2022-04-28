@@ -84,12 +84,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   performanceReport = [];
   financialReport = [];
   items = [
-    {name: 'Yes', value: 'yes'},
-    {name: 'No', value: 'no'}
+    {name: 'Yes', value: 'Yes'},
+    {name: 'No', value: 'No'}
   ];
   items2 = [
-    {name: 'Approve', value: 'yes'},
-    {name: 'Ask for Review', value: 'no'}
+    {name: 'Approve', value: 'Yes'},
+    {name: 'Ask for Review', value: 'No'}
   ];
 
   constructor(private router: Router,
@@ -116,7 +116,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Report") this.isSubmit = true;
+          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
           if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_MandE") this.isMakeCorrectionsMandE = true;
           if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
@@ -661,10 +661,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       this.taskRecord.outputVariables = "{}";
     }
     if (this.isReview) {
-      this.taskRecord.outputVariables = '{"changesRequested": "' + this.radioHowToProceed + '"}';
+      let action = this.radioHowToProceed
+      if (this.radioHowToProceed==undefined) action = "No"
+      this.taskRecord.outputVariables = '{"changesRequested": "' + action + '"}';
     }
     if (this.isApprove) {
-      this.taskRecord.outputVariables = '{"approved": "' + this.radioHowToProceed + '"}';
+      let action = this.radioHowToProceed
+      if (this.radioHowToProceed==undefined) action = "No"
+      this.taskRecord.outputVariables = '{"approved": "' + action+ '"}';
     }
 
     if(status=="completed") {
