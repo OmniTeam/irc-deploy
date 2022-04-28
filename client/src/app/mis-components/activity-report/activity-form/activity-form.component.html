@@ -230,7 +230,7 @@
                             placeholder=""
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="activityObjective"
+                            formControlName="activityObjectives"
                             [readOnly]="true"
                           ></textarea>
                         </div>
@@ -253,7 +253,7 @@
                             placeholder=""
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="achievedResults"
+                            formControlName="activityResults"
                             [readOnly]="true"
                           ></textarea>
                         </div>
@@ -277,7 +277,7 @@
                             placeholder=""
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="activitiesUndertaken"
+                            formControlName="activityUndertaken"
                             [readOnly]="true"
                           ></textarea>
                         </div>
@@ -561,7 +561,7 @@
                       <td class='text-center'>{{this.totalBudgetDisburse | number}}</td>
                     </tr><tr>
                       <td class='text-center'>Balance</td>
-                      <td class='text-center'>{{totalBalance || 'Balance'}}</td>
+                      <td class='text-center'>{{totalBalance | number}}</td>
                     </tr>
                     </tbody>
                   </table>

@@ -93,6 +93,7 @@ export class ActivityFormComponent implements OnInit {
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
             this.activity = data;
+            this.getActivityDetails(data)
             this.formGroup = this.formBuilder.group({
               budgetLine: [this.activity?.budgetLine, [Validators.required]],
               name: [this.activity?.name, [Validators.required]],
@@ -101,9 +102,9 @@ export class ActivityFormComponent implements OnInit {
               designation: [this.activity?.designation, [Validators.required]],
               location: [this.activity?.location],
               milestone: [this.activity?.milestone],
-              activityObjective:[this.activity?.activityObjective],
-              achievedResults:[this.activity?.achievedResults],
-              activitiesUndertaken:[this.activity?.activitiesUndertaken],
+              activityObjectives:[this.activity?.activityObjectives],
+              activityResults:[this.activity?.activityResults],
+              activityUndertaken:[this.activity?.activityUndertaken],
               challenges:[this.activity?.challenges],
               lessonsLearned:[this.activity?.lessonsLearned],
               keyAchievements:[this.activity?.keyAchievements],
@@ -128,11 +129,24 @@ export class ActivityFormComponent implements OnInit {
 
   }
 
-  getActivityDetails(){
-    this.activity.forEach((d) => {
-      let values = JSON.parse(d.costAssociated)
-      console.log(values)
-    })
+  getActivityDetails(data){
+
+    let values =  JSON.parse(data.costAssociated)
+    console.log("Values",values)
+    this.peopleSurvey = values.people
+    this.totalBalance = values.balance
+    this.budget = values.budget
+    this.getTotalApproved = values.totalApproved
+    this.totalSpent = values.totalSpent
+    this.totalBudgetDisburse = values.budgetDisburse
+    console.log(this.budget)
+    // data.forEach((d) => {
+    //   let values = JSON.parse(d.costAssociated)
+    //   this.budget = JSON.parse(values.budget)
+    //   this.peopleSurvey = values.people
+    //   this.totalBalance = values.balance
+    //   console.log(values)
+    // })
   }
 
   get f() {
@@ -267,9 +281,9 @@ export class ActivityFormComponent implements OnInit {
 
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
-      achievedResults: activityReport.achievedResults,
+      activityResults: activityReport.activityResults,
       activitiesUndertaken: activityReport.activitiesUndertaken,
-      activityObjective: activityReport.activityObjective,
+      activityObjectives: activityReport.activityObjectives,
       assignee: activityReport.assignee,
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
