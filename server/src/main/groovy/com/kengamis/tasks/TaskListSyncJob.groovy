@@ -1,5 +1,6 @@
 package com.kengamis.tasks
 
+import com.kengamis.ReportForm
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
 import groovy.sql.Sql
@@ -89,7 +90,8 @@ class TaskListSyncJob extends Script {
     }
 
     def deleteCompletedTask(def id) {
-        TaskList.where {synced == 'true' && id == id }.deleteAll()
+        def hasReports = ReportForm.findAllByTaskId(id)
+        if(hasReports.size()==0) TaskList.where {synced == 'true' && id == id }.deleteAll()
     }
 
     static def setTaskSyncStatusToTrue(def id) {
