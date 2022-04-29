@@ -8,7 +8,7 @@ import {AclGroupMappingService} from '../../services/acl-group-mapping.service';
 import {KengaDataTablesService} from '../../services/kenga-data-tables.service';
 
 @Component({
-  selector: 'app-groups',
+  selector: 'app-acl-group-mapping-lists',
   templateUrl: './acl-group-mapping-lists.component.html',
   styleUrls: ['./acl-group-mapping-lists.component.css']
 })
@@ -30,7 +30,7 @@ export class AclGroupMappingListsComponent implements OnInit {
   formGp: FormGroup;
   rowData: any;
   submitted = false;
-  private selectedEntries = [];
+  selectedEntries = [];
   private checkedRow: any;
   aclsEntries: any;
   groups: any;
@@ -42,6 +42,7 @@ export class AclGroupMappingListsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
+              // tslint:disable-next-line:no-shadowed-variable
               private AclGroupMappingService: AclGroupMappingService,
               private alertService: AlertService,
               private kengaDataTablesService: KengaDataTablesService,
