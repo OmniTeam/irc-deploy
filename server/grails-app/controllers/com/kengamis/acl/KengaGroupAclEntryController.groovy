@@ -112,19 +112,14 @@ class KengaGroupAclEntryController {
             }
             log.info("==============size${records.size()}")
 
-            // create entries
-//            createAcls(records, groupId,permission)
-            records.each {record->
-                def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
-                new KengaGroupAclEntry(
-                        kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                        kengaGroup: kengaGroup,
-                        mask: permission
-                ).save(flush: true, failOnError: true)
-            }
+            // gets the id label of the kengaDataTable may be __id or id
+            // that's its significance
+            def idLabel= kengaDataTable.idLabel
 
-            // after creating the acls of the immediate group
-            // create the function that checks for the parent of groups
+            // create entries
+            createAcls(records, groupId,permission, idLabel)
+
+            // after creating the acls of the immediate group, create the function that checks for the parent of groups
             // until the last parent has no parent
 
             def parentGroupId = kengaGroup.parentGroup.collect{it.id}[0]
@@ -134,37 +129,24 @@ class KengaGroupAclEntryController {
                 def myCurrentObject = kengaGroup.get(parentGroupId)
 
                 // create acl for the parent
-//                createAcls(records,myCurrentObject,permission)
-                records.each {record->
-                    def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
-                    new KengaGroupAclEntry(
-                            kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                            kengaGroup: myCurrentObject,
-                            mask: permission
-                    ).save(flush: true, failOnError: true)
-                }
+                createAcls(records,myCurrentObject,permission,idLabel)
 
                 // update the parent ID to the new parent of the current parent
                 parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
-
             }
         }
     }
 
-    /*def createAcls(aclRecords,groupId, permissionNumber){
+    def createAcls(aclRecords,groupId, permissionNumber, idLabel){
         aclRecords.each { record ->
-            print('======')
-            print(record)
-            print('======')
-            def currentIdLabel = KengaDataTable.idLabel
-            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record.currentIdLabel)
+            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$idLabel")
             new KengaGroupAclEntry(
                     kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
                     kengaGroup: groupId,
                     mask: permissionNumber
             ).save(flush: true, failOnError: true)
         }
-    }*/
+    }
 
     def allMisTables() {
         def tables = AppHolder.withMisSqlNonTx {
