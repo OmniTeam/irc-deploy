@@ -6,7 +6,6 @@ import { TaskListRoutingModule } from './task-list-routing.module';
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
-import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 
 @NgModule({
@@ -17,7 +16,6 @@ import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-vi
     FormsModule,
     NgxDatatableModule,
     ComponentsModule,
-    DataTablesModule,
     EntityViewTableModule,
   ]
 })
