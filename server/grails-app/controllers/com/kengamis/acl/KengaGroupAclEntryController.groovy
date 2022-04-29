@@ -91,35 +91,6 @@ class KengaGroupAclEntryController {
     def saveGroupMappings(){
         def json=request.JSON
         def groupId = json.group
-        def formId = json.form
-        def permission = json.permissions
-        def grpConditionQuery = json.groupConditionQuery
-        def kengaGroup = KengaGroup.get(groupId)
-        def form = Form.get(formId)
-        def kengaDataTable = KengaDataTable.findByTableName(form.name)
-
-        //create entries
-        def records = AppHolder.withMisSqlNonTx {
-            def query = "select * from ${form.name} ${grpConditionQuery}"
-            log.info(query)
-            rows(query.toString())
-        }
-        log.info("==============size${records.size()}")
-        records.each {record->
-            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
-            new KengaGroupAclEntry(
-                    kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                    kengaGroup: kengaGroup,
-                    mask: permission
-            ).save(flush: true, failOnError: true)
-        }
-
-    }
-
-    @Transactional
-    def saveGroupMappingsWithParent(){
-        def json=request.JSON
-        def groupId = json.group
         def permission = json.permissions
         def queryArray = json.queryArray
 
@@ -142,6 +113,7 @@ class KengaGroupAclEntryController {
             log.info("==============size${records.size()}")
 
             // create entries
+//            createAcls(records, groupId,permission)
             records.each {record->
                 def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
                 new KengaGroupAclEntry(
@@ -162,6 +134,7 @@ class KengaGroupAclEntryController {
                 def myCurrentObject = kengaGroup.get(parentGroupId)
 
                 // create acl for the parent
+//                createAcls(records,myCurrentObject,permission)
                 records.each {record->
                     def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
                     new KengaGroupAclEntry(
@@ -177,6 +150,21 @@ class KengaGroupAclEntryController {
             }
         }
     }
+
+    /*def createAcls(aclRecords,groupId, permissionNumber){
+        aclRecords.each { record ->
+            print('======')
+            print(record)
+            print('======')
+            def currentIdLabel = KengaDataTable.idLabel
+            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record.currentIdLabel)
+            new KengaGroupAclEntry(
+                    kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
+                    kengaGroup: groupId,
+                    mask: permissionNumber
+            ).save(flush: true, failOnError: true)
+        }
+    }*/
 
     def allMisTables() {
         def tables = AppHolder.withMisSqlNonTx {

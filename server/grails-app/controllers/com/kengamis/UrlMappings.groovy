@@ -81,8 +81,7 @@ class UrlMappings {
             'getLoginUser'(controller: 'userApi', action:'getLoginUser',method: 'GET' )
         }
 
-        "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
-        "/api/v1/aclGroupMapping-v2"(controller: 'kengaGroupAclEntry', action:'saveGroupMappingsWithParent',method: 'POST' )
+        "/aclGroupMappings"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
         "/listAllACLS"(controller: 'kengaGroupAclEntry', action:'listAllACLS',method: 'GET' )
         "/getMISUsers"(controller: 'user', action:'getMISUsers',method: 'GET' )
         "/allMisTables"(controller: 'kengaGroupAclEntry', action:'allMisTables',method: 'GET' )
