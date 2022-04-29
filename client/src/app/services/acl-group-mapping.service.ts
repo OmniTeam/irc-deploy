@@ -8,7 +8,8 @@ import {environment} from '../../environments/environment';
 })
 export class AclGroupMappingService {
   baseurl = environment.serverUrl;
-  urlAcl2 = `${this.baseurl}/aclGroupMappings/`;
+  urlMapping = `${this.baseurl}/aclGroupMappings/`;
+  urlAcl = `${this.baseurl}/kengaGroupAclEntry/`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +18,11 @@ export class AclGroupMappingService {
   }
 
   createGroupMapping2(formData): Observable<any> {
-    return this.http.post(this.urlAcl2, formData);
+    return this.http.post(this.urlMapping, formData);
+  }
+
+  deleteCurrentACL(p): Observable<any> {
+    return this.http.delete(`${this.urlAcl}${p}/`);
   }
 
 }

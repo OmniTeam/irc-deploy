@@ -84,7 +84,8 @@
         <div class="dataTables_wrapper py-4">
           <div class="row" style="padding: 11px;">
             <div class="col-lg-12 col-5 text-right" style="margin-top: -31px;">
-              <a class=" btn btn-danger" (click)="deleteACLS()" style="color: white"> Delete ACLS </a>
+<!--              <a class=" btn btn-danger" (click)="deleteACLS(this.aclsEntries)" style="color: white"> Delete Current Filtered </a>-->
+              <a class=" btn btn-danger" (click)="deleteACLS(this.selectedEntries)" style="color: white"> Delete ACLS </a>
               <a class=" btn btn-success" (click)="addNewAcls()" style="color: white"> Create ACLs </a>
             </div>
           </div>
