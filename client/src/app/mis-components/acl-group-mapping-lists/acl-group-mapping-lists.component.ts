@@ -1,11 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {AlertService} from '../../services/alert';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {TagService} from '../../services/tags';
-import {HttpParams} from '@angular/common/http';
 import {GroupsService} from '../../services/groups.service';
 import {AclGroupMappingService} from '../../services/acl-group-mapping.service';
 import {KengaDataTablesService} from '../../services/kenga-data-tables.service';
@@ -40,6 +37,8 @@ export class AclGroupMappingListsComponent implements OnInit {
   kengaDataTables: any;
   private groupValue = '';
   private tableValue = '';
+  currentGroups: any;
+  currentTables: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -83,17 +82,16 @@ export class AclGroupMappingListsComponent implements OnInit {
     console.log(this.selectedEntries);
   }
 
-  deleteACLS() {
-    const deletedRow = this.selectedEntries;
-    deletedRow.forEach((p) => {
-        this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
-          console.warn(result, 'Groups have been deleted');
-          this.router.navigate(['/aclsEntries']).then(() => {
-            window.location.reload();
-          });
+  deleteACLS(data) {
+    data.forEach((p) => {
+        this.AclGroupMappingService.deleteCurrentACL(p).subscribe((result) => {
+          console.warn(result, 'ACLS have been deleted');
         });
       }
     );
+    this.router.navigate(['/acl-group-mapping-lists']).then(() => {
+      window.location.reload();
+    });
   }
 
   /*Responsible for the opening of the Modals*/
@@ -146,6 +144,8 @@ export class AclGroupMappingListsComponent implements OnInit {
   reloadTable() {
     this.AclGroupMappingService.listAllACLS().subscribe((data) => {
       this.aclsEntries = data;
+      this.currentGroups = [...new Set(data.map( (a) => a.group))];
+      this.currentTables = [...new Set(data.map( (a) => a.table))];
       this.page.count = this.aclsEntries.length;
     });
   }

@@ -381,13 +381,6 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
       },
       {
-        path: 'acl-group-mapping', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/acl-group-mapping/acl-group-mapping.module').then(m => m.AclGroupMappingModule)
-      },
-      {
         path: 'acl-group-mapping-parent', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN]
