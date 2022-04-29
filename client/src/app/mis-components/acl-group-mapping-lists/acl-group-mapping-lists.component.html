@@ -43,8 +43,8 @@
                                    placeholder="Group"
                                    [searchable]="true"
                                    [clearable]="true">
-                          <ng-option [value]="item.name" *ngFor="let item of groups">
-                            {{item.name}}
+                          <ng-option [value]="item" *ngFor="let item of currentGroups">
+                            {{item}}
                           </ng-option>
                         </ng-select>
                       </div>
@@ -60,8 +60,8 @@
                                    placeholder="Table"
                                    [searchable]="true"
                                    [clearable]="true">
-                          <ng-option [value]="item.Tables_in_kengamis" *ngFor="let item of kengaDataTables">
-                            {{item.Tables_in_kengamis}}
+                          <ng-option [value]="item" *ngFor="let item of currentTables">
+                            {{item}}
                           </ng-option>
                         </ng-select>
                       </div>

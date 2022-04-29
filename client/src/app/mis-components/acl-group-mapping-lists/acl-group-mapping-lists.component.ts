@@ -37,6 +37,8 @@ export class AclGroupMappingListsComponent implements OnInit {
   kengaDataTables: any;
   private groupValue = '';
   private tableValue = '';
+  currentGroups: any;
+  currentTables: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -142,6 +144,8 @@ export class AclGroupMappingListsComponent implements OnInit {
   reloadTable() {
     this.AclGroupMappingService.listAllACLS().subscribe((data) => {
       this.aclsEntries = data;
+      this.currentGroups = [...new Set(data.map( (a) => a.group))];
+      this.currentTables = [...new Set(data.map( (a) => a.table))];
       this.page.count = this.aclsEntries.length;
     });
   }
