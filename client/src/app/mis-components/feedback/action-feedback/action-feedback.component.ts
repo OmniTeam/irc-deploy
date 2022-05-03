@@ -370,4 +370,13 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
     }
   }
 
+  feedbackSharedChoice(event) {
+    if (event === 'Internally') {
+      document.getElementById("sectorName").hidden = false
+      document.getElementById("organizationReferred").hidden = true
+    } else {
+      document.getElementById('organizationReferred').hidden = false
+      document.getElementById('sectorName').hidden = true
+    }
+  }
 }
