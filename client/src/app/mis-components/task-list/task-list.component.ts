@@ -1,7 +1,6 @@
-import {Component, DoCheck, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {TaskListService} from "../../services/task-list.service";
-import {Subject} from "rxjs";
+import {ReportFormService} from "../../services/report-form.service";
 
 @Component({
   selector: 'app-tasklist',
@@ -11,40 +10,45 @@ import {Subject} from "rxjs";
 export class TaskListComponent implements OnInit {
 
   rows: any = [];
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  temp: any = [];
+  entries: number = 10;
 
-  constructor(private router: Router, private taskListService: TaskListService) {
+  constructor(
+    private router: Router,
+    private reportFormService: ReportFormService
+  ) {
   }
-
-  count = 0;
 
   ngOnInit(): void {
-    this.taskListService.getTaskList().subscribe(tasks => {
-      console.log(tasks)
-      this.rows = tasks;
-      this.dtTrigger.next();
-    }, error => console.log(error));
-
-    this.dtOptions = {
-      pagingType: "numbers",
-      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      processing: true,
-      responsive: true,
-      dom: 'lfBrtip',
-      buttons: [
-        {
-          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
-          extend: 'csvHtml5',
-          title: 'TaskList'
-        },
-        {
-          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
-          extend: 'excelHtml5',
-          title: 'TaskList'
-        }
-      ]
-    };
+    this.reloadTable();
   }
 
+  reloadTable() {
+    this.reportFormService.getAllReports().subscribe(data => {
+      this.rows = data;
+      this.temp = [...data];
+    }, error => console.log(error));
+  }
+
+  entriesChange($event) {
+    this.entries = $event.target.value;
+    this.reloadTable();
+  }
+
+  onChangeSearch(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  onSearch(event) {
+    this.reloadTable();
+  }
 }

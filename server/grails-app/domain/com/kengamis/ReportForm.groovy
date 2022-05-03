@@ -4,7 +4,7 @@ class ReportForm {
 
     String id
     String groupId
-    String processId
+    String processInstanceId
     String taskId
     String taskDefinitionKey
     String userId
@@ -17,7 +17,6 @@ class ReportForm {
         id generator: 'uuid2'
     }
     static constraints = {
-        processId nullable: true
         groupId nullable: true
     }
 }

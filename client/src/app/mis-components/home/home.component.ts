@@ -6,6 +6,7 @@ import {ActivityReportService} from "../../services/activity-report.service";
 import {OngoingTask} from "../../models/ongoing-task";
 import {UsersService} from "../../services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -38,9 +39,32 @@ export class HomeComponent implements OnInit {
   isQuarterlyReport: boolean;
   isActivityReport: boolean;
 
+  taskListRows: any = [];
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
   ngOnInit(): void {
-    this.isReferrals = true;
-    this.reloadTable();
+    this.reloadTable(true);
+
+    this.dtOptions = {
+      pagingType: "numbers",
+      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      processing: true,
+      responsive: true,
+      dom: 'lfBrtip',
+      buttons: [
+        {
+          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
+          extend: 'csvHtml5',
+          title: 'TaskList'
+        },
+        {
+          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
+          extend: 'excelHtml5',
+          title: 'TaskList'
+        }
+      ]
+    };
   }
 
   switchRowsData(type: string) {
@@ -77,7 +101,7 @@ export class HomeComponent implements OnInit {
     this.reloadTable();
   }
 
-  reloadTable() {
+  reloadTable(firstTime? : boolean) {
     this.taskListService.getTaskList().subscribe(data => {
       console.log('data', data)
       let results1 = [];
@@ -97,6 +121,10 @@ export class HomeComponent implements OnInit {
       this.referrals = results2;
       this.activity_report = results3;
       this.feedback = results4;
+
+      if(firstTime==true) this.switchRowsData('referrals');
+      this.taskListRows = data;
+      this.dtTrigger.next();
     });
   }
 

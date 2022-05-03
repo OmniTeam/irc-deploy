@@ -1,15 +1,12 @@
 package com.kengamis
 
-import com.kengamis.query.EntityQueryHelper
-import grails.validation.ValidationException
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+import groovy.json.JsonSlurper
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class ReportFormController {
@@ -20,8 +17,43 @@ class ReportFormController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond reportFormService.list(params), model:[reportFormCount: reportFormService.count()]
+//        params.max = Math.min(max ?: 10, 100)
+        def slurper = new JsonSlurper()
+        def list = []
+        reportFormService.list(params).collect {
+            def task = TaskList.get(it.taskId)
+            if (task != null) {
+                def inputVariables = task.inputVariables
+                def variables = slurper.parseText(inputVariables)
+                def programId = '', periodType = ''
+                variables['data'].each {
+                    if (it.key == 'ProgramId') programId = it.value
+                    if (it.key == 'Period') periodType = it.value
+                }
+                def program = Program.get(programId)
+                list << [
+                        id               : it.id,
+                        taskDefinitionKey: it.taskDefinitionKey,
+                        program          : program.title,
+                        periodType       : periodType,
+                        dateCreated      : it.dateCreated,
+                        lastUpdated      : it.lastUpdated,
+                        status           : it.status
+                ]
+            } else {
+                list << [
+                        id               : it.id,
+                        taskDefinitionKey: it.taskDefinitionKey,
+                        program          : '',
+                        periodType       : '',
+                        dateCreated      : it.dateCreated,
+                        lastUpdated      : it.lastUpdated,
+                        status           : it.status
+                ]
+            }
+        }
+
+        respond list, model: [reportFormCount: reportFormService.count()]
     }
 
     def show(Long id) {
@@ -48,7 +80,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: CREATED, view:"show"]
+        respond reportForm, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -71,7 +103,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: OK, view:"show"]
+        respond reportForm, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -87,7 +119,7 @@ class ReportFormController {
     }
 
     def getReportForTask() {
-        def reportData = [report: ReportForm.findByTaskId(params.taskId)]
+        def reportData = [report: ReportForm.findByProcessInstanceId(params.processInstanceId)]
         respond reportData
     }
 }

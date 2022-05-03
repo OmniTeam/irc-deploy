@@ -146,15 +146,11 @@ export const ROUTES: RouteInfo[] = [
     roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
   },
   {
-    path: '/',
-    title: 'Tasks',
-    type: 'sub',
+    path: 'taskList',
+    title: 'Reporting Process',
+    type: 'link',
     icontype: 'fas fa-tasks text-pink',
-    isCollapsed: true,
     roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
-    children: [
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'], },
-    ]
   },
 
   {
