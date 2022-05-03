@@ -14,8 +14,8 @@ import groovyx.net.http.Method
 import java.text.SimpleDateFormat
 
 class StartCamundaInstancesJob extends Script {
-    static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
-//    static String camundaApiUrl = "http://localhost:8181/mis/rest"
+//    static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
+    static String camundaApiUrl = "http://localhost:8181/mis/rest"
     static String QUARTERLY_REPORTING = "QUATERLY_REPORTING"
     static String IRC_ACTIVITY_REPORT = "ACTIVITY_REPORTING"
     static String IRC_REFERRAL = "IRC_REFERRAL"

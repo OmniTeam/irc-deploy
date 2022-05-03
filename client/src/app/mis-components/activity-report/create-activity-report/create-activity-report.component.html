@@ -223,10 +223,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="Activity Objective"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="activityObjective"
+                            formControlName="activityObjectives"
                           ></textarea>
                         </div>
                       </div>
@@ -245,10 +245,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="Achieved Results"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="achievedResults"
+                            formControlName="activityResults"
                           ></textarea>
                         </div>
                       </div>
@@ -268,10 +268,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="Key Achievements"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="activitiesUndertaken"
+                            formControlName="activityUndertaken"
                           ></textarea>
                         </div>
                       </div>
@@ -290,7 +290,7 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="challenges"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="challenges"
@@ -551,7 +551,7 @@
                       <td class='text-center'>{{this.totalBudgetDisburse | number}}</td>
                     </tr><tr>
                       <td class='text-center'>Balance</td>
-                      <td class='text-center'>{{totalBalance || 'Balance'}}</td>
+                      <td class='text-center'>{{totalBalance | number}}</td>
                     </tr>
                     </tbody>
                   </table>
