@@ -485,6 +485,7 @@
                                      [multiple]="false"
                                      placeholder="Is feedback shared internally or externally?"
                                      formControlName="feedbackInternallyExternally"
+                                     (change)="feedbackSharedChoice($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -497,7 +498,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row" id="personName" >
+                <div class="row" id="orgName" [hidden]="true">
                   <div class="col-md-3">
                     <label>
                       Organisation referred to
@@ -520,10 +521,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="row" id="personPosition" [hidden]="true">
+                <div class="row" id="sectorName" [hidden]="true">
                   <div class="col-md-3">
                     <label>
-                      Position of person referred to
+                     IRC Sector
 <!--                      -->
                     </label>
                   </div>
@@ -536,7 +537,7 @@
                             placeholder="Position of person referred to"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="referredPersonPosition"
+                            formControlName="referredOrganization"
                           >
                         </div>
                       </div>

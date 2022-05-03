@@ -224,6 +224,77 @@ export class CreateFeedbackComponent implements OnInit {
     },
   ];
 
+  feedback_category = [
+    {
+      'name': 'Allegations non-IRC'
+    },
+    {
+      'name': 'Assistance'
+    },
+    {
+      'name': 'Information'
+    },
+    {
+      'name': 'Minor Dissatisfaction'
+    },
+    {
+      'name': 'Positive'
+    },
+  ];
+
+  feedback_shared_referred = [
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+
+  feedback_internal_external = [
+    {
+      'name': 'Internally'
+    },
+    {
+      'name': 'Externally'
+    },
+    {
+      'name': 'I dont Know'
+    },
+  ];
+  response_required = [
+    {
+      'name': 'Apology'
+    },
+    {
+      'name': 'Change Policy'
+    },
+    {
+      'name': 'Corrective Decision'
+    },
+    {
+      'name': 'Explanation'
+    },
+    {
+      'name': 'External Referral'
+    },
+    {
+      'name': 'Goods/Services'
+    },
+    {
+      'name': 'Information'
+    },
+  ];
+
+  followup_needed = [
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+
 
   get f() {
     return this.formGroup.controls;
@@ -313,8 +384,10 @@ export class CreateFeedbackComponent implements OnInit {
     if (event === 'Forwarded For Action') {
       document.getElementById("assignee").hidden = false
       document.getElementById("loop").hidden = true
+      document.getElementById("actionDetails").hidden = true
     } else if(event === 'Actioned') {
       document.getElementById('loop').hidden = false
+      document.getElementById('actionDetails').hidden = false
       document.getElementById('assignee').hidden = true
     }
   }
