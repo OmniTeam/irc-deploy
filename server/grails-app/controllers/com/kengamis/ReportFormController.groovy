@@ -21,23 +21,36 @@ class ReportFormController {
         def slurper = new JsonSlurper()
         def list = []
         reportFormService.list(params).collect {
-            def inputVariables = TaskList.get(it.taskId).inputVariables
-            def variables = slurper.parseText(inputVariables)
-            def programId = '', periondType = ''
-            variables['data'].each {
-                if (it.key == 'ProgramId') programId = it.value
-                if (it.key == 'Period') periondType = it.value
+            def task = TaskList.get(it.taskId)
+            if (task != null) {
+                def inputVariables = task.inputVariables
+                def variables = slurper.parseText(inputVariables)
+                def programId = '', periodType = ''
+                variables['data'].each {
+                    if (it.key == 'ProgramId') programId = it.value
+                    if (it.key == 'Period') periodType = it.value
+                }
+                def program = Program.get(programId)
+                list << [
+                        id               : it.id,
+                        taskDefinitionKey: it.taskDefinitionKey,
+                        program          : program.title,
+                        periodType       : periodType,
+                        dateCreated      : it.dateCreated,
+                        lastUpdated      : it.lastUpdated,
+                        status           : it.status
+                ]
+            } else {
+                list << [
+                        id               : it.id,
+                        taskDefinitionKey: it.taskDefinitionKey,
+                        program          : '',
+                        periodType       : '',
+                        dateCreated      : it.dateCreated,
+                        lastUpdated      : it.lastUpdated,
+                        status           : it.status
+                ]
             }
-            def program = Program.get(programId)
-            list << [
-                    id               : it.id,
-                    taskDefinitionKey: it.taskDefinitionKey,
-                    program          : program.title,
-                    periodType       : periondType,
-                    dateCreated      : it.dateCreated,
-                    lastUpdated      : it.lastUpdated,
-                    status           : it.status
-            ]
         }
 
         respond list, model: [reportFormCount: reportFormService.count()]
