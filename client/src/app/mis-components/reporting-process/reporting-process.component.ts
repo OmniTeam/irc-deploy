@@ -3,11 +3,11 @@ import {Router} from "@angular/router";
 import {ReportFormService} from "../../services/report-form.service";
 
 @Component({
-  selector: 'app-tasklist',
-  templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.css']
+  selector: 'app-reporting-process',
+  templateUrl: './reporting-process.component.html',
+  styleUrls: ['./reporting-process.component.css']
 })
-export class TaskListComponent implements OnInit {
+export class ReportingProcessComponent implements OnInit {
 
   rows: any = [];
   temp: any = [];

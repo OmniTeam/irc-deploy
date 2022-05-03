@@ -97,6 +97,11 @@ class TaskListController {
     def getTaskRecord() {
         def task = TaskList.get(params.id)
 
+        if (task==null) {
+            respond 'No values for this task id'
+            return
+        }
+
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
         def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId='',activityId = '',feedbackId = ''
