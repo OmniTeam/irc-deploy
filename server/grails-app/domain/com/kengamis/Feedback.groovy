@@ -49,6 +49,8 @@ class Feedback {
     }
 
     static constraints = {
+
+        //TODO add field to capture anon identifier
         serialNumber nullable: true
         gender nullable: true
         age nullable: true

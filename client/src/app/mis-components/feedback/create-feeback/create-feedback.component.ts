@@ -54,6 +54,29 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'Program Staff'
     },
   ];
+  action_taken = [
+    {
+      'name': 'Apology Sent'
+    },
+    {
+      'name': 'Corrective decision taken'
+    },
+    {
+      'name': 'Dropped'
+    },
+    {
+      'name': 'Explanation Provided'
+    },
+    {
+      'name': 'Information Provided'
+    },
+    {
+      'name': 'Programming change made'
+    },
+    {
+      'name': 'Referred externally'
+    },
+  ];
   type_of_feedback = [
     {
       'name': 'Old'
@@ -75,6 +98,9 @@ export class CreateFeedbackComponent implements OnInit {
     {
       'name': 'Forwarded For Action'
     },
+    {
+      'name': 'Referral'
+    }
   ];
   location = [
     {
@@ -168,9 +194,6 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'In Person'
     },
     {
-      'name': 'In Person'
-    },
-    {
       'name': 'Phone Call'
     },
     {
@@ -211,6 +234,7 @@ export class CreateFeedbackComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       dateFeedbackReceived: [''],
       nameOfRegister: [''],
+      anonymousId:[''],
       staffDesignation: [null],
       typeOfFeedback: [null],
       currentStatusOfFeedback: [null],
@@ -265,4 +289,33 @@ export class CreateFeedbackComponent implements OnInit {
     });
   }
 
+  checkForAnonStatus(event) {
+    if (event === 'Yes') {
+      document.getElementById("detailsForUser").hidden = true
+      document.getElementById("detailsForAnonUser").hidden = false
+    } else {
+      document.getElementById('detailsForUser').hidden = false
+      document.getElementById('detailsForAnonUser').hidden = true
+    }
+  }
+
+  changeChannelPreferred(event) {
+    if (event === 'Email Address') {
+      document.getElementById("phone").hidden = true
+      document.getElementById("email").hidden = false
+    } else {
+      document.getElementById('phone').hidden = false
+      document.getElementById('email').hidden = true
+    }
+  }
+
+  chooseActionForFeedback(event) {
+    if (event === 'Forwarded For Action') {
+      document.getElementById("assignee").hidden = false
+      document.getElementById("loop").hidden = true
+    } else if(event === 'Actioned') {
+      document.getElementById('loop').hidden = false
+      document.getElementById('assignee').hidden = true
+    }
+  }
 }
