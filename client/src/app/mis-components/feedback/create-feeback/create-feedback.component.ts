@@ -21,12 +21,15 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
 })
 export class CreateFeedbackComponent implements OnInit {
 
+
+
   constructor(
     private userService: UsersService,
     private CountriesService: CountriesService,
     private feedbackService: FeedbackService,
     private groupsService: GroupsService,
     private alertService: AlertService,
+    private referralsService: ReferralsService,
     private programStaff: ProgramStaffService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -39,6 +42,7 @@ export class CreateFeedbackComponent implements OnInit {
   formGroup: FormGroup
   submitted = false;
   staffs: any
+  updateStatus: any;
 
   staff_Designation =[
     {
@@ -52,6 +56,29 @@ export class CreateFeedbackComponent implements OnInit {
     },
     {
       'name': 'Program Staff'
+    },
+  ];
+  action_taken = [
+    {
+      'name': 'Apology Sent'
+    },
+    {
+      'name': 'Corrective decision taken'
+    },
+    {
+      'name': 'Dropped'
+    },
+    {
+      'name': 'Explanation Provided'
+    },
+    {
+      'name': 'Information Provided'
+    },
+    {
+      'name': 'Programming change made'
+    },
+    {
+      'name': 'Referred externally'
     },
   ];
   type_of_feedback = [
@@ -75,6 +102,9 @@ export class CreateFeedbackComponent implements OnInit {
     {
       'name': 'Forwarded For Action'
     },
+    {
+      'name': 'Referral'
+    }
   ];
   location = [
     {
@@ -168,9 +198,6 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'In Person'
     },
     {
-      'name': 'In Person'
-    },
-    {
       'name': 'Phone Call'
     },
     {
@@ -201,6 +228,106 @@ export class CreateFeedbackComponent implements OnInit {
     },
   ];
 
+  feedback_category = [
+    {
+      'name': 'Allegations non-IRC'
+    },
+    {
+      'name': 'Assistance'
+    },
+    {
+      'name': 'Information'
+    },
+    {
+      'name': 'Minor Dissatisfaction'
+    },
+    {
+      'name': 'Positive'
+    },
+  ];
+
+  feedback_shared_referred = [
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+
+  feedback_internal_external = [
+    {
+      'name': 'Internally'
+    },
+    {
+      'name': 'Externally'
+    },
+    {
+      'name': 'I dont Know'
+    },
+  ];
+  response_required = [
+    {
+      'name': 'Apology'
+    },
+    {
+      'name': 'Change Policy'
+    },
+    {
+      'name': 'Corrective Decision'
+    },
+    {
+      'name': 'Explanation'
+    },
+    {
+      'name': 'External Referral'
+    },
+    {
+      'name': 'Goods/Services'
+    },
+    {
+      'name': 'Information'
+    },
+  ];
+
+  followup_needed = [
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+
+  reason_for_referral = [
+    {
+      'name': 'Food amd Shelter'
+    },
+    {
+      'name': 'Formal Education'
+    },
+    {
+      'name': 'Insecurity'
+    },
+    {
+      'name': 'Resettlement'
+    },
+    {
+      'name': 'LGBTI'
+    },
+  ];
+  organization_referred_to = [
+    {
+      'name': 'AVSI FOUNDATION'
+    },
+    {
+      'name': 'JRS'
+    },
+    {
+      'name': 'REFUGEPOINT'
+    },
+  ];
+  referralDecisionPoint: any;
 
   get f() {
     return this.formGroup.controls;
@@ -230,6 +357,10 @@ export class CreateFeedbackComponent implements OnInit {
       project:[''],
       assignee:[''],
       feedbackDetails:[''],
+      nameOfReferringOfficer:[''],
+      reasonForReferral:[''],
+      organizationReferredTo:[''],
+      followupNeeded:[''],
       status:['Pending']
     });
   }
@@ -242,13 +373,81 @@ export class CreateFeedbackComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
+
+    let submitData: {[key:string]: string} = {
+      dateOfReferral: formData.dateFeedbackReceived,
+      nameOfReferringOfficer: formData.nameOfReferringOfficer,
+      reasonForReferral: formData.reasonForReferral,
+      organizationReferredTo: formData.organizationReferredTo,
+      followupNeeded: formData.followupNeeded,
+      status: 'Pending',
+      nameOfClientBeingReferred: formData.nameOfClient,
+      gender: formData.gender,
+      ageCategory: formData.age,
+      nationalityStatus: formData.nationalityStatus,
+      assignee: formData.assignee,
+      phoneNumber: formData.phoneNumber
+
+    }
+
+    let statusSave = 'Actioned'
+    let newFormData: {[key:string]: string} = {
+      dateFeedbackReceived: formData.dateFeedbackReceived,
+      nameOfRegister: formData.nameOfRegister,
+      staffDesignation: formData.staffDesignation,
+      typeOfFeedback: formData.typeOfFeedback,
+      currentStatusOfFeedback: formData.currentStatusOfFeedback,
+      location: formData.location,
+      projectSector: formData.projectSector,
+      subSector: formData.subSector,
+      nameOfClient: formData.nameOfClient,
+      remainAnonymous: formData.remainAnonymous,
+      nationalityStatus: formData.nationalityStatus,
+      clientType: formData.clientType,
+      preferredChannel: formData.preferredChannel,
+      phoneNumber: formData.phoneNumber,
+      email: formData.email,
+      age: formData.age,
+      serialNumber: formData.serialNumber,
+      gender: formData.gender,
+      project: formData.project,
+      assignee: formData.assignee,
+      feedbackDetails: formData.feedbackDetails,
+      nameOfReferringOfficer: formData.nameOfReferringOfficer,
+      reasonForReferral: formData.reasonForReferral,
+      organizationReferredTo: formData.organizationReferredTo,
+      followupNeeded: formData.followupNeeded,
+      status: statusSave
+    }
     console.log(formData, "submitted data")
-    this.feedbackService.createFeedback(formData).subscribe((result) => {
-      this.alertService.success(`feedback is created successfully`);
-      this.router.navigate(['/feedback-list']);
-    }, error => {
-      this.alertService.error("Failed to Create feedback")
-    });
+    if(this.referralDecisionPoint == 'Referral'){
+
+      console.log("Feedback",newFormData);
+      /** save feedback */
+      this.feedbackService.createFeedback(newFormData).subscribe((result) => {
+        this.alertService.success(`feedback is created successfully`);
+        this.router.navigate(['/feedback-list']);
+      }, error => {
+        this.alertService.error("Failed to Create feedback")
+      });
+        /** save referral */
+      this.referralsService.createReferral(submitData).subscribe((result) => {
+        console.warn(result, 'Referral Created Successfully');
+        this.alertService.success(`Referral has been successfully created`)
+        // this.router.navigate(['/referrals-list']);
+      }, error => {
+        this.alertService.error(`Failed to create Referral`)
+      });
+    } else {
+
+      this.feedbackService.createFeedback(formData).subscribe((result) => {
+        this.alertService.success(`feedback is created successfully`);
+        this.router.navigate(['/feedback-list']);
+      }, error => {
+        this.alertService.error("Failed to Create feedback")
+      });
+    }
+
   }
 
 
@@ -265,4 +464,44 @@ export class CreateFeedbackComponent implements OnInit {
     });
   }
 
+  checkForAnonStatus(event) {
+    if (event === 'Yes') {
+      document.getElementById("detailsForUser").hidden = true
+      document.getElementById("detailsForAnonUser").hidden = false
+    } else {
+      document.getElementById('detailsForUser').hidden = false
+      document.getElementById('detailsForAnonUser').hidden = true
+    }
+  }
+
+  changeChannelPreferred(event) {
+    if (event === 'Email Address') {
+      document.getElementById("phone").hidden = true
+      document.getElementById("email").hidden = false
+    } else {
+      document.getElementById('phone').hidden = false
+      document.getElementById('email').hidden = true
+    }
+  }
+
+  //TODO add save functionality
+
+  chooseActionForFeedback(event) {
+    if (event === 'Forwarded For Action') {
+      document.getElementById("assignee").hidden = false
+      document.getElementById("loop").hidden = true
+      document.getElementById("actionDetails").hidden = true
+      document.getElementById("referral").hidden = true
+    } else if(event === 'Actioned') {
+      document.getElementById('loop').hidden = false
+      document.getElementById('actionDetails').hidden = false
+      document.getElementById('assignee').hidden = true
+      document.getElementById('referral').hidden = true
+    } else if(event === 'Referral') {
+      document.getElementById('loop').hidden = true
+      document.getElementById('actionDetails').hidden = true
+      document.getElementById('assignee').hidden = true
+      document.getElementById('referral').hidden = false
+    }
+  }
 }

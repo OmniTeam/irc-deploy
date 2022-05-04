@@ -65,9 +65,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       designation: ['', [Validators.required]],
       location: [''],
       milestone: [''],
-      activityObjective:[''],
-      achievedResults:[''],
-      activitiesUndertaken:[''],
+      activityObjectives:[''],
+      activityResults:[''],
+      activityUndertaken:[''],
       challenges:[''],
       lessonsLearned:[''],
       keyAchievements:[''],
@@ -98,7 +98,10 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     let values: {[key: string]: string} = {
       budget: this.budget,
       people: this.peopleSurvey,
-      balance: this.totalBalance
+      balance: this.totalBalance,
+      totalApproved: this.getTotalApproved,
+      totalSpent: this.totalSpent,
+      budgetDisburse: this.totalBudgetDisburse
     }
 
     this.submitted = true;
@@ -113,9 +116,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
 
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
-      achievedResults: activityReport.achievedResults,
-      activitiesUndertaken: activityReport.activitiesUndertaken,
-      activityObjective: activityReport.activityObjective,
+      activityResults: activityReport.activityResults,
+      activityUndertaken: activityReport.activityUndertaken,
+      activityObjectives: activityReport.activityObjectives,
       assignee: activityReport.assignee,
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
@@ -353,7 +356,10 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     let values: {[key: string]: string} = {
       budget: this.budget,
       people: this.peopleSurvey,
-      balance: this.totalBalance
+      balance: this.totalBalance,
+      totalApproved: this.getTotalApproved,
+      totalSpent: this.totalSpent,
+      budgetDisburse: this.totalBudgetDisburse
     }
 
 
@@ -367,9 +373,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     let savedActivityRecord: {[key:string]: string} = {
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
-      achievedResults: activityReport.achievedResults,
-      activitiesUndertaken: activityReport.activitiesUndertaken,
-      activityObjective: activityReport.activityObjective,
+      activityResults: activityReport.activityResults,
+      activityUndertaken: activityReport.activityUndertaken,
+      activityObjectives: activityReport.activityObjectives,
       assignee: activityReport.assignee,
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,

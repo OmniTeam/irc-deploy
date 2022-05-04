@@ -24,15 +24,6 @@
         <div class="card-body">
           <form [formGroup]="formGroup" (ngSubmit)="actionReferral()" *ngIf="formGroup" style="padding:30px">
             <div class="row">
-<!--              <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">-->
-<!--                <div class="row">-->
-<!--                  <div class="col-md-12">-->
-<!--                    <h2>-->
-<!--                      Feedback Details-->
-<!--                    </h2>-->
-<!--                  </div>-->
-
-
                   <div class="col-lg-6">
                     <div>
                       <div class="row">
@@ -447,35 +438,6 @@
                     </div>
                   </div>
                 </div>
-<!--                <div class="row">-->
-<!--                  <div class="col-md-3">-->
-<!--                    <label>-->
-<!--                      Feedback Priority-->
-<!--&lt;!&ndash;                      &ndash;&gt;-->
-<!--                    </label>-->
-<!--                  </div>-->
-<!--                  <div class="col-md-9">-->
-<!--                    <div class="col-md-12">-->
-<!--                      <div class="form-group ">-->
-<!--                        <div class=" input-group input-group-merge">-->
-<!--                          <ng-select class="form-control form-control-sm"-->
-<!--                                     aria-controls="datatable"-->
-<!--                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
-<!--                                     [multiple]="false"-->
-<!--                                     placeholder="Feedback Priority"-->
-<!--                                     formControlName="feedbackPriority"-->
-<!--                                     [searchable]="true"-->
-<!--                                     [clearable]="true"-->
-<!--                          >-->
-<!--                            <ng-option [value]="item.name" *ngFor="let item of feedback_priority">-->
-<!--                              {{item.name}}-->
-<!--                            </ng-option>-->
-<!--                          </ng-select>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
                 <div class="row">
                   <div class="col-md-3">
                     <label>
@@ -523,6 +485,7 @@
                                      [multiple]="false"
                                      placeholder="Is feedback shared internally or externally?"
                                      formControlName="feedbackInternallyExternally"
+                                     (change)="feedbackSharedChoice($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -535,7 +498,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row" id="personName" >
+                <div class="row" id="orgName" [hidden]="true">
                   <div class="col-md-3">
                     <label>
                       Organisation referred to
@@ -558,10 +521,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="row" id="personPosition" [hidden]="true">
+                <div class="row" id="sectorName" [hidden]="true">
                   <div class="col-md-3">
                     <label>
-                      Position of person referred to
+                     IRC Sector
 <!--                      -->
                     </label>
                   </div>
@@ -574,7 +537,7 @@
                             placeholder="Position of person referred to"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="referredPersonPosition"
+                            formControlName="referredOrganization"
                           >
                         </div>
                       </div>
