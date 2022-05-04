@@ -139,14 +139,14 @@
                 </div>
                 <div class="card-body col-sm-12 home-card">
                   <div class="row" *ngFor="let row of taskListRows">
-                    <button class="btn" (click)="openForm(row.processDefKey, row)">
+                    <button class="btn" (click)="openForm(row.task_type, row)">
                       <div class="row">
                         <span style="border-left: 4px solid #2dce89;"></span>
                         <div class="col text-left" style="display: grid">
-                          <span>{{row.case}}</span>
-                          <span>{{ row.processDefKey | replace: '_' : ' ' }}</span>
-                          <span><b>{{ row.taskName }}</b></span>
-                          <span><i>{{ row.dateCreated | date: 'mediumDate' }}</i></span>
+                          <span>{{row.task_case}}</span>
+                          <span>{{ row.task_type | replace: '_' : ' ' }}</span>
+                          <span><b>{{ row.task_name | replace: '_' : ' ' }}</b></span>
+                          <span><i>{{ row.date_assigned | date: 'mediumDate' }}</i></span>
                         </div>
                       </div>
                     </button>
