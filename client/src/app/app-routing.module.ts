@@ -78,6 +78,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/work-plan/work-plan-setup.module').then(m => m.WorkPlanSetupModule)
       },
       {
+        path: 'taskList', canActivate: [AuthGuard],
+        data: {
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
+      },
+      {
         path: 'workPlanList', canActivate: [AuthGuard],
         data: {
           userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]

@@ -162,6 +162,7 @@ export const ROUTES: RouteInfo[] = [
     roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
       {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},

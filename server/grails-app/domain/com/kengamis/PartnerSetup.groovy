@@ -10,6 +10,7 @@ class PartnerSetup {
     String startDate
     String endDate
     String reportingStartDate
+    String reportingEndDate
     String startCycle
     String periodType
     Date dateCreated

@@ -28,7 +28,7 @@ export class CellEdit {
        save: (newValue: string, key: string, row_id, row?: any) => void,
        type?: string,
        status?: string,
-       selectList?:[]) {
+       selectList?:any[]) {
     const td = document.getElementById(td_id);
     const container1 = td.firstElementChild as HTMLElement;
 
