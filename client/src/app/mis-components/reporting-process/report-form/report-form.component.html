@@ -99,9 +99,9 @@
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
                         <li>Total Budget Allocated: <b>{{totalAmountCommitted}}</b></li>
-                        <li>Total spending plan for the reporting period: <b> </b></li>
-                        <li>Total amount committed in the reporting period: <b> </b></li>
-                        <li>Balance Spent/Overspent: <b> </b></li>
+                        <li>Total spending plan for the reporting period: <b>{{totalSpendingPlanForPeriod}}</b></li>
+                        <li>Total amount spent: <b>{{totalAmountSpent}}</b></li>
+                        <li>Balance (Variance): <b>{{balance}}</b></li>
                       </ul>
                     </div>
                   </div>
@@ -160,7 +160,7 @@
                       <th class='text-center'>Budget Line</th>
                       <th class='text-center'>Budget Allocated</th>
                       <th class='text-center'>Expense-to-date</th>
-                      <th class='text-center'>Cumulative Spending Plan<span class="required-indicator">*</span></th>
+                      <th class='text-center'>Quarter Budget<span class="required-indicator">*</span></th>
                       <th class='text-center'>Quarter Expenses <span class="required-indicator">*</span></th>
                       <th class='text-center'>Variance</th>
                       <th class='text-center'>Reason for Variance <span class="required-indicator">*</span></th>
@@ -172,20 +172,8 @@
                       <td class='text-center'>{{ row.budget_line }}</td>
                       <td class='text-center'>{{ row.approved_budget | number }}</td>
                       <td class='text-center'>{{ row.expense_to_date | number }}</td>
-                      <td class='text-center'  id="td1-{{row.id}}">
-                        <div>{{ row.total_advanced | number }}
-                          <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')"><i
-                            class="fas fa-pencil-alt"></i></button>
-                        </div>
-                      </td>
-                      <td class='text-center' id="td2-{{row.id}}">
-                        <div>{{ row.quarter_expenses | number }}
-                          <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')"><i
-                            class="fas fa-pencil-alt"></i></button>
-                        </div>
-                      </td>
+                      <td class='text-center'>{{ row.quarter_budget | number }}</td>
+                      <td class='text-center'>{{ row.quarter_expenses | number }}</td>
                       <td class='text-center'>{{ row.variance }}</td>
                       <td class='text-center comment' [id]="'td3-'+row.id">
                         {{ row.reason_for_variance }}
@@ -200,7 +188,7 @@
                   </table>
                 </div>
 
-                <div class="card" [style.display]="isSubmit ? 'block' : 'none'">
+                <!--<div class="card" [style.display]="isSubmit ? 'block' : 'none'">
                   <form>
                     <div class="form-group row">
                       <div class="col-sm-3"><label for="attachment1">Attach narrative to the program report: <span class="required-indicator">*</span></label>
@@ -214,25 +202,13 @@
                         </button>
                       </div>
                     </div>
-            <!--        <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
-                        report: <span class="required-indicator">*</span></label></div>
-                      <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
-                                                        class="text fas fa-file-download" target="_blank" download>&nbsp;&nbsp;Download
-                          Template</a>
-                        </button>
-                      </div>
-                    </div>-->
                   </form>
 
-                  <!--Flag variable is used here-->
+                  &lt;!&ndash;Flag variable is used here&ndash;&gt;
                   <div class="container" *ngIf="loading">***
                     <h3>Uploading attachment, please wait ...</h3>
                   </div>
-                </div>
+                </div>-->
 
                 <div class="card" [style.display]="isMakeCorrectionsMandE || isMakeCorrectionsSupervisor ? 'block' : 'none'">
                   <div>
@@ -244,7 +220,7 @@
                   </div>
                 </div>
 
-                <div class="card" [style.display]="isReview || isMakeCorrectionsMandE || isMakeCorrectionsSupervisor ? 'block' : 'none'">
+                <!--<div class="card" [style.display]="isReview || isMakeCorrectionsMandE || isMakeCorrectionsSupervisor ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
                       <div class="col-sm-4"><p>Attach narrative to the program report:</p></div>
@@ -257,21 +233,10 @@
                         </button>
                       </div>
                     </div>
-           <!--         <div class="row">
-                      <div class="col-sm-4"><p>Attach narrative duly signed financial report:</p></div>
-                      <div class="col-sm-4">{{attachment2}}</div>
-                      <div class="col-sm-4">
-                        <button class="btn btn-link"><a href="{{shortLink2}}" style="font-size:15px;"
-                                                                           class="text fas fa-file-download"
-                                                                           target="_blank" download>&nbsp;&nbsp;Download
-                          Attachment</a>
-                        </button>
-                      </div>
-                    </div>-->
                   </div>
-                </div>
+                </div>-->
 
-                <h3 style="margin-left: 40px;" [style.display]="isApprove ? 'block' : 'none'">ATTACHMENTS</h3>
+             <!--   <h3 style="margin-left: 40px;" [style.display]="isApprove ? 'block' : 'none'">ATTACHMENTS</h3>
                 <div class="card" [style.display]="isApprove ? 'block' : 'none'">
                   <div class="row">
                     <div class="col">
@@ -298,15 +263,8 @@
                         </div>
                       </div>
                     </div>
-     <!--               <div class="col">
-                      <p>Balance brought forward from previous period: </p>
-                      <p>Total funds received during reporting period: </p>
-                      <p>Actual expenditure for current reporting period: </p>
-                      <p>Funds available at end of current reporting period: </p>
-                      <p>Disbursement cycle due: Cycle - Q4: Amount - </p>
-                    </div>-->
                   </div>
-                </div>
+                </div>-->
 
                 <h3 style="margin-left: 40px;" [style.display]="isReview ? 'block' : 'none'">REVIEWER
                   INFORMATION</h3>

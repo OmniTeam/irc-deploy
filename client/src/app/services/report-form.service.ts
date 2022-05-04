@@ -18,6 +18,10 @@ export class ReportFormService {
     return this.http.get(`${environment.serverUrl}/reportForm/getReportForTask`, {params});
   }
 
+  getActivityReportRecord(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportForm/getActivityReportRecord`, {params});
+  }
+
   createReport(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/reportForm`, formData);
   }

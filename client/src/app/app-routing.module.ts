@@ -78,6 +78,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/work-plan/work-plan-setup.module').then(m => m.WorkPlanSetupModule)
       },
       {
+        path: 'taskList', canActivate: [AuthGuard],
+        data: {
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
+      },
+      {
         path: 'workPlanList', canActivate: [AuthGuard],
         data: {
           userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
@@ -85,18 +92,18 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/work-plan/work-plan-list/work-plan-list.module').then(m => m.WorkPlanListModule)
       },
       {
-        path: 'taskList', canActivate: [AuthGuard],
+        path: 'reportingProcess', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER, Roles.ROLE_REBUILD_DATA_VIEWER]
         },
-        loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
+        loadChildren: () => import('./mis-components/reporting-process/reporting-process.module').then(m => m.ReportingProcessModule)
       },
       {
         path: 'reportForm/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
         },
-        loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
+        loadChildren: () => import('./mis-components/reporting-process/report-form/report-form.module').then(m => m.ReportFormModule)
       },
       {
         path: 'entity', canActivate: [AuthGuard],

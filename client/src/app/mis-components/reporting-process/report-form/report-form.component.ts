@@ -1,19 +1,19 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
-import {ReportFormService} from "../../services/report-form.service";
-import {CommentNode} from '../comments/comments.component';
+import {ReportFormService} from "../../../services/report-form.service";
+import {CommentNode} from '../../comments/comments.component';
 import {Location} from '@angular/common';
-import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
-import {FileUploadService} from '../../services/file-upload.service';
+import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
+import {FileUploadService} from '../../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
-import {AuthService} from "../../services/auth.service";
-import {TaskListService} from "../../services/task-list.service";
+import {AuthService} from "../../../services/auth.service";
+import {TaskListService} from "../../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {UsersService} from "../../services/users.service";
-import {WorkPlanService} from "../../services/work-plan-setup.service";
-import {ProjectMilestoneService} from "../../services/project-milestone.service";
-import {AlertService} from "../../services/alert";
+import {UsersService} from "../../../services/users.service";
+import {WorkPlanService} from "../../../services/work-plan-setup.service";
+import {ProjectMilestoneService} from "../../../services/project-milestone.service";
+import {AlertService} from "../../../services/alert";
 
 //import {SampleData} from "../../helpers/sample-data";
 
@@ -71,7 +71,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   taskId: string;
   taskRecord: any;
   reportValues: [];
+
   totalAmountCommitted: string;
+  totalAmountSpent: string;
+  totalSpendingPlanForPeriod: string;
+  balance: string;
 
   shortLink1: string = "";
   shortLink2: string = "";
@@ -214,18 +218,57 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.workPlanService.getWorkPlanRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
+        console.log(values)
 
         this.totalAmountCommitted = values.currentStatus.totalAmountCommitted;
+        this.totalAmountSpent = values.currentStatus.totalAmountSpent;
+
+        values.quarterlyCommitment.forEach((q) => {
+          if (q.datePeriod == this.taskRecord.reportingPeriod) {
+            this.totalSpendingPlanForPeriod = q.commitment
+            this.balance = (+this.totalSpendingPlanForPeriod - +this.totalAmountSpent).toString()
+          }
+        })
 
         values.budget.forEach((b) => {
-          if (!this.financialReport.some(x => x.id === b.id)) {
-            this.financialReport.push({
-              id: b.id,
-              budget_line: b.budgetLine,
-              approved_budget: b.approvedAmount,
-              expense_to_date: b.totalSpent
-            });
-          }
+          let quarterBudget
+          b.quarterlyBudget.forEach((qb) => {
+            if (qb.datePeriod == this.taskRecord.reportingPeriod) {
+              quarterBudget = qb.amount;
+            }
+          })
+          const params = new HttpParams()
+            .set('milestone', b.budgetLine)
+            .set("startDate", this.taskRecord.startDate)
+            .set("endDate", this.taskRecord.endDate);
+          this.reportFormService.getActivityReportRecord(params).subscribe((results) => {
+            let quarterExpenses = 0
+            results.forEach((data) => {
+              if (data.cost_associated != undefined) {
+                let values = JSON.parse(data.cost_associated);
+                values.budget.forEach((activityBudget) => {
+                  quarterExpenses += +activityBudget.totalSpent
+                })
+              }
+            })
+            if (!this.financialReport.some(x => x.id === b.id)) {
+              this.financialReport.push({
+                id: b.id,
+                budget_line: b.budgetLine,
+                approved_budget: b.approvedAmount,
+                expense_to_date: b.totalSpent,
+                quarter_budget: quarterBudget,
+                quarter_expenses: quarterExpenses
+              });
+            } else {
+              this.financialReport.forEach((report) => {
+                if (report.id == b.id) {
+                  report.quarter_budget = quarterBudget;
+                  report.quarter_expenses = quarterExpenses
+                }
+              })
+            }
+          })
         });
 
         if (values.indicators != undefined) {
@@ -236,14 +279,14 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               .set('id', i.milestoneId)
               .set("startDate", this.taskRecord.startDate)
               .set("endDate", this.taskRecord.endDate);
-            this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone:any)=>{
-              if(milestone!=undefined) {
+            this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone: any) => {
+              if (milestone != undefined) {
 
                 let cumulative = milestone.cumulativeAchievement ?? 0
                 let quarter = milestone.quaterAchievement ?? 0
-                let percentageAchievement : number;
-                let p = (cumulative/quarter)*100
-                if(p>0 && isFinite(p)) percentageAchievement = p; else percentageAchievement=0;
+                let percentageAchievement: number;
+                let p = (cumulative / quarter) * 100
+                if (p > 0 && isFinite(p)) percentageAchievement = p; else percentageAchievement = 0;
 
                 if (!this.performanceReport.some(x => x.id === i.id)) {
                   this.performanceReport.push({
@@ -271,10 +314,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }, error => console.log(error));
   }
 
-  getTargetForThisQuarter(disaggregation : any) {
+  getTargetForThisQuarter(disaggregation: any) {
     let value = 0
-    disaggregation.forEach((d)=>{
-      if(d.datePeriod==this.taskRecord.reportingPeriod) value = d.target;
+    disaggregation.forEach((d) => {
+      if (d.datePeriod == this.taskRecord.reportingPeriod) value = d.target;
     });
     return value;
   }
@@ -414,23 +457,23 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                if(+value <= +item.total_advanced){
+                if (+value <= +item.quarter_budget) {
                   item.quarter_expenses = value
                 } else {
                   this.alertService.error(`Quarter expense should be less than Total Advanced`);
                   return;
                 }
-                item.variance = +item.total_advanced - +value
+                item.variance = +item.quarter_budget - +value
               }
             });
           }
           break;
-        case "totalAdvanced":
+        case "quarter_budget":
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                item.total_advanced = value
-                item.variance = +item.total_advanced - +item.quarter_expenses
+                item.quarter_budget = value
+                item.variance = +item.quarter_budget - +item.quarter_expenses
               }
             });
           }
@@ -443,11 +486,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           }
           break;
       }
-      let reportValues: { [key: string]: string } = {
-        financialReport: JSON.stringify(this.financialReport),
-        performanceReport: JSON.stringify(this.performanceReport),
-      }
-      this.saveReport(reportValues, 'draft');
+    let reportValues: { [key: string]: string } = {
+      financialReport: JSON.stringify(this.financialReport),
+      performanceReport: JSON.stringify(this.performanceReport),
+    }
+    this.saveReport(reportValues, 'draft');
   }
 
   cellEditor(row, td_id, key: string, oldValue, type?: string) {
@@ -492,7 +535,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
     });
     setTimeout(() => {
-      if(status!="draft") this.router.navigate(['/taskList']);
+      if (status != "draft") this.router.navigate(['/taskList']);
       this.success = false;
       this.error = false;
     }, 3000);
@@ -586,11 +629,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   approveReport() {
-    if(this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed=="undefined") {
+    if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed == "undefined") {
       this.alertService.error('How would you like to proceed? is Required');
       return;
     }
-    if(this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed=="undefined") {
+    if (this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed == "undefined") {
       this.alertService.error('Do you recommend for further fund disbursement? is Required');
       return;
     }
@@ -662,17 +705,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }
     if (this.isReview) {
       let action = this.radioHowToProceed
-      if (this.radioHowToProceed==undefined) action = "No"
+      if (this.radioHowToProceed == undefined) action = "No"
       this.taskRecord.outputVariables = '{"changesRequested": "' + action + '"}';
     }
     if (this.isApprove) {
       let action = this.radioHowToProceed
-      if (this.radioHowToProceed==undefined) action = "No"
-      this.taskRecord.outputVariables = '{"approved": "' + action+ '"}';
+      if (this.radioHowToProceed == undefined) action = "No"
+      this.taskRecord.outputVariables = '{"approved": "' + action + '"}';
     }
 
-    if(status=="completed") {
-      if (this.isApprove && this.radioHowToProceed == "Yes")  this.updateCalendarStatus();
+    if (status == "completed") {
+      if (this.isApprove && this.radioHowToProceed == "Yes") this.updateCalendarStatus();
     }
 
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
@@ -682,7 +725,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateCalendarStatus() {
     const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
-    this.workPlanService.updateReportingCalendarStatus(params).subscribe((data)=>{
+    this.workPlanService.updateReportingCalendarStatus(params).subscribe((data) => {
       console.log('updated calendar status')
     }, error => console.log('failed update calendar status', error));
   }

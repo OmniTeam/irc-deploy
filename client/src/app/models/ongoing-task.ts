@@ -3,6 +3,7 @@ export class OngoingTask {
   task_name: string;
   task_type: string;
   date_assigned: string;
-  date_created: string;
-  task_age: string
+  task_case: string;
+  task_age: string;
+  filter_category: any;
 }

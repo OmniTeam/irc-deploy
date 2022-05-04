@@ -1,54 +1,46 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {ReportFormService} from "../../services/report-form.service";
+import { Component, OnInit } from '@angular/core';
+import {TaskListService} from "../../services/task-list.service";
+import {Subject} from "rxjs";
 
 @Component({
-  selector: 'app-tasklist',
+  selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
 
-  rows: any = [];
-  temp: any = [];
-  entries: number = 10;
+  constructor(private taskListService: TaskListService) { }
 
-  constructor(
-    private router: Router,
-    private reportFormService: ReportFormService
-  ) {
-  }
+  taskListRows: any = [];
+  dtOptions: any = {};
+  dtTrigger: Subject<any> = new Subject<any>();
 
   ngOnInit(): void {
-    this.reloadTable();
-  }
-
-  reloadTable() {
-    this.reportFormService.getAllReports().subscribe(data => {
-      this.rows = data;
-      this.temp = [...data];
-    }, error => console.log(error));
-  }
-
-  entriesChange($event) {
-    this.entries = $event.target.value;
-    this.reloadTable();
-  }
-
-  onChangeSearch(event) {
-    let val = event.target.value.toLowerCase();
-    // update the rows
-    this.rows = this.temp.filter(function (d) {
-      for (const key in d) {
-        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
+    this.taskListService.getTaskList().subscribe(data => {
+      console.log('data', data)
+      this.taskListRows = data;
+      this.dtTrigger.next();
     });
+
+    this.dtOptions = {
+      pagingType: "numbers",
+      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      processing: true,
+      responsive: true,
+      dom: 'lfBrtip',
+      buttons: [
+        {
+          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
+          extend: 'csvHtml5',
+          title: 'TaskList'
+        },
+        {
+          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
+          extend: 'excelHtml5',
+          title: 'TaskList'
+        }
+      ]
+    };
   }
 
-  onSearch(event) {
-    this.reloadTable();
-  }
 }

@@ -122,4 +122,13 @@ class ReportFormController {
         def reportData = [report: ReportForm.findByProcessInstanceId(params.processInstanceId)]
         respond reportData
     }
+
+    def getActivityReportRecord(){
+        def milestone = params.milestone as String
+        def startDate = params.startDate as String
+        def endDate = params.endDate as String
+        def query = "SELECT id, milestone, cost_associated FROM `activity_report` where milestone = '${milestone}' and start_date >= '${startDate}' AND end_date <= '${endDate}'"
+        def list = AppHolder.withMisSql { rows(query.toString()) }
+        respond list
+    }
 }
