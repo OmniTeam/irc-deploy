@@ -85,6 +85,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
               grantStartDate: data.setup.startDate,
               grantEndDate: data.setup.endDate,
               projectReportingStartDate: data.setup.reportingStartDate,
+              projectReportingEndDate: data.setup.reportingEndDate,
               reportingCalender: this.getCalendarForSetup(data.setup.id)
             };
           }, error => console.log(error));
@@ -93,7 +94,6 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
     if (this.workPlanId != undefined) {
       this.usersService.getUserStaffs().subscribe(data => {
-        console.log(data)
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
         }
@@ -187,7 +187,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
   calendarDates() {
     let startDate = this.calendar.projectReportingStartDate;
-    let endDate = this.calendar.grantEndDate;
+    let endDate = this.calendar.projectReportingEndDate;
 
     if (this.calendar.periodType == "quarter") {
       //generate quarters
@@ -247,6 +247,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     const params = new HttpParams().set('program', program);
     this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
       if (data !== null && data !== undefined) {
+        console.log('milestones', data.milestones)
         this.milestones = data.milestones;
       }
     });
@@ -363,7 +364,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.budget = this.budget.filter(item => item.id != row.id);
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: []) {
+  cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: any[]) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
 
@@ -422,7 +423,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
           break;
         case 'indicators':
           if (this.indicators.some(x => x.id === rowId)) {
-            this.indicators.forEach(function (item) {
+            this.indicators.forEach((item) => {
               if (item.id === rowId) {
                 item.name = value
                 item.milestoneId = extras;
@@ -455,6 +456,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       startDate: this.calendar.grantStartDate,
       endDate: this.calendar.grantEndDate,
       reportingStartDate: this.calendar.projectReportingStartDate,
+      reportingEndDate: this.calendar.projectReportingEndDate,
       periodType: this.calendar.periodType,
       startCycle: "" + this.startReportingCycle,
     }

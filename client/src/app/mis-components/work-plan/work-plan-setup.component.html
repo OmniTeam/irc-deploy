@@ -131,6 +131,12 @@
                         </div>
                       </div>
                       <div class="row">
+                        <div class="col-sm-6">Project End Date: <span class="required-indicator">*</span></div>
+                        <div class="col-sm-6">
+                          <input class="form-control" type="date" [(ngModel)]="calendar.grantEndDate"  [min]="calendar.projectReportingStartDate"/><br>
+                        </div>
+                      </div>
+                      <div class="row">
                         <div class="col-sm-6">Project Reporting Start Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
                           <input class="form-control" type="date"
@@ -138,9 +144,10 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6">Project End Date: <span class="required-indicator">*</span></div>
+                        <div class="col-sm-6">Project Reporting End Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
-                          <input class="form-control" type="date" [(ngModel)]="calendar.grantEndDate"  [min]="calendar.projectReportingStartDate"/><br>
+                          <input class="form-control" type="date"
+                                 [(ngModel)]="calendar.projectReportingEndDate"/><br>
                         </div>
                       </div>
                       <div class="row">
@@ -267,7 +274,7 @@
                       <td class='text-center' [id]="row.id+'-b'">
                         <div>{{ row.budgetLine }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine,'select', milestones)"><i
+                                  (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine,'select', indicators)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -357,11 +364,11 @@
                       <div class="col text-left"><input type="number" class="form-control"
                                                         [(ngModel)]="currentStatus.totalAmountCommitted"/><br></div>
                     </div>
-                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                  <!--  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Date of last Commitment:</div>
                       <div class="col text-left"><input type="date" class="form-control"
                                                         [(ngModel)]="currentStatus.dateOfLastCommitment"/><br></div>
-                    </div>
+                    </div>-->
                     <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Start Reporting Cycle?</div>
                       <div class="col">

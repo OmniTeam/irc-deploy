@@ -7,6 +7,7 @@ import {OngoingTask} from "../../models/ongoing-task";
 import {UsersService} from "../../services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
+import {DateAgoPipe} from "../../pipes/date-ago.pipe";
 
 @Component({
   selector: 'app-home',
@@ -39,32 +40,15 @@ export class HomeComponent implements OnInit {
   isQuarterlyReport: boolean;
   isActivityReport: boolean;
 
-  taskListRows: any = [];
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  filters = [
+    {name: '0 to 1 Week'},
+    {name: '1 to 2 Week'},
+    {name: '3 to 4 Week'},
+    {name: 'More than 4 Weeks'},
+  ];
 
   ngOnInit(): void {
     this.reloadTable(true);
-
-    this.dtOptions = {
-      pagingType: "numbers",
-      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      processing: true,
-      responsive: true,
-      dom: 'lfBrtip',
-      buttons: [
-        {
-          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
-          extend: 'csvHtml5',
-          title: 'TaskList'
-        },
-        {
-          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
-          extend: 'excelHtml5',
-          title: 'TaskList'
-        }
-      ]
-    };
   }
 
   switchRowsData(type: string) {
@@ -111,10 +95,10 @@ export class HomeComponent implements OnInit {
       if (data != null) {
         data.forEach((item) => {
           let staff = this.getStaff(item.partnerId);
-          if(item.processDefKey=="QUATERLY_REPORTING") results1.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
-          if(item.processDefKey=="IRC_REFERRAL") results2.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
-          if(item.processDefKey=="ACTIVITY_REPORTING") results3.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
-          if(item.processDefKey=="IRC_FEEDBACK") results4.push(this.getRow(staff ? staff.name : '', item.taskDefinitionKey, item.processDefKey,item.startDate, item.dateCreated, item.dateCreated))
+          if(item.processDefKey=="QUATERLY_REPORTING") results1.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey,item.startDate, item.case))
+          if(item.processDefKey=="IRC_REFERRAL") results2.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey,item.startDate, item.case))
+          if(item.processDefKey=="ACTIVITY_REPORTING") results3.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey,item.startDate, item.case))
+          if(item.processDefKey=="IRC_FEEDBACK") results4.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey,item.startDate, item.case))
         });
       }
       this.quarterly_report = results1;
@@ -123,20 +107,21 @@ export class HomeComponent implements OnInit {
       this.feedback = results4;
 
       if(firstTime==true) this.switchRowsData('referrals');
-      this.taskListRows = data;
-      this.dtTrigger.next();
     });
   }
 
-  getRow(assignee, taskName, type, dateAssigned, dateCreated, startDate): OngoingTask {
+  getRow(assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
+    let taskAge = new DateAgoPipe().transform(dateAssigned)
+    let filterCategory = this.setFilterCategory(taskAge)
     return (
       {
         assignee: assignee,
         task_name: taskName,
+        task_case: taskCase,
         task_type: type,
         date_assigned: dateAssigned,
-        date_created: dateCreated,
-        task_age: startDate
+        task_age: taskAge,
+        filter_category: filterCategory
       }
     );
   }
@@ -192,4 +177,55 @@ export class HomeComponent implements OnInit {
     this.reloadTable();
   }
 
+  openForm(processDefKey: any, row) {
+    switch (processDefKey) {
+      case 'IRC_REFERRAL':
+        this.router.navigate(['/action-referral', row.id]);
+        break;
+      case 'QUATERLY_REPORTING':
+        this.router.navigate(['/reportForm', row.id]);
+        break;
+      case 'IRC_FEEDBACK':
+        this.router.navigate(['/action-feedback', row.id]);
+        break;
+      case 'ACTIVITY_REPORTING':
+        this.router.navigate(['/activityForm', row.id]);
+        break;
+    }
+  }
+
+  setFilterCategory(taskAge:string){
+    let filterCategory:any
+    if(taskAge.includes('week')) {
+      filterCategory = {period: 'week', duration: taskAge.charAt(0)}
+    } else if (taskAge.includes('month')) {
+      filterCategory = {period: 'month', duration: taskAge.charAt(0)}
+    } else if (taskAge.includes('year')) {
+      filterCategory = {period: 'year', duration: taskAge.charAt(0)}
+    }
+    return filterCategory
+  }
+
+  setFilters(filter) {
+    let results = []
+    this.rows.forEach((task)=>{
+      console.log("age",task.task_age)
+      if(filter.name == 'More than 4 Weeks') {
+        if(task.filter_category.period == 'month' || task.filter_category.period == 'year') results.push(task)
+      } else if (filter.name == '0 to 1 Week') {
+        if(task.filter_category.period == 'week' && task.filter_category.duration <= 1) {
+          results.push(task)
+        } else if (task.filter_category.period == 'day') results.push(task)
+      } else if (filter.name == '1 to 2 Week') {
+        if(task.filter_category.period == 'week' && task.filter_category.duration >= 1 && task.filter_category.duration <= 2) {
+          results.push(task)
+        }
+      } else if (filter.name == '3 to 4 Week') {
+        if(task.filter_category.period == 'week' && task.filter_category.duration >= 3 && task.filter_category.duration <= 4) {
+          results.push(task)
+        }
+      }
+    })
+    this.rows = results;
+  }
 }
