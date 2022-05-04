@@ -97,11 +97,11 @@ export class HomeComponent implements OnInit {
       if (data != null) {
         data.forEach((item) => {
           let staff = this.getStaff(item.partnerId);
-          results.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "QUATERLY_REPORTING") results1.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "IRC_REFERRAL") results2.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "ACTIVITY_REPORTING") results3.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "IRC_FEEDBACK") results4.push(this.getRow(staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          results.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "QUATERLY_REPORTING") results1.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "IRC_REFERRAL") results2.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "ACTIVITY_REPORTING") results3.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "IRC_FEEDBACK") results4.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
         });
       }
       this.taskListRows = results;
@@ -114,11 +114,12 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getRow(assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
+  getRow(id, assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
     let taskAge = new DateAgoPipe().transform(dateAssigned)
     let filterCategory = this.setFilterCategory(taskAge)
     return (
       {
+        id: id,
         assignee: assignee,
         task_name: taskName,
         task_case: taskCase,
@@ -184,16 +185,16 @@ export class HomeComponent implements OnInit {
   openForm(processDefKey: any, row) {
     switch (processDefKey) {
       case 'IRC_REFERRAL':
-        this.router.navigate(['/action-referral', row.id]);
+        this.router.navigate(['/action-referral/'+ row.id]);
         break;
       case 'QUATERLY_REPORTING':
-        this.router.navigate(['/reportForm', row.id]);
+        this.router.navigate(['/reportForm/'+ row.id +'/'+false]);
         break;
       case 'IRC_FEEDBACK':
-        this.router.navigate(['/action-feedback', row.id]);
+        this.router.navigate(['/action-feedback/'+ row.id]);
         break;
       case 'ACTIVITY_REPORTING':
-        this.router.navigate(['/activityForm', row.id]);
+        this.router.navigate(['/activityForm/'+ row.id]);
         break;
     }
   }

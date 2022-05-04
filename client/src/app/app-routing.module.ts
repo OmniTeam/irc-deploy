@@ -99,7 +99,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/reporting-process/reporting-process.module').then(m => m.ReportingProcessModule)
       },
       {
-        path: 'reportForm/:id', canActivate: [AuthGuard],
+        path: 'reportForm/:id/:readonly', canActivate: [AuthGuard],
         data: {
           userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
         },

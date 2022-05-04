@@ -25,6 +25,7 @@ export class ReportingProcessComponent implements OnInit {
 
   reloadTable() {
     this.reportFormService.getAllReports().subscribe(data => {
+      console.log(data)
       this.rows = data;
       this.temp = [...data];
     }, error => console.log(error));

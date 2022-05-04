@@ -47,7 +47,7 @@ table {
 }
 
 .home-card {
-  height: 400px;
+  height: 460px;
   overflow-y: auto;
   overflow-x: clip
 }

@@ -74,7 +74,13 @@
                         <ngx-datatable-column name="Task" prop="taskDefinitionKey">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
-                            <a [routerLink]="['/reportForm', row.taskId]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a [routerLink]="['/reportForm', row.taskId, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Process" prop="process">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{ value | replace: '_' : ' ' }}
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Program" prop="program"></ngx-datatable-column>
