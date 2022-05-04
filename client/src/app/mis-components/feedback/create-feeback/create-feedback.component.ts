@@ -373,7 +373,7 @@ export class CreateFeedbackComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
-    formData.status = this.updateStatus
+
     let submitData: {[key:string]: string} = {
       dateOfReferral: formData.dateFeedbackReceived,
       nameOfReferringOfficer: formData.nameOfReferringOfficer,
