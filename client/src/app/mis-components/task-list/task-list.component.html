@@ -60,7 +60,7 @@
                           <a *ngIf="row.processDefKey=='IRC_REFERRAL' " [routerLink]="['/action-referral', row.id]"
                              style="font-size:20px;"
                              class="text fas fa-external-link-square-alt"></a>
-                          <a *ngIf="row.processDefKey=='QUATERLY_REPORTING' " [routerLink]="['/reportForm', row.id]"
+                          <a *ngIf="row.processDefKey=='QUATERLY_REPORTING' " [routerLink]="['/reportForm', row.id, false]"
                              style="font-size:20px;"
                              class="text fas fa-external-link-square-alt"></a>
                           <a *ngIf="row.processDefKey=='IRC_FEEDBACK' " [routerLink]="['/action-feedback', row.id]"

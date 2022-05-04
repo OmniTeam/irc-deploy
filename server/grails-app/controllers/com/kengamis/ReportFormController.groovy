@@ -31,9 +31,12 @@ class ReportFormController {
                     if (it.key == 'Period') periodType = it.value
                 }
                 def program = Program.get(programId)
+
                 list << [
                         id               : it.id,
+                        taskId           : it.taskId,
                         taskDefinitionKey: it.taskDefinitionKey,
+                        process          : task.processDefKey,
                         program          : program.title,
                         periodType       : periodType,
                         dateCreated      : it.dateCreated,
@@ -123,7 +126,7 @@ class ReportFormController {
         respond reportData
     }
 
-    def getActivityReportRecord(){
+    def getActivityReportRecord() {
         def milestone = params.milestone as String
         def startDate = params.startDate as String
         def endDate = params.endDate as String

@@ -1,4 +1,5 @@
 export class OngoingTask {
+  id: string;
   assignee: string;
   task_name: string;
   task_type: string;

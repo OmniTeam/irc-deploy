@@ -64,10 +64,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   radioActivitiesConducted: string;
   radioBudgetExpenditure: string;
   radioCommentsSatisfactory: string;
-  radioHowToProceed: string;
   amountOfFundsDisbursed: string;
   provideAnyRecommendations: string;
 
+  isReadOnly: boolean;
   taskId: string;
   taskRecord: any;
   reportValues: [];
@@ -117,11 +117,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
+        this.isReadOnly = p['readonly']=='true';
+
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
           if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
-          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_MandE") this.isMakeCorrectionsMandE = true;
+          if (this.taskRecord.taskDefinitionKey === "Make_Changes_From_MandE") this.isMakeCorrectionsMandE = true;
           if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
           if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
           if (this.taskRecord.taskDefinitionKey === "Approve_Quarterly_Report") this.isApprove = true;
@@ -201,7 +203,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.radioActivitiesConducted = this.approverInformation.recommend_fund;
           this.radioBudgetExpenditure = this.approverInformation.end_of_partnership;
           this.radioCommentsSatisfactory = this.approverInformation.commentsSatisfactory;
-          this.radioHowToProceed = this.approverInformation.howToProceed;
           this.amountOfFundsDisbursed = this.approverInformation.amountOfFundsDisbursed;
           this.provideAnyRecommendations = this.approverInformation.provideAnyRecommendations;
         }
@@ -629,14 +630,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   approveReport() {
-    if (this.taskRecord.taskDefinitionKey === "Approve_Fund_Disbursement" && this.radioHowToProceed == "undefined") {
-      this.alertService.error('How would you like to proceed? is Required');
-      return;
-    }
-    if (this.taskRecord.taskDefinitionKey === "Approve_Report" && this.radioHowToProceed == "undefined") {
-      this.alertService.error('Do you recommend for further fund disbursement? is Required');
-      return;
-    }
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
@@ -686,7 +679,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         recommend_fund: this.radioActivitiesConducted,
         end_of_partnership: this.radioBudgetExpenditure,
         commentsSatisfactory: this.radioCommentsSatisfactory,
-        howToProceed: this.radioHowToProceed,
         amountOfFundsDisbursed: this.amountOfFundsDisbursed,
         provideAnyRecommendations: this.provideAnyRecommendations
       })
@@ -699,23 +691,26 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   updateTaskStatus(status) {
     this.taskRecord.status = status;
+    if(status=="needs_revision") this.taskRecord.status = "completed"
     this.taskRecord.groupId = '[]';
     if (this.isSubmit) {
       this.taskRecord.outputVariables = "{}";
     }
     if (this.isReview) {
-      let action = this.radioHowToProceed
-      if (this.radioHowToProceed == undefined) action = "No"
+      let action
+      if (status == "completed") action = "No"
+      if (status == "needs_revision") action = "Yes"
       this.taskRecord.outputVariables = '{"changesRequested": "' + action + '"}';
     }
     if (this.isApprove) {
-      let action = this.radioHowToProceed
-      if (this.radioHowToProceed == undefined) action = "No"
+      let action
+      if (status == "completed") action = "Yes"
+      if (status == "needs_revision") action = "No"
       this.taskRecord.outputVariables = '{"approved": "' + action + '"}';
     }
 
     if (status == "completed") {
-      if (this.isApprove && this.radioHowToProceed == "Yes") this.updateCalendarStatus();
+      if (this.isApprove) this.updateCalendarStatus();
     }
 
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
