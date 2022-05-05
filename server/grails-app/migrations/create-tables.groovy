@@ -2211,4 +2211,12 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "DELL (generated)", id: "20220901124635-cr") {
+        modifyDataType(columnName: "feedback_details", newDataType: "text", tableName: "feedback")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011635k-cr") {
+        modifyDataType(columnName: "response_summary", newDataType: "text", tableName: "feedback")
+    }
 }

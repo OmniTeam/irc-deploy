@@ -255,7 +255,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Name Of Register" prop="nameOfRegister">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/action-feedback/{{row.id}}">{{row?.nameOfRegister}} </a>
+                <a routerLink="/feedback-edit/{{row.id}}">{{row?.nameOfRegister}} </a>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Receiving Channel" prop="preferredChannel"></ngx-datatable-column>
