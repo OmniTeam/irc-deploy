@@ -1,0 +1,120 @@
+<div class="header bg-success pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <h5 class="h2 text-white d-inline-block mb-0">REPORTING PROCESS</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row">
+    <div class=" col">
+      <div class="row">
+
+        <div class=" col-md-12 col-sm-12" style="margin-top: 20px;">
+          <div class=" row">
+            <div class=" col">
+              <div class="card">
+
+                <div class="card-body col-sm-12">
+                  <div class="row">
+
+                    <div class="dataTables_wrapper py-4">
+                      <div class="row" style="display: flex; width: 100%">
+                        <div class="col-sm-6">
+                          <div class="dataTables_length" id="datatable_length">
+                            <label>
+                              Show
+                              <select
+                                name="datatable_length"
+                                aria-controls="datatable"
+                                class="form-control form-control-sm"
+                                (change)="entriesChange($event)"
+                                style="width: 200%;"
+                              >
+                                <option value="10" [selected]="entries == 10">10</option>
+                                <option value="25" [selected]="entries == 25">25</option>
+                                <option value="50" [selected]="entries == 50">50</option>
+                                <option value="-1" [selected]="entries == -1">All</option>
+                              </select>
+                              entries
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div id="datatable_filter" class="dataTables_filter">
+                            <label>
+                              <input
+                                type="search"
+                                class="form-control form-control-sm"
+                                placeholder="Search Reports"
+                                aria-controls="datatable"
+                                (keyup)="onChangeSearch($event)"
+                                (search)="onSearch($event)"
+                                style="width: 200%;"
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ngx-datatable
+                        class="bootstrap selection-cell"
+                        [columnMode]="'force'"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        [rowHeight]="'auto'"
+                        [limit]="entries != -1 ? entries : undefined"
+                        [rows]="rows">
+
+                        <ngx-datatable-column name="Task" prop="taskDefinitionKey">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            <a [routerLink]="['/reportForm', row.taskId, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Process" prop="process">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{ value | replace: '_' : ' ' }}
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Program" prop="program"></ngx-datatable-column>
+                        <ngx-datatable-column name="Period" prop="periodType"></ngx-datatable-column>
+                        <ngx-datatable-column name="Date Created" prop="dateCreated">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{ value | date: 'medium' }}
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Last Updated" prop="lastUpdated">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{ value | date: 'medium' }}
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Status" prop="status">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{ value | replace: '_' : ' ' | titlecase }}
+                          </ng-template>
+                        </ngx-datatable-column>
+                      </ngx-datatable>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

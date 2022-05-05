@@ -2203,4 +2203,12 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "bruno (generated)", id: "1650423423505-120") {
+        addColumn(tableName: "partner_setup") {
+            column(name: "reporting_end_date", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
 }

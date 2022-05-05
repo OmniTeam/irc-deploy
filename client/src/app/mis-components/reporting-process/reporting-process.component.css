@@ -45,18 +45,3 @@ table {
   background-color: #7851a9;
   border-color: #7851a9;
 }
-
-.home-card {
-  height: 460px;
-  overflow-y: auto;
-  overflow-x: clip
-}
-
-.home-card>div {
-  padding: 0 0 0 15px;
-}
-
-.home-card>div>.btn {
-  width: 95%;
-  padding: 20px 0 20px 40px;
-}

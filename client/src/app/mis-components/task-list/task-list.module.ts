@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TaskListComponent } from './task-list.component';
 import { TaskListRoutingModule } from './task-list-routing.module';
-import {FormsModule} from "@angular/forms";
-import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {TaskListComponent} from "./task-list.component";
 import {ComponentsModule} from "../../components/components.module";
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
+import {DataTablesModule} from "angular-datatables";
+
 
 @NgModule({
   declarations: [TaskListComponent],
-  imports: [
-    CommonModule,
-    TaskListRoutingModule,
-    FormsModule,
-    NgxDatatableModule,
-    ComponentsModule,
-    EntityViewTableModule,
-  ]
+    imports: [
+        CommonModule,
+        TaskListRoutingModule,
+        ComponentsModule,
+        NgxDatatableModule,
+        EntityViewTableModule,
+        DataTablesModule,
+    ]
 })
 export class TaskListModule { }

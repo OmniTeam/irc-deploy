@@ -31,9 +31,12 @@ class ReportFormController {
                     if (it.key == 'Period') periodType = it.value
                 }
                 def program = Program.get(programId)
+
                 list << [
                         id               : it.id,
+                        taskId           : it.taskId,
                         taskDefinitionKey: it.taskDefinitionKey,
+                        process          : task.processDefKey,
                         program          : program.title,
                         periodType       : periodType,
                         dateCreated      : it.dateCreated,
@@ -121,5 +124,14 @@ class ReportFormController {
     def getReportForTask() {
         def reportData = [report: ReportForm.findByProcessInstanceId(params.processInstanceId)]
         respond reportData
+    }
+
+    def getActivityReportRecord() {
+        def milestone = params.milestone as String
+        def startDate = params.startDate as String
+        def endDate = params.endDate as String
+        def query = "SELECT id, milestone, cost_associated FROM `activity_report` where milestone = '${milestone}' and start_date >= '${startDate}' AND end_date <= '${endDate}'"
+        def list = AppHolder.withMisSql { rows(query.toString()) }
+        respond list
     }
 }

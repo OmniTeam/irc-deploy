@@ -21,7 +21,7 @@ class TaskListController {
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '',referralId = '',activityId = '',feedbackId = ''
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
 
             variables['data'].each {
                 if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -48,26 +48,30 @@ class TaskListController {
             def taskCase = ''
 
             def referral = Referral.findById(referralId)
-            if (referralId != null && referral !=null) {
+            if (referralId != null && referral != null) {
                 assignee << referral.assignee
                 taskCase = referral.organizationReferredTo
             }
 
             def activityReport = ActivityReport.findById(activityId)
-            if (activityId != null && activityReport!=null) {
+            if (activityId != null && activityReport != null) {
                 assignee << activityReport.assignee
                 taskCase = activityReport.milestone
             }
 
             def feedback = Feedback.findById(feedbackId)
-            if (feedbackId != null && feedback!=null) {
+            if (feedbackId != null && feedback != null) {
                 assignee << feedback.assignee
                 taskCase = feedback.typeOfFeedback
             }
 
+            if (task.processDefKey == 'QUATERLY_REPORTING') {
+                taskCase = taskProgram.title
+            }
+
             boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
 
-            if(assignee.contains(currentUser.email) || c2)
+            if (assignee.contains(currentUser.email) || c2)
                 tasks << [id               : task.id,
                           taskName         : task.taskName,
                           partnerSetupId   : partnerSetupId,
@@ -97,9 +101,14 @@ class TaskListController {
     def getTaskRecord() {
         def task = TaskList.get(params.id)
 
+        if (task == null) {
+            respond 'No values for this task id'
+            return
+        }
+
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId='',activityId = '',feedbackId = ''
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
 
         variables['data'].each {
             if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -126,19 +135,19 @@ class TaskListController {
         def taskCase = ''
 
         def referral = Referral.findById(referralId)
-        if (referralId != null && referral !=null) {
+        if (referralId != null && referral != null) {
             assignee << referral.assignee
             taskCase = referral.organizationReferredTo
         }
 
         def activityReport = ActivityReport.findById(activityId)
-        if (activityId != null && activityReport!=null) {
+        if (activityId != null && activityReport != null) {
             assignee << activityReport.assignee
             taskCase = activityReport.milestone
         }
 
         def feedback = Feedback.findById(feedbackId)
-        if (feedbackId != null && feedback!=null) {
+        if (feedbackId != null && feedback != null) {
             assignee << feedback.assignee
             taskCase = feedback.typeOfFeedback
         }
@@ -146,7 +155,7 @@ class TaskListController {
         boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
 
         def t = null
-        if(assignee.contains(currentUser.email) || c2)
+        if (assignee.contains(currentUser.email) || c2)
             t = [id               : task.id,
                  taskName         : task.taskName,
                  partnerSetupId   : partnerSetupId,
@@ -195,7 +204,7 @@ class TaskListController {
             return
         }
 
-        respond taskList, [status: CREATED, view:"show"]
+        respond taskList, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -218,7 +227,7 @@ class TaskListController {
             return
         }
 
-        respond taskList, [status: OK, view:"show"]
+        respond taskList, [status: OK, view: "show"]
     }
 
     @Transactional
