@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { GrantProcessComponent } from './grant-process.component';
 import { ApplicationLetterComponent } from './application-letter.component';
+import { PlanningLearningGrantComponent } from './planning-learning-grant.component';
 import { GrantProcessRoutingModule } from './grant-process-routing.module';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
@@ -12,7 +13,7 @@ import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-vi
 import {NgSelectModule} from "@ng-select/ng-select";
 
 @NgModule({
-  declarations: [GrantProcessComponent, ApplicationLetterComponent],
+  declarations: [GrantProcessComponent, ApplicationLetterComponent, PlanningLearningGrantComponent],
   imports: [
     CommonModule,
     GrantProcessRoutingModule,
