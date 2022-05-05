@@ -30,7 +30,7 @@ class ActivityReport {
     static mapping = {
         id generator: 'uuid2'
     }
-
+    //TODO add activity name field
     static constraints = {
          budgetLine nullable: false
          name nullable: false
