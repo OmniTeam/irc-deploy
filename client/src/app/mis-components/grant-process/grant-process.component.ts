@@ -15,13 +15,36 @@ export class GrantProcessComponent implements OnInit {
 
   organisationalInfo: any;
 
+  hasApplicationBeenReviewed: any;
+  dateOfDueDiligence: any;
+  attachmentDiligenceReport: any;
+  reviewerComments: any;
+
+  items = [
+    {name: 'Yes', value: 'Yes'},
+    {name: 'No', value: 'No'}
+  ];
+  decision = [
+    {name: 'Proceed with application', value: 'Yes'},
+    {name: 'Unsuccessful', value: 'No'}
+  ];
+  isReadOnly: boolean;
+
   constructor() { }
 
   ngOnInit(): void {
-    this.isSubmitLetterOfInterest = true;
+    this.isSubmitLetterOfInterest = false;
+    this.isReadOnly = false;
+    this.isReviewLetterOfInterest = false;
+    this.isPlanningLearningApplication = true;
+    this.isReviewLearningGrant = false;
+    this.isApprovePlanningLearningGrant = false;
+    this.isProvidePlanningLearningGrant = false;
   }
 
-
+  readOnlyChanged(readOnly: boolean) {
+    this.isReadOnly = readOnly;
+  }
 
 
 }

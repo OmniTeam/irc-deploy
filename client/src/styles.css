@@ -72,8 +72,17 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   font-family: Open Sans, sans-serif !important;
 }
 
+.ng-select.ng-select-single .ng-select-container {
+  height: 46px !important;
+}
+
 .form-control-sm {
   height: 36px !important;
+}
+
+.selected-div {
+  background-color: #b6b9b6;
+  color: #ffffff!important;
 }
 
 .alertify-notifier .ajs-message.ajs-error {
@@ -84,6 +93,15 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   font-family: "Poppins Medium", "Helvetica", sans-serif !important;
 }
 
-button {
+button, .btn {
   font-family: "Poppins Light", "Helvetica", sans-serif !important;
+}
+
+.page-item.active .page-link {
+  background-color: #f5365c !important;
+  border-color: #f5365c !important;
+}
+
+td a {
+  color: #7851a9 !important;
 }
