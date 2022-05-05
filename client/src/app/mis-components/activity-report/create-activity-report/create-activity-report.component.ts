@@ -1,22 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AlertService} from "../../../services/alert";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertService} from '../../../services/alert';
 import {v4 as uuid} from 'uuid';
-import {ProgramStaffService} from "../../../services/program-staff.service";
-import {FileUploadService} from "../../../services/file-upload.service";
-import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
-import {ActivityReportService} from "../../../services/activity-report.service";
-import {WorkPlanService} from "../../../services/work-plan-setup.service";
-import {AuthService} from "../../../services/auth.service";
-import {UsersService} from "../../../services/users.service";
+import {ProgramStaffService} from '../../../services/program-staff.service';
+import {FileUploadService} from '../../../services/file-upload.service';
+import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
+import {ActivityReportService} from '../../../services/activity-report.service';
+import {WorkPlanService} from '../../../services/work-plan-setup.service';
+import {AuthService} from '../../../services/auth.service';
+import {UsersService} from '../../../services/users.service';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-create-activity-report',
   templateUrl: './create-activity-report.component.html',
   styleUrls: ['./create-activity-report.component.css']
 })
-export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
+export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   formGroup: FormGroup;
   submitted = false;
@@ -30,10 +31,10 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   loading: boolean = false;
   calendar: any = {};
   totalApprovedAmount: string;
-  totalBalance:any;
+  totalBalance: any;
   totalNationalM: string;
   choosenBudget: string;
-  budgetHolderId: string
+  budgetHolderId: string;
   totalBudgetDisburse: any;
   budgetLines: any;
   totalSpent: any;
@@ -43,7 +44,86 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   budgetAmount: any;
   budgetHolder: any;
   milestones: any;
-  peopleSurvey:any = {};
+  peopleSurvey: any = {};
+
+  location_id = [
+    {
+      'name': 'BAKULI'
+    },
+    {
+      'name': 'BUNGA'
+    },
+    {
+      'name': 'BWAISE'
+    },
+    {
+      'name': 'KABALAGALA'
+    }, {
+      'name': 'KAMPALA_CENTRAL'
+    }, {
+      'name': 'KAMWOKYA'
+    }, {
+      'name': 'KANSANGA'
+    }, {
+      'name': 'KASOKOSO'
+    }, {
+      'name': 'KASUBI'
+    }, {
+      'name': 'KATWE'
+    }, {
+      'name': 'KATWE_II'
+    }, {
+      'name': 'KAWAALA'
+    }, {
+      'name': 'KAWEMPE'
+    }, {
+      'name': 'KAZO ANGOLA'
+    }, {
+      'name': 'KINAWATAKA'
+    }, {
+      'name': 'KISENYI'
+    }, {
+      'name': 'KOSOVO'
+    }, {
+      'name': 'KYEBANDO'
+    }, {
+      'name': 'LUGALA'
+    },
+    {
+      'name': 'MAKINDYE'
+    }, {
+      'name': 'MENGO'
+    }, {
+      'name': 'MAKINDYE'
+    }, {
+      'name': 'NAAKULABYE'
+    }, {
+      'name': 'NABULAGALA'
+    }, {
+      'name': 'NAMUWONGO'
+    }, {
+      'name': 'NDEJJE'
+    }, {
+      'name': 'NSAMBYA'
+    }, {
+      'name': 'SSABAGABO'
+    },
+  ];
+  workPlanId: string;
+  newUpdatedExpenses: any;
+  workPlanUpdate: any;
+  indicators: any;
+  quarterlyCommitment: any;
+  currentStatus: any;
+  userId: any;
+  partnerId: string;
+   programId: any;
+   startDate: any;
+   endDate: any;
+   reportingStartDate: any;
+   periodType: any;
+   startCycle: string;
+
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private authService: AuthService,
@@ -53,32 +133,34 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               private activityReportService: ActivityReportService,
               private workPlanService: WorkPlanService,
               private router: Router,
-              private programStaffService: ProgramStaffService) { }
+              private programStaffService: ProgramStaffService) {
+  }
 
   ngOnInit(): void {
-    this.getBudgetLines()
+    this.getBudgetLines();
     this.formGroup = this.formBuilder.group({
       budgetLine: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      startDate:[''],
-      endDate:[''],
+      startDate: [''],
+      endDate: [''],
       designation: ['', [Validators.required]],
       location: [''],
       milestone: [''],
-      activityObjectives:[''],
-      activityResults:[''],
-      activityUndertaken:[''],
-      challenges:[''],
-      lessonsLearned:[''],
-      keyAchievements:[''],
-      peopleReached:[''],
-      costAssociated:[''],
-      budgetProgress:[''],
-      assignee:[''],
-      attachPhoto:[''],
-      attachList:[''],
-      attachStories:[''],
-      status:['Pending']
+      activityName: [''],
+      activityObjectives: [''],
+      activityResults: [''],
+      activityUndertaken: [''],
+      challenges: [''],
+      lessonsLearned: [''],
+      keyAchievements: [''],
+      peopleReached: [''],
+      costAssociated: [''],
+      budgetProgress: [''],
+      assignee: [''],
+      attachPhoto: [''],
+      attachList: [''],
+      attachStories: [''],
+      status: ['Pending']
     });
     this.programStaffService.getPrograms().subscribe((data) => {
       this.programs = data;
@@ -95,14 +177,14 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   createActivityReport() {
 
 
-    let values: {[key: string]: string} = {
+    let values: { [key: string]: string } = {
       budget: this.budget,
       people: this.peopleSurvey,
       balance: this.totalBalance,
       totalApproved: this.getTotalApproved,
       totalSpent: this.totalSpent,
       budgetDisburse: this.totalBudgetDisburse
-    }
+    };
 
     this.submitted = true;
     if (this.formGroup.invalid) {
@@ -110,9 +192,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       return;
     }
     const activityReport = this.formGroup.value;
-    let statusSave = 'Started'
+    let statusSave = 'Started';
 
-    let savedActivityRecord: {[key:string]: string} = {
+    let savedActivityRecord: { [key: string]: string } = {
 
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
@@ -134,9 +216,10 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       milestone: activityReport.milestone,
       startDate: activityReport.startDate,
       status: statusSave
-    }
-    console.log(savedActivityRecord)
+    };
+
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
+      this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully created `);
     }, error => {
@@ -157,24 +240,27 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   removeBudget(row) {
     this.budget = this.budget.filter(item => item.id != row.id);
   }
+
   cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: []) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
 
 
   saveCellValue = (value: string, key: string, rowId): void => {
-    if (value !== null && value !== undefined)
+    if (value !== null && value !== undefined) {
       switch (key) {
         case 'budget_line':
           if (this.budget.some(x => x.id === rowId)) {
             this.budget.forEach(function (item) {
-              if (item.id === rowId) item.budgetLine = value;
+              if (item.id === rowId) {
+                item.budgetLine = value;
+              }
             });
           }
           break;
         case 'approved_amt':
           this.updateBudgetAmount(rowId, value);
-          break
+          break;
         case 'total_spent':
           this.updateBudgetDisburse(rowId, value, true);
           break;
@@ -182,8 +268,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
           this.update1835(rowId, value);
           break;
       }
+    }
     // this.savePlan();
-  }
+  };
 
   // savePlan(done?: boolean) {
   //   this.error = false;
@@ -199,10 +286,10 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
   // }
 
   private update1835(id, newValue) {
-    let values: {[key: string]: string};
+    let values: { [key: string]: string };
     switch (id) {
       case 1:
-       this.peopleSurvey.total1835 = newValue;
+        this.peopleSurvey.total1835 = newValue;
         break;
       case 2:
         this.peopleSurvey.total1835M = newValue;
@@ -238,7 +325,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach(function (item) {
-        if (item.id === id) item.approvedAmount = newValue;
+        if (item.id === id) {
+          item.approvedAmount = newValue;
+        }
         total += +item.approvedAmount;
       });
     }
@@ -257,13 +346,16 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
               this.alertService.error(`Amount spent should be less than Amount Approved`);
               return;
             }
-          } else item.totalSpent = newValue;
+          } else {
+            item.totalSpent = newValue;
+          }
         }
         total += +item.totalSpent;
       });
     }
     this.totalBudgetDisburse = total.toString();
-    this.totalBalance = parseInt(this.getTotalApproved) - (parseInt(this.totalSpent) + parseInt(this.totalBudgetDisburse))
+    this.totalBalance = parseInt(this.getTotalApproved) - (parseInt(this.totalSpent) + parseInt(this.totalBudgetDisburse));
+    this.newUpdatedExpenses = (+this.totalSpent + +this.totalBudgetDisburse)
     // this.currentStatus.totalAmountSpent = total;
   }
 
@@ -281,9 +373,15 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
-    if (event.target.id === "attachment1") this.attachment1 = files.item(0).name;
-    if (event.target.id === "attachment2") this.attachment2 = files.item(0).name;
-    if (event.target.id === "attachment3") this.attachment3 = files.item(0).name;
+    if (event.target.id === 'attachment1') {
+      this.attachment1 = files.item(0).name;
+    }
+    if (event.target.id === 'attachment2') {
+      this.attachment2 = files.item(0).name;
+    }
+    if (event.target.id === 'attachment3') {
+      this.attachment3 = files.item(0).name;
+    }
     this.uploadFile(files.item(0), event.target.id);
   }
 
@@ -304,63 +402,126 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
     this.formGroup.reset();
   }
 
-  getBudgetLines(){
-    this.workPlanService.getWorkPlan().subscribe((data) =>{
-      console.log(data)
-      this.budgetHolder = data
-    })
+  getBudgetLines() {
+    this.workPlanService.getWorkPlan().subscribe((data) => {
+      console.log(data);
+      this.budgetHolder = data;
+    });
   }
 
 
   onBudgetLineChange() {
-    let rowNumber = ''
-     rowNumber = this.choosenBudget ;
+    let rowNumber = '';
+    rowNumber = this.choosenBudget;
     if (this.getListBudgetLine.some(x => x.id === rowNumber)) {
-      this.getListBudgetLine.forEach( (item) => {
+      this.getListBudgetLine.forEach((item) => {
         if (item.id === rowNumber) {
-          this.getTotalApproved = item.approvedAmount
-          this.totalSpent = item.totalSpent
+          this.getTotalApproved = item.approvedAmount;
+          this.totalSpent = item.totalSpent;
         }
       });
     }
   }
 
-  getBudgetHolderBudgetLines() {
-    let staffId = this.budgetHolderId
-    console.log(staffId)
-    let newBudgetLine: any = []
-    let newMilestone: any = []
-      this.budgetHolder.forEach((d) => {
-        if (d.staffId === staffId) {
-        let values = JSON.parse(d.setupValues)
-        this.milestones = JSON.parse(values.indicators)
-        this.budgetLines = values.budget
-        this.budgetLines.forEach((item) => {
-          newBudgetLine.push(item)
-          this.getListBudgetLine = newBudgetLine;
-        })
-       this.milestones.forEach((mile) =>{
-         newMilestone.push(mile)
-         this.getMilestone = newMilestone;
-         console.log(this.getMilestone)
-       })
-      }
+  updateTotalExpensesInWorkPlan(){
+    this.budgetHolder.forEach((d) => {
+      if (d.id == this.workPlanId) {
+        console.log(this.workPlanId);
+        const params2 = new HttpParams().set('id', this.workPlanId);
+        this.workPlanService.getWorkPlanRecord(params2).subscribe((data) =>{
+          this.workPlanUpdate = data.setup
+
+        console.log("Update",data);
+      let values = JSON.parse(d.setupValues);
+        this.budgetLines = values.budget;
+        this.indicators = values.indicators;
+        this.quarterlyCommitment = values.quarterlyCommitment;
+        this.currentStatus = values.currentStatus
+
+
+                  this.userId =  this.workPlanUpdate.userId
+                  this.partnerId =  this.workPlanUpdate.partnerId
+                  this.programId =  this.workPlanUpdate.programId
+                  this.startDate = this.workPlanUpdate.startDate
+                  this.endDate = this.workPlanUpdate.endDate
+                  this.reportingStartDate = this.workPlanUpdate.reportingStartDate
+                  this.periodType = this.workPlanUpdate.periodType
+                  this.startCycle = this.workPlanUpdate.startCycle
+
+      this.budgetLines.forEach((item) => {
+        if (item.id == this.choosenBudget) {
+
+          item.totalSpent = this.newUpdatedExpenses.toString();
+
+
+          let newValues: { [key: string]: string } = {
+            indicators: this.indicators,
+            budget: this.budgetLines,
+            quarterlyCommitment: this.quarterlyCommitment,
+            currentStatus: this.currentStatus
+          }
+
+          let workPlanRecord: { [key: string]: string } = {
+            userId: this.userId,
+            partnerId: this.partnerId,
+            programId: this.programId,
+            setupValues: JSON.stringify(newValues),
+            startDate: this.startDate,
+            endDate: this.endDate,
+            reportingStartDate: this.reportingStartDate,
+            periodType: this.periodType,
+            startCycle: this.startCycle,
+
+          }
+          this.workPlanService.updateWorkPlan(workPlanRecord, this.workPlanId).subscribe((data) => {
+
+          });
+
+        }
       })
+      })
+    }
+    })
+    // console.log("Budget Holder", this.budgetHolder);
+
+  }
+
+  getBudgetHolderBudgetLines() {
+    let staffId = this.budgetHolderId;
+    console.log(staffId);
+    let newBudgetLine: any = [];
+    let newMilestone: any = [];
+    this.budgetHolder.forEach((d) => {
+      if (d.staffId === staffId) {
+        this.workPlanId = d.id
+        let values = JSON.parse(d.setupValues);
+        this.milestones = JSON.parse(values.indicators);
+        this.budgetLines = values.budget;
+        this.budgetLines.forEach((item) => {
+          newBudgetLine.push(item);
+          this.getListBudgetLine = newBudgetLine;
+        });
+        this.milestones.forEach((mile) => {
+          newMilestone.push(mile);
+          this.getMilestone = newMilestone;
+          console.log(this.getMilestone);
+        });
+      }
+    });
 
   }
 
 
-
   saveReport() {
 
-    let values: {[key: string]: string} = {
+    let values: { [key: string]: string } = {
       budget: this.budget,
       people: this.peopleSurvey,
       balance: this.totalBalance,
       totalApproved: this.getTotalApproved,
       totalSpent: this.totalSpent,
       budgetDisburse: this.totalBudgetDisburse
-    }
+    };
 
 
     if (this.formGroup.invalid) {
@@ -368,9 +529,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       return;
     }
     const activityReport = this.formGroup.value;
-    let statusSave = 'Pending'
+    let statusSave = 'Pending';
 
-    let savedActivityRecord: {[key:string]: string} = {
+    let savedActivityRecord: { [key: string]: string } = {
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
@@ -391,9 +552,10 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell{
       milestone: activityReport.milestone,
       startDate: activityReport.startDate,
       status: statusSave
-    }
-    console.log(savedActivityRecord)
+    };
+
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
+      this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully created `);
     }, error => {
