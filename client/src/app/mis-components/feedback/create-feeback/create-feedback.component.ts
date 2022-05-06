@@ -20,6 +20,7 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
   styleUrls: ['./create-feedback.component.scss']
 })
 export class CreateFeedbackComponent implements OnInit {
+  status: string;
 
 
 
@@ -328,6 +329,7 @@ export class CreateFeedbackComponent implements OnInit {
     },
   ];
   referralDecisionPoint: any;
+  underReview: string;
 
   get f() {
     return this.formGroup.controls;
@@ -361,7 +363,24 @@ export class CreateFeedbackComponent implements OnInit {
       reasonForReferral:[''],
       organizationReferredTo:[''],
       followupNeeded:[''],
-      status:['Pending']
+      status:[''],
+      feedbackCategory: [''],
+      feedbackPriority: [''],
+      feedbackReferredShared: [''],
+      feedbackInternallyExternally: [''],
+      referredPersonName: [''],
+      referredPersonPosition: [''],
+      referredOrganization: [''],
+      dateFeedbackReferredShared: [''],
+      responseTypeRequired: [''],
+      actionFollowupNeeded: [''],
+      inFeedbackRegistry: [''],
+      dateFeedbackClient: [''],
+      actionTaken: [''],
+      staffProvidedResponse: [''],
+      responseSummary: [''],
+      supervisor: [''],
+      dataEntryFocalPoint: [''],
     });
   }
 
@@ -373,7 +392,7 @@ export class CreateFeedbackComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
-
+    //create a referral
     let submitData: {[key:string]: string} = {
       dateOfReferral: formData.dateFeedbackReceived,
       nameOfReferringOfficer: formData.nameOfReferringOfficer,
@@ -389,8 +408,8 @@ export class CreateFeedbackComponent implements OnInit {
       phoneNumber: formData.phoneNumber
 
     }
-
-    let statusSave = 'Actioned'
+    //create feedback
+    // let statusSave = 'Actioned'
     let newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: formData.nameOfRegister,
@@ -411,13 +430,31 @@ export class CreateFeedbackComponent implements OnInit {
       serialNumber: formData.serialNumber,
       gender: formData.gender,
       project: formData.project,
-      assignee: formData.assignee,
+      assignee: formData.assignee || this.underReview,
       feedbackDetails: formData.feedbackDetails,
       nameOfReferringOfficer: formData.nameOfReferringOfficer,
       reasonForReferral: formData.reasonForReferral,
       organizationReferredTo: formData.organizationReferredTo,
       followupNeeded: formData.followupNeeded,
-      status: statusSave
+      feedbackCategory: formData.feedbackCategory,
+      feedbackPriority: formData.feedbackPriority,
+      feedbackReferredShared: formData.feedbackReferredShared,
+      feedbackInternallyExternally: formData.feedbackInternallyExternally,
+      referredPersonName: formData.referredPersonName,
+      referredPersonPosition: formData.referredPersonPosition,
+      referredOrganization: formData.referredOrganization,
+      dateFeedbackReferredShared: formData.dateFeedbackReferredShared,
+      responseTypeRequired: formData.responseTypeRequired,
+      actionFollowupNeeded: formData.actionFollowupNeeded,
+      inFeedbackRegistry: formData.inFeedbackRegistry,
+      dateFeedbackClient: formData.dateFeedbackClient,
+      actionTaken: formData.actionTaken,
+      staffProvidedResponse: formData.staffProvidedResponse,
+      responseSummary: formData.responseSummary,
+      supervisor: formData.supervisor,
+      dataEntryFocalPoint: formData.dataEntryFocalPoint,
+
+      status: this.status
     }
     console.log(formData, "submitted data")
     if(this.referralDecisionPoint == 'Referral'){
@@ -484,7 +521,6 @@ export class CreateFeedbackComponent implements OnInit {
     }
   }
 
-  //TODO add save functionality
 
   chooseActionForFeedback(event) {
     if (event === 'Forwarded For Action') {
@@ -492,16 +528,127 @@ export class CreateFeedbackComponent implements OnInit {
       document.getElementById("loop").hidden = true
       document.getElementById("actionDetails").hidden = true
       document.getElementById("referral").hidden = true
+      this.status = 'Pending'
     } else if(event === 'Actioned') {
       document.getElementById('loop').hidden = false
       document.getElementById('actionDetails').hidden = false
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
+      this.status = 'Actioned'
     } else if(event === 'Referral') {
       document.getElementById('loop').hidden = true
       document.getElementById('actionDetails').hidden = true
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = false
+      this.status = 'Referred'
+    } else if(event === 'Under Review') {
+      this.status = 'Under Review'
+      this.underReview =  this.authService.getLoggedInUsername()
+    } else{
+      this.status = ''
+    }
+  }
+
+  /*Save feedback for later*/
+
+  saveForm() {
+    this.clicked = true;
+    this.submitted = true;
+    if (this.formGroup.invalid) {
+      console.log('Invalid');
+      return;
+    }
+    const formData = this.formGroup.value;
+
+    let submitData: {[key:string]: string} = {
+      dateOfReferral: formData.dateFeedbackReceived,
+      nameOfReferringOfficer: formData.nameOfReferringOfficer,
+      reasonForReferral: formData.reasonForReferral,
+      organizationReferredTo: formData.organizationReferredTo,
+      followupNeeded: formData.followupNeeded,
+      status: 'Saved',
+      nameOfClientBeingReferred: formData.nameOfClient,
+      gender: formData.gender,
+      ageCategory: formData.age,
+      nationalityStatus: formData.nationalityStatus,
+      assignee: formData.assignee,
+      phoneNumber: formData.phoneNumber
+
+    }
+
+    let statusSave = 'Saved'
+    let newFormData: {[key:string]: string} = {
+      dateFeedbackReceived: formData.dateFeedbackReceived,
+      nameOfRegister: formData.nameOfRegister,
+      staffDesignation: formData.staffDesignation,
+      typeOfFeedback: formData.typeOfFeedback,
+      currentStatusOfFeedback: formData.currentStatusOfFeedback,
+      location: formData.location,
+      projectSector: formData.projectSector,
+      subSector: formData.subSector,
+      nameOfClient: formData.nameOfClient,
+      remainAnonymous: formData.remainAnonymous,
+      nationalityStatus: formData.nationalityStatus,
+      clientType: formData.clientType,
+      preferredChannel: formData.preferredChannel,
+      phoneNumber: formData.phoneNumber,
+      email: formData.email,
+      age: formData.age,
+      serialNumber: formData.serialNumber,
+      gender: formData.gender,
+      project: formData.project,
+      assignee: formData.assignee || this.underReview,
+      feedbackDetails: formData.feedbackDetails,
+      nameOfReferringOfficer: formData.nameOfReferringOfficer,
+      reasonForReferral: formData.reasonForReferral,
+      organizationReferredTo: formData.organizationReferredTo,
+      followupNeeded: formData.followupNeeded,
+      feedbackCategory: formData.feedbackCategory,
+      feedbackPriority: formData.feedbackPriority,
+      feedbackReferredShared: formData.feedbackReferredShared,
+      feedbackInternallyExternally: formData.feedbackInternallyExternally,
+      referredPersonName: formData.referredPersonName,
+      referredPersonPosition: formData.referredPersonPosition,
+      referredOrganization: formData.referredOrganization,
+      dateFeedbackReferredShared: formData.dateFeedbackReferredShared,
+      responseTypeRequired: formData.responseTypeRequired,
+      actionFollowupNeeded: formData.actionFollowupNeeded,
+      inFeedbackRegistry: formData.inFeedbackRegistry,
+      dateFeedbackClient: formData.dateFeedbackClient,
+      actionTaken: formData.actionTaken,
+      staffProvidedResponse: formData.staffProvidedResponse,
+      responseSummary: formData.responseSummary,
+      supervisor: formData.supervisor,
+      dataEntryFocalPoint: formData.dataEntryFocalPoint,
+      status: statusSave
+    }
+    console.log(formData, "submitted data")
+    if(this.referralDecisionPoint == 'Referral'){
+
+      console.log("Feedback",newFormData);
+      /** save feedback */
+      this.feedbackService.createFeedback(newFormData).subscribe((result) => {
+        this.alertService.success(`feedback is created successfully`);
+        this.router.navigate(['/feedback-list']);
+      }, error => {
+        this.alertService.error("Failed to Create feedback")
+      });
+      /** save referral */
+      this.referralsService.createReferral(submitData).subscribe((result) => {
+        console.warn(result, 'Referral Created Successfully');
+        this.alertService.success(`Referral has been successfully created`)
+        // this.router.navigate(['/referrals-list']);
+      }, error => {
+        this.alertService.error(`Failed to create Referral`)
+      });
+    } else {
+
+      this.feedbackService.createFeedback(formData).subscribe((result) => {
+        this.alertService.success(`feedback is created successfully`);
+        this.router.navigate(['/feedback-list']);
+      }, error => {
+        this.alertService.error("Failed to Create feedback")
+      });
     }
   }
 }
