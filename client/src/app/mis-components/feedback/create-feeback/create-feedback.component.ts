@@ -20,9 +20,6 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
   styleUrls: ['./create-feedback.component.scss']
 })
 export class CreateFeedbackComponent implements OnInit {
-  status: string;
-
-
 
   constructor(
     private userService: UsersService,
@@ -363,7 +360,7 @@ export class CreateFeedbackComponent implements OnInit {
       reasonForReferral:[''],
       organizationReferredTo:[''],
       followupNeeded:[''],
-      status:[''],
+      status: [''],
       feedbackCategory: [''],
       feedbackPriority: [''],
       feedbackReferredShared: [''],
@@ -392,6 +389,7 @@ export class CreateFeedbackComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
+
     //create a referral
     let submitData: {[key:string]: string} = {
       dateOfReferral: formData.dateFeedbackReceived,
@@ -409,13 +407,14 @@ export class CreateFeedbackComponent implements OnInit {
 
     }
     //create feedback
-    // let statusSave = 'Actioned'
+    let statusSave:string = formData.currentStatusOfFeedback
+    console.log("ufdufudf",statusSave);
     let newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: formData.nameOfRegister,
       staffDesignation: formData.staffDesignation,
       typeOfFeedback: formData.typeOfFeedback,
-      currentStatusOfFeedback: formData.currentStatusOfFeedback,
+      status: formData.currentStatusOfFeedback,
       location: formData.location,
       projectSector: formData.projectSector,
       subSector: formData.subSector,
@@ -454,12 +453,10 @@ export class CreateFeedbackComponent implements OnInit {
       supervisor: formData.supervisor,
       dataEntryFocalPoint: formData.dataEntryFocalPoint,
 
-      status: this.status
     }
     console.log(formData, "submitted data")
     if(this.referralDecisionPoint == 'Referral'){
 
-      console.log("Feedback",newFormData);
       /** save feedback */
       this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
@@ -528,24 +525,21 @@ export class CreateFeedbackComponent implements OnInit {
       document.getElementById("loop").hidden = true
       document.getElementById("actionDetails").hidden = true
       document.getElementById("referral").hidden = true
-      this.status = 'Pending'
+
     } else if(event === 'Actioned') {
       document.getElementById('loop').hidden = false
       document.getElementById('actionDetails').hidden = false
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
-      this.status = 'Actioned'
+
     } else if(event === 'Referral') {
       document.getElementById('loop').hidden = true
       document.getElementById('actionDetails').hidden = true
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = false
-      this.status = 'Referred'
+
     } else if(event === 'Under Review') {
-      this.status = 'Under Review'
       this.underReview =  this.authService.getLoggedInUsername()
-    } else{
-      this.status = ''
     }
   }
 

@@ -213,6 +213,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       keyAchievements: activityReport.keyAchievements,
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
+      activityName: activityReport.activityName,
       milestone: activityReport.milestone,
       startDate: activityReport.startDate,
       status: statusSave
@@ -334,6 +335,8 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.totalApprovedAmount = total.toString();
   }
 
+
+  ///TODO pick images
   private updateBudgetDisburse(id, newValue, editing?: boolean) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
@@ -343,11 +346,8 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
             if (+newValue <= +item.approvedAmount) {
               item.totalSpent = newValue;
             } else {
-              this.alertService.error(`Amount spent should be less than Amount Approved`);
-              return;
+              item.totalSpent = newValue;
             }
-          } else {
-            item.totalSpent = newValue;
           }
         }
         total += +item.totalSpent;
@@ -549,6 +549,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       keyAchievements: activityReport.keyAchievements,
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
+      activityName: activityReport.activityName,
       milestone: activityReport.milestone,
       startDate: activityReport.startDate,
       status: statusSave

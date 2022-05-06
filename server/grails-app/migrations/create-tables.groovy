@@ -2212,6 +2212,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1651825962805-120") {
+        addColumn(tableName: "activity_report") {
+            column(name: "activity_name", type: "varchar(255)")
+        }
+    }
+
     changeSet(author: "DELL (generated)", id: "20220901124635-cr") {
         modifyDataType(columnName: "feedback_details", newDataType: "text", tableName: "feedback")
     }
@@ -2219,4 +2225,29 @@ databaseChangeLog = {
     changeSet(author: "DELL (generated)", id: "202209011635k-cr") {
         modifyDataType(columnName: "response_summary", newDataType: "text", tableName: "feedback")
     }
+
+    changeSet(author: "DELL (generated)", id: "20220901k1246352-cr") {
+        modifyDataType(columnName: "challenges", newDataType: "text", tableName: "activity_report")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011246352ol-cr") {
+        modifyDataType(columnName: "lessons_learned", newDataType: "text", tableName: "activity_report")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011246352ol2-cr") {
+        modifyDataType(columnName: "activity_results", newDataType: "text", tableName: "activity_report")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011246352ol23-cr") {
+        modifyDataType(columnName: "activity_undertaken", newDataType: "text", tableName: "activity_report")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011246352ol2773-cr") {
+        modifyDataType(columnName: "activity_objectives", newDataType: "text", tableName: "activity_report")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011246352ol2773yy-cr") {
+        modifyDataType(columnName: "key_achievements", newDataType: "text", tableName: "activity_report")
+    }
+
 }
