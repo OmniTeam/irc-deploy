@@ -65,7 +65,7 @@ class TaskListController {
                 taskCase = feedback.typeOfFeedback
             }
 
-            if (task.processDefKey == 'QUATERLY_REPORTING') {
+            if (task.processDefKey == 'PROGRESS_REPORTING') {
                 taskCase = taskProgram.title
             }
 
