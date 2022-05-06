@@ -89,7 +89,7 @@ export class ActivityFormComponent implements OnInit {
 
           this.isReview = this.taskRecord.taskDefinitionKey=="Conduct_Financial_Review"
           this.isMakeCorrections = (this.taskRecord.taskDefinitionKey=="Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey=="Make_Changes_from_Supervisor")
-          this.isApprove = this.taskRecord.taskDefinitionKey=="Approve_Activity_Report"
+          this.isApprove = this.taskRecord.taskDefinitionKey=="Activity_1avlrtp"
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
             this.activity = data;
@@ -315,13 +315,13 @@ export class ActivityFormComponent implements OnInit {
   updateTask(status){
     this.taskRecord.status = status;
     this.taskRecord.groupId = '[]';
-    if (this.isReview) {
+    if (this.isApprove) {
       let actionRequired = this.formGroup.value.actionRequired;
       this.taskRecord.outputVariables = '{"changesRequested": "' + actionRequired + '"}'
     }
-    if(this.isApprove) {
-      this.taskRecord.outputVariables = '{"archiveReport": "' + "Yes" + '"}'
-    }
+    // if(this.isApprove) {
+    //   this.taskRecord.outputVariables = '{"archiveReport": "' + "Yes" + '"}'
+    // }
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
       console.log('successfully updated task');
     }, error => console.log('update task', error));
