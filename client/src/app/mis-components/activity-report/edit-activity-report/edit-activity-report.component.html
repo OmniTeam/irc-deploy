@@ -3,7 +3,7 @@
     <div class=" header-body">
       <div class=" row align-items-center py-4">
         <div class=" col-lg-6 col-7">
-          <h6 class=" h2 text-white d-inline-block mb-0">Activity Report</h6>
+          <h6 class=" h2 text-white d-inline-block mb-0">Edit Activity Report</h6>
           <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
         </div>
         <div class=" col-lg-6 col-5 text-right">
@@ -18,7 +18,7 @@
     <div class=" col-lg-10 card-wrapper">
       <div class="card">
         <div class="card-header" style="padding: 10px">
-          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Create Activity Report</h3>
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Edit Activity Report</h3>
         </div>
         <div class="card-body" style="font-size: 0.9rem;">
           <form [formGroup]="formGroup" (ngSubmit)="createActivityReport()" *ngIf="formGroup" style="margin: 20px;">
@@ -61,6 +61,31 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Designation
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Designation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="designation"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -123,8 +148,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Designation
-                      <span class="required-indicator">*</span>
+                      Activity Name
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -133,16 +157,18 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Designation"
+                            placeholder="Activity Name"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="designation"
+                            formControlName="activityName"
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div class="form-row">
                   <!--TODO Add restriction on dates-->
                   <div class="col-md-3" style="padding-top: 10px;">
@@ -219,28 +245,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Activity Name
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Activity Name"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="activityName"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
 
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
@@ -689,4 +694,3 @@
     </div>
   </div>
 </div>
-

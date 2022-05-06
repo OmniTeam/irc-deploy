@@ -23,6 +23,7 @@ class ActivityReport {
     String attachList
     String attachStory
     String status
+    String activityName
     Date dateCreated
     Date lastUpdated
 
@@ -41,6 +42,7 @@ class ActivityReport {
          milestone nullable: false
          activityObjectives nullable: true
          activityResults nullable: true
+         activityName nullable: true
          activityUndertaken nullable: true
          challenges nullable: true
          lessonsLearned nullable: true

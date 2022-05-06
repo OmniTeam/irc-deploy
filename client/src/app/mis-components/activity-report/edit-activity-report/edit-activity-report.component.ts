@@ -10,6 +10,7 @@ import {ActivityReportService} from '../../../services/activity-report.service';
 import {WorkPlanService} from '../../../services/work-plan-setup.service';
 import {ProgramStaffService} from '../../../services/program-staff.service';
 import {CellEdit} from '../../../helpers/cell-edit';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-activity-report',
@@ -110,6 +111,8 @@ export class EditActivityReportComponent implements OnInit {
   ];
   workPlanId: string;
   newUpdatedExpenses: any;
+  activity: any;
+  activityId: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -119,36 +122,51 @@ export class EditActivityReportComponent implements OnInit {
               private fileUploadService: FileUploadService,
               private activityReportService: ActivityReportService,
               private workPlanService: WorkPlanService,
+              private activityReport: ActivityReportService,
               private router: Router,
               private programStaffService: ProgramStaffService) {
   }
 
   ngOnInit(): void {
+    this.activityId = this.route.snapshot.params.id;
+
+
     this.getBudgetLines();
-    this.formGroup = this.formBuilder.group({
-      budgetLine: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      startDate: [''],
-      endDate: [''],
-      designation: ['', [Validators.required]],
-      location: [''],
-      milestone: [''],
-      activityName: [''],
-      activityObjectives: [''],
-      activityResults: [''],
-      activityUndertaken: [''],
-      challenges: [''],
-      lessonsLearned: [''],
-      keyAchievements: [''],
-      peopleReached: [''],
-      costAssociated: [''],
-      budgetProgress: [''],
-      assignee: [''],
-      attachPhoto: [''],
-      attachList: [''],
-      attachStories: [''],
-      status: ['Pending']
-    });
+    this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
+      this.activity = data;
+      console.log(data);
+      this.getActivityDetails(data)
+      this.formGroup = this.formBuilder.group({
+        budgetLine: [this.activity?.budgetLine, [Validators.required]],
+        name: [this.activity?.name, [Validators.required]],
+        startDate:[this.activity?.startDate],
+        endDate:[this.activity?.endDate],
+        designation: [this.activity?.designation, [Validators.required]],
+        location: [this.activity?.location],
+        milestone: [this.activity?.milestone],
+        activityObjectives:[this.activity?.activityObjectives],
+        activityResults:[this.activity?.activityResults],
+        activityUndertaken:[this.activity?.activityUndertaken],
+        challenges:[this.activity?.challenges],
+        lessonsLearned:[this.activity?.lessonsLearned],
+        keyAchievements:[this.activity?.keyAchievements],
+        activityName:[this.activity?.activityName],
+        peopleReached:[''],
+        costAssociated:[''],
+        budgetProgress:[''],
+        assignee:[''],
+        attachPhoto:[''],
+        attachList:[''],
+        attachStories:[''],
+        comments:[''],
+        actionRequired:[''],
+        status:['']
+      });
+
+      this.userService.getUsers().subscribe((data) => {
+        this.staff = data;
+      });
+    })
     this.programStaffService.getPrograms().subscribe((data) => {
       this.programs = data;
     });
@@ -159,6 +177,26 @@ export class EditActivityReportComponent implements OnInit {
 
   get f() {
     return this.formGroup.controls;
+  }
+
+  getActivityDetails(data){
+
+    let values =  JSON.parse(data.costAssociated)
+    console.log("Values",values)
+    this.peopleSurvey = values.people
+    this.totalBalance = values.balance
+    this.budget = values.budget
+    this.getTotalApproved = values.totalApproved
+    this.totalSpent = values.totalSpent
+    this.totalBudgetDisburse = values.budgetDisburse
+    console.log(this.budget)
+    // data.forEach((d) => {
+    //   let values = JSON.parse(d.costAssociated)
+    //   this.budget = JSON.parse(values.budget)
+    //   this.peopleSurvey = values.people
+    //   this.totalBalance = values.balance
+    //   console.log(values)
+    // })
   }
 
   createActivityReport() {
@@ -200,6 +238,7 @@ export class EditActivityReportComponent implements OnInit {
       keyAchievements: activityReport.keyAchievements,
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
+      activityName: activityReport.activityName,
       milestone: activityReport.milestone,
       startDate: activityReport.startDate,
       status: statusSave
@@ -497,6 +536,7 @@ export class EditActivityReportComponent implements OnInit {
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
       milestone: activityReport.milestone,
+      activityName: activityReport.activityName,
       startDate: activityReport.startDate,
       status: statusSave
     };
