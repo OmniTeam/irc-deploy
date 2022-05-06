@@ -50,6 +50,7 @@ export class GrantProcessComponent implements OnInit {
   grantAmount: any;
   periodFrom: any;
   periodTo: any;
+  clusterName: any;
 
   constructor(public authService: AuthService) { }
 
