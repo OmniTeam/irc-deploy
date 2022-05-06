@@ -7,6 +7,29 @@
   </div>
 </div>
 
+<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
+<div *ngIf="openCommentsPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Comments</h3>
+  </div>
+  <div class="card-body d-flex flex-column">
+    <div class="row">
+      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
+      <div class="col-sm-11">
+        <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
+        <div style="display: flex;justify-content: end;">
+          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addComment()">Send</button>
+        </div>
+      </div>
+    </div>
+    <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
+    <app-comments [comments]="comments" (commentsChanged)="commentsChangedHandler($event)"></app-comments>
+  </div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>
+  </div>
+</div>
+
 <div class=" container-fluid mt--6">
   <div class=" row">
     <div class=" col">
@@ -14,11 +37,16 @@
         <div class="row">
 
           <div style="width: 100%; text-align: -webkit-center; display: block;">
-            <div [style.display]="isSubmitLetterOfInterest || isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
-            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PLANNING AND LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isSubmitLetterOfInterest || isReviewLetterOfInterest ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
+            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              PLANNING AND LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
+              LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              APPROVE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              PROVIDE PLANNING AND LEARNING GRANT</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
@@ -41,7 +69,8 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="hasApplicationBeenReviewed" [(ngModel)]="hasApplicationBeenReviewed"
+                              <input type="radio" name="hasApplicationBeenReviewed"
+                                     [(ngModel)]="hasApplicationBeenReviewed"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -107,12 +136,13 @@
             </div>
 
             <div *ngIf="isPlanningLearningApplication" class=" col">
+              <organizational-information [partnerId]="partnerId"></organizational-information>
               <planning-learning-application [isReadOnly]="false"></planning-learning-application>
             </div>
 
             <div *ngIf="isReviewLearningGrant" class="col">
+              <organizational-information [partnerId]="partnerId"></organizational-information>
               <planning-learning-application [isReadOnly]="true"></planning-learning-application>
-
 
               <h3 style="margin-left: 40px;">Reviewer Action</h3>
               <div class="card">
@@ -178,6 +208,98 @@
                       <label for="reviewerActionComments">Provide any comments</label>
                       <textarea class="form-control" rows="3" id="reviewerActionComments"
                                 [(ngModel)]="reviewerComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-warning">Cancel</button>
+                    <button class="btn btn-success">Submit Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="isApprovePlanningLearningGrant" class="col">
+              <organizational-information [partnerId]="partnerId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true"></planning-learning-application>
+
+              <h3 style="margin-left: 40px;">Approver Section</h3>
+              <div class="card">
+                <div class="row">
+                  <div class="col-sm-9">
+                    <p>What is your recommendation?</p>
+                    <div class="text-left">
+                      <ul style="list-style: none;" *ngFor="let item of decision2">
+                        <li>
+                          <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfApproveProcess"
+                                 value="{{item.value}}"/>
+                          {{item.name}}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                  </div>
+                </div>
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+                    <div class="row" style="margin: 10px;">
+                      <label for="reviewerActionComments">Provide any comments</label>
+                      <textarea class="form-control" rows="3" id="approverComments"
+                                [(ngModel)]="approveComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-warning">Cancel</button>
+                    <button class="btn btn-success">Submit Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="isProvidePlanningLearningGrant" class="col">
+              <organizational-information [partnerId]="partnerId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true"></planning-learning-application>
+
+              <h3 style="margin-left: 40px;">Finance Section</h3>
+              <div class="card">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>Grant Amount</label>
+                    <input class="form-control" type="number" [(ngModel)]="grantAmount"/>
+                  </div>
+                  <div class="col-sm-4">
+                    <label>Lead Agency</label>
+                    <input class="form-control" type="text" [(ngModel)]="leadAgency"/>
+                  </div>
+                  <div class="col-sm-4 text-right">
+                    <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <label>From:</label><input class="form-control" placeholder="From" type="date" [(ngModel)]="periodFrom"/>
+                      </div>
+                      <div class="col-sm-4">
+                        <label>To:</label><input class="form-control" placeholder="To" type="date" [(ngModel)]="periodTo"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+                    <div class="row" style="margin: 10px;">
+                      <label for="financeSectionComments">Provide any comments</label>
+                      <textarea class="form-control" rows="3" id="financeSectionComments"
+                                [(ngModel)]="financeSectionComments"></textarea>
                     </div>
                   </div>
                 </div>

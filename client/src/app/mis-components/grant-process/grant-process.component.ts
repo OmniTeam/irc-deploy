@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {CommentNode} from "../comments/comments.component";
+import {AuthService} from "../../services/auth.service";
+import {v4 as uuid} from 'uuid';
 
 @Component({
   selector: 'app-grant-process',
@@ -26,21 +29,55 @@ export class GrantProcessComponent implements OnInit {
     {name: 'Proceed with application', value: 'Yes'},
     {name: 'Unsuccessful', value: 'No'}
   ];
+  decision2 = [
+    {name: 'Proceed with application', value: 'Yes'},
+    {name: 'Return to Program Officer for further Review', value: 'No'}
+  ];
   isConceptInline: any;
   doesItAdhere: any;
   areTheyAdhering: any;
   decisionOfReviewProcess: any;
+  hasDueDiligenceConducted: any;
+  partnerId: string;
+  decisionOfApproveProcess: any;
+  approveComments: any;
 
-  constructor() { }
+  comments: Array<CommentNode> = [];
+  openCommentsPopup: boolean;
+  openPopup: boolean;
+  financeSectionComments: any;
+  leadAgency: any;
+  grantAmount: any;
+  periodFrom: any;
+  periodTo: any;
+
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    this.isSubmitLetterOfInterest = true;
+    this.isSubmitLetterOfInterest = false;
     this.isReviewLetterOfInterest = false;
     this.isPlanningLearningApplication = false;
     this.isReviewLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
-    this.isProvidePlanningLearningGrant = false;
+    this.isProvidePlanningLearningGrant = true;
   }
 
+  viewComments(): void {
+    this.openCommentsPopup = !this.openCommentsPopup;
+    this.openPopup = this.openCommentsPopup;
+  }
+
+  addComment() {
+    let text = (document.getElementById("addComment") as HTMLTextAreaElement);
+    if (text.value !== "") {
+      this.comments.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], [], new Date()));
+      text.value = "";
+    }
+  }
+
+  commentsChangedHandler(comments: Array<CommentNode>) {
+    this.comments = comments;
+    console.log(comments);
+  }
 
 }
