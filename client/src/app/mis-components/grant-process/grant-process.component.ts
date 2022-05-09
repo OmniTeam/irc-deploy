@@ -55,9 +55,11 @@ export class GrantProcessComponent implements OnInit {
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    this.isSubmitLetterOfInterest = true;
+    this.partnerId = "33547de5-83a7-42d6-9b36-3e7a3b292271"
+
+    this.isSubmitLetterOfInterest = false;
     this.isReviewLetterOfInterest = false;
-    this.isPlanningLearningApplication = false;
+    this.isPlanningLearningApplication = true;
     this.isReviewLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
     this.isProvidePlanningLearningGrant = false;

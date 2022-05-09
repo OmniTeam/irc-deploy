@@ -288,4 +288,46 @@ export class SampleData {
       value: 'partner_three'
     }
   ];
+  static letterOfInterest = {
+    acronym: "IMTC",
+    address_contact_person: "Kampala, Uganda",
+    attachment: "C:\\fakepath\\image_2022-04-28_16-04-55.png",
+    city: "Kampala",
+    contact_person: "Bruno Wepukhulu",
+    contact_person_number: "+256773430638",
+    country: "Uganda",
+    email: "brunojay001@gmail.com",
+    email_address: "brunojay001@gmail.com",
+    legal_status: "Limited Liability",
+    organisation: "Tech",
+    organization_type: "1",
+    physical_address: "Kampala, Uganda",
+    postal_address: "0000",
+    program: "1",
+    website: "inscriptug.com"
+  }
+  static planningAndLearningGrantApplication = {
+    address_contact_person: "Kampala, Uganda",
+    amount_requested: 100,
+    annual_work_plan: "image_2022-04-28_16-04-55.png",
+    assessment_report: "image_2022-04-28_16-05-42.png",
+    bank_details: "sdgssgsg",
+    child_policy: "image_2022-04-28_16-04-55.png",
+    completed: "image_2022-04-28_16-05-42.png",
+    contact_authorized_signatory: "+256773430638",
+    contact_person_number: "+256773430638",
+    email_contact_person: "inscriptug@gmail.com",
+    financial: "image_2022-04-28_16-05-42.png",
+    list_members: "image_2022-04-28_16-04-55.png",
+    mel_framework: "photo_2022-04-23_14-04-04.jpg",
+    name_authorized_signatory: "Bruno Wepukhulu",
+    other_organization: "twetwtwet",
+    other_sources: "werwer",
+    proposed_duration: 50,
+    proposed_start_date: "2022-05-04",
+    registration: "image_2022-04-28_16-04-55.png",
+    strategic_plan: "image_2022-04-28_16-05-42.png",
+    structure: "image_2022-04-28_16-04-55.png",
+    total_budget_amt: 50000
+  }
 }

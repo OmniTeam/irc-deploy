@@ -165,7 +165,8 @@
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Name of authorized Signatory (if different from contact person):<span class="required-indicator">*</span></label>
+          <label>Name of authorized Signatory (if different from contact person):<span
+            class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -177,7 +178,8 @@
                 [ngClass]="{ 'is-invalid': submitted && f.name_authorized_signatory.errors }"
               >
               <div *ngIf="submitted && f.name_authorized_signatory.errors" class="invalid-feedback">
-                <div *ngIf="f.name_authorized_signatory.errors.required" class="input-error">Name of Authorized Signatory is
+                <div *ngIf="f.name_authorized_signatory.errors.required" class="input-error">Name of Authorized
+                  Signatory is
                   required
                 </div>
               </div>
@@ -250,13 +252,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="completed"
-                    [ngClass]="{ 'is-invalid': submitted && f.completed.errors }"
-                  >
+                    id="completed"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.completed.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.completed.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -265,13 +272,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="mel_framework"
-                    [ngClass]="{ 'is-invalid': submitted && f.mel_framework.errors }"
-                  >
+                    id="mel_framework"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.mel_framework.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.mel_framework.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -282,13 +294,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="financial"
-                    [ngClass]="{ 'is-invalid': submitted && f.financial.errors }"
-                  >
+                    id="financial"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.financial.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.financial.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -297,13 +314,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="registration"
-                    [ngClass]="{ 'is-invalid': submitted && f.registration.errors }"
-                  >
+                    id="registration"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.registration.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.registration.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -314,13 +336,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="list_members"
-                    [ngClass]="{ 'is-invalid': submitted && f.list_members.errors }"
-                  >
+                    id="list_members"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.list_members.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.list_members.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -329,13 +356,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="assessment_report"
-                    [ngClass]="{ 'is-invalid': submitted && f.assessment_report.errors }"
-                  >
+                    id="assessment_report"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a
+                    href="{{formGroup.controls.assessment_report.value}}" style="font-size:15px;"
+                    class="text fas fa-file-download" target="_blank"
+                    download> {{formGroup.controls.assessment_report.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -346,13 +378,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="strategic_plan"
-                    [ngClass]="{ 'is-invalid': submitted && f.strategic_plan.errors }"
-                  >
+                    id="strategic_plan"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.strategic_plan.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.strategic_plan.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -361,13 +398,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="annual_work_plan"
-                    [ngClass]="{ 'is-invalid': submitted && f.annual_work_plan.errors }"
-                  >
+                    id="annual_work_plan"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a
+                    href="{{formGroup.controls.annual_work_plan.value}}" style="font-size:15px;"
+                    class="text fas fa-file-download" target="_blank"
+                    download> {{formGroup.controls.annual_work_plan.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -378,13 +420,18 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="child_policy"
-                    [ngClass]="{ 'is-invalid': submitted && f.child_policy.errors }"
-                  >
+                    id="child_policy"
+                    (change)="handleFileInput($event)">
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.child_policy.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.child_policy.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -393,19 +440,27 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    *ngIf="!isReadOnly"
                     class="form-control"
                     placeholder="Attachment"
                     type="file"
                     style="padding-left: 10px;"
-                    formControlName="structure"
-                    [ngClass]="{ 'is-invalid': submitted && f.structure.errors }"
-                  >
+                    id="structure"
+                    (change)="handleFileInput($event)"/>
+                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.structure.value}}"
+                                                                     style="font-size:15px;"
+                                                                     class="text fas fa-file-download" target="_blank"
+                                                                     download> {{formGroup.controls.structure.value}}</a>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="card-footer" *ngIf="loading">
+      <h3>Uploading attachment, please wait ...</h3>
     </div>
   </div>
 
