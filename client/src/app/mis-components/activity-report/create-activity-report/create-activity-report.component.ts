@@ -117,12 +117,15 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   currentStatus: any;
   userId: any;
   partnerId: string;
-   programId: any;
+  programId: any;
    startDate: any;
    endDate: any;
    reportingStartDate: any;
    periodType: any;
    startCycle: string;
+   responsiblePerson: any;
+   budgetLineName: any;
+   singleMilestone: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -170,6 +173,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     });
   }
 
+
   get f() {
     return this.formGroup.controls;
   }
@@ -192,11 +196,12 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       return;
     }
     const activityReport = this.formGroup.value;
+
     let statusSave = 'Started';
 
     let savedActivityRecord: { [key: string]: string } = {
 
-      name: activityReport.name,
+      name: this.responsiblePerson,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
@@ -205,7 +210,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
       attachStories: activityReport.attachStories,
-      budgetLine: activityReport.budgetLine,
+      budgetLine: this.budgetLineName,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
       designation: activityReport.designation,
@@ -218,7 +223,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       startDate: activityReport.startDate,
       status: statusSave
     };
-
+    console.log("Activity",savedActivityRecord);
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
@@ -416,6 +421,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     if (this.getListBudgetLine.some(x => x.id === rowNumber)) {
       this.getListBudgetLine.forEach((item) => {
         if (item.id === rowNumber) {
+          this.budgetLineName = item.budgetLine
           this.getTotalApproved = item.approvedAmount;
           this.totalSpent = item.totalSpent;
         }
@@ -426,27 +432,23 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   updateTotalExpensesInWorkPlan(){
     this.budgetHolder.forEach((d) => {
       if (d.id == this.workPlanId) {
-        console.log(this.workPlanId);
         const params2 = new HttpParams().set('id', this.workPlanId);
         this.workPlanService.getWorkPlanRecord(params2).subscribe((data) =>{
           this.workPlanUpdate = data.setup
 
-        console.log("Update",data);
       let values = JSON.parse(d.setupValues);
         this.budgetLines = values.budget;
         this.indicators = values.indicators;
         this.quarterlyCommitment = values.quarterlyCommitment;
         this.currentStatus = values.currentStatus
-
-
-                  this.userId =  this.workPlanUpdate.userId
-                  this.partnerId =  this.workPlanUpdate.partnerId
-                  this.programId =  this.workPlanUpdate.programId
-                  this.startDate = this.workPlanUpdate.startDate
-                  this.endDate = this.workPlanUpdate.endDate
-                  this.reportingStartDate = this.workPlanUpdate.reportingStartDate
-                  this.periodType = this.workPlanUpdate.periodType
-                  this.startCycle = this.workPlanUpdate.startCycle
+          this.userId =  this.workPlanUpdate.userId
+          this.partnerId =  this.workPlanUpdate.partnerId
+          this.programId =  this.workPlanUpdate.programId
+          this.startDate = this.workPlanUpdate.startDate
+          this.endDate = this.workPlanUpdate.endDate
+          this.reportingStartDate = this.workPlanUpdate.reportingStartDate
+          this.periodType = this.workPlanUpdate.periodType
+          this.startCycle = this.workPlanUpdate.startCycle
 
       this.budgetLines.forEach((item) => {
         if (item.id == this.choosenBudget) {
@@ -494,6 +496,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.budgetHolder.forEach((d) => {
       if (d.staffId === staffId) {
         this.workPlanId = d.id
+        this.responsiblePerson = d.staff
         let values = JSON.parse(d.setupValues);
         this.milestones = JSON.parse(values.indicators);
         this.budgetLines = values.budget;
@@ -504,7 +507,8 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
         this.milestones.forEach((mile) => {
           newMilestone.push(mile);
           this.getMilestone = newMilestone;
-          console.log(this.getMilestone);
+          this.singleMilestone = this.getMilestone[0].name
+          this.formGroup.get('milestone').setValue(this.singleMilestone)
         });
       }
     });
@@ -532,7 +536,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     let statusSave = 'Pending';
 
     let savedActivityRecord: { [key: string]: string } = {
-      name: activityReport.name,
+      name: this.responsiblePerson,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
@@ -541,7 +545,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
       attachStories: activityReport.attachStories,
-      budgetLine: activityReport.budgetLine,
+      budgetLine: this.budgetLineName,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
       designation: activityReport.designation,
