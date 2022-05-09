@@ -113,6 +113,8 @@ export class EditActivityReportComponent implements OnInit {
   newUpdatedExpenses: any;
   activity: any;
   activityId: any;
+  budgetLineName: any;
+  responsiblePerson: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -129,7 +131,6 @@ export class EditActivityReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.activityId = this.route.snapshot.params.id;
-
 
     this.getBudgetLines();
     this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
@@ -199,7 +200,7 @@ export class EditActivityReportComponent implements OnInit {
     // })
   }
 
-  createActivityReport() {
+  updateActivityReport() {
 
 
     let values: { [key: string]: string } = {
@@ -221,7 +222,7 @@ export class EditActivityReportComponent implements OnInit {
 
     let savedActivityRecord: { [key: string]: string } = {
 
-      name: activityReport.name,
+      name: this.responsiblePerson,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
@@ -230,7 +231,7 @@ export class EditActivityReportComponent implements OnInit {
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
       attachStories: activityReport.attachStories,
-      budgetLine: activityReport.budgetLine,
+      budgetLine: this.budgetLineName,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
       designation: activityReport.designation,
@@ -244,12 +245,12 @@ export class EditActivityReportComponent implements OnInit {
       status: statusSave
     };
 
-    this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
+    this.activityReportService.updateActivityReport(savedActivityRecord,this.activityId).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
-      this.alertService.success(`${activityReport.name} has been successfully created `);
+      this.alertService.success(`${activityReport.name} has been successfully updated! `);
     }, error => {
-      this.alertService.error(`${activityReport.name} could not be created`);
+      this.alertService.error(`${activityReport.name} could not be updated`);
     });
 
   }
@@ -442,6 +443,7 @@ export class EditActivityReportComponent implements OnInit {
     if (this.getListBudgetLine.some(x => x.id === rowNumber)) {
       this.getListBudgetLine.forEach((item) => {
         if (item.id === rowNumber) {
+          this.budgetLineName = item.budgetLine
           this.getTotalApproved = item.approvedAmount;
           this.totalSpent = item.totalSpent;
         }
@@ -479,6 +481,7 @@ export class EditActivityReportComponent implements OnInit {
     let newMilestone: any = [];
     this.budgetHolder.forEach((d) => {
       if (d.staffId === staffId) {
+        this.responsiblePerson = d.staff
         this.workPlanId = d.id
         let values = JSON.parse(d.setupValues);
         this.milestones = JSON.parse(values.indicators);
@@ -518,7 +521,7 @@ export class EditActivityReportComponent implements OnInit {
     let statusSave = 'Pending';
 
     let savedActivityRecord: { [key: string]: string } = {
-      name: activityReport.name,
+      name: this.responsiblePerson,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
@@ -527,7 +530,7 @@ export class EditActivityReportComponent implements OnInit {
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
       attachStories: activityReport.attachStories,
-      budgetLine: activityReport.budgetLine,
+      budgetLine: this.budgetLineName,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
       designation: activityReport.designation,
@@ -541,12 +544,12 @@ export class EditActivityReportComponent implements OnInit {
       status: statusSave
     };
 
-    this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
+    this.activityReportService.updateActivityReport(savedActivityRecord,this.activityId).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
-      this.alertService.success(`${activityReport.name} has been successfully created `);
+      this.alertService.success(`${activityReport.name} has been successfully updated! `);
     }, error => {
-      this.alertService.error(`${activityReport.name} could not be created`);
+      this.alertService.error(`${activityReport.name} could not be updated`);
     });
 
   }

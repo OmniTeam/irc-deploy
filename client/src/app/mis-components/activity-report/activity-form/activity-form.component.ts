@@ -46,20 +46,86 @@ export class ActivityFormComponent implements OnInit {
   submitted = false;
   peopleSurvey:any = {};
   formGroup: FormGroup
+  isDisabled: boolean
+
+  location_id = [
+    {
+      'name': 'BAKULI'
+    },
+    {
+      'name': 'BUNGA'
+    },
+    {
+      'name': 'BWAISE'
+    },
+    {
+      'name': 'KABALAGALA'
+    }, {
+      'name': 'KAMPALA_CENTRAL'
+    }, {
+      'name': 'KAMWOKYA'
+    }, {
+      'name': 'KANSANGA'
+    }, {
+      'name': 'KASOKOSO'
+    }, {
+      'name': 'KASUBI'
+    }, {
+      'name': 'KATWE'
+    }, {
+      'name': 'KATWE_II'
+    }, {
+      'name': 'KAWAALA'
+    }, {
+      'name': 'KAWEMPE'
+    }, {
+      'name': 'KAZO ANGOLA'
+    }, {
+      'name': 'KINAWATAKA'
+    }, {
+      'name': 'KISENYI'
+    }, {
+      'name': 'KOSOVO'
+    }, {
+      'name': 'KYEBANDO'
+    }, {
+      'name': 'LUGALA'
+    },
+    {
+      'name': 'MAKINDYE'
+    }, {
+      'name': 'MENGO'
+    }, {
+      'name': 'MAKINDYE'
+    }, {
+      'name': 'NAAKULABYE'
+    }, {
+      'name': 'NABULAGALA'
+    }, {
+      'name': 'NAMUWONGO'
+    }, {
+      'name': 'NDEJJE'
+    }, {
+      'name': 'NSAMBYA'
+    }, {
+      'name': 'SSABAGABO'
+    },
+  ];
 
   followup_needed = [
     {
       'name': 'Approve Report',
-      'value': 'Yes'
+      'value': 'No'
     },
     {
       'name': 'Return to Sender',
-      'value': 'No'
+      'value': 'Yes'
     },
   ];
   isReview: boolean;
   isMakeCorrections: boolean;
   isApprove: boolean;
+  workPlanId: any;
 
   constructor(
     private router: Router,
@@ -87,31 +153,38 @@ export class ActivityFormComponent implements OnInit {
         this.taskListService.getTaskRecord(params).subscribe((data) =>{
           this.taskRecord = data;
 
+
           this.isReview = this.taskRecord.taskDefinitionKey=="Conduct_Financial_Review"
           this.isMakeCorrections = (this.taskRecord.taskDefinitionKey=="Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey=="Make_Changes_from_Supervisor")
-          this.isApprove = this.taskRecord.taskDefinitionKey=="Activity_1avlrtp"
+          this.isApprove = this.taskRecord.taskDefinitionKey=="Approve_Activity_Report"
+          // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
+          this.isDisabled = true;
+
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
             this.activity = data;
+            console.log("Logged dta",data);
             this.getActivityDetails(data)
+            this.getBudgetLines();
             this.formGroup = this.formBuilder.group({
-              budgetLine: [this.activity?.budgetLine, [Validators.required]],
-              name: [this.activity?.name, [Validators.required]],
-              startDate:[this.activity?.startDate],
-              endDate:[this.activity?.endDate],
-              designation: [this.activity?.designation, [Validators.required]],
-              location: [this.activity?.location],
-              milestone: [this.activity?.milestone],
-              activityObjectives:[this.activity?.activityObjectives],
-              activityResults:[this.activity?.activityResults],
-              activityUndertaken:[this.activity?.activityUndertaken],
-              challenges:[this.activity?.challenges],
-              lessonsLearned:[this.activity?.lessonsLearned],
-              keyAchievements:[this.activity?.keyAchievements],
+              budgetLine: [{value: this.activity?.budgetLine,disabled: this.isDisabled}, [Validators.required]],
+              name: [{value:this.activity?.name,disabled:this.isDisabled}, [Validators.required]],
+              startDate:[{value:this.activity?.startDate,disabled:this.isDisabled}],
+              endDate:[{value: this.activity?.endDate,disabled:this.isDisabled}],
+              designation: [{value:this.activity?.designation,disabled:this.isDisabled}, [Validators.required]],
+              location: [{value:this.activity?.location,disabled:this.isDisabled}],
+              milestone: [{value:this.activity?.milestone,disabled:this.isDisabled}],
+              activityObjectives:[{value:this.activity?.activityObjectives,disabled:this.isDisabled}],
+              activityResults:[{value:this.activity?.activityResults,disabled:this.isDisabled}],
+              activityUndertaken:[{value:this.activity?.activityUndertaken,disabled:this.isDisabled}],
+              activityName:[{value:this.activity?.activityName,disabled:this.isDisabled}],
+              challenges:[{value:this.activity?.challenges,disabled:this.isDisabled}],
+              lessonsLearned:[{value:this.activity?.lessonsLearned,disabled:this.isDisabled}],
+              keyAchievements:[{value:this.activity?.keyAchievements,disabled:this.isDisabled}],
               peopleReached:[''],
               costAssociated:[''],
               budgetProgress:[''],
-              assignee:[''],
+              assignee:[this.activity?.assignee],
               attachPhoto:[''],
               attachList:[''],
               attachStories:[''],
@@ -265,7 +338,10 @@ export class ActivityFormComponent implements OnInit {
     let values: {[key: string]: string} = {
       budget: this.budget,
       people: this.peopleSurvey,
-      balance: this.totalBalance
+      balance: this.totalBalance,
+      totalApproved: this.getTotalApproved,
+      totalSpent: this.totalSpent,
+      budgetDisburse: this.totalBudgetDisburse
     }
 
     this.submitted = true;
@@ -282,6 +358,7 @@ export class ActivityFormComponent implements OnInit {
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
+      activityName: activityReport.activityName,
       activitiesUndertaken: activityReport.activitiesUndertaken,
       activityObjectives: activityReport.activityObjectives,
       assignee: activityReport.assignee,
@@ -330,4 +407,50 @@ export class ActivityFormComponent implements OnInit {
   onReset() {
     this.formGroup.reset();
   }
+
+  onBudgetLineChange() {
+    let rowNumber = '';
+    rowNumber = this.choosenBudget;
+    if (this.getListBudgetLine.some(x => x.id === rowNumber)) {
+      this.getListBudgetLine.forEach((item) => {
+        console.log("item",item);
+        if (item.id === rowNumber) {
+          this.getTotalApproved = item.approvedAmount;
+          this.totalSpent = item.totalSpent;
+        }
+      });
+    }
+  }
+
+  getBudgetHolderBudgetLines() {
+    let staffId = this.budgetHolderId;
+    console.log(staffId);
+    let newBudgetLine: any = [];
+    let newMilestone: any = [];
+    this.budgetHolder.forEach((d) => {
+      if (d.staffId === staffId) {
+        this.workPlanId = d.id
+        let values = JSON.parse(d.setupValues);
+        this.milestones = JSON.parse(values.indicators);
+        this.budgetLines = values.budget;
+        this.budgetLines.forEach((item) => {
+          newBudgetLine.push(item);
+          this.getListBudgetLine = newBudgetLine;
+        });
+        this.milestones.forEach((mile) => {
+          newMilestone.push(mile);
+          this.getMilestone = newMilestone;
+        });
+      }
+    });
+
+  }
+
+  getBudgetLines() {
+    this.WorkPlanService.getWorkPlan().subscribe((data) => {
+      console.log(data);
+      this.budgetHolder = data;
+    });
+  }
+
 }
