@@ -1,0 +1,33 @@
+<h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-6">
+        <ul style="list-style: none; font-size: 16px">
+          <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo?.organisation}}</b></li>
+          <li>Acronym Name: <b>{{organisationalInfo?.acronym}}</b></li>
+          <li>Type of Organisation: <b>{{organisationalInfo?.organization_type}}</b></li>
+          <li>Legal Status: <b>{{organisationalInfo?.legal_status}}</b></li>
+          <li>Name of Contact Person: <b>{{organisationalInfo?.nameContactPerson}}</b></li>
+          <li>
+            <button class="btn btn-link"><a href="{{organisationalInfo?.letter}}" style="font-size:15px;"
+                                            class="text fas fa-file-download"
+                                            target="_blank" download>&nbsp;&nbsp;Download Letter of
+              interest</a>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-6">
+        <ul style="list-style: none; font-size: 16px">
+          <li>Physical Address: <b>{{organisationalInfo?.physical_address}}</b></li>
+          <li>Postal Address: <b>{{organisationalInfo?.postal_address}}</b></li>
+          <li>Email: <b>{{organisationalInfo?.email}}</b></li>
+          <li>Website: <b>{{organisationalInfo?.website}}</b></li>
+          <li>Country: <b>{{organisationalInfo?.country}}</b></li>
+          <li>City: <b>{{organisationalInfo?.city}}</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

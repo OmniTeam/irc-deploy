@@ -337,19 +337,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   uploadFile(file, id) {
     this.loading = !this.loading;
     console.log(file);
-    this.fileUploadService.upload(file).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-
-          // Short link via api response
-          if (id === "attachment1") this.shortLink1 = event.link;
-          if (id === "attachment2") this.shortLink2 = event.link;
-          if (id === "attachment3") this.shortLink3 = event.link;
-
+    this.fileUploadService.upload(file, 'reporting-'+this.taskRecord.taskDefinitionKey).subscribe((data) => {
+          if (id === "attachment1") this.shortLink1 = data.path;
+          if (id === "attachment2") this.shortLink2 = data.path;
+          if (id === "attachment3") this.shortLink3 = data.path;
           console.log("shortlink", this.shortLink1);
-
-          this.loading = false; // Flag variable
-        }
+          this.loading = false;
       }
     );
   }
@@ -516,9 +509,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }
 
     let attachments = [];
-    attachments.push({key: 'attachment1', value: this.attachment1});
-    attachments.push({key: 'attachment2', value: this.attachment2});
-    attachments.push({key: 'attachment3', value: this.attachment3});
+    attachments.push({key: 'attachment1', value: this.shortLink1});
+    attachments.push({key: 'attachment2', value: this.shortLink2});
+    attachments.push({key: 'attachment3', value: this.shortLink3});
 
     attachments.forEach((attachment) => {
       if (attachment != null) {

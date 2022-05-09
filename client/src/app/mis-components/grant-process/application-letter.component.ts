@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
+import {SampleData} from "../../helpers/sample-data";
 
 @Component({
   selector: 'application-letter',
@@ -9,6 +10,8 @@ import {CountriesService} from "../../services/countries.service";
 })
 
 export class ApplicationLetterComponent implements OnInit {
+  @Input() isReadOnly:boolean;
+  @Output() readOnlyChanged: EventEmitter<boolean> = new EventEmitter();
 
   formGroup: FormGroup;
   submitted = false;
@@ -22,7 +25,7 @@ export class ApplicationLetterComponent implements OnInit {
     {id:"2", name:"Youth Capacity Development Program"},
     {id:"3", name:"Prevention of Violence Against Children and Adolescents"},
   ] ;
-  radioEndOfPartnership: any;
+  private letterOfInterest: any;
 
   constructor(
     private countriesService: CountriesService,
@@ -34,26 +37,33 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //this.readOnlyChanged.emit(false);
     this.countries = this.countriesService.getListOfCountries();
 
-    this.formGroup = this.formBuilder.group({
-      program: ['', [Validators.required]],
-      organisation: ['', [Validators.required]],
-      acronym: [null],
-      organization_type: ['', [Validators.required]],
-      legal_status: ['', [Validators.required]],
-      contact_person: ['', [Validators.required]],
-      address_contact_person: ['', [Validators.required]],
-      email_address: ['', [Validators.required]],
-      contact_person_number: ['', [Validators.required]],
-      physical_address: ['', [Validators.required]],
-      postal_address: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      website: [null],
-      country: [null],
-      city: [null],
-      attachment: [null],
-    });
+    this.letterOfInterest = SampleData.letterOfInterest;
+
+    if(this.letterOfInterest!=null&& this.isReadOnly) {
+      this.formGroup = this.formBuilder.group(this.letterOfInterest)
+    } else {
+      this.formGroup = this.formBuilder.group({
+        program: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        organisation: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        acronym: [{value: '', disabled: this.isReadOnly}],
+        organization_type: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        legal_status: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        contact_person: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        address_contact_person: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        email_address: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        contact_person_number: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        physical_address: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        postal_address: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        email: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        website: [{value: '', disabled: this.isReadOnly}],
+        country: [{value: '', disabled: this.isReadOnly}],
+        city: [{value: '', disabled: this.isReadOnly}],
+        attachment: [{value: '', disabled: this.isReadOnly}],
+      });
+    }
   }
 
   submitLetter() {
@@ -63,6 +73,7 @@ export class ApplicationLetterComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
+    this.letterOfInterest = formData;
     console.log('formData', formData)
   }
 

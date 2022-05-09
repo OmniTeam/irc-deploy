@@ -55,6 +55,7 @@ class UrlMappings {
         get "/$controller/exportEntityData(.$format)?"(action:"exportEntityData")
         get "/$controller/exportZippedFormData(.$format)?"(action:"getExportedZippedFormData")
         get "/$controller/getUserRoles(.$format)?"(action:"getUserRoles")
+        post "/$controller/uploadFile(.$format)?"(action:"uploadFile")
 
 
         group "/odxRest/", {
