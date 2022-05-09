@@ -55,12 +55,12 @@ export class GrantProcessComponent implements OnInit {
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    this.isSubmitLetterOfInterest = false;
+    this.isSubmitLetterOfInterest = true;
     this.isReviewLetterOfInterest = false;
     this.isPlanningLearningApplication = false;
     this.isReviewLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
-    this.isProvidePlanningLearningGrant = true;
+    this.isProvidePlanningLearningGrant = false;
   }
 
   viewComments(): void {
