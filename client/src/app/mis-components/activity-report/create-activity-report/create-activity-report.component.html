@@ -27,7 +27,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Budget Holder
+                      Responsible Person
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
@@ -61,6 +61,31 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Designation
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Designation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="designation"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -93,11 +118,43 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Designation
-                      <span class="required-indicator">*</span>
+                      Select Related Milestone
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <input
+                          class="form-control"
+                          placeholder="Select Milestone"
+                          type="text"
+                          style="padding-left: 10px;"
+                          formControlName="milestone"
+                        >
+<!--                        <ng-select class="form-control form-control-sm"-->
+<!--                                   aria-controls="datatable"-->
+<!--                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                   [multiple]="false"-->
+<!--                                   placeholder="Select Milestone"-->
+<!--                                   formControlName="milestone"-->
+<!--                                   [clearable]="true">-->
+<!--                          <ng-option [value]="this.singleMilestone">-->
+<!--                            {{this.singleMilestone}}-->
+<!--                          </ng-option>-->
+<!--                        </ng-select>-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Activity Name
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -106,17 +163,20 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Designation"
+                            placeholder="Activity Name"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="designation"
+                            formControlName="activityName"
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div class="form-row">
+                  <!--TODO Add restriction on dates-->
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Activity Report Start Date
@@ -167,31 +227,6 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Select Related Milestone
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <ng-select class="form-control form-control-sm"
-                                   aria-controls="datatable"
-                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   placeholder="Select Milestone"
-                                   formControlName="milestone"
-                                   [searchable]="true"
-                                   [clearable]="true">
-                          <ng-option [value]="item.name" *ngFor="let item of this.getMilestone">
-                            {{item.name}}
-                          </ng-option>
-                        </ng-select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
                       Location
                     </label>
                   </div>
@@ -199,18 +234,25 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Location"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="location"
-                          >
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Select Location"
+                                     formControlName="location"
+                                     [searchable]="true"
+                                     [clearable]="true">
+                            <ng-option [value]="item.name" *ngFor="let item of location_id">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -484,7 +526,7 @@
                     <thead style="background-color: #f6f9fc;">
                     <tr>
                       <th class='text-center'>Budget Item</th>
-                      <th class='text-center'>Planned expenses</th>
+                      <th class='text-center'>Spending Plan</th>
 <!--                      <th class='text-center'>Quarterly Sending Plan</th>-->
                       <th class='text-center'>Actual expense</th>
                       <th class='text-center'>Action</th>
@@ -541,7 +583,7 @@
                   <table class="table table-striped table-bordered hover" id="disbursement_plan">
                     <tbody>
                     <tr>
-                      <td class='text-center'>Budget</td>
+                      <td class='text-center'>Budget Allocated</td>
                       <td class='text-center'>{{this.getTotalApproved | number}}</td>
                     </tr><tr>
                       <td class='text-center'>Expenses to date</td>
@@ -625,7 +667,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Attachment 3: Stories
+                      Attachment 3: Narrative Report
 
                     </label>
                   </div>

@@ -18,7 +18,7 @@
     <div class=" col-lg-10 card-wrapper">
       <div class="card">
         <div class="card-header" style="padding: 10px">
-          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Activity Report</h3>
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Action Activity Report</h3>
         </div>
         <div class="card-body" style="font-size: 0.9rem;">
           <form [formGroup]="formGroup" (ngSubmit)="createActivityReport()" *ngIf="formGroup">
@@ -27,7 +27,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Budget Holder
+                      Responsible Person
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
@@ -39,16 +39,29 @@
                                      aria-controls="datatable"
                                      style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Search Staff.."
+                                     placeholder="Select Milestone"
                                      formControlName="name"
-                                     [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
                                      [searchable]="true"
-                                     [readonly]="true"
-                                     [clearable]="false">
-                            <ng-option [value]="item.staffId" *ngFor="let item of budgetHolder">
-                              {{item.partner}}
+                                     [clearable]="true">
+                            <ng-option [value]="item.name" *ngFor="let item of this.budgetHolder">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
+<!--                          <ng-select class="form-control form-control-sm"-->
+<!--                                     aria-controls="datatable"-->
+<!--                                     style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                     [multiple]="false"-->
+<!--                                     placeholder="Search Staff.."-->
+<!--                                     formControlName="name"-->
+<!--                                     [ngClass]="{ 'is-invalid': submitted && f.name.errors }"-->
+
+<!--                                     [(ngModel)]="budgetHolderId"-->
+<!--                                     (ngModelChange)="getBudgetHolderBudgetLines()"-->
+<!--                                     [clearable]="true">-->
+<!--&lt;!&ndash;                            <ng-option [value]="item.staffId" *ngFor="let item of budgetHolder">&ndash;&gt;-->
+<!--&lt;!&ndash;                              {{item.staff}}&ndash;&gt;-->
+<!--&lt;!&ndash;                            </ng-option>&ndash;&gt;-->
+<!--                          </ng-select>-->
                           <div *ngIf="submitted && f.name.errors"
                                class="invalid-feedback">
                             <div *ngIf="f.name.errors.required">Staff is
@@ -60,37 +73,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Budget Line
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <ng-select class="form-control form-control-sm"
-                                   aria-controls="datatable"
-                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   placeholder="Select Budget Line"
-                                   formControlName="budgetLine"
-                                   [ngClass]="{ 'is-invalid': submitted && f.budgetLine.errors }"
-                                   [searchable]="true"
-                                   [readonly]="true"
-                                   [clearable]="false">
-                          <ng-option [value]="item.id" *ngFor="let item of getListBudgetLine">
-                            {{item.budgetLine}}
-                          </ng-option>
-                        </ng-select>
-                        <div *ngIf="submitted && f.budgetLine.errors" class="invalid-feedback">
-                          <div *ngIf="f.budgetLine.errors.required">Budget Line is required</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -108,15 +91,110 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="designation"
-                            [readOnly]="true"
-
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
                 <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Budget Line
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Select Milestone"
+                                   formControlName="budgetLine"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.name" *ngFor="let item of this.getListBudgetLine">
+                            {{item.budgetLine}}
+                          </ng-option>
+                        </ng-select>
+<!--                        <ng-select class="form-control form-control-sm"-->
+<!--                                   aria-controls="datatable"-->
+<!--                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                   [multiple]="false"-->
+<!--                                   placeholder="Select Budget Line"-->
+<!--                                   formControlName="budgetLine"-->
+<!--                                   [ngClass]="{ 'is-invalid': submitted && f.budgetLine.errors }"-->
+<!--                                   [searchable]="true"-->
+<!--                                   [(ngModel)]="choosenBudget"-->
+<!--                                   (ngModelChange)="onBudgetLineChange()"-->
+<!--                                   [clearable]="true">-->
+<!--                          <ng-option [value]="item.id" *ngFor="let item of getListBudgetLine">-->
+<!--                            {{item.budgetLine}}-->
+<!--                          </ng-option>-->
+<!--                        </ng-select>-->
+                        <div *ngIf="submitted && f.budgetLine.errors" class="invalid-feedback">
+                          <div *ngIf="f.budgetLine.errors.required">Budget Line is required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Select Related Milestone
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Select Milestone"
+                                   formControlName="milestone"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.name" *ngFor="let item of this.getMilestone">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Activity Name
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Activity Name"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="activityName"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="form-row">
+                  <!--TODO Add restriction on dates-->
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Activity Report Start Date
@@ -133,7 +211,6 @@
                             type="date"
                             style="padding-left: 10px;"
                             formControlName="startDate"
-                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -158,7 +235,6 @@
                             type="date"
                             style="padding-left: 10px;"
                             formControlName="endDate"
-                            [readOnly]="true"
                           >
                         </div>
                       </div>
@@ -169,32 +245,6 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Select Related Milestone
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <ng-select class="form-control form-control-sm"
-                                   aria-controls="datatable"
-                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   placeholder="Select Milestone"
-                                   formControlName="milestone"
-                                   [searchable]="true"
-                                   [readonly]="true"
-                                   [clearable]="false">
-                          <ng-option [value]="item.name" *ngFor="let item of this.getMilestone">
-                            {{item.name}}
-                          </ng-option>
-                        </ng-select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
                       Location
                     </label>
                   </div>
@@ -202,19 +252,25 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Location"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="location"
-                            [readOnly]="true"
-                          >
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Select Location"
+                                     formControlName="location"
+                                     [searchable]="true"
+                                     [clearable]="true">
+                            <ng-option [value]="item.name" *ngFor="let item of location_id">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -227,11 +283,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="Activity Objective"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="activityObjectives"
-                            [readOnly]="true"
                           ></textarea>
                         </div>
                       </div>
@@ -250,11 +305,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="Achieved Results"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="activityResults"
-                            [readOnly]="true"
                           ></textarea>
                         </div>
                       </div>
@@ -274,11 +328,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="Key Achievements"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="activityUndertaken"
-                            [readOnly]="true"
                           ></textarea>
                         </div>
                       </div>
@@ -297,11 +350,10 @@
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
-                            placeholder=""
+                            placeholder="challenges"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="challenges"
-                            [readOnly]="true"
                           ></textarea>
                         </div>
                       </div>
@@ -324,7 +376,6 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="lessonsLearned"
-                            [readOnly]="true"
                           ></textarea>
                         </div>
                       </div>
@@ -347,7 +398,6 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="keyAchievements"
-                            [readOnly]="true"
                           ></textarea>
                         </div>
                       </div>
@@ -578,7 +628,7 @@
                         <div class=" input-group input-group-merge">
                           <input class="form-control" id="attachment1"
                                  placeholder="Download document"
-                                 formControlName="keyAchievements"
+                                 formControlName="attachPhoto"
                                  type="file" />
                         </div>
                       </div>
@@ -609,7 +659,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Attachment 3: Stories
+                      Attachment 3: Narrative Report
 
                     </label>
                   </div>
@@ -626,7 +676,7 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="isReview" class="form-row">
+                <div *ngIf="isApprove" class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Action Required
@@ -666,7 +716,7 @@
                             placeholder="Comments"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="lessonsLearned"
+                            formControlName="comments"
 
                           ></textarea>
                           </div>
@@ -707,7 +757,7 @@
 
                 <button class=" btn btn-danger" type="reset" (click)="onReset()">Cancel</button>
 <!--                <button class=" btn btn-warning" type="button" (click)="saveReport()">Save For Later</button>-->
-                <button class=" btn btn-success" type="submit">Submit Review</button>
+                <button class=" btn btn-success" type="submit">Submit</button>
               </div>
             </div>
           </form>

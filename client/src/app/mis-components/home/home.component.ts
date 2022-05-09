@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
         data.forEach((item) => {
           let staff = this.getStaff(item.partnerId);
           results.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "QUATERLY_REPORTING") results1.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "PROGRESS_REPORTING") results1.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
           if (item.processDefKey == "IRC_REFERRAL") results2.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
           if (item.processDefKey == "ACTIVITY_REPORTING") results3.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
           if (item.processDefKey == "IRC_FEEDBACK") results4.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
@@ -187,7 +187,7 @@ export class HomeComponent implements OnInit {
       case 'IRC_REFERRAL':
         this.router.navigate(['/action-referral/'+ row.id]);
         break;
-      case 'QUATERLY_REPORTING':
+      case 'PROGRESS_REPORTING':
         this.router.navigate(['/reportForm/'+ row.id +'/'+false]);
         break;
       case 'IRC_FEEDBACK':

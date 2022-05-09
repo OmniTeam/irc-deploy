@@ -15,6 +15,7 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
   private readonly USERNAME = 'USERNAME';
   private readonly ROLES: any = [];
+  private readonly EMAIL = 'EMAIL';
   private loggedUser: string;
 
   constructor(private http: HttpClient) {
@@ -71,10 +72,12 @@ export class AuthService {
   }
 
   private storeTokens(user: User) {
+    console.log(user);
     localStorage.setItem(this.JWT_TOKEN, user.access_token);
     localStorage.setItem(this.REFRESH_TOKEN, user.refresh_token);
     localStorage.setItem(this.USERNAME, this.loggedUser);
     localStorage.setItem(this.ROLES, user.roles);
+    localStorage.setItem(this.EMAIL,user.email);
   }
 
   private removeTokens() {

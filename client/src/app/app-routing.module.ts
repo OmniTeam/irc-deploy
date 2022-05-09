@@ -508,10 +508,16 @@ const routes: Routes = [
         },
         loadChildren: () => import('./mis-components/data-views/data-view-table/data-view-table.module').then(m => m.DataViewTableModule)
       },
+      { path: 'edit-activity-report',data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        }, loadChildren: () => import('./mis-components/activity-report/edit-activity-report/edit-activity-report.module').then(m => m.EditActivityReportModule) },
+      { path: 'activity-form', loadChildren: () => import('./mis-components/activity-report/activity-form/activity-form.module').then(m => m.ActivityFormModule) },
+      { path: 'feedback-edit/:id',data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        }, loadChildren: () => import('./mis-components/feedback/feedback-edit/feedback-edit.module').then(m => m.FeedbackEditModule) },
     ]
   },
-  { path: 'edit-activity-report', loadChildren: () => import('./mis-components/activity-report/edit-activity-report/edit-activity-report.module').then(m => m.EditActivityReportModule) },
-  { path: 'activity-form', loadChildren: () => import('./mis-components/activity-report/activity-form/activity-form.module').then(m => m.ActivityFormModule) },
+
   {
     path: '**',
     redirectTo: 'dashboard'
