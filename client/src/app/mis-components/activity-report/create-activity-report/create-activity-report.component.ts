@@ -125,6 +125,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
    startCycle: string;
    responsiblePerson: any;
    budgetLineName: any;
+   singleMilestone: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -171,6 +172,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       this.staff = data;
     });
   }
+
 
   get f() {
     return this.formGroup.controls;
@@ -505,7 +507,8 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
         this.milestones.forEach((mile) => {
           newMilestone.push(mile);
           this.getMilestone = newMilestone;
-          console.log(this.getMilestone);
+          this.singleMilestone = this.getMilestone[0].name
+          this.formGroup.get('milestone').setValue(this.singleMilestone)
         });
       }
     });
