@@ -375,19 +375,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   uploadFile(file, id) {
     this.loading = !this.loading;
     console.log(file);
-    this.fileUploadService.upload(file).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-
-          // Short link via api response
-          if (id === "attachment1") this.shortLink1 = event.link;
-          if (id === "attachment2") this.shortLink2 = event.link;
-          if (id === "attachment3") this.shortLink3 = event.link;
-
-          console.log("shortlink", this.shortLink1);
-
-          this.loading = false; // Flag variable
-        }
+    this.fileUploadService.upload(file, 'reporting-'+this.taskRecord.taskDefinitionKey).subscribe((data) => {
+        if (id === "attachment1") this.shortLink1 = data.path;
+        if (id === "attachment2") this.shortLink2 = data.path;
+        if (id === "attachment3") this.shortLink3 = data.path;
+        console.log("shortlink", this.shortLink1);
+        this.loading = false;
       }
     );
   }
