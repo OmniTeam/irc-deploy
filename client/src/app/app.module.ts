@@ -16,13 +16,13 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {TokenInterceptor} from "./helpers/token.interceptor";
 import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
 import {DatePipe} from "@angular/common";
-import { SafeUrlPipe } from './pipes/safe-url.pipe';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    SafeUrlPipe
+
   ],
   imports: [
     BrowserAnimationsModule,
@@ -39,8 +39,8 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
     NgxDatatableModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    fakeBackendProvider,DatePipe
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    fakeBackendProvider, DatePipe
   ],
   bootstrap: [AppComponent]
 })

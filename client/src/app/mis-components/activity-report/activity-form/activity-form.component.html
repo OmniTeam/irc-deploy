@@ -633,7 +633,7 @@
                             placeholder="Upload document"
                             (change)="handleFileInput($event)"
                             type="file" />
-                          <button *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachPhoto.value)" class="btn btn-link">
+                          <button  *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachPhoto.value)" class="btn btn-link">
                             <a href="{{formGroup.controls.attachPhoto.value}}"
                                style="font-size:15px;"
                                class="text fas fa-file-download" target="_blank"
@@ -661,8 +661,8 @@
                                  id="attachList"
                                  (change)="handleFileInput($event)"
                                  type="file" />
-                          <button *ngIf="isDisabled" class="btn btn-link">
-                            <a [href]="downloadFile(formGroup.controls.attachList.value)"
+                          <button  *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachList.value)" class="btn btn-link">
+                            <a [href]="downloadFile(formGroup.controls.attachList.value) | safeUrl"
                                style="font-size:15px;"
                                class="text fas fa-file-download" target="_blank"
                                download> {{formGroup.controls.attachList.value}}</a>
@@ -685,15 +685,15 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <input *ngIf="!isDisabled" class="form-control"
-                                 id="attachStories"
+                                 id="attachStory"
                                  placeholder="Download document"
                                  (change)="handleFileInput($event)"
                                  type="file" />
-                          <button *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachStories.value)" class="btn btn-link">
-                            <a href="{{formGroup.controls.attachStories.value}}"
+                          <button *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachStory.value)" class="btn btn-link">
+                            <a href="{{formGroup.controls.attachStory.value}}"
                                style="font-size:15px;"
                                class="text fas fa-file-download" target="_blank"
-                               download> {{formGroup.controls.attachStories.value}}</a>
+                               download> {{formGroup.controls.attachStory.value}}</a>
                           </button>
 
                         </div>

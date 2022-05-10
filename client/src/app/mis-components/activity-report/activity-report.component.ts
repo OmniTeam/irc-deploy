@@ -73,7 +73,13 @@ export class ActivityReportComponent implements OnInit {
 
   editActivityReport(row) {
     const id = row.id;
-    this.router.navigate(['/activityReport/edit/' + id]);
+    console.log("Row cjjjd",row);
+    if(row.id == 'Pending') {
+      this.router.navigate(['/activityReport/edit/' + id]);
+    } else {
+      this.alertService.error("Cannot Edit Running Report")
+    }
+
   }
 
   deleteActivityReport(row) {

@@ -195,7 +195,7 @@ export class ActivityFormComponent implements OnInit {
               assignee:[this.activity?.assignee],
               attachPhoto:[{value:this.activity?.attachPhoto,disabled:this.isDisabled}],
               attachList:[{value:this.activity?.attachList,disabled:this.isDisabled}],
-              attachStories:[{value:this.activity?.attachStories,disabled:this.isDisabled}],
+              attachStory:[{value:this.activity?.attachStory,disabled:this.isDisabled}],
               comments:[{value:this.activity?.comments,disabled: !this.isDisabled}],
               actionRequired:[''],
               status:['']
@@ -372,7 +372,7 @@ export class ActivityFormComponent implements OnInit {
       assignee: activityReport.assignee,
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
-      attachStories: activityReport.attachStories,
+      attachStory: activityReport.attachStory,
       budgetLine: activityReport.budgetLine,
       comments: activityReport.comments,
       budgetProgress: activityReport.budgetProgress,
@@ -474,7 +474,7 @@ export class ActivityFormComponent implements OnInit {
     this.fileUploadService.upload(file, 'activity-report').subscribe((data) => {
         if (id === "attachPhoto") this.formGroup.patchValue({attachPhoto: data.path});
         if (id === "attachList") this.formGroup.patchValue({attachList: data.path});
-        if (id === "attachStories") this.formGroup.patchValue({attachStories: data.path});
+        if (id === "attachStory") this.formGroup.patchValue({attachStory: data.path});
         this.loading = false;
       }, error => {
       console.log(error);}
@@ -482,8 +482,7 @@ export class ActivityFormComponent implements OnInit {
   }
 
   downloadFile(path){
-    return '';
-
+    return this.fileUploadService.downloadFile(path);
   }
 
 }
