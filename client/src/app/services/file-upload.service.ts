@@ -7,7 +7,7 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class FileUploadService {
-  baseApiUrl = environment.serverUrl+'/fileManager/uploadFile';
+  baseApiUrl = environment.serverUrl+'/fileManager';
 
   constructor(private http: HttpClient) {}
 
@@ -15,11 +15,12 @@ export class FileUploadService {
     const formData = new FormData();
     formData.append("file", file, file.name);
     if(folder!=undefined) formData.append("folder", folder);
-    return this.http.post(this.baseApiUrl, formData)
+    return this.http.post(this.baseApiUrl+'/uploadFile', formData)
   }
 
-  downloadFile(path){
-    console.log(environment.uploadFolder);
-    return environment.uploadFolder+path
+  downloadFile(path):Observable<any> {
+    const formData = new FormData();
+    formData.append("path", path);
+    return this.http.post(this.baseApiUrl+'/downloadFile', formData)
   }
 }

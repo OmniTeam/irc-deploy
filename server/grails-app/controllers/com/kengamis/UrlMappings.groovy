@@ -61,6 +61,7 @@ class UrlMappings {
         get "/$controller/getUsersWithoutWorkPlan(.$format)?"(action:"getUsersWithoutWorkPlan")
         get "/$controller/getActivityReportRecord(.$format)?"(action:"getActivityReportRecord")
         post "/$controller/uploadFile(.$format)?"(action:"uploadFile")
+        post "/$controller/downloadFile(.$format)?"(action:"downloadFile")
 
         group "/odxRest/", {
             'getEntityData'(controller: 'kengaMobileRest', namespace: 'rest', action: 'getEntityData')

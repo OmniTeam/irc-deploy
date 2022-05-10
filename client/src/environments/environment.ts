@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://localhost:8082/irc',
-  uploadFolder : "D:/uploads/"
+  serverUrl: 'http://localhost:8082/irc'
   // serverUrl: 'http://157.230.227.3:8082/irc'
 };
 

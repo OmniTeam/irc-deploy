@@ -1,7 +1,5 @@
 package com.kengamis
 
-import org.springframework.web.multipart.MultipartFile
-
 class FileManagerController {
     static responseFormats = ['json', 'xml']
 
@@ -33,6 +31,24 @@ class FileManagerController {
         println "generatedPath $generatedPath"
 
         respond path: generatedPath
+    }
+
+    def downloadFile() {
+        def path = request.getParameter('path')
+        if (path) {
+            def uploadPath = grailsApplication.config.uploadFolder as String
+            def file = new File(uploadPath + path)
+            if (file.exists()) {
+                response.setHeader("Content-Disposition", "inline; filename=\"${file.name}\"")
+                response.setHeader("Content-Type", getMimeType(file))
+                response.outputStream << file.bytes
+            }
+        }
+    }
+
+    def getMimeType(def fileName) {
+        def matcher = (fileName =~ /.*\.(.*)$/)
+        matcher[0][1] as String
     }
 
 }
