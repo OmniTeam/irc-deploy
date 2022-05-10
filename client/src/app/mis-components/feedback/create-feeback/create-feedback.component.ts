@@ -389,6 +389,7 @@ export class CreateFeedbackComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
+    if(this.underReview != undefined) this.formGroup.get('assignee').setValue(this.underReview)
 
     //create a referral
     let submitData: {[key:string]: string} = {
@@ -408,13 +409,13 @@ export class CreateFeedbackComponent implements OnInit {
     }
     //create feedback
     let statusSave:string = formData.currentStatusOfFeedback
-    console.log("ufdufudf",statusSave);
+
     let newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: formData.nameOfRegister,
       staffDesignation: formData.staffDesignation,
       typeOfFeedback: formData.typeOfFeedback,
-      status: formData.currentStatusOfFeedback,
+      status: 'Pending',
       location: formData.location,
       projectSector: formData.projectSector,
       subSector: formData.subSector,
@@ -425,7 +426,7 @@ export class CreateFeedbackComponent implements OnInit {
       preferredChannel: formData.preferredChannel,
       phoneNumber: formData.phoneNumber,
       email: formData.email,
-      age: formData.age,
+      age: (formData.age).toString(),
       serialNumber: formData.serialNumber,
       gender: formData.gender,
       project: formData.project,
@@ -553,6 +554,7 @@ export class CreateFeedbackComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
+    if(this.underReview != undefined) this.formGroup.get('assignee').setValue(this.underReview)
 
     let submitData: {[key:string]: string} = {
       dateOfReferral: formData.dateFeedbackReceived,
@@ -591,7 +593,7 @@ export class CreateFeedbackComponent implements OnInit {
       serialNumber: formData.serialNumber,
       gender: formData.gender,
       project: formData.project,
-      assignee: formData.assignee || this.underReview,
+      assignee: formData.assignee,
       feedbackDetails: formData.feedbackDetails,
       nameOfReferringOfficer: formData.nameOfReferringOfficer,
       reasonForReferral: formData.reasonForReferral,
@@ -614,7 +616,7 @@ export class CreateFeedbackComponent implements OnInit {
       responseSummary: formData.responseSummary,
       supervisor: formData.supervisor,
       dataEntryFocalPoint: formData.dataEntryFocalPoint,
-      status: statusSave
+      status: 'Saved'
     }
     console.log(formData, "submitted data")
     if(this.referralDecisionPoint == 'Referral'){

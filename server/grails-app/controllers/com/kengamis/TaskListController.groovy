@@ -56,7 +56,7 @@ class TaskListController {
             def activityReport = ActivityReport.findById(activityId)
             if (activityId != null && activityReport != null) {
                 assignee << activityReport.assignee
-                taskCase = activityReport.milestone
+                taskCase = activityReport.activityName
             }
 
             def feedback = Feedback.findById(feedbackId)

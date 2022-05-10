@@ -227,9 +227,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
-      this.alertService.success(`${activityReport.name} has been successfully created `);
+      this.alertService.success(`${this.budgetLineName} has been successfully created `);
     }, error => {
-      this.alertService.error(`${activityReport.name} could not be created`);
+      this.alertService.error(`${this.budgetLineName} could not be created`);
     });
 
   }
@@ -562,9 +562,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
-      this.alertService.success(`${activityReport.name} has been successfully created `);
+      this.alertService.success(`${this.budgetLineName} has been successfully saved `);
     }, error => {
-      this.alertService.error(`${activityReport.name} could not be created`);
+      this.alertService.error(`${this.budgetLineName} could not be saved`);
     });
 
   }

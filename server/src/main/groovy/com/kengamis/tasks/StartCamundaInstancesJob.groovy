@@ -148,7 +148,7 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static void ircFeedbackJob(){
-        Feedback.findAllByStatus("Pending").each { feed ->
+        Feedback.findAllByCurrentStatusOfFeedback("Forwarded For Action").each { feed ->
             boolean startInstance = true
 
             if (startInstance) {
@@ -166,7 +166,7 @@ class StartCamundaInstancesJob extends Script {
                     if (started) {
                         print "================ Yes Here We Go!!! ================"
                         println("IRC PROCESS STARTED")
-                        feed.status = "Running"
+                        feed.currentStatusOfFeedback = "Running"
                         feed.save()
                     }
 
