@@ -2254,4 +2254,12 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "status", tableName: "feedback")
     }
 
+    changeSet(author: "DELL (generated)", id: "1652168594469-123") {
+        addColumn(tableName: "activity_report") {
+            column(name: "comments", type: "text"){
+                constraints(nullable: "true")
+            }
+        }
+    }
+
 }

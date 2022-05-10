@@ -378,28 +378,19 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
-    if (event.target.id === 'attachment1') {
-      this.attachment1 = files.item(0).name;
-    }
-    if (event.target.id === 'attachment2') {
-      this.attachment2 = files.item(0).name;
-    }
-    if (event.target.id === 'attachment3') {
-      this.attachment3 = files.item(0).name;
-    }
     this.uploadFile(files.item(0), event.target.id);
   }
 
   uploadFile(file, id) {
     this.loading = !this.loading;
     console.log(file);
-    this.fileUploadService.upload(file).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-
-          this.loading = false; // Flag variable
-        }
-      }
+    this.fileUploadService.upload(file, 'activity-report').subscribe((data) => {
+        if (id === "attachPhoto") this.formGroup.patchValue({attachPhoto: data.path});
+        if (id === "attachList") this.formGroup.patchValue({attachList: data.path});
+        if (id === "attachStories") this.formGroup.patchValue({attachStories: data.path});
+        this.loading = false;
+      }, error => {
+        console.log(error);}
     );
   }
 

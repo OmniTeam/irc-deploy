@@ -626,10 +626,19 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input class="form-control" id="attachment1"
-                                 placeholder="Download document"
-                                 formControlName="attachPhoto"
-                                 type="file" />
+                          <input
+                            *ngIf="!isDisabled"
+                            class="form-control"
+                            id="attachPhoto"
+                            placeholder="Upload document"
+                            (change)="handleFileInput($event)"
+                            type="file" />
+                          <button *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachPhoto.value)" class="btn btn-link">
+                            <a href="{{formGroup.controls.attachPhoto.value}}"
+                               style="font-size:15px;"
+                               class="text fas fa-file-download" target="_blank"
+                               download> {{formGroup.controls.attachPhoto.value}}</a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -647,10 +656,18 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input class="form-control" id="attachment2"
+                          <input *ngIf="!isDisabled" class="form-control"
                                  placeholder="Download document"
-                                 formControlName="attachList"
+                                 id="attachList"
+                                 (change)="handleFileInput($event)"
                                  type="file" />
+                          <button *ngIf="isDisabled" class="btn btn-link">
+                            <a [href]="downloadFile(formGroup.controls.attachList.value)"
+                               style="font-size:15px;"
+                               class="text fas fa-file-download" target="_blank"
+                               download> {{formGroup.controls.attachList.value}}</a>
+                          </button>
+
                         </div>
                       </div>
                     </div>
@@ -667,10 +684,18 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input class="form-control" id="attachment3"
+                          <input *ngIf="!isDisabled" class="form-control"
+                                 id="attachStories"
                                  placeholder="Download document"
-                                 formControlName="attachStories"
+                                 (change)="handleFileInput($event)"
                                  type="file" />
+                          <button *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachStories.value)" class="btn btn-link">
+                            <a href="{{formGroup.controls.attachStories.value}}"
+                               style="font-size:15px;"
+                               class="text fas fa-file-download" target="_blank"
+                               download> {{formGroup.controls.attachStories.value}}</a>
+                          </button>
+
                         </div>
                       </div>
                     </div>

@@ -37,6 +37,7 @@ export class ActivityFormComponent implements OnInit {
   totalBudgetDisburse: any;
   budgetLines: any;
   totalSpent: any;
+  loading: boolean = false;
   getTotalApproved: any;
   getListBudgetLine = [];
   getMilestone = [];
@@ -47,6 +48,13 @@ export class ActivityFormComponent implements OnInit {
   peopleSurvey:any = {};
   formGroup: FormGroup
   isDisabled: boolean
+
+  shortLink1: string = "";
+  shortLink2: string = "";
+  shortLink3: string = "";
+  attachment1: string;
+  attachment2: string;
+  attachment3: string;
 
   location_id = [
     {
@@ -185,10 +193,10 @@ export class ActivityFormComponent implements OnInit {
               costAssociated:[''],
               budgetProgress:[''],
               assignee:[this.activity?.assignee],
-              attachPhoto:[''],
-              attachList:[''],
-              attachStories:[''],
-              comments:[''],
+              attachPhoto:[{value:this.activity?.attachPhoto,disabled:this.isDisabled}],
+              attachList:[{value:this.activity?.attachList,disabled:this.isDisabled}],
+              attachStories:[{value:this.activity?.attachStories,disabled:this.isDisabled}],
+              comments:[{value:this.activity?.comments,disabled: !this.isDisabled}],
               actionRequired:[''],
               status:['']
             });
@@ -366,6 +374,7 @@ export class ActivityFormComponent implements OnInit {
       attachPhoto: activityReport.attachPhoto,
       attachStories: activityReport.attachStories,
       budgetLine: activityReport.budgetLine,
+      comments: activityReport.comments,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
       designation: activityReport.designation,
@@ -451,6 +460,30 @@ export class ActivityFormComponent implements OnInit {
       console.log(data);
       this.budgetHolder = data;
     });
+  }
+
+/*attachments*/
+  handleFileInput(event) {
+    let files: FileList = event.target.files;
+    this.uploadFile(files.item(0), event.target.id);
+  }
+
+  uploadFile(file, id) {
+    this.loading = !this.loading;
+    console.log(file);
+    this.fileUploadService.upload(file, 'activity-report').subscribe((data) => {
+        if (id === "attachPhoto") this.formGroup.patchValue({attachPhoto: data.path});
+        if (id === "attachList") this.formGroup.patchValue({attachList: data.path});
+        if (id === "attachStories") this.formGroup.patchValue({attachStories: data.path});
+        this.loading = false;
+      }, error => {
+      console.log(error);}
+    );
+  }
+
+  downloadFile(path){
+    return '';
+
   }
 
 }
