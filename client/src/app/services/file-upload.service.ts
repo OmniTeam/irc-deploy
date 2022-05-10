@@ -18,9 +18,9 @@ export class FileUploadService {
     return this.http.post(this.baseApiUrl+'/uploadFile', formData)
   }
 
-  downloadFile(path):Observable<any> {
+  downloadFile(path):Observable<Blob> {
     const formData = new FormData();
     formData.append("path", path);
-    return this.http.post(this.baseApiUrl+'/downloadFile', formData)
+    return this.http.post(this.baseApiUrl+'/downloadFile', formData, { responseType: 'blob' })
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Location} from "@angular/common";
 import {ReportFormService} from "../../../services/report-form.service";
@@ -12,7 +12,6 @@ import {AuthService} from "../../../services/auth.service";
 import {HttpParams} from "@angular/common/http";
 import DevExpress from "devextreme";
 import {v4 as uuid} from 'uuid';
-import data = DevExpress.data;
 import {ActivityReportService} from "../../../services/activity-report.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CellEdit} from "../../../helpers/cell-edit";
@@ -30,7 +29,7 @@ export class ActivityFormComponent implements OnInit {
   staff: any;
   budget: any = [];
   totalApprovedAmount: string;
-  totalBalance:any;
+  totalBalance: any;
   totalNationalM: string;
   choosenBudget: string;
   budgetHolderId: string
@@ -45,7 +44,7 @@ export class ActivityFormComponent implements OnInit {
   budgetHolder: any;
   milestones: any;
   submitted = false;
-  peopleSurvey:any = {};
+  peopleSurvey: any = {};
   formGroup: FormGroup
   isDisabled: boolean
 
@@ -150,70 +149,71 @@ export class ActivityFormComponent implements OnInit {
     public authService: AuthService,
     private userServices: UsersService,
     private activityReport: ActivityReportService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
 
     this.route.params
-      .subscribe(p =>{
+      .subscribe(p => {
         this.taskId = p['id'];
         const params = new HttpParams().set('id', this.taskId);
-        this.taskListService.getTaskRecord(params).subscribe((data) =>{
+        this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;
 
 
-          this.isReview = this.taskRecord.taskDefinitionKey=="Conduct_Financial_Review"
-          this.isMakeCorrections = (this.taskRecord.taskDefinitionKey=="Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey=="Make_Changes_from_Supervisor")
-          this.isApprove = this.taskRecord.taskDefinitionKey=="Approve_Activity_Report"
+          this.isReview = this.taskRecord.taskDefinitionKey == "Conduct_Financial_Review"
+          this.isMakeCorrections = (this.taskRecord.taskDefinitionKey == "Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey == "Make_Changes_from_Supervisor")
+          this.isApprove = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report"
           // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
           this.isDisabled = true;
 
 
-          this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data =>{
+          this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data => {
             this.activity = data;
-            console.log("Logged dta",data);
+            console.log("Logged dta", data);
             this.getActivityDetails(data)
             this.getBudgetLines();
             this.formGroup = this.formBuilder.group({
-              budgetLine: [{value: this.activity?.budgetLine,disabled: this.isDisabled}, [Validators.required]],
-              name: [{value:this.activity?.name,disabled:this.isDisabled}, [Validators.required]],
-              startDate:[{value:this.activity?.startDate,disabled:this.isDisabled}],
-              endDate:[{value: this.activity?.endDate,disabled:this.isDisabled}],
-              designation: [{value:this.activity?.designation,disabled:this.isDisabled}, [Validators.required]],
-              location: [{value:this.activity?.location,disabled:this.isDisabled}],
-              milestone: [{value:this.activity?.milestone,disabled:this.isDisabled}],
-              activityObjectives:[{value:this.activity?.activityObjectives,disabled:this.isDisabled}],
-              activityResults:[{value:this.activity?.activityResults,disabled:this.isDisabled}],
-              activityUndertaken:[{value:this.activity?.activityUndertaken,disabled:this.isDisabled}],
-              activityName:[{value:this.activity?.activityName,disabled:this.isDisabled}],
-              challenges:[{value:this.activity?.challenges,disabled:this.isDisabled}],
-              lessonsLearned:[{value:this.activity?.lessonsLearned,disabled:this.isDisabled}],
-              keyAchievements:[{value:this.activity?.keyAchievements,disabled:this.isDisabled}],
-              peopleReached:[''],
-              costAssociated:[''],
-              budgetProgress:[''],
-              assignee:[this.activity?.assignee],
-              attachPhoto:[{value:this.activity?.attachPhoto,disabled:this.isDisabled}],
-              attachList:[{value:this.activity?.attachList,disabled:this.isDisabled}],
-              attachStory:[{value:this.activity?.attachStory,disabled:this.isDisabled}],
-              comments:[{value:this.activity?.comments,disabled: !this.isDisabled}],
-              actionRequired:[''],
-              status:['']
+              budgetLine: [{value: this.activity?.budgetLine, disabled: this.isDisabled}, [Validators.required]],
+              name: [{value: this.activity?.name, disabled: this.isDisabled}, [Validators.required]],
+              startDate: [{value: this.activity?.startDate, disabled: this.isDisabled}],
+              endDate: [{value: this.activity?.endDate, disabled: this.isDisabled}],
+              designation: [{value: this.activity?.designation, disabled: this.isDisabled}, [Validators.required]],
+              location: [{value: this.activity?.location, disabled: this.isDisabled}],
+              milestone: [{value: this.activity?.milestone, disabled: this.isDisabled}],
+              activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isDisabled}],
+              activityResults: [{value: this.activity?.activityResults, disabled: this.isDisabled}],
+              activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isDisabled}],
+              activityName: [{value: this.activity?.activityName, disabled: this.isDisabled}],
+              challenges: [{value: this.activity?.challenges, disabled: this.isDisabled}],
+              lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isDisabled}],
+              keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isDisabled}],
+              peopleReached: [''],
+              costAssociated: [''],
+              budgetProgress: [''],
+              assignee: [this.activity?.assignee],
+              attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isDisabled}],
+              attachList: [{value: this.activity?.attachList, disabled: this.isDisabled}],
+              attachStory: [{value: this.activity?.attachStory, disabled: this.isDisabled}],
+              comments: [{value: this.activity?.comments, disabled: !this.isDisabled}],
+              actionRequired: [''],
+              status: ['']
             });
 
             this.userServices.getUsers().subscribe((data) => {
               this.staff = data;
             });
           })
-          })
         })
+      })
 
   }
 
-  getActivityDetails(data){
+  getActivityDetails(data) {
 
-    let values =  JSON.parse(data.costAssociated)
-    console.log("Values",values)
+    let values = JSON.parse(data.costAssociated)
+    console.log("Values", values)
     this.peopleSurvey = values.people
     this.totalBalance = values.balance
     this.budget = values.budget
@@ -244,6 +244,7 @@ export class ActivityFormComponent implements OnInit {
   removeBudget(row) {
     this.budget = this.budget.filter(item => item.id != row.id);
   }
+
   cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: []) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
@@ -272,7 +273,7 @@ export class ActivityFormComponent implements OnInit {
   }
 
   private update1835(id, newValue) {
-    let values: {[key: string]: string};
+    let values: { [key: string]: string };
     switch (id) {
       case 1:
         this.peopleSurvey.total1835 = newValue;
@@ -343,7 +344,7 @@ export class ActivityFormComponent implements OnInit {
   createActivityReport() {
 
 
-    let values: {[key: string]: string} = {
+    let values: { [key: string]: string } = {
       budget: this.budget,
       people: this.peopleSurvey,
       balance: this.totalBalance,
@@ -361,7 +362,7 @@ export class ActivityFormComponent implements OnInit {
     console.log(activityReport)
     let statusSave = 'Approve'
 
-    let savedActivityRecord: {[key:string]: string} = {
+    let savedActivityRecord: { [key: string]: string } = {
 
       name: activityReport.name,
       costAssociated: JSON.stringify(values),
@@ -387,7 +388,7 @@ export class ActivityFormComponent implements OnInit {
       status: statusSave
     }
 
-    this.activityReport.updateActivityReport(savedActivityRecord,this.taskRecord.activityId,).subscribe(results => {
+    this.activityReport.updateActivityReport(savedActivityRecord, this.taskRecord.activityId,).subscribe(results => {
       this.updateTask("completed")
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully created `);
@@ -398,7 +399,7 @@ export class ActivityFormComponent implements OnInit {
   }
 
   ///TODO:
-  updateTask(status){
+  updateTask(status) {
     this.taskRecord.status = status;
     this.taskRecord.groupId = '[]';
     if (this.isApprove) {
@@ -422,7 +423,7 @@ export class ActivityFormComponent implements OnInit {
     rowNumber = this.choosenBudget;
     if (this.getListBudgetLine.some(x => x.id === rowNumber)) {
       this.getListBudgetLine.forEach((item) => {
-        console.log("item",item);
+        console.log("item", item);
         if (item.id === rowNumber) {
           this.getTotalApproved = item.approvedAmount;
           this.totalSpent = item.totalSpent;
@@ -462,7 +463,7 @@ export class ActivityFormComponent implements OnInit {
     });
   }
 
-/*attachments*/
+  /*attachments*/
   handleFileInput(event) {
     let files: FileList = event.target.files;
     this.uploadFile(files.item(0), event.target.id);
@@ -477,12 +478,31 @@ export class ActivityFormComponent implements OnInit {
         if (id === "attachStory") this.formGroup.patchValue({attachStory: data.path});
         this.loading = false;
       }, error => {
-      console.log(error);}
+        console.log(error);
+      }
     );
   }
 
-  downloadFile(path){
-    return this.fileUploadService.downloadFile(path);
+  async downloadFile(path) {
+    let fileName = path.substring(path.lastIndexOf('/') + 1)
+    let fileExtension = fileName.split('.').pop();
+    let mime
+    if (['jpeg', 'jpg', 'png'].includes(fileExtension)) mime = 'image/' + fileExtension
+    else mime = 'application/' + fileExtension
+    console.log(fileName, mime)
+    this.fileUploadService.downloadFile(path).subscribe((response) => {
+      var newBlob = new Blob([response], {type: mime});
+      const data = window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('href', data);
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }, error => {
+      console.log(error)
+    })
   }
 
 }
