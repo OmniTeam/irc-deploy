@@ -23,6 +23,7 @@ class ActivityReport {
     String attachList
     String attachStory
     String status
+    String comments
     String activityName
     Date dateCreated
     Date lastUpdated
@@ -54,6 +55,7 @@ class ActivityReport {
          attachPhoto nullable: true
          attachList nullable: true
          attachStory nullable: true
+         comments nullable: true
          status nullable: true
     }
 }

@@ -17,10 +17,12 @@ import {TokenInterceptor} from "./helpers/token.interceptor";
 import {fakeBackendProvider} from "./helpers/fake-backend-interceptor";
 import {DatePipe} from "@angular/common";
 
+
 @NgModule({
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
+
   ],
   imports: [
     BrowserAnimationsModule,
@@ -37,8 +39,8 @@ import {DatePipe} from "@angular/common";
     NgxDatatableModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    fakeBackendProvider,DatePipe
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    fakeBackendProvider, DatePipe
   ],
   bootstrap: [AppComponent]
 })

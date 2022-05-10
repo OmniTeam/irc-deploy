@@ -2250,4 +2250,16 @@ databaseChangeLog = {
         modifyDataType(columnName: "key_achievements", newDataType: "text", tableName: "activity_report")
     }
 
+    changeSet(author: "MO-SALAH (generated)", id: "1497551594095k-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "status", tableName: "feedback")
+    }
+
+    changeSet(author: "DELL (generated)", id: "1652168594469-123") {
+        addColumn(tableName: "activity_report") {
+            column(name: "comments", type: "text"){
+                constraints(nullable: "true")
+            }
+        }
+    }
+
 }

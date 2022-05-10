@@ -17,4 +17,9 @@ export class FileUploadService {
     if(folder!=undefined) formData.append("folder", folder);
     return this.http.post(this.baseApiUrl, formData)
   }
+
+  downloadFile(path){
+    console.log(environment.uploadFolder);
+    return environment.uploadFolder+path
+  }
 }

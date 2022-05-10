@@ -162,7 +162,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       assignee: [''],
       attachPhoto: [''],
       attachList: [''],
-      attachStories: [''],
+      attachStory: [''],
       status: ['Pending']
     });
     this.programStaffService.getPrograms().subscribe((data) => {
@@ -209,7 +209,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       assignee: activityReport.assignee,
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
-      attachStories: activityReport.attachStories,
+      attachStory: activityReport.attachStory,
       budgetLine: this.budgetLineName,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
@@ -227,9 +227,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
-      this.alertService.success(`${activityReport.name} has been successfully created `);
+      this.alertService.success(`${this.budgetLineName} has been successfully created `);
     }, error => {
-      this.alertService.error(`${activityReport.name} could not be created`);
+      this.alertService.error(`${this.budgetLineName} could not be created`);
     });
 
   }
@@ -378,28 +378,19 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
-    if (event.target.id === 'attachment1') {
-      this.attachment1 = files.item(0).name;
-    }
-    if (event.target.id === 'attachment2') {
-      this.attachment2 = files.item(0).name;
-    }
-    if (event.target.id === 'attachment3') {
-      this.attachment3 = files.item(0).name;
-    }
     this.uploadFile(files.item(0), event.target.id);
   }
 
   uploadFile(file, id) {
     this.loading = !this.loading;
     console.log(file);
-    this.fileUploadService.upload(file).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-
-          this.loading = false; // Flag variable
-        }
-      }
+    this.fileUploadService.upload(file, 'activity-report').subscribe((data) => {
+        if (id === "attachPhoto") this.formGroup.patchValue({attachPhoto: data.path});
+        if (id === "attachList") this.formGroup.patchValue({attachList: data.path});
+        if (id === "attachStory") this.formGroup.patchValue({attachStory: data.path});
+        this.loading = false;
+      }, error => {
+        console.log(error);}
     );
   }
 
@@ -544,7 +535,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       assignee: activityReport.assignee,
       attachList: activityReport.attachList,
       attachPhoto: activityReport.attachPhoto,
-      attachStories: activityReport.attachStories,
+      attachStory: activityReport.attachStory,
       budgetLine: this.budgetLineName,
       budgetProgress: activityReport.budgetProgress,
       challenges: activityReport.challenges,
@@ -562,9 +553,9 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.activityReportService.createActivityReport(savedActivityRecord).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
-      this.alertService.success(`${activityReport.name} has been successfully created `);
+      this.alertService.success(`${this.budgetLineName} has been successfully saved `);
     }, error => {
-      this.alertService.error(`${activityReport.name} could not be created`);
+      this.alertService.error(`${this.budgetLineName} could not be saved`);
     });
 
   }

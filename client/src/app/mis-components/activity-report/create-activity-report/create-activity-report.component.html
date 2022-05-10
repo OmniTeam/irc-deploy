@@ -634,10 +634,12 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input class="form-control" id="attachment1"
-                                 placeholder="upload document"
-                                 formControlName="keyAchievements"
-                                 type="file" />
+                          <input
+                            class="form-control"
+                            id="attachPhoto"
+                            placeholder="Upload document"
+                            (change)="handleFileInput($event)"
+                            type="file" />
                         </div>
                       </div>
                     </div>
@@ -655,9 +657,10 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input class="form-control" id="attachment2"
-                                 placeholder="upload document"
-                                 formControlName="attachList"
+                          <input  class="form-control"
+                                 placeholder="Download document"
+                                 id="attachList"
+                                 (change)="handleFileInput($event)"
                                  type="file" />
                         </div>
                       </div>
@@ -675,9 +678,10 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input class="form-control" id="attachment3"
-                                 placeholder="upload document"
-                                 formControlName="attachStories"
+                          <input class="form-control"
+                                 id="attachStory"
+                                 placeholder="Download document"
+                                 (change)="handleFileInput($event)"
                                  type="file" />
                         </div>
                       </div>
