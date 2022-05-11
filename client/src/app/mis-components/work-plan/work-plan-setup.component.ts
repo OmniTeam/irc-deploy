@@ -1,5 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {SampleData} from "../../helpers/sample-data";
+import {Component, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {v4 as uuid} from 'uuid';
 import {WorkPlanService} from "../../services/work-plan-setup.service";
@@ -75,7 +74,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.route.params
       .subscribe(p => {
         this.workPlanId = p['id'];
-        if(this.workPlanId!=undefined || this.workPlanId!=null) {
+        if (this.workPlanId != undefined || this.workPlanId != null) {
           const params = new HttpParams().set('id', this.workPlanId);
           this.workPlanService.getWorkPlanRecord(params).subscribe(data => {
             this.editing = true;
@@ -121,7 +120,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.setup = data;
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
-      this.staffChosen = data.partnerId;
+      this.staffChosen = data.staffId;
       this.startReportingCycle = data.startCycle == "true";
       if (this.staffChosen != undefined) this.onPartnerChange()
 
@@ -450,7 +449,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
     let workPlanRecord: { [key: string]: string } = {
       userId: this.authService.getLoggedInUsername(),
-      partnerId: this.staffChosen,
+      staffId: this.staffChosen,
       programId: this.programChosen,
       setupValues: JSON.stringify(values),
       startDate: this.calendar.grantStartDate,
@@ -502,7 +501,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         startDate: c.startDate,
         endDate: c.endDate,
         period: c.datePeriod,
-        partnerSetupId: setupId,
+        workPlanId: setupId,
         started: false,
         completed: false
       });
@@ -512,7 +511,6 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       this.workPlanService.deleteReportingCalendarForPartner(setupId).subscribe((data) => {
         values.forEach((value) => {
           this.workPlanService.createReportingCalendar(value).subscribe((data) => {
-            console.log("saved reporting calendar", data);
             if (this.calendar.reportingCalender.some(x => x.id === data.id)) {
               this.calendar.reportingCalender.forEach(function (item) {
                 if (item.id === data.id) {
@@ -556,7 +554,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.totalApprovedAmount = total.toString();
   }
 
-  private updateQuarterlyPlanAmount (id, newValue) {
+  private updateQuarterlyPlanAmount(id, newValue) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach(function (item) {
@@ -590,10 +588,10 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
   private updateQuarterlyCommitmentValues(period, newValue) {
     let totalD: number = 0;
-      this.quarterlyCommitment.forEach(function (item) {
-        if (item.datePeriod === period) item.commitment = +item.commitment + +newValue
-        totalD += +item.commitment;
-      });
+    this.quarterlyCommitment.forEach(function (item) {
+      if (item.datePeriod === period) item.commitment = +item.commitment + +newValue
+      totalD += +item.commitment;
+    });
     this.totalDisbursement = totalD.toString();
     this.currentStatus.totalAmountCommitted = totalD;
   }

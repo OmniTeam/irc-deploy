@@ -114,30 +114,30 @@ class ProgramStaffController {
     }
 
     def getProgramStaffWithoutWorkPlan() {
-        def programPartners = []
+        def programStaff = []
         def list = []
 
-        PartnerSetup.all.each {
-            list << it.partnerId
+        WorkPlan.all.each {
+            list << it.staffId
         }
 
-        programStaffService.list(params).each { programStaff ->
-            if (!list.contains(programStaff.id)) {
+        programStaffService.list(params).each { staff ->
+            if (!list.contains(staff.id)) {
                 def newProgramStaffObject = [:]
-                def programId = programStaff.program.id
+                def programId = staff.program.id
                 def program = Program.findById(programId)
-                newProgramStaffObject['id'] = programStaff.id
-                newProgramStaffObject['name'] = programStaff.name
-                newProgramStaffObject['email'] = programStaff.email
-                newProgramStaffObject['nameContactPerson'] = programStaff.nameContactPerson
-                newProgramStaffObject['personContact'] = programStaff.personContact
-                newProgramStaffObject['dateCreated'] = programStaff.dateCreated
-                newProgramStaffObject['lastUpdated'] = programStaff.lastUpdated
+                newProgramStaffObject['id'] = staff.id
+                newProgramStaffObject['name'] = staff.name
+                newProgramStaffObject['email'] = staff.email
+                newProgramStaffObject['nameContactPerson'] = staff.nameContactPerson
+                newProgramStaffObject['personContact'] = staff.personContact
+                newProgramStaffObject['dateCreated'] = staff.dateCreated
+                newProgramStaffObject['lastUpdated'] = staff.lastUpdated
                 newProgramStaffObject['program'] = program.title
                 newProgramStaffObject['programId'] = program.id
-                programPartners << newProgramStaffObject
+                programStaff << newProgramStaffObject
             }
         }
-        respond programPartners
+        respond programStaff
     }
 }

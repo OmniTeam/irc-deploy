@@ -116,7 +116,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   quarterlyCommitment: any;
   currentStatus: any;
   userId: any;
-  partnerId: string;
+  staffId: string;
   programId: any;
    startDate: any;
    endDate: any;
@@ -144,12 +144,12 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.formGroup = this.formBuilder.group({
       budgetLine: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      startDate: [''],
-      endDate: [''],
+      startDate: ['',[Validators.required]],
+      endDate: ['',[Validators.required]],
       designation: ['', [Validators.required]],
-      location: [''],
-      milestone: [''],
-      activityName: [''],
+      location: ['',[Validators.required]],
+      milestone: ['',[Validators.required]],
+      activityName: ['',[Validators.required]],
       activityObjectives: [''],
       activityResults: [''],
       activityUndertaken: [''],
@@ -433,7 +433,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
         this.quarterlyCommitment = values.quarterlyCommitment;
         this.currentStatus = values.currentStatus
           this.userId =  this.workPlanUpdate.userId
-          this.partnerId =  this.workPlanUpdate.partnerId
+          this.staffId =  this.workPlanUpdate.staffId
           this.programId =  this.workPlanUpdate.programId
           this.startDate = this.workPlanUpdate.startDate
           this.endDate = this.workPlanUpdate.endDate
@@ -456,7 +456,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
           let workPlanRecord: { [key: string]: string } = {
             userId: this.userId,
-            partnerId: this.partnerId,
+            staffId: this.staffId,
             programId: this.programId,
             setupValues: JSON.stringify(newValues),
             startDate: this.startDate,

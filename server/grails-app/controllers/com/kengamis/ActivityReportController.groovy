@@ -88,7 +88,7 @@ class ActivityReportController {
 
         if (id != "undefined") {
             def slurper = new JsonSlurper()
-            def query = "SELECT * FROM `partner_setup` WHERE setup_values LIKE '%${id}%'"
+            def query = "SELECT * FROM `work_plan` WHERE setup_values LIKE '%${id}%'"
             def v = AppHolder.withMisSql { rows(query.toString()) }
             if(v.size() > 0){
                 def setup = v.first()

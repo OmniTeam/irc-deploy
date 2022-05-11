@@ -3,7 +3,7 @@ package com.kengamis
 class CalendarTriggerDates {
 
     String id
-    String partnerSetupId
+    String workPlanId
     String period
     String startDate
     String endDate

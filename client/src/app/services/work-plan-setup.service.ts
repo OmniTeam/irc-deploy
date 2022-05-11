@@ -11,27 +11,27 @@ export class WorkPlanService {
   constructor(private http: HttpClient) { }
 
   getWorkPlan(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/partnerSetup`);
+    return this.http.get(`${environment.serverUrl}/workPlan`);
   }
 
   createWorkPlan(formData): Observable<any> {
-    return this.http.post(`${environment.serverUrl}/partnerSetup`, formData);
+    return this.http.post(`${environment.serverUrl}/workPlan`, formData);
   }
 
   updateWorkPlan(formData, id): Observable<any> {
-    return this.http.put(`${environment.serverUrl}/partnerSetup/${id}`, formData);
+    return this.http.put(`${environment.serverUrl}/workPlan/${id}`, formData);
   }
 
   getWorkPlanRecord(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/partnerSetup/getPartnerSetupRecord`, {params});
+    return this.http.get(`${environment.serverUrl}/workPlan/getWorkPlanRecord`, {params});
   }
 
   deleteWorkPlanRecord(deletedRow): Observable<any> {
-    return this.http.delete(`${environment.serverUrl}/partnerSetup/${deletedRow}`);
+    return this.http.delete(`${environment.serverUrl}/workPlan/${deletedRow}`);
   }
 
   getReportingCalendarByWorkPlanId(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/calendarTriggerDates/getReportingCalendarByPartnerSetupId`, {params});
+    return this.http.get(`${environment.serverUrl}/calendarTriggerDates/getReportingCalendarByWorkPlanId`, {params});
   }
 
   deleteReportingCalendarForPartner(deletedRow): Observable<any> {

@@ -1,29 +1,29 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
-import {ReportFormService} from "../../../services/report-form.service";
-import {CommentNode} from '../../comments/comments.component';
+import {ReportFormService} from "../../services/report-form.service";
+import {CommentNode} from '../comments/comments.component';
 import {Location} from '@angular/common';
-import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
-import {FileUploadService} from '../../../services/file-upload.service';
+import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
+import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
-import {AuthService} from "../../../services/auth.service";
-import {TaskListService} from "../../../services/task-list.service";
+import {AuthService} from "../../services/auth.service";
+import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {UsersService} from "../../../services/users.service";
-import {WorkPlanService} from "../../../services/work-plan-setup.service";
-import {ProjectMilestoneService} from "../../../services/project-milestone.service";
-import {AlertService} from "../../../services/alert";
+import {UsersService} from "../../services/users.service";
+import {WorkPlanService} from "../../services/work-plan-setup.service";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {AlertService} from "../../services/alert";
 
 //import {SampleData} from "../../helpers/sample-data";
 
 @Component({
-  selector: 'app-report-form',
-  templateUrl: './report-form.component.html',
-  styleUrls: ['./report-form.component.css']
+  selector: 'app-progress-report',
+  templateUrl: './progress-report.component.html',
+  styleUrls: ['./progress-report.component.css']
 })
 
-export class ReportFormComponent implements OnInit, OnUpdateCell {
+export class ProgressReportComponent implements OnInit, OnUpdateCell {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -132,7 +132,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             .set('processInstanceId', this.taskRecord.processInstanceId);
 
           //set organizational Info
-          this.usersService.getCurrentUserStaff(this.taskRecord.partnerId).subscribe((results: any) => {
+          this.usersService.getCurrentUserStaff(this.taskRecord.staffId).subscribe((results: any) => {
             if (results !== null && results !== undefined) {
               this.organisationalInfo = results;
             }
@@ -215,7 +215,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   setReportsFromWorkPlan() {
-    const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+    const params2 = new HttpParams().set('id', this.taskRecord.workPlanId);
     this.workPlanService.getWorkPlanRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
@@ -712,7 +712,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   updateCalendarStatus() {
-    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+    const params = new HttpParams().set('setupId', this.taskRecord.workPlanId).set('completed', "yes");
     this.workPlanService.updateReportingCalendarStatus(params).subscribe((data) => {
       console.log('updated calendar status')
     }, error => console.log('failed update calendar status', error));

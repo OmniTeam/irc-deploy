@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ReportFormService} from "../../services/report-form.service";
+import {TaskListService} from "../../services/task-list.service";
 
 @Component({
-  selector: 'app-reporting-process',
-  templateUrl: './reporting-process.component.html',
-  styleUrls: ['./reporting-process.component.css']
+  selector: 'app-archive',
+  templateUrl: './archive.component.html',
+  styleUrls: ['./archive.component.css']
 })
-export class ReportingProcessComponent implements OnInit {
+export class ArchiveComponent implements OnInit {
 
   rows: any = [];
   temp: any = [];
@@ -15,7 +16,7 @@ export class ReportingProcessComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private reportFormService: ReportFormService
+    private taskListService:TaskListService
   ) {
   }
 
@@ -24,7 +25,7 @@ export class ReportingProcessComponent implements OnInit {
   }
 
   reloadTable() {
-    this.reportFormService.getAllReports().subscribe(data => {
+    this.taskListService.getTaskList().subscribe(data => {
       console.log(data)
       this.rows = data;
       this.temp = [...data];
