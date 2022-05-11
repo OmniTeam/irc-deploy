@@ -28,7 +28,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Responsible Person
-                      <span class="required-indicator">*</span>
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -66,7 +66,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Designation
-                      <span class="required-indicator">*</span>
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -80,6 +80,11 @@
                             style="padding-left: 10px;"
                             formControlName="designation"
                           >
+                          <div *ngIf="submitted && f.designation.errors" class="invalid-feedback">
+                            <div *ngIf="f.designation.errors.required">Designation is
+                              required
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -90,7 +95,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Budget Line
-                      <span class="required-indicator">*</span>
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -123,6 +128,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Select Related Milestone
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -155,6 +161,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Activity Name
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -168,6 +175,9 @@
                             style="padding-left: 10px;"
                             formControlName="activityName"
                           >
+                          <div *ngIf="submitted && f.activityName.errors" class="invalid-feedback">
+                          <div *ngIf="f.activityName.errors.required">Activity Name Line is required</div>
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -180,7 +190,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Activity Report Start Date
-                      <span class="required-indicator">*</span>
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -194,6 +204,9 @@
                             style="padding-left: 10px;"
                             formControlName="startDate"
                           >
+                          <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.startDate.errors.required">Start Date Line is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -204,7 +217,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Activity Report End Date
-                      <span class="required-indicator">*</span>
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -218,6 +231,9 @@
                             style="padding-left: 10px;"
                             formControlName="endDate"
                           >
+                          <div *ngIf="submitted && f.startDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.startDate.errors.required">End Date Line is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -228,6 +244,7 @@
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Location
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
