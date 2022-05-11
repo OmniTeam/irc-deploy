@@ -39,16 +39,9 @@ class FileManagerController {
             def uploadPath = grailsApplication.config.uploadFolder as String
             def file = new File(uploadPath + path)
             if (file.exists()) {
-                response.setHeader("Content-Disposition", "inline; filename=\"${file.name}\"")
-                response.setHeader("Content-Type", getMimeType(file))
                 response.outputStream << file.bytes
             }
         }
-    }
-
-    def getMimeType(def fileName) {
-        def matcher = (fileName =~ /.*\.(.*)$/)
-        matcher[0][1] as String
     }
 
 }
