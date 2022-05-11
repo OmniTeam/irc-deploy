@@ -80,7 +80,7 @@ class CalendarTriggerDatesController {
             return
         }
 
-        CalendarTriggerDates.findAllByPartnerSetupId(id).each {it.delete()}
+        CalendarTriggerDates.findAllByWorkPlanId(id).each {it.delete()}
 
         render status: NO_CONTENT
     }
@@ -89,14 +89,14 @@ class CalendarTriggerDatesController {
     def updateReportingCalendarStatus() {
         def setupId = params.setupId as String
         def completedStatus = params.completed=="yes"
-        def calendar = CalendarTriggerDates.findByPartnerSetupId(setupId)
+        def calendar = CalendarTriggerDates.findByWorkPlanId(setupId)
         calendar.completed = completedStatus
         calendar.save(flush:true)
     }
 
-    def getReportingCalendarByPartnerSetupId() {
+    def getReportingCalendarByWorkPlanId() {
         def query = "select id, period, start_date as startDate, end_date as endDate " +
-                "from calendar_trigger_dates where partner_setup_id='${params.setupId}' order by period"
+                "from calendar_trigger_dates where work_plan_id='${params.setupId}' order by period"
         def results = AppHolder.withMisSql { rows(query.toString()) }
         def map = [calendar: results]
         respond map

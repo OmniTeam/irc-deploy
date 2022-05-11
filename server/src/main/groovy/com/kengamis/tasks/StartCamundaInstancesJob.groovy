@@ -24,16 +24,16 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static void ircReportingJob(){
-        PartnerSetup.findAllByStartCycle("true").each { setup ->
+        WorkPlan.findAllByStartCycle("true").each { workPlan ->
             boolean startInstance = true
 
             def query = "SELECT calendar_trigger_dates.id, " +
                     "calendar_trigger_dates.start_date, " +
                     "calendar_trigger_dates.end_date, " +
                     "calendar_trigger_dates.period " +
-                    "FROM partner_setup " +
-                    "INNER JOIN calendar_trigger_dates ON partner_setup.id = calendar_trigger_dates.partner_setup_id " +
-                    "WHERE partner_setup.id='${setup.id}' " +
+                    "FROM work_plan " +
+                    "INNER JOIN calendar_trigger_dates ON work_plan.id = calendar_trigger_dates.work_plan_id " +
+                    "WHERE work_plan.id='${workPlan.id}' " +
                     "AND calendar_trigger_dates.end_date <= CURDATE() " +
                     "AND calendar_trigger_dates.started = 1 " +
                     "AND calendar_trigger_dates.completed = 0;"
@@ -46,9 +46,9 @@ class StartCamundaInstancesJob extends Script {
                         "calendar_trigger_dates.start_date, " +
                         "calendar_trigger_dates.end_date, " +
                         "calendar_trigger_dates.period " +
-                        "FROM partner_setup " +
-                        "INNER JOIN calendar_trigger_dates ON partner_setup.id = calendar_trigger_dates.partner_setup_id " +
-                        "WHERE partner_setup.id='${setup.id}' " +
+                        "FROM work_plan " +
+                        "INNER JOIN calendar_trigger_dates ON work_plan.id = calendar_trigger_dates.work_plan_id " +
+                        "WHERE work_plan.id='${workPlan.id}' " +
                         "AND calendar_trigger_dates.end_date <= CURDATE() " +
                         "AND calendar_trigger_dates.started = 0 " +
                         "ORDER BY calendar_trigger_dates.period LIMIT 1;"
@@ -58,9 +58,9 @@ class StartCamundaInstancesJob extends Script {
                     if (r.size() > 0) {
                         def result = r.first()
                         boolean started = startProcessInstance([
-                                PartnerSetupId: setup.id,
-                                PartnerId     : setup.partnerId,
-                                ProgramId     : setup.programId,
+                                PartnerSetupId: workPlan.id,
+                                PartnerId     : workPlan.staffId,
+                                ProgramId     : workPlan.programId,
                                 StartDate     : result['start_date'],
                                 EndDate       : result['end_date'],
                                 Period        : result['period'],

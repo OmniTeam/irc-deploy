@@ -132,7 +132,7 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
             .set('processInstanceId', this.taskRecord.processInstanceId);
 
           //set organizational Info
-          this.usersService.getCurrentUserStaff(this.taskRecord.partnerId).subscribe((results: any) => {
+          this.usersService.getCurrentUserStaff(this.taskRecord.staffId).subscribe((results: any) => {
             if (results !== null && results !== undefined) {
               this.organisationalInfo = results;
             }
@@ -215,7 +215,7 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
   }
 
   setReportsFromWorkPlan() {
-    const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
+    const params2 = new HttpParams().set('id', this.taskRecord.workPlanId);
     this.workPlanService.getWorkPlanRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
@@ -712,7 +712,7 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
   }
 
   updateCalendarStatus() {
-    const params = new HttpParams().set('setupId', this.taskRecord.partnerSetupId).set('completed', "yes");
+    const params = new HttpParams().set('setupId', this.taskRecord.workPlanId).set('completed', "yes");
     this.workPlanService.updateReportingCalendarStatus(params).subscribe((data) => {
       console.log('updated calendar status')
     }, error => console.log('failed update calendar status', error));

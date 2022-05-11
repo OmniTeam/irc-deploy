@@ -206,11 +206,11 @@ class UserController {
     }
 
     def getUsersWithoutWorkPlan() {
-        def programPartners = []
+        def programStaff = []
         def list = []
 
-        PartnerSetup.all.each {
-            list << it.partnerId
+        WorkPlan.all.each {
+            list << it.staffId
         }
 
         userService.list(params).each { user ->
@@ -229,10 +229,10 @@ class UserController {
                     newProgramStaffObject['lastUpdated'] = user.lastUpdated
                     newProgramStaffObject['program'] = program.title
                     newProgramStaffObject['programId'] = program.id
-                    programPartners << newProgramStaffObject
+                    programStaff << newProgramStaffObject
                 }
             }
         }
-        respond programPartners
+        respond programStaff
     }
 }

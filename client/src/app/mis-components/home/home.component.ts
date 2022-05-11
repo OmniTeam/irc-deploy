@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
       let results4 = [];
       if (data != null) {
         data.forEach((item) => {
-          let staff = this.getStaff(item.partnerId);
+          let staff = this.getStaff(item.staffId);
           results.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
           if (item.processDefKey == "PROGRESS_REPORTING") results1.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
           if (item.processDefKey == "IRC_REFERRAL") results2.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
@@ -222,7 +222,7 @@ export class HomeComponent implements OnInit {
       let rts = []
       if (data != null) {
         data.forEach((item) => {
-          let staff = this.getStaff(item.partnerId);
+          let staff = this.getStaff(item.staffId);
           rts.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
         });
         rts.forEach((task) => {

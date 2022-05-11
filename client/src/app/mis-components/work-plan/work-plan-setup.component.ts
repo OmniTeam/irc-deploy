@@ -120,7 +120,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.setup = data;
     if (data !== null && data !== undefined) {
       let setupValues = JSON.parse(data.setupValues);
-      this.staffChosen = data.partnerId;
+      this.staffChosen = data.staffId;
       this.startReportingCycle = data.startCycle == "true";
       if (this.staffChosen != undefined) this.onPartnerChange()
 
@@ -449,7 +449,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
     let workPlanRecord: { [key: string]: string } = {
       userId: this.authService.getLoggedInUsername(),
-      partnerId: this.staffChosen,
+      staffId: this.staffChosen,
       programId: this.programChosen,
       setupValues: JSON.stringify(values),
       startDate: this.calendar.grantStartDate,
@@ -501,7 +501,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         startDate: c.startDate,
         endDate: c.endDate,
         period: c.datePeriod,
-        partnerSetupId: setupId,
+        workPlanId: setupId,
         started: false,
         completed: false
       });
