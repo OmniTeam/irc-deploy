@@ -636,7 +636,7 @@
                           <button
                             *ngIf="isDisabled"
                             type="button"
-                            (click)="downloadFile(formGroup.controls.attachPhoto.value)"
+                            (click)="fileUploadService.downloadFile(formGroup.controls.attachPhoto.value)"
                             class="btn btn-link">{{formGroup.controls.attachPhoto.value}}</button>
                         </div>
                       </div>

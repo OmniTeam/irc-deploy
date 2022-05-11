@@ -140,7 +140,6 @@ export class ActivityFormComponent implements OnInit {
     private location: Location,
     private reportFormService: ReportFormService,
     private taskListService: TaskListService,
-    private fileUploadService: FileUploadService,
     private WorkPlanService: WorkPlanService,
     private usersService: UsersService,
     private projectMilestoneService: ProjectMilestoneService,
@@ -148,7 +147,8 @@ export class ActivityFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     public authService: AuthService,
     private userServices: UsersService,
-    private activityReport: ActivityReportService
+    private activityReport: ActivityReportService,
+    public fileUploadService: FileUploadService,
   ) {
   }
 
@@ -482,27 +482,4 @@ export class ActivityFormComponent implements OnInit {
       }
     );
   }
-
-  async downloadFile(path) {
-    let fileName = path.substring(path.lastIndexOf('/') + 1)
-    let fileExtension = fileName.split('.').pop();
-    let mime
-    if (['jpeg', 'jpg', 'png'].includes(fileExtension)) mime = 'image/' + fileExtension
-    else mime = 'application/' + fileExtension
-    console.log(fileName, mime)
-    this.fileUploadService.downloadFile(path).subscribe((response) => {
-      var newBlob = new Blob([response], {type: mime});
-      const data = window.URL.createObjectURL(newBlob);
-      const link = document.createElement('a');
-      link.setAttribute('target', '_blank');
-      link.setAttribute('href', data);
-      link.setAttribute('download', fileName);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    }, error => {
-      console.log(error)
-    })
-  }
-
 }
