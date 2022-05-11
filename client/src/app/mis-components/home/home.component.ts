@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   isQuarterlyReport: boolean;
   isActivityReport: boolean;
 
+  filterCounter: { filter: string, count: number }[] = []
   filters = [
     {name: '0 to 1 Week'},
     {name: '1 to 2 Week'},
@@ -51,6 +52,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadTable(true);
+    //load filter counts
+    this.filters.forEach((filter) => {
+      this.setFilters(filter, true)
+    })
   }
 
   switchRowsData(type: string) {
@@ -185,16 +190,16 @@ export class HomeComponent implements OnInit {
   openForm(processDefKey: any, row) {
     switch (processDefKey) {
       case 'IRC_REFERRAL':
-        this.router.navigate(['/action-referral/'+ row.id]);
+        this.router.navigate(['/action-referral/' + row.id]);
         break;
       case 'PROGRESS_REPORTING':
-        this.router.navigate(['/reportForm/'+ row.id +'/'+false]);
+        this.router.navigate(['/progress-report/' + row.id + '/' + false]);
         break;
       case 'IRC_FEEDBACK':
-        this.router.navigate(['/action-feedback/'+ row.id]);
+        this.router.navigate(['/action-feedback/' + row.id]);
         break;
       case 'ACTIVITY_REPORTING':
-        this.router.navigate(['/activityForm/'+ row.id]);
+        this.router.navigate(['/activityForm/' + row.id]);
         break;
     }
   }
@@ -211,30 +216,63 @@ export class HomeComponent implements OnInit {
     return filterCategory
   }
 
-  setFilters(filter) {
-    let results = []
-    this.reloadTable();
-    this.taskListRows.forEach((task) => {
-      if (task.filter_category != undefined) {
-        if (filter.name == 'More than 4 Weeks') {
-          if (task.filter_category.period == 'month' || task.filter_category.period == 'year') results.push(task)
-        } else if (filter.name == '0 to 1 Week') {
-          if (task.filter_category.period == 'week' && task.filter_category.duration <= 1) {
-            results.push(task)
-          } else if (task.filter_category.period == 'day') results.push(task)
-        } else if (filter.name == '1 to 2 Week') {
-          if (task.filter_category.period == 'week' && task.filter_category.duration >= 1 && task.filter_category.duration <= 2) {
-            results.push(task)
+  setFilters(filter, firstTime?: boolean) {
+    this.taskListService.getTaskList().subscribe(data => {
+      let results = []
+      let rts = []
+      if (data != null) {
+        data.forEach((item) => {
+          let staff = this.getStaff(item.partnerId);
+          rts.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+        });
+        rts.forEach((task) => {
+          if (task.filter_category != undefined) {
+            if (filter.name == 'More than 4 Weeks') {
+              if (task.filter_category.period == 'month' || task.filter_category.period == 'year') results.push(task)
+              this.filterCount(filter, results.length)
+            } else if (filter.name == '0 to 1 Week') {
+              if (task.filter_category.period == 'week' && task.filter_category.duration <= 1) {
+                results.push(task)
+              } else if (task.filter_category.period == 'day') results.push(task)
+              this.filterCount(filter, results.length)
+            } else if (filter.name == '1 to 2 Week') {
+              if (task.filter_category.period == 'week' && task.filter_category.duration >= 1 && task.filter_category.duration <= 2) {
+                results.push(task)
+              }
+              this.filterCount(filter, results.length)
+            } else if (filter.name == '3 to 4 Week') {
+              if (task.filter_category.period == 'week' && task.filter_category.duration >= 3 && task.filter_category.duration <= 4) {
+                results.push(task)
+              }
+              this.filterCount(filter, results.length)
+            }
           }
-        } else if (filter.name == '3 to 4 Week') {
-          if (task.filter_category.period == 'week' && task.filter_category.duration >= 3 && task.filter_category.duration <= 4) {
-            results.push(task)
-          }
-        } else if (filter.name == 'All') {
-          this.reloadTable();
-        }
+        })
+        if (firstTime != true) this.taskListRows = results;
       }
+    });
+
+    if (filter.name == 'All') {
+      this.reloadTable();
+    }
+  }
+
+  filterCount(filter, count: number) {
+    if (this.filterCounter.some(x => x.filter === filter.name)) {
+      this.filterCounter.forEach((item) => {
+        if (item.filter == filter.name) item.count = count
+      })
+    } else this.filterCounter.push({filter: filter.name, count: count})
+  }
+
+  getNumberOfRecordsForFilter(filterName): number {
+    let number = 0
+    this.filterCounter.forEach((item) => {
+      if (item.filter == filterName) number = item.count
     })
-    this.taskListRows = results;
+    if (filterName == 'All') {
+      number = this.taskListRows.length
+    }
+    return number
   }
 }

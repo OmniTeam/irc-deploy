@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {ReportingProcessComponent} from "./reporting-process.component";
+import {ArchiveComponent} from "./archive.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: ReportingProcessComponent
+    component: ArchiveComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ReportingProcessRoutingModule { }
+export class ArchiveRoutingModule { }

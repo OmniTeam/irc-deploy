@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ReportingProcessComponent } from './reporting-process.component';
-import { ReportingProcessRoutingModule } from './reporting-process-routing.module';
+import { ArchiveComponent } from './archive.component';
+import { ArchiveRoutingModule } from './archive-routing.module';
 import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 
 @NgModule({
-  declarations: [ReportingProcessComponent],
+  declarations: [ArchiveComponent],
   imports: [
     CommonModule,
-    ReportingProcessRoutingModule,
+    ArchiveRoutingModule,
     FormsModule,
     NgxDatatableModule,
     ComponentsModule,
     EntityViewTableModule,
   ]
 })
-export class ReportingProcessModule { }
+export class ArchiveModule { }

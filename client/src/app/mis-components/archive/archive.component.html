@@ -74,24 +74,27 @@
                         <ngx-datatable-column name="Task" prop="taskDefinitionKey">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
-                            <a [routerLink]="['/reportForm', row.taskId, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a *ngIf="row.processDefKey=='IRC_REFERRAL' " [routerLink]="['/action-referral', row.id]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a *ngIf="row.processDefKey=='PROGRESS_REPORTING' " [routerLink]="['/progress-report', row.id, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a *ngIf="row.processDefKey=='IRC_FEEDBACK' " [routerLink]="['/action-feedback', row.id]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a *ngIf="row.processDefKey=='ACTIVITY_REPORTING' " [routerLink]="['/activityForm', row.id]" class="text">{{value | replace: '_' : ' '}}</a>
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Process" prop="process">
+                        <ngx-datatable-column name="Process" prop="processDefKey">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
                             {{ value | replace: '_' : ' ' }}
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Program" prop="program"></ngx-datatable-column>
-                        <ngx-datatable-column name="Period" prop="periodType"></ngx-datatable-column>
-                        <ngx-datatable-column name="Date Created" prop="dateCreated">
+                        <ngx-datatable-column name="Case/Program" prop="case"></ngx-datatable-column>
+                        <ngx-datatable-column name="Period" prop="reportingPeriod"></ngx-datatable-column>
+                        <ngx-datatable-column name="Start Date" prop="startDate">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
                             {{ value | date: 'medium' }}
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Last Updated" prop="lastUpdated">
+                        <ngx-datatable-column name="End Date" prop="endDate">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
                             {{ value | date: 'medium' }}

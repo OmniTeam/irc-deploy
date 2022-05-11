@@ -1,29 +1,29 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
-import {ReportFormService} from "../../../services/report-form.service";
-import {CommentNode} from '../../comments/comments.component';
+import {ReportFormService} from "../../services/report-form.service";
+import {CommentNode} from '../comments/comments.component';
 import {Location} from '@angular/common';
-import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
-import {FileUploadService} from '../../../services/file-upload.service';
+import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
+import {FileUploadService} from '../../services/file-upload.service';
 import {v4 as uuid} from 'uuid';
-import {AuthService} from "../../../services/auth.service";
-import {TaskListService} from "../../../services/task-list.service";
+import {AuthService} from "../../services/auth.service";
+import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
-import {UsersService} from "../../../services/users.service";
-import {WorkPlanService} from "../../../services/work-plan-setup.service";
-import {ProjectMilestoneService} from "../../../services/project-milestone.service";
-import {AlertService} from "../../../services/alert";
+import {UsersService} from "../../services/users.service";
+import {WorkPlanService} from "../../services/work-plan-setup.service";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {AlertService} from "../../services/alert";
 
 //import {SampleData} from "../../helpers/sample-data";
 
 @Component({
-  selector: 'app-report-form',
-  templateUrl: './report-form.component.html',
-  styleUrls: ['./report-form.component.css']
+  selector: 'app-progress-report',
+  templateUrl: './progress-report.component.html',
+  styleUrls: ['./progress-report.component.css']
 })
 
-export class ReportFormComponent implements OnInit, OnUpdateCell {
+export class ProgressReportComponent implements OnInit, OnUpdateCell {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
