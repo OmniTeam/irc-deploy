@@ -67,11 +67,13 @@ grails.gorm.default.constraints = {
 }
 environments {
     development {
+        camundaUrl = "http://192.168.100.5:8181/mis/rest"
         uploadFolder = "D:/uploads/"
         uploadDocsFolder = "D:/uploads/"
         imageFolder = "D:/uploads/centralImages/"
     }
     production {
+        camundaUrl = "http://206.189.209.21:8090/mis/rest"
         uploadFolder = "/opt/uploads/"
         imageFolder = "/opt/uploads/centralImages/"
     }

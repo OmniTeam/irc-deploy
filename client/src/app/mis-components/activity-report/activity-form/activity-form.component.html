@@ -633,12 +633,11 @@
                             placeholder="Upload document"
                             (change)="handleFileInput($event)"
                             type="file" />
-                          <button  *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachPhoto.value)" class="btn btn-link">
-                            <a href="{{formGroup.controls.attachPhoto.value}}"
-                               style="font-size:15px;"
-                               class="text fas fa-file-download" target="_blank"
-                               download> {{formGroup.controls.attachPhoto.value}}</a>
-                          </button>
+                          <button
+                            *ngIf="isDisabled"
+                            type="button"
+                            (click)="fileUploadService.downloadFile(formGroup.controls.attachPhoto.value)"
+                            class="btn btn-link">{{formGroup.controls.attachPhoto.value}}</button>
                         </div>
                       </div>
                     </div>
@@ -661,12 +660,11 @@
                                  id="attachList"
                                  (change)="handleFileInput($event)"
                                  type="file" />
-                          <button  *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachList.value)" class="btn btn-link">
-                            <a [href]="downloadFile(formGroup.controls.attachList.value) | safeUrl"
-                               style="font-size:15px;"
-                               class="text fas fa-file-download" target="_blank"
-                               download> {{formGroup.controls.attachList.value}}</a>
-                          </button>
+                          <button
+                            *ngIf="isDisabled"
+                            type="button"
+                            (click)="fileUploadService.downloadFile(formGroup.controls.attachList.value)"
+                            class="btn btn-link">{{formGroup.controls.attachList.value}}</button>
 
                         </div>
                       </div>
@@ -689,13 +687,11 @@
                                  placeholder="Download document"
                                  (change)="handleFileInput($event)"
                                  type="file" />
-                          <button *ngIf="isDisabled" (click)="downloadFile(formGroup.controls.attachStory.value)" class="btn btn-link">
-                            <a href="{{formGroup.controls.attachStory.value}}"
-                               style="font-size:15px;"
-                               class="text fas fa-file-download" target="_blank"
-                               download> {{formGroup.controls.attachStory.value}}</a>
-                          </button>
-
+                          <button
+                            *ngIf="isDisabled"
+                            type="button"
+                            (click)="fileUploadService.downloadFile(formGroup.controls.attachStory.value)"
+                            class="btn btn-link">{{formGroup.controls.attachStory.value}}</button>
                         </div>
                       </div>
                     </div>
