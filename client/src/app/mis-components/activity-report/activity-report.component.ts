@@ -4,6 +4,7 @@ import {AlertService} from "../../services/alert";
 import {ProgramStaffService} from "../../services/program-staff.service";
 import {ActivityReportService} from "../../services/activity-report.service";
 import {HttpParams} from "@angular/common/http";
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-activity-report',
@@ -20,25 +21,27 @@ export class ActivityReportComponent implements OnInit {
   activeRow: any;
   staffs: any;
   activity: any;
+  userRole: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
     private activityReportService: ActivityReportService,
-    private programStaffService: ProgramStaffService
+    private programStaffService: ProgramStaffService,
+    private authService: AuthService
   ) {
   }
 
   ngOnInit(): void {
     this.reloadTable();
     this.getStaff();
+    this.userRole = this.authService.getUserRoles()
   }
 
   reloadTable() {
     this.activityReportService.getActivityReport().subscribe((data) => {
       this.activity = data;
-      console.log("results", this.activity)
     });
   }
 
@@ -62,7 +65,6 @@ export class ActivityReportComponent implements OnInit {
 
   getStaff() {
     this.programStaffService.getProgramStaffs().subscribe((data) => {
-      console.log()
       this.staffs = data;
     });
   }
@@ -73,13 +75,7 @@ export class ActivityReportComponent implements OnInit {
 
   editActivityReport(row) {
     const id = row.id;
-    console.log("Row cjjjd",row);
-    if(row.id == 'Pending') {
       this.router.navigate(['/activityReport/edit/' + id]);
-    } else {
-      this.alertService.error("Cannot Edit Running Report")
-    }
-
   }
 
   deleteActivityReport(row) {

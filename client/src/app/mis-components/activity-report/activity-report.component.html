@@ -59,9 +59,10 @@
             <ngx-datatable-column name="Location" prop="location" [width]="200"></ngx-datatable-column>
             <ngx-datatable-column name="Start Date" prop="startDate" [width]="200"></ngx-datatable-column>
             <ngx-datatable-column name="End Date" prop="endDate" [width]="200"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Created" prop="dateCreated" [width]="200"></ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false" [width]="250">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button (click)="editActivityReport(row);"  class="btn btn-default" style="padding: 1px 6px;"
+                <button (click)="editActivityReport(row);" *ngIf="userRole == 'ROLE_SUPER_ADMIN'|| userRole == 'ROLE_ADMIN'"  class="btn btn-default" style="padding: 1px 6px;"
                 >
                   <i class="fa fa-pencil-alt"></i>
                 </button>
