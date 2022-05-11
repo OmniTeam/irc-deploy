@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
 import {SampleData} from "../../helpers/sample-data";
+import {FileUploadService} from "../../services/file-upload.service";
 
 @Component({
   selector: 'application-letter',
@@ -29,7 +30,8 @@ export class ApplicationLetterComponent implements OnInit {
 
   constructor(
     private countriesService: CountriesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public fileUploadService:FileUploadService
   ) { }
 
   get f() {

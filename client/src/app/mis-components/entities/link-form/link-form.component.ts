@@ -3,7 +3,7 @@ import {FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EntityService} from "../../../services/entity.service";
 import {HttpParams} from "@angular/common/http";
-import {ReplacePipe} from "../../../replace-pipe";
+import {ReplacePipe} from "../../../pipes/replace-pipe";
 import {Subject} from "rxjs";
 import {EntityFormFieldMap} from "../../../models/entity";
 

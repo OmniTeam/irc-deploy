@@ -259,11 +259,11 @@
                     style="padding-left: 10px;"
                     id="completed"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.completed.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.completed.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.completed.value)"
+                    class="btn btn-link">{{formGroup.controls.completed.value}}</button>
                 </div>
               </div>
             </div>
@@ -279,11 +279,11 @@
                     style="padding-left: 10px;"
                     id="mel_framework"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.mel_framework.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.mel_framework.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.mel_framework.value)"
+                    class="btn btn-link">{{formGroup.controls.mel_framework.value}}</button>
                 </div>
               </div>
             </div>
@@ -301,11 +301,11 @@
                     style="padding-left: 10px;"
                     id="financial"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.financial.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.financial.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.financial.value)"
+                    class="btn btn-link">{{formGroup.controls.financial.value}}</button>
                 </div>
               </div>
             </div>
@@ -321,11 +321,11 @@
                     style="padding-left: 10px;"
                     id="registration"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.registration.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.registration.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.registration.value)"
+                    class="btn btn-link">{{formGroup.controls.registration.value}}</button>
                 </div>
               </div>
             </div>
@@ -343,11 +343,11 @@
                     style="padding-left: 10px;"
                     id="list_members"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.list_members.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.list_members.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.list_members.value)"
+                    class="btn btn-link">{{formGroup.controls.list_members.value}}</button>
                 </div>
               </div>
             </div>
@@ -363,11 +363,11 @@
                     style="padding-left: 10px;"
                     id="assessment_report"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a
-                    href="{{formGroup.controls.assessment_report.value}}" style="font-size:15px;"
-                    class="text fas fa-file-download" target="_blank"
-                    download> {{formGroup.controls.assessment_report.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.assessment_report.value)"
+                    class="btn btn-link">{{formGroup.controls.assessment_report.value}}</button>
                 </div>
               </div>
             </div>
@@ -385,11 +385,11 @@
                     style="padding-left: 10px;"
                     id="strategic_plan"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.strategic_plan.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.strategic_plan.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.strategic_plan.value)"
+                    class="btn btn-link">{{formGroup.controls.strategic_plan.value}}</button>
                 </div>
               </div>
             </div>
@@ -405,11 +405,11 @@
                     style="padding-left: 10px;"
                     id="annual_work_plan"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a
-                    href="{{formGroup.controls.annual_work_plan.value}}" style="font-size:15px;"
-                    class="text fas fa-file-download" target="_blank"
-                    download> {{formGroup.controls.annual_work_plan.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.annual_work_plan.value)"
+                    class="btn btn-link">{{formGroup.controls.annual_work_plan.value}}</button>
                 </div>
               </div>
             </div>
@@ -427,11 +427,11 @@
                     style="padding-left: 10px;"
                     id="child_policy"
                     (change)="handleFileInput($event)">
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.child_policy.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.child_policy.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.child_policy.value)"
+                    class="btn btn-link">{{formGroup.controls.child_policy.value}}</button>
                 </div>
               </div>
             </div>
@@ -447,11 +447,11 @@
                     style="padding-left: 10px;"
                     id="structure"
                     (change)="handleFileInput($event)"/>
-                  <button *ngIf="isReadOnly" class="btn btn-link"><a href="{{formGroup.controls.structure.value}}"
-                                                                     style="font-size:15px;"
-                                                                     class="text fas fa-file-download" target="_blank"
-                                                                     download> {{formGroup.controls.structure.value}}</a>
-                  </button>
+                  <button
+                    *ngIf="isReadOnly"
+                    type="button"
+                    (click)="fileUploadService.downloadFile(formGroup.controls.structure.value)"
+                    class="btn btn-link">{{formGroup.controls.structure.value}}</button>
                 </div>
               </div>
             </div>

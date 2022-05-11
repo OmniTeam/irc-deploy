@@ -13,6 +13,7 @@ import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {CommentsModule} from "../comments/comments.module";
+import {AppModule} from "../../app.module";
 
 @NgModule({
   declarations: [
@@ -21,18 +22,19 @@ import {CommentsModule} from "../comments/comments.module";
     PlanningLearningGrantComponent,
     OrganizationalInformationComponent
   ],
-  imports: [
-    CommonModule,
-    GrantProcessRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxDatatableModule,
-    ComponentsModule,
-    DataTablesModule,
-    EntityViewTableModule,
-    NgSelectModule,
-    CommentsModule,
-  ]
+    imports: [
+        CommonModule,
+        GrantProcessRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxDatatableModule,
+        ComponentsModule,
+        DataTablesModule,
+        EntityViewTableModule,
+        NgSelectModule,
+        CommentsModule,
+        AppModule,
+    ]
 })
 export class GrantProcessModule {
 }

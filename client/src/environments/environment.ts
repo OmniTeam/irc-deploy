@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://localhost:8081/crvpf'
+  serverUrl: 'http://localhost:8081/crvpf',
+  uploadFolder: "D:/uploads/"
 };
 
 /*

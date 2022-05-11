@@ -3,6 +3,7 @@ package com.kengamis.tasks
 import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
 import com.kengamis.PartnerSetup
+import grails.util.Holders
 import groovy.json.JsonOutput
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
@@ -11,8 +12,7 @@ import groovyx.net.http.Method
 import java.text.SimpleDateFormat
 
 class StartCamundaInstancesJob extends Script {
-    static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
-    //static String camundaApiUrl = "http://localhost:8181/mis/rest"
+    static String camundaApiUrl = Holders.grailsApplication.config.camundaUrl as String
     static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
     static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 

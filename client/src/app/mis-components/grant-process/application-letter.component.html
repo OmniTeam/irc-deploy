@@ -350,6 +350,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
+                *ngIf="!isReadOnly"
                 class="form-control"
                 placeholder="Attachment"
                 type="file"
@@ -357,6 +358,11 @@
                 formControlName="attachment"
                 [ngClass]="{ 'is-invalid': submitted && f.attachment.errors }"
               >
+              <button
+                *ngIf="isReadOnly"
+                type="button"
+                (click)="fileUploadService.downloadFile(formGroup.controls.attachment.value)"
+                class="btn btn-link">{{formGroup.controls.attachment.value}}</button>
             </div>
           </div>
         </div>
