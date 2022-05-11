@@ -271,7 +271,7 @@ export class HomeComponent implements OnInit {
       if (item.filter == filterName) number = item.count
     })
     if (filterName == 'All') {
-      number = this.taskListRows.length
+      number = this.taskListRows?.length
     }
     return number
   }
