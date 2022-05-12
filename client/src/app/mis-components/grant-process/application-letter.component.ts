@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
 import {SampleData} from "../../helpers/sample-data";
 import {FileUploadService} from "../../services/file-upload.service";
+import {GrantProcessService} from "../../services/grant-process.service";
 
 @Component({
   selector: 'application-letter',
@@ -11,28 +12,30 @@ import {FileUploadService} from "../../services/file-upload.service";
 })
 
 export class ApplicationLetterComponent implements OnInit {
-  @Input() isReadOnly:boolean;
+  @Input() isReadOnly: boolean;
   @Output() readOnlyChanged: EventEmitter<boolean> = new EventEmitter();
 
   formGroup: FormGroup;
   submitted = false;
   organizationType = [
-    {id:"1", name:"my type"}
-  ] ;
+    {id: "1", name: "my type"}
+  ];
   countries: any;
   cities: any;
   programs = [
-    {id:"1", name:"Adolescent Girl Power Program"},
-    {id:"2", name:"Youth Capacity Development Program"},
-    {id:"3", name:"Prevention of Violence Against Children and Adolescents"},
-  ] ;
+    {id: "1", name: "Adolescent Girl Power Program"},
+    {id: "2", name: "Youth Capacity Development Program"},
+    {id: "3", name: "Prevention of Violence Against Children and Adolescents"},
+  ];
   private letterOfInterest: any;
 
   constructor(
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
-    public fileUploadService:FileUploadService
-  ) { }
+    public fileUploadService: FileUploadService,
+    private grantProcessService: GrantProcessService
+  ) {
+  }
 
   get f() {
     return this.formGroup.controls;
@@ -44,7 +47,7 @@ export class ApplicationLetterComponent implements OnInit {
 
     this.letterOfInterest = SampleData.letterOfInterest;
 
-    if(this.letterOfInterest!=null&& this.isReadOnly) {
+    if (this.letterOfInterest != null && this.isReadOnly) {
       this.formGroup = this.formBuilder.group(this.letterOfInterest)
     } else {
       this.formGroup = this.formBuilder.group({
@@ -77,10 +80,14 @@ export class ApplicationLetterComponent implements OnInit {
     const formData = this.formGroup.value;
     this.letterOfInterest = formData;
     console.log('formData', formData)
+
+    this.grantProcessService.saveGrantForm(formData, this.grantProcessService.LETTER_OF_INTEREST).subscribe(data => {
+      console.log(data)
+    }, error => {console.log(error)})
   }
 
-  onSelectCountry(country){
-    this.countriesService.getCitiesForCountry(country).subscribe((response)=>{
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
       this.cities = response.data;
     }, error => console.log(error))
   }
