@@ -2,6 +2,7 @@ package com.kengamis.tasks
 
 import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
+import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
 import grails.util.Holders
 import groovy.json.JsonOutput
@@ -81,18 +82,19 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static planningAndLearningGrantJob() {
-/*        boolean started = startProcessInstance([
-                GrantId: setup.id,
-                PartnerId     : setup.partnerId
-        ], GRANT_PROCESS)
+        GrantLetterOfInterest.findAllByStatus("not_stated").each { it ->
+            boolean started = startProcessInstance([
+                    GrantId  : it.id,
+                    PartnerId: ''
+            ], GRANT_PROCESS)
 
 
-        if (started) {
-            print "================ started the damn instance ================"
-            *//*def calendar = CalendarTriggerDates.get(result['id'] as String)
-            calendar.started = true
-            calendar.save()*//*
-        }*/
+            if (started) {
+                print "================ started the damn instance ================"
+                it.status = 'started'
+                it.save()
+            }
+        }
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {

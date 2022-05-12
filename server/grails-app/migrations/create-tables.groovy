@@ -1900,5 +1900,413 @@ databaseChangeLog = {
         modifyDataType(columnName: "config_attribute", newDataType: "text", tableName: "request_map")
     }
 
+    changeSet(author: "bruno (generated)", id: "1652364702164-9") {
+        createTable(tableName: "grant_letter_of_interest") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_letter_of_interestPK")
+            }
+
+            column(name: "letter_attachment", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "contact_person_number", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "organisation", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "address_contact_person", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "postal_address", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "physical_address", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "legal_status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "email_address", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "city", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "contact_person", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)")
+
+            column(name: "country", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "organization_type", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "email", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "website", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "program", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "acronym", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652364702164-10") {
+        createTable(tableName: "grant_letter_of_interest_review") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_letter_of_interest_reviewPK")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "has_been_reviewed", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "due_diligence_report", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "due_diligence", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "comments", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_letter_of_interest_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "decision", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_of_due_diligence", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652364702164-11") {
+        createTable(tableName: "grant_planning_learning") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_planning_learningPK")
+            }
+
+            column(name: "mel_framework_attachment", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "child_policy", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "email_contact_person", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "structure", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "contact_person_number", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "proposed_duration", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "contact_authorized_signatory", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "address_contact_person", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "completed_attachment", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "registration", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "financial_attachment", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "strategic_plan", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "amount_requested", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "total_budget_amt", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "annual_work_plan", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "bank_details", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "proposed_start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "other_organization", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "assessment_report", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)")
+
+            column(name: "other_sources", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name_authorized_signatory", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "list_members_attachment", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652364702164-12") {
+        createTable(tableName: "grant_planning_learning_approve") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_planning_learning_approvePK")
+            }
+
+            column(name: "comments", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "decision", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_planning_learning_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652364702164-13") {
+        createTable(tableName: "grant_planning_learning_review") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_planning_learning_reviewPK")
+            }
+
+            column(name: "comments", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "decision", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_planning_learning_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "is_concept_inline", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "are_they_adhering", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)")
+
+            column(name: "does_it_adhere", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652364702164-14") {
+        createTable(tableName: "grant_provide_learning_grant") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_provide_learning_grantPK")
+            }
+
+            column(name: "comments", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "lead_agency", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "cluster_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_from", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_amount", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)")
+
+            column(name: "date_to", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 
 }

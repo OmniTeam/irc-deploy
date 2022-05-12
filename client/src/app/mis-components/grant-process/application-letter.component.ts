@@ -48,7 +48,7 @@ export class ApplicationLetterComponent implements OnInit {
 
     this.letterOfInterest = SampleData.letterOfInterest;
 
-    if (this.letterOfInterest != null /*&& this.isReadOnly*/) {
+    if (this.letterOfInterest != null && this.isReadOnly) {
       this.formGroup = this.formBuilder.group(this.letterOfInterest)
     } else {
       this.formGroup = this.formBuilder.group({
@@ -68,6 +68,7 @@ export class ApplicationLetterComponent implements OnInit {
         country: [{value: '', disabled: this.isReadOnly}],
         city: [{value: '', disabled: this.isReadOnly}],
         letterAttachment: [{value: '', disabled: this.isReadOnly}],
+        status: [null],
       });
     }
   }
