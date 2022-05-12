@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
+    <hr style="margin-top: 0; margin-bottom: 0;"/>
     <app-comments [comments]="comments" (commentsChanged)="commentsChangedHandler($event)"></app-comments>
   </div>
   <div class="card-footer" style="text-align: end">
@@ -41,7 +41,7 @@
               class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
             <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               PLANNING AND LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
+            <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
               LEARNING GRANT APPLICATION</h6></div>
             <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               APPROVE PLANNING AND LEARNING GRANT</h6></div>
@@ -59,7 +59,7 @@
 
               <application-letter [isReadOnly]="true"></application-letter>
 
-              <h3 style="margin-left: 40px;">Form</h3>
+              <h3 style="margin-left: 40px;">Review</h3>
               <div class="card">
                 <div class="row" style="margin: 10px;">
                   <div class="col-sm-12">
@@ -140,7 +140,7 @@
               <planning-learning-application [isReadOnly]="false"></planning-learning-application>
             </div>
 
-            <div *ngIf="isReviewLearningGrant" class="col">
+            <div *ngIf="isReviewPlanningLearningGrant" class="col">
               <organizational-information [partnerId]="partnerId"></organizational-information>
               <planning-learning-application [isReadOnly]="true"></planning-learning-application>
 

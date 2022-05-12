@@ -84,7 +84,6 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <ng-select class="form-control form-control-sm"
-                         name="datatable_length"
                          aria-controls="datatable"
                          style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                          [multiple]="false"
@@ -302,7 +301,6 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <ng-select class="form-control form-control-sm"
-                         name="datatable_length"
                          aria-controls="datatable"
                          style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                          [multiple]="false"
@@ -325,7 +323,6 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <ng-select class="form-control form-control-sm"
-                         name="datatable_length"
                          aria-controls="datatable"
                          style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                          [multiple]="false"
@@ -355,14 +352,14 @@
                 placeholder="Attachment"
                 type="file"
                 style="padding-left: 10px;"
-                formControlName="attachment"
-                [ngClass]="{ 'is-invalid': submitted && f.attachment.errors }"
+                formControlName="letter_attachment"
+                [ngClass]="{ 'is-invalid': submitted && f.letter_attachment.errors }"
               >
               <button
                 *ngIf="isReadOnly"
                 type="button"
-                (click)="fileUploadService.downloadFile(formGroup.controls.attachment.value)"
-                class="btn btn-link">{{formGroup.controls.attachment.value}}</button>
+                (click)="fileUploadService.downloadFile(formGroup.controls.letter_attachment.value)"
+                class="btn btn-link">{{formGroup.controls.letter_attachment.value}}</button>
             </div>
           </div>
         </div>

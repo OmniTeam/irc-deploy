@@ -63,7 +63,7 @@ export class ApplicationLetterComponent implements OnInit {
         website: [{value: '', disabled: this.isReadOnly}],
         country: [{value: '', disabled: this.isReadOnly}],
         city: [{value: '', disabled: this.isReadOnly}],
-        attachment: [{value: '', disabled: this.isReadOnly}],
+        letter_attachment: [{value: '', disabled: this.isReadOnly}],
       });
     }
   }

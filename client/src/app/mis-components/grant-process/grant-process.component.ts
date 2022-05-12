@@ -12,7 +12,7 @@ export class GrantProcessComponent implements OnInit {
   isSubmitLetterOfInterest: boolean;
   isReviewLetterOfInterest: boolean;
   isPlanningLearningApplication: boolean;
-  isReviewLearningGrant: boolean;
+  isReviewPlanningLearningGrant: boolean;
   isApprovePlanningLearningGrant: boolean;
   isProvidePlanningLearningGrant: boolean;
 
@@ -57,12 +57,12 @@ export class GrantProcessComponent implements OnInit {
   ngOnInit(): void {
     this.partnerId = "33547de5-83a7-42d6-9b36-3e7a3b292271"
 
-    this.isSubmitLetterOfInterest = true;
+    this.isSubmitLetterOfInterest = false;
     this.isReviewLetterOfInterest = false;
-    this.isPlanningLearningApplication = false;
-    this.isReviewLearningGrant = false;
+    this.isPlanningLearningApplication = false
+    this.isReviewPlanningLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
-    this.isProvidePlanningLearningGrant = false;
+    this.isProvidePlanningLearningGrant = true;
   }
 
   viewComments(): void {

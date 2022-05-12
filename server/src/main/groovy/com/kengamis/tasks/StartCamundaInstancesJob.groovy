@@ -9,15 +9,19 @@ import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
-import java.text.SimpleDateFormat
-
 class StartCamundaInstancesJob extends Script {
     static String camundaApiUrl = Holders.grailsApplication.config.camundaUrl as String
-    static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
-    static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    static String CRVPF_REPORTING = "CRVPF_REPORTING"
+    static String GRANT_PROCESS = "GRANT_PROCESS"
 
     @Override
     Object run() {
+        reportingJob()
+        planningAndLearningGrantJob()
+        return null
+    }
+
+    static reportingJob() {
         PartnerSetup.findAllByStartCycle("true").each { setup ->
             boolean startInstance = true
 
@@ -59,7 +63,7 @@ class StartCamundaInstancesJob extends Script {
                                 EndDate       : result['end_date'],
                                 Period        : result['period'],
                                 GroupId       : "${getGroupIds(setup.partnerId)}"
-                        ], CIIF_MANAGEMENT_KEY)
+                        ], CRVPF_REPORTING)
 
 
                         if (started) {
@@ -74,7 +78,21 @@ class StartCamundaInstancesJob extends Script {
                 }
             }
         }
-        return null
+    }
+
+    static planningAndLearningGrantJob() {
+/*        boolean started = startProcessInstance([
+                GrantId: setup.id,
+                PartnerId     : setup.partnerId
+        ], GRANT_PROCESS)
+
+
+        if (started) {
+            print "================ started the damn instance ================"
+            *//*def calendar = CalendarTriggerDates.get(result['id'] as String)
+            calendar.started = true
+            calendar.save()*//*
+        }*/
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {

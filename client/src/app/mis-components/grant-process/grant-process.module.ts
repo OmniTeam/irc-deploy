@@ -13,7 +13,6 @@ import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {CommentsModule} from "../comments/comments.module";
-import {AppModule} from "../../app.module";
 
 @NgModule({
   declarations: [
@@ -32,8 +31,7 @@ import {AppModule} from "../../app.module";
         DataTablesModule,
         EntityViewTableModule,
         NgSelectModule,
-        CommentsModule,
-        AppModule,
+        CommentsModule
     ]
 })
 export class GrantProcessModule {
