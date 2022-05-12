@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReportingProcessComponent } from './reporting-process.component';
+import { ProgressReportComponent } from './progress-report.component';
 
-describe('ReportingProcessComponent', () => {
-  let component: ReportingProcessComponent;
-  let fixture: ComponentFixture<ReportingProcessComponent>;
+describe('FormViewComponent', () => {
+  let component: ProgressReportComponent;
+  let fixture: ComponentFixture<ProgressReportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReportingProcessComponent ]
+      declarations: [ ProgressReportComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportingProcessComponent);
+    fixture = TestBed.createComponent(ProgressReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

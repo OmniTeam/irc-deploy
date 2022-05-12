@@ -21,13 +21,13 @@ class TaskListController {
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
+            def workPlanId = '', startDate = '', staffId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
 
             variables['data'].each {
-                if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+                if (it.key == 'PartnerSetupId') workPlanId = it.value
                 if (it.key == 'Period') period = it.value
                 if (it.key == 'StartDate') startDate = it.value
-                if (it.key == 'PartnerId') partnerId = it.value
+                if (it.key == 'PartnerId') staffId = it.value
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
                 if (it.key == 'ReferralId') referralId = it.value
@@ -36,7 +36,7 @@ class TaskListController {
                 if (it.key == 'GroupId') groupId = it.value
             }
 
-            def taskPartner = ProgramStaff.findById(partnerId)
+            def taskPartner = ProgramStaff.findById(staffId)
             def taskProgram = Program.findById(programId)
 
             if (taskPartner == null) taskPartner = [name: '']
@@ -74,9 +74,9 @@ class TaskListController {
             if (assignee.contains(currentUser.email) || c2)
                 tasks << [id               : task.id,
                           taskName         : task.taskName,
-                          partnerSetupId   : partnerSetupId,
+                          workPlanId       : workPlanId,
                           startDate        : startDate,
-                          partnerId        : partnerId,
+                          staffId          : staffId,
                           partnerName      : taskPartner.name,
                           programId        : programId,
                           programName      : taskProgram.title,
@@ -108,13 +108,13 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
+        def workPlanId = '', startDate = '', staffId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
 
         variables['data'].each {
-            if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+            if (it.key == 'PartnerSetupId') workPlanId = it.value
             if (it.key == 'Period') period = it.value
             if (it.key == 'StartDate') startDate = it.value
-            if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'PartnerId') staffId = it.value
             if (it.key == 'ProgramId') programId = it.value
             if (it.key == 'ReferralId') referralId = it.value
             if (it.key == 'ActivityId') activityId = it.value
@@ -123,7 +123,7 @@ class TaskListController {
             if (it.key == 'GroupId') groupId = it.value
         }
 
-        def programPartner = ProgramStaff.findById(partnerId)
+        def programPartner = ProgramStaff.findById(staffId)
         def program = Program.findById(programId)
 
         if (programPartner == null) programPartner = [name: '']
@@ -158,9 +158,9 @@ class TaskListController {
         if (assignee.contains(currentUser.email) || c2)
             t = [id               : task.id,
                  taskName         : task.taskName,
-                 partnerSetupId   : partnerSetupId,
+                 workPlanId       : workPlanId,
                  startDate        : startDate,
-                 partnerId        : partnerId,
+                 staffId          : staffId,
                  partnerName      : programPartner.name,
                  programId        : programId,
                  programName      : program.title,

@@ -1588,9 +1588,9 @@ databaseChangeLog = {
     }
 
     changeSet(author: "BrunoJay (generated)", id: "1646309130239-1") {
-        createTable(tableName: "partner_setup") {
+        createTable(tableName: "work_plan") {
             column(name: "id", type: "VARCHAR(255)") {
-                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setupPK")
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "work_planPK")
             }
 
             column(name: "setup_values", type: "text") {
@@ -1609,7 +1609,7 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
-            column(name: "partner_id", type: "VARCHAR(255)") {
+            column(name: "staff_id", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
         }
@@ -1843,7 +1843,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1648452203322-1") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "end_date", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -1851,7 +1851,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1648452203322-2") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "period_type", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -1859,7 +1859,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1648452203322-3") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "program_id", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -1867,7 +1867,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1648452203322-4") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "reporting_calendar", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -1875,7 +1875,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1648452203322-5") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "reporting_start_date", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -1883,7 +1883,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1648452203322-6") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "start_date", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -1891,11 +1891,11 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "2022090343454245-01") {
-        modifyDataType(columnName: "reporting_calendar", newDataType: "LONGTEXT", tableName: "partner_setup")
+        modifyDataType(columnName: "reporting_calendar", newDataType: "LONGTEXT", tableName: "work_plan")
     }
 
     changeSet(author: "bruno (generated)", id: "1649327928652-35") {
-        dropColumn(columnName: "reporting_calendar", tableName: "partner_setup")
+        dropColumn(columnName: "reporting_calendar", tableName: "work_plan")
     }
 
     changeSet(author: "bruno (generated)", id: "1649327928652-3") {
@@ -1939,7 +1939,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1649327928652-4") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "start_cycle", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -2205,7 +2205,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1650423423505-120") {
-        addColumn(tableName: "partner_setup") {
+        addColumn(tableName: "work_plan") {
             column(name: "reporting_end_date", type: "varchar(255)") {
                 constraints(nullable: "false")
             }
@@ -2260,6 +2260,10 @@ databaseChangeLog = {
                 constraints(nullable: "true")
             }
         }
+    }
+
+    changeSet(author: "bruno (generated)",  id: "16518259628050-120"){
+        renameColumn(columnDataType:"varchar(255)", newColumnName:"work_plan_id", oldColumnName:"partner_setup_id", tableName: "calendar_trigger_dates")
     }
 
 }

@@ -2,7 +2,6 @@ package com.kengamis
 
 import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.validation.ValidationException
-import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -17,10 +16,9 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class PartnerSetupController {
+class WorkPlanController {
 
-    PartnerSetupService partnerSetupService
-    ProgramStaffService programStaffService
+    WorkPlanService workPlanService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -28,81 +26,80 @@ class PartnerSetupController {
     def index(Integer max) {
         //params.max = Math.min(max ?: 10, 100)
 
-        def partnerSetups = partnerSetupService.list(params)
         def list = []
 
-        partnerSetups.each { PartnerSetup setup ->
-            def user = User.findById(setup.partnerId)
+        WorkPlan.all.each { workPlan ->
+            def user = User.findById(workPlan.staffId)
 
-            list << [id         : setup.id,
+            list << [id         : workPlan.id,
                      staff       : user.names,
-                     staffId    : setup.partnerId,
-                     lastUpdated: setup.lastUpdated,
-                     dateCreated: setup.dateCreated,
-                     setupValues: setup.setupValues
+                     staffId    : workPlan.staffId,
+                     lastUpdated: workPlan.lastUpdated,
+                     dateCreated: workPlan.dateCreated,
+                     setupValues: workPlan.setupValues
             ]
         }
         respond list
     }
 
     def show(Long id) {
-        respond partnerSetupService.get(id)
+        respond workPlanService.get(id)
     }
 
     @Transactional
-    def save(PartnerSetup partnerSetup) {
-        if (partnerSetup == null) {
+    def save(WorkPlan workPlan) {
+        if (workPlan == null) {
             render status: NOT_FOUND
             return
         }
-        if (partnerSetup.hasErrors()) {
+        if (workPlan.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond partnerSetup.errors
+            respond workPlan.errors
             return
         }
 
         try {
-            partnerSetupService.save(partnerSetup)
+            workPlanService.save(workPlan)
         } catch (ValidationException e) {
-            respond partnerSetup.errors
+            respond workPlan.errors
             return
         }
 
-        respond partnerSetup, [status: CREATED, view: "show"]
+        respond workPlan, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(PartnerSetup partnerSetup) {
-        if (partnerSetup == null) {
+    def update(WorkPlan workPlan) {
+        if (workPlan == null) {
             render status: NOT_FOUND
             return
         }
-        if (partnerSetup.hasErrors()) {
+        if (workPlan.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond partnerSetup.errors
+            respond workPlan.errors
             return
         }
 
         try {
-            partnerSetupService.save(partnerSetup)
+            workPlanService.save(workPlan)
         } catch (ValidationException e) {
-            respond partnerSetup.errors
+            respond workPlan.errors
             return
         }
 
-        respond partnerSetup, [status: OK, view: "show"]
+        respond workPlan, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(String id) {
-        if (id == null && params.id == null) {
+    def delete(Long id) {
+        if (id == null) {
             render status: NOT_FOUND
             return
         }
 
         //delete all tasks, calendar trigger dates and reports linked to this partner
-        def partnerSetup = partnerSetupService.get(params.id)
-        def tasks = TaskList.findAllByInputVariablesIlike('%' + partnerSetup.partnerId + '%')
+        def workPlan = workPlanService.get(params.id)
+        def tasks = TaskList.findAllByInputVariablesIlike('%' + workPlan.staffId + '%')
         tasks.each {
             def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
             if (deletedFromCamunda) {
@@ -113,15 +110,16 @@ class PartnerSetupController {
                 it.delete()
             }
         }
-        CalendarTriggerDates.findAllByPartnerSetupId(partnerSetup.id).each {it.delete()}
+        CalendarTriggerDates.findAllByWorkPlanId(workPlan.id).each {it.delete()}
 
-        partnerSetupService.delete(id ?: params.id)
+
+        workPlanService.delete(id ?: params.id)
 
         render status: NO_CONTENT
     }
 
-    def getPartnerSetupRecord() {
-        def map = [setup: PartnerSetup.findById(params.id)]
+    def getWorkPlanRecord() {
+        def map = [setup: WorkPlan.findById(params.id)]
         respond map
     }
 

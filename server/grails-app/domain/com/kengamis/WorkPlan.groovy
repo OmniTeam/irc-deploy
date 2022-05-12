@@ -1,10 +1,10 @@
 package com.kengamis
 
-class PartnerSetup {
+class WorkPlan {
 
     String id
     String userId
-    String partnerId
+    String staffId
     String programId
     String setupValues
     String startDate

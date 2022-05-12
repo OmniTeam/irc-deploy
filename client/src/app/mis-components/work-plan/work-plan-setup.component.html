@@ -326,18 +326,13 @@
                       <th class='text-center'>Commitment</th>
                     </tr>
                     </thead>
-                    <tbody *ngIf="editing">
+                    <tbody>
                     <tr *ngFor="let row of quarterlyCommitment">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{row.datePeriod }}</td>
                       <td class='text-center'>{{row.startDate }}</td>
                       <td class='text-center'>{{ row.endDate }}</td>
                       <td class='text-center' [id]="row.id">{{ row.commitment | number }}
-                       <!-- <div>
-                          <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id, 'quarterlyCommitment', row.commitment, 'number')"><i
-                            class="fas fa-pencil-alt"></i></button>
-                        </div>-->
                       </td>
                     </tr>
                     </tbody>

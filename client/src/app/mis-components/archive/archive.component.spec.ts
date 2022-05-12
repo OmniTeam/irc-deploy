@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReportFormComponent } from './report-form.component';
+import { ArchiveComponent } from './archive.component';
 
-describe('FormViewComponent', () => {
-  let component: ReportFormComponent;
-  let fixture: ComponentFixture<ReportFormComponent>;
+describe('ReportingProcessComponent', () => {
+  let component: ArchiveComponent;
+  let fixture: ComponentFixture<ArchiveComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReportFormComponent ]
+      declarations: [ ArchiveComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportFormComponent);
+    fixture = TestBed.createComponent(ArchiveComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
