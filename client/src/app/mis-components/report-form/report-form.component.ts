@@ -35,6 +35,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   errorMessage: string;
   successMessage: string;
 
+  isReadOnly: boolean;
+
   isSubmitVisible: boolean;
   isSubmitFinalVisible: boolean;
   isReviewVisible: boolean;
@@ -98,7 +100,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               private location: Location,
               private reportFormService: ReportFormService,
               private taskListService: TaskListService,
-              private fileUploadService: FileUploadService,
+              public fileUploadService: FileUploadService,
               private partnerSetupService: PartnerSetupService,
               private programPartnersService: ProgramPartnersService,
               private projectMilestoneService: ProjectMilestoneService,
@@ -117,6 +119,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
+        this.isReadOnly = p['readonly']=='true';
         const params = new HttpParams().set('id', this.taskId);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
           this.taskRecord = data;

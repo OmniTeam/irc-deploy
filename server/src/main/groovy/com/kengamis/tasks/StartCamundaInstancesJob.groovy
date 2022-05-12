@@ -2,22 +2,27 @@ package com.kengamis.tasks
 
 import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
+import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
+import grails.util.Holders
 import groovy.json.JsonOutput
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
-import java.text.SimpleDateFormat
-
 class StartCamundaInstancesJob extends Script {
-    static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
-    //static String camundaApiUrl = "http://localhost:8181/mis/rest"
-    static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
-    static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    static String camundaApiUrl = Holders.grailsApplication.config.camundaUrl as String
+    static String CRVPF_REPORTING = "CRVPF_REPORTING"
+    static String GRANT_PROCESS = "GRANT_PROCESS"
 
     @Override
     Object run() {
+        reportingJob()
+        planningAndLearningGrantJob()
+        return null
+    }
+
+    static reportingJob() {
         PartnerSetup.findAllByStartCycle("true").each { setup ->
             boolean startInstance = true
 
@@ -59,7 +64,7 @@ class StartCamundaInstancesJob extends Script {
                                 EndDate       : result['end_date'],
                                 Period        : result['period'],
                                 GroupId       : "${getGroupIds(setup.partnerId)}"
-                        ], CIIF_MANAGEMENT_KEY)
+                        ], CRVPF_REPORTING)
 
 
                         if (started) {
@@ -74,7 +79,22 @@ class StartCamundaInstancesJob extends Script {
                 }
             }
         }
-        return null
+    }
+
+    static planningAndLearningGrantJob() {
+        GrantLetterOfInterest.findAllByStatus("not_stated").each { it ->
+            boolean started = startProcessInstance([
+                    GrantId  : it.id,
+                    PartnerId: ''
+            ], GRANT_PROCESS)
+
+
+            if (started) {
+                print "================ started the damn instance ================"
+                it.status = 'started'
+                it.save()
+            }
+        }
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {FormService} from '../../services/form.service';
-import {ReplacePipe} from '../../replace-pipe';
+import {ReplacePipe} from '../../pipes/replace-pipe';
 import {EntityService} from '../../services/entity.service';
 import {TitleCasePipe} from '@angular/common';
 
@@ -365,41 +365,6 @@ export class SidebarComponent implements OnInit {
           formsMenu,
           {
             path: '/',
-            title: 'Tasks',
-            type: 'sub',
-            icontype: 'fas fa-tasks text-pink',
-            roles: [
-              'ROLE_SUPER_ADMIN',
-              'ROLE_ADMIN',
-              'ROLE_YCD_PARTNER_DATA_MANAGER',
-              'ROLE_VAC_PARTNER_DATA_MANAGER',
-              'ROLE_AGPP_PARTNER_DATA_MANAGER',
-              'ROLE_VAC_STAFF_DATA_MANAGER',
-              'ROLE_AGPP_STAFF_DATA_MANAGER',
-              'ROLE_YCD_STAFF_DATA_MANAGER',
-              'ROLE_STAFF_DATA_VIEWER'
-            ],
-            isCollapsed: true,
-            children: [
-              {
-                path: 'taskList',
-                title: 'Task List',
-                type: 'link',
-                roles: [
-                  'ROLE_SUPER_ADMIN', 'ROLE_ADMIN',
-                  'ROLE_YCD_PARTNER_DATA_MANAGER',
-                  'ROLE_VAC_PARTNER_DATA_MANAGER',
-                  'ROLE_AGPP_PARTNER_DATA_MANAGER',
-                  'ROLE_VAC_STAFF_DATA_MANAGER',
-                  'ROLE_AGPP_STAFF_DATA_MANAGER',
-                  'ROLE_YCD_STAFF_DATA_MANAGER',
-                  'ROLE_STAFF_DATA_VIEWER'
-                ]
-              },
-            ]
-          },
-          {
-            path: '/',
             title: 'Admin',
             type: 'sub',
             icontype: 'fas fa-user-cog',
@@ -411,6 +376,12 @@ export class SidebarComponent implements OnInit {
                 title: 'Tags',
                 type: 'link',
                 roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+              },
+              {
+                path: 'taskList',
+                title: 'Task List',
+                type: 'link',
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
               },
               {
                 path: 'partnerSetupList',

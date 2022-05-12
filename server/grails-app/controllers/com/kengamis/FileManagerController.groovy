@@ -1,7 +1,5 @@
 package com.kengamis
 
-import org.springframework.web.multipart.MultipartFile
-
 class FileManagerController {
     static responseFormats = ['json', 'xml']
 
@@ -22,7 +20,7 @@ class FileManagerController {
         }
         String originalFileName = f.originalFilename
         String generatedPath = generator((('A'..'Z') + ('0'..'9')).join(), 9) + '/' + originalFileName
-        if(!folder.empty) generatedPath = folder + '/' + generatedPath
+        if(folder) generatedPath = folder + '/' + generatedPath
 
         def uploadPath = grailsApplication.config.uploadFolder as String
 
@@ -33,6 +31,17 @@ class FileManagerController {
         println "generatedPath $generatedPath"
 
         respond path: generatedPath
+    }
+
+    def downloadFile() {
+        def path = request.getParameter('path')
+        if (path) {
+            def uploadPath = grailsApplication.config.uploadFolder as String
+            def file = new File(uploadPath + path)
+            if (file.exists()) {
+                response.outputStream << file.bytes
+            }
+        }
     }
 
 }

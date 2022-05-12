@@ -56,6 +56,7 @@ class UrlMappings {
         get "/$controller/exportZippedFormData(.$format)?"(action:"getExportedZippedFormData")
         get "/$controller/getUserRoles(.$format)?"(action:"getUserRoles")
         post "/$controller/uploadFile(.$format)?"(action:"uploadFile")
+        post "/$controller/downloadFile(.$format)?"(action:"downloadFile")
 
 
         group "/odxRest/", {

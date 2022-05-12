@@ -26,7 +26,7 @@ export class PlanningLearningGrantComponent implements OnInit {
   constructor(
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
-    private fileUploadService: FileUploadService
+    public fileUploadService: FileUploadService
   ) {
   }
 

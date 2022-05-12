@@ -6,22 +6,21 @@
         <ul style="list-style: none; font-size: 16px">
           <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo?.organisation}}</b></li>
           <li>Acronym Name: <b>{{organisationalInfo?.acronym}}</b></li>
-          <li>Type of Organisation: <b>{{organisationalInfo?.organization_type}}</b></li>
-          <li>Legal Status: <b>{{organisationalInfo?.legal_status}}</b></li>
-          <li>Name of Contact Person: <b>{{organisationalInfo?.nameContactPerson}}</b></li>
+          <li>Type of Organisation: <b>{{organisationalInfo?.organizationType}}</b></li>
+          <li>Legal Status: <b>{{organisationalInfo?.legalStatus}}</b></li>
+          <li>Name of Contact Person: <b>{{organisationalInfo?.contactPerson}}</b></li>
           <li>
-            <button class="btn btn-link"><a href="{{organisationalInfo?.letter}}" style="font-size:15px;"
-                                            class="text fas fa-file-download"
-                                            target="_blank" download>&nbsp;&nbsp;Download Letter of
-              interest</a>
-            </button>
+            <button
+              type="button"
+              (click)="fileUploadService.downloadFile(organisationalInfo?.letterAttachment)"
+              class="btn btn-link">{{organisationalInfo?.letterAttachment}}</button>
           </li>
         </ul>
       </div>
       <div class="col-sm-6">
         <ul style="list-style: none; font-size: 16px">
-          <li>Physical Address: <b>{{organisationalInfo?.physical_address}}</b></li>
-          <li>Postal Address: <b>{{organisationalInfo?.postal_address}}</b></li>
+          <li>Physical Address: <b>{{organisationalInfo?.physicalAddress}}</b></li>
+          <li>Postal Address: <b>{{organisationalInfo?.postalAddress}}</b></li>
           <li>Email: <b>{{organisationalInfo?.email}}</b></li>
           <li>Website: <b>{{organisationalInfo?.website}}</b></li>
           <li>Country: <b>{{organisationalInfo?.country}}</b></li>

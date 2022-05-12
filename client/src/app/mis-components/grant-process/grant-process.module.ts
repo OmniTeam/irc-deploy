@@ -21,18 +21,18 @@ import {CommentsModule} from "../comments/comments.module";
     PlanningLearningGrantComponent,
     OrganizationalInformationComponent
   ],
-  imports: [
-    CommonModule,
-    GrantProcessRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxDatatableModule,
-    ComponentsModule,
-    DataTablesModule,
-    EntityViewTableModule,
-    NgSelectModule,
-    CommentsModule,
-  ]
+    imports: [
+        CommonModule,
+        GrantProcessRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxDatatableModule,
+        ComponentsModule,
+        DataTablesModule,
+        EntityViewTableModule,
+        NgSelectModule,
+        CommentsModule
+    ]
 })
 export class GrantProcessModule {
 }

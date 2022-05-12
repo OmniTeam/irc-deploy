@@ -81,6 +81,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
       },
       {
+        path: 'archive', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/archive/archive.module').then(m => m.ArchiveModule)
+      },
+      {
         path: 'partnerSetup', canActivate: [AuthGuard],
         data: {
           userRoles: [
@@ -166,7 +173,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
       },
       {
-        path: 'reportForm/:id', canActivate: [AuthGuard],
+        path: 'reportForm/:id/:readonly', canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,

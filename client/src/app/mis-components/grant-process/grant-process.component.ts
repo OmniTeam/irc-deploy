@@ -12,7 +12,7 @@ export class GrantProcessComponent implements OnInit {
   isSubmitLetterOfInterest: boolean;
   isReviewLetterOfInterest: boolean;
   isPlanningLearningApplication: boolean;
-  isReviewLearningGrant: boolean;
+  isReviewPlanningLearningGrant: boolean;
   isApprovePlanningLearningGrant: boolean;
   isProvidePlanningLearningGrant: boolean;
 
@@ -38,7 +38,9 @@ export class GrantProcessComponent implements OnInit {
   areTheyAdhering: any;
   decisionOfReviewProcess: any;
   hasDueDiligenceConducted: any;
-  partnerId: string;
+  grantId: string;
+  definitionKey: string;
+  processInstanceId: string;
   decisionOfApproveProcess: any;
   approveComments: any;
 
@@ -55,12 +57,14 @@ export class GrantProcessComponent implements OnInit {
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    this.partnerId = "33547de5-83a7-42d6-9b36-3e7a3b292271"
+    this.isSubmitLetterOfInterest = true;
+    this.grantId = ""
+    this.definitionKey = ""
+    this.processInstanceId = ""
 
-    this.isSubmitLetterOfInterest = false;
     this.isReviewLetterOfInterest = false;
-    this.isPlanningLearningApplication = true;
-    this.isReviewLearningGrant = false;
+    this.isPlanningLearningApplication = false
+    this.isReviewPlanningLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
     this.isProvidePlanningLearningGrant = false;
   }
