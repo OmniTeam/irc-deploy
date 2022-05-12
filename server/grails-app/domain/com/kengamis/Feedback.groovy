@@ -41,6 +41,7 @@ class Feedback {
     String project
     String assignee
     String status
+    String countryOfOrigin
     Date dateCreated
     Date lastUpdated
 
@@ -49,9 +50,6 @@ class Feedback {
     }
 
     static constraints = {
-
-
-        //TODO TEXT AREAS!!!
         serialNumber nullable: true
         gender nullable: true
         age nullable: true
@@ -88,6 +86,7 @@ class Feedback {
         dataEntryFocalPoint nullable: true
         email nullable: true
         project nullable: true
+        countryOfOrigin nullable: true
         feedbackDetails nullable: true
         assignee nullable: true
         status nullable: false

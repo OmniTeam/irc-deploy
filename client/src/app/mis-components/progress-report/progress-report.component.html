@@ -102,10 +102,10 @@
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Total Budget Allocated: <b>{{totalAmountCommitted}}</b></li>
-                        <li>Total spending plan for the reporting period: <b>{{totalSpendingPlanForPeriod}}</b></li>
-                        <li>Total amount spent: <b>{{totalAmountSpent}}</b></li>
-                        <li>Balance (Variance): <b>{{balance}}</b></li>
+                        <li>Total Budget Allocated: <b>{{totalAmountCommitted | number}}</b></li>
+                        <li>Total spending plan for the reporting period: <b>{{totalSpendingPlanForPeriod | number}}</b></li>
+                        <li>Total amount spent: <b>{{totalAmountSpent | number}}</b></li>
+                        <li>Balance (Variance): <b>{{balance | number}}</b></li>
                       </ul>
                     </div>
                   </div>
@@ -180,7 +180,7 @@
                       <td class='text-center'>{{ row.expense_to_date | number }}</td>
                       <td class='text-center'>{{ row.quarter_budget | number }}</td>
                       <td class='text-center'>{{ row.quarter_expenses | number }}</td>
-                      <td class='text-center'>{{ row.variance }}</td>
+                      <td class='text-center'>{{ row.variance | number}}</td>
                       <td class='text-center comment' [id]="'td3-'+row.id">
                         {{ row.reason_for_variance }}
                         <div *ngIf="!isReadOnly">
@@ -302,7 +302,7 @@
 
                   <div class="row">
                     <div class="col">
-                      <p>Comments For Partner </p>
+                      <p>Comments For Staff </p>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" [(ngModel)]="reviewerComments"></textarea>
                     </div>
                     <div class="col">

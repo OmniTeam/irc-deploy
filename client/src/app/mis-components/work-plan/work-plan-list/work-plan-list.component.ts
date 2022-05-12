@@ -52,7 +52,7 @@ export class WorkPlanListComponent implements OnInit {
   }
 
   deleteRecord(id) {
-    if (confirm('Are you sure to delete this Partner Setup Record?')) {
+    if (confirm('Are you sure to delete this Work Plan Record?')) {
       this.workPlanService.deleteWorkPlanRecord(id).subscribe((result) => {
           this.alertService.warning(`Staff Work plan Record has been  deleted `);
           this.reloadTableData();

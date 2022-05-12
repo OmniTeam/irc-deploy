@@ -112,8 +112,8 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div id="gender" [hidden]="false">
+                  <div class="row"  >
                     <label>
                       Gender
 
@@ -142,8 +142,8 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div id="age" [hidden]="false">
+                  <div class="row" >
                     <label>
                       Age
 
@@ -165,8 +165,8 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div id="nationality" [hidden]="false">
+                  <div class="row" >
                     <label>
                       Nationality Status
 
@@ -184,10 +184,41 @@
                                      placeholder="Nationality Status"
                                      formControlName="nationalityStatus"
                                      [searchable]="true"
+                                     (change)="onChangeCountry($event)"
                                      [clearable]="true"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of nationality_status">
                               {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="country_of_origin" [hidden]="true">
+                  <div class="row">
+                    <label>
+                      Country of Origin
+                      <!--                      <span class="required-indicator">*</span>-->
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Country of Origin"
+                                     formControlName="countryOfOrigin"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
+                              {{item.name?.common}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -259,7 +290,7 @@
                     </div>
                   </div>
                 </div>
-                <div  id="phone" [hidden]="false">
+                <div  id="phone" [hidden]="true">
                   <div class="row">
                     <label>
                       Phone Number
@@ -282,7 +313,7 @@
                     </div>
                   </div>
                 </div>
-                <div id="email" [hidden]="false">
+                <div id="email" [hidden]="true">
                   <div class="row" >
                     <label>
                       Email
@@ -299,6 +330,30 @@
                             type="email"
                             style="padding-left: 10px;"
                             formControlName="email"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                  <div id="disability" [hidden]="false">
+                  <div class="row" >
+                    <label>
+                      Disability
+
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Disability"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="disability"
                           >
                         </div>
                       </div>
@@ -857,6 +912,37 @@
                                            [clearable]="true"
                                 >
                                   <ng-option [value]="item.name" *ngFor="let item of followup_needed">
+                                    {{item.name}}
+                                  </ng-option>
+                                </ng-select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row" [hidden]="false">
+                        <div class="col-md-3">
+                          <label>
+                            Feedback response received?
+                            <!--                      -->
+                          </label>
+                        </div>
+                        <div class="col-md-9">
+                          <div class="col-md-12">
+                            <div class="form-group ">
+                              <div class=" input-group input-group-merge">
+                                <ng-select class="form-control form-control-sm"
+                                           aria-controls="datatable"
+                                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                           [multiple]="false"
+                                           placeholder="Feedback Response Received"
+                                           formControlName="feedBackResponse"
+                                           (change)="checkForFeedBackResponse($event)"
+                                           [searchable]="true"
+                                           [clearable]="true"
+                                >
+                                  <ng-option [value]="item.name" *ngFor="let item of followup_response">
                                     {{item.name}}
                                   </ng-option>
                                 </ng-select>

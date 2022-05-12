@@ -133,6 +133,7 @@ export class ActivityFormComponent implements OnInit {
   isMakeCorrections: boolean;
   isApprove: boolean;
   workPlanId: any;
+  commentDisable: boolean;
 
   constructor(
     private router: Router,
@@ -167,6 +168,7 @@ export class ActivityFormComponent implements OnInit {
           this.isApprove = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report"
           // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
           this.isDisabled = true;
+          if(this.isMakeCorrections) this.commentDisable = true
 
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data => {
@@ -196,7 +198,7 @@ export class ActivityFormComponent implements OnInit {
               attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isDisabled}],
               attachList: [{value: this.activity?.attachList, disabled: this.isDisabled}],
               attachStory: [{value: this.activity?.attachStory, disabled: this.isDisabled}],
-              comments: [{value: this.activity?.comments, disabled: !this.isDisabled}],
+              comments: [{value: this.activity?.comments, disabled: this.commentDisable }],
               actionRequired: [''],
               status: ['']
             });

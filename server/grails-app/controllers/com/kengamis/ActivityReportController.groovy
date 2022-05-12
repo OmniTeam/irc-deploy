@@ -78,9 +78,9 @@ class ActivityReportController {
         }
         /*delete all occurrences of the deleted activity from the db*/
         def activitySetup = activityReportService.get(id)
-        def tasks = TaskList.findAllByInputVariables('%' + activitySetup.id + '%')
+        def tasks = TaskList.findAllByInputVariablesIlike('%' + activitySetup.id + '%')
         tasks.each {
-            def deleteFromCamunda = PartnerSetupController.deleteProcessInstance(it.processInstanceId)
+            def deleteFromCamunda = WorkPlanController.deleteProcessInstance(it.processInstanceId)
             if(deleteFromCamunda) {
                 it.delete()
             }

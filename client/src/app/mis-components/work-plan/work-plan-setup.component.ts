@@ -465,10 +465,10 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
-        this.successMessage = "Updated Partner Setup";
+        this.successMessage = "Updated Work Plan";
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to update Partner Setup";
+        this.errorMessage = "Failed to update Work Plan";
         this.success = false;
         console.log(error);
       });
@@ -478,10 +478,10 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
-        this.successMessage = "Saved Partner Setup";
+        this.successMessage = "Saved Work Plan";
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to save Partner Setup";
+        this.errorMessage = "Failed to save Work Plan";
         this.success = false;
         console.log(error);
       });
@@ -589,7 +589,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   private updateQuarterlyCommitmentValues(period, newValue) {
     let totalD: number = 0;
     this.quarterlyCommitment.forEach(function (item) {
-      if (item.datePeriod === period) item.commitment = +item.commitment + +newValue
+      if (item.datePeriod === period) item.commitment = newValue
       totalD += +item.commitment;
     });
     this.totalDisbursement = totalD.toString();

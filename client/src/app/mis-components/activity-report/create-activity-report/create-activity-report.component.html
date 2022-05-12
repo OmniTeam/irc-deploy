@@ -134,24 +134,24 @@
                   <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
-                        <input
-                          class="form-control"
-                          placeholder="Select Milestone"
-                          type="text"
-                          style="padding-left: 10px;"
-                          formControlName="milestone"
-                        >
-<!--                        <ng-select class="form-control form-control-sm"-->
-<!--                                   aria-controls="datatable"-->
-<!--                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"-->
-<!--                                   [multiple]="false"-->
-<!--                                   placeholder="Select Milestone"-->
-<!--                                   formControlName="milestone"-->
-<!--                                   [clearable]="true">-->
-<!--                          <ng-option [value]="this.singleMilestone">-->
-<!--                            {{this.singleMilestone}}-->
-<!--                          </ng-option>-->
-<!--                        </ng-select>-->
+<!--                        <input-->
+<!--                          class="form-control"-->
+<!--                          placeholder="Select Milestone"-->
+<!--                          type="text"-->
+<!--                          style="padding-left: 10px;"-->
+<!--                          formControlName="milestone"-->
+<!--                        >-->
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Select Milestone"
+                                   formControlName="milestone"
+                                   [clearable]="true">
+                          <ng-option [value]="item.name" *ngFor="let item of this.getMilestone">
+                            {{item.name}}
+                          </ng-option>
+                        </ng-select>
                       </div>
                     </div>
                   </div>

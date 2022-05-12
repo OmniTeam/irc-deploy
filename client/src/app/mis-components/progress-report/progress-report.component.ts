@@ -252,6 +252,7 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
                 })
               }
             })
+            let variance =  +b.approvedAmount - (+b.totalSpent + +quarterExpenses)
             if (!this.financialReport.some(x => x.id === b.id)) {
               this.financialReport.push({
                 id: b.id,
@@ -259,7 +260,8 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
                 approved_budget: b.approvedAmount,
                 expense_to_date: b.totalSpent,
                 quarter_budget: quarterBudget,
-                quarter_expenses: quarterExpenses
+                quarter_expenses: quarterExpenses,
+                variance: variance
               });
             } else {
               this.financialReport.forEach((report) => {

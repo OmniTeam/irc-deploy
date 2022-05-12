@@ -2266,4 +2266,10 @@ databaseChangeLog = {
         renameColumn(columnDataType:"varchar(255)", newColumnName:"work_plan_id", oldColumnName:"partner_setup_id", tableName: "calendar_trigger_dates")
     }
 
+    changeSet(author: "DELL (generated)", id: "1652356293285-126") {
+        addColumn(tableName: "feedback") {
+            column(name: "country_of_origin", type: "varchar(255)")
+        }
+    }
+
 }
