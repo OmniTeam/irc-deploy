@@ -136,12 +136,12 @@
             </div>
 
             <div *ngIf="isPlanningLearningApplication" class=" col">
-              <organizational-information [partnerId]="partnerId"></organizational-information>
+              <organizational-information [grantId]="grantId"></organizational-information>
               <planning-learning-application [isReadOnly]="false"></planning-learning-application>
             </div>
 
             <div *ngIf="isReviewPlanningLearningGrant" class="col">
-              <organizational-information [partnerId]="partnerId"></organizational-information>
+              <organizational-information [grantId]="grantId"></organizational-information>
               <planning-learning-application [isReadOnly]="true"></planning-learning-application>
 
               <h3 style="margin-left: 40px;">Reviewer Action</h3>
@@ -222,7 +222,7 @@
             </div>
 
             <div *ngIf="isApprovePlanningLearningGrant" class="col">
-              <organizational-information [partnerId]="partnerId"></organizational-information>
+              <organizational-information [grantId]="grantId"></organizational-information>
               <planning-learning-application [isReadOnly]="true"></planning-learning-application>
 
               <h3 style="margin-left: 40px;">Approver Section</h3>
@@ -264,7 +264,7 @@
             </div>
 
             <div *ngIf="isProvidePlanningLearningGrant" class="col">
-              <organizational-information [partnerId]="partnerId"></organizational-information>
+              <organizational-information [grantId]="grantId"></organizational-information>
               <planning-learning-application [isReadOnly]="true"></planning-learning-application>
 
               <h3 style="margin-left: 40px;">Finance Section</h3>

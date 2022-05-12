@@ -3,7 +3,6 @@ package com.kengamis
 class GrantLetterOfInterest {
 
     String id
-    String partnerId
     String program
     String organisation
     String organizationType
@@ -25,6 +24,7 @@ class GrantLetterOfInterest {
     Date lastUpdated
 
     static constraints = {
+        status nullable: true
     }
 
     static mapping = {

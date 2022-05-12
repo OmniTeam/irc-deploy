@@ -290,19 +290,19 @@ export class SampleData {
   ];
   static letterOfInterest = {
     acronym: "IMTC",
-    address_contact_person: "Kampala, Uganda",
-    letter_attachment: "C:\\fakepath\\image_2022-04-28_16-04-55.png",
+    addressContactPerson: "Kampala, Uganda",
+    letterAttachment: "C:\\fakepath\\image_2022-04-28_16-04-55.png",
     city: "Kampala",
-    contact_person: "Bruno Wepukhulu",
-    contact_person_number: "+256773430638",
+    contactPerson: "Bruno Wepukhulu",
+    contactPersonNumber: "+256773430638",
     country: "Uganda",
     email: "brunojay001@gmail.com",
-    email_address: "brunojay001@gmail.com",
-    legal_status: "Limited Liability",
+    emailAddress: "brunojay001@gmail.com",
+    legalStatus: "Limited Liability",
     organisation: "Tech",
-    organization_type: "1",
-    physical_address: "Kampala, Uganda",
-    postal_address: "0000",
+    organizationType: "1",
+    physicalAddress: "Kampala, Uganda",
+    postalAddress: "0000",
     program: "1",
     website: "inscriptug.com"
   }

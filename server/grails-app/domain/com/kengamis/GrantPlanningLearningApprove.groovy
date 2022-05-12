@@ -10,7 +10,6 @@ class GrantPlanningLearningApprove {
 
     String definitionKey
     String processInstanceId
-    String partnerId
     String status
     Date dateCreated
     Date lastUpdated
@@ -18,6 +17,7 @@ class GrantPlanningLearningApprove {
     GrantPlanningLearning grantPlanningLearning
 
     static constraints = {
+        status nullable: true
     }
 
     static mapping = {

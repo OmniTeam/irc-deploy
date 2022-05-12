@@ -88,8 +88,8 @@
                          style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                          [multiple]="false"
                          placeholder="Organization Type"
-                         formControlName="organization_type"
-                         [ngClass]="{ 'is-invalid': submitted && f.organization_type.errors }"
+                         formControlName="organizationType"
+                         [ngClass]="{ 'is-invalid': submitted && f.organizationType.errors }"
                          [searchable]="true"
                          [clearable]="true"
               >
@@ -97,8 +97,8 @@
                   {{item.name}}
                 </ng-option>
               </ng-select>
-              <div *ngIf="submitted && f.organization_type.errors" class="invalid-feedback">
-                <div *ngIf="f.organization_type.errors.required" class="input-error">Organization Type is required</div>
+              <div *ngIf="submitted && f.organizationType.errors" class="invalid-feedback">
+                <div *ngIf="f.organizationType.errors.required" class="input-error">Organization Type is required</div>
               </div>
             </div>
           </div>
@@ -112,11 +112,11 @@
                 placeholder="Legal Status"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="legal_status"
-                [ngClass]="{ 'is-invalid': submitted && f.legal_status.errors }"
+                formControlName="legalStatus"
+                [ngClass]="{ 'is-invalid': submitted && f.legalStatus.errors }"
               >
-              <div *ngIf="submitted && f.legal_status.errors" class="invalid-feedback">
-                <div *ngIf="f.legal_status.errors.required" class="input-error">Legal Status</div>
+              <div *ngIf="submitted && f.legalStatus.errors" class="invalid-feedback">
+                <div *ngIf="f.legalStatus.errors.required" class="input-error">Legal Status</div>
               </div>
             </div>
           </div>
@@ -133,11 +133,11 @@
                 placeholder="Contact Person"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="contact_person"
-                [ngClass]="{ 'is-invalid': submitted && f.contact_person.errors }"
+                formControlName="contactPerson"
+                [ngClass]="{ 'is-invalid': submitted && f.contactPerson.errors }"
               >
-              <div *ngIf="submitted && f.contact_person.errors" class="invalid-feedback">
-                <div *ngIf="f.contact_person.errors.required" class="input-error">Contact Person is
+              <div *ngIf="submitted && f.contactPerson.errors" class="invalid-feedback">
+                <div *ngIf="f.contactPerson.errors.required" class="input-error">Contact Person is
                   required
                 </div>
               </div>
@@ -153,11 +153,11 @@
                 placeholder="Address"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="address_contact_person"
-                [ngClass]="{ 'is-invalid': submitted && f.address_contact_person.errors }"
+                formControlName="addressContactPerson"
+                [ngClass]="{ 'is-invalid': submitted && f.addressContactPerson.errors }"
               >
-              <div *ngIf="submitted && f.address_contact_person.errors" class="invalid-feedback">
-                <div *ngIf="f.address_contact_person.errors.required" class="input-error">Address is
+              <div *ngIf="submitted && f.addressContactPerson.errors" class="invalid-feedback">
+                <div *ngIf="f.addressContactPerson.errors.required" class="input-error">Address is
                   required
                 </div>
               </div>
@@ -176,11 +176,11 @@
                 placeholder="Email Address"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="email_address"
-                [ngClass]="{ 'is-invalid': submitted && f.email_address.errors }"
+                formControlName="emailAddress"
+                [ngClass]="{ 'is-invalid': submitted && f.emailAddress.errors }"
               >
-              <div *ngIf="submitted && f.email_address.errors" class="invalid-feedback">
-                <div *ngIf="f.email_address.errors.required" class="input-error">Email address is
+              <div *ngIf="submitted && f.emailAddress.errors" class="invalid-feedback">
+                <div *ngIf="f.emailAddress.errors.required" class="input-error">Email address is
                   required
                 </div>
               </div>
@@ -196,11 +196,11 @@
                 placeholder="Phone Number"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="contact_person_number"
-                [ngClass]="{ 'is-invalid': submitted && f.contact_person_number.errors }"
+                formControlName="contactPersonNumber"
+                [ngClass]="{ 'is-invalid': submitted && f.contactPersonNumber.errors }"
               >
-              <div *ngIf="submitted && f.contact_person_number.errors" class="invalid-feedback">
-                <div *ngIf="f.contact_person_number.errors.required" class="input-error">Phone Number is
+              <div *ngIf="submitted && f.contactPersonNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.contactPersonNumber.errors.required" class="input-error">Phone Number is
                   required
                 </div>
               </div>
@@ -219,11 +219,11 @@
                 placeholder="Physical Address"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="physical_address"
-                [ngClass]="{ 'is-invalid': submitted && f.physical_address.errors }"
+                formControlName="physicalAddress"
+                [ngClass]="{ 'is-invalid': submitted && f.physicalAddress.errors }"
               >
-              <div *ngIf="submitted && f.physical_address.errors" class="invalid-feedback">
-                <div *ngIf="f.physical_address.errors.required" class="input-error">Physical Address is
+              <div *ngIf="submitted && f.physicalAddress.errors" class="invalid-feedback">
+                <div *ngIf="f.physicalAddress.errors.required" class="input-error">Physical Address is
                   required
                 </div>
               </div>
@@ -239,11 +239,11 @@
                 placeholder="Postal Address"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="postal_address"
-                [ngClass]="{ 'is-invalid': submitted && f.postal_address.errors }"
+                formControlName="postalAddress"
+                [ngClass]="{ 'is-invalid': submitted && f.postalAddress.errors }"
               >
-              <div *ngIf="submitted && f.postal_address.errors" class="invalid-feedback">
-                <div *ngIf="f.postal_address.errors.required" class="input-error">Postal Address is
+              <div *ngIf="submitted && f.postalAddress.errors" class="invalid-feedback">
+                <div *ngIf="f.postalAddress.errors.required" class="input-error">Postal Address is
                   required
                 </div>
               </div>
@@ -352,16 +352,20 @@
                 placeholder="Attachment"
                 type="file"
                 style="padding-left: 10px;"
-                formControlName="letter_attachment"
-                [ngClass]="{ 'is-invalid': submitted && f.letter_attachment.errors }"
+                id="letterOfAttachment"
+                (change)="handleFileInput($event)"
               >
               <button
                 *ngIf="isReadOnly"
                 type="button"
-                (click)="fileUploadService.downloadFile(formGroup.controls.letter_attachment.value)"
-                class="btn btn-link">{{formGroup.controls.letter_attachment.value}}</button>
+                (click)="fileUploadService.downloadFile(formGroup.controls.letterAttachment.value)"
+                class="btn btn-link">{{formGroup.controls.letterAttachment.value}}</button>
             </div>
           </div>
+        </div>
+        <!--Flag variable is used here-->
+        <div class="container" *ngIf="loading">
+          <h3>Uploading attachment, please wait ...</h3>
         </div>
       </div>
 

@@ -17,6 +17,7 @@ export class ApplicationLetterComponent implements OnInit {
 
   formGroup: FormGroup;
   submitted = false;
+  loading: boolean;
   organizationType = [
     {id: "1", name: "my type"}
   ];
@@ -47,26 +48,26 @@ export class ApplicationLetterComponent implements OnInit {
 
     this.letterOfInterest = SampleData.letterOfInterest;
 
-    if (this.letterOfInterest != null && this.isReadOnly) {
+    if (this.letterOfInterest != null /*&& this.isReadOnly*/) {
       this.formGroup = this.formBuilder.group(this.letterOfInterest)
     } else {
       this.formGroup = this.formBuilder.group({
         program: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
         organisation: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
         acronym: [{value: '', disabled: this.isReadOnly}],
-        organization_type: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        legal_status: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        contact_person: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        address_contact_person: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        email_address: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        contact_person_number: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        physical_address: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        postal_address: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        organizationType: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        legalStatus: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        contactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        addressContactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        emailAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        contactPersonNumber: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        physicalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+        postalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
         email: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
         website: [{value: '', disabled: this.isReadOnly}],
         country: [{value: '', disabled: this.isReadOnly}],
         city: [{value: '', disabled: this.isReadOnly}],
-        letter_attachment: [{value: '', disabled: this.isReadOnly}],
+        letterAttachment: [{value: '', disabled: this.isReadOnly}],
       });
     }
   }
@@ -84,6 +85,24 @@ export class ApplicationLetterComponent implements OnInit {
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
       console.log(data)
     }, error => {console.log(error)})
+  }
+
+  /*attachments*/
+  handleFileInput(event) {
+    let files: FileList = event.target.files;
+    this.uploadFile(files.item(0), event.target.id);
+  }
+
+  uploadFile(file, id) {
+    this.loading = !this.loading;
+    console.log(file);
+    this.fileUploadService.upload(file).subscribe((data) => {
+        if (id === "letterOfAttachment") this.formGroup.patchValue({letterAttachment: data.path});
+        this.loading = false;
+      }, error => {
+        console.log(error);
+      }
+    );
   }
 
   onSelectCountry(country) {
