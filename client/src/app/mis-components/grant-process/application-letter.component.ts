@@ -81,7 +81,7 @@ export class ApplicationLetterComponent implements OnInit {
     this.letterOfInterest = formData;
     console.log('formData', formData)
 
-    this.grantProcessService.saveGrantForm(formData, this.grantProcessService.LETTER_OF_INTEREST).subscribe(data => {
+    this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
       console.log(data)
     }, error => {console.log(error)})
   }

@@ -7,21 +7,25 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class GrantProcessService {
-  baseUrlShortTerm = environment.serverUrl+'/grantShortTerm';
-  LETTER_OF_INTEREST = 'letterOfInterest'
-  REVIEW_LETTER_OF_INTEREST = 'reviewLetterOfInterest'
-  PLANNING_LEARNING = 'planningLearning'
-  PLANNING_LEARNING_REVIEW = 'planningLearningReview'
-  PLANNING_LEARNING_APPROVE = 'planningLearningApprove'
-  PROVIDE_LEARNING_GRANT = 'provideLearningGrant'
+  baseUrl = environment.serverUrl;
+  letterOfInterest = this.baseUrl+'/grantLetterOfInterest';
+  reviewLetterOfInterest = this.baseUrl+'/grantLetterOfInterestReview';
+  planningLearning = this.baseUrl+'/grantPlanningLearning';
+  planningLearningReview = this.baseUrl+'/grantPlanningLearningReview';
+  planningLearningApprove = this.baseUrl+'/grantPlanningLearningApprove';
+  provideLearningGrant = this.baseUrl+'/grantProvideLearningGrant';
 
   constructor(private http: HttpClient) { }
 
-  getGrantForm(form:string): Observable<any> {
-    return this.http.get(`${this.baseUrlShortTerm}/${form}`);
+  getLetterOfInterest(id): Observable<any> {
+    return this.http.get(`${this.letterOfInterest}/${id}`);
   }
 
-  saveGrantForm(formData:FormData, form:string): Observable<any> {
-    return this.http.put(`${this.baseUrlShortTerm}/${form}`, formData);
+  createLetterOfInterest(formData): Observable<any> {
+    return this.http.post(this.letterOfInterest, formData);
+  }
+
+  updateLetterOfInterest(formData, id): Observable<any> {
+    return this.http.put(`${this.letterOfInterest}/${id}`, formData);
   }
 }
