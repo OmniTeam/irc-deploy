@@ -20,7 +20,7 @@ class FileManagerController {
         }
         String originalFileName = f.originalFilename
         String generatedPath = generator((('A'..'Z') + ('0'..'9')).join(), 9) + '/' + originalFileName
-        if(!folder.empty) generatedPath = folder + '/' + generatedPath
+        if(!folder) generatedPath = folder + '/' + generatedPath
 
         def uploadPath = grailsApplication.config.uploadFolder as String
 

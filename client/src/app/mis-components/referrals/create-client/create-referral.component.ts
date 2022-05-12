@@ -19,7 +19,7 @@ import {ClientService} from "../../../services/client.service";
   styleUrls: ['./create-referral.component.scss']
 })
 export class CreateReferralComponent implements OnInit {
-  private nationalityValue = '';
+   nationalityValue = '';
 
   constructor(
     private userService: UsersService,

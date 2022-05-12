@@ -72,11 +72,19 @@ class ActivityReportController {
 
     @Transactional
     def delete(String id) {
-        if (id == null) {
+        if (id == null && params.id == null) {
             render status: NOT_FOUND
             return
         }
-
+        /*delete all occurrences of the deleted activity from the db*/
+        def activitySetup = activityReportService.get(id)
+        def tasks = TaskList.findAllByInputVariablesIlike('%' + activitySetup.id + '%')
+        tasks.each {
+            def deleteFromCamunda = WorkPlanController.deleteProcessInstance(it.processInstanceId)
+            if(deleteFromCamunda) {
+                it.delete()
+            }
+        }
         activityReportService.delete(id)
 
         render status: NO_CONTENT

@@ -498,8 +498,8 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
         this.milestones.forEach((mile) => {
           newMilestone.push(mile);
           this.getMilestone = newMilestone;
-          this.singleMilestone = this.getMilestone[0].name
-          this.formGroup.get('milestone').setValue(this.singleMilestone)
+          // this.singleMilestone = this.getMilestone
+          // this.formGroup.get('milestone').setValue(this.singleMilestone)
         });
       }
     });

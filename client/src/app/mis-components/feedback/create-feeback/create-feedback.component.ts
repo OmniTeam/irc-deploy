@@ -20,6 +20,8 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
   styleUrls: ['./create-feedback.component.scss']
 })
 export class CreateFeedbackComponent implements OnInit {
+   nationalityValue: '';
+   country_of_origin: any;
 
   constructor(
     private userService: UsersService,
@@ -297,6 +299,15 @@ export class CreateFeedbackComponent implements OnInit {
     },
   ];
 
+  followup_response = [
+    {
+      'name': 'Yes'
+    },
+    {
+      'name': 'No'
+    },
+  ];
+
   reason_for_referral = [
     {
       'name': 'Food amd Shelter'
@@ -333,6 +344,11 @@ export class CreateFeedbackComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.CountriesService.getCountries().subscribe(data => {
+      this.country_of_origin = data
+    }, error => {
+      this.alertService.error("Failed to get Countries")
+    })
     this.loadProgramStaff();
     this.formGroup = this.formBuilder.group({
       dateFeedbackReceived: [''],
@@ -372,11 +388,13 @@ export class CreateFeedbackComponent implements OnInit {
       responseTypeRequired: [''],
       actionFollowupNeeded: [''],
       inFeedbackRegistry: [''],
+      feedBackResponse:[''],
       dateFeedbackClient: [''],
       actionTaken: [''],
       staffProvidedResponse: [''],
       responseSummary: [''],
       supervisor: [''],
+      countryOfOrigin:['Uganda'],
       dataEntryFocalPoint: [''],
     });
   }
@@ -404,7 +422,9 @@ export class CreateFeedbackComponent implements OnInit {
       ageCategory: formData.age,
       nationalityStatus: formData.nationalityStatus,
       assignee: formData.assignee,
-      phoneNumber: formData.phoneNumber
+      phoneNumber: formData.phoneNumber,
+      countryOfOrigin: formData.countryOfOrigin,
+      disability: formData.disability
 
     }
     //create feedback
@@ -430,6 +450,8 @@ export class CreateFeedbackComponent implements OnInit {
       serialNumber: formData.serialNumber,
       gender: formData.gender,
       project: formData.project,
+      countryOfOrigin:formData.countryOfOrigin,
+      currentStatusOfFeedback: formData.currentStatusOfFeedback,
       assignee: formData.assignee || this.underReview,
       feedbackDetails: formData.feedbackDetails,
       nameOfReferringOfficer: formData.nameOfReferringOfficer,
@@ -456,7 +478,7 @@ export class CreateFeedbackComponent implements OnInit {
 
     }
     console.log(formData, "submitted data")
-    if(this.referralDecisionPoint == 'Referral'){
+    if(formData.currentStatusOfFeedback == 'Referral'){
 
       /** save feedback */
       this.feedbackService.createFeedback(newFormData).subscribe((result) => {
@@ -470,11 +492,8 @@ export class CreateFeedbackComponent implements OnInit {
         console.warn(result, 'Referral Created Successfully');
         this.alertService.success(`Referral has been successfully created`)
         // this.router.navigate(['/referrals-list']);
-      }, error => {
-        this.alertService.error(`Failed to create Referral`)
       });
     } else {
-
       this.feedbackService.createFeedback(formData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
         this.router.navigate(['/feedback-list']);
@@ -503,9 +522,17 @@ export class CreateFeedbackComponent implements OnInit {
     if (event === 'Yes') {
       document.getElementById("detailsForUser").hidden = true
       document.getElementById("detailsForAnonUser").hidden = false
+      document.getElementById("age").hidden = true
+      document.getElementById("gender").hidden = true
+      document.getElementById("nationality").hidden = true
+      document.getElementById("disability").hidden = true
     } else {
       document.getElementById('detailsForUser').hidden = false
       document.getElementById('detailsForAnonUser').hidden = true
+      document.getElementById("age").hidden = false
+      document.getElementById("gender").hidden = false
+      document.getElementById("nationality").hidden = false
+      document.getElementById("disability").hidden = false
     }
   }
 
@@ -523,12 +550,12 @@ export class CreateFeedbackComponent implements OnInit {
   chooseActionForFeedback(event) {
     if (event === 'Forwarded For Action') {
       document.getElementById("assignee").hidden = false
-      document.getElementById("loop").hidden = true
+
       document.getElementById("actionDetails").hidden = true
       document.getElementById("referral").hidden = true
 
     } else if(event === 'Actioned') {
-      document.getElementById('loop').hidden = false
+
       document.getElementById('actionDetails').hidden = false
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
@@ -539,8 +566,17 @@ export class CreateFeedbackComponent implements OnInit {
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = false
 
-    } else if(event === 'Under Review') {
+    } else if(event === 'Under Review' ) {
+
+      document.getElementById('actionDetails').hidden = true
+      document.getElementById('assignee').hidden = true
+      document.getElementById('referral').hidden = true
       this.underReview =  this.authService.getLoggedInUsername()
+    } else {
+
+      document.getElementById('actionDetails').hidden = true
+      document.getElementById('assignee').hidden = true
+      document.getElementById('referral').hidden = true
     }
   }
 
@@ -568,7 +604,9 @@ export class CreateFeedbackComponent implements OnInit {
       ageCategory: formData.age,
       nationalityStatus: formData.nationalityStatus,
       assignee: formData.assignee,
-      phoneNumber: formData.phoneNumber
+      phoneNumber: formData.phoneNumber,
+      countryOfOrigin: formData.countryOfOrigin,
+      disability: formData.disability
 
     }
 
@@ -601,6 +639,7 @@ export class CreateFeedbackComponent implements OnInit {
       followupNeeded: formData.followupNeeded,
       feedbackCategory: formData.feedbackCategory,
       feedbackPriority: formData.feedbackPriority,
+      countryOfOrigin:formData.countryOfOrigin,
       feedbackReferredShared: formData.feedbackReferredShared,
       feedbackInternallyExternally: formData.feedbackInternallyExternally,
       referredPersonName: formData.referredPersonName,
@@ -647,4 +686,14 @@ export class CreateFeedbackComponent implements OnInit {
       });
     }
   }
+
+
+    onChangeCountry(event) {
+      document.getElementById("country_of_origin").hidden = event == "National";
+  }
+
+  checkForFeedBackResponse(event) {
+    document.getElementById("loop").hidden = event == "No";
+  }
+
 }
