@@ -42,6 +42,7 @@ export class ActivityReportComponent implements OnInit {
   reloadTable() {
     this.activityReportService.getActivityReport().subscribe((data) => {
       this.activity = data;
+      console.log(data);
     });
   }
 

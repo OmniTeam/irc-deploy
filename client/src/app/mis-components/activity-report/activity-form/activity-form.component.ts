@@ -173,7 +173,6 @@ export class ActivityFormComponent implements OnInit {
 
           this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data => {
             this.activity = data;
-            console.log("Logged dta", data);
             this.getActivityDetails(data)
             this.getBudgetLines();
             this.formGroup = this.formBuilder.group({

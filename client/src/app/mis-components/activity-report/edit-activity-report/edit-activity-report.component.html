@@ -46,7 +46,7 @@
                                      [(ngModel)]="budgetHolderId"
                                      (ngModelChange)="getBudgetHolderBudgetLines()"
                                      [clearable]="true">
-                            <ng-option [value]="item.staffId" *ngFor="let item of budgetHolder">
+                            <ng-option [value]="item.staffId" *ngFor="let item of this.budgetHolder">
                               {{item.staff}}
                             </ng-option>
                           </ng-select>
@@ -107,7 +107,7 @@
                                    [(ngModel)]="choosenBudget"
                                    (ngModelChange)="onBudgetLineChange()"
                                    [clearable]="true">
-                          <ng-option [value]="item.id" *ngFor="let item of getListBudgetLine">
+                          <ng-option [value]="item.id" *ngFor="let item of this.getListBudgetLine">
                             {{item.budgetLine}}
                           </ng-option>
                         </ng-select>
@@ -630,11 +630,17 @@
                         <div class=" input-group input-group-merge">
                           <input class="form-control" id="attachment1"
                                  placeholder="upload document"
-                                 formControlName="keyAchievements"
+                                 formControlName="attachPhoto"
                                  type="file" />
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-3">
+                    <button
+                      type="button"
+                      (click)="fileUploadService.downloadFile(formGroup.controls.attachPhoto.value)"
+                      class="btn btn-link">{{formGroup.controls.attachPhoto.value}}</button>
                   </div>
                 </div>
 
@@ -657,6 +663,12 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-3">
+                    <button
+                      type="button"
+                      (click)="fileUploadService.downloadFile(formGroup.controls.attachList.value)"
+                      class="btn btn-link">{{formGroup.controls.attachList.value}}</button>
+                  </div>
                 </div>
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
@@ -676,6 +688,12 @@
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-3">
+                    <button
+                      type="button"
+                      (click)="fileUploadService.downloadFile(formGroup.controls.attachStory.value)"
+                      class="btn btn-link">{{formGroup.controls.attachStory.value}}</button>
                   </div>
                 </div>
               </div>

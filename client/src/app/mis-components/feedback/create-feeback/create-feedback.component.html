@@ -15,32 +15,33 @@
 </div>
 
 <div class=" container-fluid mt--6" style="overflow-x: hidden;">
-  <div class=" row justify-content-center">
-    <div class=" col-lg-10 card-wrapper">
+  <div class=" row">
+    <div class=" col">
       <div class="card">
         <div class="card-header" style="padding: 10px">
           <h3 style="font-family: Open Sans, sans-serif;align-content: center">Register New Feedback</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="padding-left: 80px;padding-top: 15px;padding-right: 40px">
           <form [formGroup]="formGroup" (ngSubmit)="createFeedback()" *ngIf="formGroup" style="padding:30px">
             <div class="row">
 
-              <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
+              <div class="col-lg-12 card" style="padding-left: 30px;padding-top: 15px">
 
                 <div>
-                  <div >
+                  <div>
                     <h2>
                       Client Details
                     </h2>
                   </div>
                   <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Remain Anonymous?
 
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -65,15 +66,15 @@
                     </div>
                   </div>
                 </div>
-
-                <div id="detailsForUser" [hidden]="false">
-                  <div class="row">
+                </div>
+                <div id="detailsForUser" class="row" [hidden]="false">
+                  <div class="col-md-3">
                     <label>
                       Name Of Client/Community/Group
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -89,14 +90,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="detailsForAnonUser" [hidden]="true">
-                  <div class="row">
+                <div id="detailsForAnonUser" class="row" [hidden]="true">
+                  <div class="col-md-3">
                     <label>
                       Anonymous Identifier
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -112,14 +113,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="gender" [hidden]="false">
-                  <div class="row"  >
+                <div id="gender" class="row" [hidden]="false">
+                  <div class="col-md-3"  >
                     <label>
                       Gender
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -142,14 +143,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="age" [hidden]="false">
-                  <div class="row" >
+                <div id="age" class="row" [hidden]="false">
+                  <div class="col-md-3" >
                     <label>
                       Age
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -165,14 +166,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="nationality" [hidden]="false">
-                  <div class="row" >
+                <div id="nationality" class="row" [hidden]="false">
+                  <div class="col-md-3" >
                     <label>
                       Nationality Status
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -196,14 +197,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="country_of_origin" [hidden]="true">
-                  <div class="row">
+                <div id="country_of_origin" class="row" [hidden]="true">
+                  <div class="col-md-3">
                     <label>
                       Country of Origin
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -226,17 +227,15 @@
                     </div>
                   </div>
                 </div>
-              </div>
-                <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
-                  <h2></h2><br>
-                <div>
-                  <div class="row">
+
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Type of Client
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -259,14 +258,14 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Preferred Channel for Response
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -290,14 +289,14 @@
                     </div>
                   </div>
                 </div>
-                <div  id="phone" [hidden]="true">
-                  <div class="row">
+                <div  class="row" id="phone" [hidden]="true">
+                  <div class="col-md-3">
                     <label>
                       Phone Number
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -313,14 +312,14 @@
                     </div>
                   </div>
                 </div>
-                <div id="email" [hidden]="true">
-                  <div class="row" >
+                <div id="email" class="row" [hidden]="true">
+                  <div class="col-md-3" >
                     <label>
                       Email
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -337,14 +336,14 @@
                   </div>
                 </div>
 
-                  <div id="disability" [hidden]="false">
-                  <div class="row" >
+                  <div id="disability" class="row" [hidden]="false">
+                  <div class="col-md-3" >
                     <label>
                       Disability
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -362,16 +361,16 @@
                 </div>
               </div>
 
-                <div  class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
+                <div  class="col-lg-12 card" style="padding-left: 30px;padding-top: 15px">
                   <h2>Feedback Details</h2>
-                <div >
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Feedback Details
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -387,8 +386,8 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label
                       style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
                                                     line-height: 1.5; text-align: left;"
@@ -397,7 +396,7 @@
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class=" input-group input-group-merge">
@@ -411,14 +410,14 @@
                     </div>
                   </div>
                 </div>
-                <div >
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Name of Register
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -434,14 +433,14 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Staff Designation
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -464,14 +463,14 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Type of Feedback
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -494,17 +493,14 @@
                     </div>
                   </div>
                 </div>
-                </div>
-                <div class="col-lg-6" style="padding-left: 30px;padding-top: 15px">
-                  <h2></h2><br>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Location
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -527,14 +523,14 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Project Sector
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -557,14 +553,14 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div  class="col-md-3">
                     <label>
                       Project
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -587,14 +583,14 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Sub Sector (Project Level)
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -611,16 +607,16 @@
                   </div>
                 </div>
                 </div>
-                <div  class="col-lg-8" style="padding-left: 30px;padding-top: 15px;justify-content: center">
+                <div  class="col-lg-12 card" style="padding-left: 30px;padding-top: 15px;justify-content: center">
                   <h2>Action Details</h2>
-              <div>
-                  <div class="row" style="padding-top: 26px;">
+              <div class="row">
+                  <div class="col-md-3" style="padding-top: 26px;">
                     <label>
                       Current Status of the Feedback
 
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -652,7 +648,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group ">
                           <div class=" input-group input-group-merge">
@@ -689,7 +685,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -718,7 +714,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -747,7 +743,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -776,7 +772,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -799,7 +795,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -822,7 +818,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -848,7 +844,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group">
                               <div class=" input-group input-group-merge">
@@ -869,7 +865,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -898,7 +894,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -928,7 +924,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -972,7 +968,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group">
                           <div class=" input-group input-group-merge">
@@ -993,7 +989,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group ">
                           <div class=" input-group input-group-merge">
@@ -1022,7 +1018,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group ">
                           <div class=" input-group input-group-merge">
@@ -1045,7 +1041,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group ">
                           <div class=" input-group input-group-merge">
@@ -1068,7 +1064,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group ">
                           <div class=" input-group input-group-merge">
@@ -1091,7 +1087,7 @@
                         <!--                      -->
                       </label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                       <div class="col-md-12">
                         <div class="form-group ">
                           <div class=" input-group input-group-merge">
@@ -1128,7 +1124,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group">
                               <div class=" input-group input-group-merge">
@@ -1149,7 +1145,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -1178,7 +1174,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -1207,7 +1203,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -1237,7 +1233,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -1268,7 +1264,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
@@ -1292,7 +1288,7 @@
                             <!--                      -->
                           </label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
