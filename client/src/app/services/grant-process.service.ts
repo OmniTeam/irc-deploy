@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
@@ -7,18 +7,18 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class GrantProcessService {
-  baseUrl = environment.serverUrl;
-  letterOfInterest = this.baseUrl+'/grantLetterOfInterest';
-  reviewLetterOfInterest = this.baseUrl+'/grantLetterOfInterestReview';
-  planningLearning = this.baseUrl+'/grantPlanningLearning';
-  planningLearningReview = this.baseUrl+'/grantPlanningLearningReview';
-  planningLearningApprove = this.baseUrl+'/grantPlanningLearningApprove';
-  provideLearningGrant = this.baseUrl+'/grantProvideLearningGrant';
+  letterOfInterest = `${environment.serverUrl}/grantLetterOfInterest`
+  reviewLetterOfInterest = `${environment.serverUrl}/grantLetterOfInterestReview`;
+  planningLearning = `${environment.serverUrl}/grantPlanningLearning`;
+  planningLearningReview = `${environment.serverUrl}/grantPlanningLearningReview`;
+  planningLearningApprove = `${environment.serverUrl}/grantPlanningLearningApprove`;
+  provideLearningGrant = `${environment.serverUrl}/grantProvideLearningGrant`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  getLetterOfInterest(id): Observable<any> {
-    return this.http.get(`${this.letterOfInterest}/${id}`);
+  getLetterOfInterest(id) {
+    return this.http.get(`${this.letterOfInterest}/${id}/`);
   }
 
   createLetterOfInterest(formData): Observable<any> {

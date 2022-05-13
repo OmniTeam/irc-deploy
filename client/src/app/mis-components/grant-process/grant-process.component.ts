@@ -81,18 +81,17 @@ export class GrantProcessComponent implements OnInit {
 
     this.route.params
       .subscribe(p => {
-        this.grantId = p['id'];
         this.isReadOnly = p['readonly'] == 'true';
 
-        const params = new HttpParams().set('id', this.grantId);
+        const params = new HttpParams().set('id', p['id']);
         this.taskListService.getTaskRecord(params).subscribe((data) => {
+          if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") this.isReviewLetterOfInterest = true;
+
+          console.log('taskRecord',data)
+          this.grantId = data.grantId;
           this.definitionKey = data.taskDefinitionKey
           this.processInstanceId = data.processInstanceId
-          if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") this.isReviewLetterOfInterest = true;
         })
-        this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data) => {
-          console.log(data)
-        }, error => console.log(error));
       });
   }
 

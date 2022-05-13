@@ -51,9 +51,10 @@ export class ApplicationLetterComponent implements OnInit {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfCountries();
 
+    console.log('grantId',this.grantId)
     this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data)=>{
       console.log('letterOfInterest',data)
-      this.letterOfInterest = data
+      this.letterOfInterest = data[0]
     })
 
     if (this.letterOfInterest != null && this.isReadOnly) {

@@ -23,13 +23,14 @@ class TaskListController {
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = ''
 
             variables['data'].each {
                 if (it.key == 'PartnerSetupId') partnerSetupId = it.value
                 if (it.key == 'Period') period = it.value
                 if (it.key == 'StartDate') startDate = it.value
                 if (it.key == 'PartnerId') partnerId = it.value
+                if (it.key == 'GrantId') grantId = it.value
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
                 if (it.key == 'GroupId') groupId = it.value
@@ -55,16 +56,16 @@ class TaskListController {
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
-            if (task.taskDefinitionKey=="Review_Program_Report" || task.taskDefinitionKey=="Approve_Report") {
+            if (task.taskDefinitionKey == "Review_Program_Report" || task.taskDefinitionKey == "Approve_Report") {
                 def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
-                if(userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
-            } else if(task.taskDefinitionKey=="Submit_Report" || task.taskDefinitionKey=="Submit_Final_Report") {
+                if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
+            } else if (task.taskDefinitionKey == "Submit_Report" || task.taskDefinitionKey == "Submit_Final_Report") {
                 c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
-            } else if(task.taskDefinitionKey=="Review_Performance_Report") {
+            } else if (task.taskDefinitionKey == "Review_Performance_Report") {
                 c2 = userRoles.contains("ROLE_MEAL")
-            } else if(task.taskDefinitionKey=="Review_Finance_Report" || task.taskDefinitionKey=="Disburse_Funds") {
+            } else if (task.taskDefinitionKey == "Review_Finance_Report" || task.taskDefinitionKey == "Disburse_Funds") {
                 c2 = userRoles.contains("ROLE_FINANCE")
-            } else if(task.taskDefinitionKey=="Approve_Fund_Disbursement") {
+            } else if (task.taskDefinitionKey == "Approve_Fund_Disbursement") {
                 c2 = userRoles.contains("ROLE_ED")
             }
 
@@ -78,6 +79,7 @@ class TaskListController {
                           partnerId        : partnerId,
                           partnerName      : taskPartner.name,
                           programId        : programId,
+                          grantId          : grantId,
                           programName      : taskProgram.title,
                           endDate          : endDate,
                           groupId          : groupId,
@@ -98,13 +100,14 @@ class TaskListController {
 
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
-        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = ''
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = ''
 
         variables['data'].each {
             if (it.key == 'PartnerSetupId') partnerSetupId = it.value
             if (it.key == 'Period') period = it.value
             if (it.key == 'StartDate') startDate = it.value
             if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'GrantId') grantId = it.value
             if (it.key == 'ProgramId') programId = it.value
             if (it.key == 'EndDate') endDate = it.value
             if (it.key == 'GroupId') groupId = it.value
@@ -123,6 +126,7 @@ class TaskListController {
                  partnerId        : partnerId,
                  partnerName      : programPartner.name,
                  programId        : programId,
+                 grantId          : grantId,
                  programName      : program.title,
                  endDate          : endDate,
                  groupId          : groupId,

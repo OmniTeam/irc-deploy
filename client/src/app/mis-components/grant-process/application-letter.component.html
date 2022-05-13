@@ -372,7 +372,7 @@
     </div>
   </div>
 
-  <input class="form-control" type="hidden" formControlName="status" [value]="'not_stated'">
+  <input class="form-control" type="hidden" formControlName="status" [ngModel]="'not_stated'">
 
   <div *ngIf="error || success" class="row align-items-center text-center"
        style="display: flex; justify-content: center;">
