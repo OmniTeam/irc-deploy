@@ -38,7 +38,7 @@ export class PlanningLearningGrantComponent implements OnInit {
     //this.readOnlyChanged.emit(false);
     this.countries = this.countriesService.getListOfCountries();
 
-    this.planningAndLearningGrantApplication = SampleData.planningAndLearningGrantApplication;
+   // this.planningAndLearningGrantApplication = SampleData.planningAndLearningGrantApplication;
 
     if (this.planningAndLearningGrantApplication != null && this.isReadOnly) {
       this.formGroup = this.formBuilder.group(this.planningAndLearningGrantApplication)

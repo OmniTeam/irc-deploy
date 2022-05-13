@@ -84,6 +84,7 @@ class TaskListController {
                           reportingPeriod  : period,
                           outputVariables  : task.outputVariables,
                           processInstanceId: task.processInstanceId,
+                          processDefKey    : task.processDefKey,
                           taskDefinitionKey: task.taskDefinitionKey,
                           dateCreated      : task.dateCreated,
                           status           : task.status]
@@ -128,6 +129,7 @@ class TaskListController {
                  reportingPeriod  : period,
                  outputVariables  : task.outputVariables,
                  processInstanceId: task.processInstanceId,
+                 processDefKey    : task.processDefKey,
                  taskDefinitionKey: task.taskDefinitionKey,
                  dateCreated      : task.dateCreated,
                  status           : task.status]

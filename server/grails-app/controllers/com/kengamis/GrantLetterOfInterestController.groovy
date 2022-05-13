@@ -23,7 +23,7 @@ class GrantLetterOfInterestController {
         respond grantLetterOfInterestService.list(params), model:[grantLetterOfInterestCount: grantLetterOfInterestService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond grantLetterOfInterestService.get(id)
     }
 
@@ -73,7 +73,7 @@ class GrantLetterOfInterestController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return

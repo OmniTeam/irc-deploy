@@ -68,7 +68,7 @@ class StartCamundaInstancesJob extends Script {
 
 
                         if (started) {
-                            print "================ started the damn instance ================"
+                            print "================ started reporting process instance ================"
                             def calendar = CalendarTriggerDates.get(result['id'] as String)
                             calendar.started = true
                             calendar.save()
@@ -82,7 +82,7 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static planningAndLearningGrantJob() {
-        GrantLetterOfInterest.findAllByStatus("not_stated").each { it ->
+        GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
             boolean started = startProcessInstance([
                     GrantId  : it.id,
                     PartnerId: ''
@@ -90,7 +90,7 @@ class StartCamundaInstancesJob extends Script {
 
 
             if (started) {
-                print "================ started the damn instance ================"
+                print "================ started grant process instance ================"
                 it.status = 'started'
                 it.save()
             }

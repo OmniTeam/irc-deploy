@@ -4,6 +4,7 @@ import {CountriesService} from "../../services/countries.service";
 import {SampleData} from "../../helpers/sample-data";
 import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'application-letter',
@@ -13,7 +14,7 @@ import {GrantProcessService} from "../../services/grant-process.service";
 
 export class ApplicationLetterComponent implements OnInit {
   @Input() isReadOnly: boolean;
-  @Output() readOnlyChanged: EventEmitter<boolean> = new EventEmitter();
+  @Input() grantId: string;
 
   formGroup: FormGroup;
   submitted = false;
@@ -28,9 +29,14 @@ export class ApplicationLetterComponent implements OnInit {
     {id: "2", name: "Youth Capacity Development Program"},
     {id: "3", name: "Prevention of Violence Against Children and Adolescents"},
   ];
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
   private letterOfInterest: any;
 
   constructor(
+    private router: Router,
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
@@ -43,10 +49,12 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.readOnlyChanged.emit(false);
     this.countries = this.countriesService.getListOfCountries();
 
-    this.letterOfInterest = SampleData.letterOfInterest;
+    this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data)=>{
+      console.log('letterOfInterest',data)
+      this.letterOfInterest = data
+    })
 
     if (this.letterOfInterest != null && this.isReadOnly) {
       this.formGroup = this.formBuilder.group(this.letterOfInterest)
@@ -85,7 +93,22 @@ export class ApplicationLetterComponent implements OnInit {
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
       console.log(data)
-    }, error => {console.log(error)})
+      this.submitted = true
+      this.error = false;
+      this.success = true;
+      this.successMessage = "Saved Application";
+    }, error => {
+      this.error = true;
+      this.errorMessage = "Failed to save Application";
+      this.success = false;
+      console.log(error);
+    });
+    setTimeout(() => {
+      (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
+      this.formGroup.reset()
+      this.success = false;
+      this.error = false;
+    }, 3000);
   }
 
   /*attachments*/
@@ -113,7 +136,12 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   cancel() {
+    (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
     this.formGroup.reset()
     this.submitted = false
+  }
+
+  onBackPressed() {
+    this.router.navigate(['/grantProcess']);
   }
 }

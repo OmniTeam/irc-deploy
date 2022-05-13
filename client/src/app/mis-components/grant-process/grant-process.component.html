@@ -37,16 +37,12 @@
         <div class="row">
 
           <div style="width: 100%; text-align: -webkit-center; display: block;">
-            <div [style.display]="isSubmitLetterOfInterest || isReviewLetterOfInterest ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
-            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
-              PLANNING AND LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
-              LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
-              APPROVE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
-              PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
+            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LETTER OF INTEREST</h6></div>
+            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PLANNING AND LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PROVIDE PLANNING AND LEARNING GRANT</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
@@ -57,7 +53,7 @@
 
             <div *ngIf="isReviewLetterOfInterest" class=" col">
 
-              <application-letter [isReadOnly]="true"></application-letter>
+              <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
 
               <h3 style="margin-left: 40px;">Review</h3>
               <div class="card">
@@ -71,6 +67,7 @@
                             <li>
                               <input type="radio" name="hasApplicationBeenReviewed"
                                      [(ngModel)]="hasApplicationBeenReviewed"
+                                     [disabled]="isReadOnly"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -83,7 +80,9 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="hasDueDiligenceConducted" [(ngModel)]="hasDueDiligenceConducted"
+                              <input type="radio" name="hasDueDiligenceConducted"
+                                     [(ngModel)]="hasDueDiligenceConducted"
+                                     [disabled]="isReadOnly"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -97,7 +96,9 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of decision">
                             <li>
-                              <input type="radio" name="decisionOfReviewProcess" [(ngModel)]="decisionOfReviewProcess"
+                              <input type="radio" name="decisionOfReviewProcess"
+                                     [(ngModel)]="decisionOfReviewProcess"
+                                     [disabled]="isReadOnly"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -109,23 +110,32 @@
                         <div class="text-left">
                           <label for="dateOfDueDiligence">Date when due diligence was done:</label>
                           <input type="date" class="form-control" id="dateOfDueDiligence"
+                                 [disabled]="isReadOnly"
                                  [(ngModel)]="dateOfDueDiligence"/><br>
                         </div>
                         <div class="text-left">
                           <label for="attachmentDiligenceReport">Attach due diligence report:</label>
                           <input type="file" class="form-control" id="attachmentDiligenceReport"
-                                 [(ngModel)]="attachmentDiligenceReport"/><br>
+                                 *ngIf="!isReadOnly"
+                                 [(ngModel)]="attachmentDiligenceReport"/>
+                          <button
+                            *ngIf="isReadOnly"
+                            type="button"
+                            (click)="fileUploadService.downloadFile(attachmentDiligenceReport)"
+                            class="btn btn-link">{{attachmentDiligenceReport}}</button>
+                          <br>
                         </div>
                       </div>
                     </div>
                     <div class="row" style="margin: 10px;">
                       <label for="reviewerComments">Provide any comments</label>
                       <textarea class="form-control" rows="3" id="reviewerComments"
+                                [disabled]="isReadOnly"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-warning">Save Current Version</button>
@@ -211,7 +221,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-warning">Cancel</button>
@@ -253,7 +263,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-warning">Cancel</button>
@@ -304,7 +314,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
                     <button class="btn btn-warning">Cancel</button>

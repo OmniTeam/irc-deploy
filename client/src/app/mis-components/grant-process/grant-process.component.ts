@@ -2,6 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {CommentNode} from "../comments/comments.component";
 import {AuthService} from "../../services/auth.service";
 import {v4 as uuid} from 'uuid';
+import {GrantProcessService} from "../../services/grant-process.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {TaskListService} from "../../services/task-list.service";
+import {HttpParams} from "@angular/common/http";
+import {FileUploadService} from "../../services/file-upload.service";
 
 @Component({
   selector: 'app-grant-process',
@@ -15,6 +20,8 @@ export class GrantProcessComponent implements OnInit {
   isReviewPlanningLearningGrant: boolean;
   isApprovePlanningLearningGrant: boolean;
   isProvidePlanningLearningGrant: boolean;
+
+  isReadOnly: boolean;
 
   hasApplicationBeenReviewed: any;
   dateOfDueDiligence: any;
@@ -54,19 +61,39 @@ export class GrantProcessComponent implements OnInit {
   periodTo: any;
   clusterName: any;
 
-  constructor(public authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    public authService: AuthService,
+    private grantProcessService: GrantProcessService,
+    private taskListService: TaskListService,
+    public fileUploadService: FileUploadService
+  ) {
+  }
 
   ngOnInit(): void {
-    this.isSubmitLetterOfInterest = true;
-    this.grantId = ""
-    this.definitionKey = ""
-    this.processInstanceId = ""
-
+    this.isSubmitLetterOfInterest = false;
     this.isReviewLetterOfInterest = false;
     this.isPlanningLearningApplication = false
     this.isReviewPlanningLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
     this.isProvidePlanningLearningGrant = false;
+
+    this.route.params
+      .subscribe(p => {
+        this.grantId = p['id'];
+        this.isReadOnly = p['readonly'] == 'true';
+
+        const params = new HttpParams().set('id', this.grantId);
+        this.taskListService.getTaskRecord(params).subscribe((data) => {
+          this.definitionKey = data.taskDefinitionKey
+          this.processInstanceId = data.processInstanceId
+          if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") this.isReviewLetterOfInterest = true;
+        })
+        this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data) => {
+          console.log(data)
+        }, error => console.log(error));
+      });
   }
 
   viewComments(): void {
