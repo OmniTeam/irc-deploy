@@ -349,22 +349,20 @@
                 <h3 style="margin-left: 40px;">CURRENT STATUS</h3>
                 <div class="card">
                   <div style="margin: 10px;">
-                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                    <div class="row" style="margin-bottom: 0; margin-top: 0;">
                       <div class="col">Total Amount Spent:</div>
-                      <div class="col text-left"><input type="number" class="form-control"
-                                                        [(ngModel)]="currentStatus.totalAmountSpent"/><br></div>
+                      <div class="col text-left">{{currentStatus.totalAmountSpent | number}}</div>
                     </div>
-                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                    <div class="row" style="margin-bottom: 0; margin-top: 0;">
                       <div class="col">Total Amount Committed:</div>
-                      <div class="col text-left"><input type="number" class="form-control"
-                                                        [(ngModel)]="currentStatus.totalAmountCommitted"/><br></div>
+                      <div class="col text-left">{{currentStatus.totalAmountCommitted | number}}</div>
                     </div>
                   <!--  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                       <div class="col">Date of last Commitment:</div>
                       <div class="col text-left"><input type="date" class="form-control"
                                                         [(ngModel)]="currentStatus.dateOfLastCommitment"/><br></div>
                     </div>-->
-                    <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                    <div class="row" style="margin-bottom: 0; margin-top: 0;">
                       <div class="col">Start Reporting Cycle?</div>
                       <div class="col">
                         <label class="switch">

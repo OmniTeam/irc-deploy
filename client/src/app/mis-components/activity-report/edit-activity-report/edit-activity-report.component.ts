@@ -34,7 +34,7 @@ export class EditActivityReportComponent implements OnInit {
   totalBalance: any;
   totalNationalM: string;
   choosenBudget: string;
-  budgetHolderId: string;
+  budgetHolderId: [];
   totalBudgetDisburse: any;
   budgetLines: any;
   totalSpent: any;
@@ -121,7 +121,7 @@ export class EditActivityReportComponent implements OnInit {
               private authService: AuthService,
               private alertService: AlertService,
               private userService: UsersService,
-              private fileUploadService: FileUploadService,
+              public fileUploadService: FileUploadService,
               private activityReportService: ActivityReportService,
               private workPlanService: WorkPlanService,
               private activityReport: ActivityReportService,
@@ -135,8 +135,9 @@ export class EditActivityReportComponent implements OnInit {
     this.getBudgetLines();
     this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
       this.activity = data;
-      console.log(data);
       this.getActivityDetails(data)
+      this.choosenBudget =  this.activity?.budgetLine
+      this.budgetHolderId = this.activity?.name
       this.formGroup = this.formBuilder.group({
         budgetLine: [this.activity?.budgetLine, [Validators.required]],
         name: [this.activity?.name, [Validators.required]],

@@ -173,7 +173,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     });
   }
 
-
+  // #fdc513 #fc1 gold hsl(45,98%,53%) rgb(253,197,19)
   get f() {
     return this.formGroup.controls;
   }
