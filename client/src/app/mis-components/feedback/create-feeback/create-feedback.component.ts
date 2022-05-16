@@ -108,13 +108,19 @@ export class CreateFeedbackComponent implements OnInit {
   ];
   location = [
     {
-      'name': 'Kampala Office'
+      'name': 'Kampala'
     },
     {
-      'name': 'Gulu Office'
+      'name': 'WestNile'
     },
     {
-      'name': 'Hoima Office'
+      'name': 'Northern'
+    },
+    {
+      'name': 'Southwest'
+    },
+    {
+      'name': 'Karamoja'
     },
   ];
   project_status = [
@@ -146,6 +152,24 @@ export class CreateFeedbackComponent implements OnInit {
     },
     {
       'name': 'Not Sure'
+    },
+  ];
+
+  disability_status = [
+    {
+      'name': 'Physical disability'
+    },
+    {
+      'name': 'Visual Impairment'
+    },
+    {
+      'name': 'Hearing Impairment'
+    },
+    {
+      'name': 'Speech Impairment'
+    },
+    {
+      'name': 'Mental Disability'
     },
   ];
   gender = [
@@ -214,6 +238,131 @@ export class CreateFeedbackComponent implements OnInit {
     },
     {
       'name': 'Other'
+    },
+  ];
+
+  country_origin = [
+    {
+      'name': 'Burundian'
+    },
+    {
+      'name': 'Congolese'
+    },
+    {
+      'name': 'Eritrean'
+    },
+    {
+      'name': 'Ethiopian'
+    },
+    {
+      'name': 'Nigerian'
+    },
+    {
+      'name': 'Nigerian'
+    },
+    {
+      'name': 'Rwandese'
+    },
+    {
+      'name': 'Somalian'
+    },
+    {
+      'name': 'South Sudanese'
+    },
+    {
+      'name': 'Tanzanian'
+    },
+    {
+      'name': 'Ugandan'
+    },
+    {
+      'name': 'Other'
+    },
+  ];
+
+  district_list = [
+    {
+      'name': 'Kampala'
+    },
+    {
+      'name': 'Yumbe'
+    },
+    {
+      'name': 'Madi Okollo'
+    },
+    {
+      'name': 'Terego'
+    },
+    {
+      'name': 'Kiryandongo'
+    },
+    {
+      'name': 'Lamwo'
+    },
+    {
+      'name': 'Moroto'
+    },
+    {
+      'name': 'Napak'
+    },
+    {
+      'name': 'Nakapiripirit'
+    },
+    {
+      'name': 'Amudat'
+    },
+    {
+      'name': 'Kotido'
+    },
+    {
+      'name': 'Abim'
+    },{
+      'name': 'Kaabong'
+    },{
+      'name': 'Kyegeggwa'
+    },
+  ];
+
+  project_sites = [
+    {
+      'name': 'Kampala Urban'
+    },
+    {
+      'name': 'Bidi bidi'
+    },
+    {
+      'name': 'Rhino'
+    },
+    {
+      'name': 'Imvepi'
+    },
+    {
+      'name': 'Kiryandongo'
+    },
+    {
+      'name': 'Lamwo'
+    },
+    {
+      'name': 'Moroto'
+    },
+    {
+      'name': 'Napak'
+    },
+    {
+      'name': 'Nakapiripirit'
+    },
+    {
+      'name': 'Amudat'
+    },
+    {
+      'name': 'Kotido'
+    },
+    {
+      'name': 'Abim'
+    },{
+      'name': 'Kaabong'
+    },{
+      'name': 'Kyaka'
     },
   ];
   gender_list = [
@@ -336,6 +485,47 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'REFUGEPOINT'
     },
   ];
+
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
+  age_category = [
+    {
+      'name': '0 - 28 days'
+    },
+    {
+      'name': '29 days - 4 years'
+    },
+    {
+      'name': '5 - 9 years'
+    },
+    {
+      'name': '10 -19 years'
+    },
+    {
+      'name': '20 - 29 years'
+    },
+    {
+      'name': '30 - 59 years'
+    },
+    {
+      'name': '60 years and above'
+    },
+  ];
   referralDecisionPoint: any;
   underReview: string;
 
@@ -357,6 +547,8 @@ export class CreateFeedbackComponent implements OnInit {
       typeOfFeedback: [''],
       currentStatusOfFeedback: [''],
       location: [''],
+      district: [''],
+      projectSite:[''],
       projectSector: [''],
       subSector: [''],
       nameOfClient: [''],
@@ -375,6 +567,9 @@ export class CreateFeedbackComponent implements OnInit {
       nameOfReferringOfficer:[''],
       reasonForReferral:[''],
       organizationReferredTo:[''],
+      ircReferredTo:[''],
+      referredPerson:[''],
+      responseType:[''],
       followupNeeded:[''],
       feedbackCategory: [''],
       feedbackPriority: [''],
@@ -448,6 +643,11 @@ export class CreateFeedbackComponent implements OnInit {
       serialNumber: formData.serialNumber,
       gender: formData.gender,
       project: formData.project,
+      district: formData.district,
+      projectSite: formData.projectSite,
+      ircReferredTo:formData.ircReferredTo,
+      referredPerson:formData.referredPerson,
+      responseType: formData.responseType,
       countryOfOrigin:formData.countryOfOrigin,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
       assignee: formData.assignee,
@@ -538,8 +738,11 @@ export class CreateFeedbackComponent implements OnInit {
     if (event === 'Email Address') {
       document.getElementById("phone").hidden = true
       document.getElementById("email").hidden = false
-    } else {
+    } else if(event === 'Phone Call' || event === 'SMS'){
       document.getElementById('phone').hidden = false
+      document.getElementById('email').hidden = true
+    } else {
+      document.getElementById('phone').hidden = true
       document.getElementById('email').hidden = true
     }
   }
@@ -575,6 +778,7 @@ export class CreateFeedbackComponent implements OnInit {
       document.getElementById('actionDetails').hidden = true
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
+      document.getElementById('loop').hidden = true
     }
   }
 
@@ -616,6 +820,11 @@ export class CreateFeedbackComponent implements OnInit {
       typeOfFeedback: formData.typeOfFeedback,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
       location: formData.location,
+      district: formData.district,
+      projectSite: formData.projectSite,
+      ircReferredTo:formData.ircReferredTo,
+      referredPerson:formData.referredPerson,
+      responseType: formData.responseType,
       projectSector: formData.projectSector,
       subSector: formData.subSector,
       nameOfClient: formData.nameOfClient,
@@ -694,4 +903,27 @@ export class CreateFeedbackComponent implements OnInit {
     document.getElementById("loop").hidden = event == "No";
   }
 
+  disabilityQuestion(event) {
+    if(event === 'Yes'){
+      document.getElementById("disability").hidden = false
+    } else {
+      document.getElementById("disability").hidden = true
+    }
+  }
+
+  feedBackSharedChange(event) {
+    document.getElementById("internalExternal").hidden = event !== 'Yes';
+  }
+
+  interFeedBackCheck(event) {
+    if(event === 'Internally'){
+      document.getElementById("sectorName").hidden = false
+      document.getElementById("personReferred").hidden = false
+      document.getElementById("orgName").hidden = true
+    } else {
+      document.getElementById("orgName").hidden = false
+      document.getElementById("personReferred").hidden = false
+      document.getElementById("sectorName").hidden = true
+    }
+  }
 }
