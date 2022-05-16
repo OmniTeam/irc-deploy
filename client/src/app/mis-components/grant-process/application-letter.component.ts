@@ -33,7 +33,6 @@ export class ApplicationLetterComponent implements OnInit {
   success: boolean;
   errorMessage: string;
   successMessage: string;
-  private letterOfInterest: any;
 
   constructor(
     private router: Router,
@@ -52,8 +51,7 @@ export class ApplicationLetterComponent implements OnInit {
     this.countries = this.countriesService.getListOfCountries();
 
     this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data:any) => {
-      this.letterOfInterest = data
-      if (this.letterOfInterest != null && this.isReadOnly) {
+      if (data != null && this.isReadOnly) {
         this.formGroup = this.formBuilder.group({
           program: [{value: data.program, disabled: this.isReadOnly}, [Validators.required]],
           organisation: [{value: data.organisation, disabled: this.isReadOnly}, [Validators.required]],
@@ -109,7 +107,6 @@ export class ApplicationLetterComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
-    this.letterOfInterest = formData;
     console.log('formData', formData)
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {

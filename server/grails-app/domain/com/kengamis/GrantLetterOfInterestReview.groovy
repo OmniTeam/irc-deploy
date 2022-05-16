@@ -15,7 +15,6 @@ class GrantLetterOfInterestReview {
     String status
     Date dateCreated
     Date lastUpdated
-    GrantLetterOfInterest grantLetterOfInterest
 
     static constraints = {
         status nullable: true

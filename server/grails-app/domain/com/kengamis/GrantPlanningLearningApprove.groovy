@@ -14,8 +14,6 @@ class GrantPlanningLearningApprove {
     Date dateCreated
     Date lastUpdated
 
-    GrantPlanningLearning grantPlanningLearning
-
     static constraints = {
         status nullable: true
     }

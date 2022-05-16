@@ -2308,5 +2308,77 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1652700022855-9") {
+        createTable(tableName: "archive") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "archivePK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "group_id", type: "VARCHAR(255)")
+
+            column(name: "output_variables", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "input_variables", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "task_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "task_definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_def_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "synced", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "form_id", type: "VARCHAR(255)")
+
+            column(name: "task_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652700022855-63") {
+        dropColumn(columnName: "grant_letter_of_interest_id", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652700022855-64") {
+        dropColumn(columnName: "grant_planning_learning_id", tableName: "grant_planning_learning_approve")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1652700022855-65") {
+        dropColumn(columnName: "grant_planning_learning_id", tableName: "grant_planning_learning_review")
+    }
+
 
 }

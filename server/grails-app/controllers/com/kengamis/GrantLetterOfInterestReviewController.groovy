@@ -29,6 +29,8 @@ class GrantLetterOfInterestReviewController {
 
     @Transactional
     def save(GrantLetterOfInterestReview grantLetterOfInterestReview) {
+        println grantLetterOfInterestReview.errors
+
         if (grantLetterOfInterestReview == null) {
             render status: NOT_FOUND
             return
