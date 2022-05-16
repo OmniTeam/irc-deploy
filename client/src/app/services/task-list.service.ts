@@ -22,4 +22,8 @@ export class TaskListService {
     return this.http.put(`${environment.serverUrl}/taskList/${id}`, formData);
   }
 
+  getArchivedRecords(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/archive`);
+  }
+
 }

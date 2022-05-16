@@ -288,7 +288,7 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
                 let cumulative = milestone.cumulativeAchievement ?? 0
                 let quarter = milestone.quaterAchievement ?? 0
                 let percentageAchievement: number;
-                let p = (cumulative / quarter) * 100
+                let p = (quarter / cumulative) * 100
                 if (p > 0 && isFinite(p)) percentageAchievement = p; else percentageAchievement = 0;
 
                 if (!this.performanceReport.some(x => x.id === i.id)) {
