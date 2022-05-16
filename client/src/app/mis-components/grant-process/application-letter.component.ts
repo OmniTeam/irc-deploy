@@ -45,41 +45,61 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   get f() {
-    return this.formGroup.controls;
+    return this.formGroup?.controls;
   }
 
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfCountries();
 
-    console.log('grantId',this.grantId)
-    this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data)=>{
-      console.log('letterOfInterest',data)
-      this.letterOfInterest = data[0]
+    this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data:any) => {
+      this.letterOfInterest = data
+      if (this.letterOfInterest != null && this.isReadOnly) {
+        this.formGroup = this.formBuilder.group({
+          program: [{value: data.program, disabled: this.isReadOnly}, [Validators.required]],
+          organisation: [{value: data.organisation, disabled: this.isReadOnly}, [Validators.required]],
+          acronym: [{value: data.acronym, disabled: this.isReadOnly}],
+          organizationType: [{value: data.organizationType, disabled: this.isReadOnly}, [Validators.required]],
+          legalStatus: [{value: data.legalStatus, disabled: this.isReadOnly}, [Validators.required]],
+          contactPerson: [{value: data.contactPerson, disabled: this.isReadOnly}, [Validators.required]],
+          addressContactPerson: [{value: data.addressContactPerson, disabled: this.isReadOnly}, [Validators.required]],
+          emailAddress: [{value: data.emailAddress, disabled: this.isReadOnly}, [Validators.required]],
+          contactPersonNumber: [{value: data.contactPersonNumber, disabled: this.isReadOnly}, [Validators.required]],
+          physicalAddress: [{value: data.physicalAddress, disabled: this.isReadOnly}, [Validators.required]],
+          postalAddress: [{value: data.postalAddress, disabled: this.isReadOnly}, [Validators.required]],
+          email: [{value: data.email, disabled: this.isReadOnly}, [Validators.required]],
+          website: [{value: data.website, disabled: this.isReadOnly}],
+          country: [{value: data.country, disabled: this.isReadOnly}],
+          city: [{value: data.city, disabled: this.isReadOnly}],
+          letterAttachment: [{value: data.letterAttachment, disabled: this.isReadOnly}],
+          status: [data.status],
+        });
+      } else this.setEmptyForm()
+    }, error => {
+      console.log(error)
+      this.setEmptyForm()
     })
+  }
 
-    if (this.letterOfInterest != null && this.isReadOnly) {
-      this.formGroup = this.formBuilder.group(this.letterOfInterest)
-    } else {
-      this.formGroup = this.formBuilder.group({
-        program: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        organisation: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        acronym: [{value: '', disabled: this.isReadOnly}],
-        organizationType: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        legalStatus: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        contactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        addressContactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        emailAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        contactPersonNumber: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        physicalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        postalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        email: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-        website: [{value: '', disabled: this.isReadOnly}],
-        country: [{value: '', disabled: this.isReadOnly}],
-        city: [{value: '', disabled: this.isReadOnly}],
-        letterAttachment: [{value: '', disabled: this.isReadOnly}],
-        status: [null],
-      });
-    }
+  setEmptyForm(){
+    this.formGroup = this.formBuilder.group({
+      program: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      organisation: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      acronym: [{value: '', disabled: this.isReadOnly}],
+      organizationType: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      legalStatus: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      contactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      addressContactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      emailAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      contactPersonNumber: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      physicalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      postalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      email: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
+      website: [{value: '', disabled: this.isReadOnly}],
+      country: [{value: '', disabled: this.isReadOnly}],
+      city: [{value: '', disabled: this.isReadOnly}],
+      letterAttachment: [{value: '', disabled: this.isReadOnly}],
+      status: [null],
+    });
   }
 
   submitLetter() {
