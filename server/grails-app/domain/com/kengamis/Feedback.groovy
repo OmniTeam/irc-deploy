@@ -89,7 +89,7 @@ class Feedback {
         countryOfOrigin nullable: true
         feedbackDetails nullable: true
         assignee nullable: true
-        status nullable: false
+        status nullable: true
     }
 
     @Override
