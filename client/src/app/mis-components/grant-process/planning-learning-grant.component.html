@@ -36,6 +36,11 @@
                 formControlName="proposedStartDate"
                 [ngClass]="{ 'is-invalid': submitted && f.proposedStartDate.errors }"
               >
+              <div *ngIf="submitted && f.proposedStartDate.errors" class="invalid-feedback">
+                <div *ngIf="f.proposedStartDate.errors.required" class="input-error">Proposed Start Date is
+                  required
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -71,8 +76,8 @@
                 placeholder="Other sources"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="other_sources"
-                [ngClass]="{ 'is-invalid': submitted && f.other_sources.errors }"
+                formControlName="otherSources"
+                [ngClass]="{ 'is-invalid': submitted && f.otherSources.errors }"
               >
             </div>
           </div>

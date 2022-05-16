@@ -5,6 +5,7 @@ import {SampleData} from "../../helpers/sample-data";
 import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
+import {AlertService} from "../../services/alert";
 
 @Component({
   selector: 'application-letter',
@@ -39,7 +40,8 @@ export class ApplicationLetterComponent implements OnInit {
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
-    private grantProcessService: GrantProcessService
+    private grantProcessService: GrantProcessService,
+    private alertService: AlertService
   ) {
   }
 
@@ -103,7 +105,7 @@ export class ApplicationLetterComponent implements OnInit {
   submitLetter() {
     this.submitted = true;
     if (this.formGroup.invalid) {
-      console.log('Invalid');
+      this.alertService.error("Please fill in all fields correctly");
       return;
     }
     const formData = this.formGroup.value;
@@ -115,15 +117,19 @@ export class ApplicationLetterComponent implements OnInit {
       this.error = false;
       this.success = true;
       this.successMessage = "Saved Application";
+      this.alertService.success(this.successMessage);
     }, error => {
       this.error = true;
-      this.errorMessage = "Failed to save Application";
       this.success = false;
+      this.errorMessage = "Failed to save Application";
+      this.alertService.error(this.errorMessage);
       console.log(error);
     });
     setTimeout(() => {
-      (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
-      this.formGroup.reset()
+      if(this.success == true){
+        (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
+        this.formGroup.reset()
+      }
       this.success = false;
       this.error = false;
     }, 3000);

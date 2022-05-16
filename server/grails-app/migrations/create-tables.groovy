@@ -2380,5 +2380,45 @@ databaseChangeLog = {
         dropColumn(columnName: "grant_planning_learning_id", tableName: "grant_planning_learning_review")
     }
 
+    changeSet(author: "bruno (generated)", id: "2022046456456656-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "mel_framework_attachment", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202204565546-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "child_policy", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202204345556-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "structure", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202204242342356-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "completed_attachment", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202204234235666456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "strategic_plan", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022046456456456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "annual_work_plan", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202245645646456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "assessment_report", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022456456454456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "financial_attachment", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022045645645624456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "registration", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022756765454456-01") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "list_members_attachment", tableName: "grant_planning_learning")
+    }
+
 
 }

@@ -29,6 +29,7 @@ class GrantPlanningLearningController {
 
     @Transactional
     def save(GrantPlanningLearning grantPlanningLearning) {
+        println grantPlanningLearning.errors
         if (grantPlanningLearning == null) {
             render status: NOT_FOUND
             return
@@ -51,6 +52,7 @@ class GrantPlanningLearningController {
 
     @Transactional
     def update(GrantPlanningLearning grantPlanningLearning) {
+        println grantPlanningLearning.errors
         if (grantPlanningLearning == null) {
             render status: NOT_FOUND
             return

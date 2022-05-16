@@ -36,6 +36,16 @@ class GrantPlanningLearning {
 
     static constraints = {
         status nullable: true
+        completedAttachment nullable: true
+        melFrameworkAttachment nullable: true
+        financialAttachment nullable: true
+        registration nullable: true
+        listMembersAttachment nullable: true
+        assessmentReport nullable: true
+        strategicPlan nullable: true
+        annualWorkPlan nullable: true
+        childPolicy nullable: true
+        structure nullable: true
     }
 
     static mapping = {
