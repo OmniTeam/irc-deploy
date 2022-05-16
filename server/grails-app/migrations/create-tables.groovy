@@ -2272,4 +2272,66 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1652689499240-5") {
+        createTable(tableName: "archive") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "archivePK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "output_variables", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "input_variables", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "task_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "task_definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_def_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "synced", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "form_id", type: "VARCHAR(255)")
+
+            column(name: "task_name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }

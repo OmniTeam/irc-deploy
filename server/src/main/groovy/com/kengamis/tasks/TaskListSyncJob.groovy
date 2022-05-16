@@ -1,6 +1,6 @@
 package com.kengamis.tasks
 
-import com.kengamis.ReportForm
+import com.kengamis.Archive
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
 import groovy.sql.Sql
@@ -89,9 +89,9 @@ class TaskListSyncJob extends Script {
         }
     }
 
-    def deleteCompletedTask(def id) {
-        def hasReports = ReportForm.findAllByTaskId(id)
-        if(hasReports.size()==0) TaskList.where {synced == 'true' && id == id }.deleteAll()
+    def deleteCompletedTask(TaskList task) {
+        new Archive(task as Map).save()
+        TaskList.where {synced == 'true' && id == task.id }.deleteAll()
     }
 
     static def setTaskSyncStatusToTrue(def id) {
@@ -112,7 +112,7 @@ class TaskListSyncJob extends Script {
                 response.success = { resp, json ->
                     println "Camunda :: receivedOutputVariables() True [ ${json} ]"
                     setTaskSyncStatusToTrue(task.id)
-                    this.deleteCompletedTask(task.id)
+                    this.deleteCompletedTask(task)
                 }
                 response.failure = { resp ->
                     println "Camunda :: receivedOutputVariables() False [ ${resp.status} ]"
