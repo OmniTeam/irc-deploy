@@ -2358,10 +2358,5 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "DELL (generated)", id: "1652706056826-131") {
-        addColumn(tableName: "feedback") {
-            column(name: "response_type", type: "varchar(255)")
-        }
-    }
 
 }
