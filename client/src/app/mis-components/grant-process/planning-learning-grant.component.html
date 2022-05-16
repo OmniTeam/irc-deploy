@@ -13,11 +13,11 @@
                 placeholder="Duration"
                 type="number"
                 style="padding-left: 10px;"
-                formControlName="proposed_duration"
-                [ngClass]="{ 'is-invalid': submitted && f.proposed_duration.errors }"
+                formControlName="proposedDuration"
+                [ngClass]="{ 'is-invalid': submitted && f.proposedDuration.errors }"
               >
-              <div *ngIf="submitted && f.proposed_duration.errors" class="invalid-feedback">
-                <div *ngIf="f.proposed_duration.errors.required" class="input-error">Proposed Duration is
+              <div *ngIf="submitted && f.proposedDuration.errors" class="invalid-feedback">
+                <div *ngIf="f.proposedDuration.errors.required" class="input-error">Proposed Duration is
                   required
                 </div>
               </div>
@@ -33,9 +33,14 @@
                 placeholder="Date"
                 type="date"
                 style="padding-left: 10px;"
-                formControlName="proposed_start_date"
-                [ngClass]="{ 'is-invalid': submitted && f.proposed_start_date.errors }"
+                formControlName="proposedStartDate"
+                [ngClass]="{ 'is-invalid': submitted && f.proposedStartDate.errors }"
               >
+              <div *ngIf="submitted && f.proposedStartDate.errors" class="invalid-feedback">
+                <div *ngIf="f.proposedStartDate.errors.required" class="input-error">Proposed Start Date is
+                  required
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -51,11 +56,11 @@
                 placeholder="Amount"
                 type="number"
                 style="padding-left: 10px;"
-                formControlName="amount_requested"
-                [ngClass]="{ 'is-invalid': submitted && f.amount_requested.errors }"
+                formControlName="amountRequested"
+                [ngClass]="{ 'is-invalid': submitted && f.amountRequested.errors }"
               >
-              <div *ngIf="submitted && f.amount_requested.errors" class="invalid-feedback">
-                <div *ngIf="f.amount_requested.errors.required" class="input-error">Amount Requested is
+              <div *ngIf="submitted && f.amountRequested.errors" class="invalid-feedback">
+                <div *ngIf="f.amountRequested.errors.required" class="input-error">Amount Requested is
                   required
                 </div>
               </div>
@@ -71,8 +76,8 @@
                 placeholder="Other sources"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="other_sources"
-                [ngClass]="{ 'is-invalid': submitted && f.other_sources.errors }"
+                formControlName="otherSources"
+                [ngClass]="{ 'is-invalid': submitted && f.otherSources.errors }"
               >
             </div>
           </div>
@@ -89,11 +94,11 @@
                 placeholder="Amount"
                 type="number"
                 style="padding-left: 10px;"
-                formControlName="total_budget_amt"
-                [ngClass]="{ 'is-invalid': submitted && f.total_budget_amt.errors }"
+                formControlName="totalBudgetAmt"
+                [ngClass]="{ 'is-invalid': submitted && f.totalBudgetAmt.errors }"
               >
-              <div *ngIf="submitted && f.total_budget_amt.errors" class="invalid-feedback">
-                <div *ngIf="f.total_budget_amt.errors.required" class="input-error">Total Budget Amount is
+              <div *ngIf="submitted && f.totalBudgetAmt.errors" class="invalid-feedback">
+                <div *ngIf="f.totalBudgetAmt.errors.required" class="input-error">Total Budget Amount is
                   required
                 </div>
               </div>
@@ -109,11 +114,11 @@
                 placeholder="Address"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="address_contact_person"
-                [ngClass]="{ 'is-invalid': submitted && f.address_contact_person.errors }"
+                formControlName="addressContactPerson"
+                [ngClass]="{ 'is-invalid': submitted && f.addressContactPerson.errors }"
               >
-              <div *ngIf="submitted && f.address_contact_person.errors" class="invalid-feedback">
-                <div *ngIf="f.address_contact_person.errors.required" class="input-error">Address is
+              <div *ngIf="submitted && f.addressContactPerson.errors" class="invalid-feedback">
+                <div *ngIf="f.addressContactPerson.errors.required" class="input-error">Address is
                   required
                 </div>
               </div>
@@ -130,11 +135,11 @@
                 placeholder="Email Address"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="email_contact_person"
-                [ngClass]="{ 'is-invalid': submitted && f.email_contact_person.errors }"
+                formControlName="emailContactPerson"
+                [ngClass]="{ 'is-invalid': submitted && f.emailContactPerson.errors }"
               >
-              <div *ngIf="submitted && f.email_contact_person.errors" class="invalid-feedback">
-                <div *ngIf="f.email_contact_person.errors.required" class="input-error">Email address is
+              <div *ngIf="submitted && f.emailContactPerson.errors" class="invalid-feedback">
+                <div *ngIf="f.emailContactPerson.errors.required" class="input-error">Email address is
                   required
                 </div>
               </div>
@@ -150,11 +155,11 @@
                 placeholder="Phone Number"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="contact_person_number"
-                [ngClass]="{ 'is-invalid': submitted && f.contact_person_number.errors }"
+                formControlName="contactPersonNumber"
+                [ngClass]="{ 'is-invalid': submitted && f.contactPersonNumber.errors }"
               >
-              <div *ngIf="submitted && f.contact_person_number.errors" class="invalid-feedback">
-                <div *ngIf="f.contact_person_number.errors.required" class="input-error">Phone Number is
+              <div *ngIf="submitted && f.contactPersonNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.contactPersonNumber.errors.required" class="input-error">Phone Number is
                   required
                 </div>
               </div>
@@ -174,11 +179,11 @@
                 placeholder="Name"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="name_authorized_signatory"
-                [ngClass]="{ 'is-invalid': submitted && f.name_authorized_signatory.errors }"
+                formControlName="nameAuthorizedSignatory"
+                [ngClass]="{ 'is-invalid': submitted && f.nameAuthorizedSignatory.errors }"
               >
-              <div *ngIf="submitted && f.name_authorized_signatory.errors" class="invalid-feedback">
-                <div *ngIf="f.name_authorized_signatory.errors.required" class="input-error">Name of Authorized
+              <div *ngIf="submitted && f.nameAuthorizedSignatory.errors" class="invalid-feedback">
+                <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
                   Signatory is
                   required
                 </div>
@@ -195,11 +200,11 @@
                 placeholder="Contact details"
                 type="text"
                 style="padding-left: 10px;"
-                formControlName="contact_authorized_signatory"
-                [ngClass]="{ 'is-invalid': submitted && f.contact_authorized_signatory.errors }"
+                formControlName="contactAuthorizedSignatory"
+                [ngClass]="{ 'is-invalid': submitted && f.contactAuthorizedSignatory.errors }"
               >
-              <div *ngIf="submitted && f.contact_authorized_signatory.errors" class="invalid-feedback">
-                <div *ngIf="f.contact_authorized_signatory.errors.required" class="input-error">Contact details are
+              <div *ngIf="submitted && f.contactAuthorizedSignatory.errors" class="invalid-feedback">
+                <div *ngIf="f.contactAuthorizedSignatory.errors.required" class="input-error">Contact details are
                   required
                 </div>
               </div>
@@ -217,8 +222,8 @@
               <textarea
                 class="form-control"
                 style="padding-left: 10px;"
-                formControlName="bank_details"
-                [ngClass]="{ 'is-invalid': submitted && f.bank_details.errors }"
+                formControlName="bankDetails"
+                [ngClass]="{ 'is-invalid': submitted && f.bankDetails.errors }"
               ></textarea>
             </div>
           </div>
@@ -230,8 +235,8 @@
               <textarea
                 class="form-control"
                 style="padding-left: 10px;"
-                formControlName="other_organization"
-                [ngClass]="{ 'is-invalid': submitted && f.other_organization.errors }"
+                formControlName="otherOrganization"
+                [ngClass]="{ 'is-invalid': submitted && f.otherOrganization.errors }"
               ></textarea>
             </div>
           </div>
@@ -262,8 +267,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.completed.value)"
-                    class="btn btn-link">{{formGroup.controls.completed.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.completedAttachment.value)"
+                    class="btn btn-link">{{formGroup.controls.completedAttachment.value}}</button>
                 </div>
               </div>
             </div>
@@ -282,8 +287,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.mel_framework.value)"
-                    class="btn btn-link">{{formGroup.controls.mel_framework.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.melFrameworkAttachment.value)"
+                    class="btn btn-link">{{formGroup.controls.melFrameworkAttachment.value}}</button>
                 </div>
               </div>
             </div>
@@ -304,8 +309,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.financial.value)"
-                    class="btn btn-link">{{formGroup.controls.financial.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.financialAttachment.value)"
+                    class="btn btn-link">{{formGroup.controls.financialAttachment.value}}</button>
                 </div>
               </div>
             </div>
@@ -346,8 +351,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.list_members.value)"
-                    class="btn btn-link">{{formGroup.controls.list_members.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.listMembersAttachment.value)"
+                    class="btn btn-link">{{formGroup.controls.listMembersAttachment.value}}</button>
                 </div>
               </div>
             </div>
@@ -366,8 +371,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.assessment_report.value)"
-                    class="btn btn-link">{{formGroup.controls.assessment_report.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.assessmentReport.value)"
+                    class="btn btn-link">{{formGroup.controls.assessmentReport.value}}</button>
                 </div>
               </div>
             </div>
@@ -388,8 +393,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.strategic_plan.value)"
-                    class="btn btn-link">{{formGroup.controls.strategic_plan.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.strategicPlan.value)"
+                    class="btn btn-link">{{formGroup.controls.strategicPlan.value}}</button>
                 </div>
               </div>
             </div>
@@ -408,8 +413,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.annual_work_plan.value)"
-                    class="btn btn-link">{{formGroup.controls.annual_work_plan.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.annualWorkPlan.value)"
+                    class="btn btn-link">{{formGroup.controls.annualWorkPlan.value}}</button>
                 </div>
               </div>
             </div>
@@ -430,8 +435,8 @@
                   <button
                     *ngIf="isReadOnly"
                     type="button"
-                    (click)="fileUploadService.downloadFile(formGroup.controls.child_policy.value)"
-                    class="btn btn-link">{{formGroup.controls.child_policy.value}}</button>
+                    (click)="fileUploadService.downloadFile(formGroup.controls.childPolicy.value)"
+                    class="btn btn-link">{{formGroup.controls.childPolicy.value}}</button>
                 </div>
               </div>
             </div>

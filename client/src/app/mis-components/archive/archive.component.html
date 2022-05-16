@@ -74,7 +74,14 @@
                         <ngx-datatable-column name="Task" prop="taskDefinitionKey">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
-                            <a [routerLink]="['/reportForm', row.id, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a *ngIf="row.processDefKey=='CRVPF_REPORTING'" [routerLink]="['/reportForm', row.id, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                            <a *ngIf="row.processDefKey=='GRANT_PROCESS'" [routerLink]="['/grantProcess', row.id, true]" class="text">{{value | replace: '_' : ' '}}</a>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Activity" prop="processDefKey">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{ value | replace: '_' : ' ' }}
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Program" prop="programName"></ngx-datatable-column>

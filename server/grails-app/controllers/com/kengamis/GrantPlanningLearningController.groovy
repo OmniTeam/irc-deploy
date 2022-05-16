@@ -23,12 +23,13 @@ class GrantPlanningLearningController {
         respond grantPlanningLearningService.list(params), model:[grantPlanningLearningCount: grantPlanningLearningService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond grantPlanningLearningService.get(id)
     }
 
     @Transactional
     def save(GrantPlanningLearning grantPlanningLearning) {
+        println grantPlanningLearning.errors
         if (grantPlanningLearning == null) {
             render status: NOT_FOUND
             return
@@ -51,6 +52,7 @@ class GrantPlanningLearningController {
 
     @Transactional
     def update(GrantPlanningLearning grantPlanningLearning) {
+        println grantPlanningLearning.errors
         if (grantPlanningLearning == null) {
             render status: NOT_FOUND
             return
@@ -72,7 +74,7 @@ class GrantPlanningLearningController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return

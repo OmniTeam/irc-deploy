@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ProgramPartnersService} from "../../services/program-partners.service";
 import {FileUploadService} from "../../services/file-upload.service";
+import {GrantProcessService} from "../../services/grant-process.service";
 
 @Component({
   selector: 'organizational-information',
@@ -12,11 +12,12 @@ export class OrganizationalInformationComponent implements OnInit {
   @Input() grantId: string;
   organisationalInfo: any;
 
-  constructor(private programPartnersService: ProgramPartnersService, public fileUploadService:FileUploadService) { }
+  constructor(private grantProcessService: GrantProcessService, public fileUploadService: FileUploadService) {
+  }
 
   ngOnInit(): void {
     //set organizational Info
-    this.programPartnersService.getCurrentProgramPartner(this.grantId).subscribe((results: any) => {
+    this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((results: any) => {
       if (results !== null && results !== undefined) {
         this.organisationalInfo = results;
       }

@@ -23,7 +23,7 @@ class GrantPlanningLearningReviewController {
         respond grantPlanningLearningReviewService.list(params), model:[grantPlanningLearningReviewCount: grantPlanningLearningReviewService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond grantPlanningLearningReviewService.get(id)
     }
 
@@ -72,7 +72,7 @@ class GrantPlanningLearningReviewController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return

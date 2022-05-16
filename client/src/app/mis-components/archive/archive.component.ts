@@ -24,7 +24,7 @@ export class ArchiveComponent implements OnInit {
   }
 
   reloadTable() {
-    this.taskListService.getTaskList().subscribe(data => {
+    this.taskListService.getArchivedRecords().subscribe(data => {
       console.log(data)
       this.rows = data;
       this.temp = [...data];

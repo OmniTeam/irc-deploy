@@ -2,6 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {CommentNode} from "../comments/comments.component";
 import {AuthService} from "../../services/auth.service";
 import {v4 as uuid} from 'uuid';
+import {GrantProcessService} from "../../services/grant-process.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {TaskListService} from "../../services/task-list.service";
+import {HttpParams} from "@angular/common/http";
+import {FileUploadService} from "../../services/file-upload.service";
+import {AlertService} from "../../services/alert";
 
 @Component({
   selector: 'app-grant-process',
@@ -15,6 +21,14 @@ export class GrantProcessComponent implements OnInit {
   isReviewPlanningLearningGrant: boolean;
   isApprovePlanningLearningGrant: boolean;
   isProvidePlanningLearningGrant: boolean;
+
+  taskRecord: any;
+
+  isReadOnly: boolean;
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
 
   hasApplicationBeenReviewed: any;
   dateOfDueDiligence: any;
@@ -54,19 +68,71 @@ export class GrantProcessComponent implements OnInit {
   periodTo: any;
   clusterName: any;
 
-  constructor(public authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    public authService: AuthService,
+    private grantProcessService: GrantProcessService,
+    private taskListService: TaskListService,
+    public fileUploadService: FileUploadService,
+    private alertService: AlertService
+  ) {
+  }
 
   ngOnInit(): void {
-    this.isSubmitLetterOfInterest = true;
-    this.grantId = ""
-    this.definitionKey = ""
-    this.processInstanceId = ""
-
+    this.isSubmitLetterOfInterest = false;
     this.isReviewLetterOfInterest = false;
     this.isPlanningLearningApplication = false
     this.isReviewPlanningLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
     this.isProvidePlanningLearningGrant = false;
+
+    this.route.params
+      .subscribe(p => {
+        this.isReadOnly = p['readonly'] == 'true';
+
+        if(p['id']!=undefined) {
+          const params = new HttpParams().set('id', p['id']);
+          this.taskListService.getTaskRecord(params).subscribe((data) => {
+            this.taskRecord = data
+            if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence" || data.taskDefinitionKey == "Review_Report" || data.taskDefinitionKey == "Submit_Report") {
+              this.isReviewLetterOfInterest = true;
+              this.grantProcessService.getReviewRecord(data.grantId).subscribe((data)=>{
+                console.log('review record available', data)
+              })
+            }
+            if (data.taskDefinitionKey === "Activity_142yglq") {
+              this.isPlanningLearningApplication = true;
+              this.grantProcessService.getPlanningAndLearningRecord(data.grantId).subscribe((data)=>{
+                console.log('apply PandG record available', data)
+              })
+            }
+            if (data.taskDefinitionKey === "Review_Concept") {
+              this.isReviewPlanningLearningGrant = true;
+              this.grantProcessService.getPlanningAndLearningReview(data.grantId).subscribe((data)=>{
+                console.log('apply PlanningAndLearningReview record available', data)
+              })
+            }
+            if (data.taskDefinitionKey === "Approve_Learning_Grant") {
+              this.isApprovePlanningLearningGrant = true;
+              this.grantProcessService.getPlanningAndLearningApprove(data.grantId).subscribe((data)=>{
+                console.log('apply PlanningAndLearningApprove record available', data)
+              })
+            }
+            if (data.taskDefinitionKey === "Provide_Learning_Grant") {
+              this.isProvidePlanningLearningGrant = true;
+              this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data)=>{
+                console.log('apply ProvideLearningGrant record available', data)
+              })
+            }
+            this.grantId = data.grantId;
+            this.definitionKey = data.taskDefinitionKey
+            this.processInstanceId = data.processInstanceId
+          })
+        } else {
+          this.isSubmitLetterOfInterest = true
+        }
+      });
   }
 
   viewComments(): void {
@@ -85,6 +151,53 @@ export class GrantProcessComponent implements OnInit {
   commentsChangedHandler(comments: Array<CommentNode>) {
     this.comments = comments;
     console.log(comments);
+  }
+
+  submit(key, status) {
+    if(this.decisionOfReviewProcess!=undefined) {
+      switch (key) {
+        case 'review':
+          let formData: { [key: string]: string } = {
+            grantId: this.grantId,
+            definitionKey: this.definitionKey,
+            processInstanceId: this.processInstanceId,
+            hasBeenReviewed: this.hasApplicationBeenReviewed,
+            dueDiligence: this.hasDueDiligenceConducted,
+            dateOfDueDiligence: this.dateOfDueDiligence,
+            dueDiligenceReport: this.attachmentDiligenceReport,
+            comments: this.reviewerComments,
+            decision: this.decisionOfReviewProcess,
+            status: status
+          }
+          this.grantProcessService.createReviewLetterOfInterest(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Updated Report";
+            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+            this.taskRecord.status = status
+            this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
+              console.log('successfully updated task');
+            }, error => console.log('update task', error));
+            this.alertService.success(this.successMessage);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to update Report";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+          break
+      }
+      setTimeout(() => {
+        if(status!="draft" && this.success) this.router.navigate(['/taskList']);
+        this.success = false;
+        this.error = false;
+      }, 3000);
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
   }
 
 }

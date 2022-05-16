@@ -1,5 +1,6 @@
 package com.kengamis.tasks
 
+import com.kengamis.Archive
 import com.kengamis.TaskList
 import groovy.json.JsonBuilder
 import groovyx.net.http.ContentType
@@ -8,11 +9,11 @@ import groovyx.net.http.Method
 
 class TaskListSyncJob extends Script {
     static def url = StartCamundaInstancesJob.camundaApiUrl
-    static def path = '/get-tasks/CRVPF_REPORTING/'
 
     @Override
     Object run() {
-        downloadTasks(url + path + '0/50')
+        downloadTasks(url + '/get-tasks/CRVPF_REPORTING/' + '0/50')
+        downloadTasks(url + '/get-tasks/GRANT_PROCESS/' + '0/50')
         //send data to workflow
         def data = TaskList.where {status == 'completed' && synced == 'false' }.findAll()
         data.each {  sendTasksToWorkflow(it as TaskList) }
@@ -84,8 +85,22 @@ class TaskListSyncJob extends Script {
         }
     }
 
-    def deleteCompletedTask(def id) {
-        TaskList.where {synced == 'true' && id == id }.deleteAll()
+    def deleteCompletedTask(TaskList task) {
+        Archive archive = new Archive()
+        archive.taskId = task.taskId
+        archive.inputVariables = task.inputVariables
+        archive.outputVariables = task.outputVariables
+        archive.status = task.status
+        archive.formId = task.formId
+        archive.groupId = task.groupId
+        archive.userId = task.userId
+        archive.taskName = task.taskName
+        archive.processInstanceId = task.processInstanceId
+        archive.processDefKey = task.processDefKey
+        archive.synced = task.synced
+        archive.taskDefinitionKey = task.taskDefinitionKey
+        archive.save(flush: true, failOnError: true)
+        TaskList.where {synced == 'true' && id == task.id }.deleteAll()
     }
 
     static def setTaskSyncStatusToTrue(def id) {
@@ -106,7 +121,7 @@ class TaskListSyncJob extends Script {
                 response.success = { resp, json ->
                     println "Camunda :: receivedOutputVariables() True [ ${json} ]"
                     setTaskSyncStatusToTrue(task.id)
-                    this.deleteCompletedTask(task.id)
+                    this.deleteCompletedTask(task)
                 }
                 response.failure = { resp ->
                     println "Camunda :: receivedOutputVariables() False [ ${resp.status} ]"

@@ -70,160 +70,7 @@ export interface ChildrenItems2 {
 }
 
 // Menu Items
-export const ROUTES: RouteInfo[] = [
-  /*{
-    path: '/',
-    title: 'Home',
-    type: 'link',
-    icontype: 'fas fa-home',
-    roles: [
-      "ROLE_SUPER_ADMIN",
-      "ROLE_ADMIN",
-      "ROLE_VAC_PARTNER_DATA_MANAGER",
-      "ROLE_AGPP_PARTNER_DATA_MANAGER",
-      "ROLE_YCD_PARTNER_DATA_MANAGER",
-      "ROLE_VAC_PARTNER_DATA_VIEWER",
-      "ROLE_AGPP_PARTNER_DATA_VIEWER",
-      "ROLE_YCD_PARTNER_DATA_VIEWER",
-      "ROLE_VAC_STAFF_DATA_MANAGER",
-      "ROLE_AGPP_STAFF_DATA_MANAGER",
-      "ROLE_YCD_STAFF_DATA_MANAGER",
-      "ROLE_STAFF_DATA_VIEWER",
-    ]
-  },
-  formsMenu,
-  // listsMenu,
-  {
-    path: '/',
-    title: 'Tasks',
-    type: 'sub',
-    icontype: 'fas fa-tasks text-pink',
-    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"],
-    isCollapsed: true,
-    children: [
-      {
-        path: 'taskList',
-        title: 'Task List',
-        type: 'link',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]
-      },
-    ]
-  },
-  {
-    path: '/',
-    title: 'Admin',
-    type: 'sub',
-    icontype: 'fas fa-user-cog',
-    isCollapsed: true,
-    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER", ],
-    children: [
-      {
-        path: 'tags',
-        title: 'Tags',
-        type: 'link',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_VIEWER", "ROLE_YCD_PARTNER_DATA_VIEWER", "ROLE_AGPP_PARTNER_DATA_VIEWER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]
-      },
-      {
-        path: 'partnerSetupList',
-        title: 'Work Plan',
-        type: 'link',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER", "ROLE_STAFF_DATA_VIEWER"]
-      },
-      {
-        path: 'programPartner',
-        title: 'Program Partner',
-        type: 'link',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
-      },
-      {
-        path: 'mis-users',
-        title: 'Users',
-        type: 'link',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
-      },
-      {
-        path: 'issdugdata.net:3000',
-        title: 'Analytics',
-        type: 'analytics',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_YCD_PARTNER_DATA_MANAGER", "ROLE_VAC_PARTNER_DATA_MANAGER", "ROLE_AGPP_PARTNER_DATA_MANAGER", "ROLE_VAC_STAFF_DATA_MANAGER", "ROLE_AGPP_STAFF_DATA_MANAGER","ROLE_YCD_STAFF_DATA_MANAGER"]
-      },
-    ]
-  },
-
-  {
-    path: '/',
-    title: 'Set-Up',
-    type: 'sub',
-    icontype: 'fas fa-cog text-blue',
-    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
-    isCollapsed: true,
-    children: [
-      {
-        path: '', title: 'Program', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
-        children: [
-          {path: 'program', title: 'Add Program', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-          {
-            path: 'programCategory',
-            title: 'Add Program Category',
-            type: 'link',
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]
-          },
-        ]
-      },
-      {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]}
-    ]
-  },
-
-  {
-    path: '/',
-    title: 'Configuration',
-    type: 'sub',
-    icontype: 'fas fa-tools text-purple',
-    isCollapsed: true,
-    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
-    children: [
-      {path: 'forms', title: 'Forms', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-      formSettingsMenu,
-      {
-        path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
-        children: [
-          {path: 'entity', title: 'Entities', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-          {path: 'entityView', title: 'Entity Views', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-          {
-            path: 'entityViewFilter',
-            title: 'Entity View Filters',
-            type: 'link',
-            roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]
-          },
-          {path: 'dataView', title: 'Data View', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-        ]
-      },
-      {path: 'tagType', title: 'Tag Type', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-    ]
-  },
-  {
-    path: '',
-    title: 'User',
-    type: 'sub',
-    icontype: 'fas fa-user-tie text-green',
-    roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"],
-    isCollapsed: true,
-    children: [
-      // {path: 'acl-group-mapping', title: 'ACL Group Permissions', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-      {path: 'aclsEntries', title: 'Groups', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-      {path: 'roles', title: 'Roles', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-      {path: 'users', title: 'User Management', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-      {
-        path: 'acl-group-mapping-parent',
-        title: 'ACL Group Permissions With Parent',
-        type: 'link',
-        roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]
-      },
-      {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ["ROLE_SUPER_ADMIN", "ROLE_ADMIN"]},
-    ]
-  },*/
-];
+export const ROUTES: RouteInfo[] = [];
 
 @Component({
   selector: 'app-sidebar',
@@ -298,20 +145,6 @@ export class SidebarComponent implements OnInit {
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
-          /*entityObject['roles'] = [
-            "ROLE_SUPER_ADMIN",
-            "ROLE_ADMIN",
-            "ROLE_YCD_PARTNER_DATA_MANAGER",
-            "ROLE_VAC_PARTNER_DATA_MANAGER",
-            "ROLE_AGPP_PARTNER_DATA_MANAGER",
-            "ROLE_VAC_PARTNER_DATA_VIEWER",
-            "ROLE_YCD_PARTNER_DATA_VIEWER",
-            "ROLE_AGPP_PARTNER_DATA_VIEWER",
-            "ROLE_VAC_STAFF_DATA_MANAGER",
-            "ROLE_AGPP_STAFF_DATA_MANAGER",
-            "ROLE_YCD_STAFF_DATA_MANAGER",
-            "ROLE_STAFF_DATA_VIEWER"
-          ];*/
 
           const entityTitleTrancated = entityObject['title'].slice(0, 3);
           const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
@@ -363,6 +196,13 @@ export class SidebarComponent implements OnInit {
             ]
           },
           formsMenu,
+          {
+            path: 'archive',
+            title: 'Archive',
+            type: 'link',
+            icontype: 'fas fa-tasks text-pink',
+            roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+          },
           {
             path: '/',
             title: 'Admin',
