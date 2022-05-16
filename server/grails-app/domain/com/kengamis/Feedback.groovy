@@ -40,6 +40,11 @@ class Feedback {
     String feedbackDetails
     String project
     String assignee
+    String district
+    String projectSite
+    String ircReferredTo
+    String referredPerson
+    String responseType
     String status
     String countryOfOrigin
     Date dateCreated
@@ -90,6 +95,11 @@ class Feedback {
         feedbackDetails nullable: true
         assignee nullable: true
         status nullable: true
+        district nullable: true
+        projectSite nullable: true
+        ircReferredTo nullable: true
+        referredPerson nullable: true
+        responseType nullable: true
     }
 
     @Override

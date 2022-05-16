@@ -37,8 +37,7 @@
                   <div class="col-md-3">
                     <label>
                       Remain Anonymous?
-
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -71,7 +70,7 @@
                   <div class="col-md-3">
                     <label>
                       Name Of Client/Community/Group
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -94,7 +93,7 @@
                   <div class="col-md-3">
                     <label>
                       Anonymous Identifier
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -117,7 +116,7 @@
                   <div class="col-md-3"  >
                     <label>
                       Gender
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -146,21 +145,28 @@
                 <div id="age" class="row" [hidden]="false">
                   <div class="col-md-3" >
                     <label>
-                      Age
-
+                      Age Category
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Age"
-                            type="number"
-                            style="padding-left: 10px;"
-                            formControlName="age"
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Age Category"
+                                     formControlName="age"
+                                     [searchable]="true"
+                                     [clearable]="true"
                           >
+                            <ng-option [value]="item.name" *ngFor="let item of age_category">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
@@ -201,6 +207,7 @@
                   <div class="col-md-3">
                     <label>
                       Country of Origin
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
@@ -218,8 +225,8 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name?.common" *ngFor="let item of country_of_origin">
-                              {{item.name?.common}}
+                            <ng-option [value]="item.name" *ngFor="let item of country_origin">
+                              {{item.name}}
                             </ng-option>
                           </ng-select>
                         </div>
@@ -232,7 +239,7 @@
                   <div class="col-md-3">
                     <label>
                       Type of Client
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -262,7 +269,7 @@
                   <div class="col-md-3">
                     <label>
                       Preferred Channel for Response
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -293,7 +300,7 @@
                   <div class="col-md-3">
                     <label>
                       Phone Number
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -316,7 +323,7 @@
                   <div class="col-md-3" >
                     <label>
                       Email
-
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -336,24 +343,76 @@
                   </div>
                 </div>
 
-                  <div id="disability" class="row" [hidden]="false">
+                  <div class="row" [hidden]="false">
                   <div class="col-md-3" >
                     <label>
-                      Disability
-
+                     Has Disability?
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
                   <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Disability"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="disability"
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder=""
+                                     (change)="disabilityQuestion($event)"
+                                     [searchable]="true"
+                                     [clearable]="true"
                           >
+                            <ng-option [value]="item?.name" *ngFor="let item of remain_anonymous">
+                              {{item?.name}}
+                            </ng-option>
+                          </ng-select>
+<!--                          <input-->
+<!--                            class="form-control"-->
+<!--                            placeholder="Disability"-->
+<!--                            type="text"-->
+<!--                            style="padding-left: 10px;"-->
+<!--                            formControlName="disability"-->
+<!--                          >-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="disability" class="row" [hidden]="true">
+                  <div class="col-md-3" >
+                    <label>
+                      Disability Status?
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Preferred Channel for Response"
+                                     formControlName="disability"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item?.name" *ngFor="let item of disability_status">
+                              {{item?.name}}
+                            </ng-option>
+                          </ng-select>
+                          <!--                          <input-->
+                          <!--                            class="form-control"-->
+                          <!--                            placeholder="Disability"-->
+                          <!--                            type="text"-->
+                          <!--                            style="padding-left: 10px;"-->
+                          <!--                            formControlName="disability"-->
+                          <!--                          >-->
                         </div>
                       </div>
                     </div>
@@ -361,18 +420,19 @@
                 </div>
               </div>
 
-                <div  class="col-lg-12 card" style="padding-left: 30px;padding-top: 15px">
+                <div  class="col-lg-12 card " style="padding-left: 30px;padding-top: 15px">
                   <h2>Feedback Details</h2>
-                <div class="row">
+                <div class="form-row">
                   <div class="col-md-3">
                     <label>
                       Feedback Details
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
                   <div class="col-md-6">
                     <div class="col-md-12">
-                      <div class="form-group ">
+                      <div class="form-group">
                         <div class=" input-group input-group-merge">
                           <textarea
                             class="form-control"
@@ -393,6 +453,7 @@
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date Feedback Received
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
@@ -414,6 +475,7 @@
                   <div class="col-md-3">
                     <label>
                       Name of Register
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
@@ -437,6 +499,7 @@
                   <div class="col-md-3">
                     <label>
                       Staff Designation
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -467,6 +530,7 @@
                   <div class="col-md-3">
                     <label>
                       Type of Feedback
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -496,7 +560,8 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
-                      Location
+                      Region
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -523,10 +588,76 @@
                     </div>
                   </div>
                 </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label>
+                        District
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="col-md-12">
+                        <div class="form-group ">
+                          <div class=" input-group input-group-merge">
+                            <ng-select class="form-control form-control-sm"
+                                       name="datatable_length"
+                                       aria-controls="datatable"
+                                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                       [multiple]="false"
+                                       placeholder="District"
+                                       formControlName="district"
+                                       [searchable]="true"
+                                       [clearable]="true"
+                            >
+                              <ng-option [value]="item.name" *ngFor="let item of district_list">
+                                {{item.name}}
+                              </ng-option>
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label>
+                        Project Site
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="col-md-12">
+                        <div class="form-group ">
+                          <div class=" input-group input-group-merge">
+                            <ng-select class="form-control form-control-sm"
+                                       name="datatable_length"
+                                       aria-controls="datatable"
+                                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                       [multiple]="false"
+                                       placeholder=""
+                                       formControlName="projectSite"
+                                       [searchable]="true"
+                                       [clearable]="true"
+                            >
+                              <ng-option [value]="item.name" *ngFor="let item of project_sites">
+                                {{item.name}}
+                              </ng-option>
+                            </ng-select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 <div class="row">
                   <div class="col-md-3">
                     <label>
                       Project Sector
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -557,6 +688,7 @@
                   <div  class="col-md-3">
                     <label>
                       Project
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -587,6 +719,7 @@
                   <div class="col-md-3">
                     <label>
                       Sub Sector (Project Level)
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -613,6 +746,7 @@
                   <div class="col-md-3" style="padding-top: 26px;">
                     <label>
                       Current Status of the Feedback
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
                     </label>
                   </div>
@@ -645,6 +779,7 @@
                     <div class="col-md-3">
                       <label>
                         Assign staff
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         <!--                      -->
                       </label>
                     </div>
@@ -676,12 +811,14 @@
                       <div class="row">
                         <h2>
                           Enter Action Details
+
                         </h2>
                       </div>
                       <div class="row">
                         <div class="col-md-3">
                           <label>
                             Feedback Category
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -711,6 +848,7 @@
                         <div class="col-md-3">
                           <label>
                             Feedback Referred or Shared
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -724,6 +862,7 @@
                                            [multiple]="false"
                                            placeholder="Feedback Referred or Shared"
                                            formControlName="feedbackReferredShared"
+                                           (change)="feedBackSharedChange($event)"
                                            [searchable]="true"
                                            [clearable]="true"
                                 >
@@ -740,6 +879,7 @@
                         <div class="col-md-3">
                           <label>
                             Feedback shared internally or externally?
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -752,7 +892,8 @@
                                            style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                            [multiple]="false"
                                            placeholder="Is feedback shared internally or externally?"
-                                           formControlName="feedbackInternallyExternally"
+                                           formControlName="responseType"
+                                           (change)="interFeedBackCheck($event)"
                                            [searchable]="true"
                                            [clearable]="true"
                                 >
@@ -769,6 +910,7 @@
                         <div class="col-md-3">
                           <label>
                             Organisation referred to
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -776,13 +918,26 @@
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
-                                <input
-                                  class="form-control"
-                                  placeholder="Name of person referred to"
-                                  type="text"
-                                  style="padding-left: 10px;"
-                                  formControlName="referredPersonName"
+                                <ng-select class="form-control form-control-sm"
+                                           aria-controls="datatable"
+                                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                           [multiple]="false"
+                                           placeholder=""
+                                           formControlName="referredOrganization"
+                                           [searchable]="true"
+                                           [clearable]="true"
                                 >
+                                  <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
+                                    {{item.name}}
+                                  </ng-option>
+                                </ng-select>
+<!--                                <input-->
+<!--                                  class="form-control"-->
+<!--                                  placeholder="Name of person referred to"-->
+<!--                                  type="text"-->
+<!--                                  style="padding-left: 10px;"-->
+<!--                                  formControlName="referredPersonName"-->
+<!--                                >-->
                               </div>
                             </div>
                           </div>
@@ -792,6 +947,45 @@
                         <div class="col-md-3">
                           <label>
                             IRC Sector
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                            <!--                      -->
+                          </label>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="col-md-12">
+                            <div class="form-group ">
+                              <div class=" input-group input-group-merge">
+<!--                                <input-->
+<!--                                  class="form-control"-->
+<!--                                  placeholder=""-->
+<!--                                  type="text"-->
+<!--                                  style="padding-left: 10px;"-->
+<!--                                  formControlName="referredOrganization"-->
+<!--                                >-->
+                                <ng-select class="form-control form-control-sm"
+                                           aria-controls="datatable"
+                                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                           [multiple]="false"
+                                           placeholder=""
+                                           formControlName="ircReferredTo"
+                                           [searchable]="true"
+                                           [clearable]="true"
+                                >
+                                  <ng-option [value]="item.name" *ngFor="let item of irc_list">
+                                    {{item.name}}
+                                  </ng-option>
+                                </ng-select>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" id="personReferred" [hidden]="true">
+                        <div class="col-md-3">
+                          <label>
+                            Name of person referred
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -804,30 +998,7 @@
                                   placeholder="Position of person referred to"
                                   type="text"
                                   style="padding-left: 10px;"
-                                  formControlName="referredOrganization"
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row" id="organizationReferred" >
-                        <div class="col-md-3">
-                          <label>
-                            Organization referred to / IRC Sector
-                            <!--                      -->
-                          </label>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="col-md-12">
-                            <div class="form-group ">
-                              <div class=" input-group input-group-merge">
-                                <input
-                                  class="form-control"
-                                  placeholder="Organization referred to"
-                                  type="text"
-                                  style="padding-left: 10px;"
-                                  formControlName="referredOrganization"
+                                  formControlName="referredPerson"
                                 >
                               </div>
                             </div>
@@ -841,6 +1012,7 @@
                                                     line-height: 1.5; text-align: left;"
                           >
                             Date when feedback was referred/shared
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -862,6 +1034,7 @@
                         <div class="col-md-3">
                           <label>
                             Type of response given
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -891,6 +1064,7 @@
                         <div class="col-md-3">
                           <label>
                             Action / follow up needed
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -921,6 +1095,7 @@
                         <div class="col-md-3">
                           <label>
                             Feedback response received?
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -965,6 +1140,7 @@
                                                     line-height: 1.5; text-align: left;"
                       >
                         Date of response/feedback given to client
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         <!--                      -->
                       </label>
                     </div>
@@ -986,6 +1162,7 @@
                     <div class="col-md-3">
                       <label>
                         Action taken
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         <!--                      -->
                       </label>
                     </div>
@@ -1015,6 +1192,7 @@
                     <div class="col-md-3">
                       <label>
                         Name of the staff who provided the response
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         <!--                      -->
                       </label>
                     </div>
@@ -1038,6 +1216,7 @@
                     <div class="col-md-3">
                       <label>
                         Response summary
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         <!--                      -->
                       </label>
                     </div>
@@ -1084,6 +1263,7 @@
                     <div class="col-md-3">
                       <label>
                         Data Entry Focal Point
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         <!--                      -->
                       </label>
                     </div>
@@ -1112,6 +1292,7 @@
                       <div class="row">
                         <h2>
                           Referral Details
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                         </h2>
                       </div>
                       <div class="row">
@@ -1121,6 +1302,7 @@
                                                     line-height: 1.5; text-align: left;"
                           >
                             Name of Referring Officer
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -1142,6 +1324,7 @@
                         <div class="col-md-3">
                           <label>
                             Reason for referral
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -1171,6 +1354,7 @@
                         <div class="col-md-3">
                           <label>
                             Organization referred to
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -1200,6 +1384,7 @@
                         <div class="col-md-3">
                           <label>
                             Follow up needed?
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -1230,6 +1415,7 @@
                         <div class="col-md-3">
                           <label>
                             Assign staff
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -1261,6 +1447,7 @@
                         <div class="col-md-3">
                           <label>
                             Supervisor
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>
@@ -1285,6 +1472,7 @@
                         <div class="col-md-3">
                           <label>
                             Data Entry Focal Point
+                            <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                             <!--                      -->
                           </label>
                         </div>

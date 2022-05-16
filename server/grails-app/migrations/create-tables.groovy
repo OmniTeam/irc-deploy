@@ -2334,4 +2334,34 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1652706056826-127") {
+        addColumn(tableName: "feedback") {
+            column(name: "district", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1652706056826-128") {
+        addColumn(tableName: "feedback") {
+            column(name: "irc_referred_to", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1652706056826-129") {
+        addColumn(tableName: "feedback") {
+            column(name: "project_site", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1652706056826-130") {
+        addColumn(tableName: "feedback") {
+            column(name: "referred_person", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1652706056826-131") {
+        addColumn(tableName: "feedback") {
+            column(name: "response_type", type: "varchar(255)")
+        }
+    }
+
 }
