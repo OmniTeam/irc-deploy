@@ -11,77 +11,76 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 
 @ReadOnly
-class GrantLetterOfInterestReviewController {
+class GrantReportReviewController {
 
-    GrantLetterOfInterestReviewService grantLetterOfInterestReviewService
+    GrantReportReviewService grantReportReviewService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond grantLetterOfInterestReviewService.list(params), model:[grantLetterOfInterestReviewCount: grantLetterOfInterestReviewService.count()]
+        respond grantReportReviewService.list(params), model:[grantReportReviewCount: grantReportReviewService.count()]
     }
 
     def show(String id) {
         //the id passed here is the grantId, therefore we find by grantId not Id
-        respond GrantLetterOfInterestReview.findByGrantId(id)
+        respond GrantReportReview.findByGrantId(id)
     }
 
     @Transactional
-    def save(GrantLetterOfInterestReview grantLetterOfInterestReview) {
-        println grantLetterOfInterestReview.errors
-
-        if (grantLetterOfInterestReview == null) {
+    def save(GrantReportReview grantReportReview) {
+        println grantReportReview.errors
+        if (grantReportReview == null) {
             render status: NOT_FOUND
             return
         }
-        if (grantLetterOfInterestReview.hasErrors()) {
+        if (grantReportReview.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond grantLetterOfInterestReview.errors
+            respond grantReportReview.errors
             return
         }
 
         try {
-            grantLetterOfInterestReviewService.save(grantLetterOfInterestReview)
+            grantReportReviewService.save(grantReportReview)
         } catch (ValidationException e) {
-            respond grantLetterOfInterestReview.errors
+            respond grantReportReview.errors
             return
         }
 
-        respond grantLetterOfInterestReview, [status: CREATED, view:"show"]
+        respond grantReportReview, [status: CREATED, view:"show"]
     }
 
     @Transactional
-    def update(GrantLetterOfInterestReview grantLetterOfInterestReview) {
-        if (grantLetterOfInterestReview == null) {
+    def update(GrantReportReview grantReportReview) {
+        if (grantReportReview == null) {
             render status: NOT_FOUND
             return
         }
-        if (grantLetterOfInterestReview.hasErrors()) {
+        if (grantReportReview.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond grantLetterOfInterestReview.errors
+            respond grantReportReview.errors
             return
         }
 
         try {
-            grantLetterOfInterestReviewService.save(grantLetterOfInterestReview)
+            grantReportReviewService.save(grantReportReview)
         } catch (ValidationException e) {
-            respond grantLetterOfInterestReview.errors
+            respond grantReportReview.errors
             return
         }
 
-        respond grantLetterOfInterestReview, [status: OK, view:"show"]
+        respond grantReportReview, [status: OK, view:"show"]
     }
 
     @Transactional
-    def delete(String id) {
+    def delete(Long id) {
         if (id == null) {
             render status: NOT_FOUND
             return
         }
 
-        grantLetterOfInterestReviewService.delete(id)
+        grantReportReviewService.delete(id)
 
         render status: NO_CONTENT
     }

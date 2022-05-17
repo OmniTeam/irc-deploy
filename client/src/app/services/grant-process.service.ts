@@ -13,6 +13,8 @@ export class GrantProcessService {
   planningLearningReview = `${environment.serverUrl}/grantPlanningLearningReview`;
   planningLearningApprove = `${environment.serverUrl}/grantPlanningLearningApprove`;
   provideLearningGrant = `${environment.serverUrl}/grantProvideLearningGrant`;
+  grantReport = `${environment.serverUrl}/grantReport`;
+  grantReportReview = `${environment.serverUrl}/grantReportReview`;
 
   constructor(private http: HttpClient) {
   }
@@ -45,6 +47,14 @@ export class GrantProcessService {
     return this.http.get(`${this.provideLearningGrant}/${id}/`);
   }
 
+  getGrantReport(id) {
+    return this.http.get(`${this.grantReport}/${id}/`);
+  }
+
+  getGrantReportReview(id) {
+    return this.http.get(`${this.grantReportReview}/${id}/`);
+  }
+
 
   /***
    *   create
@@ -73,6 +83,14 @@ export class GrantProcessService {
 
   createProvideLearningGrant(formData): Observable<any> {
     return this.http.post(this.provideLearningGrant, formData);
+  }
+
+  createGrantReport(formData): Observable<any> {
+    return this.http.post(this.grantReport, formData);
+  }
+
+  createGrantReportReview(formData): Observable<any> {
+    return this.http.post(this.grantReportReview, formData);
   }
 
   /***

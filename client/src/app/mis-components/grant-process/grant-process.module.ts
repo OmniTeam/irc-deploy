@@ -5,6 +5,7 @@ import {GrantProcessComponent} from './grant-process.component';
 import {ApplicationLetterComponent} from './application-letter.component';
 import {PlanningLearningGrantComponent} from './planning-learning-grant.component';
 import {OrganizationalInformationComponent} from './organizational-information.component';
+import {GrantReportComponent} from './grant-report.component';
 import {GrantProcessRoutingModule} from './grant-process-routing.module';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
@@ -19,7 +20,8 @@ import {CommentsModule} from "../comments/comments.module";
     GrantProcessComponent,
     ApplicationLetterComponent,
     PlanningLearningGrantComponent,
-    OrganizationalInformationComponent
+    OrganizationalInformationComponent,
+    GrantReportComponent
   ],
     imports: [
         CommonModule,
