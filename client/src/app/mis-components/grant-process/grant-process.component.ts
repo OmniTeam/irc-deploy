@@ -21,6 +21,8 @@ export class GrantProcessComponent implements OnInit {
   isReviewPlanningLearningGrant: boolean;
   isApprovePlanningLearningGrant: boolean;
   isProvidePlanningLearningGrant: boolean;
+  isSubmitReport: boolean;
+  isReviewReport: boolean;
 
   taskRecord: any;
 
@@ -87,6 +89,8 @@ export class GrantProcessComponent implements OnInit {
     this.isReviewPlanningLearningGrant = false;
     this.isApprovePlanningLearningGrant = false;
     this.isProvidePlanningLearningGrant = false;
+    this.isSubmitReport = false;
+    this.isReviewReport = false;
 
     this.route.params
       .subscribe(p => {
@@ -96,7 +100,7 @@ export class GrantProcessComponent implements OnInit {
           const params = new HttpParams().set('id', p['id']);
           this.taskListService.getTaskRecord(params).subscribe((data) => {
             this.taskRecord = data
-            if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence" || data.taskDefinitionKey == "Review_Report" || data.taskDefinitionKey == "Submit_Report") {
+            if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") {
               this.isReviewLetterOfInterest = true;
               this.grantProcessService.getReviewRecord(data.grantId).subscribe((data) => {
                 console.log('review record available', data)
@@ -125,6 +129,12 @@ export class GrantProcessComponent implements OnInit {
               this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data) => {
                 console.log('apply ProvideLearningGrant record available', data)
               })
+            }
+            if (data.taskDefinitionKey === "Submit_Report") {
+              this.isSubmitReport = true;
+            }
+            if (data.taskDefinitionKey === "Review_Report") {
+              this.isReviewReport = true;
             }
             this.grantId = data.grantId;
             this.definitionKey = data.taskDefinitionKey
@@ -328,6 +338,10 @@ export class GrantProcessComponent implements OnInit {
       this.success = false;
       console.log(error);
     });
+  }
+
+  cancel() {
+    this.router.navigate(['/taskList']);
   }
 
 }

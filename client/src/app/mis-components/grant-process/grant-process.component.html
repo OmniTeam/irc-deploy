@@ -49,6 +49,10 @@
               APPROVE PLANNING AND LEARNING GRANT</h6></div>
             <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isSubmitReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              SUBMIT PLANNING AND LEARNING GRANT REPORT</h6></div>
+            <div [style.display]="isReviewReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              REVIEW PLANNING AND LEARNING GRANT REPORT</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
@@ -152,6 +156,7 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
                     <button class="btn btn-warning" (click)="submit('reviewLetter', 'draft')">Save Current Version</button>
                     <button class="btn btn-success" (click)="submit('reviewLetter', 'completed')">Submit Review</button>
                   </div>
@@ -244,6 +249,7 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
                     <button class="btn btn-warning" (click)="submit('reviewConcept', 'draft')">Save for Later</button>
                     <button class="btn btn-success" (click)="submit('reviewConcept', 'completed')">Submit Review</button>
                   </div>
@@ -289,6 +295,7 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
                     <button class="btn btn-warning" (click)="submit('approveConcept', 'draft')">Save for Later</button>
                     <button class="btn btn-success" (click)="submit('approveConcept', 'completed')">Approve Review</button>
                   </div>
@@ -343,11 +350,36 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
                     <button class="btn btn-warning" (click)="submit('provideLearningGrant', 'draft')">Save for Later</button>
                     <button class="btn btn-success" (click)="submit('provideLearningGrant', 'completed')">Submit Review</button>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div *ngIf="isSubmitReport" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+              <grant-report [grantId]="grantId"
+                            [processInstanceId]="processInstanceId"
+                            [definitionKey]="definitionKey"
+                            (statusChanged)="statusChangedHandler($event)"></grant-report>
+            </div>
+
+            <div *ngIf="isReviewReport" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+              <grant-report [grantId]="grantId" [isReadOnly]="true"
+                            [processInstanceId]="processInstanceId"
+                            [definitionKey]="definitionKey"
+                            (statusChanged)="statusChangedHandler($event)"></grant-report>
             </div>
 
           </div>

@@ -2420,5 +2420,60 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "list_members_attachment", tableName: "grant_planning_learning")
     }
 
+    changeSet(author: "bruno (generated)", id: "1652790644052-9") {
+        createTable(tableName: "grant_report") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_reportPK")
+            }
+
+            column(name: "period_to", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "period_from", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "balance", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_amount_utilised", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "amount_transferred", type: "INT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "report_attachment", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_amount", type: "INT") {
+                constraints(nullable: "false")
+            }
+        }
+    }
 
 }
