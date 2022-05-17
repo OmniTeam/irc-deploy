@@ -2476,4 +2476,56 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1652795516897-9") {
+        createTable(tableName: "grant_report_review") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grant_report_reviewPK")
+            }
+
+            column(name: "comments", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "decision", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "achieve_intended_objectives", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "adhere_to_budget", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "activities_inline_with_work_plan", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }

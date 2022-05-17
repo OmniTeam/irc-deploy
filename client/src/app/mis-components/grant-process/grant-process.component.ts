@@ -50,11 +50,18 @@ export class GrantProcessComponent implements OnInit {
     {name: 'Proceed with application', value: 'Yes'},
     {name: 'Return to Program Officer for further Review', value: 'No'}
   ];
+  decision3 = [
+    {name: 'Recommend for the major grant', value: 'Yes'},
+    {name: 'Drop the applicant', value: 'No'}
+  ];
   isConceptInline: any;
   doesItAdhere: any;
   areTheyAdhering: any;
   decisionOfReviewProcess: any;
   hasDueDiligenceConducted: any;
+  achieveIntendedObjectives: any;
+  adhereToBudget: any;
+  activitiesInlineWithWorkPlan: any;
   grantId: string;
   definitionKey: string;
   processInstanceId: string;
@@ -132,9 +139,15 @@ export class GrantProcessComponent implements OnInit {
             }
             if (data.taskDefinitionKey === "Submit_Report") {
               this.isSubmitReport = true;
+              this.grantProcessService.getGrantReport(data.grantId).subscribe((data) => {
+                console.log('apply GrantReport record available', data)
+              })
             }
             if (data.taskDefinitionKey === "Review_Report") {
               this.isReviewReport = true;
+              this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data) => {
+                console.log('apply GrantReportReview record available', data)
+              })
             }
             this.grantId = data.grantId;
             this.definitionKey = data.taskDefinitionKey
@@ -201,6 +214,9 @@ export class GrantProcessComponent implements OnInit {
         break
       case 'provideLearningGrant':
         this.provideLearningGrant(status)
+        break
+      case 'reviewReport':
+        this.submitGrantReportReview(status)
         break
     }
 
@@ -338,6 +354,40 @@ export class GrantProcessComponent implements OnInit {
       this.success = false;
       console.log(error);
     });
+  }
+
+  submitGrantReportReview(status) {
+    if (this.decisionOfReviewProcess != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        achieveIntendedObjectives: this.achieveIntendedObjectives,
+        adhereToBudget: this.adhereToBudget,
+        activitiesInlineWithWorkPlan: this.activitiesInlineWithWorkPlan,
+        comments: this.reviewerComments,
+        decision: this.decisionOfReviewProcess,
+        status: status
+      }
+      this.grantProcessService.createGrantReportReview(formData).subscribe((data) => {
+        console.log('response', data)
+        this.error = false;
+        this.success = true;
+        this.successMessage = "Updated";
+        this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
+        this.statusChangedHandler(status)
+        this.alertService.success(this.successMessage);
+      }, error => {
+        this.error = true;
+        this.errorMessage = "Failed to update";
+        this.alertService.error(this.errorMessage);
+        this.success = false;
+        console.log(error);
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
   }
 
   cancel() {
