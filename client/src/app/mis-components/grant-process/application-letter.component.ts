@@ -81,7 +81,7 @@ export class ApplicationLetterComponent implements OnInit {
             status: [data.status],
           });
         }
-      })
+      }, error=>{console.log(error)})
     }
   }
 

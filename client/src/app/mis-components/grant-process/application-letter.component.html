@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup" (ngSubmit)="submitLetter()">
+<form [formGroup]="formGroup" (ngSubmit)="submitLetter()" *ngIf="formGroup">
 
   <h3 style="margin-left: 40px;">A. Submission Instructions</h3>
   <div class="card">

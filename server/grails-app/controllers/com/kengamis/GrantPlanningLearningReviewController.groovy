@@ -24,7 +24,8 @@ class GrantPlanningLearningReviewController {
     }
 
     def show(String id) {
-        respond grantPlanningLearningReviewService.get(id)
+        //the id passed here is the grantId, therefore we find by grantId not Id
+        respond GrantPlanningLearningReview.findByGrantId(id)
     }
 
     @Transactional

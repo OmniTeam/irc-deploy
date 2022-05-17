@@ -152,8 +152,8 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-warning" (click)="submit('review', 'draft')">Save Current Version</button>
-                    <button class="btn btn-success" (click)="submit('review', 'completed')">Submit Review</button>
+                    <button class="btn btn-warning" (click)="submit('reviewLetter', 'draft')">Save Current Version</button>
+                    <button class="btn btn-success" (click)="submit('reviewLetter', 'completed')">Submit Review</button>
                   </div>
                 </div>
               </div>
@@ -244,8 +244,8 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-warning">Cancel</button>
-                    <button class="btn btn-success">Submit Review</button>
+                    <button class="btn btn-warning" (click)="submit('reviewConcept', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('reviewConcept', 'completed')">Submit Review</button>
                   </div>
                 </div>
               </div>
@@ -289,8 +289,8 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-warning">Cancel</button>
-                    <button class="btn btn-success">Submit Review</button>
+                    <button class="btn btn-warning" (click)="submit('approveConcept', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('approveConcept', 'completed')">Approve Review</button>
                   </div>
                 </div>
               </div>
@@ -343,8 +343,8 @@
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                    <button class="btn btn-warning">Cancel</button>
-                    <button class="btn btn-success">Submit Review</button>
+                    <button class="btn btn-warning" (click)="submit('provideLearningGrant', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('provideLearningGrant', 'completed')">Submit Review</button>
                   </div>
                 </div>
               </div>

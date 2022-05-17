@@ -26,7 +26,7 @@ export class PlanningLearningGrantComponent implements OnInit {
   successMessage: string;
   status = 'completed';
 
-  formGroup: FormGroup;
+  formGp: FormGroup;
   submitted = false;
   countries: any;
   pCountries: any;
@@ -46,7 +46,7 @@ export class PlanningLearningGrantComponent implements OnInit {
   }
 
   get f() {
-    return this.formGroup.controls;
+    return this.formGp.controls;
   }
 
   ngOnInit(): void {
@@ -56,51 +56,50 @@ export class PlanningLearningGrantComponent implements OnInit {
       this.setEmptyForm()
     } else {
       this.grantProcessService.getPlanningAndLearningRecord(this.grantId).subscribe((data: any) => {
-        if (data != null) {
-          this.formGroup = this.formBuilder.group({
-            proposedDuration: [{value: data.proposedDuration, disabled: this.isReadOnly}, [Validators.required]],
-            proposedStartDate: [{value: data.proposedStartDate, disabled: this.isReadOnly}, [Validators.required]],
-            amountRequested: [{value: data.amountRequested, disabled: this.isReadOnly}],
-            otherSources: [{value: data.otherSources, disabled: this.isReadOnly}, [Validators.required]],
-            totalBudgetAmt: [{value: data.totalBudgetAmt, disabled: this.isReadOnly}, [Validators.required]],
+        console.log('getPlanningAndLearningRecord', data)
+          this.formGp = this.formBuilder.group({
+            proposedDuration: [{value: data?.proposedDuration, disabled: this.isReadOnly}, [Validators.required]],
+            proposedStartDate: [{value: data?.proposedStartDate, disabled: this.isReadOnly}, [Validators.required]],
+            amountRequested: [{value: data?.amountRequested, disabled: this.isReadOnly}],
+            otherSources: [{value: data?.otherSources, disabled: this.isReadOnly}, [Validators.required]],
+            totalBudgetAmt: [{value: data?.totalBudgetAmt, disabled: this.isReadOnly}, [Validators.required]],
             addressContactPerson: [{
-              value: data.addressContactPerson,
+              value: data?.addressContactPerson,
               disabled: this.isReadOnly
             }, [Validators.required]],
-            emailContactPerson: [{value: data.emailContactPerson, disabled: this.isReadOnly}, [Validators.required]],
-            contactPersonNumber: [{value: data.contactPersonNumber, disabled: this.isReadOnly}, [Validators.required]],
+            emailContactPerson: [{value: data?.emailContactPerson, disabled: this.isReadOnly}, [Validators.required]],
+            contactPersonNumber: [{value: data?.contactPersonNumber, disabled: this.isReadOnly}, [Validators.required]],
             nameAuthorizedSignatory: [{
-              value: data.nameAuthorizedSignatory,
+              value: data?.nameAuthorizedSignatory,
               disabled: this.isReadOnly
             }, [Validators.required]],
             contactAuthorizedSignatory: [{
-              value: data.contactAuthorizedSignatory,
+              value: data?.contactAuthorizedSignatory,
               disabled: this.isReadOnly
             }, [Validators.required]],
-            bankDetails: [{value: data.bankDetails, disabled: this.isReadOnly}, [Validators.required]],
-            otherOrganization: [{value: data.otherOrganization, disabled: this.isReadOnly}, [Validators.required]],
+            bankDetails: [{value: data?.bankDetails, disabled: this.isReadOnly}, [Validators.required]],
+            otherOrganization: [{value: data?.otherOrganization, disabled: this.isReadOnly}, [Validators.required]],
 
-            completedAttachment: [{value: data.completedAttachment, disabled: this.isReadOnly}],
-            melFrameworkAttachment: [{value: data.melFrameworkAttachment, disabled: this.isReadOnly}],
-            financialAttachment: [{value: data.financialAttachment, disabled: this.isReadOnly}],
-            registration: [{value: data.registration, disabled: this.isReadOnly}],
-            listMembersAttachment: [{value: data.listMembersAttachment, disabled: this.isReadOnly}],
-            assessmentReport: [{value: data.assessmentReport, disabled: this.isReadOnly}],
-            strategicPlan: [{value: data.strategicPlan, disabled: this.isReadOnly}],
-            annualWorkPlan: [{value: data.annualWorkPlan, disabled: this.isReadOnly}],
-            childPolicy: [{value: data.childPolicy, disabled: this.isReadOnly}],
-            structure: [{value: data.structure, disabled: this.isReadOnly}],
+            completedAttachment: [{value: data?.completedAttachment, disabled: this.isReadOnly}],
+            melFrameworkAttachment: [{value: data?.melFrameworkAttachment, disabled: this.isReadOnly}],
+            financialAttachment: [{value: data?.financialAttachment, disabled: this.isReadOnly}],
+            registration: [{value: data?.registration, disabled: this.isReadOnly}],
+            listMembersAttachment: [{value: data?.listMembersAttachment, disabled: this.isReadOnly}],
+            assessmentReport: [{value: data?.assessmentReport, disabled: this.isReadOnly}],
+            strategicPlan: [{value: data?.strategicPlan, disabled: this.isReadOnly}],
+            annualWorkPlan: [{value: data?.annualWorkPlan, disabled: this.isReadOnly}],
+            childPolicy: [{value: data?.childPolicy, disabled: this.isReadOnly}],
+            structure: [{value: data?.structure, disabled: this.isReadOnly}],
             grantId: [{value: this.grantId, disabled: this.isReadOnly}],
             processInstanceId: [{value: this.processInstanceId, disabled: this.isReadOnly}],
             definitionKey: [{value: this.definitionKey, disabled: this.isReadOnly}],
           });
-        }
-      })
+      }, error=>{console.log(error)})
     }
   }
 
   setEmptyForm() {
-    this.formGroup = this.formBuilder.group({
+    this.formGp = this.formBuilder.group({
       proposedDuration: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
       proposedStartDate: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
       amountRequested: [{value: '', disabled: this.isReadOnly}],
@@ -132,12 +131,12 @@ export class PlanningLearningGrantComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-    console.log('formData', this.formGroup.value)
-    if (this.formGroup.invalid) {
+    console.log('formData', this.formGp.value)
+    if (this.formGp.invalid) {
       this.alertService.error("Please fill in all fields correctly");
       return;
     }
-    const formData = this.formGroup.value;
+    const formData = this.formGp.value;
     console.log('formData', formData)
 
     this.grantProcessService.createPlanningAndLearningRecord(formData).subscribe(data => {
@@ -157,7 +156,7 @@ export class PlanningLearningGrantComponent implements OnInit {
     });
     setTimeout(() => {
       if (this.success == true) {
-        this.formGroup.reset()
+        this.formGp.reset()
         this.router.navigate(['/taskList']);
       }
       this.success = false;
@@ -173,16 +172,16 @@ export class PlanningLearningGrantComponent implements OnInit {
   uploadFile(file, id) {
     this.loading = !this.loading;
     this.fileUploadService.upload(file, 'PandL_Grant').subscribe((data) => {
-      if (id === "completed") this.formGroup.patchValue({completedAttachment: data.path});
-      if (id === "mel_framework") this.formGroup.patchValue({melFrameworkAttachment: data.path});
-      if (id === "financial") this.formGroup.patchValue({financialAttachment: data.path});
-      if (id === "registration") this.formGroup.patchValue({registration: data.path});
-      if (id === "list_members") this.formGroup.patchValue({listMembersAttachment: data.path});
-      if (id === "assessment_report") this.formGroup.patchValue({assessmentReport: data.path});
-      if (id === "strategic_plan") this.formGroup.patchValue({strategicPlan: data.path});
-      if (id === "annual_work_plan") this.formGroup.patchValue({annualWorkPlan: data.path});
-      if (id === "child_policy") this.formGroup.patchValue({childPolicy: data.path});
-      if (id === "structure") this.formGroup.patchValue({structure: data.path});
+      if (id === "completed") this.formGp.patchValue({completedAttachment: data.path});
+      if (id === "mel_framework") this.formGp.patchValue({melFrameworkAttachment: data.path});
+      if (id === "financial") this.formGp.patchValue({financialAttachment: data.path});
+      if (id === "registration") this.formGp.patchValue({registration: data.path});
+      if (id === "list_members") this.formGp.patchValue({listMembersAttachment: data.path});
+      if (id === "assessment_report") this.formGp.patchValue({assessmentReport: data.path});
+      if (id === "strategic_plan") this.formGp.patchValue({strategicPlan: data.path});
+      if (id === "annual_work_plan") this.formGp.patchValue({annualWorkPlan: data.path});
+      if (id === "child_policy") this.formGp.patchValue({childPolicy: data.path});
+      if (id === "structure") this.formGp.patchValue({structure: data.path});
       this.loading = false;
     }, error => {
       console.log(error)
@@ -195,7 +194,7 @@ export class PlanningLearningGrantComponent implements OnInit {
   }
 
   cancel() {
-    this.formGroup.reset()
+    this.formGp.reset()
     this.submitted = false
   }
 }
