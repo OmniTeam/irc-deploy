@@ -23,6 +23,7 @@ export class ApplicationLetterComponent implements OnInit {
   organizationType = [
     {id: "1", name: "my type"}
   ];
+  status = 'not_started';
   countries: any;
   cities: any;
   programs = [
@@ -52,35 +53,39 @@ export class ApplicationLetterComponent implements OnInit {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfCountries();
 
-    this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data:any) => {
-      if (data != null && this.isReadOnly) {
-        this.formGroup = this.formBuilder.group({
-          program: [{value: data.program, disabled: this.isReadOnly}, [Validators.required]],
-          organisation: [{value: data.organisation, disabled: this.isReadOnly}, [Validators.required]],
-          acronym: [{value: data.acronym, disabled: this.isReadOnly}],
-          organizationType: [{value: data.organizationType, disabled: this.isReadOnly}, [Validators.required]],
-          legalStatus: [{value: data.legalStatus, disabled: this.isReadOnly}, [Validators.required]],
-          contactPerson: [{value: data.contactPerson, disabled: this.isReadOnly}, [Validators.required]],
-          addressContactPerson: [{value: data.addressContactPerson, disabled: this.isReadOnly}, [Validators.required]],
-          emailAddress: [{value: data.emailAddress, disabled: this.isReadOnly}, [Validators.required]],
-          contactPersonNumber: [{value: data.contactPersonNumber, disabled: this.isReadOnly}, [Validators.required]],
-          physicalAddress: [{value: data.physicalAddress, disabled: this.isReadOnly}, [Validators.required]],
-          postalAddress: [{value: data.postalAddress, disabled: this.isReadOnly}, [Validators.required]],
-          email: [{value: data.email, disabled: this.isReadOnly}, [Validators.required]],
-          website: [{value: data.website, disabled: this.isReadOnly}],
-          country: [{value: data.country, disabled: this.isReadOnly}],
-          city: [{value: data.city, disabled: this.isReadOnly}],
-          letterAttachment: [{value: data.letterAttachment, disabled: this.isReadOnly}],
-          status: [data.status],
-        });
-      } else this.setEmptyForm()
-    }, error => {
-      console.log(error)
+    if (!this.isReadOnly) {
       this.setEmptyForm()
-    })
+    } else {
+      this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data: any) => {
+        if (data != null) {
+          this.formGroup = this.formBuilder.group({
+            program: [{value: data.program, disabled: this.isReadOnly}, [Validators.required]],
+            organisation: [{value: data.organisation, disabled: this.isReadOnly}, [Validators.required]],
+            acronym: [{value: data.acronym, disabled: this.isReadOnly}],
+            organizationType: [{value: data.organizationType, disabled: this.isReadOnly}, [Validators.required]],
+            legalStatus: [{value: data.legalStatus, disabled: this.isReadOnly}, [Validators.required]],
+            contactPerson: [{value: data.contactPerson, disabled: this.isReadOnly}, [Validators.required]],
+            addressContactPerson: [{
+              value: data.addressContactPerson,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            emailAddress: [{value: data.emailAddress, disabled: this.isReadOnly}, [Validators.required]],
+            contactPersonNumber: [{value: data.contactPersonNumber, disabled: this.isReadOnly}, [Validators.required]],
+            physicalAddress: [{value: data.physicalAddress, disabled: this.isReadOnly}, [Validators.required]],
+            postalAddress: [{value: data.postalAddress, disabled: this.isReadOnly}, [Validators.required]],
+            email: [{value: data.email, disabled: this.isReadOnly}, [Validators.required]],
+            website: [{value: data.website, disabled: this.isReadOnly}],
+            country: [{value: data.country, disabled: this.isReadOnly}],
+            city: [{value: data.city, disabled: this.isReadOnly}],
+            letterAttachment: [{value: data.letterAttachment, disabled: this.isReadOnly}],
+            status: [data.status],
+          });
+        }
+      }, error=>{console.log(error)})
+    }
   }
 
-  setEmptyForm(){
+  setEmptyForm() {
     this.formGroup = this.formBuilder.group({
       program: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
       organisation: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
@@ -126,9 +131,10 @@ export class ApplicationLetterComponent implements OnInit {
       console.log(error);
     });
     setTimeout(() => {
-      if(this.success == true){
+      if (this.success == true) {
         (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
         this.formGroup.reset()
+        this.onBackPressed()
       }
       this.success = false;
       this.error = false;
@@ -157,6 +163,12 @@ export class ApplicationLetterComponent implements OnInit {
     this.countriesService.getCitiesForCountry(country).subscribe((response) => {
       this.cities = response.data;
     }, error => console.log(error))
+  }
+
+
+  saveDraft(){
+    this.status = 'draft'
+    this.submitLetter()
   }
 
   cancel() {

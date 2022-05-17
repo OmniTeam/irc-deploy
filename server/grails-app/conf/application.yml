@@ -21,6 +21,11 @@ spring:
     groovy:
         template:
             check-template-location: false
+    http:
+        multipart:
+            enabled: true
+            max-file-size: 50MB
+            max-request-size: 50MB
     devtools:
         restart:
             additional-exclude:
