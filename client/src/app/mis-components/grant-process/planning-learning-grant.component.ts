@@ -5,6 +5,7 @@ import {SampleData} from "../../helpers/sample-data";
 import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {AlertService} from "../../services/alert";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'planning-learning-application',
@@ -15,12 +16,15 @@ import {AlertService} from "../../services/alert";
 export class PlanningLearningGrantComponent implements OnInit {
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
-  @Output() readOnlyChanged: EventEmitter<boolean> = new EventEmitter();
+  @Input() processInstanceId: string;
+  @Input() definitionKey: string;
+  @Output() statusChanged: EventEmitter<string> = new EventEmitter();
 
   error: boolean;
   success: boolean;
   errorMessage: string;
   successMessage: string;
+  status = 'completed';
 
   formGroup: FormGroup;
   submitted = false;
@@ -31,6 +35,8 @@ export class PlanningLearningGrantComponent implements OnInit {
   loading: boolean;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
@@ -40,15 +46,17 @@ export class PlanningLearningGrantComponent implements OnInit {
   }
 
   get f() {
-    return this.formGroup?.controls;
+    return this.formGroup.controls;
   }
 
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfCountries();
 
-    if (this.grantId != null) {
+    if (!this.isReadOnly) {
+      this.setEmptyForm()
+    } else {
       this.grantProcessService.getPlanningAndLearningRecord(this.grantId).subscribe((data: any) => {
-        if (data != null && this.isReadOnly) {
+        if (data != null) {
           this.formGroup = this.formBuilder.group({
             proposedDuration: [{value: data.proposedDuration, disabled: this.isReadOnly}, [Validators.required]],
             proposedStartDate: [{value: data.proposedStartDate, disabled: this.isReadOnly}, [Validators.required]],
@@ -82,13 +90,13 @@ export class PlanningLearningGrantComponent implements OnInit {
             annualWorkPlan: [{value: data.annualWorkPlan, disabled: this.isReadOnly}],
             childPolicy: [{value: data.childPolicy, disabled: this.isReadOnly}],
             structure: [{value: data.structure, disabled: this.isReadOnly}],
+            grantId: [{value: this.grantId, disabled: this.isReadOnly}],
+            processInstanceId: [{value: this.processInstanceId, disabled: this.isReadOnly}],
+            definitionKey: [{value: this.definitionKey, disabled: this.isReadOnly}],
           });
-        } else this.setEmptyForm()
-      }, error => {
-        console.log(error)
-        this.setEmptyForm()
+        }
       })
-    } else this.setEmptyForm()
+    }
   }
 
   setEmptyForm() {
@@ -116,6 +124,9 @@ export class PlanningLearningGrantComponent implements OnInit {
       annualWorkPlan: [{value: '', disabled: this.isReadOnly}],
       childPolicy: [{value: '', disabled: this.isReadOnly}],
       structure: [{value: '', disabled: this.isReadOnly}],
+      grantId: [{value: '', disabled: this.isReadOnly}],
+      processInstanceId: [{value: '', disabled: this.isReadOnly}],
+      definitionKey: [{value: '', disabled: this.isReadOnly}],
     });
   }
 
@@ -136,6 +147,7 @@ export class PlanningLearningGrantComponent implements OnInit {
       this.success = true;
       this.successMessage = "Saved Application";
       this.alertService.success(this.successMessage);
+      this.statusChanged.emit(this.status);
     }, error => {
       this.error = true;
       this.success = false;
@@ -144,7 +156,10 @@ export class PlanningLearningGrantComponent implements OnInit {
       console.log(error);
     });
     setTimeout(() => {
-      if (this.success == true) this.formGroup.reset()
+      if (this.success == true) {
+        this.formGroup.reset()
+        this.router.navigate(['/taskList']);
+      }
       this.success = false;
       this.error = false;
     }, 3000);
@@ -172,6 +187,11 @@ export class PlanningLearningGrantComponent implements OnInit {
     }, error => {
       console.log(error)
     });
+  }
+
+  saveDraft(){
+    this.status = 'draft'
+    this.submitLetter()
   }
 
   cancel() {

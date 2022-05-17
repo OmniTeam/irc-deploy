@@ -24,6 +24,7 @@ export class GrantProcessComponent implements OnInit {
 
   taskRecord: any;
 
+  loading: boolean;
   isReadOnly: boolean;
   error: boolean;
   success: boolean;
@@ -135,6 +136,22 @@ export class GrantProcessComponent implements OnInit {
       });
   }
 
+
+  handleFileInput(event) {
+    let files: FileList = event.target.files;
+    this.uploadFile(files.item(0), event.target.id);
+  }
+
+  uploadFile(file, id) {
+    this.loading = !this.loading;
+    this.fileUploadService.upload(file, 'PandL_Grant').subscribe((data) => {
+      if (id === "attachmentDiligenceReport") this.attachmentDiligenceReport = data.path;
+      this.loading = false;
+    }, error => {
+      console.log(error)
+    });
+  }
+
   viewComments(): void {
     this.openCommentsPopup = !this.openCommentsPopup;
     this.openPopup = this.openCommentsPopup;
@@ -151,6 +168,14 @@ export class GrantProcessComponent implements OnInit {
   commentsChangedHandler(comments: Array<CommentNode>) {
     this.comments = comments;
     console.log(comments);
+  }
+
+  statusChangedHandler(status: string) {
+    console.log('status',status);
+    this.taskRecord.status = status
+    this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
+      console.log('successfully updated task');
+    }, error => console.log('update task', error));
   }
 
   submit(key, status) {
@@ -175,10 +200,7 @@ export class GrantProcessComponent implements OnInit {
             this.success = true;
             this.successMessage = "Updated Report";
             this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
-            this.taskRecord.status = status
-            this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
-              console.log('successfully updated task');
-            }, error => console.log('update task', error));
+            this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
           }, error => {
             this.error = true;

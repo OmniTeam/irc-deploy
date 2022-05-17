@@ -37,12 +37,18 @@
         <div class="row">
 
           <div style="width: 100%; text-align: -webkit-center; display: block;">
-            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
-            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LETTER OF INTEREST</h6></div>
-            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PLANNING AND LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT
+              LETTER OF INTEREST</h6></div>
+            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
+              LETTER OF INTEREST</h6></div>
+            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              PLANNING AND LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              REVIEW LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              APPROVE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              PROVIDE PLANNING AND LEARNING GRANT</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
@@ -115,9 +121,14 @@
                         </div>
                         <div class="text-left">
                           <label for="attachmentDiligenceReport">Attach due diligence report:</label>
-                          <input type="file" class="form-control" id="attachmentDiligenceReport"
-                                 *ngIf="!isReadOnly"
-                                 [(ngModel)]="attachmentDiligenceReport"/>
+                          <input
+                            *ngIf="!isReadOnly"
+                            class="form-control"
+                            placeholder="Attachment"
+                            type="file"
+                            style="padding-left: 10px;"
+                            id="attachmentDiligenceReport"
+                            (change)="handleFileInput($event)"/>
                           <button
                             *ngIf="isReadOnly"
                             type="button"
@@ -135,6 +146,9 @@
                     </div>
                   </div>
                 </div>
+                <div class="row" *ngIf="loading">
+                  <h3>Uploading attachment, please wait ...</h3>
+                </div>
                 <div class="row" *ngIf="!isReadOnly">
                   <div class="col-lg-12 bottom_buttons_row"
                        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
@@ -147,12 +161,18 @@
 
             <div *ngIf="isPlanningLearningApplication" class=" col">
               <organizational-information [grantId]="grantId"></organizational-information>
-              <planning-learning-application [isReadOnly]="false"></planning-learning-application>
+              <planning-learning-application [isReadOnly]="false" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
             </div>
 
             <div *ngIf="isReviewPlanningLearningGrant" class="col">
               <organizational-information [grantId]="grantId"></organizational-information>
-              <planning-learning-application [isReadOnly]="true"></planning-learning-application>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
 
               <h3 style="margin-left: 40px;">Reviewer Action</h3>
               <div class="card">
@@ -233,7 +253,10 @@
 
             <div *ngIf="isApprovePlanningLearningGrant" class="col">
               <organizational-information [grantId]="grantId"></organizational-information>
-              <planning-learning-application [isReadOnly]="true"></planning-learning-application>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
 
               <h3 style="margin-left: 40px;">Approver Section</h3>
               <div class="card">
@@ -275,7 +298,10 @@
 
             <div *ngIf="isProvidePlanningLearningGrant" class="col">
               <organizational-information [grantId]="grantId"></organizational-information>
-              <planning-learning-application [isReadOnly]="true"></planning-learning-application>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
 
               <h3 style="margin-left: 40px;">Finance Section</h3>
               <div class="card">
