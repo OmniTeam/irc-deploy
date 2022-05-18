@@ -159,16 +159,16 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
       {
-        path: 'grantProcess', canActivate: [AuthGuard],
+        path: 'grantProcess',
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: []
         },
         loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
       },
       {
-        path: 'grantProcess/:id/:readonly', canActivate: [AuthGuard],
+        path: 'grantProcess/:id/:readonly',
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: []
         },
         loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
       },
