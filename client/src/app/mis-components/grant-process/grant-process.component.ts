@@ -113,7 +113,7 @@ export class GrantProcessComponent implements OnInit {
                 console.log('review record available', data)
               })
             }
-            if (data.taskDefinitionKey === "Activity_142yglq") {
+            if (data.taskDefinitionKey === "Apply_for_Learning_Planning_Grant") {
               this.isPlanningLearningApplication = true;
               this.grantProcessService.getPlanningAndLearningRecord(data.grantId).subscribe((data) => {
                 console.log('apply PandG record available', data)
