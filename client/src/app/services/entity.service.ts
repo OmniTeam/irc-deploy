@@ -82,4 +82,11 @@ export class EntityService {
   exportEntityData(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/misEntity/exportEntityData`, {params});
   }
+
+  uploadExcelFile(file, id): Observable<any> {
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+    formData.append("id", id);
+    return this.http.post(`${environment.serverUrl}/fileManager/uploadExcel`, formData);
+  }
 }

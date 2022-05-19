@@ -57,6 +57,7 @@ class UrlMappings {
         get "/$controller/getUserRoles(.$format)?"(action:"getUserRoles")
         post "/$controller/uploadFile(.$format)?"(action:"uploadFile")
         post "/$controller/downloadFile(.$format)?"(action:"downloadFile")
+        post "/$controller/uploadExcel(.$format)?"(action:"uploadExcel")
 
 
         group "/odxRest/", {

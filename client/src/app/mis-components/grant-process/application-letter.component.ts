@@ -155,6 +155,7 @@ export class ApplicationLetterComponent implements OnInit {
         this.loading = false;
       }, error => {
         console.log(error);
+      this.loading = false;
       }
     );
   }

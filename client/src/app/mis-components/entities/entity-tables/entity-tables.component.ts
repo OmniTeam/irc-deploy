@@ -44,6 +44,9 @@ export class EntityTablesComponent implements OnInit {
   selectedTagTypeFilter = "";
   selectedTagFilter = "";
   recordId = "";
+  openPopup: boolean;
+  loading: boolean;
+  uploadMessage: string = "Uploading attachment, please wait ..."
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -437,5 +440,29 @@ export class EntityTablesComponent implements OnInit {
     this.entityService.exportEntityData(params).subscribe((data) => {
       this.exportService.exportToCsv(data['data'], data['file']);
     }, error => console.log(error));
+  }
+
+  importExcelFormData() {
+    this.openPopup = true
+  }
+
+  handleFileInput(event) {
+    this.loading = !this.loading;
+    let files: FileList = event.target.files;
+    this.entityService.uploadExcelFile(files.item(0), this.entityId).subscribe((data) => {
+      this.uploadMessage = "Success"
+      setTimeout(() => {
+        this.loading = false;
+        this.closePopUp()
+      }, 3000);
+    }, error => {
+      console.log(error)
+      this.uploadMessage = "Failed to upload file, try again."
+      setTimeout(() => {this.loading = false}, 3000);
+    });
+  }
+
+  closePopUp(){
+    this.openPopup = false
   }
 }
