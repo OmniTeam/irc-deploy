@@ -1,9 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {FormService} from "../../services/form.service";
-import {Project} from "../../models/project";
-import {Subject} from "rxjs";
-import {Form} from "../../models/form";
 import {AlertService} from "../../services/alert";
 
 @Component({
