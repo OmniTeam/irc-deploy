@@ -15,7 +15,7 @@
   </div>
   <div class="card-body d-flex flex-column">
     <div class="row">
-     <input class="form-control" type="file" style="padding-left: 10px;" (change)="handleFileInput($event)"/>
+     <input class="form-control" type="file" style="padding-left: 10px;" (change)="handleFileInput($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
     </div>
     <div class="container" *ngIf="loading">
       <h3>{{uploadMessage}}</h3>
@@ -137,6 +137,9 @@
                   Import Excel </a>
               </div>
             </div>
+          </div>
+          <div class="container" *ngIf="loading">
+            <h3>Loading ...</h3>
           </div>
           <ngx-datatable
             class="bootstrap selection-cell"

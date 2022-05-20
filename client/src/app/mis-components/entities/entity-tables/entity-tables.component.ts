@@ -121,6 +121,7 @@ export class EntityTablesComponent implements OnInit {
   getEntityData() {
     const params = new HttpParams()
       .set('id', this.entityId);
+    this.loading = true;
     this.entityService.getEntityData(params).subscribe((data) => {
       this.entityName = new ReplacePipe().transform(data.entity['name'], '_', ' ');
       this.temp = [...data.resultList];
@@ -129,7 +130,8 @@ export class EntityTablesComponent implements OnInit {
       this.enableTagging = data.enableTagging;
       this.columns = this.columnMappings(data.headerList);
       this.formInputConfigs = this.generateFormInputConfigs(data.headerList);
-    }, error => console.log(error));
+      this.loading = false
+    }, error => {console.log(error)});
   }
 
   columnMappings(array) {
@@ -450,10 +452,11 @@ export class EntityTablesComponent implements OnInit {
     this.loading = !this.loading;
     let files: FileList = event.target.files;
     this.entityService.uploadExcelFile(files.item(0), this.entityId).subscribe((data) => {
-      this.uploadMessage = "Success"
+      this.uploadMessage = data[0]
       setTimeout(() => {
         this.loading = false;
         this.closePopUp()
+        this.getEntityData();
       }, 3000);
     }, error => {
       console.log(error)

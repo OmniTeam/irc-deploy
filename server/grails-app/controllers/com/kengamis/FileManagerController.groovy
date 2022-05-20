@@ -57,6 +57,7 @@ class FileManagerController {
     }
 
     def uploadExcel() {
+        def message = ["Data imported successfully"]
         def f = request.getFile('file')
         def id = request.getParameter('id')
 
@@ -103,7 +104,7 @@ class FileManagerController {
                 importEntityRecord(id, v)
             }
         }
-        respond "Data imported successfully"
+        respond message
     }
 
     @Transactional
