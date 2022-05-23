@@ -66,7 +66,7 @@ export class EntityTablesComponent implements OnInit {
     let val = event.target.value.toLowerCase();
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
-        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+        if (d[key]?.toString().toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
