@@ -4,6 +4,7 @@ import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
 import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
+import com.kengamis.ProgramPartner
 import grails.util.Holders
 import groovy.json.JsonOutput
 import groovyx.net.http.ContentType
@@ -56,9 +57,11 @@ class StartCamundaInstancesJob extends Script {
                 try {
                     if (r.size() > 0) {
                         def result = r.first()
+                        def partner = ProgramPartner.findById(setup.partnerId)
                         boolean started = startProcessInstance([
                                 PartnerSetupId: setup.id,
                                 PartnerId     : setup.partnerId,
+                                Assignee      : partner.email,
                                 ProgramId     : setup.programId,
                                 StartDate     : result['start_date'],
                                 EndDate       : result['end_date'],
@@ -85,7 +88,7 @@ class StartCamundaInstancesJob extends Script {
         GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
             boolean started = startProcessInstance([
                     GrantId  : it.id,
-                    PartnerId: ''
+                    Assignee: it.email
             ], GRANT_PROCESS)
 
 
