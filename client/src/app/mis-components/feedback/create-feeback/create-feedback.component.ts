@@ -210,33 +210,45 @@ export class CreateFeedbackComponent implements OnInit {
   ];
   preferred_channel = [
     {
-      'name': 'Client Forum'
+      'name': 'Age Gender Diversity(AGD)'
     },
     {
-      'name': 'Collectively with Community'
+      'name': 'Bodaboda Talk Talk (BBTT)'
     },
     {
-      'name': 'Email Address'
+      'name': 'Client Responsiveness Survey'
     },
     {
-      'name': 'In Person'
+      'name': 'Community Meetings Or Dialogues'
     },
     {
-      'name': 'Phone Call'
+      'name': 'Email (ADDRESS)'
     },
     {
-      'name': 'SMS'
+      'name': 'Focus Group Discussion'
     },
     {
-      'name': 'Stakeholders Reference Group'
+      'name': 'Individual Interview'
     },
     {
-      'name': 'Through a Third Party'
+      'name': 'Information Support Centers (Help Desk)'
     },
     {
-      'name': 'Via IRC Staff'
+      'name': 'Office Walk-In'
     },
     {
+      'name': 'Suggestion Box'
+    },{
+      'name': 'Telephone (NUMBER)'
+    },{
+      'name': 'Through Community Leaders'
+    },{
+      'name': 'Through IRC Staff And Volunteers'
+    },{
+      'name': 'Whatsapp'
+    },{
+      'name': 'Women And Girl Centres'
+    },{
       'name': 'Other'
     },
   ];
@@ -681,6 +693,7 @@ export class CreateFeedbackComponent implements OnInit {
       referredPerson:formData.referredPerson,
       responseType: formData.responseType,
       countryOfOrigin:formData.countryOfOrigin,
+      disability: formData.disability,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
       assignee: formData.assignee,
       feedbackDetails: formData.feedbackDetails,
@@ -893,6 +906,7 @@ export class CreateFeedbackComponent implements OnInit {
       staffProvidedResponse: formData.staffProvidedResponse,
       responseSummary: formData.responseSummary,
       supervisor: formData.supervisor,
+      disability: formData.disability,
       dataEntryFocalPoint: formData.dataEntryFocalPoint,
       status: 'Saved'
     }

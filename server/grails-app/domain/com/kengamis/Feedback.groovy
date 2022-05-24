@@ -46,6 +46,7 @@ class Feedback {
     String referredPerson
     String responseType
     String status
+    String disability
     String countryOfOrigin
     Date dateCreated
     Date lastUpdated
@@ -100,6 +101,7 @@ class Feedback {
         ircReferredTo nullable: true
         referredPerson nullable: true
         responseType nullable: true
+        disability nullable: true
     }
 
     @Override

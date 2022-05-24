@@ -2358,5 +2358,10 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1653392684361-4") {
+        addColumn(tableName: "feedback") {
+            column(name: "disability", type: "varchar(255)")
+        }
+    }
 
 }
