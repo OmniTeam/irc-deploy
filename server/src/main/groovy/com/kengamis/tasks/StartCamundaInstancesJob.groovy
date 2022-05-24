@@ -89,12 +89,13 @@ class StartCamundaInstancesJob extends Script {
     static planningAndLearningGrantJob() {
         GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
 
-            def query = "SELECT user.username,user.email,role.authority as role,kenga_group.name as group_program" +
-                    "FROM`user INNER JOIN user_role ON USER.id = user_role.user_id" +
-                    "INNER JOIN role ON user_role.role_id = role.id" +
-                    "INNER JOIN kenga_user_group ON USER.id = kenga_user_group.user_id" +
-                    "INNER JOIN kenga_group ON kenga_user_group.kenga_group_id = kenga_group.id" +
+            def query = "SELECT user.username, user.email,role.authority as role, kenga_group.name as group_program " +
+                    "FROM user INNER JOIN user_role ON user.id = user_role.user_id " +
+                    "INNER JOIN role ON user_role.role_id = role.id " +
+                    "INNER JOIN kenga_user_group ON user.id = kenga_user_group.user_id " +
+                    "INNER JOIN kenga_group ON kenga_user_group.kenga_group_id = kenga_group.id " +
                     "WHERE user.email IS NOT NULL"
+            println query
             def r = AppHolder.withMisSql { rows(query.toString()) }
 
             try {
@@ -104,7 +105,9 @@ class StartCamundaInstancesJob extends Script {
                     def orgInfo = slurper.parseText(it.organisation)
                     def applicantEmail = orgInfo['email']
 
-                    def edEmail, financeEmail, programTeamEmail
+                    def edEmail = []
+                    def financeEmail = []
+                    def programTeamEmail = []
                     def program = Program.get(it.program)
 
                     r.each {

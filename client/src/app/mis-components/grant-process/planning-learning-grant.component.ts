@@ -144,5 +144,6 @@ export class PlanningLearningGrantComponent implements OnInit {
   cancel() {
     this.formGp.reset()
     this.submitted = false
+    window.location.reload();
   }
 }

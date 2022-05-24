@@ -153,5 +153,6 @@ export class ApplicationLetterComponent implements OnInit {
 
   onBackPressed() {
     this.router.navigate(['/grantProcess']);
+    window.location.reload();
   }
 }
