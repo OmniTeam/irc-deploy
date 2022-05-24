@@ -54,12 +54,15 @@
                                      (change)="checkForAnonStatus($event)"
                                      [searchable]="true"
                                      [clearable]="true"
+                                     [ngClass]="{'is-invalid': submitted && f.remainAnonymous.errors}"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of remain_anonymous">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
-
+                          <div *ngIf="submitted && f.remainAnonymous.errors" class="invalid-feedback">
+                            <div *ngIf="f.remainAnonymous.errors.required">Field is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -313,7 +316,11 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="phoneNumber"
+                            [ngClass]="{'is-invalid': submitted && f.phoneNumber.errors}"
                           >
+                          <div *ngIf="submitted && f.phoneNumber.errors" class="invalid-feedback">
+                            <div *ngIf="f.phoneNumber.errors.required">Enter a valid Phone number</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -336,7 +343,11 @@
                             type="email"
                             style="padding-left: 10px;"
                             formControlName="email"
+                            [ngClass]="{'is-invalid': submitted && f.email.errors}"
                           >
+                          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Enter a valid Email</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -397,7 +408,7 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Preferred Channel for Response"
+                                     placeholder="Disability Status"
                                      formControlName="disability"
                                      [searchable]="true"
                                      [clearable]="true"
@@ -465,6 +476,7 @@
                             class=" form-control"
                             type="date"
                             formControlName="dateFeedbackReceived"
+                            [max]="getToday()"
                           />
                         </div>
                       </div>
@@ -474,7 +486,7 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
-                      Name of Register
+                      Name Of Registering Officer
                       <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
@@ -507,20 +519,27 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Staff Designation"
-                                     formControlName="staffDesignation"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                          <input
+                            class="form-control"
+                            placeholder="Staff Designation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="staffDesignation"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of staff_Designation">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
+<!--                          <ng-select class="form-control form-control-sm"-->
+<!--                                     name="datatable_length"-->
+<!--                                     aria-controls="datatable"-->
+<!--                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                     [multiple]="false"-->
+<!--                                     placeholder="Staff Designation"-->
+<!--                                     formControlName="staffDesignation"-->
+<!--                                     [searchable]="true"-->
+<!--                                     [clearable]="true"-->
+<!--                          >-->
+<!--                            <ng-option [value]="item.name" *ngFor="let item of staff_Designation">-->
+<!--                              {{item.name}}-->
+<!--                            </ng-option>-->
+<!--                          </ng-select>-->
                         </div>
                       </div>
                     </div>
@@ -576,6 +595,8 @@
                                      [multiple]="false"
                                      placeholder="Location"
                                      formControlName="location"
+                                     [ngModel]="location"
+                                     (change)="filterForLocation($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -696,20 +717,27 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     name="datatable_length"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Project"
-                                     formControlName="project"
-                                     [searchable]="true"
-                                     [clearable]="true"
+                          <input
+                            class="form-control"
+                            type="text"
+                            placeholder="Project"
+                            style="padding-left: 10px;"
+                            formControlName="project"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of project_status">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
+<!--                          <ng-select class="form-control form-control-sm"-->
+<!--                                     name="datatable_length"-->
+<!--                                     aria-controls="datatable"-->
+<!--                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                     [multiple]="false"-->
+<!--                                     placeholder="Project"-->
+<!--                                     formControlName="project"-->
+<!--                                     [searchable]="true"-->
+<!--                                     [clearable]="true"-->
+<!--                          >-->
+<!--                            <ng-option [value]="item.name" *ngFor="let item of project_status">-->
+<!--                              {{item.name}}-->
+<!--                            </ng-option>-->
+<!--                          </ng-select>-->
                         </div>
                       </div>
                     </div>
