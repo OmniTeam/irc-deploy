@@ -112,6 +112,7 @@ class FileManagerController {
         try {
             def misEntity = MisEntity.get(misEntityId)
             def id = UUID.randomUUID() as String
+//            def id = data['record id']
             def submitterName = springSecurityService.currentUser as User
             def simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             def dateCreated = Timestamp.valueOf(simpleDateFormat.format(new Date()))
@@ -145,13 +146,20 @@ class FileManagerController {
             // Insert into Entity Table
             def query = "INSERT IGNORE INTO ${escapeField misEntity.tableName} (id, submitterName, date_created, unique_id, ${columns.join(", ")}) values ('${id}', '${submitterName.username}', '${dateCreated}', '${uniqueId}', ${values.join(", ")})"
             log.trace(query)
-            println query
             def result = AppHolder.withMisSql { execute(query.toString()) }
             if (!result) {
                 log.info("Table ${misEntity.tableName} successfully inserted a record")
             }
 
             //update tags
+    /*        def results = AppHolder.withMisSql { rows("SELECT * FROM entity_beneficiaries_list_tagging WHERE record_id = '${id}'".toString()) }
+            if (!result) {
+                results.each {
+                    def tag = Tag.findById(it['tag_id'] as String)
+                    def q = "update entity_beneficiaries_list set _tag = '${tag.name}' where id = '${it['record_id']}'".toString()
+                    AppHolder.withMisSql { execute(q) }
+                }
+            }*/
             data.each {key, value ->
                 if(key=="TAG" || key=="tag" || key=="Tag") tagEntityRecordOnImport(misEntityId,value,id)
             }
