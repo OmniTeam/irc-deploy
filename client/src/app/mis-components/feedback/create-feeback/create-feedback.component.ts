@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {
   FormBuilder,
-  FormGroup
+  FormGroup, Validators
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
@@ -280,10 +280,15 @@ export class CreateFeedbackComponent implements OnInit {
     },
   ];
 
-  district_list = [
+  district_list: any;
+
+  district_kla = [
     {
       'name': 'Kampala'
     },
+  ];
+
+  district_westNile = [
     {
       'name': 'Yumbe'
     },
@@ -292,13 +297,19 @@ export class CreateFeedbackComponent implements OnInit {
     },
     {
       'name': 'Terego'
-    },
+    }
+  ];
+
+  district_north = [
     {
       'name': 'Kiryandongo'
     },
     {
       'name': 'Lamwo'
-    },
+    }
+  ];
+
+  district_karamoja = [
     {
       'name': 'Moroto'
     },
@@ -318,15 +329,24 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'Abim'
     },{
       'name': 'Kaabong'
-    },{
+    }
+  ];
+
+  district_southwest = [
+   {
       'name': 'Kyegeggwa'
     },
   ];
 
-  project_sites = [
+  project_sites :any
+  project_site_kla = [
     {
       'name': 'Kampala Urban'
     },
+  ];
+
+  project_sites_west = [
+
     {
       'name': 'Bidi bidi'
     },
@@ -336,12 +356,19 @@ export class CreateFeedbackComponent implements OnInit {
     {
       'name': 'Imvepi'
     },
+  ];
+
+  project_sites_north = [
     {
       'name': 'Kiryandongo'
     },
     {
       'name': 'Lamwo'
     },
+  ];
+
+  project_sites_karamoja = [
+
     {
       'name': 'Moroto'
     },
@@ -361,10 +388,15 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'Abim'
     },{
       'name': 'Kaabong'
-    },{
+    }
+  ];
+
+  project_sites_south = [
+    {
       'name': 'Kyaka'
     },
   ];
+
   gender_list = [
     {
       'name': 'Male'
@@ -545,19 +577,19 @@ export class CreateFeedbackComponent implements OnInit {
       nameOfRegister: [''],
       staffDesignation: [''],
       typeOfFeedback: [''],
-      currentStatusOfFeedback: [''],
-      location: [''],
-      district: [''],
+      currentStatusOfFeedback: ['', [Validators.required]],
+      location: ['', [Validators.required]],
+      district: ['', [Validators.required]],
       projectSite:[''],
       projectSector: [''],
       subSector: [''],
       nameOfClient: [''],
-      remainAnonymous: [''],
+      remainAnonymous: ['', [Validators.required]],
       nationalityStatus: [''],
       clientType: [''],
-      preferredChannel: [''],
-      phoneNumber: [''],
-      email:[''],
+      preferredChannel: ['', [Validators.required]],
+      phoneNumber: ['',[Validators.minLength(9)]],
+      email:['', [Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       age:[''],
       serialNumber:[''],
       gender:[''],
@@ -924,6 +956,29 @@ export class CreateFeedbackComponent implements OnInit {
       document.getElementById("orgName").hidden = false
       document.getElementById("personReferred").hidden = false
       document.getElementById("sectorName").hidden = true
+    }
+  }
+
+  getToday(): string {
+    return new Date().toISOString().split('T')[0]
+  }
+
+  filterForLocation(event) {
+    if(event === 'Kampala'){
+      this.district_list = this.district_kla
+      this.project_sites = this.project_site_kla
+    } else if (event === 'WestNile'){
+      this.district_list = this.district_westNile
+      this.project_sites = this.project_sites_west
+    } else if(event === 'Northern'){
+      this.district_list = this.district_north
+      this.project_sites = this.project_sites_north
+    } else if(event === 'Southwest'){
+      this.district_list = this.district_southwest
+      this.project_sites = this.project_sites_south
+    } else if(event === 'Karamoja'){
+      this.district_list = this.district_karamoja
+      this.project_sites = this.project_sites_karamoja
     }
   }
 }

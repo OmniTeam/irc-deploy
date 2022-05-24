@@ -185,12 +185,12 @@ export class FeedbackComponent implements OnInit {
     console.log(this.selectedUsers);
   }
 
-  deleteUsers() {
+  deleteFeedback() {
     const deletedRow = this.selectedUsers;
     deletedRow.forEach((p) => {
-        this.usersService.deleteCurrentUser(p).subscribe((result) => {
-          console.warn(result, 'Users have been deleted');
-          this.router.navigate(['/users']).then(() => {
+        this.feedbackService.deleteCurrentFeedback(p).subscribe((result) => {
+          console.warn(result, 'Feedback has been deleted');
+          this.router.navigate(['/feedback-list']).then(() => {
             window.location.reload();
           });
         })
