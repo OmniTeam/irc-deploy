@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
-import {SampleData} from "../../helpers/sample-data";
 import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
+import {ProgramService} from "../../services/program.service";
 
 @Component({
   selector: 'application-letter',
@@ -17,24 +17,27 @@ export class ApplicationLetterComponent implements OnInit {
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
 
-  formGroup: FormGroup;
   submitted = false;
   loading: boolean;
-  organizationType = [
-    {id: "1", name: "my type"}
-  ];
+
   status = 'not_started';
-  countries: any;
-  cities: any;
-  programs = [
-    {id: "1", name: "Adolescent Girl Power Program"},
-    {id: "2", name: "Youth Capacity Development Program"},
-    {id: "3", name: "Prevention of Violence Against Children and Adolescents"},
-  ];
+  // countries: any;
+  // cities: any;
+  programs: any;
   error: boolean;
   success: boolean;
   errorMessage: string;
   successMessage: string;
+
+  /*values*/
+  program: string;
+
+  /*json*/
+  organisation: any = {};
+  ngos: any = {};
+  proposal: any = {};
+  financial: any = {};
+  documents: any = {};
 
   constructor(
     private router: Router,
@@ -42,78 +45,52 @@ export class ApplicationLetterComponent implements OnInit {
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
     private grantProcessService: GrantProcessService,
+    private programService: ProgramService,
     private alertService: AlertService
   ) {
   }
 
-  get f() {
-    return this.formGroup?.controls;
-  }
-
   ngOnInit(): void {
-    this.countries = this.countriesService.getListOfCountries();
+    // this.countries = this.countriesService.getListOfCountries();
 
-    if (!this.isReadOnly) {
-      this.setEmptyForm()
-    } else {
+    this.programService.getPrograms().subscribe((data)=>{
+      let results = []
+      if(data!=null) {
+        data.forEach((it)=>{
+          results.push({id: it.id, name: it.title})
+        })
+      }
+      this.programs = results;
+    })
+
+    if (this.isReadOnly) {
       this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data: any) => {
         if (data != null) {
-          this.formGroup = this.formBuilder.group({
-            program: [{value: data.program, disabled: this.isReadOnly}, [Validators.required]],
-            organisation: [{value: data.organisation, disabled: this.isReadOnly}, [Validators.required]],
-            acronym: [{value: data.acronym, disabled: this.isReadOnly}],
-            organizationType: [{value: data.organizationType, disabled: this.isReadOnly}, [Validators.required]],
-            legalStatus: [{value: data.legalStatus, disabled: this.isReadOnly}, [Validators.required]],
-            contactPerson: [{value: data.contactPerson, disabled: this.isReadOnly}, [Validators.required]],
-            addressContactPerson: [{
-              value: data.addressContactPerson,
-              disabled: this.isReadOnly
-            }, [Validators.required]],
-            emailAddress: [{value: data.emailAddress, disabled: this.isReadOnly}, [Validators.required]],
-            contactPersonNumber: [{value: data.contactPersonNumber, disabled: this.isReadOnly}, [Validators.required]],
-            physicalAddress: [{value: data.physicalAddress, disabled: this.isReadOnly}, [Validators.required]],
-            postalAddress: [{value: data.postalAddress, disabled: this.isReadOnly}, [Validators.required]],
-            email: [{value: data.email, disabled: this.isReadOnly}, [Validators.required]],
-            website: [{value: data.website, disabled: this.isReadOnly}],
-            country: [{value: data.country, disabled: this.isReadOnly}],
-            city: [{value: data.city, disabled: this.isReadOnly}],
-            letterAttachment: [{value: data.letterAttachment, disabled: this.isReadOnly}],
-            status: [data.status],
-          });
+          this.program = data.program
+          this.organisation = JSON.parse(data.organisation);
+          this.ngos = JSON.parse(data.ngos);
+          this.proposal = JSON.parse(data.proposal);
+          this.financial = JSON.parse(data.financial);
+          this.documents = JSON.parse(data.documents);
         }
-      }, error=>{console.log(error)})
+      }, error => {
+        console.log(error)
+      })
     }
-  }
-
-  setEmptyForm() {
-    this.formGroup = this.formBuilder.group({
-      program: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      organisation: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      acronym: [{value: '', disabled: this.isReadOnly}],
-      organizationType: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      legalStatus: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      contactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      addressContactPerson: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      emailAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      contactPersonNumber: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      physicalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      postalAddress: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      email: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      website: [{value: '', disabled: this.isReadOnly}],
-      country: [{value: '', disabled: this.isReadOnly}],
-      city: [{value: '', disabled: this.isReadOnly}],
-      letterAttachment: [{value: '', disabled: this.isReadOnly}],
-      status: [null],
-    });
   }
 
   submitLetter() {
     this.submitted = true;
-    if (this.formGroup.invalid) {
-      this.alertService.error("Please fill in all fields correctly");
-      return;
+
+    let formData: { [key: string]: string } = {
+      program: this.program,
+      organisation: JSON.stringify(this.organisation),
+      ngos: JSON.stringify(this.ngos),
+      proposal: JSON.stringify(this.proposal),
+      financial: JSON.stringify(this.financial),
+      documents: JSON.stringify(this.documents),
+      status: this.status
     }
-    const formData = this.formGroup.value;
     console.log('formData', formData)
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
@@ -121,19 +98,17 @@ export class ApplicationLetterComponent implements OnInit {
       this.submitted = true
       this.error = false;
       this.success = true;
-      this.successMessage = "Saved Application";
+      this.successMessage = "Application Successfully Submitted";
       this.alertService.success(this.successMessage);
     }, error => {
       this.error = true;
       this.success = false;
-      this.errorMessage = "Failed to save Application";
+      this.errorMessage = "Failed to submit Application";
       this.alertService.error(this.errorMessage);
       console.log(error);
     });
     setTimeout(() => {
       if (this.success == true) {
-        (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
-        this.formGroup.reset()
         this.onBackPressed()
       }
       this.success = false;
@@ -141,7 +116,6 @@ export class ApplicationLetterComponent implements OnInit {
     }, 3000);
   }
 
-  /*attachments*/
   handleFileInput(event) {
     let files: FileList = event.target.files;
     this.uploadFile(files.item(0), event.target.id);
@@ -149,33 +123,32 @@ export class ApplicationLetterComponent implements OnInit {
 
   uploadFile(file, id) {
     this.loading = !this.loading;
-    console.log(file);
-    this.fileUploadService.upload(file).subscribe((data) => {
-        if (id === "letterOfAttachment") this.formGroup.patchValue({letterAttachment: data.path});
-        this.loading = false;
-      }, error => {
-        console.log(error);
+    this.fileUploadService.upload(file, 'PandL_Grant').subscribe((data) => {
+      if (id === "financialAttachment") this.documents.financial = data.path;
+      if (id === "registration") this.documents.registration = data.path;
+      if (id === "listMembersAttachment") this.documents.listMembers = data.path;
+      if (id === "listStaffMembersAttachment") this.documents.listStaffMembers = data.path;
+      if (id === "organizationStructure") this.documents.organizationStructure = data.path;
+      if (id === "assessmentReport") this.documents.assessmentReport = data.path;
+      if (id === "strategicPlan") this.documents.strategicPlan = data.path;
+      if (id === "annualWorkPlan") this.documents.annualWorkPlan = data.path;
+      if (id === "mou") this.documents.mou = data.path;
+      if (id === "childPolicy") this.documents.childPolicy = data.path;
       this.loading = false;
-      }
-    );
+    }, error => {
+      console.log(error)
+    });
   }
 
-  onSelectCountry(country) {
-    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
-      this.cities = response.data;
-    }, error => console.log(error))
-  }
-
-
-  saveDraft(){
-    this.status = 'draft'
-    this.submitLetter()
-  }
+  /*  onSelectCountry(country) {
+      this.countriesService.getCitiesForCountry(country).subscribe((response) => {
+        this.cities = response.data;
+      }, error => console.log(error))
+    }*/
 
   cancel() {
-    (document.getElementById('letterOfAttachment') as HTMLInputElement).value = ''
-    this.formGroup.reset()
     this.submitted = false
+    this.onBackPressed()
   }
 
   onBackPressed() {

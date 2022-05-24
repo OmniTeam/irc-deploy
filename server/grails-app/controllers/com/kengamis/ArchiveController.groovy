@@ -54,40 +54,52 @@ class ArchiveController {
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
-            if (record.taskDefinitionKey == "Review_Program_Report" || record.taskDefinitionKey == "Approve_Report") {
-                def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
-                if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
-            } else if (record.taskDefinitionKey == "Submit_Report" || record.taskDefinitionKey == "Submit_Final_Report") {
-                c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
-            } else if (record.taskDefinitionKey == "Review_Performance_Report") {
-                c2 = userRoles.contains("ROLE_MEAL")
-            } else if (record.taskDefinitionKey == "Review_Finance_Report" || record.taskDefinitionKey == "Disburse_Funds") {
-                c2 = userRoles.contains("ROLE_FINANCE")
-            } else if (record.taskDefinitionKey == "Approve_Fund_Disbursement") {
-                c2 = userRoles.contains("ROLE_ED")
+            if (record.processDefKey == "CRVPF_REPORTING") {
+                if (record.taskDefinitionKey == "Review_Program_Report" || record.taskDefinitionKey == "Approve_Report") {
+                    def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+                    if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
+                } else if (record.taskDefinitionKey == "Submit_Report" || record.taskDefinitionKey == "Submit_Final_Report") {
+                    c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
+                } else if (record.taskDefinitionKey == "Review_Performance_Report") {
+                    c2 = userRoles.contains("ROLE_MEAL")
+                } else if (record.taskDefinitionKey == "Review_Finance_Report" || record.taskDefinitionKey == "Disburse_Funds") {
+                    c2 = userRoles.contains("ROLE_FINANCE")
+                } else if (record.taskDefinitionKey == "Approve_Fund_Disbursement") {
+                    c2 = userRoles.contains("ROLE_ED")
+                }
+            } else if (record.processDefKey == "GRANT_PROCESS") {
+                if (record.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
+                        record.taskDefinitionKey == "Review_Concept" ||
+                        record.taskDefinitionKey == "Review_Report") {
+                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
+                } else if (record.taskDefinitionKey == "Provide_Learning_Grant") {
+                    c2 = userRoles.contains("ROLE_FINANCE")
+                } else if (record.taskDefinitionKey == "Approve_Learning_Grant") {
+                    c2 = userRoles.contains("ROLE_ED")
+                }
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
 
             if (c2 || c3) {
                 records << [id               : record.id,
-                          taskName         : record.taskName,
-                          partnerSetupId   : partnerSetupId,
-                          startDate        : startDate,
-                          partnerId        : partnerId,
-                          partnerName      : taskPartner.name,
-                          programId        : programId,
-                          grantId          : grantId,
-                          programName      : taskProgram.title,
-                          endDate          : endDate,
-                          groupId          : groupId,
-                          reportingPeriod  : period,
-                          outputVariables  : record.outputVariables,
-                          processInstanceId: record.processInstanceId,
-                          processDefKey    : record.processDefKey,
-                          taskDefinitionKey: record.taskDefinitionKey,
-                          dateCreated      : record.dateCreated,
-                          status           : record.status]
+                            taskName         : record.taskName,
+                            partnerSetupId   : partnerSetupId,
+                            startDate        : startDate,
+                            partnerId        : partnerId,
+                            partnerName      : taskPartner.name,
+                            programId        : programId,
+                            grantId          : grantId,
+                            programName      : taskProgram.title,
+                            endDate          : endDate,
+                            groupId          : groupId,
+                            reportingPeriod  : period,
+                            outputVariables  : record.outputVariables,
+                            processInstanceId: record.processInstanceId,
+                            processDefKey    : record.processDefKey,
+                            taskDefinitionKey: record.taskDefinitionKey,
+                            dateCreated      : record.dateCreated,
+                            status           : record.status]
             }
         }
         respond records
@@ -116,7 +128,7 @@ class ArchiveController {
             return
         }
 
-        respond archive, [status: CREATED, view:"show"]
+        respond archive, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -138,7 +150,7 @@ class ArchiveController {
             return
         }
 
-        respond archive, [status: OK, view:"show"]
+        respond archive, [status: OK, view: "show"]
     }
 
     @Transactional

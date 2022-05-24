@@ -4,21 +4,13 @@ class GrantLetterOfInterest {
 
     String id
     String program
+
     String organisation
-    String organizationType
-    String acronym
-    String addressContactPerson
-    String city
-    String contactPerson
-    String contactPersonNumber
-    String country
-    String email
-    String emailAddress
-    String legalStatus
-    String physicalAddress
-    String postalAddress
-    String website
-    String letterAttachment
+    String ngos
+    String proposal
+    String financial
+    String documents
+
     String status
     Date dateCreated
     Date lastUpdated

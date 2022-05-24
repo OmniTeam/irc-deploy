@@ -4,9 +4,11 @@ import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
 import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
+import com.kengamis.Program
 import com.kengamis.ProgramPartner
 import grails.util.Holders
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -86,16 +88,48 @@ class StartCamundaInstancesJob extends Script {
 
     static planningAndLearningGrantJob() {
         GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
-            boolean started = startProcessInstance([
-                    GrantId  : it.id,
-                    Assignee: it.email
-            ], GRANT_PROCESS)
+
+            def query = "SELECT user.username,user.email,role.authority as role,kenga_group.name as group_program" +
+                    "FROM`user INNER JOIN user_role ON USER.id = user_role.user_id" +
+                    "INNER JOIN role ON user_role.role_id = role.id" +
+                    "INNER JOIN kenga_user_group ON USER.id = kenga_user_group.user_id" +
+                    "INNER JOIN kenga_group ON kenga_user_group.kenga_group_id = kenga_group.id" +
+                    "WHERE user.email IS NOT NULL"
+            def r = AppHolder.withMisSql { rows(query.toString()) }
+
+            try {
+                if (r.size() > 0) {
+
+                    def slurper = new JsonSlurper()
+                    def orgInfo = slurper.parseText(it.organisation)
+                    def applicantEmail = orgInfo['email']
+
+                    def edEmail, financeEmail, programTeamEmail
+                    def program = Program.get(it.program)
+
+                    r.each {
+                        if (it['role'] == "ROLE_ED") edEmail << it['email']
+                        if (it['role'] == "ROLE_FINANCE") financeEmail << it['email']
+                        if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                    }
+
+                    boolean started = startProcessInstance([
+                            GrantId          : it.id,
+                            Applicant        : applicantEmail,
+                            ProgramTeam      : programTeamEmail,
+                            Finance          : financeEmail,
+                            ExecutiveDirector: edEmail
+                    ], GRANT_PROCESS)
 
 
-            if (started) {
-                print "================ started grant process instance ================"
-                it.status = 'started'
-                it.save()
+                    if (started) {
+                        print "================ started grant process instance ================"
+                        it.status = 'started'
+                        it.save()
+                    }
+                }
+            } catch (e) {
+                e.printStackTrace()
             }
         }
     }
