@@ -1,10 +1,9 @@
 package com.kengamis
 
-import fuzzycsv.FuzzyCSVTable
+
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
-import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
 import static org.springframework.http.HttpStatus.*
@@ -19,6 +18,9 @@ class TaskListController {
 
     def index(Integer max) {
         def tasks = []
+
+        //check for tasks that need to create/deactivate new account
+        userAccountTasks()
 
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
@@ -210,5 +212,91 @@ class TaskListController {
         taskListService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    static generator = { String alphabet, int n ->
+        new Random().with {
+            (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
+        }
+    }
+
+    @Transactional
+    def userAccountTasks() {
+        TaskList[] createUserAccountTask = TaskList.where { status == 'not_started' && task_definition_key == 'Create_account_in_MIS' }.findAll()
+        if (createUserAccountTask > 0) {
+            createUserAccountTask.each {
+                if (createUser(it)) {
+                    it.status = "completed"
+                    it.save()
+                }
+            }
+        }
+
+        TaskList[] deactivateUserAccountTask = TaskList.where { status == 'not_started' && task_definition_key == 'Deactivate_account' }.findAll()
+        if (deactivateUserAccountTask > 0) {
+            deactivateUserAccountTask.each {
+                if (deactivateUser(it)) {
+                    it.status = "completed"
+                    it.save()
+                }
+            }
+        }
+    }
+
+    @Transactional
+    boolean createUser(TaskList task) {
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+
+        variables['data'].each {
+            if (it.key == 'GrantId') {
+                GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
+                def orgInfo = slurper.parseText(g.organisation)
+                def email = orgInfo['email'] as String
+                def names = orgInfo['names'] as String
+                def username = generateCode("AP", generator(('0'..'9').join(), 4)) as String
+                def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
+
+                println "${username} New User password: ${password}"
+
+                def user = new User(email: email, names: names, username: username, password: password)
+                user.save(flush: true, failOnError: true)
+
+                Role applicant = Role.findByAuthority("ROLE_APPLICANT")
+                def role = new UserRole(user: user, role: applicant)
+                role.save(flush: true, failOnError: true)
+
+                return true
+            }
+        }
+        return false
+    }
+
+    @Transactional
+    boolean deactivateUser(TaskList task) {
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+
+        variables['data'].each {
+            if (it.key == 'GrantId') {
+                GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
+                def orgInfo = slurper.parseText(g.organisation)
+                def email = orgInfo['email'] as String
+
+                def user = User.findByEmail(email)
+                user.enabled = false
+                user.save(flush: true, failOnError: true)
+
+                return true
+            }
+        }
+        return false
+    }
+
+
+    def generateCode(def prefix, def increment_value) {
+        def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
+        def code = prefix.toString() + '/' + actualIncrementValue.toString()
+        return code
     }
 }
