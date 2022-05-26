@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {CommonModule} from "@angular/common";
-import {BrowserModule} from "@angular/platform-browser";
+import {CommonModule} from '@angular/common';
+import {BrowserModule} from '@angular/platform-browser';
 import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
-import {AuthGuard} from "./guards/auth.guard";
-import {LoggedInGuard} from "./guards/loggedin.guard";
-import {Roles} from "./models/roles";
+import {AuthGuard} from './guards/auth.guard';
+import {LoggedInGuard} from './guards/loggedin.guard';
+import {Roles} from './models/roles';
 
 const routes: Routes = [
   {
@@ -342,14 +342,14 @@ const routes: Routes = [
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
             Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,]
+            Roles.ROLE_YCD_STAFF_DATA_MANAGER, ]
         },
         loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
       },
       {
         path: 'mis-users', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN,Roles.ROLE_VAC_STAFF_DATA_MANAGER, Roles.ROLE_AGPP_STAFF_DATA_MANAGER,Roles.ROLE_YCD_STAFF_DATA_MANAGER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_VAC_STAFF_DATA_MANAGER, Roles.ROLE_AGPP_STAFF_DATA_MANAGER, Roles.ROLE_YCD_STAFF_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
       },
@@ -507,7 +507,7 @@ const routes: Routes = [
             Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
             Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
             Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,]
+            Roles.ROLE_YCD_STAFF_DATA_MANAGER, ]
         },
         loadChildren: () => import('./mis-components/program-partners/program-partners.module').then(m => m.ProgramPartnersModule)
       },
@@ -518,7 +518,7 @@ const routes: Routes = [
             Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
             Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
             Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,]
+            Roles.ROLE_YCD_STAFF_DATA_MANAGER, ]
         },
         loadChildren: () => import('./mis-components/program-partners/create-program-partners/create-program-partners.module').then(m => m.CreateProgramPartnersModule)
       },
