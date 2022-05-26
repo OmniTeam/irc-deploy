@@ -22,6 +22,9 @@ class TaskListController {
         //check for tasks that need to create/deactivate new account
         userAccountTasks()
 
+        //check if task for archive
+        archiveReport()
+
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
@@ -299,5 +302,28 @@ class TaskListController {
         def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
         def code = prefix.toString() + '/' + actualIncrementValue.toString()
         return code
+    }
+
+    @Transactional
+    def archiveReport(){
+        TaskList[] forArchiving = TaskList.where { taskDefinitionKey == 'Disburse_Funds' || taskDefinitionKey == 'Archive_Report'}.findAll()
+        if(forArchiving.size()>0) {
+            forArchiving.each { task ->
+                Archive archive = new Archive()
+                archive.taskId = task.taskId
+                archive.inputVariables = task.inputVariables
+                archive.outputVariables = task.outputVariables
+                archive.status = task.status
+                archive.formId = task.formId
+                archive.groupId = task.groupId
+                archive.userId = task.userId
+                archive.taskName = task.taskName
+                archive.processInstanceId = task.processInstanceId
+                archive.processDefKey = task.processDefKey
+                archive.synced = task.synced
+                archive.taskDefinitionKey = task.taskDefinitionKey
+                archive.save(flush: true, failOnError: true)
+            }
+        }
     }
 }
