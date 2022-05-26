@@ -106,28 +106,20 @@ export class SidebarComponent implements OnInit {
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
 
-          const currentString = formObject['title'].slice(0, 3);
           const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
 
-          this.usersRoles.forEach((a) => {
-            const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
-            if (cleanRole.includes(currentString)) {
-              if (formsMenu.children.length === 0) {
-                formObject['roles'] = this.usersRoles;
-                formsMenu.children.push(formObject);
-              } else {
-                for (let i = 0; i < formsMenu.children.length; i++) {
-                  if (!(currentTitle.includes(formsMenu.children[i].title)) ) {
-                    formObject['roles'] = this.usersRoles;
-                    formsMenu.children.push(formObject);
-                  }
-                }
-              }
-            }
-          });
-
-          if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN') || this.usersRoles.includes('ROLE_STAFF_DATA_VIEWER')) {
-            formObject['roles'] = (this.usersRoles);
+          if (currentTitle.includes('Parent') && (
+            this.usersRoles.includes('ROLE_SUPER_ADMIN') ||
+            this.usersRoles.includes('ROLE_ADMIN')
+            || this.usersRoles.includes('ROLE_VAC_PARTNER_DATA_MANAGER')
+            || this.usersRoles.includes('ROLE_VAC_STAFF_DATA_MANAGER')
+            || this.usersRoles.includes('ROLE_VAC_PARTNER_DATA_VIEWER')
+          )) {
+            formObject['roles'] = this.usersRoles;
+            formsMenu.children.push(formObject);
+          }
+          if (!currentTitle.includes('Parent')) {
+            formObject['roles'] = this.usersRoles;
             formsMenu.children.push(formObject);
           }
 
@@ -145,32 +137,9 @@ export class SidebarComponent implements OnInit {
           entityObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
           entityObject['path'] = entity.id;
           entityObject['type'] = 'link';
+          entityObject['roles'] = this.usersRoles;
 
-          const entityTitleTrancated = entityObject['title'].slice(0, 3);
-          const entityTitle = this.titleCasePipe.transform(new ReplacePipe().transform(entity.name, '_', ' '));
-
-          this.usersRoles.forEach((a) => {
-            const cleanRole = this.titleCasePipe.transform(new ReplacePipe().transform(a, '_', ' '));
-            if (cleanRole.includes(entityTitleTrancated)) {
-              const myArray = listsMenu.children;
-              if (myArray.length === 0) {
-                entityObject['roles'] = this.usersRoles;
-                listsMenu.children.push(entityObject);
-              } else {
-                for (let i = 0; i < myArray.length; i++) {
-                  if (!(myArray[i].title === entityTitle) ) {
-                    entityObject['roles'] = this.usersRoles;
-                    listsMenu.children.push(entityObject);
-                  }
-                }
-              }
-            }
-          });
-
-          if (this.usersRoles.includes('ROLE_SUPER_ADMIN') || this.usersRoles.includes('ROLE_ADMIN')) {
-            entityObject['roles'] = this.usersRoles;
-            listsMenu.children.push(entityObject);
-          }
+          listsMenu.children.push(entityObject);
         }
 
         this.lengthOfChildren = listsMenu.children.length;
@@ -193,6 +162,7 @@ export class SidebarComponent implements OnInit {
               'ROLE_AGPP_STAFF_DATA_MANAGER',
               'ROLE_YCD_STAFF_DATA_MANAGER',
               'ROLE_STAFF_DATA_VIEWER',
+              'ROLE_APPLICANT',
             ]
           },
           formsMenu,

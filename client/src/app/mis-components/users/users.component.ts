@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../services/alert";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {UsersService} from "../../services/users.service";
-import {RolesService} from "../../services/roles.service";
-import {GroupsService} from "../../services/groups.service";
+import {Subject} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../services/alert';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {UsersService} from '../../services/users.service';
+import {RolesService} from '../../services/roles.service';
+import {GroupsService} from '../../services/groups.service';
 
 @Component({
   selector: 'app-users',
@@ -15,13 +15,13 @@ import {GroupsService} from "../../services/groups.service";
 })
 export class UsersComponent implements OnInit {
 
-  entries: number = 10;
+  entries = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
   activeRow: any;
   private searchValue = '';
-  tags: any
+  tags: any;
   closeResult: string;
   formGroup: FormGroup;
   formGp: FormGroup;
@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit {
   submitted = false;
   private selectedUsers = [];
   private checkedRow: any;
-  groups: any
+  groups: any;
   partners = [
     {
       'name': 'Partner 1',
@@ -69,68 +69,69 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.reloadTable();
     this.rolesService.getRoles().subscribe(results => {
-      this.roles = results
+      this.roles = results;
     }, error => {
-      this.alertService.error("Failed to get Roles")
-    })
+      this.alertService.error('Failed to get Roles');
+    });
 
     this.groupsService.getGroups().subscribe(data => {
-      this.groups = data
+      this.groups = data;
     }, error => {
-      this.alertService.error("Failed to get Groups")
-    })
+      this.alertService.error('Failed to get Groups');
+    });
   }
 
   onChangeRoles(event) {
-    console.log(event)
+    console.log(event);
     if (!event) {
-      this.roleValue = ''
-      this.reloadTable()
+      this.roleValue = '';
+      this.reloadTable();
     } else {
-      this.roleValue = event
-      this.users=this.users.filter(a => a.roles.includes(this.roleValue))
+      this.roleValue = event;
+      this.users = this.users.filter(a => a.roles.includes(this.roleValue));
     }
 
   }
 
   onChangeGroup(event) {
-    console.log(event)
+    console.log(event);
     if (!event) {
-      this.groupValue = ''
-      this.reloadTable()
+      this.groupValue = '';
+      this.reloadTable();
     } else {
       this.groupValue = event;
-      this.users = this.users.filter(a => a.groups.includes(this.groupValue))
+      this.users = this.users.filter(a => a.groups.includes(this.groupValue));
     }
 
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    this.searchValue = event.target.value
+    console.log(event.target.value);
+    this.searchValue = event.target.value;
     if (!this.searchValue) {
-      this.reloadTable()
+      this.reloadTable();
     } else {
-      this.users = this.users.filter(a => a.username.toUpperCase().includes(this.searchValue.toUpperCase()) || a.names.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.users = this.users.filter(a => a.username.toUpperCase().includes(this.searchValue.toUpperCase()) || a.names.toUpperCase().includes(this.searchValue.toUpperCase()));
     }
   }
 
   entriesChange($event) {
     this.entries = $event.target.value;
-    console.log(this.entries, "Entries")
+    console.log(this.entries, 'Entries');
     this.reloadTable();
   }
 
   reloadTable() {
-    if(this.router.url.includes('mis-users')){
+    if (this.router.url.includes('mis-users')) {
       this.usersService.getMISUsers().subscribe((data) => {
         this.users = data;
-        console.log(data,"mis users")
+        console.log(data, 'mis users');
       });
 
     } else {
       this.usersService.getUsers().subscribe((data) => {
         this.users = data;
+        console.log(data, 'users');
       });
     }
 
@@ -147,7 +148,7 @@ export class UsersComponent implements OnInit {
   onSelected(event) {
     if (event.target.checked) {
       this.checkedRow = event.target.value;
-      this.selectedUsers.push(this.checkedRow)
+      this.selectedUsers.push(this.checkedRow);
     } else { /*if it is not checked*/
       const x = this.selectedUsers.indexOf(this.checkedRow);
       this.selectedUsers.splice(x, 1);
@@ -163,9 +164,9 @@ export class UsersComponent implements OnInit {
           this.router.navigate(['/users']).then(() => {
             window.location.reload();
           });
-        })
+        });
       }
-    )
+    );
   }
 
   /*Responsible for the opening of the Modals*/
