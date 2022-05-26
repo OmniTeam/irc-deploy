@@ -430,9 +430,9 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
       },
       {
-        path: 'program', canActivate: [AuthGuard],
+        path: 'program',
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: []
         },
         loadChildren: () => import('./mis-components/program/program.module').then(m => m.ProgramModule)
       },

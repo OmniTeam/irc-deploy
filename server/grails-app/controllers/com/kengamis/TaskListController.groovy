@@ -222,8 +222,8 @@ class TaskListController {
 
     @Transactional
     def userAccountTasks() {
-        TaskList[] createUserAccountTask = TaskList.where { status == 'not_started' && task_definition_key == 'Create_account_in_MIS' }.findAll()
-        if (createUserAccountTask > 0) {
+        TaskList[] createUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_account_in_MIS' }.findAll()
+        if (createUserAccountTask.size() > 0) {
             createUserAccountTask.each {
                 if (createUser(it)) {
                     it.status = "completed"
@@ -232,8 +232,8 @@ class TaskListController {
             }
         }
 
-        TaskList[] deactivateUserAccountTask = TaskList.where { status == 'not_started' && task_definition_key == 'Deactivate_account' }.findAll()
-        if (deactivateUserAccountTask > 0) {
+        TaskList[] deactivateUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Deactivate_account' }.findAll()
+        if (deactivateUserAccountTask.size() > 0) {
             deactivateUserAccountTask.each {
                 if (deactivateUser(it)) {
                     it.status = "completed"
