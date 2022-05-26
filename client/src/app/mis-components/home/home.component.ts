@@ -117,19 +117,6 @@ export class HomeComponent implements OnInit {
     return null
   }
 
-  getReferralStats(data): any {
-    let pending = data.filter(item => item.status == "Pending");
-    let actioned = data.filter(item => item.status == "Actioned");
-    return (
-      {
-        referralsAssigned: data.length,
-        referralsActioned: actioned.length,
-        referralsPending: pending.length,
-        AverageTimeToCompleteReferral: 4,
-      }
-    );
-  }
-
   onChangeSearch(event) {
     let val = event.target.value.toLowerCase();
     // update the rows
