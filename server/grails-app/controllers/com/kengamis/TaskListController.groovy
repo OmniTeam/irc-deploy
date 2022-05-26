@@ -75,7 +75,8 @@ class TaskListController {
                 if (task.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         task.taskDefinitionKey == "Review_Concept" ||
                         task.taskDefinitionKey == "Review_Report") {
-                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
+                    def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+                    if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (task.taskDefinitionKey == "Provide_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_FINANCE")
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
