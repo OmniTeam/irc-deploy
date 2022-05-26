@@ -38,66 +38,69 @@
             >
           </div>
         </div>
-      </div>
 
-      <div class="col-sm-6">
-        <label>2. Where is the organization located or operating area? (provide physical location and postal address,
-          Telephone, email, website)<span class="required-indicator">*</span></label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
-              <textarea
-                [disabled]="isReadOnly"
-                class="form-control"
-                placeholder="Address"
-                style="padding-left: 10px;"
-                [(ngModel)]="organisation.physicalAddress"
-              ></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
+        <label>3. Who is the contact person? <span class="required-indicator">*</span></label>
 
-    <div class="row" style="margin: 10px;">
-      <div class="col-sm-6">
-        <label>3. Who is the contact person? (provide full names, contact, Telephone, email and address if
-          different)</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
-            <div class="col-sm-12">
+        <div class="col-sm-12" style="padding: 0;">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <input
                 [disabled]="isReadOnly"
                 class="form-control"
                 placeholder="Names"
                 type="text"
-                [(ngModel)]="organisation.names"><br>
+                [(ngModel)]="organisation.names">
+            </div>
+          </div>
 
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <input
                 [disabled]="isReadOnly"
                 class="form-control"
                 placeholder="Contact"
                 type="text"
-                [(ngModel)]="organisation.contact"><br>
+                [(ngModel)]="organisation.contact">
+            </div>
+          </div>
 
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <input
                 [disabled]="isReadOnly"
                 class="form-control"
                 placeholder="Email"
                 type="text"
-                [(ngModel)]="organisation.email"><br>
+                [(ngModel)]="organisation.email">
             </div>
           </div>
         </div>
+
       </div>
 
       <div class="col-sm-6">
-        <label>4. Type of organization e.g. CBO, National NGO, Network?<span
+        <label>2. Where is the organization located or operating area?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Provide physical location and postal address, Telephone, email, website"
+                style="padding-left: 10px;"
+                rows="5"
+                [(ngModel)]="organisation.physicalAddress"
+              ></textarea>
+          </div>
+        </div>
+
+        <label>4. Type of organization<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
               [disabled]="isReadOnly"
               class="form-control"
-              placeholder="Organization Type"
+              placeholder="e.g. CBO, National NGO, Network"
               type="text"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.organizationType"
@@ -109,15 +112,17 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>5. What inspired the formation of the organization? When was it founded and registered? (50-75 words)
+        <label>5. What inspired the formation of the organization?
           <span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
                 [disabled]="isReadOnly"
                 class="form-control"
-                placeholder="Inspiration"
+                placeholder="When was it founded and registered? (50-75 words)"
                 style="padding-left: 10px;"
+                rows="5"
+                maxlength="300"
                 [(ngModel)]="organisation.inspired"
               ></textarea>
           </div>
@@ -133,6 +138,7 @@
                 class="form-control"
                 placeholder="Vision and Mission"
                 style="padding-left: 10px;"
+                rows="5"
                 [(ngModel)]="organisation.visionMission"
               ></textarea>
           </div>
@@ -142,15 +148,17 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>7. Briefly describe the leadership and governance structure of the organization?(50-75 words )<span
+        <label>7. Briefly describe the leadership and governance structure of the organization?<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
                 [disabled]="isReadOnly"
                 class="form-control"
-                placeholder="Structure"
+                placeholder="50-75 words"
                 style="padding-left: 10px;"
+                rows="5"
+                maxlength="300"
                 [(ngModel)]="organisation.structure"
               ></textarea>
           </div>
@@ -158,15 +166,16 @@
       </div>
 
       <div class="col-sm-6">
-        <label>8. What are the core programs implemented by the organization? Provide 2 – 3 sentences description of
-          each program.<span class="required-indicator">*</span></label>
+        <label>8. What are the core programs implemented by the organization?<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
                 [disabled]="isReadOnly"
                 class="form-control"
-                placeholder="Core Programs"
+                placeholder="Provide 2 – 3 sentences description of each program."
                 style="padding-left: 10px;"
+                rows="5"
                 [(ngModel)]="organisation.corePrograms"
               ></textarea>
           </div>
@@ -176,15 +185,17 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>9. Describe one program that you have implemented on prevention of violence against children. (Not more
-          than 50 words).<span class="required-indicator">*</span></label>
+        <label>9. Describe one program that you have implemented on prevention of violence against children.<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
                 [disabled]="isReadOnly"
                 class="form-control"
-                placeholder="Program"
+                placeholder="Not more than 50 words"
                 style="padding-left: 10px;"
+                rows="5"
+                maxlength="300"
                 [(ngModel)]="organisation.programOnPrevention"
               ></textarea>
           </div>
@@ -220,14 +231,14 @@
   <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>11. How many organizations will be involved in the cluster/Network partnership? (Name the organisations
-          and their contacts)</label>
+        <label>11. How many organizations will be involved in the cluster/Network partnership?</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
                 class="form-control" [disabled]="isReadOnly"
-                placeholder="Partner Organizations"
+                placeholder="Name the organisations and their contacts"
                 style="padding-left: 10px;"
+                rows="5"
                 [(ngModel)]="ngos.partnerOrganizations"
               ></textarea>
           </div>
@@ -237,15 +248,13 @@
       <div class="col-sm-6">
         <label>12. Please give a brief description of the cluster/Network members?<span
           class="required-indicator">*</span></label>
-        <i>(e.g. year of founding or
-          registration, Vision and mission, objectives, major thematic areas / activities, governance, management,
-          recent accomplishments, membership, geographical area of operation among others )( not more than 50
-          words)</i>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
                 class="form-control" [disabled]="isReadOnly"
-                placeholder="Members"
+                placeholder="e.g. year of founding or registration, Vision and mission, objectives, major thematic areas / activities, governance, management, recent accomplishments, membership, geographical area of operation among others )( not more than 50 words)"
+                rows="5"
+                maxlength="300"
                 style="padding-left: 10px;"
                 [(ngModel)]="ngos.members"
               ></textarea>
@@ -263,6 +272,7 @@
                 class="form-control" [disabled]="isReadOnly"
                 placeholder="Reason"
                 style="padding-left: 10px;"
+                rows="5"
                 [(ngModel)]="ngos.whyCollaborate"
               ></textarea>
           </div>
@@ -270,14 +280,14 @@
       </div>
 
       <div class="col-sm-6">
-        <label>14. Was the organization consulted or informed about the partnership. If yes, indicate their response
-          towards the intended cluster formation .</label>
+        <label>14. Was the organization consulted or informed about the partnership.</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                   <textarea
                     class="form-control" [disabled]="isReadOnly"
-                    placeholder="Response"
+                    placeholder="If yes, indicate their response towards the intended cluster formation"
                     style="padding-left: 10px;"
+                    rows="3"
                     [(ngModel)]="ngos.clusterResponse"
                   ></textarea>
           </div>
@@ -301,6 +311,7 @@
                     class="form-control" [disabled]="isReadOnly"
                     placeholder="Response"
                     style="padding-left: 10px;"
+                    rows="5"
                     [(ngModel)]="proposal.actions"
                   ></textarea>
           </div>
@@ -315,6 +326,7 @@
                  class="form-control" [disabled]="isReadOnly"
                  placeholder="Response"
                  style="padding-left: 10px;"
+                 rows="5"
                  [(ngModel)]="proposal.geographicAreas"
                ></textarea>
           </div>
@@ -326,14 +338,13 @@
       <div class="col-sm-6">
         <label>17. Describe your organizations’ unique strength or capacity and weaknesses to implement the
           interventions proposed.</label>
-        <i>(This should describe expertise, skills, organization structure and experience to
-          manage similar or related projects)</i>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                      <textarea
                        class="form-control" [disabled]="isReadOnly"
-                       placeholder="Strength and Weaknesses"
+                       placeholder="This should describe expertise, skills, organization structure and experience to manage similar or related projects"
                        style="padding-left: 10px;"
+                       rows="5"
                        [(ngModel)]="proposal.strength"
                      ></textarea>
           </div>

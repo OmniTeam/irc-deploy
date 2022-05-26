@@ -118,6 +118,7 @@ class StartCamundaInstancesJob extends Script {
 
                     boolean started = startProcessInstance([
                             GrantId          : it.id,
+                            ProgramId        : it.program,
                             Applicant        : applicantEmail,
                             ProgramTeam      : programTeamEmail,
                             Finance          : financeEmail,

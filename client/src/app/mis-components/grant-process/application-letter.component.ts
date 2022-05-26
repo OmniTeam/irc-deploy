@@ -6,6 +6,7 @@ import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {ProgramService} from "../../services/program.service";
+import {MessagePagesComponent} from "../message-pages/message-pages.component";
 
 @Component({
   selector: 'application-letter',
@@ -109,7 +110,7 @@ export class ApplicationLetterComponent implements OnInit {
     });
     setTimeout(() => {
       if (this.success == true) {
-        this.onBackPressed()
+        this.router.navigate(['/messagePage/success']);
       }
       this.success = false;
       this.error = false;
@@ -140,19 +141,8 @@ export class ApplicationLetterComponent implements OnInit {
     });
   }
 
-  /*  onSelectCountry(country) {
-      this.countriesService.getCitiesForCountry(country).subscribe((response) => {
-        this.cities = response.data;
-      }, error => console.log(error))
-    }*/
-
   cancel() {
     this.submitted = false
-    this.onBackPressed()
-  }
-
-  onBackPressed() {
-    this.router.navigate(['/grantProcess']);
     window.location.reload();
   }
 }

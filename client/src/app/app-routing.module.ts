@@ -430,6 +430,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
       },
       {
+        path: 'messagePage/:type',
+        data: {
+          userRoles: []
+        },
+        loadChildren: () => import('./mis-components/message-pages/message-pages.module').then(m => m.MessagePagesModule)
+      },
+      {
         path: 'program',
         data: {
           userRoles: []
