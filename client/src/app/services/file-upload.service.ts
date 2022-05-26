@@ -45,4 +45,8 @@ export class FileUploadService {
       console.log(error)
     })
   }
+
+  getFileName(path) {
+    return path.substring(path.lastIndexOf('/') + 1)
+  }
 }

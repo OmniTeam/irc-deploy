@@ -197,8 +197,8 @@ export class GrantProcessComponent implements OnInit {
     console.log('status', status);
     this.taskRecord.status = status
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
-      console.log('successfully updated task');
-    }, error => console.log('update task', error));
+      console.log('successfully Submitted task');
+    }, error => console.log('submit task', error));
   }
 
   submit(key, status) {
@@ -245,13 +245,13 @@ export class GrantProcessComponent implements OnInit {
         console.log('response', data)
         this.error = false;
         this.success = true;
-        this.successMessage = "Updated";
+        this.successMessage = "Submitted";
         this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
         this.statusChangedHandler(status)
         this.alertService.success(this.successMessage);
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to update";
+        this.errorMessage = "Failed to submit";
         this.alertService.error(this.errorMessage);
         this.success = false;
         console.log(error);
@@ -279,13 +279,13 @@ export class GrantProcessComponent implements OnInit {
         console.log('response', data)
         this.error = false;
         this.success = true;
-        this.successMessage = "Updated";
+        this.successMessage = "Submitted";
         this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
         this.statusChangedHandler(status)
         this.alertService.success(this.successMessage);
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to update";
+        this.errorMessage = "Failed to submit";
         this.alertService.error(this.errorMessage);
         this.success = false;
         console.log(error);
@@ -310,13 +310,13 @@ export class GrantProcessComponent implements OnInit {
         console.log('response', data)
         this.error = false;
         this.success = true;
-        this.successMessage = "Updated";
+        this.successMessage = "Submitted";
         this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
         this.statusChangedHandler(status)
         this.alertService.success(this.successMessage);
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to update";
+        this.errorMessage = "Failed to submit";
         this.alertService.error(this.errorMessage);
         this.success = false;
         console.log(error);
@@ -344,12 +344,12 @@ export class GrantProcessComponent implements OnInit {
       console.log('response', data)
       this.error = false;
       this.success = true;
-      this.successMessage = "Updated";
+      this.successMessage = "Submitted";
       this.statusChangedHandler(status)
       this.alertService.success(this.successMessage);
     }, error => {
       this.error = true;
-      this.errorMessage = "Failed to update";
+      this.errorMessage = "Failed to submit";
       this.alertService.error(this.errorMessage);
       this.success = false;
       console.log(error);
@@ -373,13 +373,13 @@ export class GrantProcessComponent implements OnInit {
         console.log('response', data)
         this.error = false;
         this.success = true;
-        this.successMessage = "Updated";
+        this.successMessage = "Submitted";
         this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
         this.statusChangedHandler(status)
         this.alertService.success(this.successMessage);
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to update";
+        this.errorMessage = "Failed to submit";
         this.alertService.error(this.errorMessage);
         this.success = false;
         console.log(error);

@@ -1,14 +1,13 @@
 package com.kengamis
 
 
-import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
-import groovy.json.JsonSlurper
+import groovy.json.*
 
 import static org.springframework.http.HttpStatus.*
 
-@ReadOnly
+@Transactional
 class TaskListController {
 
     TaskListService taskListService
@@ -21,6 +20,9 @@ class TaskListController {
 
         //check for tasks that need to create/deactivate new account
         userAccountTasks()
+
+        //check if task for archive
+        archiveReport()
 
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
@@ -81,6 +83,8 @@ class TaskListController {
                     c2 = userRoles.contains("ROLE_FINANCE")
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_ED")
+                } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
+                    c2 = userRoles.contains("ROLE_APPLICANT")
                 }
             }
 
@@ -221,7 +225,6 @@ class TaskListController {
         }
     }
 
-    @Transactional
     def userAccountTasks() {
         TaskList[] createUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_account_in_MIS' }.findAll()
         if (createUserAccountTask.size() > 0) {
@@ -258,14 +261,32 @@ class TaskListController {
                 def username = generateCode("AP", generator(('0'..'9').join(), 4)) as String
                 def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
-                println "${username} New User password: ${password}"
-
                 def user = new User(email: email, names: names, username: username, password: password)
                 user.save(flush: true, failOnError: true)
 
                 Role applicant = Role.findByAuthority("ROLE_APPLICANT")
                 def role = new UserRole(user: user, role: applicant)
                 role.save(flush: true, failOnError: true)
+
+                println "New User created => username ${username}, password: ${password}"
+
+                //update input variables with username and password for camunda to pick for email to the applicant
+                // and also flag task as complete
+                variables.'data'.each {
+                    if (it.key == 'ApplicantUserName') {
+                        it.value = username
+                        it.type = 'string'
+                    }
+                    if (it.key == 'ApplicantPassword') {
+                        it.value = password
+                        it.type = 'string'
+                    }
+                }
+                def result = JsonOutput.toJson(variables)
+
+                task.inputVariables = result
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
 
                 return true
             }
@@ -299,5 +320,44 @@ class TaskListController {
         def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
         def code = prefix.toString() + '/' + actualIncrementValue.toString()
         return code
+    }
+
+    def addingLeadingZerosToIncrement(def increment_value) {
+        def stringLength = 6
+        def incrementValueLen = increment_value.toString().size()
+        def expectedLen = stringLength.toInteger() - incrementValueLen.toInteger()
+        for (def i = 0; i <= expectedLen - 1; i++) {
+            increment_value = "0" + increment_value
+        }
+        return increment_value
+    }
+
+    @Transactional
+    def archiveReport() {
+        TaskList[] forArchiving = TaskList.where { taskDefinitionKey == 'Disburse_Funds' || taskDefinitionKey == 'Archive_Report' }.findAll()
+        if (forArchiving.size() > 0) {
+            forArchiving.each { task ->
+                Archive archive = new Archive()
+                archive.taskId = task.taskId
+                archive.inputVariables = task.inputVariables
+                archive.outputVariables = task.outputVariables
+                archive.status = task.status
+                archive.formId = task.formId
+                archive.groupId = task.groupId
+                archive.userId = task.userId
+                archive.taskName = task.taskName
+                archive.processInstanceId = task.processInstanceId
+                archive.processDefKey = task.processDefKey
+                archive.synced = task.synced
+                archive.taskDefinitionKey = task.taskDefinitionKey
+                archive.save(flush: true, failOnError: true)
+
+                //complete the archive report task
+                if(task.taskDefinitionKey == 'Archive_Report') {
+                    task.status = 'completed'
+                    task.save()
+                }
+            }
+        }
     }
 }

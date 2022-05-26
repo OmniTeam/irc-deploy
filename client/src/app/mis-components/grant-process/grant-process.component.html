@@ -71,7 +71,7 @@
                   <div class="col-sm-12">
                     <div class="row">
                       <div class="col">
-                        <p>Has the application been reviewed?</p>
+                        <p>Has the application been reviewed?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -86,7 +86,7 @@
                       </div>
 
                       <div class="col">
-                        <p>Has due diligence been conducted?</p>
+                        <p>Has due diligence been conducted?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -118,13 +118,13 @@
 
                       <div class="col">
                         <div class="text-left">
-                          <label for="dateOfDueDiligence">Date when due diligence was done:</label>
+                          <label for="dateOfDueDiligence">Date when due diligence was done:<span class="required-indicator">*</span></label>
                           <input type="date" class="form-control" id="dateOfDueDiligence"
                                  [disabled]="isReadOnly"
                                  [(ngModel)]="dateOfDueDiligence"/><br>
                         </div>
                         <div class="text-left">
-                          <label for="attachmentDiligenceReport">Attach due diligence report:</label>
+                          <label for="attachmentDiligenceReport">Attach due diligence report:<span class="required-indicator">*</span></label>
                           <input
                             *ngIf="!isReadOnly"
                             class="form-control"
@@ -143,7 +143,7 @@
                       </div>
                     </div>
                     <div class="row" style="margin: 10px;">
-                      <label for="reviewerComments">Provide any comments</label>
+                      <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea class="form-control" rows="3" id="reviewerComments"
                                 [disabled]="isReadOnly"
                                 [(ngModel)]="reviewerComments"></textarea>
