@@ -126,7 +126,9 @@ class StartCamundaInstancesJob extends Script {
                             Applicant        : applicantEmail,
                             ProgramTeam      : programTeamEmail[0],
                             Finance          : financeEmail[0],
-                            ExecutiveDirector: edEmail[0]
+                            ExecutiveDirector: edEmail[0],
+                            ApplicantUserName: 'Test',
+                            ApplicantPassword: 'Test'
                     ], GRANT_PROCESS)
 
 

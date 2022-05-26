@@ -365,7 +365,6 @@
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
-              *ngIf="!isReadOnly"
               class="form-control" [disabled]="isReadOnly"
               placeholder="Amount"
               type="number"
@@ -416,7 +415,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.financial)"
-                  class="btn btn-link">{{documents.financial}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -436,7 +435,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.registration)"
-                  class="btn btn-link">{{documents.registration}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -458,7 +457,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listMembers)"
-                  class="btn btn-link">{{documents.listMembers}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -478,7 +477,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listStaffMembers)"
-                  class="btn btn-link">{{documents.listStaffMembers}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -500,7 +499,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.organizationStructure)"
-                  class="btn btn-link">{{documents.organizationStructure}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -520,7 +519,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.assessmentReport)"
-                  class="btn btn-link">{{documents.assessmentReport}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -542,7 +541,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.strategicPlan)"
-                  class="btn btn-link">{{documents.strategicPlan}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -562,7 +561,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.annualWorkPlan)"
-                  class="btn btn-link">{{documents.annualWorkPlan}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -584,7 +583,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.mou)"
-                  class="btn btn-link">{{documents.mou}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -604,7 +603,7 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.childPolicy)"
-                  class="btn btn-link">{{documents.childPolicy}}</button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
