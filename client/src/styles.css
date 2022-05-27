@@ -48,8 +48,9 @@ table tr th.select-checkbox.selected::after {
 table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select-checkbox:before {
   margin-top: 3px !important;
 }
-.input-error{
-  color:red;
+
+.input-error {
+  color: red;
   font-size: 80%;
   font-weight: 400;
   font-family: Open Sans, sans-serif;
@@ -58,6 +59,7 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 .invalid-feedback {
   color: red;
 }
+
 .was-validated .form-control:invalid, .form-control.is-invalid, .was-validated .custom-select:invalid, .custom-select.is-invalid {
   border-color: red !important;
 }
@@ -70,9 +72,36 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
   font-family: Open Sans, sans-serif !important;
 }
 
+.ng-select.ng-select-single .ng-select-container {
+  height: 46px !important;
+}
+
 .form-control-sm {
   height: 36px !important;
 }
-.alertify-notifier .ajs-message.ajs-error{
+
+.selected-div {
+  background-color: #b6b9b6;
+  color: #ffffff!important;
+}
+
+.alertify-notifier .ajs-message.ajs-error {
   color: #FFFFFF;
+}
+
+.main-content, .sidenav {
+  font-family: "Poppins Medium", "Helvetica", sans-serif !important;
+}
+
+button, .btn {
+  font-family: "Poppins Light", "Helvetica", sans-serif !important;
+}
+
+.page-item.active .page-link {
+  background-color: #f5365c !important;
+  border-color: #f5365c !important;
+}
+
+td a {
+  color: #7851a9 !important;
 }

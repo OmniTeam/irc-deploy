@@ -3,9 +3,12 @@ package com.kengamis.exporter
 import com.kengamis.AppHolder
 import com.kengamis.Form
 import com.kengamis.FormSetting
+import com.kengamis.KengaGroupService
+import com.kengamis.KengaGroupsService
 import com.kengamis.User
 import com.kengamis.Util
 import com.kengamis.query.QueryHelper
+import com.kengamis.query.security.Permission
 import fuzzycsv.FuzzyCSV
 import fuzzycsv.FuzzyCSVTable
 import groovy.sql.Sql
@@ -22,6 +25,8 @@ class DataExporter {
     Form form
     User user
     def choiceOptions = [:]
+
+    KengaGroupsService kengaGroupService = AppHolder.bean(KengaGroupsService)
 
     DataExporter(String formTable, Map params) {
         this.params = params
@@ -94,7 +99,7 @@ class DataExporter {
 
     private List<Map<String, String>> getExportedData(ResultSet rs) {
         def result = []
-        def mapList = FuzzyCSVTable.toCSV(rs).toMapList()
+        def mapList = kengaGroupService.postFilter(FuzzyCSVTable.toCSV(rs).toMapList(), Permission.READ, formTable)
         def headers = getColumnHeaderSettings(rs)
         mapList.each { record ->
             def eachRecord = [:]

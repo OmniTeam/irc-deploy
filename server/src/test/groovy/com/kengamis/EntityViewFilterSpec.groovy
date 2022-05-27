@@ -3,7 +3,7 @@ package com.kengamis
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class EntityViewFilterSpec extends Specification implements DomainUnitTest<EntityViewFilter> {
+class EntityViewFilterSpec extends Specification implements DomainUnitTest<EntityViewFilters> {
 
     def setup() {
     }

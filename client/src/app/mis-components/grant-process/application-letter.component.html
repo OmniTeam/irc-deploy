@@ -1,0 +1,637 @@
+<div class="row" style="margin: 20px;">
+  <div class="col-sm-12">
+    <label>Select the program you wish to apply for:<span class="required-indicator">*</span></label>
+    <div style="margin-bottom: 30px;">
+      <ng-select class="form-control form-control-sm"
+                 [disabled]="isReadOnly"
+                 aria-controls="datatable"
+                 style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                 [multiple]="false"
+                 placeholder="Program"
+                 [(ngModel)]="program"
+                 [searchable]="true"
+                 [clearable]="true"
+      >
+        <ng-option [value]="item.id" *ngFor="let item of programs">
+          {{item.name}}
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+</div>
+
+<h3 style="margin-left: 40px;">Part I: Organizational Background:</h3>
+<div class="card">
+  <div class="card-body">
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>1. What is the name of the organization?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              [disabled]="isReadOnly"
+              class="form-control"
+              placeholder="Organisation Name"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.name"
+            >
+          </div>
+        </div>
+
+        <label>3. Who is the contact person? <span class="required-indicator">*</span></label>
+
+        <div class="col-sm-12" style="padding: 0;">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Names"
+                type="text"
+                [(ngModel)]="organisation.names">
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Contact"
+                type="text"
+                [(ngModel)]="organisation.contact">
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Email"
+                type="text"
+                [(ngModel)]="organisation.email">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-sm-6">
+        <label>2. Where is the organization located or operating area?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Provide physical location and postal address, Telephone, email, website"
+                style="padding-left: 10px;"
+                rows="5"
+                [(ngModel)]="organisation.physicalAddress"
+              ></textarea>
+          </div>
+        </div>
+
+        <label>4. Type of organization<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              [disabled]="isReadOnly"
+              class="form-control"
+              placeholder="e.g. CBO, National NGO, Network"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.organizationType"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>5. What inspired the formation of the organization?
+          <span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="When was it founded and registered? (50-75 words)"
+                style="padding-left: 10px;"
+                rows="5"
+                maxlength="300"
+                [(ngModel)]="organisation.inspired"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>6. What is the vision and mission of the organization?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Vision and Mission"
+                style="padding-left: 10px;"
+                rows="5"
+                [(ngModel)]="organisation.visionMission"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>7. Briefly describe the leadership and governance structure of the organization?<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="50-75 words"
+                style="padding-left: 10px;"
+                rows="5"
+                maxlength="300"
+                [(ngModel)]="organisation.structure"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>8. What are the core programs implemented by the organization?<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Provide 2 – 3 sentences description of each program."
+                style="padding-left: 10px;"
+                rows="5"
+                [(ngModel)]="organisation.corePrograms"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>9. Describe one program that you have implemented on prevention of violence against children.<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Not more than 50 words"
+                style="padding-left: 10px;"
+                rows="5"
+                maxlength="300"
+                [(ngModel)]="organisation.programOnPrevention"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label>10. Who is funding the current programs?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              class="form-control" [disabled]="isReadOnly"
+              placeholder="Funding"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.funding"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<h3 style="margin-left: 40px;">Part II:NGOs working in Clusters/ Networks.</h3>
+<div class="card">
+  <div class="card-header">
+    <i>This program will be funded through clusters. Cluster partnership is where 3-4 organizations form a partnership
+      and collaborate to implement a project together in a given/one geographic area. It is based on core principles
+      of integration (of activities) and collaboration (of members) for mutual benefit. (Refer to attached annex on
+      details for Cluster). </i>
+  </div>
+  <div class="card-body">
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>11. How many organizations will be involved in the cluster/Network partnership?</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control" [disabled]="isReadOnly"
+                placeholder="Name the organisations and their contacts"
+                style="padding-left: 10px;"
+                rows="5"
+                [(ngModel)]="ngos.partnerOrganizations"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>12. Please give a brief description of the cluster/Network members?<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control" [disabled]="isReadOnly"
+                placeholder="e.g. year of founding or registration, Vision and mission, objectives, major thematic areas / activities, governance, management, recent accomplishments, membership, geographical area of operation among others )( not more than 50 words)"
+                rows="5"
+                maxlength="300"
+                style="padding-left: 10px;"
+                [(ngModel)]="ngos.members"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>13. Why do you want to collaborate with these organizations?</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control" [disabled]="isReadOnly"
+                placeholder="Reason"
+                style="padding-left: 10px;"
+                rows="5"
+                [(ngModel)]="ngos.whyCollaborate"
+              ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>14. Was the organization consulted or informed about the partnership.</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+                  <textarea
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="If yes, indicate their response towards the intended cluster formation"
+                    style="padding-left: 10px;"
+                    rows="3"
+                    [(ngModel)]="ngos.clusterResponse"
+                  ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<h3 style="margin-left: 40px;">Part III: Proposal</h3>
+<div class="card">
+  <div class="card-body">
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>15. Interventions/activities / strategies - What actions will you take to create change?</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+                  <textarea
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Response"
+                    style="padding-left: 10px;"
+                    rows="5"
+                    [(ngModel)]="proposal.actions"
+                  ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>16. Suggest few geographic areas where the project will be implemented?</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+               <textarea
+                 class="form-control" [disabled]="isReadOnly"
+                 placeholder="Response"
+                 style="padding-left: 10px;"
+                 rows="5"
+                 [(ngModel)]="proposal.geographicAreas"
+               ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>17. Describe your organizations’ unique strength or capacity and weaknesses to implement the
+          interventions proposed.</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+                     <textarea
+                       class="form-control" [disabled]="isReadOnly"
+                       placeholder="This should describe expertise, skills, organization structure and experience to manage similar or related projects"
+                       style="padding-left: 10px;"
+                       rows="5"
+                       [(ngModel)]="proposal.strength"
+                     ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<h3 style="margin-left: 40px;">Part IV: Financial Information</h3>
+<div class="card">
+  <div class="card-body">
+
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-6">
+        <label>18. How much funds are you requesting?</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              class="form-control" [disabled]="isReadOnly"
+              placeholder="Amount"
+              type="number"
+              style="padding-left: 10px;"
+              [(ngModel)]="financial.fundsAmount"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>19. What is your organization’s current budget for this financial year?</label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+               <textarea
+                 class="form-control" [disabled]="isReadOnly"
+                 placeholder="Amount"
+                 style="padding-left: 10px;"
+                 [(ngModel)]="financial.budget"
+               ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<h3 style="margin-left: 40px;">Part V: Other documents to share (if available)</h3>
+<div class="card">
+  <div class="card-body">
+    <div class="row" style="margin: 10px;">
+      <div class="col">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>i. A copy of financial audited reports or organizational financial report. if you have :</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="financialAttachment"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.financial)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>ii. A copy of the registration certificate</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="registration"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.registration)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>iii. List of members of governing body their affiliations, skills and experience</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="listMembersAttachment"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.listMembers)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>iv. List of staff members and their titles as well as qualifications and experience</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="listStaffMembersAttachment"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.listStaffMembers)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>v. Organization structure/organogram</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="organizationStructure"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.organizationStructure)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>vi. Organizational capacity assessment report if available.</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="assessmentReport"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.assessmentReport)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>vii. Organization strategic plan if available </label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="strategicPlan"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.strategicPlan)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>viii. Organizational annual work plan and budget.</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="annualWorkPlan"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.annualWorkPlan)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>ix. Draft M.O.U if application is submitted by Cluster </label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="mou"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.mou)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>x. Child safe guard policy /manual if available</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="childPolicy"
+                  (change)="handleFileInput($event)"/>
+                <button
+                  *ngIf="isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.childPolicy)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="loading">
+    <h3>Uploading attachment, please wait ...</h3>
+  </div>
+</div>
+
+<input class="form-control" type="hidden" [(ngModel)]="status">
+
+<div *ngIf="error || success" class="row align-items-center text-center"
+     style="display: flex; justify-content: center;">
+  <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+    <strong>Error:</strong> {{errorMessage}}
+  </div>
+  <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+    <strong>Success:</strong> {{successMessage}}
+  </div>
+</div>
+
+<div class="row" *ngIf="!isReadOnly">
+  <div class="col-lg-12 bottom_buttons_row"
+       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+    <button class="btn btn-success" type="button" (click)="submitLetter()">Submit Application</button>
+  </div>
+</div>

@@ -1,0 +1,466 @@
+<div class="header bg-success pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
+<div *ngIf="openCommentsPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Comments</h3>
+  </div>
+  <div class="card-body d-flex flex-column">
+    <div class="row">
+      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
+      <div class="col-sm-11">
+        <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
+        <div style="display: flex;justify-content: end;">
+          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addComment()">Send</button>
+        </div>
+      </div>
+    </div>
+    <hr style="margin-top: 0; margin-bottom: 0;"/>
+    <app-comments [comments]="comments" (commentsChanged)="commentsChangedHandler($event)"></app-comments>
+  </div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>
+  </div>
+</div>
+
+<div class="container-fluid mt--6" >
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class="row">
+
+          <div style="width: 100%; text-align: -webkit-center; display: block;">
+            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT
+              LETTER OF INTEREST</h6></div>
+            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
+              LETTER OF INTEREST</h6></div>
+            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              PLANNING AND LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              REVIEW LEARNING GRANT APPLICATION</h6></div>
+            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              APPROVE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isSubmitReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              SUBMIT PLANNING AND LEARNING GRANT REPORT</h6></div>
+            <div [style.display]="isReviewReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+              REVIEW PLANNING AND LEARNING GRANT REPORT</h6></div>
+          </div>
+
+          <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+
+            <div *ngIf="isSubmitLetterOfInterest" class=" col">
+              <application-letter [isReadOnly]="false"></application-letter>
+            </div>
+
+            <div *ngIf="isReviewLetterOfInterest" class=" col">
+
+              <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
+
+              <h3 style="margin-left: 40px;">Review</h3>
+              <div class="card">
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+                    <div class="row">
+                      <div class="col">
+                        <p>Has the application been reviewed?<span class="required-indicator">*</span></p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="hasApplicationBeenReviewed"
+                                     [(ngModel)]="hasApplicationBeenReviewed"
+                                     [disabled]="isReadOnly"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <p>Has due diligence been conducted?<span class="required-indicator">*</span></p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="hasDueDiligenceConducted"
+                                     [(ngModel)]="hasDueDiligenceConducted"
+                                     [disabled]="isReadOnly"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of decision">
+                            <li>
+                              <input type="radio" name="decisionOfReviewProcess"
+                                     [(ngModel)]="decisionOfReviewProcess"
+                                     [disabled]="isReadOnly"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="text-left">
+                          <label for="dateOfDueDiligence">Date when due diligence was done:<span class="required-indicator">*</span></label>
+                          <input type="date" class="form-control" id="dateOfDueDiligence"
+                                 [disabled]="isReadOnly"
+                                 [(ngModel)]="dateOfDueDiligence"/><br>
+                        </div>
+                        <div class="text-left">
+                          <label for="attachmentDiligenceReport">Attach due diligence report:<span class="required-indicator">*</span></label>
+                          <input
+                            *ngIf="!isReadOnly"
+                            class="form-control"
+                            placeholder="Attachment"
+                            type="file"
+                            style="padding-left: 10px;"
+                            id="attachmentDiligenceReport"
+                            (change)="handleFileInput($event)"/>
+                          <button
+                            *ngIf="isReadOnly"
+                            type="button"
+                            (click)="fileUploadService.downloadFile(attachmentDiligenceReport)"
+                            class="btn btn-link">{{attachmentDiligenceReport}}</button>
+                          <br>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="margin: 10px;">
+                      <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
+                      <textarea class="form-control" rows="3" id="reviewerComments"
+                                [disabled]="isReadOnly"
+                                [(ngModel)]="reviewerComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="loading">
+                  <h3>Uploading attachment, please wait ...</h3>
+                </div>
+                <div class="row" *ngIf="!isReadOnly">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-warning" (click)="submit('reviewLetter', 'draft')">Save Current Version</button>
+                    <button class="btn btn-success" (click)="submit('reviewLetter', 'completed')">Submit Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="isPlanningLearningApplication" class=" col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="false" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+            </div>
+
+            <div *ngIf="isReviewPlanningLearningGrant" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+
+              <h3 style="margin-left: 40px;">Reviewer Action</h3>
+              <div class="card">
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+
+                    <div class="row">
+                      <div class="col">
+                        <p>Is the concept in line with the objectives of the project?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="isConceptInline" [(ngModel)]="isConceptInline"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <p>Does it adhere to the strategic objectives of the organization?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="doesItAdhere" [(ngModel)]="doesItAdhere"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p>Are they adhering to the purpose of the planning and learning grant?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="areTheyAdhering" [(ngModel)]="areTheyAdhering"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p>What was the decision of the review process?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of decision">
+                            <li>
+                              <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="margin: 10px;">
+                      <label for="reviewerActionComments">Provide any comments</label>
+                      <textarea class="form-control" rows="3" id="reviewerActionComments"
+                                [(ngModel)]="reviewerComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="!isReadOnly">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-warning" (click)="submit('reviewConcept', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('reviewConcept', 'completed')">Submit Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="isApprovePlanningLearningGrant" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+
+              <h3 style="margin-left: 40px;">Approver Section</h3>
+              <div class="card">
+                <div class="row">
+                  <div class="col-sm-9">
+                    <p>What is your recommendation?</p>
+                    <div class="text-left">
+                      <ul style="list-style: none;" *ngFor="let item of decision2">
+                        <li>
+                          <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfApproveProcess"
+                                 value="{{item.value}}"/>
+                          {{item.name}}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                  </div>
+                </div>
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+                    <div class="row" style="margin: 10px;">
+                      <label for="approverComments">Provide any comments</label>
+                      <textarea class="form-control" rows="3" id="approverComments"
+                                [(ngModel)]="approveComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="!isReadOnly">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-warning" (click)="submit('approveConcept', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('approveConcept', 'completed')">Approve Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="isProvidePlanningLearningGrant" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+
+              <h3 style="margin-left: 40px;">Finance Section</h3>
+              <div class="card">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <label>Grant Amount</label>
+                    <input class="form-control" type="number" [(ngModel)]="grantAmount"/>
+                  </div>
+                  <div class="col-sm-5">
+                    <label>Lead Agency</label>
+                    <input class="form-control" type="text" [(ngModel)]="leadAgency"/>
+                  </div>
+                  <div class="col-sm-2 text-right">
+                    <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <label>From:</label><input class="form-control" placeholder="From" type="date"
+                                               [(ngModel)]="periodFrom"/>
+                  </div>
+                  <div class="col-sm-3">
+                    <label>To:</label><input class="form-control" placeholder="To" type="date" [(ngModel)]="periodTo"/>
+                  </div>
+                  <div class="col-sm-4">
+                    <label>Cluster Name:</label>
+                    <input class="form-control" type="text" [(ngModel)]="clusterName"/>
+                  </div>
+                </div>
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+                    <div class="row" style="margin: 10px;">
+                      <label for="financeSectionComments">Provide any comments</label>
+                      <textarea class="form-control" rows="3" id="financeSectionComments"
+                                [(ngModel)]="financeSectionComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="!isReadOnly">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-warning" (click)="submit('provideLearningGrant', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('provideLearningGrant', 'completed')">Submit Review</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="isSubmitReport" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+              <grant-report [grantId]="grantId"
+                            [processInstanceId]="processInstanceId"
+                            [definitionKey]="definitionKey"
+                            (statusChanged)="statusChangedHandler($event)"></grant-report>
+            </div>
+
+            <div *ngIf="isReviewReport" class="col">
+              <organizational-information [grantId]="grantId"></organizational-information>
+              <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
+                                             [processInstanceId]="processInstanceId"
+                                             [definitionKey]="definitionKey"
+                                             (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+              <grant-report [grantId]="grantId" [isReadOnly]="true"
+                            [processInstanceId]="processInstanceId"
+                            [definitionKey]="definitionKey"
+                            (statusChanged)="statusChangedHandler($event)"></grant-report>
+
+              <h3 style="margin-left: 40px;">Reviewer Action</h3>
+              <div class="card">
+                <div class="row" style="margin: 10px;">
+                  <div class="col-sm-12">
+
+                    <div class="row">
+                      <div class="col">
+                        <p>Were the activities carried out in-line with the proposed workplan?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="isConceptInline" [(ngModel)]="activitiesInlineWithWorkPlan"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <p>Did they adhere to the budget?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="doesItAdhere" [(ngModel)]="adhereToBudget"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p>Did they achieve their intended objectives?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of items">
+                            <li>
+                              <input type="radio" name="areTheyAdhering" [(ngModel)]="achieveIntendedObjectives"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <p>What was the decision of the review process?</p>
+                        <div class="text-left">
+                          <ul style="list-style: none;" *ngFor="let item of decision3">
+                            <li>
+                              <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                                     value="{{item.value}}"/>
+                              {{item.name}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" style="margin: 10px;">
+                      <label for="reviewerActionComments">Provide any comments</label>
+                      <textarea class="form-control" rows="3" id="reviewReportComments"
+                                [(ngModel)]="reviewerComments"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="!isReadOnly">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-warning" (click)="submit('reviewReport', 'draft')">Save for Later</button>
+                    <button class="btn btn-success" (click)="submit('reviewReport', 'completed')">Submit Review</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

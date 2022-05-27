@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {HttpParams} from "@angular/common/http";
 import {EntityService} from "../../../services/entity.service";
-import {ReplacePipe} from "../../../replace-pipe";
+import {ReplacePipe} from "../../../pipes/replace-pipe";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../../services/alert";
@@ -44,6 +44,9 @@ export class EntityTablesComponent implements OnInit {
   selectedTagTypeFilter = "";
   selectedTagFilter = "";
   recordId = "";
+  openPopup: boolean;
+  loading: boolean;
+  uploadMessage: string = "Uploading attachment, please wait ..."
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -63,7 +66,7 @@ export class EntityTablesComponent implements OnInit {
     let val = event.target.value.toLowerCase();
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
-        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+        if (d[key]?.toString().toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -118,6 +121,7 @@ export class EntityTablesComponent implements OnInit {
   getEntityData() {
     const params = new HttpParams()
       .set('id', this.entityId);
+    this.loading = true;
     this.entityService.getEntityData(params).subscribe((data) => {
       this.entityName = new ReplacePipe().transform(data.entity['name'], '_', ' ');
       this.temp = [...data.resultList];
@@ -126,7 +130,8 @@ export class EntityTablesComponent implements OnInit {
       this.enableTagging = data.enableTagging;
       this.columns = this.columnMappings(data.headerList);
       this.formInputConfigs = this.generateFormInputConfigs(data.headerList);
-    }, error => console.log(error));
+      this.loading = false
+    }, error => {console.log(error)});
   }
 
   columnMappings(array) {
@@ -146,6 +151,10 @@ export class EntityTablesComponent implements OnInit {
     }, (reason) => {
       this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  createTag(){
+    this.router.navigate(['/tags']);
   }
 
   getTags(tagTypeId) {
@@ -433,5 +442,30 @@ export class EntityTablesComponent implements OnInit {
     this.entityService.exportEntityData(params).subscribe((data) => {
       this.exportService.exportToCsv(data['data'], data['file']);
     }, error => console.log(error));
+  }
+
+  importExcelFormData() {
+    this.openPopup = true
+  }
+
+  handleFileInput(event) {
+    this.loading = !this.loading;
+    let files: FileList = event.target.files;
+    this.entityService.uploadExcelFile(files.item(0), this.entityId).subscribe((data) => {
+      this.uploadMessage = data[0]
+      setTimeout(() => {
+        this.loading = false;
+        this.closePopUp()
+        this.getEntityData();
+      }, 3000);
+    }, error => {
+      console.log(error)
+      this.uploadMessage = "Failed to upload file, try again."
+      setTimeout(() => {this.loading = false}, 3000);
+    });
+  }
+
+  closePopUp(){
+    this.openPopup = false
   }
 }

@@ -1,0 +1,31 @@
+.col > .card, .container {
+  padding: 20px;
+  margin: 20px;
+}
+
+.card > div, form {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width: auto;
+}
+
+.justify-center {
+  justify-content: center;
+  display: flex;
+}
+
+tr td {
+  overflow: hidden;
+  max-width: 300px;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+table {
+  width: 100%;
+  overflow: auto;
+  display: table;
+  table-layout: fixed;
+}

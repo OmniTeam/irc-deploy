@@ -4,7 +4,7 @@ import {FormService} from '../../services/form.service';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {SelectionType} from '@swimlane/ngx-datatable';
 import {ModalDismissReasons, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ReplacePipe} from '../../replace-pipe';
+import {ReplacePipe} from '../../pipes/replace-pipe';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 import * as crossfilter from 'crossfilter2/crossfilter';
@@ -117,7 +117,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
 
 
     this.formService.getFormData(params).subscribe((data) => {
-      console.log(data,"data ")
+      console.log(data,"Data")
       this.formName = new ReplacePipe().transform(data.form['displayName'], '_', ' ');
       this.rows = data.resultList;
       this.columns = this.columnMappings(data.headerList);
@@ -426,7 +426,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
       marker.bindPopup('Loading....');
       marker.on('click', (e) => {
         let popup = e.target.getPopup();
-        this.makePopUp(c['__id'], formtable, popup);
+        this.makePopUp(c['id'], formtable, popup);
       });
       marker.addTo(map);
     }

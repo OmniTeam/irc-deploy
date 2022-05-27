@@ -35,7 +35,7 @@ class PartnerSetupController {
             def partner = ProgramPartner.findById(setup.partnerId)
 
             list << [id         : setup.id,
-                     partner    : partner.name,
+                     partner    : partner ? partner.name : '',
                      lastUpdated: setup.lastUpdated,
                      dateCreated: setup.dateCreated]
         }
@@ -103,14 +103,14 @@ class PartnerSetupController {
         tasks.each {
             def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
             if (deletedFromCamunda) {
-                ReportForm.findAllByTaskId(it.taskId).each {it.delete()}
-                ReportFormFiles.findAllByTaskId(it.taskId).each {it.delete()}
-                ReportFormRecommendations.findAllByTaskId(it.taskId).each {it.delete()}
-                ReportFormComments.findAllByTaskId(it.taskId).each {it.delete()}
+                ReportForm.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormFiles.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormRecommendations.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormComments.findAllByTaskId(it.taskId).each { it.delete() }
                 it.delete()
             }
         }
-        CalendarTriggerDates.findAllByPartnerSetupId(partnerSetup.id).each {it.delete()}
+        CalendarTriggerDates.findAllByPartnerSetupId(partnerSetup.id).each { it.delete() }
 
         partnerSetupService.delete(id ?: params.id)
 

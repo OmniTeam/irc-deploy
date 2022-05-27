@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './home-routing.module';
 import {HomeComponent} from "./home.component";
 import {ComponentsModule} from "../../components/components.module";
+import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import {ComponentsModule} from "../../components/components.module";
   imports: [
     CommonModule,
     HomeRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    EntityViewTableModule,
+    NgxDatatableModule
   ]
 })
 export class HomeModule { }

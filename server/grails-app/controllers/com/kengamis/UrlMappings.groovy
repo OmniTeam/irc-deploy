@@ -55,6 +55,9 @@ class UrlMappings {
         get "/$controller/exportEntityData(.$format)?"(action:"exportEntityData")
         get "/$controller/exportZippedFormData(.$format)?"(action:"getExportedZippedFormData")
         get "/$controller/getUserRoles(.$format)?"(action:"getUserRoles")
+        post "/$controller/uploadFile(.$format)?"(action:"uploadFile")
+        post "/$controller/downloadFile(.$format)?"(action:"downloadFile")
+        post "/$controller/uploadExcel(.$format)?"(action:"uploadExcel")
 
 
         group "/odxRest/", {
@@ -81,8 +84,11 @@ class UrlMappings {
             'getLoginUser'(controller: 'userApi', action:'getLoginUser',method: 'GET' )
         }
 
-        "/api/v1/aclGroupMapping"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
-        "/api/v1/aclGroupMapping-v2"(controller: 'kengaGroupAclEntry', action:'saveGroupMappingsWithParent',method: 'POST' )
+        "/aclGroupMappings"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
+        "/listAllACLS"(controller: 'kengaGroupAclEntry', action:'listAllACLS',method: 'GET' )
+        "/getMISUsers"(controller: 'user', action:'getMISUsers',method: 'GET' )
+        "/allMisTables"(controller: 'kengaGroupAclEntry', action:'allMisTables',method: 'GET' )
+        "/api/v1/aclGroupMapping/tables"(controller: 'kengaGroupAclEntry', action:'allMisTables')
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')

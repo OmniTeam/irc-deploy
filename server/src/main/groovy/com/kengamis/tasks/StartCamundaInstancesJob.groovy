@@ -2,22 +2,30 @@ package com.kengamis.tasks
 
 import com.kengamis.AppHolder
 import com.kengamis.CalendarTriggerDates
+import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
+import com.kengamis.Program
+import com.kengamis.ProgramPartner
+import grails.util.Holders
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
-import java.text.SimpleDateFormat
-
 class StartCamundaInstancesJob extends Script {
-    static String camundaApiUrl = "http://206.189.209.21:8090/mis/rest"
-    //static String camundaApiUrl = "http://localhost:8181/mis/rest"
-    static String CIIF_MANAGEMENT_KEY = "CRVPF_REPORTING"
-    static def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    static String camundaApiUrl = Holders.grailsApplication.config.camundaUrl as String
+    static String CRVPF_REPORTING = "CRVPF_REPORTING"
+    static String GRANT_PROCESS = "GRANT_PROCESS"
 
     @Override
     Object run() {
+        reportingJob()
+        planningAndLearningGrantJob()
+        return null
+    }
+
+    static reportingJob() {
         PartnerSetup.findAllByStartCycle("true").each { setup ->
             boolean startInstance = true
 
@@ -46,28 +54,94 @@ class StartCamundaInstancesJob extends Script {
                         "AND calendar_trigger_dates.end_date <= CURDATE() " +
                         "AND calendar_trigger_dates.started = 0 " +
                         "ORDER BY calendar_trigger_dates.period LIMIT 1;"
-                def result = AppHolder.withMisSql { rows(query2.toString()) }.first()
+                def r = AppHolder.withMisSql { rows(query2.toString()) }
 
-                boolean started = startProcessInstance([
-                        PartnerSetupId: setup.id,
-                        PartnerId     : setup.partnerId,
-                        ProgramId     : setup.programId,
-                        StartDate     : result['start_date'],
-                        EndDate       : result['end_date'],
-                        Period        : result['period'],
-                        GroupId       : "${getGroupIds(setup.partnerId)}"
-                ], CIIF_MANAGEMENT_KEY)
+                try {
+                    if (r.size() > 0) {
+                        def result = r.first()
+                        def partner = ProgramPartner.findById(setup.partnerId)
+                        boolean started = startProcessInstance([
+                                PartnerSetupId: setup.id,
+                                PartnerId     : setup.partnerId,
+                                Assignee      : partner.email,
+                                ProgramId     : setup.programId,
+                                StartDate     : result['start_date'],
+                                EndDate       : result['end_date'],
+                                Period        : result['period'],
+                                GroupId       : "${getGroupIds(setup.partnerId)}"
+                        ], CRVPF_REPORTING)
 
 
-                if (started) {
-                    print "================ started the damn instance ================"
-                    def calendar = CalendarTriggerDates.get(result['id'] as String)
-                    calendar.started = true
-                    calendar.save()
+                        if (started) {
+                            print "================ started reporting process instance ================"
+                            def calendar = CalendarTriggerDates.get(result['id'] as String)
+                            calendar.started = true
+                            calendar.save()
+                        }
+                    }
+                } catch (e) {
+                    e.printStackTrace()
                 }
             }
         }
-        return null
+    }
+
+    static planningAndLearningGrantJob() {
+        GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
+
+            def query = "SELECT user.username, user.email,role.authority as role, kenga_group.name as group_program " +
+                    "FROM user INNER JOIN user_role ON user.id = user_role.user_id " +
+                    "INNER JOIN role ON user_role.role_id = role.id " +
+                    "INNER JOIN kenga_user_group ON user.id = kenga_user_group.user_id " +
+                    "INNER JOIN kenga_group ON kenga_user_group.kenga_group_id = kenga_group.id " +
+                    "WHERE user.email IS NOT NULL"
+            println query
+            def r = AppHolder.withMisSql { rows(query.toString()) }
+
+            try {
+                if (r.size() > 0) {
+
+                    def slurper = new JsonSlurper()
+                    def orgInfo = slurper.parseText(it.organisation)
+                    def applicantEmail = orgInfo['email']
+
+                    def edEmail = []
+                    def financeEmail = []
+                    def programTeamEmail = []
+                    def program = Program.get(it.program)
+
+                    r.each {
+                        if (it['role'] == "ROLE_ED") edEmail << it['email']
+                        if (it['role'] == "ROLE_FINANCE") financeEmail << it['email']
+                        if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                    }
+
+                    println "============"
+                    println "${[GrantId          : it.id, ProgramId        : it.program, Applicant        : applicantEmail, ProgramTeam      : programTeamEmail[0], Finance          : financeEmail[0], ExecutiveDirector: edEmail[0]]}"
+                    println "============"
+
+                    boolean started = startProcessInstance([
+                            GrantId          : it.id,
+                            ProgramId        : it.program,
+                            Applicant        : applicantEmail,
+                            ProgramTeam      : programTeamEmail[0],
+                            Finance          : financeEmail[0],
+                            ExecutiveDirector: edEmail[0],
+                            ApplicantUserName: 'Test',
+                            ApplicantPassword: 'Test'
+                    ], GRANT_PROCESS)
+
+
+                    if (started) {
+                        print "================ started grant process instance ================"
+                        it.status = 'started'
+                        it.save()
+                    }
+                }
+            } catch (e) {
+                e.printStackTrace()
+            }
+        }
     }
 
     static boolean startProcessInstance(Map processVariables, String processKey) {
@@ -110,7 +184,7 @@ class StartCamundaInstancesJob extends Script {
                 "program_partner.id = '${partnerId}' " +
                 "AND rr.authority IN ('ROLE_MEAL','ROLE_PROGRAM_OFFICER','ROLE_ED','ROLE_FINANCE')";
 
-        def result = AppHolder.withMisSql { rows(query.toString()) }.collect {it['authority']}.join(',')
+        def result = AppHolder.withMisSql { rows(query.toString()) }.collect { it['authority'] }.join(',')
         return result
     }
 }

@@ -1,0 +1,165 @@
+<form [formGroup]="formGpReport" (ngSubmit)="submitReport()" *ngIf="formGpReport">
+  <h3 style="margin-left: 40px;">Submission</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Total Grant Amount Received:<span class="required-indicator">*</span></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="grantAmount"
+                [ngClass]="{ 'is-invalid': submitted && f.grantAmount.errors }"
+              >
+              <div *ngIf="submitted && f.grantAmount.errors" class="invalid-feedback">
+                <div *ngIf="f.grantAmount.errors.required" class="input-error">Grant Amount is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Total Grant Amount Utilised in the period:<span class="required-indicator">*</span></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="grantAmountUtilised"
+                [ngClass]="{ 'is-invalid': submitted && f.grantAmountUtilised.errors }"
+              >
+              <div *ngIf="submitted && f.grantAmountUtilised.errors" class="invalid-feedback">
+                <div *ngIf="f.grantAmountUtilised.errors.required" class="input-error">Grant Amount Utilised is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Amount transferred in the reporting period:<span class="required-indicator">*</span></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="amountTransferred"
+                [ngClass]="{ 'is-invalid': submitted && f.amountTransferred.errors }"
+              >
+              <div *ngIf="submitted && f.amountTransferred.errors" class="invalid-feedback">
+                <div *ngIf="f.amountTransferred.errors.required" class="input-error">Amount Transferred is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Balance not spent /overspent:<span class="required-indicator">*</span></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="balance"
+                [ngClass]="{ 'is-invalid': submitted && f.balance.errors }"
+              >
+              <div *ngIf="submitted && f.balance.errors" class="invalid-feedback">
+                <div *ngIf="f.balance.errors.required" class="input-error">Balance is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <p>Period covered by this report:</p>
+            </div>
+            <div class="col-sm-4">
+              <label>From:</label><input class="form-control"
+                                         placeholder="From"
+                                         type="date"
+                                         style="padding-left: 10px;"
+                                         formControlName="periodFrom"
+                                         [ngClass]="{ 'is-invalid': submitted && f.periodFrom.errors }"/>
+            </div>
+            <div class="col-sm-4">
+              <label>To:</label><input class="form-control"
+                                       placeholder="To"
+                                       type="date"
+                                       style="padding-left: 10px;"
+                                       formControlName="periodTo"
+                                       [ngClass]="{ 'is-invalid': submitted && f.periodTo.errors }"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Attach Report:<span class="required-indicator">*</span></label>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group ">
+            <input
+              *ngIf="!isReadOnly"
+              class="form-control"
+              placeholder="Attachment"
+              type="file"
+              style="padding-left: 10px;"
+              id="reportAttachment"
+              (change)="handleFileInput($event)"
+            >
+            <button
+              *ngIf="isReadOnly"
+              type="button"
+              (click)="fileUploadService.downloadFile(f.reportAttachment.value)"
+              class="btn btn-link">{{f.reportAttachment.value}}</button>
+          </div>
+        </div>
+      </div>
+
+      <input class="form-control" type="hidden" formControlName="grantId" [ngModel]="grantId">
+      <input class="form-control" type="hidden" formControlName="processInstanceId" [ngModel]="processInstanceId">
+      <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
+      <input class="form-control" type="hidden" id="status" [ngModel]="status">
+
+      <div class="row" *ngIf="!isReadOnly">
+        <div class="col-lg-12 bottom_buttons_row"
+             style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+          <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+          <button class="btn btn-warning" type="button" (click)="saveDraft()">Save for Later</button>
+          <button class="btn btn-success" type="submit">Submit Report</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

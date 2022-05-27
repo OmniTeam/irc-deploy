@@ -37,7 +37,7 @@ class CentralDataImportJob extends Script {
     Object run() {
         try {
             centralService = AppHolder.bean('centralService')
-            def token = centralService.get()
+            def token = centralService.auth()
             def study = Study.findByCentralId('8')
             syncCentralData(study, token)
         }

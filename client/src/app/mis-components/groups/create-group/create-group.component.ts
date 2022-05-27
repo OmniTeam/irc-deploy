@@ -1,21 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
-import {UsersService} from "../../../services/users.service";
-import {TagService} from "../../../services/tags";
-import {AlertService} from "../../../services/alert";
-import {GroupsService} from "../../../services/groups.service";
-import {HttpParams} from "@angular/common/http";
+import {UsersService} from '../../../services/users.service';
+import {TagService} from '../../../services/tags';
+import {AlertService} from '../../../services/alert';
+import {GroupsService} from '../../../services/groups.service';
 
 
 @Component({
@@ -38,12 +32,12 @@ export class CreateGroupComponent implements OnInit {
   }
 
   clicked = false;
-  currentDashboards: any
-  formGroup: FormGroup
+  currentDashboards: any;
+  formGroup: FormGroup;
   formData: any;
   submitted = false;
-  parents: any
-  users: any
+  parents: any;
+  users: any;
 
   get f() {
     return this.formGroup.controls;
@@ -51,15 +45,15 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.usersService.getUsers().subscribe(results => {
-      this.users = results
+      this.users = results;
     }, error => {
-      this.alertService.error("Failed to get Users")
-    })
+      this.alertService.error('Failed to get Users');
+    });
     this.groupsService.getGroups().subscribe(results => {
-      this.parents = results
+      this.parents = results;
     }, error => {
-      this.alertService.error("Failed to get Parents Groups")
-    })
+      this.alertService.error('Failed to get Parents Groups');
+    });
     this.formGroup = this.formBuilder.group({
       name: ['', [Validators.required]],
       parentGroup: [null],
@@ -76,34 +70,30 @@ export class CreateGroupComponent implements OnInit {
       return;
     }
     const formData = this.formGroup.value;
-    console.log(formData)
+    console.log(formData);
 
     this.groupsService.createGroup(formData).subscribe((result) => {
       console.warn(result, 'Group created Successfully');
       this.alertService.success(`Group has been created`);
+      this.router.navigate(['/groups']);
 
-      console.log(formData.users, "Data Collectors")
-
-      //insert kenga_group_id and user_id into table. This tracks users who belong to the group
-      for(let i=0; i<formData.users.length; i++){
-        const KengaUserGroupData = new FormData()
-        KengaUserGroupData.append('kengaGroup', result.id)
-        KengaUserGroupData.append('user', formData.users[i])
+      // insert kenga_group_id and user_id into table. This tracks users who belong to the group
+      for(let i = 0; i < formData.users.length; i++) {
+        const KengaUserGroupData = new FormData();
+        KengaUserGroupData.append('kengaGroup', result.id);
+        KengaUserGroupData.append('user', formData.users[i]);
 
         this.groupsService.createKengaUserGroup(KengaUserGroupData).subscribe(data => {
-          console.log(data ,"Kenga User Group details")
-        }, error => {this.alertService.error("failed to create Kenga User Groups")})
+          console.log(data , 'Kenga User Group details');
+        }, error => {this.alertService.error('failed to create Kenga User Groups'); });
       }
-
-      this.router.navigate(['/groups']);
     }, error => {
-      this.alertService.error("Failed to Create the Group")
+      this.alertService.error('Failed to Create the Group');
     });
-    this.router.navigate(['/groups']);
   }
 
   goBack() {
-    this.router.navigate(['/groups'])
+    this.router.navigate(['/groups']);
   }
 
 }

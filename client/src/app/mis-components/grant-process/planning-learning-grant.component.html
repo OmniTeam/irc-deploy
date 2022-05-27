@@ -1,0 +1,262 @@
+<form [formGroup]="formGp" (ngSubmit)="submitLetter()" *ngIf="formGp">
+  <h3 style="margin-left: 40px;">Grant Application Details</h3>
+  <div class="card">
+    <div class="card-body">
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Proposed duration (Months):<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Duration"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="proposedDuration"
+                [ngClass]="{ 'is-invalid': submitted && f.proposedDuration.errors }"
+              >
+              <div *ngIf="submitted && f.proposedDuration.errors" class="invalid-feedback">
+                <div *ngIf="f.proposedDuration.errors.required" class="input-error">Proposed Duration is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Proposed start date (DD MM YEAR)</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Date"
+                type="date"
+                style="padding-left: 10px;"
+                formControlName="proposedStartDate"
+                [ngClass]="{ 'is-invalid': submitted && f.proposedStartDate.errors }"
+              >
+              <div *ngIf="submitted && f.proposedStartDate.errors" class="invalid-feedback">
+                <div *ngIf="f.proposedStartDate.errors.required" class="input-error">Proposed Start Date is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Amount requested from CRVP-Fund:<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="amountRequested"
+                [ngClass]="{ 'is-invalid': submitted && f.amountRequested.errors }"
+              >
+              <div *ngIf="submitted && f.amountRequested.errors" class="invalid-feedback">
+                <div *ngIf="f.amountRequested.errors.required" class="input-error">Amount Requested is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Other sources and amount of funding on this particular Project if any:</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Other sources"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="otherSources"
+                [ngClass]="{ 'is-invalid': submitted && f.otherSources.errors }"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Total Budget amount:<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="totalBudgetAmt"
+                [ngClass]="{ 'is-invalid': submitted && f.totalBudgetAmt.errors }"
+              >
+              <div *ngIf="submitted && f.totalBudgetAmt.errors" class="invalid-feedback">
+                <div *ngIf="f.totalBudgetAmt.errors.required" class="input-error">Total Budget Amount is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Address of contact person (if different):<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Address"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="addressContactPerson"
+                [ngClass]="{ 'is-invalid': submitted && f.addressContactPerson.errors }"
+              >
+              <div *ngIf="submitted && f.addressContactPerson.errors" class="invalid-feedback">
+                <div *ngIf="f.addressContactPerson.errors.required" class="input-error">Address is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label>Email address of contact person:<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Email Address"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="emailContactPerson"
+                [ngClass]="{ 'is-invalid': submitted && f.emailContactPerson.errors }"
+              >
+              <div *ngIf="submitted && f.emailContactPerson.errors" class="invalid-feedback">
+                <div *ngIf="f.emailContactPerson.errors.required" class="input-error">Email address is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Phone of contact person:<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Phone Number"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="contactPersonNumber"
+                [ngClass]="{ 'is-invalid': submitted && f.contactPersonNumber.errors }"
+              >
+              <div *ngIf="submitted && f.contactPersonNumber.errors" class="invalid-feedback">
+                <div *ngIf="f.contactPersonNumber.errors.required" class="input-error">Phone Number is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Name of authorized Signatory (if different from contact person):<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Name"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="nameAuthorizedSignatory"
+                [ngClass]="{ 'is-invalid': submitted && f.nameAuthorizedSignatory.errors }"
+              >
+              <div *ngIf="submitted && f.nameAuthorizedSignatory.errors" class="invalid-feedback">
+                <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
+                  Signatory is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Contact details of authorized signatory:</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Contact details"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="contactAuthorizedSignatory"
+                [ngClass]="{ 'is-invalid': submitted && f.contactAuthorizedSignatory.errors }"
+              >
+              <div *ngIf="submitted && f.contactAuthorizedSignatory.errors" class="invalid-feedback">
+                <div *ngIf="f.contactAuthorizedSignatory.errors.required" class="input-error">Contact details are
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Bank Details Name of the bank :<br> Bank Address Title of the Account:<br> Account Number:</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                formControlName="bankDetails"
+                [ngClass]="{ 'is-invalid': submitted && f.bankDetails.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Name other cluster organizations and their contacts.</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                formControlName="otherOrganization"
+                [ngClass]="{ 'is-invalid': submitted && f.otherOrganization.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <input class="form-control" type="hidden" formControlName="grantId" [ngModel]="grantId">
+  <input class="form-control" type="hidden" formControlName="processInstanceId" [ngModel]="processInstanceId">
+  <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
+  <input class="form-control" type="hidden" id="status" [ngModel]="status">
+
+  <div class="row" *ngIf="!isReadOnly">
+    <div class="col-lg-12 bottom_buttons_row"
+         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+      <button class="btn btn-warning" type="button" (click)="saveDraft()">Save Current Version</button>
+      <button class="btn btn-success" type="submit">Submit Application</button>
+    </div>
+  </div>
+</form>

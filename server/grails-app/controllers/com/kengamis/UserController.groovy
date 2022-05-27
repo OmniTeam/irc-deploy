@@ -29,10 +29,10 @@ class UserController {
         User.all.each { user ->
             def roles = user.authorities.collect {it.authority}.join(",")
             def groups = user.kengaGroups.collect {it.name}.join(",")
-            if (!roles.contains("ROLE_DATA_COLLECTOR") ){
+
                 users << [id    : user.id, username: user.username, email: user.email, names: user.names,
                           groups: groups, roles: roles, enabled: user.enabled]
-            }
+
         }
         respond users
     }
@@ -53,6 +53,19 @@ class UserController {
                 partner: partner?.id,
                 enabled: user.enabled
         ]
+        respond users
+    }
+
+    def getMISUsers(){
+        def users = []
+        User.all.each { user ->
+            def roles = user.authorities.collect {it.authority}.join(",")
+            def groups = user.kengaGroups.collect {it.name}.join(",")
+            if (!roles.contains("ROLE_DATA_COLLECTOR") ){
+                users << [id    : user.id, username: user.username, email: user.email, names: user.names,
+                          groups: groups, roles: roles, enabled: user.enabled]
+            }
+        }
         respond users
     }
 
@@ -90,7 +103,6 @@ class UserController {
     @Transactional
     def update(User user) {
         def userId =user.id
-        def userRole = params.role as String
 
         if (user == null) {
             render status: NOT_FOUND
@@ -103,7 +115,7 @@ class UserController {
         }
 
         try {
-            updateRolesAndGroups(userId, userRole)
+            updateRolesAndGroups(userId)
             userService.save(user)
         } catch (ValidationException e) {
             respond user.errors
@@ -140,7 +152,7 @@ class UserController {
     }
 
     @Transactional
-    def updateRolesAndGroups(userId, userRole){
+    def updateRolesAndGroups(userId){
         def currentUser = User.get(userId)
 
         UserRole.deleteOldRecords(currentUser)

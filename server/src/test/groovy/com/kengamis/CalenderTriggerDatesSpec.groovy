@@ -3,7 +3,7 @@ package com.kengamis
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class CalenderTriggerDatesSpec extends Specification implements DomainUnitTest<CalenderTriggerDates> {
+class CalenderTriggerDatesSpec extends Specification implements DomainUnitTest<CalendarTriggerDates> {
 
     def setup() {
     }

@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  baseurl = environment.serverUrl
-  urlUsers = `${this.baseurl}/user/`
-  urlUserGroup = `${this.baseurl}/KengaUserGroup/`
-  urlUserRole = `${this.baseurl}/UserRole/`
-  urlUserPartner = `${this.baseurl}/UserPartner/`
-  urlDeleteOldRolesAndGroups = `${this.baseurl}/deleteOldRoleAndGroups/`
+  baseurl = environment.serverUrl;
+  urlUsers = `${this.baseurl}/user/`;
+  urlMISUsers = `${this.baseurl}/getMISUsers/`;
+  urlUserGroup = `${this.baseurl}/KengaUserGroup/`;
+  urlUserRole = `${this.baseurl}/UserRole/`;
+  urlUserPartner = `${this.baseurl}/UserPartner/`;
+  urlDeleteOldRolesAndGroups = `${this.baseurl}/deleteOldRoleAndGroups/`;
 
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
     return this.http.get(this.urlUsers);
+  }
+
+  getMISUsers(): Observable<any> {
+    return this.http.get(this.urlMISUsers);
   }
 
   getDataCollectors(): Observable<any> {
@@ -35,13 +40,13 @@ export class UsersService {
   updateUser(id, groupData, params): Observable<any> {
     return this.http.put(`${this.urlUsers}${id}/`, groupData, {params});
   }
-  deleteOldRolesAndGroups(params){
-    return this.http.delete(this.urlDeleteOldRolesAndGroups,{params});
+  deleteOldRolesAndGroups(params) {
+    return this.http.delete(this.urlDeleteOldRolesAndGroups, {params});
 
   }
 
-  getCurrentUser(id){
-    return this.http.get(`${this.urlUsers}${id}`)
+  getCurrentUser(id) {
+    return this.http.get(`${this.urlUsers}${id}`);
   }
 
   deleteCurrentUser(p): Observable<any> {

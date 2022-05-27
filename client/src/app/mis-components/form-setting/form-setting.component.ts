@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {ReplacePipe} from "../../replace-pipe";
 import {FormSettingService} from "../../services/form-setting.service";
+import {ReplacePipe} from "../../pipes/replace-pipe";
 
 @Component({
   selector: 'app-form-setting',
