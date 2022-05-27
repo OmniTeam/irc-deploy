@@ -4,16 +4,21 @@ class GrantPlanningLearning {
 
     String id
     String grantId
-    String addressContactPerson
     String bankDetails
     String contactAuthorizedSignatory
-    String contactPersonNumber
-    String emailContactPerson
+    String country
+    String city
     String nameAuthorizedSignatory
-    String otherOrganization
+    String title
     String otherSources
     String proposedDuration
     String proposedStartDate
+    String sixMonthsManaged
+    String activitiesAndStrategies
+    String risksAndChallenges
+    String learningAndDocumentation
+    String costOfProject
+    String attachment
     int amountRequested
     int totalBudgetAmt
     String definitionKey

@@ -57,12 +57,13 @@ class TaskListController {
                 userProgram = userPartnerProgram.collect { it['program_id'] }.join(",")
             }
 
+            def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
             if (task.processDefKey == "CRVPF_REPORTING") {
                 if (task.taskDefinitionKey == "Review_Program_Report" || task.taskDefinitionKey == "Approve_Report") {
-                    def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
                     if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (task.taskDefinitionKey == "Submit_Report" || task.taskDefinitionKey == "Submit_Final_Report") {
                     c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
@@ -77,14 +78,19 @@ class TaskListController {
                 if (task.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         task.taskDefinitionKey == "Review_Concept" ||
                         task.taskDefinitionKey == "Review_Report") {
-                    def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+
                     if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (task.taskDefinitionKey == "Provide_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_FINANCE")
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_ED")
                 } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
-                    c2 = userRoles.contains("ROLE_APPLICANT")
+                    if(userRoles.contains("ROLE_APPLICANT")) {
+                        def grant = GrantLetterOfInterest.findById(grantId)
+                        def orgInfo = slurper.parseText(grant.organisation)
+                        def applicantEmail = orgInfo['email']
+                        c2 = (applicantEmail == currentUser.email)
+                    }
                 }
             }
 
@@ -272,19 +278,7 @@ class TaskListController {
 
                 //update input variables with username and password for camunda to pick for email to the applicant
                 // and also flag task as complete
-                variables.'data'.each {
-                    if (it.key == 'ApplicantUserName') {
-                        it.value = username
-                        it.type = 'string'
-                    }
-                    if (it.key == 'ApplicantPassword') {
-                        it.value = password
-                        it.type = 'string'
-                    }
-                }
-                def result = JsonOutput.toJson(variables)
-
-                task.inputVariables = result
+                task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "'+password+'"}'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
 
@@ -308,6 +302,9 @@ class TaskListController {
                 def user = User.findByEmail(email)
                 user.enabled = false
                 user.save(flush: true, failOnError: true)
+
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
 
                 return true
             }
@@ -355,7 +352,7 @@ class TaskListController {
                 //complete the archive report task
                 if(task.taskDefinitionKey == 'Archive_Report') {
                     task.status = 'completed'
-                    task.save()
+                    task.save(flush: true, failOnError: true)
                 }
             }
         }

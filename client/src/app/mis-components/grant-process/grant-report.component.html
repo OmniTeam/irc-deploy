@@ -142,7 +142,7 @@
               *ngIf="isReadOnly"
               type="button"
               (click)="fileUploadService.downloadFile(f.reportAttachment.value)"
-              class="btn btn-link">{{f.reportAttachment.value}}</button>
+              class="btn btn-link">{{fileUploadService.getFileName(f.reportAttachment.value)}}</button>
           </div>
         </div>
       </div>
