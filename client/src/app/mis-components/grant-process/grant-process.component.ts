@@ -8,6 +8,7 @@ import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {FileUploadService} from "../../services/file-upload.service";
 import {AlertService} from "../../services/alert";
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-grant-process',
@@ -37,6 +38,8 @@ export class GrantProcessComponent implements OnInit {
   dateOfDueDiligence: any;
   attachmentDiligenceReport: any;
   reviewerComments: any;
+  decisionOfReviewProcess: any;
+  hasDueDiligenceConducted: any;
 
   items = [
     {name: 'Yes', value: 'Yes'},
@@ -51,14 +54,12 @@ export class GrantProcessComponent implements OnInit {
     {name: 'Return to Program Officer for further Review', value: 'No'}
   ];
   decision3 = [
-    {name: 'Recommend for the major grant', value: 'Yes'},
-    {name: 'Drop the applicant', value: 'No'}
+    {name: 'Apply for long term grant', value: 'Yes'},
+    {name: 'Do not apply for long term grant', value: 'No'}
   ];
   isConceptInline: any;
   doesItAdhere: any;
   areTheyAdhering: any;
-  decisionOfReviewProcess: any;
-  hasDueDiligenceConducted: any;
   achieveIntendedObjectives: any;
   adhereToBudget: any;
   activitiesInlineWithWorkPlan: any;
@@ -85,7 +86,8 @@ export class GrantProcessComponent implements OnInit {
     private grantProcessService: GrantProcessService,
     private taskListService: TaskListService,
     public fileUploadService: FileUploadService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private _location: Location
   ) {
   }
 
@@ -159,8 +161,13 @@ export class GrantProcessComponent implements OnInit {
     }
     if (data.taskDefinitionKey === "Review_Report" || data.taskDefinitionKey === "Archive_Report") {
       this.isReviewReport = true;
-      this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data) => {
+      this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data:any) => {
         console.log('apply GrantReportReview record available', data)
+        this.activitiesInlineWithWorkPlan = data.activitiesInlineWithWorkPlan;
+        this.adhereToBudget = data.adhereToBudget;
+        this.achieveIntendedObjectives = data.achieveIntendedObjectives;
+        this.decisionOfReviewProcess = data.decision;
+        this.reviewerComments = data.comments;
       })
     }
     this.grantId = data.grantId;
@@ -400,7 +407,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/taskList']);
+    this._location.back();
   }
 
 }
