@@ -54,10 +54,13 @@ class KengaGroupAclJob extends Script {
             }
 
             records.each { record ->
-                KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
-                        kengaDataTable: kengaDataTable,
-                        dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
-                ).save(flush: true, failOnError: true)
+                def myRecord = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
+                if (myRecord?.dataTableRecordId == null){
+                    KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
+                            kengaDataTable: kengaDataTable,
+                            dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
+                    ).save(flush: true, failOnError: true)
+                }
             }
         } catch (Exception ex) {
             log.error(ex.getMessage())
