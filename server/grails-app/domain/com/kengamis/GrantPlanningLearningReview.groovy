@@ -19,6 +19,11 @@ class GrantPlanningLearningReview {
 
     static constraints = {
         status nullable: true
+        isConceptInline nullable: true
+        doesItAdhere nullable: true
+        areTheyAdhering nullable: true
+        decision nullable: true
+        comments nullable: true
     }
 
     static mapping = {

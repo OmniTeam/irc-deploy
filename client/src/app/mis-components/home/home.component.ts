@@ -77,10 +77,9 @@ export class HomeComponent implements OnInit {
 
       if (data != null) {
         data.forEach((item) => {
-          let partner = this.getPartner(item.partnerId);
-          results.push(this.getRow(item.id, partner ? partner.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, partner ? partner.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id, partner ? partner.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          results.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.program))
+          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.startDate, item.partnerName))
+          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.programName))
         });
       }
       this.taskListRows = results;
@@ -91,13 +90,12 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getRow(id, assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
+  getRow(id, taskName, type, dateAssigned, taskCase): OngoingTask {
     let taskAge = new DateAgoPipe().transform(dateAssigned)
     let filterCategory = this.setFilterCategory(taskAge)
     return (
       {
         id: id,
-        assignee: assignee,
         task_name: taskName,
         task_case: taskCase,
         task_type: type,
@@ -164,7 +162,7 @@ export class HomeComponent implements OnInit {
       if (data != null) {
         data.forEach((item) => {
           let staff = this.getPartner(item.staffId);
-          rts.push(this.getRow(item.id, staff ? staff.name : item.assignee, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          rts.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
         });
         rts.forEach((task) => {
           if (task.filter_category != undefined) {

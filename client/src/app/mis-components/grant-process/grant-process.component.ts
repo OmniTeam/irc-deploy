@@ -8,7 +8,6 @@ import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {FileUploadService} from "../../services/file-upload.service";
 import {AlertService} from "../../services/alert";
-import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-grant-process',
@@ -86,8 +85,7 @@ export class GrantProcessComponent implements OnInit {
     private grantProcessService: GrantProcessService,
     private taskListService: TaskListService,
     public fileUploadService: FileUploadService,
-    private alertService: AlertService,
-    private _location: Location
+    private alertService: AlertService
   ) {
   }
 
@@ -393,7 +391,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   cancel() {
-    this._location.back();
+    this.router.navigate(['/taskList']);
   }
 
 }
