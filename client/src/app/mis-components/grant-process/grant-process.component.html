@@ -147,7 +147,7 @@
                     </div>
                     <div class="row" style="margin: 10px;">
                       <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
-                      <textarea class="form-control" rows="3" id="reviewerComments"
+                      <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerComments"
                                 [disabled]="isReadOnly"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
@@ -194,7 +194,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="isConceptInline" [(ngModel)]="isConceptInline"
+                              <input [disabled]="isReadOnly" type="radio" name="isConceptInline" [(ngModel)]="isConceptInline"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -207,7 +207,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="doesItAdhere" [(ngModel)]="doesItAdhere"
+                              <input [disabled]="isReadOnly" type="radio" name="doesItAdhere" [(ngModel)]="doesItAdhere"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -221,7 +221,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="areTheyAdhering" [(ngModel)]="areTheyAdhering"
+                              <input [disabled]="isReadOnly" type="radio" name="areTheyAdhering" [(ngModel)]="areTheyAdhering"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -235,7 +235,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of decision">
                             <li>
-                              <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                              <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -245,7 +245,7 @@
                     </div>
                     <div class="row" style="margin: 10px;">
                       <label for="reviewerActionComments">Provide any comments</label>
-                      <textarea class="form-control" rows="3" id="reviewerActionComments"
+                      <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerActionComments"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
                   </div>
@@ -276,7 +276,7 @@
                     <div class="text-left">
                       <ul style="list-style: none;" *ngFor="let item of decision2">
                         <li>
-                          <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfApproveProcess"
+                          <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfApproveProcess"
                                  value="{{item.value}}"/>
                           {{item.name}}
                         </li>
@@ -291,7 +291,7 @@
                   <div class="col-sm-12">
                     <div class="row" style="margin: 10px;">
                       <label for="approverComments">Provide any comments</label>
-                      <textarea class="form-control" rows="3" id="approverComments"
+                      <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="approverComments"
                                 [(ngModel)]="approveComments"></textarea>
                     </div>
                   </div>
@@ -319,11 +319,11 @@
                 <div class="row">
                   <div class="col-sm-5">
                     <label>Grant Amount</label>
-                    <input class="form-control" type="number" [(ngModel)]="grantAmount"/>
+                    <input [disabled]="isReadOnly" class="form-control" type="number" [(ngModel)]="grantAmount"/>
                   </div>
                   <div class="col-sm-5">
                     <label>Lead Agency</label>
-                    <input class="form-control" type="text" [(ngModel)]="leadAgency"/>
+                    <input [disabled]="isReadOnly" class="form-control" type="text" [(ngModel)]="leadAgency"/>
                   </div>
                   <div class="col-sm-2 text-right">
                     <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
@@ -339,14 +339,14 @@
                   </div>
                   <div class="col-sm-4">
                     <label>Cluster Name:</label>
-                    <input class="form-control" type="text" [(ngModel)]="clusterName"/>
+                    <input [disabled]="isReadOnly" class="form-control" type="text" [(ngModel)]="clusterName"/>
                   </div>
                 </div>
                 <div class="row" style="margin: 10px;">
                   <div class="col-sm-12">
                     <div class="row" style="margin: 10px;">
                       <label for="financeSectionComments">Provide any comments</label>
-                      <textarea class="form-control" rows="3" id="financeSectionComments"
+                      <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="financeSectionComments"
                                 [(ngModel)]="financeSectionComments"></textarea>
                     </div>
                   </div>
@@ -396,7 +396,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="isConceptInline" [(ngModel)]="activitiesInlineWithWorkPlan"
+                              <input [disabled]="isReadOnly" type="radio" name="isConceptInline" [(ngModel)]="activitiesInlineWithWorkPlan"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -409,7 +409,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="doesItAdhere" [(ngModel)]="adhereToBudget"
+                              <input [disabled]="isReadOnly" type="radio" name="doesItAdhere" [(ngModel)]="adhereToBudget"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -426,7 +426,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
-                              <input type="radio" name="areTheyAdhering" [(ngModel)]="achieveIntendedObjectives"
+                              <input [disabled]="isReadOnly" type="radio" name="areTheyAdhering" [(ngModel)]="achieveIntendedObjectives"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -438,7 +438,7 @@
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of decision3">
                             <li>
-                              <input type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                              <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -448,7 +448,7 @@
                     </div>
                     <div class="row" style="margin: 10px;">
                       <label for="reviewerActionComments">Provide any comments</label>
-                      <textarea class="form-control" rows="3" id="reviewReportComments"
+                      <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewReportComments"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
                   </div>

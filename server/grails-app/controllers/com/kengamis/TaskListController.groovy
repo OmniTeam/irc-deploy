@@ -46,6 +46,9 @@ class TaskListController {
             if (taskPartner == null) taskPartner = [name: '']
             if (taskProgram == null) taskProgram = [title: '']
 
+            def grant = GrantLetterOfInterest.findById(grantId)
+            def orgInfo = slurper.parseText(grant.organisation)
+
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
             def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "
@@ -85,13 +88,15 @@ class TaskListController {
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_ED")
                 } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
-                    if(userRoles.contains("ROLE_APPLICANT")) {
-                        def grant = GrantLetterOfInterest.findById(grantId)
-                        def orgInfo = slurper.parseText(grant.organisation)
+                    if (userRoles.contains("ROLE_APPLICANT")) {
                         def applicantEmail = orgInfo['email']
                         c2 = (applicantEmail == currentUser.email)
+                        println "(applicantEmail == currentUser.email) == ($applicantEmail == ${currentUser.email})"
                     }
                 }
+
+                startDate = grant.dateCreated
+                endDate = grant.lastUpdated
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
@@ -278,7 +283,7 @@ class TaskListController {
 
                 //update input variables with username and password for camunda to pick for email to the applicant
                 // and also flag task as complete
-                task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "'+password+'"}'
+                task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
 
@@ -350,7 +355,7 @@ class TaskListController {
                 archive.save(flush: true, failOnError: true)
 
                 //complete the archive report task
-                if(task.taskDefinitionKey == 'Archive_Report') {
+                if (task.taskDefinitionKey == 'Archive_Report') {
                     task.status = 'completed'
                     task.save(flush: true, failOnError: true)
                 }

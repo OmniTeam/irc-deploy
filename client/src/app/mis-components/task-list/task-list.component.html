@@ -38,7 +38,8 @@
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center'>{{ row.taskName }}</td>
                       <td class='text-center'>{{ row.processDefKey | replace: '_' : ' ' }}</td>
-                      <td class='text-center'>{{ row.partnerName }}</td>
+                      <td *ngIf="row.processDefKey=='CRVPF_REPORTING'" class='text-center'>{{ row.partnerName }}</td>
+                      <td *ngIf="row.processDefKey=='GRANT_PROCESS'" class='text-center'>{{ row.programName }}</td>
                       <td class='text-center'>{{ row.startDate | date: 'mediumDate' }}</td>
                       <td class='text-center'>{{ row.endDate  | date: 'mediumDate' }}</td>
                       <td class='text-center'

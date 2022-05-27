@@ -5,7 +5,6 @@ import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
-import {Location} from '@angular/common';
 
 @Component({
   selector: 'grant-report',
@@ -37,8 +36,7 @@ export class GrantReportComponent implements OnInit {
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
     private grantProcessService: GrantProcessService,
-    private alertService: AlertService,
-    private _location: Location
+    private alertService: AlertService
   ) {
   }
 
@@ -152,6 +150,6 @@ export class GrantReportComponent implements OnInit {
   }
 
   onBackPressed() {
-    this._location.back();
+    this.router.navigate(['/taskList']);
   }
 }
