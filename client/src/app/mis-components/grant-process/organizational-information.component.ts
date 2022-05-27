@@ -35,14 +35,12 @@ export class OrganizationalInformationComponent implements OnInit {
     //set organizational Info
     this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((results: any) => {
       if (results !== null && results !== undefined) {
-        console.log('getLetterOfInterest', results)
         this.organisationalInfo = JSON.parse(results.organisation);
       }
     });
 
     this.grantProcessService.getLetterOfInterestReview(this.grantId).subscribe((data:any) => {
       if (data !== null && data !== undefined) {
-        console.log('getLetterOfInterestReview', data)
         this.hasApplicationBeenReviewed = data.hasBeenReviewed;
         this.dateOfDueDiligence = data.dateOfDueDiligence;
         this.attachmentDiligenceReport = data.dueDiligenceReport;

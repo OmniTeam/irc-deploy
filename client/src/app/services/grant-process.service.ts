@@ -57,6 +57,13 @@ export class GrantProcessService {
 
 
   /***
+   * get by Process Instance Id
+   * */
+  getRecordByProcessInstanceId(route, params: any): Observable<any> {
+    return this.http.get(route, {params});
+  }
+
+  /***
    *   create
    */
 

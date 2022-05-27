@@ -85,4 +85,9 @@ class GrantLetterOfInterestReviewController {
 
         render status: NO_CONTENT
     }
+
+    def getByProcessInstanceId() {
+        def results = [results: GrantLetterOfInterestReview.findByProcessInstanceId(params.id)]
+        respond results
+    }
 }

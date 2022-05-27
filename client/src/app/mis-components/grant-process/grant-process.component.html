@@ -166,9 +166,10 @@
 
             <div *ngIf="isPlanningLearningApplication" class=" col">
               <organizational-information [grantId]="grantId"></organizational-information>
-              <planning-learning-application [isReadOnly]="false" [grantId]="grantId"
+              <planning-learning-application [isReadOnly]="isReadOnly" [grantId]="grantId"
                                              [processInstanceId]="processInstanceId"
                                              [definitionKey]="definitionKey"
+                                             [taskStatus]="taskRecord.status"
                                              (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
             </div>
 
