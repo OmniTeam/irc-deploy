@@ -1,10 +1,28 @@
 <form [formGroup]="formGp" (ngSubmit)="submitLetter()" *ngIf="formGp">
-  <h3 style="margin-left: 40px;">Grant Application Details</h3>
+  <h3 style="margin-left: 20px;">GRANT APPLICATION DETAILS</h3>
   <div class="card">
     <div class="card-body">
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
+          <label>Title of the Planning and Learning grant: <span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Title"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="title"
+                [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
+              >
+              <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                <div *ngIf="f.title.errors.required" class="input-error">Title is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
           <label>Proposed duration (Months):<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -25,6 +43,50 @@
           </div>
         </div>
         <div class="col-sm-6">
+          <label>Location /area of operation ( city and country):</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <ng-select class="form-control form-control-sm"
+                         aria-controls="datatable"
+                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                         [multiple]="false"
+                         placeholder="Country"
+                         formControlName="country"
+                         (ngModelChange)="onSelectCountry($event)"
+                         [ngClass]="{ 'is-invalid': submitted && f.country.errors }"
+                         [searchable]="true"
+                         [clearable]="true"
+              >
+                <ng-option [value]="country" *ngFor="let country of countries">
+                  {{country}}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <ng-select class="form-control form-control-sm"
+                         aria-controls="datatable"
+                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                         [multiple]="false"
+                         placeholder="City"
+                         formControlName="city"
+                         [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                         [searchable]="true"
+                         [clearable]="true"
+              >
+                <ng-option [value]="city" *ngFor="let city of cities">
+                  {{city}}
+                </ng-option>
+              </ng-select>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
           <label>Proposed start date (DD MM YEAR)</label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -43,11 +105,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="row" style="margin: 10px;">
-        <div class="col-sm-6">
           <label>Amount requested from CRVP-Fund:<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -81,11 +138,6 @@
               >
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="row" style="margin: 10px;">
-        <div class="col-sm-6">
           <label>Total Budget amount:<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -105,72 +157,11 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6">
-          <label>Address of contact person (if different):<span class="required-indicator">*</span></label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
-              <input
-                class="form-control"
-                placeholder="Address"
-                type="text"
-                style="padding-left: 10px;"
-                formControlName="addressContactPerson"
-                [ngClass]="{ 'is-invalid': submitted && f.addressContactPerson.errors }"
-              >
-              <div *ngIf="submitted && f.addressContactPerson.errors" class="invalid-feedback">
-                <div *ngIf="f.addressContactPerson.errors.required" class="input-error">Address is
-                  required
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6">
-          <label>Email address of contact person:<span class="required-indicator">*</span></label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
-              <input
-                class="form-control"
-                placeholder="Email Address"
-                type="text"
-                style="padding-left: 10px;"
-                formControlName="emailContactPerson"
-                [ngClass]="{ 'is-invalid': submitted && f.emailContactPerson.errors }"
-              >
-              <div *ngIf="submitted && f.emailContactPerson.errors" class="invalid-feedback">
-                <div *ngIf="f.emailContactPerson.errors.required" class="input-error">Email address is
-                  required
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <label>Phone of contact person:<span class="required-indicator">*</span></label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
-              <input
-                class="form-control"
-                placeholder="Phone Number"
-                type="text"
-                style="padding-left: 10px;"
-                formControlName="contactPersonNumber"
-                [ngClass]="{ 'is-invalid': submitted && f.contactPersonNumber.errors }"
-              >
-              <div *ngIf="submitted && f.contactPersonNumber.errors" class="invalid-feedback">
-                <div *ngIf="f.contactPersonNumber.errors.required" class="input-error">Phone Number is
-                  required
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Name of authorized Signatory (if different from contact person):<span
+          <label>Name of authorized Signatory(ies):<span
             class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -190,9 +181,7 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <label>Contact details of authorized signatory:</label>
+          <label>Contact details of authorized signatory(ies):</label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -211,33 +200,125 @@
             </div>
           </div>
         </div>
-      </div>
-
-
-      <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Bank Details Name of the bank :<br> Bank Address Title of the Account:<br> Account Number:</label>
+          <label>Bank Details</label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
                 class="form-control"
                 style="padding-left: 10px;"
+                placeholder="Name of the Bank:&#10;Bank Address:&#10;Title of the Account:&#10;Account Number:&#10;SWIFT CODE:"
                 formControlName="bankDetails"
+                rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.bankDetails.errors }"
               ></textarea>
             </div>
           </div>
         </div>
+
+      </div>
+
+      <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Name other cluster organizations and their contacts.</label>
+          <label>Describe how the six months planning and learning grant will be managed in the cluster</label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
                 class="form-control"
                 style="padding-left: 10px;"
-                formControlName="otherOrganization"
-                [ngClass]="{ 'is-invalid': submitted && f.otherOrganization.errors }"
+                placeholder="Both in terms of  program activities and finance"
+                formControlName="sixMonthsManaged"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.sixMonthsManaged.errors }"
               ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>List activities and describe strategies you are going to use to achieve the objectives above</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="List here"
+                formControlName="activitiesAndStrategies"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.activitiesAndStrategies.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b>Risks and challenges</b><br>
+            What challenges do you foresee during this period in relation to the following:</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="•	Cluster members working relationship&#10;•	Joint planning and implementation&#10;•	Financial management"
+                formControlName="risksAndChallenges"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.risksAndChallenges.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label><b>Learning and documentation</b><br>
+            Learning is crucial in this stage. How will you ensure there is learning , how will you document your learning</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="•	Cluster partnership working relationship&#10;•	What do we learn from listening from target communities&#10;•	Understanding the available resources and how to utilize them"
+                formControlName="learningAndDocumentation"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.learningAndDocumentation.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Cost of the project in local currency & US dollars</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="costOfProject"
+                type="number"
+                [ngClass]="{ 'is-invalid': submitted && f.costOfProject.errors }"
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Detailed Work plan and Budget (Use formats provided by CRVPF)</label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                *ngIf="!isReadOnly"
+                class="form-control" [disabled]="isReadOnly"
+                placeholder="Attachment"
+                type="file"
+                style="padding-left: 10px;"
+                id="attachment"
+                (change)="handleFileInput($event)"/>
+              <button
+                *ngIf="isReadOnly"
+                type="button"
+                (click)="fileUploadService.downloadFile(f.attachment.value)"
+                class="btn btn-link">{{fileUploadService.getFileName(f.attachment.value)}} <i class="fas fa-download"></i></button>
             </div>
           </div>
         </div>

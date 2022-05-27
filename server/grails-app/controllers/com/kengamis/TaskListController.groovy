@@ -272,19 +272,7 @@ class TaskListController {
 
                 //update input variables with username and password for camunda to pick for email to the applicant
                 // and also flag task as complete
-                variables.'data'.each {
-                    if (it.key == 'ApplicantUserName') {
-                        it.value = username
-                        it.type = 'string'
-                    }
-                    if (it.key == 'ApplicantPassword') {
-                        it.value = password
-                        it.type = 'string'
-                    }
-                }
-                def result = JsonOutput.toJson(variables)
-
-                task.inputVariables = result
+                task.outputVariables = '[{"ApplicantUserName": "' + username + '"},{"ApplicantPassword": "'+password+'"}]'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
 
@@ -308,6 +296,9 @@ class TaskListController {
                 def user = User.findByEmail(email)
                 user.enabled = false
                 user.save(flush: true, failOnError: true)
+
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
 
                 return true
             }
@@ -355,7 +346,7 @@ class TaskListController {
                 //complete the archive report task
                 if(task.taskDefinitionKey == 'Archive_Report') {
                     task.status = 'completed'
-                    task.save()
+                    task.save(flush: true, failOnError: true)
                 }
             }
         }

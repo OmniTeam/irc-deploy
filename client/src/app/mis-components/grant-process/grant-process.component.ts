@@ -37,6 +37,8 @@ export class GrantProcessComponent implements OnInit {
   dateOfDueDiligence: any;
   attachmentDiligenceReport: any;
   reviewerComments: any;
+  decisionOfReviewProcess: any;
+  hasDueDiligenceConducted: any;
 
   items = [
     {name: 'Yes', value: 'Yes'},
@@ -57,8 +59,6 @@ export class GrantProcessComponent implements OnInit {
   isConceptInline: any;
   doesItAdhere: any;
   areTheyAdhering: any;
-  decisionOfReviewProcess: any;
-  hasDueDiligenceConducted: any;
   achieveIntendedObjectives: any;
   adhereToBudget: any;
   activitiesInlineWithWorkPlan: any;
@@ -109,7 +109,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord = data
             if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") {
               this.isReviewLetterOfInterest = true;
-              this.grantProcessService.getReviewRecord(data.grantId).subscribe((data) => {
+              this.grantProcessService.getLetterOfInterestReview(data.grantId).subscribe((data) => {
                 console.log('review record available', data)
               })
             }

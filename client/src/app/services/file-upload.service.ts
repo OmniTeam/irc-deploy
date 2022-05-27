@@ -47,6 +47,6 @@ export class FileUploadService {
   }
 
   getFileName(path) {
-    return path.substring(path.lastIndexOf('/') + 1)
+    return path?.substring(path.lastIndexOf('/') + 1)
   }
 }

@@ -104,6 +104,7 @@ class StartCamundaInstancesJob extends Script {
                     def slurper = new JsonSlurper()
                     def orgInfo = slurper.parseText(it.organisation)
                     def applicantEmail = orgInfo['email']
+                    def organization = orgInfo['name']
 
                     def edEmail = []
                     def financeEmail = []
@@ -127,8 +128,7 @@ class StartCamundaInstancesJob extends Script {
                             ProgramTeam      : programTeamEmail[0],
                             Finance          : financeEmail[0],
                             ExecutiveDirector: edEmail[0],
-                            ApplicantUserName: 'Test',
-                            ApplicantPassword: 'Test'
+                            Organization     : organization
                     ], GRANT_PROCESS)
 
 

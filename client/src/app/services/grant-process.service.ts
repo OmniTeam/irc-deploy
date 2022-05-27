@@ -27,7 +27,7 @@ export class GrantProcessService {
     return this.http.get(`${this.letterOfInterest}/${id}/`);
   }
 
-  getReviewRecord(id) {
+  getLetterOfInterestReview(id) {
     return this.http.get(`${this.reviewLetterOfInterest}/${id}/`);
   }
 
