@@ -106,57 +106,66 @@ export class GrantProcessComponent implements OnInit {
         if (p['id'] != undefined) {
           const params = new HttpParams().set('id', p['id']);
           this.taskListService.getTaskRecord(params).subscribe((data) => {
-            this.taskRecord = data
-            if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") {
-              this.isReviewLetterOfInterest = true;
-              this.grantProcessService.getLetterOfInterestReview(data.grantId).subscribe((data) => {
-                console.log('review record available', data)
-              })
-            }
-            if (data.taskDefinitionKey === "Apply_for_Learning_Planning_Grant") {
-              this.isPlanningLearningApplication = true;
-              this.grantProcessService.getPlanningAndLearningRecord(data.grantId).subscribe((data) => {
-                console.log('apply PandG record available', data)
-              })
-            }
-            if (data.taskDefinitionKey === "Review_Concept") {
-              this.isReviewPlanningLearningGrant = true;
-              this.grantProcessService.getPlanningAndLearningReview(data.grantId).subscribe((data) => {
-                console.log('apply PlanningAndLearningReview record available', data)
-              })
-            }
-            if (data.taskDefinitionKey === "Approve_Learning_Grant") {
-              this.isApprovePlanningLearningGrant = true;
-              this.grantProcessService.getPlanningAndLearningApprove(data.grantId).subscribe((data) => {
-                console.log('apply PlanningAndLearningApprove record available', data)
-              })
-            }
-            if (data.taskDefinitionKey === "Provide_Learning_Grant") {
-              this.isProvidePlanningLearningGrant = true;
-              this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data) => {
-                console.log('apply ProvideLearningGrant record available', data)
-              })
-            }
-            if (data.taskDefinitionKey === "Submit_Report") {
-              this.isSubmitReport = true;
-              this.grantProcessService.getGrantReport(data.grantId).subscribe((data) => {
-                console.log('apply GrantReport record available', data)
-              })
-            }
-            if (data.taskDefinitionKey === "Review_Report") {
-              this.isReviewReport = true;
-              this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data) => {
-                console.log('apply GrantReportReview record available', data)
-              })
-            }
-            this.grantId = data.grantId;
-            this.definitionKey = data.taskDefinitionKey
-            this.processInstanceId = data.processInstanceId
-          })
+            this.setData(data)
+          }, (error) => {
+            this.taskListService.getArchivedRecord(params).subscribe((data) => {
+              console.log(data);
+              this.setData(data);
+            }, error => console.log(error));
+          });
         } else {
           this.isSubmitLetterOfInterest = true
         }
       });
+  }
+
+  setData(data){
+    this.taskRecord = data
+    if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") {
+      this.isReviewLetterOfInterest = true;
+      this.grantProcessService.getLetterOfInterestReview(data.grantId).subscribe((data) => {
+        console.log('review record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Apply_for_Learning_Planning_Grant") {
+      this.isPlanningLearningApplication = true;
+      this.grantProcessService.getPlanningAndLearningRecord(data.grantId).subscribe((data) => {
+        console.log('apply PandG record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Review_Concept") {
+      this.isReviewPlanningLearningGrant = true;
+      this.grantProcessService.getPlanningAndLearningReview(data.grantId).subscribe((data) => {
+        console.log('apply PlanningAndLearningReview record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Approve_Learning_Grant") {
+      this.isApprovePlanningLearningGrant = true;
+      this.grantProcessService.getPlanningAndLearningApprove(data.grantId).subscribe((data) => {
+        console.log('apply PlanningAndLearningApprove record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Provide_Learning_Grant") {
+      this.isProvidePlanningLearningGrant = true;
+      this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data) => {
+        console.log('apply ProvideLearningGrant record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Submit_Report") {
+      this.isSubmitReport = true;
+      this.grantProcessService.getGrantReport(data.grantId).subscribe((data) => {
+        console.log('apply GrantReport record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Review_Report" || data.taskDefinitionKey === "Archive_Report") {
+      this.isReviewReport = true;
+      this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data) => {
+        console.log('apply GrantReportReview record available', data)
+      })
+    }
+    this.grantId = data.grantId;
+    this.definitionKey = data.taskDefinitionKey
+    this.processInstanceId = data.processInstanceId
   }
 
 
