@@ -2747,4 +2747,13 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "bruno (generated)", id: "202209242526665-01") {
+        modifyDataType(columnName: "input_variables", newDataType: "LONGTEXT", tableName: "archive")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202202342352236545-01") {
+        modifyDataType(columnName: "output_variables", newDataType: "LONGTEXT", tableName: "archive")
+    }
+
 }

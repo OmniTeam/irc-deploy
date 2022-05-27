@@ -117,10 +117,6 @@ class StartCamundaInstancesJob extends Script {
                         if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
                     }
 
-                    println "============"
-                    println "${[GrantId          : it.id, ProgramId        : it.program, Applicant        : applicantEmail, ProgramTeam      : programTeamEmail[0], Finance          : financeEmail[0], ExecutiveDirector: edEmail[0]]}"
-                    println "============"
-
                     boolean started = startProcessInstance([
                             GrantId          : it.id,
                             ProgramId        : it.program,

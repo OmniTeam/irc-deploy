@@ -317,8 +317,9 @@
             </div>
           </div>
           <button
+            *ngIf="!isReadOnly"
             type="button"
-            (click)="fileUploadService.downloadFile(f.attachment.value)"
+            (click)="fileUploadService.downloadFile('Copy of BUDGET Templete.xls')"
             class="btn btn-link">Download Template Here <i class="fas fa-download"></i></button>
           <button
             *ngIf="isReadOnly || taskStatus=='draft'"

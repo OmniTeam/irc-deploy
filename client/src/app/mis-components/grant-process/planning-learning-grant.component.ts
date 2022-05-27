@@ -129,7 +129,7 @@ export class PlanningLearningGrantComponent implements OnInit {
     let apiUrl = `${this.grantProcessService.planningLearning}/getByProcessInstanceId`
     const params = new HttpParams().set('id', formData.processInstanceId);
     this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response:any) => {
-      if(response!=null) {
+      if(response?.results!=null) {
         this.grantProcessService.updatePlanningAndLearningRecord(formData, response.results.id).subscribe(data => {
           console.log(data)
           this.submitted = true
