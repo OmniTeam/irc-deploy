@@ -82,4 +82,9 @@ class GrantProvideLearningGrantController {
 
         render status: NO_CONTENT
     }
+
+    def getByProcessInstanceId() {
+        def results = [results: GrantProvideLearningGrant.findByProcessInstanceId(params.id)]
+        respond results
+    }
 }

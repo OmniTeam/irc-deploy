@@ -2660,5 +2660,100 @@ databaseChangeLog = {
         dropColumn(columnName: "structure", tableName: "grant_planning_learning")
     }
 
+    changeSet(author: "bruno (generated)", id: "1653638101429-81") {
+        dropColumn(columnName: "address_contact_person", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638101429-82") {
+        dropColumn(columnName: "contact_person_number", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638101429-83") {
+        dropColumn(columnName: "email_contact_person", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638101429-84") {
+        dropColumn(columnName: "other_organization", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638101429-10") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "city", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638101429-11") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "country", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638101429-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "title", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638123155-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "attachment", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653638123452-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "six_months_managed", type: "LONGTEXT") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "165363812345664-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "activities_and_strategies", type: "LONGTEXT") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16536381231244-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "risks_and_challenges", type: "LONGTEXT") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "165363812312344-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "learning_and_documentation", type: "LONGTEXT") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "165363123124453-12") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "cost_of_project", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "202209242526665-01") {
+        modifyDataType(columnName: "input_variables", newDataType: "LONGTEXT", tableName: "archive")
+    }
+
+    changeSet(author: "bruno (generated)", id: "202202342352236545-01") {
+        modifyDataType(columnName: "output_variables", newDataType: "LONGTEXT", tableName: "archive")
+    }
 
 }

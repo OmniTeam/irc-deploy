@@ -27,7 +27,7 @@ export class GrantProcessService {
     return this.http.get(`${this.letterOfInterest}/${id}/`);
   }
 
-  getReviewRecord(id) {
+  getLetterOfInterestReview(id) {
     return this.http.get(`${this.reviewLetterOfInterest}/${id}/`);
   }
 
@@ -55,6 +55,13 @@ export class GrantProcessService {
     return this.http.get(`${this.grantReportReview}/${id}/`);
   }
 
+
+  /***
+   * get by Process Instance Id
+   * */
+  getRecordByProcessInstanceId(route, params: any): Observable<any> {
+    return this.http.get(route, {params});
+  }
 
   /***
    *   create

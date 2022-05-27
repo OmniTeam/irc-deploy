@@ -99,6 +99,9 @@
                           </ul>
                         </div>
                       </div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col">
@@ -166,9 +169,10 @@
 
             <div *ngIf="isPlanningLearningApplication" class=" col">
               <organizational-information [grantId]="grantId"></organizational-information>
-              <planning-learning-application [isReadOnly]="false" [grantId]="grantId"
+              <planning-learning-application [isReadOnly]="isReadOnly" [grantId]="grantId"
                                              [processInstanceId]="processInstanceId"
                                              [definitionKey]="definitionKey"
+                                             [taskStatus]="taskRecord.status"
                                              (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
             </div>
 
@@ -411,6 +415,9 @@
                             </li>
                           </ul>
                         </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
                       </div>
                     </div>
                     <div class="row">

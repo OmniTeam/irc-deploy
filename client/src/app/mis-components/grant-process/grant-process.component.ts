@@ -8,6 +8,7 @@ import {TaskListService} from "../../services/task-list.service";
 import {HttpParams} from "@angular/common/http";
 import {FileUploadService} from "../../services/file-upload.service";
 import {AlertService} from "../../services/alert";
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-grant-process',
@@ -37,6 +38,8 @@ export class GrantProcessComponent implements OnInit {
   dateOfDueDiligence: any;
   attachmentDiligenceReport: any;
   reviewerComments: any;
+  decisionOfReviewProcess: any;
+  hasDueDiligenceConducted: any;
 
   items = [
     {name: 'Yes', value: 'Yes'},
@@ -51,14 +54,12 @@ export class GrantProcessComponent implements OnInit {
     {name: 'Return to Program Officer for further Review', value: 'No'}
   ];
   decision3 = [
-    {name: 'Recommend for the major grant', value: 'Yes'},
-    {name: 'Drop the applicant', value: 'No'}
+    {name: 'Apply for long term grant', value: 'Yes'},
+    {name: 'Do not apply for long term grant', value: 'No'}
   ];
   isConceptInline: any;
   doesItAdhere: any;
   areTheyAdhering: any;
-  decisionOfReviewProcess: any;
-  hasDueDiligenceConducted: any;
   achieveIntendedObjectives: any;
   adhereToBudget: any;
   activitiesInlineWithWorkPlan: any;
@@ -85,7 +86,8 @@ export class GrantProcessComponent implements OnInit {
     private grantProcessService: GrantProcessService,
     private taskListService: TaskListService,
     public fileUploadService: FileUploadService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private _location: Location
   ) {
   }
 
@@ -109,7 +111,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord = data
             if (data.taskDefinitionKey === "Review_and_Conduct_Due_Diligence") {
               this.isReviewLetterOfInterest = true;
-              this.grantProcessService.getReviewRecord(data.grantId).subscribe((data) => {
+              this.grantProcessService.getLetterOfInterestReview(data.grantId).subscribe((data) => {
                 console.log('review record available', data)
               })
             }
@@ -391,7 +393,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/taskList']);
+    this._location.back();
   }
 
 }
