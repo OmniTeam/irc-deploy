@@ -2836,4 +2836,48 @@ databaseChangeLog = {
         addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "six_months_managed", tableName: "grant_planning_learning")
     }
 
+    changeSet(author: "bruno (generated)", id: "16536312423553466-12") {
+        addColumn(tableName: "grant_letter_of_interest_review") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16536234536463567-12") {
+        addColumn(tableName: "grant_planning_learning_approve") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
+    changeSet(author: "bruno (generated)", id: "16536312312445354-12") {
+        addColumn(tableName: "grant_planning_learning_review") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
+    changeSet(author: "bruno (generated)", id: "16536312234234253-12") {
+        addColumn(tableName: "grant_provide_learning_grant") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
+    changeSet(author: "bruno (generated)", id: "165323234235266678-12") {
+        addColumn(tableName: "grant_report_review") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
 }
