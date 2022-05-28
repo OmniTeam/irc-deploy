@@ -518,7 +518,7 @@
 
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                     <div class="col"><p>Amount of Funds to be disbursed:</p></div>
-                    <div class="col text-left"><input type="text" class="form-control"
+                    <div class="col text-left"><input [disabled]="isReadOnly" type="text" class="form-control"
                                                       [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                   </div>
                   <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
@@ -537,7 +537,7 @@
                         <div class="col text-left">
                           <ul style="list-style: none;">
                             <li *ngFor="let item of proceed">
-                              <input type="radio" name="how_to_proceed" [(ngModel)]="radioHowToProceed"
+                              <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="radioHowToProceed"
                                      value="{{item.value}}"/>
                               {{item.name}}
                             </li>
@@ -570,17 +570,17 @@
                     <div class="col-sm-9">
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                         <div class="col"><p>Amount of Funds to be disbursed:</p></div>
-                        <div class="col text-left"><input type="number" class="form-control"
+                        <div class="col text-left"><input [disabled]="isReadOnly" type="number" class="form-control"
                                                           [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                       </div>
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                         <div class="col"><p>Date disbursed:</p></div>
-                        <div class="col text-left"><input type="date" class="form-control"
+                        <div class="col text-left"><input [disabled]="isReadOnly" type="date" class="form-control"
                                                           [(ngModel)]="dateDisbursed"/><br></div>
                       </div>
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
                         <div class="col"><p>Amount of Funds Remaining</p></div>
-                        <div class="col text-left"><input type="number" class="form-control"
+                        <div class="col text-left"><input [disabled]="isReadOnly" type="number" class="form-control"
                                                           [(ngModel)]="amountOfFundsRemaining"/></div>
                       </div>
                     </div>

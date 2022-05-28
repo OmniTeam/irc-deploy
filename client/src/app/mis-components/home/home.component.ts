@@ -145,12 +145,12 @@ export class HomeComponent implements OnInit {
 
   setFilterCategory(taskAge: string) {
     let filterCategory: any
-    if (taskAge.includes('week')) {
-      filterCategory = {period: 'week', duration: taskAge.charAt(0)}
-    } else if (taskAge.includes('month')) {
-      filterCategory = {period: 'month', duration: taskAge.charAt(0)}
-    } else if (taskAge.includes('year')) {
-      filterCategory = {period: 'year', duration: taskAge.charAt(0)}
+    if (taskAge?.includes('week')) {
+      filterCategory = {period: 'week', duration: taskAge?.charAt(0)}
+    } else if (taskAge?.includes('month')) {
+      filterCategory = {period: 'month', duration: taskAge?.charAt(0)}
+    } else if (taskAge?.includes('year')) {
+      filterCategory = {period: 'year', duration: taskAge?.charAt(0)}
     }
     return filterCategory
   }

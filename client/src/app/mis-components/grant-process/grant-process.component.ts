@@ -436,6 +436,10 @@ export class GrantProcessComponent implements OnInit {
     }
   }
 
+  printPage() {
+    window.print();
+  }
+
   cancel() {
     this.router.navigate(['/taskList']);
   }

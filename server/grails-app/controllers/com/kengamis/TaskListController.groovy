@@ -48,7 +48,7 @@ class TaskListController {
 
             def grant = GrantLetterOfInterest.findById(grantId)
             def orgInfo = {}
-            if(grant!=null) orgInfo = slurper.parseText(grant.organisation)
+            if (grant != null) orgInfo = slurper.parseText(grant.organisation)
 
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
@@ -112,6 +112,7 @@ class TaskListController {
                           programId        : programId,
                           grantId          : grantId,
                           programName      : taskProgram.title,
+                          case             : taskPartner ? taskPartner.name : taskProgram.title,
                           endDate          : endDate,
                           groupId          : groupId,
                           reportingPeriod  : period,

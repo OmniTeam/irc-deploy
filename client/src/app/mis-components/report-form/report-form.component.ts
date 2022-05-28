@@ -127,7 +127,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.setData(data);
         }, error => {
           this.taskListService.getArchivedRecord(params).subscribe((data) => {
-            console.log(data);
             this.setData(data);
           }, error => console.log(error));
         });

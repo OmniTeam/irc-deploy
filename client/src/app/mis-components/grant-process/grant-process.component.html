@@ -64,6 +64,10 @@
 
             <div *ngIf="isReviewLetterOfInterest" class=" col">
 
+              <div class="text-right" style="width: 100%; margin-right: 20px">
+                <button class="btn btn-neutral" (click)="printPage()"><i class="fas fa-print"></i> Print Page</button>
+              </div>
+
               <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
 
               <h3 style="margin-left: 40px;">Review</h3>
