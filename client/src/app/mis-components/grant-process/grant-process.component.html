@@ -64,6 +64,10 @@
 
             <div *ngIf="isReviewLetterOfInterest" class=" col">
 
+              <div class="text-right" style="width: 100%; margin-right: 20px">
+                <button class="btn btn-neutral" (click)="printPage()"><i class="fas fa-print"></i> Print Page</button>
+              </div>
+
               <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
 
               <h3 style="margin-left: 40px;">Review</h3>
@@ -138,10 +142,10 @@
                             id="attachmentDiligenceReport"
                             (change)="handleFileInput($event)"/>
                           <button
-                            *ngIf="isReadOnly"
+                            *ngIf="isReadOnly || taskRecord.status=='draft'"
                             type="button"
                             (click)="fileUploadService.downloadFile(attachmentDiligenceReport)"
-                            class="btn btn-link">{{attachmentDiligenceReport}}</button>
+                            class="btn btn-link">{{fileUploadService.getFileName(attachmentDiligenceReport)}}</button>
                           <br>
                         </div>
                       </div>
@@ -149,7 +153,6 @@
                     <div class="row" style="margin: 10px;">
                       <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerComments"
-                                [disabled]="isReadOnly"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
                   </div>

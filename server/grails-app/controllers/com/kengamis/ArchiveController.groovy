@@ -56,7 +56,7 @@ class ArchiveController {
             }
 
             def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
-
+            def casee = ''
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
@@ -72,6 +72,7 @@ class ArchiveController {
                 } else if (record.taskDefinitionKey == "Approve_Fund_Disbursement") {
                     c2 = userRoles.contains("ROLE_ED")
                 }
+                casee = taskPartner?.name
             } else if (record.processDefKey == "GRANT_PROCESS") {
                 if (record.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         record.taskDefinitionKey == "Review_Concept" ||
@@ -90,6 +91,7 @@ class ArchiveController {
                     }
                 }
 
+                if (grant != null) casee = orgInfo['name']
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
             }
@@ -103,6 +105,7 @@ class ArchiveController {
                             startDate        : startDate,
                             partnerId        : partnerId,
                             partnerName      : taskPartner.name,
+                            case             : casee,
                             programId        : programId,
                             grantId          : grantId,
                             programName      : taskProgram.title,
@@ -123,6 +126,52 @@ class ArchiveController {
     def show(Long id) {
         respond archiveService.get(id)
     }
+
+    def getTaskRecord() {
+        def record = Archive.get(params.id)
+
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(record.inputVariables)
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = ''
+
+        variables['data'].each {
+            if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+            if (it.key == 'Period') period = it.value
+            if (it.key == 'StartDate') startDate = it.value
+            if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'GrantId') grantId = it.value
+            if (it.key == 'ProgramId') programId = it.value
+            if (it.key == 'EndDate') endDate = it.value
+            if (it.key == 'GroupId') groupId = it.value
+        }
+
+        def programPartner = ProgramPartner.findById(partnerId)
+        def program = Program.findById(programId)
+
+        if (programPartner == null) programPartner = [name: '']
+        if (program == null) program = [title: '']
+
+        def t = [id               : record.id,
+                 taskName         : record.taskName,
+                 partnerSetupId   : partnerSetupId,
+                 startDate        : startDate,
+                 partnerId        : partnerId,
+                 partnerName      : programPartner.name,
+                 programId        : programId,
+                 grantId          : grantId,
+                 programName      : program.title,
+                 endDate          : endDate,
+                 groupId          : groupId,
+                 reportingPeriod  : period,
+                 outputVariables  : record.outputVariables,
+                 processInstanceId: record.processInstanceId,
+                 processDefKey    : record.processDefKey,
+                 taskDefinitionKey: record.taskDefinitionKey,
+                 dateCreated      : record.dateCreated,
+                 status           : record.status]
+        respond t
+    }
+
 
     @Transactional
     def save(Archive archive) {

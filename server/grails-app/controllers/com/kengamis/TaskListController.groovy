@@ -48,7 +48,7 @@ class TaskListController {
 
             def grant = GrantLetterOfInterest.findById(grantId)
             def orgInfo = {}
-            if(grant!=null) orgInfo = slurper.parseText(grant.organisation)
+            if (grant != null) orgInfo = slurper.parseText(grant.organisation)
 
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
@@ -62,7 +62,7 @@ class TaskListController {
             }
 
             def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
-
+            def casee = ''
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
@@ -78,6 +78,7 @@ class TaskListController {
                 } else if (task.taskDefinitionKey == "Approve_Fund_Disbursement") {
                     c2 = userRoles.contains("ROLE_ED")
                 }
+                casee = taskPartner?.name
             } else if (task.processDefKey == "GRANT_PROCESS") {
                 if (task.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         task.taskDefinitionKey == "Review_Concept" ||
@@ -96,6 +97,7 @@ class TaskListController {
                     }
                 }
 
+                if (grant != null) casee = orgInfo['name']
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
             }
@@ -112,6 +114,7 @@ class TaskListController {
                           programId        : programId,
                           grantId          : grantId,
                           programName      : taskProgram.title,
+                          case             : casee,
                           endDate          : endDate,
                           groupId          : groupId,
                           reportingPeriod  : period,
