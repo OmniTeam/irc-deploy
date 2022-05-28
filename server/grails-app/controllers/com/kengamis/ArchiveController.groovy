@@ -103,7 +103,7 @@ class ArchiveController {
                             startDate        : startDate,
                             partnerId        : partnerId,
                             partnerName      : taskPartner.name,
-                            case             : taskPartner ? taskPartner.name : taskProgram.title,
+                            case             : taskPartner ? taskPartner.name : orgInfo['name'],
                             programId        : programId,
                             grantId          : grantId,
                             programName      : taskProgram.title,

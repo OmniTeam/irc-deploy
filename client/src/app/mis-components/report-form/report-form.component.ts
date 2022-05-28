@@ -614,6 +614,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.error = false;
     this.success = false;
 
+    this.saveCommentsAndRecommendations()
+
     let reportValues: { [key: string]: string } = {
       financialReport: JSON.stringify(this.financialReport),
       performanceReport: JSON.stringify(this.performanceReport),
@@ -651,6 +653,32 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       this.alertService.error('Do you recommend for further fund disbursement? is Required');
       return;
     }
+
+    this.saveCommentsAndRecommendations()
+
+    let reportValues: { [key: string]: string } = {
+      financialReport: JSON.stringify(this.financialReport),
+      performanceReport: JSON.stringify(this.performanceReport),
+      reviewerInformation: JSON.stringify(this.reviewerInformation),
+      approverInformation: JSON.stringify({
+        suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
+        reports_well_aligned: this.radioReportsWellAligned,
+        recommend_fund: this.radioRecommendFund,
+        end_of_partnership: this.radioEndOfPartnership,
+        how_to_proceed: this.radioHowToProceed,
+        amountOfFundsDisbursed: this.amountOfFundsDisbursed,
+        amountOfFundsRemaining: this.amountOfFundsRemaining,
+        dateDisbursed: this.dateDisbursed,
+        provideAnyRecommendations: this.provideAnyRecommendations
+      })
+    };
+
+    this.saveReport(reportValues, 'approved_report');
+    this.updateTaskStatus('completed');
+    this.router.navigate(['/taskList']);
+  }
+
+  saveCommentsAndRecommendations(){
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
@@ -689,27 +717,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         }
       }, error => console.log('recommendation', error));
     });
-
-    let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
-      reviewerInformation: JSON.stringify(this.reviewerInformation),
-      approverInformation: JSON.stringify({
-        suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
-        reports_well_aligned: this.radioReportsWellAligned,
-        recommend_fund: this.radioRecommendFund,
-        end_of_partnership: this.radioEndOfPartnership,
-        how_to_proceed: this.radioHowToProceed,
-        amountOfFundsDisbursed: this.amountOfFundsDisbursed,
-        amountOfFundsRemaining: this.amountOfFundsRemaining,
-        dateDisbursed: this.dateDisbursed,
-        provideAnyRecommendations: this.provideAnyRecommendations
-      })
-    };
-
-    this.saveReport(reportValues, 'approved_report');
-    this.updateTaskStatus('completed');
-    this.router.navigate(['/taskList']);
   }
 
   updateTaskStatus(status) {

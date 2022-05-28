@@ -288,33 +288,30 @@
                 <div class="card" [style.display]="isReviewVisible || isSubmitFinalVisible ? 'block' : 'none'">
                   <div class="container">
                     <div class="row">
-                      <div class="col-sm-4"><p>Attached narrative to the program report:</p></div>
-                      <div class="col-sm-4">{{attachment1}}</div>
-                      <div class="col-sm-4">
+                      <div class="col-sm-6"><p>Attached narrative to the program report:</p></div>
+                      <div class="col-sm-6">
                         <button
                           type="button"
                           (click)="fileUploadService.downloadFile(shortLink1)"
-                          class="btn btn-link">{{shortLink1}}</button>
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink1)}} <i class="fas fa-download"></i></button>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-4"><p>Attached narrative duly signed financial report:</p></div>
-                      <div class="col-sm-4">{{attachment2}}</div>
-                      <div class="col-sm-4">
+                      <div class="col-sm-6"><p>Attached narrative duly signed financial report:</p></div>
+                      <div class="col-sm-6">
                         <button
                           type="button"
                           (click)="fileUploadService.downloadFile(shortLink2)"
-                          class="btn btn-link">{{shortLink2}}</button>
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink2)}} <i class="fas fa-download"></i></button>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-4"><p>Attached receipts and supporting documents:</p></div>
-                      <div class="col-sm-4">{{attachment3}}</div>
-                      <div class="col-sm-4">
+                      <div class="col-sm-6"><p>Attached receipts and supporting documents:</p></div>
+                      <div class="col-sm-6">
                         <button
                           type="button"
                           (click)="fileUploadService.downloadFile(shortLink3)"
-                          class="btn btn-link">{{shortLink3}}</button>
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink3)}} <i class="fas fa-download"></i></button>
                       </div>
                     </div>
                   </div>
@@ -333,7 +330,7 @@
                           <button
                             type="button"
                             (click)="fileUploadService.downloadFile(shortLink1)"
-                            class="btn btn-link">{{shortLink1}}</button>
+                            class="btn btn-link">{{fileUploadService.getFileName(shortLink1)}} <i class="fas fa-download"></i></button>
                         </div>
                       </div>
                       <div class="row">
@@ -342,7 +339,7 @@
                           <button
                             type="button"
                             (click)="fileUploadService.downloadFile(shortLink2)"
-                            class="btn btn-link">{{shortLink2}}</button>
+                            class="btn btn-link">{{fileUploadService.getFileName(shortLink2)}} <i class="fas fa-download"></i></button>
                         </div>
                       </div>
                       <div class="row">
@@ -351,7 +348,7 @@
                           <button
                             type="button"
                             (click)="fileUploadService.downloadFile(shortLink3)"
-                            class="btn btn-link">{{shortLink3}}</button>
+                            class="btn btn-link">{{fileUploadService.getFileName(shortLink3)}} <i class="fas fa-download"></i></button>
                         </div>
                       </div>
                     </div>

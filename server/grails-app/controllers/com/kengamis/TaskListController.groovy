@@ -112,7 +112,7 @@ class TaskListController {
                           programId        : programId,
                           grantId          : grantId,
                           programName      : taskProgram.title,
-                          case             : taskPartner ? taskPartner.name : taskProgram.title,
+                          case             : taskPartner ? taskPartner.name : orgInfo['name'],
                           endDate          : endDate,
                           groupId          : groupId,
                           reportingPeriod  : period,
