@@ -2765,7 +2765,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-1") {
-        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "activities_and_strategies", tableName: "grant_planning_learning", validate: "true")
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "activities_and_strategies", tableName: "grant_planning_learning")
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-2") {
@@ -2773,7 +2773,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-3") {
-        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "attachment", tableName: "grant_planning_learning", validate: "true")
+        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "attachment", tableName: "grant_planning_learning")
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-4") {
@@ -2821,19 +2821,19 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-18") {
-        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "learning_and_documentation", tableName: "grant_planning_learning", validate: "true")
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "learning_and_documentation", tableName: "grant_planning_learning")
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-20") {
-        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "organisation", tableName: "grant_letter_of_interest", validate: "true")
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "organisation", tableName: "grant_letter_of_interest")
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-27") {
-        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "risks_and_challenges", tableName: "grant_planning_learning", validate: "true")
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "risks_and_challenges", tableName: "grant_planning_learning")
     }
 
     changeSet(author: "bruno (generated)", id: "1653662925340-28") {
-        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "six_months_managed", tableName: "grant_planning_learning", validate: "true")
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "six_months_managed", tableName: "grant_planning_learning")
     }
 
 }
