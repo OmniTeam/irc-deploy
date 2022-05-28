@@ -47,8 +47,8 @@ class TaskListController {
             if (taskProgram == null) taskProgram = [title: '']
 
             def grant = GrantLetterOfInterest.findById(grantId)
-            def orgInfo = []
-            if(grant!=null) slurper.parseText(grant.organisation)
+            def orgInfo = {}
+            if(grant!=null) orgInfo = slurper.parseText(grant.organisation)
 
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
