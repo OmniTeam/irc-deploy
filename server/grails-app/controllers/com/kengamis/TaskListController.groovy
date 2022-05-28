@@ -47,7 +47,7 @@ class TaskListController {
             if (taskProgram == null) taskProgram = [title: '']
 
             def grant = GrantLetterOfInterest.findById(grantId)
-            def orgInfo = slurper.parseText(grant.organisation)
+            def orgInfo = slurper.parseText(grant?.organisation)
 
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
@@ -95,8 +95,8 @@ class TaskListController {
                     }
                 }
 
-                startDate = grant.dateCreated
-                endDate = grant.lastUpdated
+                startDate = grant?.dateCreated
+                endDate = grant?.lastUpdated
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")

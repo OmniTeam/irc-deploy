@@ -40,6 +40,9 @@ class ArchiveController {
             if (taskPartner == null) taskPartner = [name: '']
             if (taskProgram == null) taskProgram = [title: '']
 
+            def grant = GrantLetterOfInterest.findById(grantId)
+            def orgInfo = slurper.parseText(grant?.organisation)
+
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
             def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "
@@ -51,12 +54,13 @@ class ArchiveController {
                 userProgram = userPartnerProgram.collect { it['program_id'] }.join(",")
             }
 
+            def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
             if (record.processDefKey == "CRVPF_REPORTING") {
                 if (record.taskDefinitionKey == "Review_Program_Report" || record.taskDefinitionKey == "Approve_Report") {
-                    def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
                     if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (record.taskDefinitionKey == "Submit_Report" || record.taskDefinitionKey == "Submit_Final_Report") {
                     c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
@@ -71,12 +75,22 @@ class ArchiveController {
                 if (record.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         record.taskDefinitionKey == "Review_Concept" ||
                         record.taskDefinitionKey == "Review_Report") {
-                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
+
+                    if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (record.taskDefinitionKey == "Provide_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_FINANCE")
                 } else if (record.taskDefinitionKey == "Approve_Learning_Grant") {
                     c2 = userRoles.contains("ROLE_ED")
+                } else if (record.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || record.taskDefinitionKey == "Submit_Report") {
+                    if (userRoles.contains("ROLE_APPLICANT")) {
+                        def applicantEmail = orgInfo['email']
+                        c2 = (applicantEmail == currentUser.email)
+                        println "(applicantEmail == currentUser.email) == ($applicantEmail == ${currentUser.email})"
+                    }
                 }
+
+                startDate = grant?.dateCreated
+                endDate = grant?.lastUpdated
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
@@ -164,4 +178,5 @@ class ArchiveController {
 
         render status: NO_CONTENT
     }
+
 }
