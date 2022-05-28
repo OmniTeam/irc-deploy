@@ -77,9 +77,9 @@ export class HomeComponent implements OnInit {
 
       if (data != null) {
         data.forEach((item) => {
-          results.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.program))
-          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.startDate, item.partnerName))
-          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.programName))
+          results.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
         });
       }
       this.taskListRows = results;
