@@ -133,6 +133,12 @@ export class GrantProcessComponent implements OnInit {
         this.reviewerComments = data.comments
       })
     }
+    if (data.taskDefinitionKey === "Apply_for_Learning_Planning_Grant") {
+      this.isPlanningLearningApplication = true;
+      this.grantProcessService.getPlanningAndLearningRecord(data.grantId).subscribe((data) => {
+        console.log('apply PandG record available', data)
+      })
+    }
     if (data.taskDefinitionKey === "Review_Concept") {
       this.isReviewPlanningLearningGrant = true;
       this.grantProcessService.getPlanningAndLearningReview(data.grantId).subscribe((data: any) => {
@@ -150,6 +156,18 @@ export class GrantProcessComponent implements OnInit {
         console.log('apply PlanningAndLearningApprove record available', data)
         this.decisionOfApproveProcess = data.decision
         this.approveComments = data.comments
+      })
+    }
+    if (data.taskDefinitionKey === "Provide_Learning_Grant") {
+      this.isProvidePlanningLearningGrant = true;
+      this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data) => {
+        console.log('apply ProvideLearningGrant record available', data)
+      })
+    }
+    if (data.taskDefinitionKey === "Submit_Report") {
+      this.isSubmitReport = true;
+      this.grantProcessService.getGrantReport(data.grantId).subscribe((data) => {
+        console.log('apply GrantReport record available', data)
       })
     }
     if (data.taskDefinitionKey === "Review_Report" || data.taskDefinitionKey === "Archive_Report") {
