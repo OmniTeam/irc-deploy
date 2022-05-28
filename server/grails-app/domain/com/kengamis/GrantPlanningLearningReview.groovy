@@ -10,6 +10,7 @@ class GrantPlanningLearningReview {
     String areTheyAdhering
     String decision
     String comments
+    String user
 
     String definitionKey
     String processInstanceId
@@ -19,6 +20,7 @@ class GrantPlanningLearningReview {
 
     static constraints = {
         status nullable: true
+        user nullable: true
         isConceptInline nullable: true
         doesItAdhere nullable: true
         areTheyAdhering nullable: true

@@ -11,6 +11,7 @@ class GrantLetterOfInterestReview {
     String dateOfDueDiligence
     String dueDiligenceReport
     String comments
+    String user
 
     String definitionKey
     String processInstanceId
@@ -20,6 +21,7 @@ class GrantLetterOfInterestReview {
 
     static constraints = {
         status nullable: true
+        user nullable: true
         hasBeenReviewed nullable: true
         dueDiligence nullable: true
         decision nullable: true

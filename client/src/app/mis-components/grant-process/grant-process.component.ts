@@ -173,6 +173,30 @@ export class GrantProcessComponent implements OnInit {
     this.processInstanceId = data.processInstanceId
   }
 
+  getAllComments(){
+    this.loading = true;
+    this.comments = []
+    this.grantProcessService.getLetterOfInterestReview(this.grantId).subscribe((data:any) => {
+      this.comments.push(new CommentNode(data.id, data.comments, data.user, [], [], data.dateCreated));
+      this.loading = false;
+    })
+    this.grantProcessService.getPlanningAndLearningReview(this.grantId).subscribe((data:any) => {
+      this.comments.push(new CommentNode(data.id, data.comments, data.user, [], [], data.dateCreated));
+      this.loading = false;
+    })
+    this.grantProcessService.getPlanningAndLearningApprove(this.grantId).subscribe((data:any) => {
+      this.comments.push(new CommentNode(data.id, data.comments, data.user, [], [], data.dateCreated));
+      this.loading = false;
+    })
+    this.grantProcessService.getProvideLearningGrant(this.grantId).subscribe((data:any) => {
+      this.comments.push(new CommentNode(data.id, data.comments, data.user, [], [], data.dateCreated));
+      this.loading = false;
+    })
+    this.grantProcessService.getGrantReportReview(this.grantId).subscribe((data:any) => {
+      this.comments.push(new CommentNode(data.id, data.comments, data.user, [], [], data.dateCreated));
+      this.loading = false;
+    })
+  }
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
@@ -190,6 +214,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   viewComments(): void {
+    this.getAllComments()
     this.openCommentsPopup = !this.openCommentsPopup;
     this.openPopup = this.openCommentsPopup;
   }
@@ -202,9 +227,11 @@ export class GrantProcessComponent implements OnInit {
     }
   }
 
-  commentsChangedHandler(comments: Array<CommentNode>) {
-    this.comments = comments;
-    console.log(comments);
+  onNewCommentHandler(comment: CommentNode) {
+    console.log("New comment", comment);
+    this.reviewerComments = comment.text
+    this.approveComments = comment.text
+    this.financeSectionComments = comment.text
   }
 
   statusChangedHandler(status: string) {
@@ -253,6 +280,7 @@ export class GrantProcessComponent implements OnInit {
         dueDiligenceReport: this.attachmentDiligenceReport,
         comments: this.reviewerComments,
         decision: this.decisionOfReviewProcess,
+        user: this.authService.getLoggedInUsername(),
         status: status
       }
       this.grantProcessService.createReviewLetterOfInterest(formData).subscribe((data) => {
@@ -287,6 +315,7 @@ export class GrantProcessComponent implements OnInit {
         areTheyAdhering: this.areTheyAdhering,
         comments: this.reviewerComments,
         decision: this.decisionOfReviewProcess,
+        user: this.authService.getLoggedInUsername(),
         status: status
       }
       this.grantProcessService.createPlanningAndLearningReview(formData).subscribe((data) => {
@@ -318,6 +347,7 @@ export class GrantProcessComponent implements OnInit {
         processInstanceId: this.processInstanceId,
         comments: this.approveComments,
         decision: this.decisionOfApproveProcess,
+        user: this.authService.getLoggedInUsername(),
         status: status
       }
       this.grantProcessService.createPlanningAndLearningApprove(formData).subscribe((data) => {
@@ -352,6 +382,7 @@ export class GrantProcessComponent implements OnInit {
       leadAgency: this.leadAgency,
       grantAmount: this.grantAmount,
       comments: this.financeSectionComments,
+      user: this.authService.getLoggedInUsername(),
       status: status
     }
     this.grantProcessService.createProvideLearningGrant(formData).subscribe((data) => {
@@ -381,6 +412,7 @@ export class GrantProcessComponent implements OnInit {
         activitiesInlineWithWorkPlan: this.activitiesInlineWithWorkPlan,
         comments: this.reviewerComments,
         decision: this.decisionOfReviewProcess,
+        user: this.authService.getLoggedInUsername(),
         status: status
       }
       this.grantProcessService.createGrantReportReview(formData).subscribe((data) => {
