@@ -1,15 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {SelectionType} from '@swimlane/ngx-datatable';
-import {HttpParams} from "@angular/common/http";
-import {EntityService} from "../../../services/entity.service";
-import {ReplacePipe} from "../../../pipes/replace-pipe";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../../services/alert";
-import {TagService} from "../../../services/tags";
-import {NgSelectComponent} from "@ng-select/ng-select";
-import {ExportService} from "../../../services/export.service";
+import {HttpParams} from '@angular/common/http';
+import {EntityService} from '../../../services/entity.service';
+import {ReplacePipe} from '../../../pipes/replace-pipe';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../../services/alert';
+import {TagService} from '../../../services/tags';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {ExportService} from '../../../services/export.service';
 
 @Component({
   selector: 'app-entity-tables',
@@ -18,14 +18,14 @@ import {ExportService} from "../../../services/export.service";
 })
 export class EntityTablesComponent implements OnInit {
   @ViewChild('editEntityRecordModal') editEntityRecordModal: any;
-  entityName = "";
+  entityName = '';
   entries = 10;
   selected = [];
   activeRow: any;
   rows: Object[];
   temp: Object[];
   columns: any;
-  entityId = "";
+  entityId = '';
   SelectionType = SelectionType;
   closeModal: string;
   formInputConfigs: any;
@@ -41,12 +41,12 @@ export class EntityTablesComponent implements OnInit {
   enableTagging: any;
   enableTagButton = false;
   enableRemoveTagButton = false;
-  selectedTagTypeFilter = "";
-  selectedTagFilter = "";
-  recordId = "";
+  selectedTagTypeFilter = '';
+  selectedTagFilter = '';
+  recordId = '';
   openPopup: boolean;
   loading: boolean;
-  uploadMessage: string = "Uploading attachment, please wait ..."
+  uploadMessage = 'Uploading attachment, please wait ...';
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -63,7 +63,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   filterTable(event) {
-    let val = event.target.value.toLowerCase();
+    const val = event.target.value.toLowerCase();
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
         if (d[key]?.toString().toLowerCase().indexOf(val) !== -1) {
@@ -130,8 +130,8 @@ export class EntityTablesComponent implements OnInit {
       this.enableTagging = data.enableTagging;
       this.columns = this.columnMappings(data.headerList);
       this.formInputConfigs = this.generateFormInputConfigs(data.headerList);
-      this.loading = false
-    }, error => {console.log(error)});
+      this.loading = false;
+    }, error => {console.log(error);});
   }
 
   columnMappings(array) {
@@ -153,7 +153,7 @@ export class EntityTablesComponent implements OnInit {
     });
   }
 
-  createTag(){
+  createTag() {
     this.router.navigate(['/tags']);
   }
 
@@ -237,7 +237,7 @@ export class EntityTablesComponent implements OnInit {
           this.alertService.warning(`Record has been  deleted `);
           this.getEntityData();
         }, error => {
-          this.alertService.error(`Record could not be deleted`)
+          this.alertService.error(`Record could not be deleted`);
         }
       );
     }
@@ -249,8 +249,8 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', this.entityId);
 
-    let selectedRows = this.selected;
-    let postRequest = [];
+    const selectedRows = this.selected;
+    const postRequest = [];
     for (const selectedRow of selectedRows) {
       const post = {};
       post['mis_entity_id'] = this.entityId;
@@ -282,8 +282,8 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', this.entityId);
 
-    let selectedRows = this.selected;
-    let postRequest = [];
+    const selectedRows = this.selected;
+    const postRequest = [];
     for (const selectedRow of selectedRows) {
       const post = {};
       post['mis_entity_id'] = this.entityId;
@@ -313,7 +313,7 @@ export class EntityTablesComponent implements OnInit {
 
   generateFormInputConfigs(questions: any) {
     const configs = [];
-    const controlsConfig = {}
+    const controlsConfig = {};
     for (const question of questions) {
       if (question['fieldType'] !== 'Key Field' && question['fieldType'] !== 'Tag Field') {
         const inputProperties = {};
@@ -330,7 +330,7 @@ export class EntityTablesComponent implements OnInit {
       }
     }
     this.formGroup = this.formBuilder.group(controlsConfig);
-    return configs
+    return configs;
   }
 
   generateEditFormInputConfigs(data: any, formInputConfigs: any) {
@@ -343,23 +343,23 @@ export class EntityTablesComponent implements OnInit {
       }
     }
     this.editFormGroup = this.formBuilder.group(controlsConfig);
-    return formInputConfigs
+    return formInputConfigs;
   }
 
   getInputType(dataType: string): string {
-    let inputType
-    if (dataType === "String") {
-      inputType = "text";
-    } else if (dataType === "Date") {
-      inputType = "date";
-    } else if (dataType === "Number") {
-      inputType = "number";
-    } else if (dataType === "Float") {
-      inputType = "number";
+    let inputType;
+    if (dataType === 'String') {
+      inputType = 'text';
+    } else if (dataType === 'Date') {
+      inputType = 'date';
+    } else if (dataType === 'Number') {
+      inputType = 'number';
+    } else if (dataType === 'Float') {
+      inputType = 'number';
     } else {
-      inputType = "text";
+      inputType = 'text';
     }
-    return inputType
+    return inputType;
   }
 
   getDismissReason(reason: any): string {
@@ -394,10 +394,10 @@ export class EntityTablesComponent implements OnInit {
 
   getFilteredEntityData() {
     if (!this.selectedTagTypeFilter) {
-      this.selectedTagTypeFilter = "";
+      this.selectedTagTypeFilter = '';
     }
     if (!this.selectedTagFilter) {
-      this.selectedTagFilter = "";
+      this.selectedTagFilter = '';
     }
     const params = new HttpParams()
       .set('id', this.entityId)
@@ -412,10 +412,10 @@ export class EntityTablesComponent implements OnInit {
 
   exportExcelFormData() {
     if (!this.selectedTagTypeFilter) {
-      this.selectedTagTypeFilter = "";
+      this.selectedTagTypeFilter = '';
     }
     if (!this.selectedTagFilter) {
-      this.selectedTagFilter = "";
+      this.selectedTagFilter = '';
     }
     const params = new HttpParams()
       .set('id', this.entityId)
@@ -429,10 +429,10 @@ export class EntityTablesComponent implements OnInit {
 
   exportCSVFormData() {
     if (!this.selectedTagTypeFilter) {
-      this.selectedTagTypeFilter = "";
+      this.selectedTagTypeFilter = '';
     }
     if (!this.selectedTagFilter) {
-      this.selectedTagFilter = "";
+      this.selectedTagFilter = '';
     }
     const params = new HttpParams()
       .set('id', this.entityId)
@@ -445,27 +445,27 @@ export class EntityTablesComponent implements OnInit {
   }
 
   importExcelFormData() {
-    this.openPopup = true
+    this.openPopup = true;
   }
 
   handleFileInput(event) {
     this.loading = !this.loading;
-    let files: FileList = event.target.files;
+    const files: FileList = event.target.files;
     this.entityService.uploadExcelFile(files.item(0), this.entityId).subscribe((data) => {
-      this.uploadMessage = data[0]
+      this.uploadMessage = data[0];
       setTimeout(() => {
         this.loading = false;
-        this.closePopUp()
+        this.closePopUp();
         this.getEntityData();
       }, 3000);
     }, error => {
-      console.log(error)
-      this.uploadMessage = "Failed to upload file, try again."
-      setTimeout(() => {this.loading = false}, 3000);
+      console.log(error);
+      this.uploadMessage = 'Failed to upload file, try again.';
+      setTimeout(() => {this.loading = false;}, 3000);
     });
   }
 
-  closePopUp(){
-    this.openPopup = false
+  closePopUp() {
+    this.openPopup = false;
   }
 }
