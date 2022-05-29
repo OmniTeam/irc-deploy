@@ -1,30 +1,114 @@
+<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
+<div *ngIf="openPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Review Letter Of Interest</h3>
+  </div>
+  <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
+  <h3 style="margin-left: 40px;">Review</h3>
+  <div class="card">
+    <div class="row" style="margin: 10px;">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col">
+            <p>Has the application been reviewed?<span class="required-indicator">*</span></p>
+            <div class="text-left">
+              <ul style="list-style: none;" *ngFor="let item of items">
+                <li>
+                  <input type="radio" name="hasApplicationBeenReviewed"
+                         [(ngModel)]="hasApplicationBeenReviewed"
+                         [disabled]="true"
+                         value="{{item.value}}"/>
+                  {{item.name}}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col">
+            <p>Has due diligence been conducted?<span class="required-indicator">*</span></p>
+            <div class="text-left">
+              <ul style="list-style: none;" *ngFor="let item of items">
+                <li>
+                  <input type="radio" name="hasDueDiligenceConducted"
+                         [(ngModel)]="hasDueDiligenceConducted"
+                         [disabled]="true"
+                         value="{{item.value}}"/>
+                  {{item.name}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
+            <div class="text-left">
+              <ul style="list-style: none;" *ngFor="let item of decision">
+                <li>
+                  <input type="radio" name="decisionOfReviewProcess"
+                         [(ngModel)]="decisionOfReviewProcess"
+                         [disabled]="true"
+                         value="{{item.value}}"/>
+                  {{item.name}}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="text-left">
+              <label for="dateOfDueDiligence">Date when due diligence was done:<span class="required-indicator">*</span></label>
+              <input type="date" class="form-control" id="dateOfDueDiligence"
+                     [disabled]="true"
+                     [(ngModel)]="dateOfDueDiligence"/><br>
+            </div>
+            <div class="text-left">
+              <label>Attach due diligence report:<span class="required-indicator">*</span></label>
+              <button
+                type="button"
+                (click)="fileUploadService.downloadFile(attachmentDiligenceReport)"
+                class="btn btn-link">{{fileUploadService.getFileName(attachmentDiligenceReport)}}</button>
+              <br>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin: 10px;">
+          <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
+          <textarea class="form-control" rows="3" id="reviewerComments"
+                    [disabled]="true"
+                    [(ngModel)]="reviewerComments"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="openPopUp()">Close</button>
+  </div>
+</div>
+
 <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
-<div class="card">
+<div class="card" style="margin: 20px;">
   <div class="card-body">
     <div class="row">
       <div class="col-sm-6">
         <ul style="list-style: none; font-size: 16px">
-          <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo?.organisation}}</b></li>
-          <li>Acronym Name: <b>{{organisationalInfo?.acronym}}</b></li>
-          <li>Type of Organisation: <b>{{organisationalInfo?.organizationType}}</b></li>
-          <li>Legal Status: <b>{{organisationalInfo?.legalStatus}}</b></li>
-          <li>Name of Contact Person: <b>{{organisationalInfo?.contactPerson}}</b></li>
+          <li>Name of Organization: <b>{{organisationalInfo?.name}}</b></li>
+          <li>Type of Organization: <b>{{organisationalInfo?.organizationType}}</b></li>
+          <li>Location: <b>{{organisationalInfo?.physicalAddress}}</b></li>
           <li>
             <button
               type="button"
-              (click)="fileUploadService.downloadFile(organisationalInfo?.letterAttachment)"
-              class="btn btn-link">Download Attached Letter <i class="fas fa-download"></i></button>
+              (click)="openPopUp()"
+              class="btn btn-link"><i class="fas fa-eye"></i> View Letter Of Interest
+            </button>
           </li>
         </ul>
       </div>
       <div class="col-sm-6">
         <ul style="list-style: none; font-size: 16px">
-          <li>Physical Address: <b>{{organisationalInfo?.physicalAddress}}</b></li>
-          <li>Postal Address: <b>{{organisationalInfo?.postalAddress}}</b></li>
-          <li>Email: <b>{{organisationalInfo?.email}}</b></li>
-          <li>Website: <b>{{organisationalInfo?.website}}</b></li>
-          <li>Country: <b>{{organisationalInfo?.country}}</b></li>
-          <li>City: <b>{{organisationalInfo?.city}}</b></li>
+          <li>Name of Contact Person: <b>{{organisationalInfo?.names}}</b></li>
+          <li>Telephone Number: <b>{{organisationalInfo?.contact}}</b></li>
+          <li>Email Address: <b>{{organisationalInfo?.email}}</b></li>
         </ul>
       </div>
     </div>

@@ -84,4 +84,9 @@ class GrantReportController {
 
         render status: NO_CONTENT
     }
+
+    def getByProcessInstanceId() {
+        def results = [results: GrantReport.findByProcessInstanceId(params.id)]
+        respond results
+    }
 }

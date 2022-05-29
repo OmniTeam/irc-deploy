@@ -71,21 +71,21 @@
                         [limit]="entries != -1 ? entries : undefined"
                         [rows]="rows">
 
-                        <ngx-datatable-column name="Task" prop="taskDefinitionKey">
+                        <ngx-datatable-column name="Case" prop="case">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
                             <a *ngIf="row.processDefKey=='CRVPF_REPORTING'" [routerLink]="['/reportForm', row.id, true]" class="text">{{value | replace: '_' : ' '}}</a>
                             <a *ngIf="row.processDefKey=='GRANT_PROCESS'" [routerLink]="['/grantProcess', row.id, true]" class="text">{{value | replace: '_' : ' '}}</a>
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Activity" prop="processDefKey">
+                        <ngx-datatable-column name="Process" prop="processDefKey">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
                             {{ value | replace: '_' : ' ' }}
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Program" prop="programName"></ngx-datatable-column>
-                        <ngx-datatable-column name="Period" prop="reportingPeriod"></ngx-datatable-column>
+<!--                        <ngx-datatable-column name="Period" prop="reportingPeriod"></ngx-datatable-column>-->
                         <ngx-datatable-column name="Start Date" prop="startDate">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>
@@ -98,12 +98,12 @@
                             {{ value | date: 'medium' }}
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Status" prop="status">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{ value | replace: '_' : ' ' | titlecase }}
-                          </ng-template>
-                        </ngx-datatable-column>
+<!--                        <ngx-datatable-column name="View" prop="">-->
+<!--                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"-->
+<!--                                       ngx-datatable-cell-template>-->
+<!--                            {{ value | replace: '_' : ' ' | titlecase }}-->
+<!--                          </ng-template>-->
+<!--                        </ngx-datatable-column>-->
                       </ngx-datatable>
 
                     </div>

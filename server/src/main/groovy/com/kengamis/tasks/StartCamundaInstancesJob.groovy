@@ -104,6 +104,7 @@ class StartCamundaInstancesJob extends Script {
                     def slurper = new JsonSlurper()
                     def orgInfo = slurper.parseText(it.organisation)
                     def applicantEmail = orgInfo['email']
+                    def organization = orgInfo['name']
 
                     def edEmail = []
                     def financeEmail = []
@@ -116,10 +117,6 @@ class StartCamundaInstancesJob extends Script {
                         if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
                     }
 
-                    println "============"
-                    println "${[GrantId          : it.id, ProgramId        : it.program, Applicant        : applicantEmail, ProgramTeam      : programTeamEmail[0], Finance          : financeEmail[0], ExecutiveDirector: edEmail[0]]}"
-                    println "============"
-
                     boolean started = startProcessInstance([
                             GrantId          : it.id,
                             ProgramId        : it.program,
@@ -127,8 +124,7 @@ class StartCamundaInstancesJob extends Script {
                             ProgramTeam      : programTeamEmail[0],
                             Finance          : financeEmail[0],
                             ExecutiveDirector: edEmail[0],
-                            ApplicantUserName: 'Test',
-                            ApplicantPassword: 'Test'
+                            Organization     : organization
                     ], GRANT_PROCESS)
 
 

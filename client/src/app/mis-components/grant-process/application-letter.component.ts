@@ -22,8 +22,6 @@ export class ApplicationLetterComponent implements OnInit {
   loading: boolean;
 
   status = 'not_started';
-  // countries: any;
-  // cities: any;
   programs: any;
   error: boolean;
   success: boolean;
@@ -52,8 +50,6 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.countries = this.countriesService.getListOfCountries();
-
     this.programService.getPrograms().subscribe((data)=>{
       let results = []
       if(data!=null) {
@@ -67,6 +63,7 @@ export class ApplicationLetterComponent implements OnInit {
     if (this.isReadOnly) {
       this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((data: any) => {
         if (data != null) {
+          console.log("data", data)
           this.program = data.program
           this.organisation = JSON.parse(data.organisation);
           this.ngos = JSON.parse(data.ngos);
