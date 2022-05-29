@@ -91,9 +91,9 @@ class TaskListController {
                     c2 = userRoles.contains("ROLE_ED")
                 } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
                     if (userRoles.contains("ROLE_APPLICANT")) {
-                        def applicantEmail = orgInfo['email']
+                        def applicantEmail = ''
+                        if (grant != null) applicantEmail = orgInfo['email']
                         c2 = (applicantEmail == currentUser.email)
-                        println "(applicantEmail == currentUser.email) == ($applicantEmail == ${currentUser.email})"
                     }
                 }
 

@@ -422,7 +422,7 @@ export class GrantProcessComponent implements OnInit {
         status: status
       }
 
-      let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
+      let apiUrl = `${this.grantProcessService.planningLearningApprove}/getByProcessInstanceId`
       const params = new HttpParams().set('id', formData.processInstanceId);
       this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
         if (response?.results != null) {
@@ -482,7 +482,7 @@ export class GrantProcessComponent implements OnInit {
       status: status
     }
 
-    let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
+    let apiUrl = `${this.grantProcessService.provideLearningGrant}/getByProcessInstanceId`
     const params = new HttpParams().set('id', formData.processInstanceId);
     this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
       if (response?.results != null) {
@@ -536,7 +536,7 @@ export class GrantProcessComponent implements OnInit {
         status: status
       }
 
-      let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
+      let apiUrl = `${this.grantProcessService.grantReportReview}/getByProcessInstanceId`
       const params = new HttpParams().set('id', formData.processInstanceId);
       this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
         if (response?.results != null) {
