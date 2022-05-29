@@ -21,7 +21,7 @@ class ArchiveController {
         Archive.all.each { Archive record ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(record.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = ''
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = '',organization=''
 
             variables['data'].each {
                 if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -32,10 +32,12 @@ class ArchiveController {
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
                 if (it.key == 'GroupId') groupId = it.value
+                if (it.key == 'Organization') organization = it.value
             }
 
             def taskPartner = ProgramPartner.findById(partnerId)
             def taskProgram = Program.findById(programId)
+            def taskGrant = GrantLetterOfInterest.findById(grantId)
 
             if (taskPartner == null) taskPartner = [name: '']
             if (taskProgram == null) taskProgram = [title: '']
@@ -53,31 +55,10 @@ class ArchiveController {
 
 
             //def c1 = userGroup.contains(groupId)
-            boolean c2 = false
-            if (record.processDefKey == "CRVPF_REPORTING") {
-                if (record.taskDefinitionKey == "Review_Program_Report" || record.taskDefinitionKey == "Approve_Report") {
-                    def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
-                    if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
-                } else if (record.taskDefinitionKey == "Submit_Report" || record.taskDefinitionKey == "Submit_Final_Report") {
-                    c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
-                } else if (record.taskDefinitionKey == "Review_Performance_Report") {
-                    c2 = userRoles.contains("ROLE_MEAL")
-                } else if (record.taskDefinitionKey == "Review_Finance_Report" || record.taskDefinitionKey == "Disburse_Funds") {
-                    c2 = userRoles.contains("ROLE_FINANCE")
-                } else if (record.taskDefinitionKey == "Approve_Fund_Disbursement") {
-                    c2 = userRoles.contains("ROLE_ED")
-                }
-            } else if (record.processDefKey == "GRANT_PROCESS") {
-                if (record.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
-                        record.taskDefinitionKey == "Review_Concept" ||
-                        record.taskDefinitionKey == "Review_Report") {
-                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
-                } else if (record.taskDefinitionKey == "Provide_Learning_Grant") {
-                    c2 = userRoles.contains("ROLE_FINANCE")
-                } else if (record.taskDefinitionKey == "Approve_Learning_Grant") {
-                    c2 = userRoles.contains("ROLE_ED")
-                }
-            }
+            def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
+            boolean c2 = currentUserGroup.contains(taskProgram.title)
+
+
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
 
@@ -85,13 +66,14 @@ class ArchiveController {
                 records << [id               : record.id,
                             taskName         : record.taskName,
                             partnerSetupId   : partnerSetupId,
-                            startDate        : startDate,
+                            startDate        : taskGrant.dateCreated,
                             partnerId        : partnerId,
                             partnerName      : taskPartner.name,
                             programId        : programId,
                             grantId          : grantId,
+                            case             : organization?:taskPartner.name,
                             programName      : taskProgram.title,
-                            endDate          : endDate,
+                            endDate          : record.lastUpdated,
                             groupId          : groupId,
                             reportingPeriod  : period,
                             outputVariables  : record.outputVariables,
@@ -105,8 +87,53 @@ class ArchiveController {
         respond records
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond archiveService.get(id)
+    }
+
+    def getTaskRecord() {
+        def task = Archive.get(params.id)
+
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+        def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = ''
+
+        variables['data'].each {
+            if (it.key == 'PartnerSetupId') partnerSetupId = it.value
+            if (it.key == 'Period') period = it.value
+            if (it.key == 'StartDate') startDate = it.value
+            if (it.key == 'PartnerId') partnerId = it.value
+            if (it.key == 'GrantId') grantId = it.value
+            if (it.key == 'ProgramId') programId = it.value
+            if (it.key == 'EndDate') endDate = it.value
+            if (it.key == 'GroupId') groupId = it.value
+        }
+
+        def programPartner = ProgramPartner.findById(partnerId)
+        def program = Program.findById(programId)
+
+        if (programPartner == null) programPartner = [name: '']
+        if (program == null) program = [title: '']
+
+        def t = [id               : task.id,
+                 taskName         : task.taskName,
+                 partnerSetupId   : partnerSetupId,
+                 startDate        : startDate,
+                 partnerId        : partnerId,
+                 partnerName      : programPartner.name,
+                 programId        : programId,
+                 grantId          : grantId,
+                 programName      : program.title,
+                 endDate          : endDate,
+                 groupId          : groupId,
+                 reportingPeriod  : period,
+                 outputVariables  : task.outputVariables,
+                 processInstanceId: task.processInstanceId,
+                 processDefKey    : task.processDefKey,
+                 taskDefinitionKey: task.taskDefinitionKey,
+                 dateCreated      : task.dateCreated,
+                 status           : task.status]
+        respond t
     }
 
     @Transactional
