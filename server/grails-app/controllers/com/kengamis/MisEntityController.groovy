@@ -28,13 +28,14 @@ class MisEntityController {
     def springSecurityService
     def kengaGroupsService
 
+
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         def misEntity = MisEntity.findAll().collect { entity ->
-            def entityViews = entity.entityViews.collect { [id: it.id, name: it.name] }
+            def entityViews = entity.entityViews.collect { [id: it.id, name: it.name]}
             [id: entity.id, name: entity.name, tableName: entity.tableName, prefix: entity.prefix, dateCreated: entity.dateCreated, entityViews: entityViews]
         }
         respond misEntity
@@ -183,10 +184,10 @@ class MisEntityController {
         def entityData = []
         try {
             def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
-            //   resultList: kengaGroupsService.postFilter(q.data, Permission.READ),
+//            resultList: kengaGroupsService.postFilter(q.data, Permission.READ)
             entityData = [
                     headerList : q.headers,
-                    resultList: q.data,
+                    resultList: kengaGroupsService.postFilter(q.data, Permission.READ),
                     resultListCount: q.count,
                     entity: q.misEntity,
                     tagTypeList: q.tagTypes,
