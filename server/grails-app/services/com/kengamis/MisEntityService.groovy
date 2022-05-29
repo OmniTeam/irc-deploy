@@ -7,6 +7,7 @@ interface MisEntityService {
 
     MisEntity get(Serializable id)
 
+//    List<MisEntity> list(Map args)
     List<MisEntity> list(Map args)
 
     Long count()

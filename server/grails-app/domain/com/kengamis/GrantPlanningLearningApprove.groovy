@@ -7,6 +7,7 @@ class GrantPlanningLearningApprove {
 
     String decision
     String comments
+    String user
 
     String definitionKey
     String processInstanceId
@@ -16,6 +17,7 @@ class GrantPlanningLearningApprove {
 
     static constraints = {
         status nullable: true
+        user nullable: true
     }
 
     static mapping = {

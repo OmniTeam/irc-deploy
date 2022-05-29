@@ -11,6 +11,7 @@ class GrantProvideLearningGrant {
     String dateTo
     String clusterName
     String comments
+    String user
 
     String definitionKey
     String processInstanceId
@@ -20,6 +21,7 @@ class GrantProvideLearningGrant {
 
     static constraints = {
         status nullable: true
+        user nullable: true
     }
 
     static mapping = {

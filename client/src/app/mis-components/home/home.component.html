@@ -107,27 +107,6 @@
     <div class=" col">
       <div class="row">
 
-<!--        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
-          <div class=" row">
-            <div class=" col">
-              <div class="card">
-                <div class="card-header">
-                  <div class="row">
-                    <h3 style="margin-left: 40px;">QUICK OPTIONS</h3>
-                  </div>
-                </div>
-                <div class="card-body col-sm-12">
-                  <div class="row">
-                    <button class="btn btn-default" (click)="createReferral()">New Referral</button>
-                    <button class="btn btn-default" (click)="createActivityReport()">New Activity Report</button>
-                    <button class="btn btn-default" (click)="createFeedback()">New Feedback</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>-->
-
         <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
           <div class=" row">
             <div class=" col">
@@ -268,7 +247,6 @@
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Case" prop="task_case"></ngx-datatable-column>
-                        <ngx-datatable-column name="Assignee" prop="assignee"></ngx-datatable-column>
                         <ngx-datatable-column name="Date assigned" prop="date_assigned">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>

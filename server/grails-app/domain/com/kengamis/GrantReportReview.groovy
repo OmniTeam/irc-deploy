@@ -8,6 +8,7 @@ class GrantReportReview {
     String adhereToBudget
     String activitiesInlineWithWorkPlan
     String comments
+    String user
     String decision
     String status
     String processInstanceId
@@ -16,6 +17,7 @@ class GrantReportReview {
     Date lastUpdated
 
     static constraints = {
+        user nullable: true
     }
 
     static mapping = {

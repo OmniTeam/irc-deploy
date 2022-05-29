@@ -2756,4 +2756,128 @@ databaseChangeLog = {
         modifyDataType(columnName: "output_variables", newDataType: "LONGTEXT", tableName: "archive")
     }
 
+    changeSet(author: "bruno (generated)", id: "20220234534534556-01") {
+        modifyDataType(columnName: "comments", newDataType: "LONGTEXT", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "20220353453634634-01") {
+        modifyDataType(columnName: "comments", newDataType: "LONGTEXT", tableName: "grant_planning_learning_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-1") {
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "activities_and_strategies", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-2") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "are_they_adhering", tableName: "grant_planning_learning_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-3") {
+        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "attachment", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-4") {
+        dropNotNullConstraint(columnDataType: "LONGTEXT", columnName: "comments", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-5") {
+        dropNotNullConstraint(columnDataType: "LONGTEXT", columnName: "comments", tableName: "grant_planning_learning_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-7") {
+        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "cost_of_project", tableName: "grant_planning_learning", validate: "true")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-8") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "date_of_due_diligence", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-9") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "decision", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-10") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "decision", tableName: "grant_planning_learning_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-11") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "does_it_adhere", tableName: "grant_planning_learning_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-12") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "due_diligence", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-13") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "due_diligence_report", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-14") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "has_been_reviewed", tableName: "grant_letter_of_interest_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-17") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "is_concept_inline", tableName: "grant_planning_learning_review")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-18") {
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "learning_and_documentation", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-20") {
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "organisation", tableName: "grant_letter_of_interest")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-27") {
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "risks_and_challenges", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653662925340-28") {
+        addNotNullConstraint(columnDataType: "LONGTEXT", columnName: "six_months_managed", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "16536312423553466-12") {
+        addColumn(tableName: "grant_letter_of_interest_review") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16536234536463567-12") {
+        addColumn(tableName: "grant_planning_learning_approve") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
+    changeSet(author: "bruno (generated)", id: "16536312312445354-12") {
+        addColumn(tableName: "grant_planning_learning_review") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
+    changeSet(author: "bruno (generated)", id: "16536312234234253-12") {
+        addColumn(tableName: "grant_provide_learning_grant") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
+    changeSet(author: "bruno (generated)", id: "165323234235266678-12") {
+        addColumn(tableName: "grant_report_review") {
+            column(name: "user", type: "varchar(255)") {
+                constraints(nullable: "true")
+            }
+        }
+    }
+
+
 }

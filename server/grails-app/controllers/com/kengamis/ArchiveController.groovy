@@ -42,6 +42,10 @@ class ArchiveController {
             if (taskPartner == null) taskPartner = [name: '']
             if (taskProgram == null) taskProgram = [title: '']
 
+//            def grant = GrantLetterOfInterest.findById(grantId)
+//            def orgInfo = {}
+//            if(grant!=null) orgInfo = slurper.parseText(grant.organisation)
+
             User currentUser = AppHolder.currentUser()
             def userRoles = UserRole.findAllByUser(currentUser).collect { it.role.authority }.join(",")
             def query = "SELECT USER.id AS user_id, user_partner.program_partner_id as partner_id, program_partner.program_id FROM user INNER JOIN user_partner ON user_partner.user_id = USER.id INNER JOIN program_partner ON program_partner.id = user_partner.program_partner_id WHERE user.id = '${currentUser.id}' "

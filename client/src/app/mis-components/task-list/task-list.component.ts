@@ -16,8 +16,7 @@ export class TaskListComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   constructor(private router: Router,
-              private taskListService: TaskListService,
-              private programPartnersService: ProgramPartnersService) {
+              private taskListService: TaskListService) {
   }
 
   count = 0;
@@ -34,18 +33,7 @@ export class TaskListComponent implements OnInit {
       processing: true,
       responsive: true,
       dom: 'lfBrtip',
-      buttons: [
-        {
-          text: '<i class="fas fa-file-csv" style="color: green;"></i>&nbsp;&nbsp;Export to CSV',
-          extend: 'csvHtml5',
-          title: 'TaskList'
-        },
-        {
-          text: '<i class="far fa-file-excel" style="color: green;"></i>&nbsp;&nbsp;Export to Excel',
-          extend: 'excelHtml5',
-          title: 'TaskList'
-        }
-      ]
+      buttons: []
     };
   }
 

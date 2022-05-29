@@ -40,7 +40,7 @@ deploy:
     - sshpass -V
     - export SSHPASS=$USER_PASS
     - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
-    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./stop-kengamis.sh && ./start-kengamis.sh"
+    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh"
     - echo "Done Deploying crvpf server :)" 
 
 build:client:
