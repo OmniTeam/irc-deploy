@@ -1,6 +1,7 @@
 package com.kengamis
 
 import com.kengamis.query.QueryHelper
+import com.kengamis.query.security.Permission
 import grails.core.GrailsApplication
 import grails.validation.ValidationException
 
