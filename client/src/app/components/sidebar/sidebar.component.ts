@@ -34,20 +34,23 @@ const dataMenu: any = {
   roles: [
     'ROLE_BUDGET_HOLDER',
     'ROLE_SUPER_ADMIN',
-    'ROLE_ADMIN'
+    'ROLE_ADMIN',
+    'ROLE_REBUILD_DATA_MANAGER'
   ],
   children: [
     {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red',
       roles: [
         'ROLE_BUDGET_HOLDER',
         'ROLE_SUPER_ADMIN',
-        'ROLE_ADMIN'
+        'ROLE_ADMIN',
+        'ROLE_REBUILD_DATA_MANAGER'
       ], },
       {path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6', title: 'Services', type: 'link', icontype: 'ni-single-copy-04 text-red',
       roles: [
         'ROLE_BUDGET_HOLDER',
         'ROLE_SUPER_ADMIN',
-        'ROLE_ADMIN'
+        'ROLE_ADMIN',
+        'ROLE_REBUILD_DATA_MANAGER'
       ], },
   ]
 };
@@ -63,7 +66,7 @@ const listsMenu: any = {
   roles: [
     'ROLE_BUDGET_HOLDER',
     'ROLE_SUPER_ADMIN',
-    'ROLE_ADMIN'
+    'ROLE_ADMIN',
   ]
 };
 
@@ -119,6 +122,7 @@ export const ROUTES: RouteInfo[] = [
       'ROLE_ADMIN',
       'ROLE_REBUILD_DATA_VIEWER',
       'ROLE_REBUILD_DATA_MANAGER'
+
     ]
   },
   {
@@ -126,7 +130,7 @@ export const ROUTES: RouteInfo[] = [
     title: 'Activity Report',
     type: 'link',
     icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER'],
+    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER' ],
   },
   // formsMenu,
   dataMenu,
@@ -159,11 +163,11 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-user-cog',
     isCollapsed: true,
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER'],
     children: [
       {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
-      {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
+      {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
       {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
