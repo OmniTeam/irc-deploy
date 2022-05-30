@@ -40,9 +40,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   isSubmitVisible: boolean;
   isSubmitFinalVisible: boolean;
   isReviewVisible: boolean;
+  isReviewPerformance: boolean;
+  isReviewFinance: boolean;
+  isReviewProgram: boolean;
   isApproveVisible: boolean;
   isDisburseFunds: boolean;
   isApproveFundDisbursement: boolean;
+
+  totalAmountCommitted: string;
+  totalAmountSpent: string;
+  totalSpendingPlanForPeriod: string;
+  balance: string;
 
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
@@ -112,6 +120,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   ngOnInit(): void {
     this.isSubmitVisible = false;
     this.isReviewVisible = false;
+    this.isReviewProgram = false;
+    this.isReviewFinance = false;
+    this.isReviewPerformance = false;
     this.isApproveVisible = false;
     this.isSubmitFinalVisible = false;
     this.isDisburseFunds = false;
@@ -155,11 +166,21 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       this.taskRecord.taskDefinitionKey === 'Review_Program_Report') {
       this.isReviewVisible = true;
     }
+    if (this.taskRecord.taskDefinitionKey === 'Review_Finance_Report') {
+      this.isReviewFinance = true;
+    }
+    if (this.taskRecord.taskDefinitionKey === 'Review_Performance_Report') {
+      this.isReviewPerformance = true;
+    }
+    if (this.taskRecord.taskDefinitionKey === 'Review_Program_Report') {
+      this.isReviewProgram = true;
+    }
     if (this.taskRecord.taskDefinitionKey === 'Disburse_Funds') {
       this.isDisburseFunds = true;
     }
     if (this.taskRecord.taskDefinitionKey === 'Approve_Report') {
       this.isApproveVisible = true;
+      this.isReadOnly = false;
     }
     if (this.taskRecord.taskDefinitionKey === 'Approve_Fund_Disbursement') {
       this.isApproveFundDisbursement = true;
@@ -247,6 +268,16 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
+
+        this.totalAmountCommitted = values.currentStatus.totalAmountAccountedFor;
+        this.totalAmountSpent = values.currentStatus.totalAmountDisbursed;
+
+        values.disbursementPlan.forEach((q) => {
+          if (q.datePeriod == this.taskRecord.reportingPeriod) {
+            this.totalSpendingPlanForPeriod = q.disbursement
+            this.balance = (+this.totalSpendingPlanForPeriod - +this.totalAmountSpent).toString()
+          }
+        })
 
         values.budget.forEach((b) => {
           if (!this.financialReport.some(x => x.id === b.id)) {
@@ -345,6 +376,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       });
     }
     return answers;
+  }
+
+  onNewCommentsHandler(comment: CommentNode) {
+    this.reviewerComments = comment.text
+  }
+
+  onNewRecommendationsHandler(comment: CommentNode) {
+    this.reviewerRecommendations = comment.text
+    this.provideAnyRecommendations = comment.text
   }
 
   commentsChangedHandler(comments: Array<CommentNode>) {
@@ -548,7 +588,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     });
     setTimeout(() => {
       if (status != 'draft') {
-        this.router.navigate(['/taskList']);
+        this.router.navigate(['/home']);
       }
       this.success = false;
       this.error = false;
@@ -635,12 +675,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     if (status === 'revise') {
       this.saveReport(reportValues, 'asked_for_revisions');
       this.updateTaskStatus('needs_revision');
-      this.router.navigate(['/taskList']);
     }
     if (status === 'submit') {
       this.saveReport(reportValues, 'reviewed_and_submitted');
       this.updateTaskStatus('completed');
-      this.router.navigate(['/taskList']);
     }
   }
 
@@ -675,10 +713,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     this.saveReport(reportValues, 'approved_report');
     this.updateTaskStatus('completed');
-    this.router.navigate(['/taskList']);
   }
 
   saveCommentsAndRecommendations(){
+    this.comments.push(new CommentNode(uuid(), this.reviewerComments, this.authService.getLoggedInUsername(), [], [], new Date()));
+
     this.comments.forEach((comment) => {
       let commentsRecord: { [key: string]: string } = {
         taskId: this.taskRecord.id,
@@ -698,6 +737,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         }
       }, error => console.log('comment', error));
     });
+
+    this.recommendations.push(new CommentNode(uuid(), this.reviewerRecommendations, this.authService.getLoggedInUsername(), [], [], new Date()));
+    this.recommendations.push(new CommentNode(uuid(), this.provideAnyRecommendations, this.authService.getLoggedInUsername(), [], [], new Date()));
 
     this.recommendations.forEach((recommendation) => {
       let recommendationsRecord: { [key: string]: string } = {
@@ -756,6 +798,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   onBackPressed() {
-    this.router.navigate(['/taskList']);
+    this.router.navigate(['/home']);
   }
 }

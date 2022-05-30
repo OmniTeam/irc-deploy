@@ -244,26 +244,20 @@ class TaskListController {
         TaskList[] createUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_account_in_MIS' }.findAll()
         if (createUserAccountTask.size() > 0) {
             createUserAccountTask.each {
-                if (createUser(it)) {
-                    it.status = "completed"
-                    it.save()
-                }
+                createUser(it)
             }
         }
 
         TaskList[] deactivateUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Deactivate_account' }.findAll()
         if (deactivateUserAccountTask.size() > 0) {
             deactivateUserAccountTask.each {
-                if (deactivateUser(it)) {
-                    it.status = "completed"
-                    it.save()
-                }
+                deactivateUser(it)
             }
         }
     }
 
     @Transactional
-    boolean createUser(TaskList task) {
+    def createUser(TaskList task) {
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
 
@@ -290,15 +284,12 @@ class TaskListController {
                 task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
-
-                return true
             }
         }
-        return false
     }
 
     @Transactional
-    boolean deactivateUser(TaskList task) {
+    def deactivateUser(TaskList task) {
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
 
@@ -314,11 +305,8 @@ class TaskListController {
 
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
-
-                return true
             }
         }
-        return false
     }
 
 
@@ -340,29 +328,29 @@ class TaskListController {
 
     @Transactional
     def archiveReport() {
-        TaskList[] forArchiving = TaskList.where { taskDefinitionKey == 'Disburse_Funds' || taskDefinitionKey == 'Archive_Report' }.findAll()
+        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Disburse_Funds' OR task_definition_key = 'Archive_Report')"
+        def forArchiving = AppHolder.withMisSql { rows(query as String) }
         if (forArchiving.size() > 0) {
             forArchiving.each { task ->
                 Archive archive = new Archive()
-                archive.taskId = task.taskId
-                archive.inputVariables = task.inputVariables
-                archive.outputVariables = task.outputVariables
-                archive.status = task.status
-                archive.formId = task.formId
-                archive.groupId = task.groupId
-                archive.userId = task.userId
-                archive.taskName = task.taskName
-                archive.processInstanceId = task.processInstanceId
-                archive.processDefKey = task.processDefKey
-                archive.synced = task.synced
-                archive.taskDefinitionKey = task.taskDefinitionKey
+                archive.taskId = task['task_id']
+                archive.inputVariables = task['input_variables']
+                archive.outputVariables = task['output_variables']
+                archive.status = task['status']
+                archive.formId = task['form_id']
+                archive.groupId = task['group_id']
+                archive.userId = task['user_id']
+                archive.taskName = task['task_name']
+                archive.processInstanceId = task['process_instance_id']
+                archive.processDefKey = task['process_def_key']
+                archive.synced = task['synced']
+                archive.taskDefinitionKey = task['task_definition_key']
                 archive.save(flush: true, failOnError: true)
 
-                //complete the archive report task
-                if (task.taskDefinitionKey == 'Archive_Report') {
-                    task.status = 'completed'
-                    task.save(flush: true, failOnError: true)
-                }
+                //complete the archived task
+                TaskList taskList = TaskList.findById(task['id'] as String)
+                taskList.status = 'completed'
+                taskList.save(flush: true, failOnError: true)
             }
         }
     }
