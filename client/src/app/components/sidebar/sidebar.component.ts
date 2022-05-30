@@ -195,21 +195,21 @@ export const ROUTES: RouteInfo[] = [
     type: 'sub',
     icontype: 'fas fa-tools text-purple',
     isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
+    roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/],
     children: [
-      {path: 'forms', title: 'Forms', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
+      {path: 'forms', title: 'Forms', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
       formSettingsMenu,
       {
-        path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
+        path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/],
         children: [
-          {path: 'entity', title: 'Entities', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-          {path: 'entityView', title: 'Entity Views', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-          {path: 'dataView', title: 'Data View', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
+          {path: 'entity', title: 'Entities', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+          {path: 'entityView', title: 'Entity Views', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+          {path: 'dataView', title: 'Data View', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
         ]
       },
-      {path: 'tagType', title: 'Tag Type', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
+      {path: 'tagType', title: 'Tag Type', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
     ]
   },
   {

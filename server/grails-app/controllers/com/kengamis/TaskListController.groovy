@@ -71,7 +71,7 @@ class TaskListController {
                 assignee = staff?.email
             }
 
-            boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
+            boolean c2 = (userRoles.contains("ROLE_SUPER_ADMIN")||userRoles.contains("ROLE_ADMIN"))
 
             if (assignee == currentUser.email || c2)
                 tasks << [id               : task.id,
