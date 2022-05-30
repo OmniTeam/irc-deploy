@@ -24,7 +24,9 @@ export class AuthService {
   login(user: { username: string, password: string }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/api/login`, user)
       .pipe(
-        tap(user => this.doLoginUser(user.username, user)),
+        tap(user => {
+          this.doLoginUser(user.username, user);
+        }),
         mapTo(true),
         catchError(error => {
           alert(error.error);
@@ -59,7 +61,6 @@ export class AuthService {
   }
 
   doLogoutUser() {
-    this.loggedUser = null;
     this.removeTokens();
   }
 
