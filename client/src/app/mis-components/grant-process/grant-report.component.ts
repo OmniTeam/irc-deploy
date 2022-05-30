@@ -150,6 +150,6 @@ export class GrantReportComponent implements OnInit {
   }
 
   onBackPressed() {
-    this.router.navigate(['/taskList']);
+    this.router.navigate(['/home']);
   }
 }

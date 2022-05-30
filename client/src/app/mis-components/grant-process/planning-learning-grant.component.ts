@@ -166,7 +166,7 @@ export class PlanningLearningGrantComponent implements OnInit {
     setTimeout(() => {
       if (this.success == true) {
         this.formGp.reset()
-        this.router.navigate(['/taskList']);
+        this.router.navigate(['/home']);
       }
       this.success = false;
       this.error = false;

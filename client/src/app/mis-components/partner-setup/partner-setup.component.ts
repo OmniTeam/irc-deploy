@@ -283,6 +283,12 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     }
   }
 
+  addNewBudgetItem() {
+    let id = uuid();
+    this.budget.push({id: id, indicatorId: '', budgetLine: '', approvedAmount: ''});
+    this.setDisaggregation(id);
+  }
+
   toggleDisaggregation(btn_id, data) {
     this.showDisaggregation = !this.showDisaggregation;
     this.openPopup = this.showDisaggregation;
@@ -315,7 +321,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     });
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue, type: string, selectList?: []) {
+  cellEditor(rowId, tdId, key: string, oldValue, type?: string, selectList?: []) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type, '', selectList);
   }
 
@@ -330,6 +336,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           break;
         case 'disbursementPlan':
           this.updateDisbursementPlanValues(rowId, value);
+          break;
+        case 'budget_line':
+          if (this.budget.some(x => x.id === rowId)) {
+            this.budget.forEach(function (item) {
+              if (item.id === rowId) item.budgetLine = value;
+            });
+          }
           break;
         case 'disaggregation':
           let overallTarget: number = 0;

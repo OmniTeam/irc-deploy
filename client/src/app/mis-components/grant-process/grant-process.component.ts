@@ -284,7 +284,7 @@ export class GrantProcessComponent implements OnInit {
     }
 
     setTimeout(() => {
-      if (status != "draft" && this.success) this.router.navigate(['/taskList']);
+      if (status != "draft" && this.success) this.router.navigate(['/home']);
       this.success = false;
       this.error = false;
     }, 3000);
@@ -318,7 +318,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to update";
@@ -335,7 +335,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to submit";
@@ -377,7 +377,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to update";
@@ -394,7 +394,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to submit";
@@ -434,7 +434,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to update";
@@ -451,7 +451,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to submit";
@@ -493,7 +493,7 @@ export class GrantProcessComponent implements OnInit {
           this.successMessage = "Updated";
           this.statusChangedHandler(status)
           this.alertService.success(this.successMessage);
-          this.router.navigate(['/taskList']);
+          this.router.navigate(['/home']);
         }, error => {
           this.error = true;
           this.errorMessage = "Failed to update";
@@ -509,7 +509,7 @@ export class GrantProcessComponent implements OnInit {
           this.successMessage = "Submitted";
           this.statusChangedHandler(status)
           this.alertService.success(this.successMessage);
-          this.router.navigate(['/taskList']);
+          this.router.navigate(['/home']);
         }, error => {
           this.error = true;
           this.errorMessage = "Failed to submit";
@@ -548,7 +548,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to update";
@@ -565,7 +565,7 @@ export class GrantProcessComponent implements OnInit {
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
-            this.router.navigate(['/taskList']);
+            this.router.navigate(['/home']);
           }, error => {
             this.error = true;
             this.errorMessage = "Failed to submit";
@@ -586,7 +586,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/taskList']);
+    this.router.navigate(['/home']);
   }
 
 }
