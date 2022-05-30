@@ -80,14 +80,14 @@ const routes: Routes = [
       {
         path: 'taskList', canActivate: [AuthGuard],
         data: {
-          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
       {
         path: 'workPlanList', canActivate: [AuthGuard],
         data: {
-          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/work-plan/work-plan-list/work-plan-list.module').then(m => m.WorkPlanListModule)
       },
@@ -504,7 +504,7 @@ const routes: Routes = [
       {
         path: 'dataView/showData/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_BUDGET_HOLDER, Roles.ROLE_REBUILD_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/data-views/data-view-table/data-view-table.module').then(m => m.DataViewTableModule)
       },
