@@ -37,6 +37,7 @@ export class CellEdit {
 
     if (status === "save") {
       let newValue, extras;
+      extras = oldValue;
       if (type == 'select') {
         let select = (document.getElementById("input-" + td_id) as HTMLSelectElement)
         newValue = select.value;
