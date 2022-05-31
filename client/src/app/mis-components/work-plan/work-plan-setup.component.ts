@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
+import {Subject} from 'rxjs';
 import {v4 as uuid} from 'uuid';
-import {WorkPlanService} from "../../services/work-plan-setup.service";
+import {WorkPlanService} from '../../services/work-plan-setup.service';
 import {CellEdit, OnUpdateCell} from '../../helpers/cell-edit';
-import {Location} from "@angular/common";
-import {AuthService} from "../../services/auth.service";
+import {Location} from '@angular/common';
+import {AuthService} from '../../services/auth.service';
 import {DateSplitter} from '../../helpers/date-splitter';
-import {HttpParams} from "@angular/common/http";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ProjectMilestoneService} from "../../services/project-milestone.service";
-import {Indicator} from "../../models/indicator";
-import {AlertService} from "../../services/alert";
-import {UsersService} from "../../services/users.service";
+import {HttpParams} from '@angular/common/http';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProjectMilestoneService} from '../../services/project-milestone.service';
+import {Indicator} from '../../models/indicator';
+import {AlertService} from '../../services/alert';
+import {UsersService} from '../../services/users.service';
 
 @Component({
   selector: 'app-work-plan',
@@ -29,7 +29,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   totalApprovedAmount: string;
   totalBudgetDisburse: string;
   totalDisbursement: string;
-  startReportingCycle: boolean = false;
+  startReportingCycle = false;
   quarterlyCommitment: any = [];
   currentStatus: any = {};
   indicators: Indicator[] = [];
@@ -99,7 +99,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       });
     } else {
       this.usersService.getUsersWithoutWorkPlan().subscribe(data => {
-        console.log(data)
+        console.log(data);
         if (data !== null && data !== undefined) {
           this.listOfPartners = data;
         }
@@ -107,8 +107,8 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     }
 
     this.dtOptions = {
-      pagingType: "numbers",
-      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      pagingType: 'numbers',
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
       processing: true,
       responsive: true,
       dom: 'lfBrtip',
@@ -119,22 +119,26 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   setWorkPlanInfo(data) {
     this.setup = data;
     if (data !== null && data !== undefined) {
-      let setupValues = JSON.parse(data.setupValues);
+      const setupValues = JSON.parse(data.setupValues);
       this.staffChosen = data.staffId;
-      this.startReportingCycle = data.startCycle == "true";
-      if (this.staffChosen != undefined) this.onPartnerChange()
+      this.startReportingCycle = data.startCycle == 'true';
+      if (this.staffChosen != undefined) {
+        this.onPartnerChange();
+      }
 
       if (setupValues.quarterlyCommitment != undefined) {
         this.quarterlyCommitment = setupValues.quarterlyCommitment;
         this.quarterlyCommitment.forEach((data) => {
-          let totalD: number = 0;
+          let totalD = 0;
           if (this.quarterlyCommitment.some(x => x.id === data.id)) {
             this.quarterlyCommitment.forEach(function (item) {
-              if (item.id === data.id) item.commitment = data.commitment
+              if (item.id === data.id) {
+                item.commitment = data.commitment;
+              }
               totalD += +item.commitment;
             });
           }
-          this.totalDisbursement = totalD.toString()
+          this.totalDisbursement = totalD.toString();
         });
       }
 
@@ -147,16 +151,20 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         });
       }
 
-      if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
-      if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
-      console.log("this.indicators", this.indicators);
+      if (setupValues.currentStatus != undefined) {
+        this.currentStatus = setupValues.currentStatus;
+      }
+      if (this.isValidJSONStr(setupValues.indicators)) {
+        this.indicators = JSON.parse(setupValues.indicators);
+      }
+      console.log('this.indicators', this.indicators);
     }
 
     this.dtTrigger.next();
   }
 
   getCalendarForSetup(id): any {
-    let reportingCalendar: { [key: string]: string }[] = [];
+    const reportingCalendar: { [key: string]: string }[] = [];
     const params = new HttpParams().set('setupId', id);
     this.workPlanService.getReportingCalendarByWorkPlanId(params).subscribe(data => {
       data.calendar.forEach((cal) => {
@@ -168,7 +176,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         });
       });
     });
-    return reportingCalendar
+    return reportingCalendar;
   }
 
   generateCalendar(event) {
@@ -185,20 +193,20 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   }
 
   calendarDates() {
-    let startDate = this.calendar.projectReportingStartDate;
-    let endDate = this.calendar.projectReportingEndDate;
+    const startDate = this.calendar.projectReportingStartDate;
+    const endDate = this.calendar.projectReportingEndDate;
 
-    if (this.calendar.periodType == "quarter") {
-      //generate quarters
+    if (this.calendar.periodType == 'quarter') {
+      // generate quarters
       this.calendar.reportingCalender = DateSplitter.genDatesInRange(startDate, endDate, false);
-    } else if (this.calendar.periodType == "month") {
-      //generate quarters
+    } else if (this.calendar.periodType == 'month') {
+      // generate quarters
       this.calendar.reportingCalender = DateSplitter.genDatesInRange(startDate, endDate, true);
-    } else if (this.calendar.periodType == "annual") {
-      //generate two years
-      let years = [];
-      let months = DateSplitter.genDatesInRange(startDate, endDate, true);
-      let numOfYears = Math.floor(months.length / 12);
+    } else if (this.calendar.periodType == 'annual') {
+      // generate two years
+      const years = [];
+      const months = DateSplitter.genDatesInRange(startDate, endDate, true);
+      const numOfYears = Math.floor(months.length / 12);
       let countStart = 0;
       let countEnd = 0;
       for (let number = 1; number <= numOfYears; number++) {
@@ -213,7 +221,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       this.calendar.reportingCalender = years;
     }
 
-    //set disbursement
+    // set disbursement
     this.calendar.reportingCalender.forEach((period) => {
       this.quarterlyCommitment.push(
         {
@@ -225,7 +233,9 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
         }
       );
     });
-    if (this.setup != undefined) this.saveReportingCalendar(this.setup.id);
+    if (this.setup != undefined) {
+      this.saveReportingCalendar(this.setup.id);
+    }
   }
 
   onPartnerChange() {
@@ -246,7 +256,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     const params = new HttpParams().set('program', program);
     this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
       if (data !== null && data !== undefined) {
-        console.log('milestones', data.milestones)
+        console.log('milestones', data.milestones);
         this.milestones = data.milestones;
       }
     });
@@ -257,13 +267,17 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       this.indicators.forEach((item) => {
         this.calendar.reportingCalender.forEach((c) => {
           let exists = false;
-          if (item.disaggregation.some(x => x.datePeriod === c.datePeriod)) exists = true;
-          if (!exists) item.disaggregation.push(
-            {
-              datePeriod: c.datePeriod,
-              target: ''
-            }
-          );
+          if (item.disaggregation.some(x => x.datePeriod === c.datePeriod)) {
+            exists = true;
+          }
+          if (!exists) {
+            item.disaggregation.push(
+              {
+                datePeriod: c.datePeriod,
+                target: ''
+              }
+            );
+          }
         });
       });
     }
@@ -274,13 +288,17 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       this.budget.forEach((item) => {
         this.calendar.reportingCalender.forEach((c) => {
           let exists = false;
-          if (item.quarterlyBudget.some(x => x.datePeriod === c.datePeriod)) exists = true;
-          if (!exists) item.quarterlyBudget.push(
-            {
-              datePeriod: c.datePeriod,
-              amount: ''
-            }
-          );
+          if (item.quarterlyBudget.some(x => x.datePeriod === c.datePeriod)) {
+            exists = true;
+          }
+          if (!exists) {
+            item.quarterlyBudget.push(
+              {
+                datePeriod: c.datePeriod,
+                amount: ''
+              }
+            );
+          }
         });
       });
     }
@@ -303,7 +321,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
     if (this.showDisaggregation) {
       button.firstChild.replaceWith(minus_icon);
-      //set disaggregation values
+      // set disaggregation values
       this.indicatorForDisaggregation = data;
     } else {
       button.firstChild.replaceWith(plus_icon);
@@ -327,7 +345,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
 
     if (this.showQuarterlyBudget) {
       button.firstChild.replaceWith(minus_icon);
-      //set disaggregation values
+      // set disaggregation values
       this.budgetForDisaggregation = data;
     } else {
       button.firstChild.replaceWith(plus_icon);
@@ -345,12 +363,12 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       return;
     }
 
-    let id = uuid();
+    const id = uuid();
     this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: []});
   }
 
   createNewBudgetItem() {
-    let id = uuid();
+    const id = uuid();
     this.budget.push({id: id, budgetLine: '', approvedAmount: '', totalSpent: '', quarterlyBudget: []});
     this.setBudgetDisaggregation(id);
   }
@@ -368,12 +386,14 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   }
 
   saveCellValue = (value: string, key: string, rowId, extras): void => {
-    if (value !== null && value !== undefined)
+    if (value !== null && value !== undefined) {
       switch (key) {
         case 'budget_line':
           if (this.budget.some(x => x.id === rowId)) {
             this.budget.forEach(function (item) {
-              if (item.id === rowId) item.budgetLine = value;
+              if (item.id === rowId) {
+                item.budgetLine = value;
+              }
             });
           }
           break;
@@ -381,38 +401,46 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
           this.updateBudgetAmount(rowId, value);
           break;
         case 'quartery_budget':
-          let amt: number = 0;
-          let array = rowId.split(' ');
-          let period = array[0];
-          let budgetId = array[1];
+          let amt = 0;
+          const array = rowId.split(' ');
+          const period = array[0];
+          const budgetId = array[1];
           this.budget.forEach((item) => {
             if (item.id === budgetId) {
               if (item.quarterlyBudget.some(x => x.datePeriod === period)) {
                 item.quarterlyBudget.forEach(function (item) {
-                  if (item.datePeriod === period) item.amount = value
-                  if (item.amount.length != 0) amt += +item.amount;
+                  if (item.datePeriod === period) {
+                    item.amount = value;
+                  }
+                  if (item.amount.length != 0) {
+                    amt += +item.amount;
+                  }
                 });
                 item.quarterlySpendingPlan = amt.toString();
                 this.budgetForDisaggregation = item;
               }
             }
           });
-          this.updateQuarterlyCommitmentValues(period, value);
+          this.updateQuarterlyCommitmentValues(period, value, extras);
           break;
         case 'total_spent':
           this.updateBudgetDisburse(rowId, value, true);
           break;
         case 'disaggregation':
-          let overallTarget: number = 0;
-          let arr = rowId.split(' ');
-          let datePeriod = arr[0];
-          let indicatorId = arr[1];
+          let overallTarget = 0;
+          const arr = rowId.split(' ');
+          const datePeriod = arr[0];
+          const indicatorId = arr[1];
           this.indicators.forEach((indicator) => {
             if (indicator.id === indicatorId) {
               if (indicator.disaggregation.some(x => x.datePeriod === datePeriod)) {
                 indicator.disaggregation.forEach(function (item) {
-                  if (item.datePeriod === datePeriod) item.target = value
-                  if (item.target.length != 0) overallTarget += +item.target;
+                  if (item.datePeriod === datePeriod) {
+                    item.target = value;
+                  }
+                  if (item.target.length != 0) {
+                    overallTarget += +item.target;
+                  }
                 });
                 indicator.overallTarget = overallTarget.toString();
                 this.indicatorForDisaggregation = indicator;
@@ -424,7 +452,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
           if (this.indicators.some(x => x.id === rowId)) {
             this.indicators.forEach((item) => {
               if (item.id === rowId) {
-                item.name = value
+                item.name = value;
                 item.milestoneId = extras;
               }
             });
@@ -432,6 +460,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
           this.setMilestoneDisaggregation(rowId);
           break;
       }
+    }
     this.savePlan();
   }
 
@@ -439,15 +468,15 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.error = false;
     this.success = false;
 
-    console.log("this.indicators", this.indicators);
-    let values: { [key: string]: string } = {
+    console.log('this.indicators', this.indicators);
+    const values: { [key: string]: string } = {
       indicators: JSON.stringify(this.indicators),
       budget: this.budget,
       quarterlyCommitment: this.quarterlyCommitment,
       currentStatus: this.currentStatus
-    }
+    };
 
-    let workPlanRecord: { [key: string]: string } = {
+    const workPlanRecord: { [key: string]: string } = {
       userId: this.authService.getLoggedInUsername(),
       staffId: this.staffChosen,
       programId: this.programChosen,
@@ -457,45 +486,49 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       reportingStartDate: this.calendar.projectReportingStartDate,
       reportingEndDate: this.calendar.projectReportingEndDate,
       periodType: this.calendar.periodType,
-      startCycle: "" + this.startReportingCycle,
-    }
+      startCycle: '' + this.startReportingCycle,
+    };
 
     if (this.setup) {
       this.workPlanService.updateWorkPlan(workPlanRecord, this.setup.id).subscribe((data) => {
         this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
-        this.successMessage = "Updated Work Plan";
+        this.successMessage = 'Updated Work Plan';
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to update Work Plan";
+        this.errorMessage = 'Failed to update Work Plan';
         this.success = false;
         console.log(error);
       });
     } else {
       this.workPlanService.createWorkPlan(workPlanRecord).subscribe((data) => {
-        if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
+        if (data !== null && data !== undefined) {
+          this.saveReportingCalendar(data.id);
+        }
         this.setWorkPlanInfo(data);
         this.error = false;
         this.success = true;
-        this.successMessage = "Saved Work Plan";
+        this.successMessage = 'Saved Work Plan';
       }, error => {
         this.error = true;
-        this.errorMessage = "Failed to save Work Plan";
+        this.errorMessage = 'Failed to save Work Plan';
         this.success = false;
         console.log(error);
       });
     }
 
     setTimeout(() => {
-      if (done == true && this.success) this.onBackPressed();
+      if (done == true && this.success) {
+        this.onBackPressed();
+      }
       this.success = false;
       this.error = false;
     }, 3000);
   }
 
   saveReportingCalendar(setupId) {
-    let values: { [key: string]: any }[] = []
+    const values: { [key: string]: any }[] = [];
     this.calendar.reportingCalender.forEach((c) => {
       values.push({
         startDate: c.startDate,
@@ -544,10 +577,12 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   }
 
   private updateBudgetAmount(id, newValue) {
-    let total: number = 0;
+    let total = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach(function (item) {
-        if (item.id === id) item.approvedAmount = newValue;
+        if (item.id === id) {
+          item.approvedAmount = newValue;
+        }
         total += +item.approvedAmount;
       });
     }
@@ -555,10 +590,12 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   }
 
   private updateQuarterlyPlanAmount(id, newValue) {
-    let total: number = 0;
+    let total = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach(function (item) {
-        if (item.id === id) item.quarterlySpendingPlan = newValue;
+        if (item.id === id) {
+          item.quarterlySpendingPlan = newValue;
+        }
         total += +item.quarterlySpendingPlan;
       });
     }
@@ -566,7 +603,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   }
 
   private updateBudgetDisburse(id, newValue, editing?: boolean) {
-    let total: number = 0;
+    let total = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach((item) => {
         if (item.id === id) {
@@ -577,7 +614,9 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
               this.alertService.error(`Amount spent should be less than Amount Approved`);
               return;
             }
-          } else item.totalSpent = newValue;
+          } else {
+            item.totalSpent = newValue;
+          }
         }
         total += +item.totalSpent;
       });
@@ -586,10 +625,26 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     this.currentStatus.totalAmountSpent = total;
   }
 
-  private updateQuarterlyCommitmentValues(period, newValue) {
-    let totalD: number = 0;
-    this.quarterlyCommitment.forEach(function (item) {
-      if (item.datePeriod === period) item.commitment = newValue
+  private updateQuarterlyCommitmentValues(period, newValue, oldValue) {
+    let totalD = 0;
+    this.quarterlyCommitment.forEach((item) => {
+      if (item.datePeriod === period) {
+        console.log('oldValue', oldValue.length > 0);
+        if (oldValue.length > 0) {
+          if (this.budget.length > 1) {
+            // adding new record
+            //  this is basic mathematics. answer = commitment - oldvalue
+            //  newCommitment = answer + newValue
+            let answer = +item.commitment - +oldValue;
+            item.commitment = +newValue + answer;
+          } else {
+            item.commitment = newValue;
+          }
+        } else {
+          // adding new record
+          item.commitment = (+item.commitment + +newValue);
+        }
+      }
       totalD += +item.commitment;
     });
     this.totalDisbursement = totalD.toString();

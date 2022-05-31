@@ -7,7 +7,7 @@
           <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
         </div>
         <div class=" col-lg-6 col-5 text-right">
-          <a class=" btn btn-sm btn-danger" (click)="deleteReferral()" style="color: #ffffff"> Delete </a>
+
         </div>
       </div>
     </div>
@@ -15,82 +15,298 @@
 </div>
 
 <div class=" container-fluid mt--6" style="overflow-x: hidden;">
-  <div class=" row justify-content-center">
-    <div class=" col-lg-10 card-wrapper">
+  <div class=" row">
+    <div class=" col">
       <div class="card">
         <div class="card-header" style="padding: 10px">
-          <h3 style="font-family: Open Sans, sans-serif;">Edit Feedback</h3>
+          <h3 style="font-family: Open Sans, sans-serif;align-content: center">Edit Feedback</h3>
         </div>
-        <div class="card-body">
-          <form [formGroup]="formGroup" (ngSubmit)="actionReferral()" *ngIf="formGroup" style="padding:30px">
+        <div class="card-body" style="padding-left: 80px;padding-top: 15px;padding-right: 40px">
+          <form [formGroup]="formGroup" (ngSubmit)="createFeedback()" *ngIf="formGroup" style="padding:30px">
             <div class="row">
-              <div class="col-lg-6">
-                <div>
-                  <div class="row">
-                    <h2
 
-                    >
+              <div class="col-lg-12 card" style="padding-left: 30px;padding-top: 15px">
+
+                <div>
+                  <div>
+                    <h2>
                       Client Details
-                      <!--                      <span class="required-indicator">*</span>-->
                     </h2>
                   </div>
                   <div class="row">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Name Of Client/Community/Group
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="nameOfClient"
-
-                          />
+                    <div class="col-md-3">
+                      <label>
+                        Remain Anonymous?
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="col-md-12">
+                        <div class="form-group ">
+                          <div class=" input-group input-group-merge">
+                            <ng-select class="form-control form-control-sm"
+                                       name="datatable_length"
+                                       aria-controls="datatable"
+                                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                       [multiple]="false"
+                                       placeholder="Remain Anonymous?"
+                                       formControlName="remainAnonymous"
+                                       (change)="checkForAnonStatus($event)"
+                                       [searchable]="true"
+                                       [clearable]="true"
+                                       [ngClass]="{'is-invalid': submitted && f.remainAnonymous.errors}"
+                            >
+                              <ng-option [value]="item.name" *ngFor="let item of remain_anonymous">
+                                {{item.name}}
+                              </ng-option>
+                            </ng-select>
+                            <div *ngIf="submitted && f.remainAnonymous.errors" class="invalid-feedback">
+                              <div *ngIf="f.remainAnonymous.errors.required">Field is required</div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div id="detailsForUser" class="row" [hidden]="false">
+                  <div class="col-md-3">
                     <label>
-                      Remain Anonymous?
-                      <!--                      <span class="required-indicator">*</span>-->
+                      Name Of Client/Community/Group
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Name Of Referring Officer"
+                            placeholder="Name Of Client/Community/Group"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="remainAnonymous"
-
+                            formControlName="nameOfClient"
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div>
-                  <div class="row">
+                <div id="detailsForAnonUser" class="row" [hidden]="true">
+                  <div class="col-md-3">
+                    <label>
+                      Anonymous Identifier
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Name Of Client/Community/Group"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="nameOfClient"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="gender" class="row" [hidden]="false">
+                  <div class="col-md-3"  >
+                    <label>
+                      Gender
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Gender"
+                                     formControlName="gender"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of gender_list">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="age" class="row" [hidden]="false">
+                  <div class="col-md-3" >
+                    <label>
+                      Age Category
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Age Category"
+                                     formControlName="age"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of age_category">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="nationality" class="row" [hidden]="false">
+                  <div class="col-md-3" >
                     <label>
                       Nationality Status
+
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Nationality Status"
+                                     formControlName="nationalityStatus"
+                                     [searchable]="true"
+                                     (change)="onChangeCountry($event)"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of nationality_status">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="country_of_origin" class="row" [hidden]="false">
+                  <div class="col-md-3">
+                    <label>
+                      Country of Origin
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Country of Origin"
+                                     formControlName="countryOfOrigin"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of country_origin">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Type of Client
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Type of Client"
+                                     formControlName="clientType"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of type_of_client">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Preferred Channel for Response
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Preferred Channel for Response"
+                                     formControlName="preferredChannel"
+                                     (change)="changeChannelPreferred($event)"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item?.name" *ngFor="let item of preferred_channel">
+                              {{item?.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div  class="row" id="phone" [hidden]="true">
+                  <div class="col-md-3">
+                    <label>
+                      Phone Number
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -99,105 +315,160 @@
                             placeholder="Phone Number"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="nationalityStatus"
-
+                            formControlName="phoneNumber"
+                            [ngClass]="{'is-invalid': submitted && f.phoneNumber.errors}"
                           >
+                          <div *ngIf="submitted && f.phoneNumber.errors" class="invalid-feedback">
+                            <div *ngIf="f.phoneNumber.errors.required">Enter a valid Phone number</div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Type of Client
+                <div id="email" class="row" [hidden]="true">
+                  <div class="col-md-3" >
+                    <label>
+                      Email
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Email Address"
+                            type="email"
+                            style="padding-left: 10px;"
+                            formControlName="email"
+                            [ngClass]="{'is-invalid': submitted && f.email.errors}"
+                          >
+                          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Enter a valid Email</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" [hidden]="false">
+                  <div class="col-md-3" >
+                    <label>
+                      Has Disability?
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder=""
+                                     (change)="disabilityQuestion($event)"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item?.name" *ngFor="let item of remain_anonymous">
+                              {{item?.name}}
+                            </ng-option>
+                          </ng-select>
+                          <!--                          <input-->
+                          <!--                            class="form-control"-->
+                          <!--                            placeholder="Disability"-->
+                          <!--                            type="text"-->
+                          <!--                            style="padding-left: 10px;"-->
+                          <!--                            formControlName="disability"-->
+                          <!--                          >-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="disability" class="row" [hidden]="true">
+                  <div class="col-md-3" >
+                    <label>
+                      Disability Status?
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Disability Status"
+                                     formControlName="disability"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item?.name" *ngFor="let item of disability_status">
+                              {{item?.name}}
+                            </ng-option>
+                          </ng-select>
+                          <!--                          <input-->
+                          <!--                            class="form-control"-->
+                          <!--                            placeholder="Disability"-->
+                          <!--                            type="text"-->
+                          <!--                            style="padding-left: 10px;"-->
+                          <!--                            formControlName="disability"-->
+                          <!--                          >-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div  class="col-lg-12 card " style="padding-left: 30px;padding-top: 15px">
+                <h2>Feedback Details</h2>
+                <div class="form-row">
+                  <div class="col-md-3">
+                    <label>
+                      Feedback Details
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
+                          <textarea
+                            class="form-control"
+                            placeholder="Enter feedback Details"
                             type="text"
-                            formControlName="clientType"
-
-                          />
+                            style="padding-left: 10px;"
+                            formControlName="feedbackDetails"
+                          ></textarea>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
-                    <label>
-                      Preferred Channel for Response
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="preferredChannel"
-
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="row">
-                    <label>
-                      Phone Number
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="phoneNumber"
-
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              <div class="col-lg-6">
-                <div>
-                  <div class="row">
-                    <h2
-
-                    >
-                      Feedback Details
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </h2>
-                  </div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label
                       style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date Feedback Received
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group">
                         <div class=" input-group input-group-merge">
@@ -205,443 +476,324 @@
                             class=" form-control"
                             type="date"
                             formControlName="dateFeedbackReceived"
-
+                            [max]="getToday()"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
-                      Serial Number
+                      Name Of Registering Officer
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Name Of Referring Officer"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="serialNumber"
-
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="row">
-                    <label>
-                      Name of Register
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Name Of Client Being Referred"
+                            placeholder="Name Register"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="nameOfRegister"
-
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Staff Designation
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Phone Number"
+                            placeholder="Staff Designation"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="staffDesignation"
-
                           >
+                          <!--                          <ng-select class="form-control form-control-sm"-->
+                          <!--                                     name="datatable_length"-->
+                          <!--                                     aria-controls="datatable"-->
+                          <!--                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+                          <!--                                     [multiple]="false"-->
+                          <!--                                     placeholder="Staff Designation"-->
+                          <!--                                     formControlName="staffDesignation"-->
+                          <!--                                     [searchable]="true"-->
+                          <!--                                     [clearable]="true"-->
+                          <!--                          >-->
+                          <!--                            <ng-option [value]="item.name" *ngFor="let item of staff_Designation">-->
+                          <!--                              {{item.name}}-->
+                          <!--                            </ng-option>-->
+                          <!--                          </ng-select>-->
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
                       Type of Feedback
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="typeOfFeedback"
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div class="row">
-                    <label>
-                      Current Status of the Feedback
-                      <!--                      <span class="required-indicator">*</span>-->
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="currentStatusOfFeedback"
-
-                          />
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Type of Feedback"
+                                     formControlName="typeOfFeedback"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of type_of_feedback">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
-                      Location
-                      <!--                      <span class="required-indicator">*</span>-->
+                      Region
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="location"
-
-                          />
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Location"
+                                     formControlName="location"
+                                     (change)="filterForLocation($event)"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of location">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div id="country_of_origin" [hidden]="true">
-                  <div class="row">
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      District
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="District"
+                                     formControlName="district"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of district_list">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <label>
+                      Project Site
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder=""
+                                     formControlName="projectSite"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of project_sites">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Project Sector
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
                     </label>
                   </div>
-                  <div class="row">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="projectSector"
-
-                          />
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Project Sector"
+                                     formControlName="projectSector"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of project_status">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div class="row">
+                <div class="row">
+                  <div  class="col-md-3">
+                    <label>
+                      Project
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            type="text"
+                            placeholder="Project"
+                            style="padding-left: 10px;"
+                            formControlName="project"
+                          >
+                          <!--                          <ng-select class="form-control form-control-sm"-->
+                          <!--                                     name="datatable_length"-->
+                          <!--                                     aria-controls="datatable"-->
+                          <!--                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+                          <!--                                     [multiple]="false"-->
+                          <!--                                     placeholder="Project"-->
+                          <!--                                     formControlName="project"-->
+                          <!--                                     [searchable]="true"-->
+                          <!--                                     [clearable]="true"-->
+                          <!--                          >-->
+                          <!--                            <ng-option [value]="item.name" *ngFor="let item of project_status">-->
+                          <!--                              {{item.name}}-->
+                          <!--                            </ng-option>-->
+                          <!--                          </ng-select>-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
                     <label>
                       Sub Sector (Project Level)
-                      <!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="text"
-                            formControlName="subSector"
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
 
-                          />
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Sub Sector (Project Level)"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="subSector"
+                          >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <hr class="solid">
-              </div>
-            </div>
-            <div class="row" style="padding-top: 26px;">
-              <div class="col-md-12">
+              <div  class="col-lg-12 card" style="padding-left: 30px;padding-top: 15px;justify-content: center">
+                <h2>Action Details</h2>
                 <div class="row">
-                  <h2>
-                    Action Details
-                  </h2>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
+                  <div class="col-md-3" style="padding-top: 26px;">
                     <label>
-                      Feedback Category
-                      <!--                      -->
+                      Current Status of the Feedback
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Feedback Category"
-                                     formControlName="feedbackCategory"
+                                     placeholder="Current Status of the Feedback"
+                                     formControlName="currentStatusOfFeedback"
+                                     (change)="chooseActionForFeedback($event)"
+                                     [(ngModel)]="referralDecisionPoint"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of feedback_category">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Feedback Referred or Shared
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Feedback Referred or Shared"
-                                     formControlName="feedbackReferredShared"
-                                     (change)="onReferredOrShared($event)"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of feedback_shared_referred">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" id="internalExternal" [hidden]="true">
-                  <div class="col-md-3">
-                    <label>
-                      Feedback shared internally or externally?
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Is feedback shared internally or externally?"
-                                     formControlName="feedbackInternallyExternally"
-                                     (change)="feedbackSharedChoice($event)"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of feedback_internal_external">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" id="orgName" [hidden]="true">
-                  <div class="col-md-3">
-                    <label>
-                      Organisation referred to
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Name of person referred to"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="referredPersonName"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" id="sectorName" [hidden]="true">
-                  <div class="col-md-3">
-                    <label>
-                      IRC Sector
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Position of person referred to"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="referredOrganization"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" id="organizationReferred" [hidden]="true">
-                  <div class="col-md-3">
-                    <label>
-                      Organization referred to
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Organization referred to"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="referredOrganization"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
-                                                    line-height: 1.5; text-align: left;"
-                    >
-                      Date when feedback was referred/shared
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="date"
-                            formControlName="dateFeedbackReferredShared"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Type of response required
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Type of response required"
-                                     formControlName="responseTypeRequired"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of response_required">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Action / follow up needed
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Action / follow up needed"
-                                     (change)="onChangeFollowUp($event)"
-                                     formControlName="actionFollowupNeeded"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of followup_needed">
+                            <ng-option [value]="item.name" *ngFor="let item of feedback_status">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -654,10 +806,11 @@
                   <div class="col-md-3">
                     <label>
                       Assign staff
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
                       <!--                      -->
                     </label>
                   </div>
-                  <div class="col-md-9">
+                  <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
@@ -680,174 +833,704 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="row" style="padding-top: 26px;" id="loop" [hidden]="false">
-              <div class="col-md-12">
-                <div class="row">
-                  <h2>
-                    Closing the Loop
-                  </h2>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label
-                      style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
+                <div class="row" style="padding-top: 26px;" id="actionDetails" [hidden]="true">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <h2>
+                        Enter Action Details
+
+                      </h2>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Feedback Category
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Feedback Category"
+                                         formControlName="feedbackCategory"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of feedback_category">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Feedback Referred or Shared
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Feedback Referred or Shared"
+                                         formControlName="feedbackReferredShared"
+                                         (change)="feedBackSharedChange($event)"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of feedback_shared_referred">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="internalExternal" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Feedback shared internally or externally?
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Is feedback shared internally or externally?"
+                                         formControlName="responseType"
+                                         (change)="interFeedBackCheck($event)"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of feedback_internal_external">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="orgName" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Organisation referred to
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder=""
+                                         formControlName="referredOrganization"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                              <!--                                <input-->
+                              <!--                                  class="form-control"-->
+                              <!--                                  placeholder="Name of person referred to"-->
+                              <!--                                  type="text"-->
+                              <!--                                  style="padding-left: 10px;"-->
+                              <!--                                  formControlName="referredPersonName"-->
+                              <!--                                >-->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="sectorName" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          IRC Sector
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <!--                                <input-->
+                              <!--                                  class="form-control"-->
+                              <!--                                  placeholder=""-->
+                              <!--                                  type="text"-->
+                              <!--                                  style="padding-left: 10px;"-->
+                              <!--                                  formControlName="referredOrganization"-->
+                              <!--                                >-->
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder=""
+                                         formControlName="ircReferredTo"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of irc_list">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="personReferred" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Name of person referred
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Position of person referred to"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="referredPerson"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label
+                          style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
                                                     line-height: 1.5; text-align: left;"
-                    >
-                      Date of response/feedback given to client
-                      <!--                      -->
-                    </label>
+                        >
+                          Date when feedback was referred/shared
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class=" form-control"
+                                type="date"
+                                formControlName="dateFeedbackReferredShared"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Type of response given
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Type of response given"
+                                         formControlName="responseTypeRequired"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of response_required">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Action / follow up needed
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Action / follow up needed"
+                                         formControlName="actionFollowupNeeded"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of followup_needed">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row" [hidden]="false">
+                      <div class="col-md-3">
+                        <label>
+                          Feedback response received?
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Feedback Response Received"
+                                         formControlName="feedBackResponse"
+                                         (change)="checkForFeedBackResponse($event)"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of followup_response">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class=" form-control"
-                            type="date"
-                            formControlName="dateFeedbackClient"
-                          />
+                </div>
+
+                <div class="row" style="padding-top: 26px;" id="loop" [hidden]="true">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <h2>
+                        Closing the Loop
+                      </h2>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label
+                          style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
+                                                    line-height: 1.5; text-align: left;"
+                        >
+                          Date of response/feedback given to client
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class=" form-control"
+                                type="date"
+                                formControlName="dateFeedbackClient"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Action taken
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Action Taken"
+                                         formControlName="actionTaken"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of action_taken">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Name of the staff who provided the response
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Name of the staff who provided the response"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="staffProvidedResponse"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Response summary
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                            <textArea
+                              class="form-control"
+                              placeholder="Response summary"
+                              type="text"
+                              style="padding-left: 10px;"
+                              formControlName="responseSummary"
+                            ></textArea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Supervisor
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Supervisor"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="supervisor"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Data Entry Focal Point
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Data Entry Focal Point"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="dataEntryFocalPoint"
+                              >
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Action taken
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder="Action Taken"
-                                     formControlName="actionTaken"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of action_taken">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
+
+
+                <div class="row" style="padding-top: 26px;" id="referral" [hidden]="true">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <h2>
+                        Referral Details
+                        <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                      </h2>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label
+                          style="font-family: Open Sans, sans-serif; font-size: 1rem; font-weight: 400;
+                                                    line-height: 1.5; text-align: left;"
+                        >
+                          Name of Referring Officer
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class=" form-control"
+                                type="text"
+                                formControlName="nameOfReferringOfficer"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Reason for referral
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Reason For Referral"
+                                         formControlName="reasonForReferral"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of reason_for_referral">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Organization referred to
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Organization Referred To"
+                                         formControlName="organizationReferredTo"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Follow up needed?
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Followup Needed"
+                                         formControlName="followupNeeded"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.name" *ngFor="let item of followup_needed">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label>
+                          Assign staff
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <ng-select class="form-control form-control-sm"
+                                         name="datatable_length"
+                                         aria-controls="datatable"
+                                         style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Assign Staff"
+                                         formControlName="assignee"
+                                         [searchable]="true"
+                                         [clearable]="true"
+                              >
+                                <ng-option [value]="item.email" *ngFor="let item of this.staffs">
+                                  {{item.names}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Supervisor
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Supervisor"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="supervisor"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row" [hidden]="true">
+                      <div class="col-md-3">
+                        <label>
+                          Data Entry Focal Point
+                          <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                          <!--                      -->
+                        </label>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-12">
+                          <div class="form-group ">
+                            <div class=" input-group input-group-merge">
+                              <input
+                                class="form-control"
+                                placeholder="Data Entry Focal Point"
+                                type="text"
+                                style="padding-left: 10px;"
+                                formControlName="dataEntryFocalPoint"
+                              >
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Name of the staff who provided the response
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Name of the staff who provided the response"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="staffProvidedResponse"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Response summary
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Response summary"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="responseSummary"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" [hidden]="true">
-                  <div class="col-md-3">
-                    <label>
-                      Supervisor
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Supervisor"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="supervisor"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Data Entry Focal Point
-                      <!--                      -->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Data Entry Focal Point"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="dataEntryFocalPoint"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12 offset-4" style="padding-bottom: 15px; padding-left: 0px">
+              <div class="col-md-12 text-center">
 
-                <button
-                  class=" btn btn-success"
-                  type="submit"
-                >
-                  Submit Feedback Action
-                </button>
-                <button class=" btn btn-danger" type="button" (click)="close()">
-                  cancel
-                </button>
+                <button class=" btn btn-danger" type="button" (click)="resetForm()">Reset</button>
+                <button class=" btn btn-warning" type="button" (click)="saveForm()">Save For Later</button>
+                <button class=" btn btn-success" type="submit">Submit Feedback</button>
 
               </div>
             </div>
@@ -859,4 +1542,3 @@
 
 
 </div>
-

@@ -40,7 +40,13 @@ class Feedback {
     String feedbackDetails
     String project
     String assignee
+    String district
+    String projectSite
+    String ircReferredTo
+    String referredPerson
+    String responseType
     String status
+    String disability
     String countryOfOrigin
     Date dateCreated
     Date lastUpdated
@@ -89,7 +95,13 @@ class Feedback {
         countryOfOrigin nullable: true
         feedbackDetails nullable: true
         assignee nullable: true
-        status nullable: false
+        status nullable: true
+        district nullable: true
+        projectSite nullable: true
+        ircReferredTo nullable: true
+        referredPerson nullable: true
+        responseType nullable: true
+        disability nullable: true
     }
 
     @Override

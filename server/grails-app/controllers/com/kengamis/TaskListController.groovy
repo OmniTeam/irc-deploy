@@ -70,11 +70,11 @@ class TaskListController {
 
             if (task.processDefKey == 'PROGRESS_REPORTING') {
                 def staff = User.findById(staffId)
-                taskCase = staff ?  "$period - ${staff.names}" : "$period"
-                assignee = staff.email
+                taskCase = staff ?  "$period - ${staff?.names}" : "$period"
+                assignee = staff?.email
             }
 
-            boolean c2 = userRoles.contains("ROLE_SUPER_ADMIN")
+            boolean c2 = (userRoles.contains("ROLE_SUPER_ADMIN")||userRoles.contains("ROLE_ADMIN"))
 
             if (assignee == currentUser.email || c2)
                 tasks << [id               : task.id,

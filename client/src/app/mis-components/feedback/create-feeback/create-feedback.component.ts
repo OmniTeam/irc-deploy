@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {
   FormBuilder,
-  FormGroup
+  FormGroup, Validators
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
@@ -108,13 +108,19 @@ export class CreateFeedbackComponent implements OnInit {
   ];
   location = [
     {
-      'name': 'Kampala Office'
+      'name': 'Kampala'
     },
     {
-      'name': 'Gulu Office'
+      'name': 'WestNile'
     },
     {
-      'name': 'Hoima Office'
+      'name': 'Northern'
+    },
+    {
+      'name': 'Southwest'
+    },
+    {
+      'name': 'Karamoja'
     },
   ];
   project_status = [
@@ -146,6 +152,24 @@ export class CreateFeedbackComponent implements OnInit {
     },
     {
       'name': 'Not Sure'
+    },
+  ];
+
+  disability_status = [
+    {
+      'name': 'Physical disability'
+    },
+    {
+      'name': 'Visual Impairment'
+    },
+    {
+      'name': 'Hearing Impairment'
+    },
+    {
+      'name': 'Speech Impairment'
+    },
+    {
+      'name': 'Mental Disability'
     },
   ];
   gender = [
@@ -186,36 +210,205 @@ export class CreateFeedbackComponent implements OnInit {
   ];
   preferred_channel = [
     {
-      'name': 'Client Forum'
+      'name': 'Age Gender Diversity(AGD)'
     },
     {
-      'name': 'Collectively with Community'
+      'name': 'Bodaboda Talk Talk (BBTT)'
     },
     {
-      'name': 'Email Address'
+      'name': 'Client Responsiveness Survey'
     },
     {
-      'name': 'In Person'
+      'name': 'Community Meetings Or Dialogues'
     },
     {
-      'name': 'Phone Call'
+      'name': 'Email (ADDRESS)'
     },
     {
-      'name': 'SMS'
+      'name': 'Focus Group Discussion'
     },
     {
-      'name': 'Stakeholders Reference Group'
+      'name': 'Individual Interview'
     },
     {
-      'name': 'Through a Third Party'
+      'name': 'Information Support Centers (Help Desk)'
     },
     {
-      'name': 'Via IRC Staff'
+      'name': 'Office Walk-In'
+    },
+    {
+      'name': 'Suggestion Box'
+    },{
+      'name': 'Telephone (NUMBER)'
+    },{
+      'name': 'Through Community Leaders'
+    },{
+      'name': 'Through IRC Staff And Volunteers'
+    },{
+      'name': 'Whatsapp'
+    },{
+      'name': 'Women And Girl Centres'
+    },{
+      'name': 'Other'
+    },
+  ];
+
+  country_origin = [
+    {
+      'name': 'Burundian'
+    },
+    {
+      'name': 'Congolese'
+    },
+    {
+      'name': 'Eritrean'
+    },
+    {
+      'name': 'Ethiopian'
+    },
+    {
+      'name': 'Nigerian'
+    },
+    {
+      'name': 'Nigerian'
+    },
+    {
+      'name': 'Rwandese'
+    },
+    {
+      'name': 'Somalian'
+    },
+    {
+      'name': 'South Sudanese'
+    },
+    {
+      'name': 'Tanzanian'
+    },
+    {
+      'name': 'Ugandan'
     },
     {
       'name': 'Other'
     },
   ];
+
+  district_list: any;
+
+  district_kla = [
+    {
+      'name': 'Kampala'
+    },
+  ];
+
+  district_westNile = [
+    {
+      'name': 'Yumbe'
+    },
+    {
+      'name': 'Madi Okollo'
+    },
+    {
+      'name': 'Terego'
+    }
+  ];
+
+  district_north = [
+    {
+      'name': 'Kiryandongo'
+    },
+    {
+      'name': 'Lamwo'
+    }
+  ];
+
+  district_karamoja = [
+    {
+      'name': 'Moroto'
+    },
+    {
+      'name': 'Napak'
+    },
+    {
+      'name': 'Nakapiripirit'
+    },
+    {
+      'name': 'Amudat'
+    },
+    {
+      'name': 'Kotido'
+    },
+    {
+      'name': 'Abim'
+    },{
+      'name': 'Kaabong'
+    }
+  ];
+
+  district_southwest = [
+   {
+      'name': 'Kyegeggwa'
+    },
+  ];
+
+  project_sites :any
+  project_site_kla = [
+    {
+      'name': 'Kampala Urban'
+    },
+  ];
+
+  project_sites_west = [
+
+    {
+      'name': 'Bidi bidi'
+    },
+    {
+      'name': 'Rhino'
+    },
+    {
+      'name': 'Imvepi'
+    },
+  ];
+
+  project_sites_north = [
+    {
+      'name': 'Kiryandongo'
+    },
+    {
+      'name': 'Lamwo'
+    },
+  ];
+
+  project_sites_karamoja = [
+
+    {
+      'name': 'Moroto'
+    },
+    {
+      'name': 'Napak'
+    },
+    {
+      'name': 'Nakapiripirit'
+    },
+    {
+      'name': 'Amudat'
+    },
+    {
+      'name': 'Kotido'
+    },
+    {
+      'name': 'Abim'
+    },{
+      'name': 'Kaabong'
+    }
+  ];
+
+  project_sites_south = [
+    {
+      'name': 'Kyaka'
+    },
+  ];
+
   gender_list = [
     {
       'name': 'Male'
@@ -336,6 +529,47 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'REFUGEPOINT'
     },
   ];
+
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
+  age_category = [
+    {
+      'name': '0 - 28 days'
+    },
+    {
+      'name': '29 days - 4 years'
+    },
+    {
+      'name': '5 - 9 years'
+    },
+    {
+      'name': '10 -19 years'
+    },
+    {
+      'name': '20 - 29 years'
+    },
+    {
+      'name': '30 - 59 years'
+    },
+    {
+      'name': '60 years and above'
+    },
+  ];
   referralDecisionPoint: any;
   underReview: string;
 
@@ -353,19 +587,21 @@ export class CreateFeedbackComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       dateFeedbackReceived: [''],
       nameOfRegister: [''],
-      staffDesignation: [null],
-      typeOfFeedback: [null],
-      currentStatusOfFeedback: [null],
-      location: [null],
-      projectSector: [null],
-      subSector: [null],
-      nameOfClient: [],
-      remainAnonymous: [null],
-      nationalityStatus: [null],
-      clientType: [null],
-      preferredChannel: [null],
-      phoneNumber: [''],
-      email:[''],
+      staffDesignation: [''],
+      typeOfFeedback: [''],
+      currentStatusOfFeedback: ['', [Validators.required]],
+      location: ['', [Validators.required]],
+      district: ['', [Validators.required]],
+      projectSite:[''],
+      projectSector: [''],
+      subSector: [''],
+      nameOfClient: [''],
+      remainAnonymous: ['', [Validators.required]],
+      nationalityStatus: [''],
+      clientType: [''],
+      preferredChannel: ['', [Validators.required]],
+      phoneNumber: ['',[Validators.minLength(9)]],
+      email:['', [Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       age:[''],
       serialNumber:[''],
       gender:[''],
@@ -375,8 +611,10 @@ export class CreateFeedbackComponent implements OnInit {
       nameOfReferringOfficer:[''],
       reasonForReferral:[''],
       organizationReferredTo:[''],
+      ircReferredTo:[''],
+      referredPerson:[''],
+      responseType:[''],
       followupNeeded:[''],
-      status: [''],
       feedbackCategory: [''],
       feedbackPriority: [''],
       feedbackReferredShared: [''],
@@ -435,7 +673,6 @@ export class CreateFeedbackComponent implements OnInit {
       nameOfRegister: formData.nameOfRegister,
       staffDesignation: formData.staffDesignation,
       typeOfFeedback: formData.typeOfFeedback,
-      status: 'Pending',
       location: formData.location,
       projectSector: formData.projectSector,
       subSector: formData.subSector,
@@ -450,9 +687,15 @@ export class CreateFeedbackComponent implements OnInit {
       serialNumber: formData.serialNumber,
       gender: formData.gender,
       project: formData.project,
+      district: formData.district,
+      projectSite: formData.projectSite,
+      ircReferredTo:formData.ircReferredTo,
+      referredPerson:formData.referredPerson,
+      responseType: formData.responseType,
       countryOfOrigin:formData.countryOfOrigin,
+      disability: formData.disability,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
-      assignee: formData.assignee || this.underReview,
+      assignee: formData.assignee,
       feedbackDetails: formData.feedbackDetails,
       nameOfReferringOfficer: formData.nameOfReferringOfficer,
       reasonForReferral: formData.reasonForReferral,
@@ -540,8 +783,11 @@ export class CreateFeedbackComponent implements OnInit {
     if (event === 'Email Address') {
       document.getElementById("phone").hidden = true
       document.getElementById("email").hidden = false
-    } else {
+    } else if(event === 'Phone Call' || event === 'SMS'){
       document.getElementById('phone').hidden = false
+      document.getElementById('email').hidden = true
+    } else {
+      document.getElementById('phone').hidden = true
       document.getElementById('email').hidden = true
     }
   }
@@ -577,6 +823,7 @@ export class CreateFeedbackComponent implements OnInit {
       document.getElementById('actionDetails').hidden = true
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
+      document.getElementById('loop').hidden = true
     }
   }
 
@@ -618,6 +865,11 @@ export class CreateFeedbackComponent implements OnInit {
       typeOfFeedback: formData.typeOfFeedback,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
       location: formData.location,
+      district: formData.district,
+      projectSite: formData.projectSite,
+      ircReferredTo:formData.ircReferredTo,
+      referredPerson:formData.referredPerson,
+      responseType: formData.responseType,
       projectSector: formData.projectSector,
       subSector: formData.subSector,
       nameOfClient: formData.nameOfClient,
@@ -654,6 +906,7 @@ export class CreateFeedbackComponent implements OnInit {
       staffProvidedResponse: formData.staffProvidedResponse,
       responseSummary: formData.responseSummary,
       supervisor: formData.supervisor,
+      disability: formData.disability,
       dataEntryFocalPoint: formData.dataEntryFocalPoint,
       status: 'Saved'
     }
@@ -696,4 +949,50 @@ export class CreateFeedbackComponent implements OnInit {
     document.getElementById("loop").hidden = event == "No";
   }
 
+  disabilityQuestion(event) {
+    if(event === 'Yes'){
+      document.getElementById("disability").hidden = false
+    } else {
+      document.getElementById("disability").hidden = true
+    }
+  }
+
+  feedBackSharedChange(event) {
+    document.getElementById("internalExternal").hidden = event !== 'Yes';
+  }
+
+  interFeedBackCheck(event) {
+    if(event === 'Internally'){
+      document.getElementById("sectorName").hidden = false
+      document.getElementById("personReferred").hidden = false
+      document.getElementById("orgName").hidden = true
+    } else {
+      document.getElementById("orgName").hidden = false
+      document.getElementById("personReferred").hidden = false
+      document.getElementById("sectorName").hidden = true
+    }
+  }
+
+  getToday(): string {
+    return new Date().toISOString().split('T')[0]
+  }
+
+  filterForLocation(event) {
+    if(event === 'Kampala'){
+      this.district_list = this.district_kla
+      this.project_sites = this.project_site_kla
+    } else if (event === 'WestNile'){
+      this.district_list = this.district_westNile
+      this.project_sites = this.project_sites_west
+    } else if(event === 'Northern'){
+      this.district_list = this.district_north
+      this.project_sites = this.project_sites_north
+    } else if(event === 'Southwest'){
+      this.district_list = this.district_southwest
+      this.project_sites = this.project_sites_south
+    } else if(event === 'Karamoja'){
+      this.district_list = this.district_karamoja
+      this.project_sites = this.project_sites_karamoja
+    }
+  }
 }

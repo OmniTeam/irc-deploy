@@ -231,7 +231,7 @@
               </div>
               <div
                 class=" btn btn-danger fa fa-trash-can"
-                (click)="downloadFeedback()"
+                (click)="deleteFeedback()"
                 *ngIf="this.userRole != 'ROLE_REBUILD_DATA_VIEWER'"
               >
                 Delete
@@ -253,21 +253,30 @@
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Name Of Register" prop="nameOfRegister">
+            <ngx-datatable-column name="Client Identifier" prop="nameOfClient">
+
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/feedback-edit/{{row.id}}">{{row?.nameOfRegister}} </a>
+                <a routerLink="/feedback-edit/{{row.id}}">{{row?.nameOfClient}} </a>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Receiving Channel" prop="preferredChannel"></ngx-datatable-column>
+            <ngx-datatable-column name="Type Of Client" prop="clientType"></ngx-datatable-column>
+            <ngx-datatable-column name="Registering Officer" prop="nameOfRegister"></ngx-datatable-column>
+            <ngx-datatable-column name="Project" prop="project"></ngx-datatable-column>
+            <ngx-datatable-column name="Location" prop="projectSite"></ngx-datatable-column>
             <ngx-datatable-column name="Date Received" prop="dateFeedbackReceived">
               <ng-template let-row="row" ngx-datatable-cell-template>
                 {{row?.dateFeedbackReceived | date:'dd-MM-yyyy'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Staff Designation" prop="staffDesignation"></ngx-datatable-column>
-            <ngx-datatable-column name="Project Sector" prop="projectSector"></ngx-datatable-column>
-            <ngx-datatable-column name="Name of Client" prop="nameOfClient"></ngx-datatable-column>
-            <ngx-datatable-column name="Location" prop="location"></ngx-datatable-column>
+            <ngx-datatable-column name="Date Created" prop="dateCreated">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row?.dateCreated | date:'dd-MM-yyyy'}}
+              </ng-template>
+            </ngx-datatable-column>
+
+<!--            <ngx-datatable-column name="Project Sector" prop="projectSector"></ngx-datatable-column>-->
+<!--            <ngx-datatable-column name="Name of Client" prop="nameOfClient"></ngx-datatable-column>-->
+<!--           -->
             <ngx-datatable-column name="status" prop="currentStatusOfFeedback"></ngx-datatable-column>
           </ngx-datatable>
         </div>

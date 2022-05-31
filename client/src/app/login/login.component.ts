@@ -49,9 +49,7 @@ export class LoginComponent implements OnInit {
     )
       .subscribe(success => {
         if (success) {
-          this.router.navigate(['/']).then(() => {
-            window.location.reload();
-          })
+          this.router.navigate(['/']);
         }
       }, error => {
         console.log(error.status)

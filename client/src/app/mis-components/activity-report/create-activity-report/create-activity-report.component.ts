@@ -341,7 +341,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   }
 
 
-  ///TODO pick images
+
   private updateBudgetDisburse(id, newValue, editing?: boolean) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
@@ -351,8 +351,11 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
             if (+newValue <= +item.approvedAmount) {
               item.totalSpent = newValue;
             } else {
-              item.totalSpent = newValue;
+              this.alertService.error(`Amount spent should be less than Amount Approved`);
+              return;
             }
+          } else {
+            item.totalSpent = newValue;
           }
         }
         total += +item.totalSpent;
