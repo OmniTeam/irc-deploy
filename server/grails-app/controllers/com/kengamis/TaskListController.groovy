@@ -18,6 +18,9 @@ class TaskListController {
     def index(Integer max) {
         def tasks = []
 
+        //archive reports
+        archiveReport()
+
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
@@ -242,5 +245,34 @@ class TaskListController {
         taskListService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def archiveReport() {
+        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Archive_Report')"
+        def forArchiving = AppHolder.withMisSql { rows(query as String) }
+        if (forArchiving.size() > 0) {
+            forArchiving.each { task ->
+                Archive archive = new Archive()
+                archive.taskId = task['task_id']
+                archive.inputVariables = task['input_variables']
+                archive.outputVariables = task['output_variables']
+                archive.status = task['status']
+                archive.formId = task['form_id']
+                archive.groupId = task['group_id']
+                archive.userId = task['user_id']
+                archive.taskName = task['task_name']
+                archive.processInstanceId = task['process_instance_id']
+                archive.processDefKey = task['process_def_key']
+                archive.synced = task['synced']
+                archive.taskDefinitionKey = task['task_definition_key']
+                archive.save(flush: true, failOnError: true)
+
+                //complete the archived task
+                TaskList taskList = TaskList.findById(task['id'] as String)
+                taskList.status = 'completed'
+                taskList.save(flush: true, failOnError: true)
+            }
+        }
     }
 }
