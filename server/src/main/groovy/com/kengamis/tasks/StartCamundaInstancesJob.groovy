@@ -85,14 +85,16 @@ class StartCamundaInstancesJob extends Script {
     static void ircActivityReportingJob(){
         ActivityReport.findAllByStatus("Started").each { activity ->
             boolean startInstance = true
+            def findUser = User.findByEmail(activity.assignee)
 
             if (startInstance) {
                 try {
                         boolean started = startProcessInstance([
                                 ActivityId    : activity.id,
                                 StartDate     : activity.startDate,
-                                EndDate       : activity.endDate,
-                                Assignee      : activity.assignee
+                                Case          : activity.milestone,
+                                Assignee      : activity.assignee,
+                                Name          : findUser.names,
 
                         ], IRC_ACTIVITY_REPORT)
                         if (started) {
@@ -112,6 +114,7 @@ class StartCamundaInstancesJob extends Script {
     static void ircReferralJob(){
         Referral.findAllByStatus("Pending").each { referral ->
             boolean startInstance = true
+            def findUser = User.findByEmail(referral.assignee)
 
             if (startInstance) {
                 try {
@@ -119,8 +122,9 @@ class StartCamundaInstancesJob extends Script {
                     boolean started = startProcessInstance([
                             ReferralId    : referral.id,
                             StartDate     : referral.dateOfReferral,
-                            EndDate       : referral.lastUpdated,
-                            Assignee      : referral.assignee
+                            Case          : referral.organizationReferredTo,
+                            Assignee      : referral.assignee,
+                            Name          : findUser.names,
 
                     ], IRC_REFERRAL)
 
@@ -142,6 +146,9 @@ class StartCamundaInstancesJob extends Script {
     static void ircFeedbackJob(){
         Feedback.findAllByCurrentStatusOfFeedback("Forwarded For Action").each { feed ->
             boolean startInstance = true
+            //find user by email
+            def findUser = User.findByEmail(feed.assignee)
+            print(findUser.names)
 
             if (startInstance) {
                 try {
@@ -149,8 +156,9 @@ class StartCamundaInstancesJob extends Script {
                     boolean started = startProcessInstance([
                             FeedbackId    : feed.id,
                             StartDate     : feed.dateFeedbackReceived,
-                            EndDate       : feed.lastUpdated,
-                            Assignee      : feed.assignee
+                            Case          : feed.typeOfFeedback,
+                            Assignee      : feed.assignee,
+                            Name          : findUser.names
 
                     ], IRC_FEEDBACK)
 

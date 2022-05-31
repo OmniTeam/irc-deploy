@@ -135,12 +135,14 @@ export class ReferralsComponent implements OnInit {
     console.log(this.selectedUsers);
   }
 
-  deleteUsers() {
+
+
+  deleteReferral() {
     const deletedRow = this.selectedUsers;
     deletedRow.forEach((p) => {
-        this.usersService.deleteCurrentUser(p).subscribe((result) => {
-          console.warn(result, 'Users have been deleted');
-          this.router.navigate(['/users']).then(() => {
+        this.referralsService.deleteCurrentReferral(p).subscribe((result) => {
+          console.warn(result, 'Referral have been deleted');
+          this.router.navigate(['/referrals-list']).then(() => {
             window.location.reload();
           });
         })
