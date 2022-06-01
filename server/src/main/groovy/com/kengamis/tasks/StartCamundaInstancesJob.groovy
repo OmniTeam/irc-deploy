@@ -23,7 +23,7 @@ class StartCamundaInstancesJob extends Script {
         return null
     }
 
-    static void ircReportingJob(){
+    static void ircReportingJob() {
         WorkPlan.findAllByStartCycle("true").each { workPlan ->
             boolean startInstance = true
 
@@ -57,6 +57,7 @@ class StartCamundaInstancesJob extends Script {
                 try {
                     if (r.size() > 0) {
                         def result = r.first()
+                        User staff = User.findById(workPlan.staffId)
                         boolean started = startProcessInstance([
                                 PartnerSetupId: workPlan.id,
                                 PartnerId     : workPlan.staffId,
@@ -64,7 +65,9 @@ class StartCamundaInstancesJob extends Script {
                                 StartDate     : result['start_date'],
                                 EndDate       : result['end_date'],
                                 Period        : result['period'],
-                                GroupId       : ""
+                                Assignee      : staff?.email,
+                                Supervisor    : "ccathy@omnitech.co.ug",
+                                MandE         : "ccathy@omnitech.co.ug"
                         ], QUARTERLY_REPORTING)
 
 
@@ -82,25 +85,25 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static void ircActivityReportingJob(){
+    static void ircActivityReportingJob() {
         ActivityReport.findAllByStatus("Started").each { activity ->
             boolean startInstance = true
 
             if (startInstance) {
                 try {
-                        boolean started = startProcessInstance([
-                                ActivityId    : activity.id,
-                                StartDate     : activity.startDate,
-                                EndDate       : activity.endDate,
-                                Assignee      : activity.assignee
+                    boolean started = startProcessInstance([
+                            ActivityId: activity.id,
+                            StartDate : activity.startDate,
+                            EndDate   : activity.endDate,
+                            Assignee  : activity.assignee
 
-                        ], IRC_ACTIVITY_REPORT)
-                        if (started) {
-                            print "================ Yes Here We Go!!! ================"
-                            println("IRC PROCESS STARTED")
-                            activity.status = "Running"
-                            activity.save()
-                        }
+                    ], IRC_ACTIVITY_REPORT)
+                    if (started) {
+                        print "================ Yes Here We Go!!! ================"
+                        println("IRC PROCESS STARTED")
+                        activity.status = "Running"
+                        activity.save()
+                    }
 
                 } catch (e) {
                     e.printStackTrace()
@@ -109,7 +112,7 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static void ircReferralJob(){
+    static void ircReferralJob() {
         Referral.findAllByStatus("Pending").each { referral ->
             boolean startInstance = true
 
@@ -117,10 +120,10 @@ class StartCamundaInstancesJob extends Script {
                 try {
 
                     boolean started = startProcessInstance([
-                            ReferralId    : referral.id,
-                            StartDate     : referral.dateOfReferral,
-                            EndDate       : referral.lastUpdated,
-                            Assignee      : referral.assignee
+                            ReferralId: referral.id,
+                            StartDate : referral.dateOfReferral,
+                            EndDate   : referral.lastUpdated,
+                            Assignee  : referral.assignee
 
                     ], IRC_REFERRAL)
 
@@ -139,7 +142,7 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static void ircFeedbackJob(){
+    static void ircFeedbackJob() {
         Feedback.findAllByCurrentStatusOfFeedback("Forwarded For Action").each { feed ->
             boolean startInstance = true
 
@@ -147,10 +150,10 @@ class StartCamundaInstancesJob extends Script {
                 try {
 
                     boolean started = startProcessInstance([
-                            FeedbackId    : feed.id,
-                            StartDate     : feed.dateFeedbackReceived,
-                            EndDate       : feed.lastUpdated,
-                            Assignee      : feed.assignee
+                            FeedbackId: feed.id,
+                            StartDate : feed.dateFeedbackReceived,
+                            EndDate   : feed.lastUpdated,
+                            Assignee  : feed.assignee
 
                     ], IRC_FEEDBACK)
 
