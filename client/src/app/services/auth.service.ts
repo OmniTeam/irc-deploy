@@ -58,7 +58,6 @@ export class AuthService {
   }
 
   doLogoutUser() {
-    this.loggedUser = null;
     this.removeTokens();
   }
 

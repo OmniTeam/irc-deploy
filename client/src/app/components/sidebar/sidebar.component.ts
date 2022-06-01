@@ -105,23 +105,9 @@ export class SidebarComponent implements OnInit {
           formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
+          formObject['roles'] = this.usersRoles;
 
-          const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
-
-          if (currentTitle.includes('Parent') && (
-            this.usersRoles.includes('ROLE_SUPER_ADMIN') ||
-            this.usersRoles.includes('ROLE_ADMIN')
-            || this.usersRoles.includes('ROLE_VAC_PARTNER_DATA_MANAGER')
-            || this.usersRoles.includes('ROLE_VAC_STAFF_DATA_MANAGER')
-            || this.usersRoles.includes('ROLE_VAC_PARTNER_DATA_VIEWER')
-          )) {
-            formObject['roles'] = this.usersRoles;
-            formsMenu.children.push(formObject);
-          }
-          if (!currentTitle.includes('Parent')) {
-            formObject['roles'] = this.usersRoles;
-            formsMenu.children.push(formObject);
-          }
+          formsMenu.children.push(formObject);
 
           formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formSettingObject['path'] = form.name.toString();
