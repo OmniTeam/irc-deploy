@@ -1,0 +1,25 @@
+.col > .card, .container {
+  padding: 20px;
+  margin: 20px;
+}
+
+.card > div, form {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  width: auto;
+}
+
+.justify-center {
+  justify-content: center;
+  display: flex;
+}
+
+::-webkit-scrollbar {
+  display:none;
+}
+
+.required-indicator{
+  color:red;
+}

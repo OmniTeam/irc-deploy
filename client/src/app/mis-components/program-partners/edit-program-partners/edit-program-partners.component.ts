@@ -3,11 +3,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../services/alert";
 import {ProgramPartnersService} from "../../../services/program-partners.service";
+import {CountriesService} from "../../../services/countries.service";
 
 @Component({
   selector: 'app-edit-program-partners',
   templateUrl: './edit-program-partners.component.html',
-  styleUrls: ['./edit-program-partners.component.css']
+  styleUrls: ['../program-partners.component.css']
 })
 export class EditProgramPartnersComponent implements OnInit {
 
@@ -16,26 +17,27 @@ export class EditProgramPartnersComponent implements OnInit {
   formData: any;
   programs = [];
   programPartnerId: any;
+  countries = [];
+  cities = [];
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
+              private countriesService: CountriesService,
               private router: Router,
               private programPartnersService: ProgramPartnersService) { }
 
   ngOnInit(): void {
+    this.countries = this.countriesService.getListOfCountries();
     this.programPartnerId = this.route.snapshot.params.id;
     this.programPartnersService.getCurrentProgramPartner(this.programPartnerId).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
         program: [results?.programId, [Validators.required]],
-        name: [results?.name, [Validators.required]],
-        leadCluster: [results?.leadCluster],
-        physicalAddress: [results?.physicalAddress],
-        postalAddress: [results?.postalAddress],
-        acronym: [results?.acronym],
-        email: [results?.email],
+        cluster: [results?.cluster, [Validators.required]],
         organisation: [results?.organisation],
-        website: [results?.website],
-        legal: [results?.legal],
+        physicalAddress: [results?.physicalAddress],
+        emailContactPerson: [results?.emailContactPerson],
+        telephoneContactPerson: [results?.telephoneContactPerson],
+        organisationType: [results?.organisationType],
         country: [results?.country],
         nameContactPerson: [results?.nameContactPerson],
         city: [results?.city]
@@ -70,6 +72,12 @@ export class EditProgramPartnersComponent implements OnInit {
         this.submitted = false;
       }, 100);
     }
+  }
+
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
+      this.cities = response.data;
+    }, error => console.log(error))
   }
 
   cancel(): void {

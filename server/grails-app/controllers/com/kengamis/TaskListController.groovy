@@ -328,7 +328,7 @@ class TaskListController {
 
     @Transactional
     def archiveReport() {
-        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Disburse_Funds' OR task_definition_key = 'Archive_Report')"
+        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Archive_Report')"
         def forArchiving = AppHolder.withMisSql { rows(query as String) }
         if (forArchiving.size() > 0) {
             forArchiving.each { task ->

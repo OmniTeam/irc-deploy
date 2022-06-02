@@ -44,7 +44,7 @@
                                    [searchable]="true"
                                    [clearable]="true">
                           <ng-option [value]="item.id" *ngFor="let item of programs">
-                            {{item.title}}
+                            {{item.description}}
                           </ng-option>
                         </ng-select>
                         <div *ngIf="submitted && f.program.errors" class="invalid-feedback">
@@ -58,7 +58,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Partner / Cluster
+                      Cluster
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
@@ -68,15 +68,15 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Partner / Cluster"
+                            placeholder="Cluster"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="name"
-                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                            formControlName="cluster"
+                            [ngClass]="{ 'is-invalid': submitted && f.cluster.errors }"
                           >
-                          <div *ngIf="submitted && f.name.errors"
+                          <div *ngIf="submitted && f.cluster.errors"
                                class="invalid-feedback">
-                            <div *ngIf="f.name.errors.required">Name is
+                            <div *ngIf="f.cluster.errors.required">Cluster is
                               required
                             </div>
                           </div>
@@ -89,7 +89,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Name of the Lead Cluster Organization
+                      What is the name of the lead organization?
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -101,17 +101,41 @@
                             placeholder="Name of the Lead Cluster Organization"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="leadCluster"
+                            formControlName="organisation"
                           >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Physical Address
+                      Type of Organisation
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Type of Organisation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="organisationType"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Where is the organization located?
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -130,160 +154,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Postal Address
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Postal Address"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="postalAddress"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Acronym Name
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder=" Acronym Name"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="acronym"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Email
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder=" Email"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="email"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Type of Organisation
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Type of Organisation"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="organisation"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Website
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Website"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="website"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Legal
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder=" Legal"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="legal"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Country
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Country"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="country"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -306,6 +177,84 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Email of Contact Person
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder=" Email"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="emailContactPerson"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Telephone of contact person
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Telephone"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="telephoneContactPerson"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Country
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Country"
+                                     formControlName="country"
+                                     (ngModelChange)="onSelectCountry($event)"
+                                     [ngClass]="{ 'is-invalid': submitted && f.country.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="country" *ngFor="let country of countries">
+                              {{country}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
@@ -316,18 +265,26 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="City"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="city"
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="City"
+                                     formControlName="city"
+                                     [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
                           >
+                            <ng-option [value]="city" *ngFor="let city of cities">
+                              {{city}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
             <div class="row">
