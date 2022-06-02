@@ -2879,5 +2879,57 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1654169728070-84") {
+        dropColumn(columnName: "acronym", tableName: "program_partner")
+    }
 
+    changeSet(author: "bruno (generated)", id: "1654169728070-85") {
+        dropColumn(columnName: "email", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-86") {
+        dropColumn(columnName: "lead_cluster", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-87") {
+        dropColumn(columnName: "legal", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-88") {
+        dropColumn(columnName: "name", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-89") {
+        dropColumn(columnName: "postal_address", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-90") {
+        dropColumn(columnName: "website", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-11") {
+        addColumn(tableName: "program_partner") {
+            column(name: "cluster", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-12") {
+        addColumn(tableName: "program_partner") {
+            column(name: "email_contact_person", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-13") {
+        addColumn(tableName: "program_partner") {
+            column(name: "organisation_type", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654169728070-15") {
+        addColumn(tableName: "program_partner") {
+            column(name: "telephone_contact_person", type: "varchar(255)")
+        }
+    }
 }

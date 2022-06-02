@@ -35,7 +35,7 @@ class PartnerSetupController {
             def partner = ProgramPartner.findById(setup.partnerId)
 
             list << [id         : setup.id,
-                     partner    : partner ? partner.name : '',
+                     partner    : partner ? partner.cluster : '',
                      lastUpdated: setup.lastUpdated,
                      dateCreated: setup.dateCreated]
         }

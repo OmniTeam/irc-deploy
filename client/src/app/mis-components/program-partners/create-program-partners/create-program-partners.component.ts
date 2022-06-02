@@ -3,11 +3,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../services/alert";
 import {ProgramPartnersService} from "../../../services/program-partners.service";
+import {CountriesService} from "../../../services/countries.service";
 
 @Component({
   selector: 'app-create-program-partners',
   templateUrl: './create-program-partners.component.html',
-  styleUrls: ['./create-program-partners.component.css']
+  styleUrls: ['../program-partners.component.css']
 })
 export class CreateProgramPartnersComponent implements OnInit {
 
@@ -15,26 +16,27 @@ export class CreateProgramPartnersComponent implements OnInit {
   submitted = false;
   formData: any;
   programs = [];
+  countries = [];
+  cities = [];
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
+              private countriesService: CountriesService,
               private router: Router,
               private programPartnersService: ProgramPartnersService) { }
 
   ngOnInit(): void {
+    this.countries = this.countriesService.getListOfCountries();
     this.formGroup = this.formBuilder.group({
-      program: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      leadCluster: [''],
-      physicalAddress: [''],
-      postalAddress: [''],
-      acronym: [''],
-      email: [''],
+      program: [''],
+      cluster: [''],
       organisation: [''],
-      website: [''],
-      legal: [''],
-      country: [''],
+      physicalAddress: [''],
+      organisationType: [''],
       nameContactPerson: [''],
+      telephoneContactPerson: [''],
+      emailContactPerson: [''],
+      country: [''],
       city: ['']
     });
     this.programPartnersService.getPrograms().subscribe((data) => {
@@ -66,6 +68,12 @@ export class CreateProgramPartnersComponent implements OnInit {
         this.submitted = false;
       }, 100);
     }
+  }
+
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
+      this.cities = response.data;
+    }, error => console.log(error))
   }
 
   onReset() {

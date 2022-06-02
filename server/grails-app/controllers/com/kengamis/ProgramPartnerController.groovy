@@ -25,15 +25,14 @@ class ProgramPartnerController {
             def programId = programPartner.program.id
             def program = Program.findById(programId)
             newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.name
-            newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
+            newProgramPartnerObject['name'] = programPartner.cluster
+            newProgramPartnerObject['leadCluster'] = programPartner.organisation
             newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-            newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
-            newProgramPartnerObject['acronym'] = programPartner.acronym
-            newProgramPartnerObject['email'] = programPartner.email
-            newProgramPartnerObject['organisation'] = programPartner.organisation
-            newProgramPartnerObject['website'] = programPartner.website
-            newProgramPartnerObject['legal'] = programPartner.legal
+
+
+            newProgramPartnerObject['email'] = programPartner.emailContactPerson
+            newProgramPartnerObject['organisation'] = programPartner.organisationType
+
             newProgramPartnerObject['country'] = programPartner.country
             newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
             newProgramPartnerObject['city'] = programPartner.city
@@ -53,21 +52,20 @@ class ProgramPartnerController {
             def programId = programPartner.program.id
             def program = Program.findById(programId)
             newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.name
-            newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
+            newProgramPartnerObject['name'] = programPartner.cluster
+            newProgramPartnerObject['leadCluster'] = programPartner.organisation
             newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-            newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
-            newProgramPartnerObject['acronym'] = programPartner.acronym
-            newProgramPartnerObject['email'] = programPartner.email
-            newProgramPartnerObject['organisation'] = programPartner.organisation
-            newProgramPartnerObject['website'] = programPartner.website
-            newProgramPartnerObject['legal'] = programPartner.legal
+
+
+            newProgramPartnerObject['email'] = programPartner.emailContactPerson
+            newProgramPartnerObject['organisation'] = programPartner.organisationType
+
             newProgramPartnerObject['country'] = programPartner.country
             newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
             newProgramPartnerObject['city'] = programPartner.city
             newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
-            newProgramPartnerObject['program'] = program.title
+            newProgramPartnerObject['program'] = program.description
             newProgramPartnerObject['programId'] = program.id
         }
         respond newProgramPartnerObject
@@ -143,15 +141,14 @@ class ProgramPartnerController {
                 def programId = programPartner.program.id
                 def program = Program.findById(programId)
                 newProgramPartnerObject['id'] = programPartner.id
-                newProgramPartnerObject['name'] = programPartner.name
-                newProgramPartnerObject['leadCluster'] = programPartner.leadCluster
+                newProgramPartnerObject['name'] = programPartner.cluster
+                newProgramPartnerObject['leadCluster'] = programPartner.organisation
                 newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-                newProgramPartnerObject['postalAddress'] = programPartner.postalAddress
-                newProgramPartnerObject['acronym'] = programPartner.acronym
-                newProgramPartnerObject['email'] = programPartner.email
-                newProgramPartnerObject['organisation'] = programPartner.organisation
-                newProgramPartnerObject['website'] = programPartner.website
-                newProgramPartnerObject['legal'] = programPartner.legal
+
+
+                newProgramPartnerObject['email'] = programPartner.emailContactPerson
+                newProgramPartnerObject['organisation'] = programPartner.organisationType
+
                 newProgramPartnerObject['country'] = programPartner.country
                 newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
                 newProgramPartnerObject['city'] = programPartner.city

@@ -18,6 +18,13 @@ class StartCamundaInstancesJob extends Script {
     static String CRVPF_REPORTING = "CRVPF_REPORTING"
     static String GRANT_PROCESS = "GRANT_PROCESS"
 
+    static queryUserRoles = "SELECT user.username, user.email,role.authority as role, kenga_group.name as group_program " +
+            "FROM user INNER JOIN user_role ON user.id = user_role.user_id " +
+            "INNER JOIN role ON user_role.role_id = role.id " +
+            "INNER JOIN kenga_user_group ON user.id = kenga_user_group.user_id " +
+            "INNER JOIN kenga_group ON kenga_user_group.kenga_group_id = kenga_group.id " +
+            "WHERE user.email IS NOT NULL"
+
     @Override
     Object run() {
         reportingJob()
@@ -60,15 +67,33 @@ class StartCamundaInstancesJob extends Script {
                     if (r.size() > 0) {
                         def result = r.first()
                         def partner = ProgramPartner.findById(setup.partnerId)
+
+                        def edEmail = []
+                        def mealEmail = []
+                        def financeEmail = []
+                        def programTeamEmail = []
+
+                        def roles = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
+                        roles.each {
+                            if (it['role'] == "ROLE_ED") edEmail << it['email']
+                            if (it['role'] == "ROLE_FINANCE") financeEmail << it['email']
+                            if (it['role'] == "ROLE_MEAL") mealEmail << it['email']
+                            if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == partner.programName) programTeamEmail << it['email']
+                        }
+
                         boolean started = startProcessInstance([
-                                PartnerSetupId: setup.id,
-                                PartnerId     : setup.partnerId,
-                                Assignee      : partner.email,
-                                ProgramId     : setup.programId,
-                                StartDate     : result['start_date'],
-                                EndDate       : result['end_date'],
-                                Period        : result['period'],
-                                GroupId       : "${getGroupIds(setup.partnerId)}"
+                                PartnerSetupId   : setup.id,
+                                PartnerId        : setup.partnerId,
+                                Assignee         : partner.emailContactPerson,
+                                Meal             : mealEmail,
+                                Finance          : financeEmail,
+                                ProgramTeam      : programTeamEmail,
+                                ExecutiveDirector: edEmail,
+                                ProgramId        : setup.programId,
+                                StartDate        : result['start_date'],
+                                EndDate          : result['end_date'],
+                                Period           : result['period'],
+                                GroupId          : "${getGroupIds(setup.partnerId)}"
                         ], CRVPF_REPORTING)
 
 
@@ -89,14 +114,7 @@ class StartCamundaInstancesJob extends Script {
     static planningAndLearningGrantJob() {
         GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
 
-            def query = "SELECT user.username, user.email,role.authority as role, kenga_group.name as group_program " +
-                    "FROM user INNER JOIN user_role ON user.id = user_role.user_id " +
-                    "INNER JOIN role ON user_role.role_id = role.id " +
-                    "INNER JOIN kenga_user_group ON user.id = kenga_user_group.user_id " +
-                    "INNER JOIN kenga_group ON kenga_user_group.kenga_group_id = kenga_group.id " +
-                    "WHERE user.email IS NOT NULL"
-            println query
-            def r = AppHolder.withMisSql { rows(query.toString()) }
+            def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
 
             try {
                 if (r.size() > 0) {

@@ -269,17 +269,16 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
-        this.totalAmountCommitted = values.currentStatus.totalAmountAccountedFor;
-        this.totalAmountSpent = values.currentStatus.totalAmountDisbursed;
-
         values.disbursementPlan.forEach((q) => {
           if (q.datePeriod == this.taskRecord.reportingPeriod) {
             this.totalSpendingPlanForPeriod = q.disbursement
-            this.balance = (+this.totalSpendingPlanForPeriod - +this.totalAmountSpent).toString()
           }
         })
 
         values.budget.forEach((b) => {
+          this.totalAmountCommitted += +b.approvedAmount;
+          this.totalAmountSpent += +b.totalSpent;
+          this.balance += +b.variance
           if (!this.financialReport.some(x => x.id === b.id)) {
             this.financialReport.push({
               id: b.id,

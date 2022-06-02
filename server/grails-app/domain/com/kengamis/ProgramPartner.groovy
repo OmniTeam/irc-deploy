@@ -3,31 +3,25 @@ package com.kengamis
 class ProgramPartner {
 
     String id
-    String name
-    String leadCluster
-    String postalAddress
-    String acronym
-    String email
+    String cluster
     String organisation
-    String website
-    String legal
-    String country
-    String nameContactPerson
-    String city
     String physicalAddress
+    String organisationType
+    String nameContactPerson
+    String telephoneContactPerson
+    String emailContactPerson
+    String country
+    String city
     Date dateCreated
     Date lastUpdated
 
     static belongsTo = [program: Program]
 
     static constraints = {
-        leadCluster nullable: true
-        postalAddress nullable: true
-        acronym nullable: true
-        email nullable: true
+        cluster nullable: true
+        telephoneContactPerson nullable: true
+        emailContactPerson nullable: true
         organisation nullable: true
-        website nullable: true
-        legal nullable: true
         country nullable: true
         nameContactPerson nullable: true
         city nullable: true
@@ -40,6 +34,6 @@ class ProgramPartner {
 
     @Override
     public String toString() {
-        return "${name}"
+        return "${cluster}"
     }
 }

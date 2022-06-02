@@ -86,6 +86,22 @@ class TaskListSyncJob extends Script {
     }
 
     def deleteCompletedTask(TaskList task) {
+        if(task.taskDefinitionKey = 'Disburse_Funds') {
+            Archive archive = new Archive()
+            archive.taskId = task['task_id']
+            archive.inputVariables = task['input_variables']
+            archive.outputVariables = task['output_variables']
+            archive.status = task['status']
+            archive.formId = task['form_id']
+            archive.groupId = task['group_id']
+            archive.userId = task['user_id']
+            archive.taskName = task['task_name']
+            archive.processInstanceId = task['process_instance_id']
+            archive.processDefKey = task['process_def_key']
+            archive.synced = task['synced']
+            archive.taskDefinitionKey = task['task_definition_key']
+            archive.save(flush: true, failOnError: true)
+        }
         TaskList.where {synced == 'true' && id == task.id }.deleteAll()
     }
 
