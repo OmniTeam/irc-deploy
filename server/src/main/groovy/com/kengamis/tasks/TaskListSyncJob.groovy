@@ -86,7 +86,7 @@ class TaskListSyncJob extends Script {
     }
 
     def deleteCompletedTask(TaskList task) {
-        if(task.taskDefinitionKey = 'Disburse_Funds') {
+        if(task.taskDefinitionKey == 'Disburse_Funds') {
             Archive archive = new Archive()
             archive.taskId = task['task_id']
             archive.inputVariables = task['input_variables']
