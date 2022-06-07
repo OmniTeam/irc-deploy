@@ -60,7 +60,7 @@ class ArchiveController {
                             partnerName      : taskPartner.cluster,
                             programId        : programId,
                             grantId          : grantId,
-                            case             : organization?:taskPartner.name,
+                            case             : organization?:taskPartner.cluster,
                             programName      : taskProgram.title,
                             endDate          : endDate?:taskGrant?.lastUpdated,
                             groupId          : groupId,
