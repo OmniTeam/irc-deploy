@@ -44,7 +44,7 @@ deploy:
     - echo "Done Deploying crvpf server :)" 
 
 build:client:
-  image: node:latest
+  image: node:12
 
   variables:
     SERVER_HOST: "157.230.227.3"
