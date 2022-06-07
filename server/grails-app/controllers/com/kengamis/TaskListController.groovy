@@ -78,7 +78,7 @@ class TaskListController {
                 } else if (task.taskDefinitionKey == "Approve_Fund_Disbursement") {
                     c2 = userRoles.contains("ROLE_ED")
                 }
-                casee = taskPartner?.name
+                casee = taskPartner?.cluster
             } else if (task.processDefKey == "GRANT_PROCESS") {
                 if (task.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         task.taskDefinitionKey == "Review_Concept" ||

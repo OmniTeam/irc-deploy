@@ -43,32 +43,32 @@ deploy:
     - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh"
     - echo "Done Deploying crvpf server :)" 
 
-build:client:
-  image: node:14
-
-  variables:
-    SERVER_HOST: "157.230.227.3"
-    WEBAPP_FOLDER: "/var/www/kengamis/"
-
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq unzip
-    - apt-get install zip
-    - apt-get install sshpass
-    - cd client
-    - npm install
-    - npm install -g @angular/cli
-
-  artifacts:
-    paths:
-      - dist/
-  stage: deploy
-  only:
-    - crvpf
-  script:
-    - ng build --prod --base-href kengamis
-    - cd dist/kenga_mis/
-    - sshpass -V
-    - export SSHPASS=$USER_PASS
-    - echo "Copying to server..."
-    - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
-    - echo "Done Deploying crvpf client :)"
+#build:client:
+#  image: node:12
+#
+#  variables:
+#    SERVER_HOST: "157.230.227.3"
+#    WEBAPP_FOLDER: "/var/www/kengamis/"
+#
+#  before_script:
+#    - apt-get update -qq && apt-get install -y -qq unzip
+#    - apt-get install zip
+#    - apt-get install sshpass
+#    - cd client
+#    - npm install
+#    - npm install -g @angular/cli
+#
+#  artifacts:
+#    paths:
+#      - dist/
+#  stage: deploy
+#  only:
+#    - crvpf
+#  script:
+#    - ng build --prod --base-href kengamis
+#    - cd dist/kenga_mis/
+#    - sshpass -V
+#    - export SSHPASS=$USER_PASS
+#    - echo "Copying to server..."
+#    - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
+#    - echo "Done Deploying crvpf client :)"
