@@ -12,6 +12,8 @@ class ProgramPartner {
     String emailContactPerson
     String country
     String city
+    String dataCollector
+    String organisationsInvolved
     Date dateCreated
     Date lastUpdated
 
@@ -30,6 +32,7 @@ class ProgramPartner {
 
     static mapping = {
         id generator: 'uuid2'
+        organisationsInvolved type: 'text'
     }
 
     @Override

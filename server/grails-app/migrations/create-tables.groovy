@@ -2932,4 +2932,20 @@ databaseChangeLog = {
             column(name: "telephone_contact_person", type: "varchar(255)")
         }
     }
+
+    changeSet(author: "bruno (generated)", id: "1654681634891-11") {
+        addColumn(tableName: "program_partner") {
+            column(name: "data_collector", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1654681634891-12") {
+        addColumn(tableName: "program_partner") {
+            column(name: "organisations_involved", type: "longtext") {
+                constraints(nullable: "false")
+            }
+        }
+    }
 }
