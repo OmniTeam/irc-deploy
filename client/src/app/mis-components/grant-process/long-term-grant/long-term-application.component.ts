@@ -36,7 +36,7 @@ export class LongTermApplicationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.countries = this.countriesService.getListOfCountries();
+    this.countries = this.countriesService.getListOfAllCountries();
 
     this.formGroup = this.formBuilder.group({
       program: ['', [Validators.required]],

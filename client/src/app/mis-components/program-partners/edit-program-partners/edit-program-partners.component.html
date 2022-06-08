@@ -285,6 +285,85 @@
                   </div>
                 </div>
 
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Data Collector
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="dataCollector"
+                            [value]="username"
+                            disabled>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Organizations involved in the cluster
+                    </label>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="form-group ">
+                      <div class=" input-group input-group-merge">
+                        <div class="col">
+                          <table class="table table-striped table-bordered hover" style="display: table">
+                            <thead>
+                            <tr>
+                              <th class='text-center'>Name of organization</th>
+                              <th class='text-center'>Telephone Number</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let org of organisationsInvolved">
+                              <td class='text-center' style="display: none;">{{org.id}}</td>
+                              <td class='text-center' [id]="org.id">{{org.name}}
+                                <div>
+                                  <button class="btn btn-link" type="button"
+                                          (click)="cellEditor(org.id, org.id, 'orgName', org.name)"><i
+                                    class="fas fa-pencil-alt"></i></button>
+                                </div>
+                              </td>
+                              <td class="text-center" [id]="org.id+'-d'">{{org.contact}}
+                                <div>
+                                  <button class="btn btn-link" type="button"
+                                          (click)="cellEditor(org.id,org.id+'-d', 'orgContact', org.contact)"><i
+                                    class="fas fa-pencil-alt"></i></button>
+                                </div>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-success"
+                            type="button"
+                            style="height: 37px;
+                                  width: 90px;
+                                  padding: revert;
+                                  font-size: 12px;"
+                            (click)="addOrganization()">
+                      <i class="fas fa-plus"></i>&nbsp;Add
+                    </button>
+                  </div>
+                </div>
+
+
               </div>
             </div>
             <div class="row">

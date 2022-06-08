@@ -25,19 +25,19 @@ class ProgramPartnerController {
             def programId = programPartner.program.id
             def program = Program.findById(programId)
             newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.cluster
-            newProgramPartnerObject['leadCluster'] = programPartner.organisation
+            newProgramPartnerObject['cluster'] = programPartner.cluster
+            newProgramPartnerObject['organisation'] = programPartner.organisation
             newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-
-
-            newProgramPartnerObject['email'] = programPartner.emailContactPerson
-            newProgramPartnerObject['organisation'] = programPartner.organisationType
-
-            newProgramPartnerObject['country'] = programPartner.country
+            newProgramPartnerObject['organisationType'] = programPartner.organisationType
+            newProgramPartnerObject['emailContactPerson'] = programPartner.emailContactPerson
             newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+            newProgramPartnerObject['telephoneContactPerson'] = programPartner.telephoneContactPerson
+            newProgramPartnerObject['country'] = programPartner.country
             newProgramPartnerObject['city'] = programPartner.city
             newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
+            newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
+            newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
             newProgramPartnerObject['program'] = program.title
             newProgramPartnerObject['programId'] = program.id
             programPartners << newProgramPartnerObject
@@ -52,20 +52,20 @@ class ProgramPartnerController {
             def programId = programPartner.program.id
             def program = Program.findById(programId)
             newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.cluster
-            newProgramPartnerObject['leadCluster'] = programPartner.organisation
+            newProgramPartnerObject['cluster'] = programPartner.cluster
+            newProgramPartnerObject['organisation'] = programPartner.organisation
             newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-
-
-            newProgramPartnerObject['email'] = programPartner.emailContactPerson
-            newProgramPartnerObject['organisation'] = programPartner.organisationType
-
-            newProgramPartnerObject['country'] = programPartner.country
+            newProgramPartnerObject['organisationType'] = programPartner.organisationType
+            newProgramPartnerObject['emailContactPerson'] = programPartner.emailContactPerson
             newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+            newProgramPartnerObject['telephoneContactPerson'] = programPartner.telephoneContactPerson
+            newProgramPartnerObject['country'] = programPartner.country
             newProgramPartnerObject['city'] = programPartner.city
             newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
-            newProgramPartnerObject['program'] = program.description
+            newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
+            newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+            newProgramPartnerObject['program'] = program.title
             newProgramPartnerObject['programId'] = program.id
         }
         respond newProgramPartnerObject
@@ -73,6 +73,7 @@ class ProgramPartnerController {
 
     @Transactional
     def save(ProgramPartner programPartner) {
+        println programPartner.errors
         if (programPartner == null) {
             render status: NOT_FOUND
             return
@@ -95,6 +96,7 @@ class ProgramPartnerController {
 
     @Transactional
     def update(ProgramPartner programPartner) {
+        println programPartner.errors
         if (programPartner == null) {
             render status: NOT_FOUND
             return
@@ -141,24 +143,34 @@ class ProgramPartnerController {
                 def programId = programPartner.program.id
                 def program = Program.findById(programId)
                 newProgramPartnerObject['id'] = programPartner.id
-                newProgramPartnerObject['name'] = programPartner.cluster
-                newProgramPartnerObject['leadCluster'] = programPartner.organisation
+                newProgramPartnerObject['cluster'] = programPartner.cluster
+                newProgramPartnerObject['organisation'] = programPartner.organisation
                 newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-
-
-                newProgramPartnerObject['email'] = programPartner.emailContactPerson
-                newProgramPartnerObject['organisation'] = programPartner.organisationType
-
-                newProgramPartnerObject['country'] = programPartner.country
+                newProgramPartnerObject['organisationType'] = programPartner.organisationType
+                newProgramPartnerObject['emailContactPerson'] = programPartner.emailContactPerson
                 newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+                newProgramPartnerObject['telephoneContactPerson'] = programPartner.telephoneContactPerson
+                newProgramPartnerObject['country'] = programPartner.country
                 newProgramPartnerObject['city'] = programPartner.city
                 newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
                 newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
+                newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
+                newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
                 newProgramPartnerObject['program'] = program.title
                 newProgramPartnerObject['programId'] = program.id
                 programPartners << newProgramPartnerObject
             }
         }
         respond programPartners
+    }
+
+    def getDataCollector() {
+        def dataCollector = ""
+        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
+        def results = AppHolder.withMisSql { rows(query as String) }
+        if (results.size() > 0) {
+            dataCollector = results.first()
+        }
+        respond dataCollector
     }
 }
