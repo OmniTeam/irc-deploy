@@ -2972,4 +2972,12 @@ databaseChangeLog = {
     changeSet(author: "bruno (generated)", id: "16533462423566-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "program", tableName: "project_milestone")
     }
+
+    changeSet(author: "bruno (generated)", id: "16533462342355-28") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_recommendations")
+    }
+
+    changeSet(author: "bruno (generated)", id: "16533445639345-28") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_comments")
+    }
 }

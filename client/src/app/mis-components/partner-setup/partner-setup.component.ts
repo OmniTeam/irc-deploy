@@ -53,7 +53,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   btn_id: string;
 
   periodItems = [
-    {name: 'Monthly', value: 'month'},
+    {name: 'Biannual', value: 'biannual'},
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
   ];
@@ -177,9 +177,23 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     if (this.calendar.periodType == "quarter") {
       //generate quarters
       this.calendar.reportingCalender = DateSplitter.genDatesInRange(startDate, endDate, false);
-    } else if (this.calendar.periodType == "month") {
-      //generate quarters
-      this.calendar.reportingCalender = DateSplitter.genDatesInRange(startDate, endDate, true);
+    } else if (this.calendar.periodType == "biannual") {
+      //generate biannual
+      let years = [];
+      let months = DateSplitter.genDatesInRange(startDate, endDate, true);
+      let numOfYears = Math.floor(months.length / 6);
+      let countStart = 0;
+      let countEnd = 0;
+      for (let number = 1; number <= numOfYears; number++) {
+        countStart = countEnd + (number - 1);
+        countEnd = countStart + 5;
+        years.push({
+          'datePeriod': 'HY' + number,
+          'startDate': months[countStart].startDate,
+          'endDate': months[countEnd].endDate,
+        });
+      }
+      this.calendar.reportingCalender = years;
     } else if (this.calendar.periodType == "annual") {
       //generate two years
       let years = [];

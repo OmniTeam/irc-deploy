@@ -192,7 +192,7 @@
                           *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
                       <td class='text-center' *ngIf="row.milestoneId==undefined"
                           id="1-{{row.id}}">{{ row.quarter_achievement | number }}
-                        <div *ngIf="isSubmitVisible || isReviewPerformance || isReviewProgram">
+                        <div *ngIf="isSubmitVisible || isReviewPerformance || isReviewProgram || isSubmitFinalVisible">
                           <button class="btn btn-link"
                                   (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')">
                             <i
@@ -202,7 +202,7 @@
                       <td class='text-center'>{{ row.percentage_achievement }}</td>
                       <td class='text-center comment' id="0-{{row.id}}">
                         {{ row.comment_on_result }}
-                        <div *ngIf="isSubmitVisible || isReviewPerformance || isReviewProgram">
+                        <div *ngIf="isSubmitVisible || isReviewPerformance || isReviewProgram || isSubmitFinalVisible">
                           <button class="btn btn-link"
                                   (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.comment_on_result)"><i
                             class="fas fa-pencil-alt"></i></button>
@@ -236,7 +236,7 @@
                       <td class='text-center'>{{ row.expense_to_date | number }}</td>
                       <td class='text-center' id="td1-{{row.id}}">
                         {{ row.total_advanced | number }}
-                        <div *ngIf="isSubmitVisible || isReviewFinance">
+                        <div *ngIf="isSubmitVisible || isReviewFinance || isSubmitFinalVisible">
                           <button class="btn btn-link"
                                   (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')">
                             <i
@@ -245,7 +245,7 @@
                       </td>
                       <td class='text-center' id="td2-{{row.id}}">
                         {{ row.quarter_expenses | number }}
-                        <div *ngIf="isSubmitVisible || isReviewFinance">
+                        <div *ngIf="isSubmitVisible || isReviewFinance || isSubmitFinalVisible">
                           <button class="btn btn-link"
                                   (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')">
                             <i
@@ -255,7 +255,7 @@
                       <td class='text-center'>{{ row.variance }}</td>
                       <td class='text-center comment' [id]="'td3-'+row.id">
                         {{ row.reason_for_variance }}
-                        <div *ngIf="isSubmitVisible || isReviewFinance">
+                        <div *ngIf="isSubmitVisible || isReviewFinance || isSubmitFinalVisible">
                           <button class="btn btn-link"
                                   (click)="cellEditor(row,'td3-'+row.id, 'reason_for_variance',row.reason_for_variance)">
                             <i class="fas fa-pencil-alt"></i></button>
@@ -365,6 +365,7 @@
                         <div class="col-sm-6"><p>Attached narrative to the program report:</p></div>
                         <div class="col-sm-6">
                           <button
+                            [style.display]="shortLink1.length>0 ? 'block' : 'none'"
                             type="button"
                             (click)="fileUploadService.downloadFile(shortLink1)"
                             class="btn btn-link">{{fileUploadService.getFileName(shortLink1)}} <i
@@ -375,6 +376,7 @@
                         <div class="col-sm-6"><p>Attached narrative duly signed financial report:</p></div>
                         <div class="col-sm-6">
                           <button
+                            [style.display]="shortLink2.length>0 ? 'block' : 'none'"
                             type="button"
                             (click)="fileUploadService.downloadFile(shortLink2)"
                             class="btn btn-link">{{fileUploadService.getFileName(shortLink2)}} <i
@@ -385,6 +387,7 @@
                         <div class="col-sm-6"><p>Attached receipts and supporting documents:</p></div>
                         <div class="col-sm-6">
                           <button
+                            [style.display]="shortLink3.length>0 ? 'block' : 'none'"
                             type="button"
                             (click)="fileUploadService.downloadFile(shortLink3)"
                             class="btn btn-link">{{fileUploadService.getFileName(shortLink3)}} <i
@@ -475,7 +478,8 @@
 
                   <div class="row">
                     <button class="btn btn-success comment_btn" (click)="viewRecommendations()"
-                            *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_PROGRAM_OFFICER', 'ROLE_SUPER_ADMIN']" style="margin-left: 20px">
+                            *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_PROGRAM_OFFICER', 'ROLE_SUPER_ADMIN']"
+                            style="margin-left: 20px">
                       View
                       Recommendations
                     </button>
@@ -565,15 +569,18 @@
 
                   </div>
 
-                  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                    <div class="col"><p>Amount of Funds to be disbursed:</p></div>
-                    <div class="col text-left"><input [disabled]="isReadOnly" type="text" class="form-control"
-                                                      [(ngModel)]="amountOfFundsDisbursed"/><br></div>
-                  </div>
-                  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                    <div class="col"><p>Provide any recommendations (Internal):</p></div>
-                    <div class="col text-left"><textarea [disabled]="isReadOnly" class="form-control"
-                                                         [(ngModel)]="provideAnyRecommendations"></textarea></div>
+                  <div class="row">
+                    <div class="col-sm-6" style="margin-bottom: 0; margin-top: 0;"
+                         [style.display]="radioRecommendFund=='Yes' ? 'block':'none'">
+                      <label>Amount of Funds to be disbursed:</label>
+                      <input [disabled]="isReadOnly" type="text" class="form-control"
+                             [(ngModel)]="amountOfFundsDisbursed"/>
+                    </div>
+                    <div class="col-sm-6" style="margin-bottom: 0; margin-top: 0;">
+                      <label>Provide any recommendations (Internal):</label>
+                      <textarea [disabled]="isReadOnly" class="form-control" rows="3"
+                                [(ngModel)]="provideAnyRecommendations"></textarea>
+                    </div>
                   </div>
                 </div>
 
