@@ -36,7 +36,7 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
     this.countries = this.countriesService.getListOfAllCountries();
     this.programPartnerId = this.route.snapshot.params.id;
     this.programPartnersService.getCurrentProgramPartner(this.programPartnerId).subscribe((results: any) => {
-      this.organisationsInvolved = JSON.parse(results?.organisationsInvolved)
+      if(results?.organisationsInvolved!="") this.organisationsInvolved = JSON.parse(results?.organisationsInvolved)
       this.formGroup = this.formBuilder.group({
         program: [results?.programId, [Validators.required]],
         cluster: [results?.cluster, [Validators.required]],
@@ -52,8 +52,7 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
         organisationsInvolved: [results?.organisationsInvolved],
       });
       this.usersService.getCurrentUser(results?.dataCollector).subscribe((data:any) => {
-        console.log('user data', data)
-        this.username = data.username;
+        this.username = data.names;
       });
     });
     this.programPartnersService.getPrograms().subscribe((data) => {
