@@ -6,6 +6,7 @@ import {ProgramPartnersService} from "../../../services/program-partners.service
 import {CountriesService} from "../../../services/countries.service";
 import {v4 as uuid} from 'uuid';
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
+import {UsersService} from "../../../services/users.service";
 
 @Component({
   selector: 'app-create-program-partners',
@@ -21,12 +22,14 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   countries = [];
   cities = [];
   organisationsInvolved: any = [];
+  username: string;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private countriesService: CountriesService,
               private router: Router,
+              private usersService: UsersService,
               private programPartnersService: ProgramPartnersService) {
   }
 
@@ -51,6 +54,9 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
     });
     this.programPartnersService.getDataCollector().subscribe(res => {
       this.formGroup.patchValue({dataCollector: res.user_id});
+      this.usersService.getCurrentUser(res.user_id).subscribe((data: any) => {
+        this.username = data.names;
+      });
     });
   }
 
@@ -90,7 +96,8 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   }
 
   onReset() {
-    this.formGroup.reset();
+    // this.formGroup.reset();
+    this.router.navigate(['/programPartner']);
   }
 
   addOrganization() {
