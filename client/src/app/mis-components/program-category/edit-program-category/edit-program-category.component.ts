@@ -28,7 +28,8 @@ export class EditProgramCategoryComponent implements OnInit {
       this.formGroup = this.formBuilder.group({
         name: [results?.name, [Validators.required]],
         description: [results?.description],
-        program: [results?.programId]
+        program: [results?.programId],
+        form: [results?.form]
       });
     });
     this.programCategoryService.getPrograms().subscribe((data) => {

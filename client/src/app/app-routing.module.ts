@@ -140,6 +140,9 @@ const routes: Routes = [
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
+            Roles.ROLE_MEAL,
+            Roles.ROLE_FINANCE,
+            Roles.ROLE_ED,
             Roles.ROLE_PARTNER_DATA_MANAGER,
             Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
             Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
@@ -185,6 +188,9 @@ const routes: Routes = [
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
+            Roles.ROLE_MEAL,
+            Roles.ROLE_FINANCE,
+            Roles.ROLE_ED,
             Roles.ROLE_PARTNER_DATA_MANAGER,
             Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
             Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,

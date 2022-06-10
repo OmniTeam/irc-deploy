@@ -78,7 +78,7 @@ class StartCamundaInstancesJob extends Script {
                             if (it['role'] == "ROLE_ED") edEmail << it['email']
                             if (it['role'] == "ROLE_FINANCE") financeEmail << it['email']
                             if (it['role'] == "ROLE_MEAL") mealEmail << it['email']
-                            if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == partner.programName) programTeamEmail << it['email']
+                            if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == partner.program.title) programTeamEmail << it['email']
                         }
 
                         boolean started = startProcessInstance([
@@ -186,7 +186,7 @@ class StartCamundaInstancesJob extends Script {
                 "USER.id AS userId, " +
                 "USER.username, " +
                 "user_partner.program_partner_id, " +
-                "program_partner.`name` AS partner, " +
+                "program_partner.`cluster` AS partner, " +
                 "program_partner.program_id, " +
                 "rr.authority " +
                 "FROM " +

@@ -34,21 +34,14 @@
                   <div class="col-md-6">
                     <div class="col-md-12">
                       <div class="form-group ">
-                        <ng-select class="form-control form-control-sm"
-                                   aria-controls="datatable"
-                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
-                                   [multiple]="false"
-                                   placeholder="  Program"
-                                   formControlName="program"
-                                   [ngClass]="{ 'is-invalid': submitted && f.program.errors }"
-                                   [searchable]="true"
-                                   [clearable]="true">
-                          <ng-option [value]="item.id" *ngFor="let item of programs">
-                            {{item.title}}
-                          </ng-option>
-                        </ng-select>
-                        <div *ngIf="submitted && f.program.errors" class="invalid-feedback">
-                          <div *ngIf="f.program.errors.required">Program is required</div>
+                        <input
+                          class="form-control"
+                          type="text"
+                          placeholder="Form"
+                          formControlName="form"
+                        />
+                        <div *ngIf="submitted && f.form.errors" class="invalid-feedback">
+                          <div *ngIf="f.form.errors.required">Form is required</div>
                         </div>
                       </div>
                     </div>

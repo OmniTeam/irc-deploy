@@ -3,6 +3,7 @@ package com.kengamis
 class ProgramCategory {
 
     String id
+    String form
     String name
     String description
     Date dateCreated
@@ -13,6 +14,7 @@ class ProgramCategory {
 
     static constraints = {
         description nullable: true
+        program nullable: true
     }
 
     static mapping = {

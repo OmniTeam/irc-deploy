@@ -5,6 +5,7 @@ import {AlertService} from "../../../services/alert";
 import {ProjectMilestoneService} from "../../../services/project-milestone.service";
 import {HttpParams} from "@angular/common/http";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ProgramCategoryService} from "../../../services/program-category.service";
 
 @Component({
   selector: 'app-edit-project-milestones',
@@ -34,16 +35,18 @@ export class EditProjectMilestonesComponent implements OnInit {
               private alertService: AlertService,
               private modalService: NgbModal,
               private router: Router,
-              private projectMilestoneService: ProjectMilestoneService) { }
+              private projectMilestoneService: ProjectMilestoneService,
+              private programCategoryService: ProgramCategoryService) { }
 
   ngOnInit(): void {
     this.milestoneId = this.route.snapshot.params.id
     this.projectMilestoneService.getCurrentMilestone(this.milestoneId).subscribe((results: any) => {
       this.selectedProgram = results?.programId;
-      this.getCategories(this.selectedProgram);
+      //this.getCategories(this.selectedProgram);
       this.selectedProgramCategory = results?.categoryId;
       this.formGroup = this.formBuilder.group({
-        program: [results?.programId, [Validators.required]],
+        program: [results?.programId],
+        form: [results?.form, [Validators.required]],
         category: [results?.category, [Validators.required]],
         name: [results?.name, [Validators.required]],
         description: [results?.description],
@@ -54,6 +57,9 @@ export class EditProjectMilestonesComponent implements OnInit {
     this.projectMilestoneService.getPrograms().subscribe(data => {
       this.programs = data;
     }, error => console.log(error));
+    this.programCategoryService.getProgramCategories().subscribe(data => {
+      this.categories = data
+    })
   }
 
   getCategories(value) {
