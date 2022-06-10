@@ -162,7 +162,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
       },
       {
-        path: 'grantProcess',
+        path: 'submitletterofinterest',
         data: {
           userRoles: []
         },
