@@ -5,6 +5,7 @@ import {AlertService} from "../../../services/alert";
 import {ProjectMilestoneService} from "../../../services/project-milestone.service";
 import {HttpParams} from "@angular/common/http";
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ProgramCategoryService} from "../../../services/program-category.service";
 
 @Component({
   selector: 'app-create-project-milestones',
@@ -33,13 +34,15 @@ export class CreateProjectMilestonesComponent implements OnInit {
               private alertService: AlertService,
               private modalService: NgbModal,
               private router: Router,
-              private projectMilestoneService: ProjectMilestoneService) { }
+              private projectMilestoneService: ProjectMilestoneService,
+              private programCategoryService: ProgramCategoryService) { }
 
   ngOnInit(): void {
     this.selectedProgram = null;
     this.selectedProgramCategory = null;
     this.formGroup = this.formBuilder.group({
-      program: ['', [Validators.required]],
+      program: [''],
+      form: ['', [Validators.required]],
       programCategory: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: [''],
@@ -49,9 +52,12 @@ export class CreateProjectMilestonesComponent implements OnInit {
     this.projectMilestoneService.getPrograms().subscribe(data => {
       this.programs = data;
     }, error => console.log(error));
+    this.programCategoryService.getProgramCategories().subscribe(data => {
+      this.categories = data
+    })
   }
 
-  getCategories(value) {
+/*  getCategories(value) {
     this.selectedProgramCategory = null;
     this.selectedProgram = value;
     const params = new HttpParams()
@@ -59,7 +65,7 @@ export class CreateProjectMilestonesComponent implements OnInit {
     this.projectMilestoneService.getProgramCategories(params).subscribe(data => {
       this.categories = data;
     }, error => console.log(error));
-  }
+  }*/
 
   get f() {
     return this.formGroup.controls;

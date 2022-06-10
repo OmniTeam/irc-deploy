@@ -150,7 +150,7 @@ class TaskListController {
         def programPartner = ProgramPartner.findById(partnerId)
         def program = Program.findById(programId)
 
-        if (programPartner == null) programPartner = [name: '']
+        if (programPartner == null) programPartner = [cluster: '']
         if (program == null) program = [title: '']
 
         def t = [id               : task.id,
@@ -158,7 +158,7 @@ class TaskListController {
                  partnerSetupId   : partnerSetupId,
                  startDate        : startDate,
                  partnerId        : partnerId,
-                 partnerName      : programPartner.name,
+                 partnerName      : programPartner.cluster,
                  programId        : programId,
                  grantId          : grantId,
                  programName      : program.title,

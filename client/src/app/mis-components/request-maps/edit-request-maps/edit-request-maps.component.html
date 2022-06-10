@@ -66,14 +66,14 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
+                          <textarea
                             class="form-control"
                             placeholder="  Config Attribute"
-                            type="text"
+                            rows="5"
                             style="padding-left: 10px;"
                             formControlName="configAttribute"
                             [ngClass]="{ 'is-invalid': submitted && f.configAttribute.errors }"
-                          >
+                          ></textarea>
                           <div *ngIf="submitted && f.configAttribute.errors"
                                class="invalid-feedback">
                             <div *ngIf="f.configAttribute.errors.required">Config Attribute is

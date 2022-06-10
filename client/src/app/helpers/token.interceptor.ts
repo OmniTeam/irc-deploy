@@ -28,8 +28,8 @@ export class TokenInterceptor implements HttpInterceptor {
         errorMessage = 'Error: ' + error.status + '\\nMessage:' + error.message;
       }
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        //errorMessage = 'Invalid username or password or your session has expired!';
-        this.alertService.error(errorMessage);
+        errorMessage = 'Invalid username or password or your session has expired!';
+        //this.alertService.error(errorMessage);
         this.authService.doLogoutUser();
         this.router.navigate(['login']);
       } else {
