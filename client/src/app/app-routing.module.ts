@@ -10,13 +10,22 @@ import { Roles } from "./models/roles";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "/home",
+    redirectTo: "auth",
     pathMatch: "full",
     // canActivate: [AuthGuard],
     data: {
       userRoles: [], // All User Can Access but must be login
     },
   },
+  // {
+  //   path: "home",
+  //   pathMatch: "full",
+  //   children: [],
+  //   canActivate: [AuthGuard],
+  //   data: {
+  //     userRoles: [], // All User Can Access but must be login
+  //   },
+  // },
 
   {
     path: "",
