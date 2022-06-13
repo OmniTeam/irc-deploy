@@ -36,18 +36,19 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfAvailableCountries();
     this.formGroup = this.formBuilder.group({
-      program: [''],
-      cluster: [''],
-      organisation: [''],
-      physicalAddress: [''],
-      organisationType: [''],
-      nameContactPerson: [''],
-      telephoneContactPerson: [''],
-      emailContactPerson: [''],
-      country: [''],
-      city: [''],
-      dataCollector: [''],
-      organisationsInvolved: ['']
+      program: [null, [Validators.required]],
+      cluster: [null, [Validators.required]],
+      organisation: [null],
+      physicalAddress: [null],
+      organisationType: [null],
+      nameContactPerson: [null],
+      telephoneContactPerson: [null, [Validators.required, Validators.pattern('[- +()0-9]{6,}')]],
+      emailContactPerson: [null, [Validators.required, Validators.email]],
+      country: [null],
+      city: [null],
+      dataCollector: [null],
+      organisationsInvolved: [null],
+      areaOfOperation: [null]
     });
     this.programPartnersService.getPrograms().subscribe((data) => {
       this.programs = data;

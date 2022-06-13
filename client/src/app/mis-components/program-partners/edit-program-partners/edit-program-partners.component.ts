@@ -42,14 +42,15 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
         cluster: [results?.cluster, [Validators.required]],
         organisation: [results?.organisation],
         physicalAddress: [results?.physicalAddress],
-        emailContactPerson: [results?.emailContactPerson],
-        telephoneContactPerson: [results?.telephoneContactPerson],
+        emailContactPerson: [results?.emailContactPerson, [Validators.required, Validators.email]],
+        telephoneContactPerson: [results?.telephoneContactPerson, [Validators.required, Validators.pattern('[- +()0-9]{6,}')]],
         organisationType: [results?.organisationType],
         country: [results?.country],
         nameContactPerson: [results?.nameContactPerson],
         city: [results?.city],
         dataCollector: [results?.dataCollector],
         organisationsInvolved: [results?.organisationsInvolved],
+        areaOfOperation: [results?.areaOfOperation]
       });
       this.usersService.getCurrentUser(results?.dataCollector).subscribe((data:any) => {
         this.username = data.names;

@@ -71,7 +71,14 @@
                 class="form-control"
                 placeholder="Email"
                 type="text"
-                [(ngModel)]="organisation.email">
+                [(ngModel)]="organisation.email"
+                [ngClass]="{ 'is-invalid': email.invalid }"
+                #email="ngModel" email>
+            </div>
+            <div *ngIf="submitted && email.invalid">
+              <div class="input-error">
+                Email must be in the format 'example@email.com'
+              </div>
             </div>
           </div>
         </div>
