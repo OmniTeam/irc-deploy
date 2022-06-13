@@ -39,7 +39,7 @@ class ArchiveController {
             def taskProgram = Program.findById(programId)
             def taskGrant = GrantLetterOfInterest.findById(grantId)
 
-            if (taskPartner == null) taskPartner = [name: '']
+            if (taskPartner == null) taskPartner = [cluster: '']
             if (taskProgram == null) taskProgram = [title: '']
 
             User currentUser = AppHolder.currentUser()
@@ -57,10 +57,10 @@ class ArchiveController {
                             partnerSetupId   : partnerSetupId,
                             startDate        : startDate?:taskGrant?.dateCreated,
                             partnerId        : partnerId,
-                            partnerName      : taskPartner.name,
+                            partnerName      : taskPartner.cluster,
                             programId        : programId,
                             grantId          : grantId,
-                            case             : organization?:taskPartner.name,
+                            case             : organization?:taskPartner.cluster,
                             programName      : taskProgram.title,
                             endDate          : endDate?:taskGrant?.lastUpdated,
                             groupId          : groupId,
@@ -101,7 +101,7 @@ class ArchiveController {
         def programPartner = ProgramPartner.findById(partnerId)
         def program = Program.findById(programId)
 
-        if (programPartner == null) programPartner = [name: '']
+        if (programPartner == null) programPartner = [cluster: '']
         if (program == null) program = [title: '']
 
         def t = [id               : task.id,
@@ -109,7 +109,7 @@ class ArchiveController {
                  partnerSetupId   : partnerSetupId,
                  startDate        : startDate,
                  partnerId        : partnerId,
-                 partnerName      : programPartner.name,
+                 partnerName      : programPartner.cluster,
                  programId        : programId,
                  grantId          : grantId,
                  programName      : program.title,

@@ -59,6 +59,7 @@ class UrlMappings {
         post "/$controller/downloadFile(.$format)?"(action:"downloadFile")
         post "/$controller/uploadExcel(.$format)?"(action:"uploadExcel")
         get "/$controller/getByProcessInstanceId(.$format)?"(action:"getByProcessInstanceId")
+        get "/$controller/getDataCollector(.$format)?"(action:"getDataCollector")
 
 
         group "/odxRest/", {

@@ -60,11 +60,13 @@ export class CellEdit {
 
       const saveButton = document.createElement("button");
       saveButton.classList.add('btn', 'btn-link');
+      saveButton.setAttribute('type', "button");
       saveButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, type, "save"));
       saveButton.id = "save_button" + td_id;
 
       const cancelButton = document.createElement("button");
       cancelButton.classList.add('btn', 'btn-link');
+      cancelButton.setAttribute('type', "button");
       cancelButton.addEventListener("click", (e: Event) => this.edit(row_id, td_id, oldValue, key, save, type, "cancel"));
       cancelButton.id = "cancel_button" + td_id;
 

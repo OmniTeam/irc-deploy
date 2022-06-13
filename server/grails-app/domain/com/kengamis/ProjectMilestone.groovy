@@ -10,6 +10,7 @@ class ProjectMilestone {
     String reportingTable
     String dashboardTable
     String program
+    String form
     Date dateCreated
     Date lastUpdated
 
@@ -17,6 +18,7 @@ class ProjectMilestone {
 
     static constraints = {
         reportingQuery nullable: true
+        program nullable: true
         dashboardQuery nullable: true
         description nullable: true
         reportingTable nullable: true

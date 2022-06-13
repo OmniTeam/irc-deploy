@@ -210,7 +210,7 @@ export class SidebarComponent implements OnInit {
                 isCollapsed: true,
                 roles: ['ROLE_SUPER_ADMIN'],
                 children: [
-                  {path: 'grantProcess', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+                  {path: 'submitletterofinterest', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
                   {path: 'grantProcess-longTerm', title: 'Long Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
                 ]
               },

@@ -93,6 +93,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   attachment3: string;
 
   organisationalInfo: any;
+  organisationsInvolved: any;
   performanceReport = [];
   financialReport = [];
   proceed = [
@@ -192,6 +193,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     //set organizational Info
     this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
       if (results !== null && results !== undefined) {
+        this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
         this.organisationalInfo = results;
       }
     });
@@ -269,13 +271,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
-        this.totalAmountCommitted = values.currentStatus.totalAmountAccountedFor;
-        this.totalAmountSpent = values.currentStatus.totalAmountDisbursed;
-
         values.disbursementPlan.forEach((q) => {
           if (q.datePeriod == this.taskRecord.reportingPeriod) {
             this.totalSpendingPlanForPeriod = q.disbursement
-            this.balance = (+this.totalSpendingPlanForPeriod - +this.totalAmountSpent).toString()
           }
         })
 
@@ -289,6 +287,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             });
           }
         });
+        this.updateProjectOverview();
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
@@ -538,6 +537,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           break;
       }
     }
+    //update project overview values
+    this.updateProjectOverview();
+    //update report in DB
     let reportValues: { [key: string]: string } = {
       financialReport: JSON.stringify(this.financialReport),
       performanceReport: JSON.stringify(this.performanceReport),
@@ -715,7 +717,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.updateTaskStatus('completed');
   }
 
-  saveCommentsAndRecommendations(){
+  saveCommentsAndRecommendations() {
     this.comments.push(new CommentNode(uuid(), this.reviewerComments, this.authService.getLoggedInUsername(), [], [], new Date()));
 
     this.comments.forEach((comment) => {
@@ -759,6 +761,20 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         }
       }, error => console.log('recommendation', error));
     });
+  }
+
+  updateProjectOverview() {
+    let tac = 0
+    let tas = 0
+    let tb = 0
+    this.financialReport.forEach(b => {
+      tac += +b.approved_budget;
+      tas += +b.expense_to_date;
+      tb += +b.variance
+    })
+    this.totalAmountCommitted = tac.toString()
+    this.totalAmountSpent = tas.toString()
+    this.balance = tb.toString()
   }
 
   updateTaskStatus(status) {

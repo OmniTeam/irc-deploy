@@ -22,15 +22,22 @@ class ProgramCategoryController {
         def programCategories = []
         programCategoryService.list(params).each { programCategory ->
             def newProgramCategoryObject = [:]
-            def programId = programCategory.program.id
-            def program = Program.findById(programId)
+            def data = programCategory.program
+            def form = ""
+            def programId = ""
+            if(data!=null) {
+                def program = Program.findById(data.id)
+                form = program.title
+                programId = program.id
+            } else form = programCategory.form
+
             newProgramCategoryObject['id'] = programCategory.id
             newProgramCategoryObject['name'] = programCategory.name
             newProgramCategoryObject['description'] = programCategory.description
             newProgramCategoryObject['dateCreated'] = programCategory.dateCreated
             newProgramCategoryObject['lastUpdated'] = programCategory.lastUpdated
-            newProgramCategoryObject['program'] = program.title
-            newProgramCategoryObject['programId'] = program.id
+            newProgramCategoryObject['program'] = form
+            newProgramCategoryObject['programId'] = programId
             programCategories << newProgramCategoryObject
         }
         respond programCategories
@@ -46,15 +53,21 @@ class ProgramCategoryController {
     def show(String id) {
         def programCategory = programCategoryService.get(id)
         def newProgramCategoryObject = [:]
-        def programId = programCategory.program.id
-        def program = Program.findById(programId)
+        def form = ""
+        def programId = ""
+        def data = programCategory.program
+        if(data!=null) {
+            def program = Program.findById(data.id)
+            form = program.title
+            programId = program.id
+        } else form = programCategory.form
         newProgramCategoryObject['id'] = programCategory.id
         newProgramCategoryObject['name'] = programCategory.name
         newProgramCategoryObject['description'] = programCategory.description
         newProgramCategoryObject['dateCreated'] = programCategory.dateCreated
         newProgramCategoryObject['lastUpdated'] = programCategory.lastUpdated
-        newProgramCategoryObject['program'] = program.title
-        newProgramCategoryObject['programId'] = program.id
+        newProgramCategoryObject['program'] = form
+        newProgramCategoryObject['programId'] = programId
         respond newProgramCategoryObject
     }
 

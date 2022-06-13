@@ -26,6 +26,7 @@ export class CreateProgramCategoryComponent implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       program: [''],
+      form: ['']
     });
     this.programCategoryService.getPrograms().subscribe((data) => {
       this.programs = data;

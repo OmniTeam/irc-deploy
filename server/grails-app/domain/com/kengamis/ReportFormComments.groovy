@@ -17,5 +17,6 @@ class ReportFormComments {
     }
     static constraints = {
         groupId nullable: true
+        content nullable: true
     }
 }

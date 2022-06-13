@@ -27,7 +27,11 @@ class ProjectMilestoneController {
             def newProjectMilestoneObject = [:]
             def categoryId = projectMilestone.programCategory.id
             def category = ProgramCategory.findById(categoryId)
-            def program = Program.findById(category.program.id)
+            def form = ""
+            if(projectMilestone.program!=null) {
+                def program = Program.findById(category.program.id)
+                form = program.title
+            } else form = projectMilestone.form
             newProjectMilestoneObject['id'] = projectMilestone.id
             newProjectMilestoneObject['name'] = projectMilestone.name
             newProjectMilestoneObject['description'] = projectMilestone.description
@@ -37,7 +41,7 @@ class ProjectMilestoneController {
             newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
             newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
             newProjectMilestoneObject['category'] = category.name
-            newProjectMilestoneObject['program'] = program.title
+            newProjectMilestoneObject['program'] = form
             projectMilestones << newProjectMilestoneObject
         }
         respond projectMilestones
@@ -48,7 +52,13 @@ class ProjectMilestoneController {
         def newProjectMilestoneObject = [:]
         def categoryId = projectMilestone.programCategory.id
         def category = ProgramCategory.findById(categoryId)
-        def program = Program.findById(category.program.id)
+        def form = ""
+        def programId = ""
+        if(projectMilestone.program!=null) {
+            def program = Program.findById(category.program.id)
+            form = program.title
+            programId = program.id
+        } else form = projectMilestone.form
         newProjectMilestoneObject['id'] = projectMilestone.id
         newProjectMilestoneObject['name'] = projectMilestone.name
         newProjectMilestoneObject['description'] = projectMilestone.description
@@ -58,8 +68,8 @@ class ProjectMilestoneController {
         newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
         newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
         newProjectMilestoneObject['category'] = category.name
-        newProjectMilestoneObject['program'] = program.title
-        newProjectMilestoneObject['programId'] = program.id
+        newProjectMilestoneObject['program'] = form
+        newProjectMilestoneObject['programId'] = programId
         respond newProjectMilestoneObject
     }
 

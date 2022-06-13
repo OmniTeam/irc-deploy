@@ -16,5 +16,6 @@ class ReportFormRecommendations {
     }
     static constraints = {
         groupId nullable: true
+        content nullable: true
     }
 }

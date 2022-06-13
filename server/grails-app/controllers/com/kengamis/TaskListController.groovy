@@ -43,7 +43,7 @@ class TaskListController {
             def taskPartner = ProgramPartner.findById(partnerId)
             def taskProgram = Program.findById(programId)
 
-            if (taskPartner == null) taskPartner = [name: '']
+            if (taskPartner == null) taskPartner = [cluster: '']
             if (taskProgram == null) taskProgram = [title: '']
 
             def grant = GrantLetterOfInterest.findById(grantId)
@@ -78,7 +78,7 @@ class TaskListController {
                 } else if (task.taskDefinitionKey == "Approve_Fund_Disbursement") {
                     c2 = userRoles.contains("ROLE_ED")
                 }
-                casee = taskPartner?.name
+                casee = taskPartner?.cluster
             } else if (task.processDefKey == "GRANT_PROCESS") {
                 if (task.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         task.taskDefinitionKey == "Review_Concept" ||
@@ -110,7 +110,7 @@ class TaskListController {
                           partnerSetupId   : partnerSetupId,
                           startDate        : startDate,
                           partnerId        : partnerId,
-                          partnerName      : taskPartner.name,
+                          partnerName      : taskPartner.cluster,
                           programId        : programId,
                           grantId          : grantId,
                           programName      : taskProgram.title,
@@ -150,7 +150,7 @@ class TaskListController {
         def programPartner = ProgramPartner.findById(partnerId)
         def program = Program.findById(programId)
 
-        if (programPartner == null) programPartner = [name: '']
+        if (programPartner == null) programPartner = [cluster: '']
         if (program == null) program = [title: '']
 
         def t = [id               : task.id,
@@ -158,7 +158,7 @@ class TaskListController {
                  partnerSetupId   : partnerSetupId,
                  startDate        : startDate,
                  partnerId        : partnerId,
-                 partnerName      : programPartner.name,
+                 partnerName      : programPartner.cluster,
                  programId        : programId,
                  grantId          : grantId,
                  programName      : program.title,
@@ -328,7 +328,7 @@ class TaskListController {
 
     @Transactional
     def archiveReport() {
-        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Disburse_Funds' OR task_definition_key = 'Archive_Report')"
+        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Archive_Report')"
         def forArchiving = AppHolder.withMisSql { rows(query as String) }
         if (forArchiving.size() > 0) {
             forArchiving.each { task ->
