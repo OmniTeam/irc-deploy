@@ -38,6 +38,7 @@ class ProgramPartnerController {
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
             newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
             newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+            newProgramPartnerObject['areaOfOperation'] = programPartner.areaOfOperation
             newProgramPartnerObject['program'] = program.title
             newProgramPartnerObject['programId'] = program.id
             programPartners << newProgramPartnerObject
@@ -65,6 +66,7 @@ class ProgramPartnerController {
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
             newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
             newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+            newProgramPartnerObject['areaOfOperation'] = programPartner.areaOfOperation
             newProgramPartnerObject['program'] = program.title
             newProgramPartnerObject['programId'] = program.id
         }
@@ -156,6 +158,7 @@ class ProgramPartnerController {
                 newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
                 newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
                 newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+                newProgramPartnerObject['areaOfOperation'] = programPartner.areaOfOperation
                 newProgramPartnerObject['program'] = program.title
                 newProgramPartnerObject['programId'] = program.id
                 programPartners << newProgramPartnerObject

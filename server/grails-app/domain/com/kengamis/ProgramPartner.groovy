@@ -14,6 +14,7 @@ class ProgramPartner {
     String city
     String dataCollector
     String organisationsInvolved
+    String areaOfOperation
     Date dateCreated
     Date lastUpdated
 
@@ -28,6 +29,7 @@ class ProgramPartner {
         nameContactPerson nullable: true
         city nullable: true
         physicalAddress nullable: true
+        areaOfOperation nullable: true
     }
 
     static mapping = {

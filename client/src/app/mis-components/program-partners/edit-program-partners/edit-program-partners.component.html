@@ -213,16 +213,17 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="256712345678"
+                            placeholder="Telephone Number"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="telephoneContactPerson"
+                            (change)="validateNumber($event)"
                             [value]="f.telephoneContactPerson.value | phone"
-                            [ngClass]="{ 'is-invalid': submitted && f.telephoneContactPerson.errors }"
+                            [ngClass]="{ 'is-invalid': inValidNumber }"
                           >
                         </div>
-                        <div *ngIf="submitted && (f.telephoneContactPerson.errors || f.telephoneContactPerson.invalid)">
-                          <div class="input-error">Please put valid PhoneNumber</div>
+                        <div *ngIf="submitted && inValidNumber">
+                          <div class="input-error">Please put a valid PhoneNumber</div>
                         </div>
                       </div>
                     </div>

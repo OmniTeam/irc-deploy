@@ -17,6 +17,7 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
 
   formGroup: FormGroup;
   submitted = false;
+  inValidNumber = false;
   formData: any;
   programs = [];
   programPartnerId: any;
@@ -43,7 +44,7 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
         organisation: [results?.organisation],
         physicalAddress: [results?.physicalAddress],
         emailContactPerson: [results?.emailContactPerson, [Validators.required, Validators.email]],
-        telephoneContactPerson: [results?.telephoneContactPerson, [Validators.required, Validators.pattern('[- +()0-9]{6,}')]],
+        telephoneContactPerson: [results?.telephoneContactPerson, [Validators.required, Validators.pattern('/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/')]],
         organisationType: [results?.organisationType],
         country: [results?.country],
         nameContactPerson: [results?.nameContactPerson],
@@ -100,6 +101,12 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
       let id = uuid();
       this.organisationsInvolved.push({id: id, name: '', contact: ''});
     }
+  }
+
+  validateNumber(value) {
+    var regExp = /^0[0-9]{9}$/
+    var phone = value.match(regExp);
+    this.inValidNumber = (phone==null);
   }
 
   cellEditor(rowId, tdId, key: string, oldValue) {

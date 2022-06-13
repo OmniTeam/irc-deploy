@@ -13,7 +13,7 @@
                  [clearable]="true"
       >
         <ng-option [value]="item.id" *ngFor="let item of programs">
-          {{item.name}}
+          {{item.description}}
         </ng-option>
       </ng-select>
     </div>
@@ -25,13 +25,13 @@
   <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>1. What is the name of the organization?<span class="required-indicator">*</span></label>
+        <label>1. What is the name of the lead organization?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
               [disabled]="isReadOnly"
               class="form-control"
-              placeholder="Organisation Name"
+              placeholder="Organization Name and Acronym"
               type="text"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.name"
@@ -40,7 +40,6 @@
         </div>
 
         <label>3. Who is the contact person? <span class="required-indicator">*</span></label>
-
         <div class="col-sm-12" style="padding: 0;">
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -60,7 +59,15 @@
                 class="form-control"
                 placeholder="Telephone Number"
                 type="text"
-                [(ngModel)]="organisation.contact">
+                [value]="organisation.contact | phone"
+                (ngModelChange)="validateNumber($event)"
+                [(ngModel)]="organisation.contact"
+                [ngClass]="{ 'is-invalid': inValidNumber }">
+            </div>
+            <div *ngIf="submitted && inValidNumber">
+              <div class="input-error">
+                Telephone Number is invalid
+              </div>
             </div>
           </div>
 
@@ -82,11 +89,10 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="col-sm-6">
-        <label>2. Where is the organization located or operating area?<span class="required-indicator">*</span></label>
+        <label>2. Where is the organization located?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -117,9 +123,90 @@
       </div>
     </div>
 
+    <div class="row" style="margin: 10px">
+      <div class="col-sm-6">
+        <label>5. Name of cluster?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              [disabled]="isReadOnly"
+              class="form-control"
+              placeholder="Name of cluster"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.nameCluster"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>6. Area of Operation<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              [disabled]="isReadOnly"
+              class="form-control"
+              placeholder="Area of Operation"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.areaOfOperation"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px">
+      <div class="col-sm-6">
+        <label>7. Country<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <ng-select class="form-control form-control-sm"
+                       aria-controls="datatable"
+                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                       [multiple]="false"
+                       placeholder="Country"
+                       (ngModelChange)="onSelectCountry($event)"
+                       [(ngModel)]="organisation.country"
+                       [searchable]="true"
+                       [clearable]="true"
+            >
+              <ng-option [value]="country" *ngFor="let country of countries">
+                {{country}}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>8. City<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <ng-select class="form-control form-control-sm"
+                       aria-controls="datatable"
+                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                       [multiple]="false"
+                       placeholder="City"
+                       [(ngModel)]="organisation.city"
+                       [searchable]="true"
+                       [clearable]="true"
+            >
+              <ng-option [value]="city" *ngFor="let city of cities">
+                {{city}}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>5. What inspired the formation of the organization?
+        <label>9. What inspired the formation of the organization?
           <span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -137,7 +224,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>6. What is the vision and mission of the organization?<span class="required-indicator">*</span></label>
+        <label>10. What is the vision and mission of the organization?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -155,7 +242,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>7. Briefly describe the leadership and governance structure of the organization?<span
+        <label>11. Briefly describe the leadership and governance structure of the organization?<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -173,7 +260,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>8. What are the core programs implemented by the organization?<span
+        <label>12. What are the core programs implemented by the organization?<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -192,7 +279,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>9. Describe one program that you have implemented on prevention of violence against children.<span
+        <label>13. Describe one program that you have implemented on prevention of violence against children.<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -209,7 +296,7 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <label>10. Who is funding the current programs?<span class="required-indicator">*</span></label>
+        <label>14. Who is funding the current programs?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
@@ -422,7 +509,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.financial)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -442,7 +530,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.registration)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -464,7 +553,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listMembers)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -484,7 +574,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listStaffMembers)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -506,7 +597,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.organizationStructure)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -526,7 +618,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.assessmentReport)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -548,7 +641,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.strategicPlan)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -568,7 +662,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.annualWorkPlan)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -590,7 +685,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.mou)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -610,7 +706,8 @@
                   *ngIf="isReadOnly"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.childPolicy)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>

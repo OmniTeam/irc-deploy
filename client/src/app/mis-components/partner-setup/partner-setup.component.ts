@@ -86,6 +86,13 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         }, error => console.log(error));
       });
 
+    this.projectMilestoneService.getMilestones().subscribe((data) => {
+      console.log('data', data)
+      if (data !== null && data !== undefined) {
+        this.milestones = data;
+      }
+    });
+
     if (this.partnerSetupId != undefined) {
       this.programPartnersService.getProgramPartners().subscribe(data => {
         if (data !== null && data !== undefined) {
@@ -234,33 +241,14 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         if (results !== null && results !== undefined) {
           this.organisationalInfo = results;
           this.programChosen = results.programId;
-          if (this.programChosen != undefined) {
-            this.setMilestones(this.programChosen);
-          }
         }
       });
-    } /*else {
-      this.organisationalInfo = SampleData.organisationalInfo;
-    }*/
-  }
-
-  setMilestones(program) {
-    const params = new HttpParams().set('program', program);
-    this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
-      if (data !== null && data !== undefined) {
-        this.milestones = data.milestones;
-      }
-    });
+    }
   }
 
   createNewIndicator() {
     if (this.calendar.reportingCalender == undefined) {
       alert('No Calendar dates, Fill in reporting calendar');
-      return;
-    }
-
-    if (this.milestones == undefined || this.milestones.length == 0) {
-      alert('No Milestones found, Select Partner to proceed');
       return;
     }
 

@@ -19,6 +19,7 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitted = false;
   loading: boolean;
+  inValidNumber: boolean;
 
   status = 'not_started';
   programs: any;
@@ -29,6 +30,9 @@ export class ApplicationLetterComponent implements OnInit {
 
   /*values*/
   program: string;
+
+  countries: any;
+  cities: any;
 
   /*json*/
   organisation: any = {};
@@ -49,14 +53,10 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.countries = this.countriesService.getListOfAvailableCountries();
+
     this.programService.getPrograms().subscribe((data) => {
-      let results = []
-      if (data != null) {
-        data.forEach((it) => {
-          results.push({id: it.id, name: it.title})
-        })
-      }
-      this.programs = results;
+      this.programs = data;
     })
 
     if (this.isReadOnly) {
@@ -123,6 +123,12 @@ export class ApplicationLetterComponent implements OnInit {
     this.uploadFile(files.item(0), event.target.id);
   }
 
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
+      this.cities = response.data;
+    }, error => console.log(error))
+  }
+
   uploadFile(file, id) {
     this.loading = !this.loading;
     this.fileUploadService.upload(file, 'PandL_Grant').subscribe((data) => {
@@ -140,6 +146,12 @@ export class ApplicationLetterComponent implements OnInit {
     }, error => {
       console.log(error)
     });
+  }
+
+  validateNumber(value) {
+    var regExp = /^0[0-9]{9}$/
+    var phone = value.match(regExp);
+    this.inValidNumber = (phone==null);
   }
 
   cancel() {

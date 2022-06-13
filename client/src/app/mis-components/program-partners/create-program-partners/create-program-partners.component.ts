@@ -17,6 +17,7 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
 
   formGroup: FormGroup;
   submitted = false;
+  inValidNumber = false;
   formData: any;
   programs = [];
   countries = [];
@@ -42,7 +43,7 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
       physicalAddress: [null],
       organisationType: [null],
       nameContactPerson: [null],
-      telephoneContactPerson: [null, [Validators.required, Validators.pattern('[- +()0-9]{6,}')]],
+      telephoneContactPerson: [null, [Validators.required]],
       emailContactPerson: [null, [Validators.required, Validators.email]],
       country: [null],
       city: [null],
@@ -108,8 +109,14 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue) {
-    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue);
+  validateNumber(value) {
+    var regExp = /^0[0-9]{9}$/;
+    var phone = value.match(regExp);
+    this.inValidNumber = (phone==null);
+  }
+
+  cellEditor(rowId, tdId, key: string, oldValue, type?:string) {
+    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type);
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {
