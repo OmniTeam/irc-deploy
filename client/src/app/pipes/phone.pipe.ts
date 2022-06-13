@@ -12,10 +12,11 @@ export class PhonePipe implements PipeTransform {
     let phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
     // Add a leading '+' sign if not available. Assumption is all numbers contain country code prefixed.
-    let newValue = value.length > 0 && value.charAt(0) != "+" ? "+" + value : value;
+    //let newValue = value.length > 0 && value.charAt(0) != "+" ? "+" + value : value;
 
     // Format the number.
-    let parsedPhoneObj = phoneUtil.parse(newValue, 'US');
+    // let parsedPhoneObj = phoneUtil.parse(newValue, 'US');
+    let parsedPhoneObj = phoneUtil.parse(value, 'UG');
 
     return phoneUtil.format(parsedPhoneObj, PNF.INTERNATIONAL);
   }

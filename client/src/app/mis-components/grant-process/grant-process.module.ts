@@ -14,6 +14,7 @@ import {DataTablesModule} from "angular-datatables";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {CommentsModule} from "../comments/comments.module";
+import {CreateProgramPartnersModule} from "../program-partners/create-program-partners/create-program-partners.module";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {CommentsModule} from "../comments/comments.module";
         DataTablesModule,
         EntityViewTableModule,
         NgSelectModule,
-        CommentsModule
+        CommentsModule,
+        CreateProgramPartnersModule
     ]
 })
 export class GrantProcessModule {
