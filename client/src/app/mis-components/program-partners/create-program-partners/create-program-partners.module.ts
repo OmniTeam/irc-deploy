@@ -5,10 +5,13 @@ import { CreateProgramPartnersRoutingModule } from './create-program-partners-ro
 import {NgSelectModule} from "@ng-select/ng-select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CreateProgramPartnersComponent} from "./create-program-partners.component";
-
+import {PhonePipe} from "../../../pipes/phone.pipe";
 
 @NgModule({
-  declarations: [CreateProgramPartnersComponent],
+  declarations: [CreateProgramPartnersComponent, PhonePipe],
+  exports: [
+    PhonePipe
+  ],
   imports: [
     CommonModule,
     CreateProgramPartnersRoutingModule,

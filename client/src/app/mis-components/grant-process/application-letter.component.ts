@@ -6,7 +6,6 @@ import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {ProgramService} from "../../services/program.service";
-import {MessagePagesComponent} from "../message-pages/message-pages.component";
 
 @Component({
   selector: 'application-letter',
@@ -50,10 +49,10 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.programService.getPrograms().subscribe((data)=>{
+    this.programService.getPrograms().subscribe((data) => {
       let results = []
-      if(data!=null) {
-        data.forEach((it)=>{
+      if (data != null) {
+        data.forEach((it) => {
           results.push({id: it.id, name: it.title})
         })
       }
@@ -79,6 +78,10 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
+    if (this.organisation.email != null || this.organisation.email != undefined) {
+      console.log('Invalid');
+      return;
+    }
 
     let formData: { [key: string]: string } = {
       program: this.program,
@@ -111,6 +114,7 @@ export class ApplicationLetterComponent implements OnInit {
       }
       this.success = false;
       this.error = false;
+      this.submitted = false;
     }, 3000);
   }
 
