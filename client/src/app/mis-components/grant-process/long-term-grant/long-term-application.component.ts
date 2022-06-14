@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../../services/countries.service";
+import {FileUploadService} from "../../../services/file-upload.service";
+import {document} from "ngx-bootstrap/utils";
+import {Validator} from "../../../helpers/validator";
 
 @Component({
   selector: 'long-term-application',
@@ -9,82 +12,74 @@ import {CountriesService} from "../../../services/countries.service";
 })
 
 export class LongTermApplicationComponent implements OnInit {
+  @Input() isReadOnly: boolean;
+  @Input() grantId: string;
 
-  formGroup: FormGroup;
+  formGroupLT: FormGroup;
   submitted = false;
-  organizationType = [
-    {id:"1", name:"my type"}
-  ] ;
+  loading: boolean;
+
   countries: any;
-  pCountries: any;
   cities: any;
-  pCities: any;
-  programs = [
-    {id:"1", name:"Adolescent Girl Power Program"},
-    {id:"2", name:"Youth Capacity Development Program"},
-    {id:"3", name:"Prevention of Violence Against Children and Adolescents"},
-  ] ;
-  radioEndOfPartnership: any;
+  documents: any = {};
+  inValidNumber: boolean;
 
   constructor(
     private countriesService: CountriesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public fileUploadService:FileUploadService
   ) { }
 
   get f() {
-    return this.formGroup.controls;
+    return this.formGroupLT.controls;
   }
 
   ngOnInit(): void {
-    this.countries = this.countriesService.getListOfAllCountries();
+    this.countries = this.countriesService.getListOfAvailableCountries();
 
-    this.formGroup = this.formBuilder.group({
-      program: ['', [Validators.required]],
-      organisation: ['', [Validators.required]],
-      acronym: [null],
-      organization_type: ['', [Validators.required]],
-      legal_status: ['', [Validators.required]],
-      contact_person: ['', [Validators.required]],
-      address_contact_person: ['', [Validators.required]],
-      email_address: ['', [Validators.required]],
-      contact_person_number: ['', [Validators.required]],
-      physical_address: ['', [Validators.required]],
-      postal_address: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      website: [null],
+    this.formGroupLT = this.formBuilder.group({
+      projectTitle: [null, [Validators.required]],
+      projectDuration: [null],
       country: [null],
       city: [null],
-      attachment: [null],
-
-      project_duration: [null],
-      project_country: [null],
-      project_city: [null],
-      project_proposed: [null],
-      project_amount: [null],
-      amount_requested: [null],
+      projectProposed: [null],
+      projectAmount: [null],
+      amountRequested: [null],
       funding: [null],
+      nameAuthorizedSignatory: [null],
+      contactAuthorizedSignatory: [null],
+      bankDetails: [null],
 
-      completed: [null],
-      mel_framework: [null],
-      financial: [null],
-      registration: [null],
-      list_members: [null],
-      assessment_report: [null],
-      strategic_plan: [null],
-      annual_work_plan: [null],
-      child_policy: [null],
-      structure: [null],
-
+      problemBackground: [null],
+      problemAddressed: [null],
+      targetPopulation: [null],
+      reasonForTargetPopulation: [null],
+      whatChangeExpected: [null],
+      overallGoal: [null],
+      midtermChanges: [null],
+      immediateChanges: [null],
+      activities: [null],
+      risksAndChallenges: [null],
+      partnershipsAndNetworks: [null],
+      changeEnvisioned: [null],
+      structuresAndPlans: [null],
+      totalProjectCost: [null],
+      documents: [null],
     });
   }
 
   submitLetter() {
     this.submitted = true;
-    if (this.formGroup.invalid) {
+    if (this.formGroupLT.invalid) {
       console.log('Invalid');
       return;
     }
-    const formData = this.formGroup.value;
+
+    if(this.documents!=null) {
+      let value = JSON.stringify(this.documents)
+      this.formGroupLT.patchValue({documents: value});
+    }
+    const formData = this.formGroupLT.value;
     console.log('formData', formData)
   }
 
@@ -94,14 +89,32 @@ export class LongTermApplicationComponent implements OnInit {
     }, error => console.log(error))
   }
 
-  onSelectProjectCountry(country){
-    this.countriesService.getCitiesForCountry(country).subscribe((response)=>{
-      this.pCities = response.data;
-    }, error => console.log(error))
+  handleFileInput(event) {
+    let files: FileList = event.target.files;
+    this.uploadFile(files.item(0), event.target.id);
+  }
+
+  uploadFile(file, id) {
+    this.loading = !this.loading;
+    this.fileUploadService.upload(file, 'Longterm_Grant').subscribe((data) => {
+      if (id === "detailedBudget") this.documents.detailedBudget = data.path;
+      if (id === "workplan") this.documents.workplan = data.path;
+      if (id === "framework") this.documents.framework = data.path;
+      if (id === "clusterGuideline") this.documents.clusterGuideline = data.path;
+      if (id === "staffMembers") this.documents.staffMembers = data.path;
+      if (id === "mou") this.documents.mou = data.path;
+      this.loading = false;
+    }, error => {
+      console.log(error)
+    });
+  }
+
+  validateNumber(value) {
+    this.inValidNumber = Validator.telephoneNumber(value)
   }
 
   cancel() {
-    this.formGroup.reset()
+    this.formGroupLT.reset()
     this.submitted = false
   }
 }

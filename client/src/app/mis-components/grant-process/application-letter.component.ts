@@ -6,6 +6,7 @@ import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {ProgramService} from "../../services/program.service";
+import {Validator} from "../../helpers/validator";
 
 @Component({
   selector: 'application-letter',
@@ -149,9 +150,7 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   validateNumber(value) {
-    var regExp = /^0[0-9]{9}$/
-    var phone = value.match(regExp);
-    this.inValidNumber = (phone==null);
+    this.inValidNumber = Validator.telephoneNumber(value)
   }
 
   cancel() {
