@@ -130,10 +130,11 @@
                 </div>
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" style="padding-bottom: 15px">
               <div class="col-md-3">
                 <label class=" form-control-label" for="tagType">
                   Tag Type
+                  <span class="required-indicator">*</span>
                 </label>
               </div>
               <div class="col-md-9">
@@ -153,6 +154,32 @@
                 </ng-select>
                 <div *ngIf="submitted && f.tagType.errors" class="invalid-feedback">
                   <div *ngIf="f.tagType.errors.required">Tag Type is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-3">
+                <label class=" form-control-label" for="tagType">
+                  Partner
+                  <span class="required-indicator">*</span>
+                </label>
+              </div>
+              <div class="col-md-9">
+                <ng-select class="form-control form-control-sm"
+                           aria-controls="datatable"
+                           style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                           [multiple]="false"
+                           placeholder=" Partner"
+                           formControlName="partner"
+                           [ngClass]="{ 'is-invalid': submitted && f.partner.errors }"
+                           [searchable]="true"
+                           [clearable]="true">
+                  <ng-option [value]="item.id" *ngFor="let item of programPartners">
+                    {{item.program}} &nbsp; {{item.country}}
+                  </ng-option>
+                </ng-select>
+                <div *ngIf="submitted && f.partner.errors" class="invalid-feedback">
+                  <div *ngIf="f.partner.errors.required">A partner is required</div>
                 </div>
               </div>
             </div>

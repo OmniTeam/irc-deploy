@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {catchError, map} from "rxjs/operators";
@@ -21,15 +21,16 @@ export class RolesService {
   }
 
   createRole(formData): Observable<any> {
-    return this.http.post(this.userRoles, formData);
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    return this.http.post(this.userRoles, formData, httpOptions);
   }
 
   updateRole(id, groupData): Observable<any> {
     return this.http.put(`${this.userRoles}/${id}/`, groupData);
   }
 
-  getCurrentRole(id){
-    return this.http.get(`${this.userRoles}/${id}/`)
+  getCurrentRole(id) {
+    return this.http.get(`${this.userRoles}/${id}/`);
   }
 
   deleteCurrentRole(p): Observable<any> {

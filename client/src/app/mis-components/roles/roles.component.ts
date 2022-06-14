@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../services/alert";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TagService} from "../../services/tags";
-import {HttpParams} from "@angular/common/http";
-import {GroupsService} from "../../services/groups.service";
-import {RolesService} from "../../services/roles.service";
+import {Subject} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../services/alert';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TagService} from '../../services/tags';
+import {HttpParams} from '@angular/common/http';
+import {GroupsService} from '../../services/groups.service';
+import {RolesService} from '../../services/roles.service';
 
 @Component({
   selector: 'app-groups',
@@ -16,7 +16,7 @@ import {RolesService} from "../../services/roles.service";
 })
 export class RolesComponent implements OnInit {
 
-  entries: number = 10;
+  entries = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
@@ -28,13 +28,13 @@ export class RolesComponent implements OnInit {
     orderDir: 'desc'
   };
   private searchValue = '';
-  tags: any
+  tags: any;
   closeResult: string;
   formGroup: FormGroup;
   formGp: FormGroup;
   rowData: any;
   submitted = false;
-  private selectedTags=[];
+  private selectedTags = [];
   private checkedRow: any;
   roles: any;
 
@@ -52,11 +52,11 @@ export class RolesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reloadTable()
+    this.reloadTable();
   }
 
 
-  addRole(){
+  addRole() {
     this.router.navigate(['role/create']);
   }
 
@@ -69,7 +69,7 @@ export class RolesComponent implements OnInit {
     /*If it is checked*/
     if (event.target.checked) {
       this.checkedRow = event.target.value;
-      this.selectedTags.push(this.checkedRow)
+      this.selectedTags.push(this.checkedRow);
     } else { /*if it is not checked*/
       const x = this.selectedTags.indexOf(this.checkedRow);
       this.selectedTags.splice(x, 1);
@@ -77,13 +77,13 @@ export class RolesComponent implements OnInit {
     console.log(this.selectedTags);
   }
 
-  deleteRole(row){
+  deleteRole(row) {
     this.rolesService.deleteCurrentRole(row.id).subscribe((result) => {
       console.warn(result, 'Roles have been deleted');
       this.router.navigate(['/roles']).then(() => {
         window.location.reload();
       });
-    })
+    });
   }
 
   deleteRoles() {
@@ -94,9 +94,9 @@ export class RolesComponent implements OnInit {
           this.router.navigate(['/roles']).then(() => {
             window.location.reload();
           });
-        })
+        });
       }
-    )
+    );
   }
 
   /*Responsible for the opening of the Modals*/
@@ -124,25 +124,25 @@ export class RolesComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    this.searchValue = event.target.value
-    if(!this.searchValue){
-      this.reloadTable()
+    console.log(event.target.value);
+    this.searchValue = event.target.value;
+    if (!this.searchValue) {
+      this.reloadTable();
     } else {
-      this.roles = this.roles.filter(a => a.authority.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.roles = this.roles.filter(a => a.authority.toUpperCase().includes(this.searchValue.toUpperCase()));
     }
   }
 
   reloadTable() {
     this.rolesService.getRoles().subscribe((data) => {
-      this.roles =data;
-      console.log(this.roles)
-      this.page.count = this.roles.length
+      this.roles = data;
+      // console.log(this.roles);
+      this.page.count = this.roles.length;
     });
   }
 
   entriesChange($event) {
-    console.log($event.target.value)
+    console.log($event.target.value);
     this.entries = $event.target.value;
   }
 

@@ -23,11 +23,12 @@ export class EditTagsComponent implements OnInit {
               private tagService: TagService) { }
 
   ngOnInit(): void {
-    this.tagId = this.route.snapshot.params.id
+    this.tagId = this.route.snapshot.params.id;
     this.tagService.getCurrentTag(this.tagId).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
         name: [results?.name, [Validators.required]],
-        tagType: [results?.tagTypeId, [Validators.required]]
+        tagType: [results?.tagTypeId, [Validators.required]],
+        partner: [results?.partner, Validators.required]
       });
     });
     this.tagService.getAllTagTypes().subscribe((data) => {

@@ -5,6 +5,7 @@ import {FormService} from '../../services/form.service';
 import {ReplacePipe} from '../../pipes/replace-pipe';
 import {EntityService} from '../../services/entity.service';
 import {TitleCasePipe} from '@angular/common';
+import {Roles} from '../../models/roles';
 
 const misc: any = {
   sidebar_mini_active: true
@@ -16,7 +17,14 @@ const formsMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_VIEWER', 'ROLE_YCD_PARTNER_DATA_VIEWER', 'ROLE_AGPP_PARTNER_DATA_VIEWER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+  roles: [
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN',
+    'ROLE_PARTNER_DATA_MANAGER',
+    'ROLE_PARTNER_DATA_VIEWER',
+    'ROLE_STAFF_DATA_MANAGER',
+    'ROLE_STAFF_DATA_VIEWER'
+  ],
   children: []
 };
 
@@ -27,7 +35,14 @@ const listsMenu: any = {
   icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
   children: [],
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_VIEWER', 'ROLE_AGPP_PARTNER_DATA_VIEWER',  'ROLE_YCD_PARTNER_DATA_VIEWER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER' , 'ROLE_STAFF_DATA_VIEWER']
+  roles: [
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN',
+    'ROLE_PARTNER_DATA_MANAGER',
+    'ROLE_PARTNER_DATA_VIEWER',
+    'ROLE_STAFF_DATA_MANAGER',
+    'ROLE_STAFF_DATA_VIEWER'
+  ]
 };
 
 
@@ -138,15 +153,9 @@ export class SidebarComponent implements OnInit {
             roles: [
               'ROLE_SUPER_ADMIN',
               'ROLE_ADMIN',
-              'ROLE_VAC_PARTNER_DATA_MANAGER',
-              'ROLE_AGPP_PARTNER_DATA_MANAGER',
-              'ROLE_YCD_PARTNER_DATA_MANAGER',
-              'ROLE_VAC_PARTNER_DATA_VIEWER',
-              'ROLE_AGPP_PARTNER_DATA_VIEWER',
-              'ROLE_YCD_PARTNER_DATA_VIEWER',
-              'ROLE_VAC_STAFF_DATA_MANAGER',
-              'ROLE_AGPP_STAFF_DATA_MANAGER',
-              'ROLE_YCD_STAFF_DATA_MANAGER',
+              'ROLE_PARTNER_DATA_MANAGER',
+              'ROLE_PARTNER_DATA_VIEWER',
+              'ROLE_STAFF_DATA_MANAGER',
               'ROLE_STAFF_DATA_VIEWER',
               'ROLE_APPLICANT',
             ]
@@ -157,7 +166,12 @@ export class SidebarComponent implements OnInit {
             title: 'Archive',
             type: 'link',
             icontype: 'fas fa-tasks text-pink',
-            roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+            roles: [
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER'
+            ],
           },
           {
             path: '/',
@@ -165,43 +179,82 @@ export class SidebarComponent implements OnInit {
             type: 'sub',
             icontype: 'fas fa-user-cog',
             isCollapsed: true,
-            roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER'],
+            roles: [
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER',
+              'ROLE_PARTNER_DATA_MANAGER',
+              'ROLE_PARTNER_DATA_VIEWER',
+            ],
             children: [
               {
                 path: 'tags',
                 title: 'Tags',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER',
+                  'ROLE_PARTNER_DATA_MANAGER',
+                  'ROLE_PARTNER_DATA_VIEWER',
+                ]
               },
               {
                 path: 'taskList',
                 title: 'Task List',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'partnerSetupList',
                 title: 'Work Plan',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'programPartner',
                 title: 'Partner',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'mis-users',
                 title: 'Users',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'issdugdata.net:3000',
                 title: 'Analytics',
                 type: 'analytics',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: '',

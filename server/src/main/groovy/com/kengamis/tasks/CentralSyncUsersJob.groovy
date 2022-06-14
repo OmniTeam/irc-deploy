@@ -6,6 +6,7 @@ import com.kengamis.Role
 import com.kengamis.Study
 import com.kengamis.User
 import com.kengamis.UserRole
+import com.kengamis.UserService
 import groovy.util.logging.Log4j
 import static com.kengamis.RestHelper.withCentral
 
@@ -13,6 +14,7 @@ import static com.kengamis.RestHelper.withCentral
 class CentralSyncUsersJob extends Script {
 
     CentralService centralService
+    UserService userService
 
     @Override
     Object run() {

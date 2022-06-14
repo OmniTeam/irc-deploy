@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../services/alert";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TagService} from "../../services/tags";
-import {HttpParams} from "@angular/common/http";
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../services/alert';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TagService} from '../../services/tags';
+import {ProgramPartnersService} from '../../services/program-partners.service';
 
 @Component({
   selector: 'app-tags',
@@ -14,13 +13,13 @@ import {HttpParams} from "@angular/common/http";
 })
 export class TagsComponent implements OnInit {
 
-  entries: number = 10;
+  entries = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
   groups;
   private searchValue = '';
-  tags: any
+  tags: any;
   closeResult: string;
   formGroup: FormGroup;
   formGp: FormGroup;
@@ -29,12 +28,14 @@ export class TagsComponent implements OnInit {
   submitted = false;
   tagTypes = [];
   activeRow: any;
+  programPartners: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
               private modalService: NgbModal,
+              private programPartnersService: ProgramPartnersService,
               private tagService: TagService) {
   }
 
@@ -42,10 +43,14 @@ export class TagsComponent implements OnInit {
     this.reloadTable();
     this.formGroup = this.formBuilder.group({
       name: ['', Validators.required],
-      tagType: ['', Validators.required]
+      tagType: [null, Validators.required],
+      partner: [null, Validators.required]
     });
     this.tagService.getAllTagTypes().subscribe((data) => {
       this.tagTypes = data;
+    });
+    this.programPartnersService.getProgramPartners().subscribe((data) => {
+      this.programPartners = data;
     });
   }
 
@@ -79,7 +84,7 @@ export class TagsComponent implements OnInit {
 
   editTag(row) {
     const id = row.id;
-    this.router.navigate(['/tags/edit/'+ id]);
+    this.router.navigate(['/tags/edit/' + id]);
   }
 
   deleteTag(row) {
@@ -121,7 +126,7 @@ export class TagsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    let val = event.target.value.toLowerCase();
+    const val = event.target.value.toLowerCase();
     // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
