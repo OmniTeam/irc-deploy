@@ -86,12 +86,12 @@
                                style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
                                [multiple]="false"
                                placeholder=" Tag Type"
-                               formControlName="tagType"
+                               formControlName="partner"
                                [ngClass]="{ 'is-invalid': submitted && f.partner.errors }"
                                [searchable]="true"
                                [clearable]="true">
-                      <ng-option [value]="item.id" *ngFor="let item of tagTypes">
-                        {{item.name}}
+                      <ng-option [value]="item.id" *ngFor="let item of programPartners">
+                        {{item.program}} &nbsp; {{item.country}}
                       </ng-option>
                     </ng-select>
                     <div *ngIf="submitted && f.partner.errors" class="invalid-feedback">

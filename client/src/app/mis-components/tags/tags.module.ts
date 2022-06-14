@@ -8,18 +8,20 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {ComponentsModule} from "../../components/components.module";
+import {EntityViewTableModule} from '../entity-views/entity-view-table/entity-view-table.module';
 
 
 @NgModule({
   declarations: [TagsComponent],
-  imports: [
-    CommonModule,
-    TagsRoutingModule,
-    DataTablesModule,
-    NgxDatatableModule,
-    ReactiveFormsModule,
-    NgSelectModule,
-    ComponentsModule
-  ]
+    imports: [
+        CommonModule,
+        TagsRoutingModule,
+        DataTablesModule,
+        NgxDatatableModule,
+        ReactiveFormsModule,
+        NgSelectModule,
+        ComponentsModule,
+        EntityViewTableModule
+    ]
 })
 export class TagsModule { }

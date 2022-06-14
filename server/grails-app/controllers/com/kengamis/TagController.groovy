@@ -29,9 +29,13 @@ class TagController {
             def newTagObject = [:]
             def tagTypeId = tag.tagType.id
             def tagType = TagType.findById(tagTypeId)
+            def partnerProgram = tag?.partner?.program
+            def partnerCountry = tag?.partner?.country
+            def partner = partnerProgram.toString()<<' '<< partnerCountry.toString()
             newTagObject['id'] = tag.id
             newTagObject['name'] = tag.name
             newTagObject['tagType'] = tagTypeId
+            newTagObject['partner'] =  partner
             newTagObject['dateCreated'] = tag.dateCreated
             newTagObject['lastUpdated'] = tag.lastUpdated
             newTagObject['tagTypeName'] = tagType.name
@@ -49,6 +53,7 @@ class TagController {
         newTagObject['id'] = tag.id
         newTagObject['name'] = tag.name
         newTagObject['tagType'] = tagTypeId
+        newTagObject['partner'] = tag?.partner?.id
         newTagObject['dateCreated'] = tag.dateCreated
         newTagObject['lastUpdated'] = tag.lastUpdated
         newTagObject['tagTypeName'] = tagType.name

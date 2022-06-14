@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {Observable, of} from "rxjs";
-import {catchError, mapTo, tap} from "rxjs/operators";
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {Observable, of} from 'rxjs';
+import {catchError, mapTo, tap} from 'rxjs/operators';
 import {User} from '../models/user';
-import {Roles} from "../models/roles";
+import {Roles} from '../models/roles';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,7 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
   private readonly USERNAME = 'USERNAME';
   private readonly ROLES: any = [];
+  private readonly PARTNERS: any = [];
   private loggedUser: string;
 
   constructor(private http: HttpClient) {
@@ -74,12 +75,15 @@ export class AuthService {
     localStorage.setItem(this.REFRESH_TOKEN, user.refresh_token);
     localStorage.setItem(this.USERNAME, this.loggedUser);
     localStorage.setItem(this.ROLES, user.roles);
+    localStorage.setItem(this.PARTNERS, user.partners);
   }
 
   private removeTokens() {
     localStorage.removeItem(this.JWT_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
     localStorage.removeItem(this.USERNAME);
+    localStorage.removeItem(this.ROLES);
+    localStorage.removeItem(this.PARTNERS);
   }
 
   getLoggedInUsername() {
@@ -88,6 +92,10 @@ export class AuthService {
 
   getUserRoles() {
     return localStorage.getItem(this.ROLES).split(',');
+  }
+
+  getUserPartners() {
+    return localStorage.getItem(this.PARTNERS).split(',');
   }
 
   public getSession(): Promise<boolean> {

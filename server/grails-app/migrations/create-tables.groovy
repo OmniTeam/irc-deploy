@@ -2980,4 +2980,12 @@ databaseChangeLog = {
     changeSet(author: "bruno (generated)", id: "16533445639345-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_comments")
     }
+
+    changeSet(author: "omni-tech (generated)", id: "1655205123672-13") {
+        addColumn(tableName: "tag") {
+            column(name: "partner_id", type: "varchar(255)")
+        }
+    }
+
+
 }

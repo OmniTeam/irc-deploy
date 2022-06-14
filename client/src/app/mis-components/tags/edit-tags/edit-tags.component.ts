@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AlertService} from "../../../services/alert";
-import {TagService} from "../../../services/tags";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertService} from '../../../services/alert';
+import {TagService} from '../../../services/tags';
+import {ProgramPartnersService} from '../../../services/program-partners.service';
 
 @Component({
   selector: 'app-edit-tags',
@@ -16,10 +17,12 @@ export class EditTagsComponent implements OnInit {
   formData: any;
   tagTypes = [];
   tagId: any;
+  programPartners: any;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
+              private programPartnersService: ProgramPartnersService,
               private tagService: TagService) { }
 
   ngOnInit(): void {
@@ -33,6 +36,9 @@ export class EditTagsComponent implements OnInit {
     });
     this.tagService.getAllTagTypes().subscribe((data) => {
       this.tagTypes = data;
+    });
+    this.programPartnersService.getProgramPartners().subscribe((data) => {
+      this.programPartners = data;
     });
   }
 

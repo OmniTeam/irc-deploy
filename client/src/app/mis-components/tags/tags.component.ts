@@ -142,6 +142,7 @@ export class TagsComponent implements OnInit {
     this.tagService.getTags().subscribe((data) => {
       this.temp = [...data];
       this.rows = data;
+      console.log(data, 'tags');
     });
   }
 
