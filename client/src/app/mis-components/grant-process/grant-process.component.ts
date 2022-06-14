@@ -37,6 +37,7 @@ export class GrantProcessComponent implements OnInit {
   dateOfDueDiligence: any;
   attachmentDiligenceReport: any;
   reviewerComments: any;
+  reviewerRecommendations: any;
   decisionOfReviewProcess: any;
   hasDueDiligenceConducted: any;
 
@@ -131,6 +132,7 @@ export class GrantProcessComponent implements OnInit {
         this.dateOfDueDiligence = data.dateOfDueDiligence
         this.attachmentDiligenceReport = data.dueDiligenceReport
         this.reviewerComments = data.comments
+        this.reviewerRecommendations = data.recommendations
       })
     }
     if (data.taskDefinitionKey === "Apply_for_Learning_Planning_Grant") {
@@ -301,6 +303,7 @@ export class GrantProcessComponent implements OnInit {
         dateOfDueDiligence: this.dateOfDueDiligence,
         dueDiligenceReport: this.attachmentDiligenceReport,
         comments: this.reviewerComments,
+        recommendations: this.reviewerRecommendations,
         decision: this.decisionOfReviewProcess,
         user: this.authService.getLoggedInUsername(),
         status: status
