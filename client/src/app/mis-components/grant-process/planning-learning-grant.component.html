@@ -16,10 +16,10 @@
                 formControlName="title"
                 [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
               >
-              <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
-                <div *ngIf="f.title.errors.required" class="input-error">Title is
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && f.title.errors">
+              <div *ngIf="f.title.errors.required" class="input-error">Title is
+                required
               </div>
             </div>
           </div>
@@ -190,12 +190,12 @@
                 type="text"
                 style="padding-left: 10px;"
                 formControlName="contactAuthorizedSignatory"
-                [ngClass]="{ 'is-invalid': submitted && f.contactAuthorizedSignatory.errors }"
+                (ngModelChange)="validateNumber($event)"
+                [ngClass]="{ 'is-invalid': inValidNumber }"
               >
-              <div *ngIf="submitted && f.contactAuthorizedSignatory.errors" class="invalid-feedback">
-                <div *ngIf="f.contactAuthorizedSignatory.errors.required" class="input-error">Contact details are
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && inValidNumber" >
+              <div class="input-error">Please put valid number
               </div>
             </div>
           </div>

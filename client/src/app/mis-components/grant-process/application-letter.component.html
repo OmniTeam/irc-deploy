@@ -59,7 +59,7 @@
                 class="form-control"
                 placeholder="Telephone Number"
                 type="text"
-                [value]="organisation.contact | phone"
+                [value]="organisation.contact"
                 (ngModelChange)="validateNumber($event)"
                 [(ngModel)]="organisation.contact"
                 [ngClass]="{ 'is-invalid': inValidNumber }">
@@ -113,7 +113,7 @@
             <input
               [disabled]="isReadOnly"
               class="form-control"
-              placeholder="e.g. CBO, National NGO, Network"
+              placeholder="e.g. CBO, National NGO"
               type="text"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.organizationType"
@@ -296,12 +296,12 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <label>14. Who is funding the current programs?<span class="required-indicator">*</span></label>
+        <label>14. Who are funding the current program?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
               class="form-control" [disabled]="isReadOnly"
-              placeholder="Funding"
+              placeholder="Source of funding"
               type="text"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.funding"
@@ -325,7 +325,7 @@
   <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>11. How many organizations will be involved in the cluster/Network partnership?</label>
+        <label>11. How many organizations will be involved in the cluster?</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -455,7 +455,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>18. How much funds are you requesting?</label>
+        <label>18. How much funds are you requesting? (USD)</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
@@ -470,7 +470,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>19. What is your organization’s current budget for this financial year?</label>
+        <label>19. What is your organization’s current budget for this financial year? (USD)</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                <textarea
@@ -494,7 +494,7 @@
       <div class="col">
         <div class="row">
           <div class="col-sm-6">
-            <label>i. A copy of financial audited reports or organizational financial report. if you have :</label>
+            <label>i. A copy of financial audited reports or organizational financial report.</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -603,7 +603,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>vi. Organizational capacity assessment report if available.</label>
+            <label>vi. Organizational capacity assessment report if available.<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -626,7 +626,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>vii. Organization strategic plan if available </label>
+            <label>vii. Organization strategic plan if available <span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -670,7 +670,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>ix. Draft M.O.U if application is submitted by Cluster </label>
+            <label>ix. Draft M.O.U if application is submitted by Cluster <span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -691,7 +691,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>x. Child safe guard policy /manual if available</label>
+            <label>x. Child safe guard policy /manual if available <span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input

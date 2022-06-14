@@ -6,6 +6,7 @@ import {GrantProcessService} from "../../services/grant-process.service";
 import {AlertService} from "../../services/alert";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpParams} from "@angular/common/http";
+import {Validator} from "../../helpers/validator";
 
 @Component({
   selector: 'planning-learning-application',
@@ -34,6 +35,7 @@ export class PlanningLearningGrantComponent implements OnInit {
   cities: any;
   pCities: any;
   loading: boolean;
+  inValidNumber: boolean;
 
   constructor(
     private router: Router,
@@ -186,6 +188,10 @@ export class PlanningLearningGrantComponent implements OnInit {
     }, error => {
       console.log(error)
     });
+  }
+
+  validateNumber(value) {
+    this.inValidNumber = Validator.telephoneNumber(value)
   }
 
   saveDraft() {

@@ -77,9 +77,9 @@ export class HomeComponent implements OnInit {
 
       if (data != null) {
         data.forEach((item) => {
-          results.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
-          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          results.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
+          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
+          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
         });
       }
       this.taskListRows = results;
@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getRow(id, taskName, type, dateAssigned, taskCase): OngoingTask {
+  getRow(id, taskName, type, assignee, dateAssigned, taskCase): OngoingTask {
     let taskAge = new DateAgoPipe().transform(dateAssigned)
     let filterCategory = this.setFilterCategory(taskAge)
     return (
@@ -99,20 +99,12 @@ export class HomeComponent implements OnInit {
         task_name: taskName,
         task_case: taskCase,
         task_type: type,
+        assignee: assignee,
         date_assigned: dateAssigned,
         task_age: taskAge,
         filter_category: filterCategory
       }
     );
-  }
-
-  getPartner(id): any {
-    this.programPartnersService.getCurrentProgramPartner(id).subscribe((results: any) => {
-      if (results !== null && results !== undefined) {
-        return results;
-      }
-    });
-    return null
   }
 
   onChangeSearch(event) {
@@ -161,8 +153,7 @@ export class HomeComponent implements OnInit {
       let rts = []
       if (data != null) {
         data.forEach((item) => {
-          let staff = this.getPartner(item.staffId);
-          rts.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.startDate, item.case))
+          rts.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
         });
         rts.forEach((task) => {
           if (task.filter_category != undefined) {

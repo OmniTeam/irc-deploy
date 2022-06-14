@@ -17,13 +17,16 @@ import {CommentsModule} from "../comments/comments.module";
 import {CreateProgramPartnersModule} from "../program-partners/create-program-partners/create-program-partners.module";
 
 @NgModule({
-  declarations: [
-    GrantProcessComponent,
-    ApplicationLetterComponent,
-    PlanningLearningGrantComponent,
-    OrganizationalInformationComponent,
-    GrantReportComponent
-  ],
+    declarations: [
+        GrantProcessComponent,
+        ApplicationLetterComponent,
+        PlanningLearningGrantComponent,
+        OrganizationalInformationComponent,
+        GrantReportComponent
+    ],
+    exports: [
+        OrganizationalInformationComponent
+    ],
     imports: [
         CommonModule,
         GrantProcessRoutingModule,

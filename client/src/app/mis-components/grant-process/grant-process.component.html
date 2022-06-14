@@ -124,7 +124,7 @@
                         </div>
                       </div>
 
-                      <div class="col">
+                      <div class="col" *ngIf="hasDueDiligenceConducted=='Yes'">
                         <div class="text-left">
                           <label for="dateOfDueDiligence">Date when due diligence was done:<span class="required-indicator">*</span></label>
                           <input type="date" class="form-control" id="dateOfDueDiligence"
@@ -151,9 +151,16 @@
                       </div>
                     </div>
                     <div class="row" style="margin: 10px;">
-                      <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
+                      <div class="col-sm-6">
+                      <label for="reviewerComments">Provide any comments</label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerComments"
                                 [(ngModel)]="reviewerComments"></textarea>
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="reviewerComments">Provide any recommendations</label>
+                        <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerRecommendations"
+                                  [(ngModel)]="reviewerRecommendations"></textarea>
+                      </div>
                     </div>
                   </div>
                 </div>

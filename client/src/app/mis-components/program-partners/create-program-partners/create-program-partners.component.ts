@@ -7,6 +7,7 @@ import {CountriesService} from "../../../services/countries.service";
 import {v4 as uuid} from 'uuid';
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
 import {UsersService} from "../../../services/users.service";
+import {Validator} from "../../../helpers/validator";
 
 @Component({
   selector: 'app-create-program-partners',
@@ -110,9 +111,7 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   }
 
   validateNumber(value) {
-    var regExp = /^0[0-9]{9}$/;
-    var phone = value.match(regExp);
-    this.inValidNumber = (phone==null);
+    this.inValidNumber = Validator.telephoneNumber(value)
   }
 
   cellEditor(rowId, tdId, key: string, oldValue, type?:string) {

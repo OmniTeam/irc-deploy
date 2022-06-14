@@ -162,7 +162,7 @@
           </div>
         </div>
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;" *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_PROGRAM_OFFICER', 'ROLE_SUPER_ADMIN']">
           <div class=" row">
             <div class=" col">
 
@@ -247,6 +247,12 @@
                           </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Case" prop="task_case"></ngx-datatable-column>
+                        <ngx-datatable-column name="Assignee" prop="assignee">
+                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>
+                            {{value | replace: '_' : ' ' | titlecase}}
+                          </ng-template>
+                        </ngx-datatable-column>
                         <ngx-datatable-column name="Date assigned" prop="date_assigned">
                           <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
                                        ngx-datatable-cell-template>

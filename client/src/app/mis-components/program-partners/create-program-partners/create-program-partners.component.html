@@ -216,7 +216,6 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="telephoneContactPerson"
-                            [value]="f.telephoneContactPerson.value"
                             (ngModelChange)="validateNumber($event)"
                             [ngClass]="{ 'is-invalid': inValidNumber }"
                           >
