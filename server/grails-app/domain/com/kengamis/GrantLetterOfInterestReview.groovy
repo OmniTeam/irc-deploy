@@ -11,6 +11,7 @@ class GrantLetterOfInterestReview {
     String dateOfDueDiligence
     String dueDiligenceReport
     String comments
+    String recommendations
     String user
 
     String definitionKey
@@ -28,6 +29,7 @@ class GrantLetterOfInterestReview {
         dateOfDueDiligence nullable: true
         dueDiligenceReport nullable: true
         comments nullable: true
+        recommendations nullable: true
     }
 
     static mapping = {
