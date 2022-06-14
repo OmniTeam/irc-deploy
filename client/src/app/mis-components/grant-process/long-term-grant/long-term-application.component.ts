@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../../services/countries.service";
 import {FileUploadService} from "../../../services/file-upload.service";
-import {document} from "ngx-bootstrap/utils";
 import {Validator} from "../../../helpers/validator";
 
 @Component({
@@ -14,6 +13,10 @@ import {Validator} from "../../../helpers/validator";
 export class LongTermApplicationComponent implements OnInit {
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
+  @Input() processInstanceId: string;
+  @Input() definitionKey: string;
+  @Input() taskStatus: string;
+  @Output() statusChanged: EventEmitter<string> = new EventEmitter();
 
   formGroupLT: FormGroup;
   submitted = false;
@@ -23,6 +26,7 @@ export class LongTermApplicationComponent implements OnInit {
   cities: any;
   documents: any = {};
   inValidNumber: boolean;
+  status = "not_started";
 
   constructor(
     private countriesService: CountriesService,
@@ -65,6 +69,11 @@ export class LongTermApplicationComponent implements OnInit {
       structuresAndPlans: [null],
       totalProjectCost: [null],
       documents: [null],
+
+      grantId: [null],
+      processInstanceId: [null],
+      definitionKey: [null],
+      status: [null],
     });
   }
 

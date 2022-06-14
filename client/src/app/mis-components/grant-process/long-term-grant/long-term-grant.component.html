@@ -14,56 +14,102 @@
         <div class="row">
 
           <div class="card-header" style="width: 100%; text-align: -webkit-center;">
-            <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">SUBMIT LETTER OF INTEREST</h6></div>
-            <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">REVIEW LETTER OF INTEREST</h6></div>
-            <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">PLANNING AND LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewLearningGrant ? 'block' : 'none'"><h6 class="h2 text-white d-inline-block mb-0">
-              REVIEW LEARNING GRANT APPLICATION</h6></div>
-            <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">APPROVE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">PROVIDE PLANNING AND LEARNING GRANT</h6></div>
+            <div [style.display]="isApplication ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">LONG TERM GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewApplication ? 'block' : 'none'"><h6
+              class="h2 d-inline-block mb-0">REVIEW LONG TERM GRANT APPLICATION</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
             <div class=" row">
 
-              <div *ngIf="isSubmitLetterOfInterest" class=" col">
-                <long-term-application></long-term-application>
+              <div *ngIf="isApplication" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="false" [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
               </div>
 
-              <div *ngIf="!isSubmitLetterOfInterest" class=" col">
-                <h3 style="margin-left: 40px;">ORGANISATIONAL INFORMATION</h3>
+              <div *ngIf="isReviewApplication" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="true" [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
+                <h3 style="margin-left: 40px;">Reviewer Action</h3>
                 <div class="card">
                   <div class="row" style="margin: 10px;">
-                    <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 16px">
-                        <li>Name of the Lead Cluster Organization: <b>{{organisationalInfo.organisation}}</b></li>
-                        <li>Acronym Name: <b>{{organisationalInfo.acronym}}</b></li>
-                        <li>Type of Organisation: <b>{{organisationalInfo.organization_type}}</b></li>
-                        <li>Legal Status: <b>{{organisationalInfo.legal_status}}</b></li>
-                        <li>Name of Contact Person: <b>{{organisationalInfo.nameContactPerson}}</b></li>
-                        <li>
-                          <button class="btn btn-link"><a href="{{organisationalInfo.letter}}" style="font-size:15px;"
-                                                          class="text fas fa-file-download"
-                                                          target="_blank" download>&nbsp;&nbsp;Download Letter of
-                            interest</a>
-                          </button>
-                        </li>
-                      </ul>
+                    <div class="col-sm-12">
+
+                      <div class="row">
+                        <div class="col">
+                          <p>Is the concept in line with the objectives of the project?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of items">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="isConceptInline" [(ngModel)]="isConceptInline"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <p>Does it adhere to the strategic objectives of the organization?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of items">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="doesItAdhere" [(ngModel)]="doesItAdhere"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <p>Are they adhering to the purpose of the planning and learning grant?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of items">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="areTheyAdhering" [(ngModel)]="areTheyAdhering"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <p>What was the decision of the review process?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of decision">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" style="margin: 10px;">
+                        <label for="reviewerActionComments">Provide any comments</label>
+                        <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerActionComments"
+                                  [(ngModel)]="reviewerComments"></textarea>
+                      </div>
                     </div>
-                    <div class="col-sm-6">
-                      <ul style="list-style: none; font-size: 16px">
-                        <li>Physical Address: <b>{{organisationalInfo.physical_address}}</b></li>
-                        <li>Postal Address: <b>{{organisationalInfo.postal_address}}</b></li>
-                        <li>Email: <b>{{organisationalInfo.email}}</b></li>
-                        <li>Website: <b>{{organisationalInfo.website}}</b></li>
-                        <li>Country: <b>{{organisationalInfo.country}}</b></li>
-                        <li>City: <b>{{organisationalInfo.city}}</b></li>
-                      </ul>
+                  </div>
+                  <div class="row" *ngIf="!isReadOnly">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                      <button class="btn btn-warning" (click)="submit('reviewConcept', 'draft')">Save for Later</button>
+                      <button class="btn btn-success" (click)="submit('reviewConcept', 'completed')">Submit Review</button>
                     </div>
                   </div>
                 </div>

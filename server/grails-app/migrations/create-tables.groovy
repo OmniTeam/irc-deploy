@@ -2988,4 +2988,25 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "bruno (generated)", id: "1655213433311-13") {
+        createTable(tableName: "temp") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tempPK")
+            }
+
+            column(name: "values", type: "LONGTEXT")
+
+            column(name: "key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1655213433311-14") {
+        addColumn(tableName: "grant_letter_of_interest_review") {
+            column(name: "recommendations", type: "varchar(255)")
+        }
+    }
+
 }

@@ -12,6 +12,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Title"
                     type="text"
@@ -32,6 +33,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Project Duration"
                     type="text"
@@ -51,6 +53,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <ng-select class="form-control form-control-sm"
+                             [disabled]="isReadOnly"
                              name="datatable_length"
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
@@ -74,6 +77,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <ng-select class="form-control form-control-sm"
+                             [disabled]="isReadOnly"
                              name="datatable_length"
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
@@ -100,6 +104,7 @@
                 <div class=" input-group input-group-merge">
                   <input
                     class="form-control"
+                    [disabled]="isReadOnly"
                     placeholder="Project proposed"
                     type="date"
                     style="padding-left: 10px;"
@@ -115,6 +120,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Amount"
                     type="number"
@@ -133,6 +139,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Amount"
                     type="number"
@@ -149,6 +156,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <textarea
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Funding"
                     style="padding-left: 10px;"
@@ -167,6 +175,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Name"
                     type="text"
@@ -188,6 +197,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
+                    [disabled]="isReadOnly"
                     class="form-control"
                     placeholder="Contact details"
                     type="text"
@@ -211,6 +221,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="Name of the Bank:&#10;Bank Address:&#10;Title of the Account:&#10;Account Number:&#10;SWIFT CODE:"
@@ -237,6 +248,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -252,6 +264,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -276,6 +289,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -291,6 +305,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="Rational for why you will focus on the specified target groups above"
@@ -308,6 +323,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="What will be the tangible difference for them because of the program"
@@ -323,6 +339,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="The long term change you want to see in one sentence"
@@ -340,6 +357,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -355,6 +373,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -372,6 +391,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -397,6 +417,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -421,6 +442,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="Please include both those you work with or not)? State the need for collaborating with these
@@ -445,6 +467,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -463,6 +486,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
+                [disabled]="isReadOnly"
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -485,6 +509,7 @@
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <textarea
+              [disabled]="isReadOnly"
               class="form-control"
               style="padding-left: 10px;"
               placeholder="Remember to complete a detail budget on the excel sheet using CRVPF approved format"
@@ -641,6 +666,11 @@
       </div>
     </div>
   </div>
+
+  <input class="form-control" type="hidden" formControlName="grantId" [ngModel]="grantId">
+  <input class="form-control" type="hidden" formControlName="processInstanceId" [ngModel]="processInstanceId">
+  <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
+  <input class="form-control" type="hidden" formControlName="status" [ngModel]="status">
 
   <div class="row">
     <div class="col-lg-12 bottom_buttons_row"
