@@ -29,6 +29,7 @@ class StartCamundaInstancesJob extends Script {
     Object run() {
         reportingJob()
         planningAndLearningGrantJob()
+        //longtermGrantJob()
         return null
     }
 
@@ -112,7 +113,7 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static planningAndLearningGrantJob() {
-        GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
+        GrantLetterOfInterest.findAllByStatus("not_started").each { grant ->
 
             def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
 
@@ -120,14 +121,14 @@ class StartCamundaInstancesJob extends Script {
                 if (r.size() > 0) {
 
                     def slurper = new JsonSlurper()
-                    def orgInfo = slurper.parseText(it.organisation)
+                    def orgInfo = slurper.parseText(grant.organisation)
                     def applicantEmail = orgInfo['email']
                     def organization = orgInfo['name']
 
                     def edEmail = []
                     def financeEmail = []
                     def programTeamEmail = []
-                    def program = Program.get(it.program)
+                    def program = Program.get(grant.program)
 
                     r.each {
                         if (it['role'] == "ROLE_ED") edEmail << it['email']
@@ -136,8 +137,8 @@ class StartCamundaInstancesJob extends Script {
                     }
 
                     boolean started = startProcessInstance([
-                            GrantId          : it.id,
-                            ProgramId        : it.program,
+                            GrantId          : grant.id,
+                            ProgramId        : grant.program,
                             Applicant        : applicantEmail,
                             ProgramTeam      : programTeamEmail[0],
                             Finance          : financeEmail[0],
@@ -148,8 +149,50 @@ class StartCamundaInstancesJob extends Script {
 
                     if (started) {
                         print "================ started grant process instance ================"
-                        it.status = 'started'
-                        it.save()
+                        grant.status = 'started'
+                        grant.save()
+                    }
+                }
+            } catch (e) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    static longtermGrantJob() {
+        GrantLetterOfInterest.findAllByStatus("not_started").each { grant ->
+
+            def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
+
+            try {
+                if (r.size() > 0) {
+
+                    def slurper = new JsonSlurper()
+                    def orgInfo = slurper.parseText(grant.organisation)
+                    def applicantEmail = orgInfo['email']
+
+                    def edEmail = []
+                    def programTeamEmail = []
+                    def program = Program.get(grant.program)
+
+                    r.each {
+                        if (it['role'] == "ROLE_ED") edEmail << it['email']
+                        if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                    }
+
+                    boolean started = startProcessInstance([
+                            GrantId          : grant.id,
+                            ApplicationId    : grant.program,
+                            Applicant        : applicantEmail,
+                            ProgramTeam      : programTeamEmail[0],
+                            ExecutiveDirector: edEmail[0]
+                    ], GRANT_PROCESS)
+
+
+                    if (started) {
+                        print "================ started grant process instance ================"
+                        grant.status = 'started'
+                        grant.save()
                     }
                 }
             } catch (e) {
