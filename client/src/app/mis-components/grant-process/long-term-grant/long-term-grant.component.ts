@@ -51,6 +51,7 @@ export class LongTermGrantComponent implements OnInit {
   ngOnInit(): void {
     this.isApplication = false;
     this.isReviewApplication = false;
+    this.grantId = "3a126943-dece-46df-9799-35d720c15693"
 
     this.route.params
       .subscribe(p => {
@@ -67,8 +68,7 @@ export class LongTermGrantComponent implements OnInit {
             }, error => console.log(error));
           });
         } else {
-          this.isApplication = false
-          this.isReviewApplication = true;
+          this.isApplication = true
         }
       });
   }
