@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../../services/countries.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {Validator} from "../../../helpers/validator";
+import {TempDataService} from "../../../services/temp-data.service";
 
 @Component({
   selector: 'long-term-application',
@@ -31,7 +32,8 @@ export class LongTermApplicationComponent implements OnInit {
   constructor(
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
-    public fileUploadService:FileUploadService
+    public fileUploadService:FileUploadService,
+    private tempDataService:TempDataService,
   ) { }
 
   get f() {
@@ -90,6 +92,16 @@ export class LongTermApplicationComponent implements OnInit {
     }
     const formData = this.formGroupLT.value;
     console.log('formData', formData)
+
+    let formDataR: { [key: string]: string } = {
+      key: "application",
+      values: JSON.stringify(formData),
+    }
+
+    this.tempDataService.createTempData(formDataR).subscribe(res => {
+      console.log("response",res)
+    });
+
   }
 
   onSelectCountry(country){
