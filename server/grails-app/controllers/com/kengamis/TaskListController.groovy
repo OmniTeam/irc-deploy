@@ -7,7 +7,6 @@ import groovy.json.JsonSlurper
 
 import static org.springframework.http.HttpStatus.*
 
-@ReadOnly
 class TaskListController {
 
     TaskListService taskListService

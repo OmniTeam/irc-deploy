@@ -23,7 +23,7 @@ class StartCamundaInstancesJob extends Script {
         return null
     }
 
-    static void ircReportingJob() {
+    static void ircReportingJob(){
         WorkPlan.findAllByStartCycle("true").each { workPlan ->
             boolean startInstance = true
 
@@ -85,25 +85,27 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static void ircActivityReportingJob() {
+    static void ircActivityReportingJob(){
         ActivityReport.findAllByStatus("Started").each { activity ->
             boolean startInstance = true
+            def findUser = User.findByEmail(activity.assignee)
 
             if (startInstance) {
                 try {
-                    boolean started = startProcessInstance([
-                            ActivityId: activity.id,
-                            StartDate : activity.startDate,
-                            EndDate   : activity.endDate,
-                            Assignee  : activity.assignee
+                        boolean started = startProcessInstance([
+                                ActivityId    : activity.id,
+                                StartDate     : activity.startDate,
+                                Case          : activity.milestone,
+                                Assignee      : activity.assignee,
+                                Name          : findUser.names,
 
-                    ], IRC_ACTIVITY_REPORT)
-                    if (started) {
-                        print "================ Yes Here We Go!!! ================"
-                        println("IRC PROCESS STARTED")
-                        activity.status = "Running"
-                        activity.save()
-                    }
+                        ], IRC_ACTIVITY_REPORT)
+                        if (started) {
+                            print "================ Yes Here We Go!!! ================"
+                            println("IRC PROCESS STARTED")
+                            activity.status = "Running"
+                            activity.save()
+                        }
 
                 } catch (e) {
                     e.printStackTrace()
@@ -112,18 +114,20 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static void ircReferralJob() {
+    static void ircReferralJob(){
         Referral.findAllByStatus("Pending").each { referral ->
             boolean startInstance = true
+            def findUser = User.findByEmail(referral.assignee)
 
             if (startInstance) {
                 try {
 
                     boolean started = startProcessInstance([
-                            ReferralId: referral.id,
-                            StartDate : referral.dateOfReferral,
-                            EndDate   : referral.lastUpdated,
-                            Assignee  : referral.assignee
+                            ReferralId    : referral.id,
+                            StartDate     : referral.dateOfReferral,
+                            Case          : referral.organizationReferredTo,
+                            Assignee      : referral.assignee,
+                            Name          : findUser.names,
 
                     ], IRC_REFERRAL)
 
@@ -142,18 +146,22 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static void ircFeedbackJob() {
+    static void ircFeedbackJob(){
         Feedback.findAllByCurrentStatusOfFeedback("Forwarded For Action").each { feed ->
             boolean startInstance = true
+            //find user by email
+            def findUser = User.findByEmail(feed.assignee)
+            print(findUser.names)
 
             if (startInstance) {
                 try {
 
                     boolean started = startProcessInstance([
-                            FeedbackId: feed.id,
-                            StartDate : feed.dateFeedbackReceived,
-                            EndDate   : feed.lastUpdated,
-                            Assignee  : feed.assignee
+                            FeedbackId    : feed.id,
+                            StartDate     : feed.dateFeedbackReceived,
+                            Case          : feed.typeOfFeedback,
+                            Assignee      : feed.assignee,
+                            Name          : findUser.names
 
                     ], IRC_FEEDBACK)
 

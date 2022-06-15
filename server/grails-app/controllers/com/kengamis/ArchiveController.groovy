@@ -100,7 +100,7 @@ class ArchiveController {
         respond records
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond archiveService.get(id)
     }
 

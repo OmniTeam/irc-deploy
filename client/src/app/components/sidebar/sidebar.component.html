@@ -88,6 +88,18 @@
                         {{ childitems.title }}
                       </a>
                     </div>
+
+                    <div *hasRole="childitems.roles">
+                      <a
+                        routerLinkActive="active"
+                        href="http://issdugdata.net:3000/"
+                        target="_blank"
+                        class="nav-link"
+                        *ngIf="childitems.type === 'analytics'"
+                      >
+                        {{ childitems.title }}
+                      </a>
+                    </div>
                     <!--If it have a submenu-->
                     <div *hasRole="childitems.roles">
                       <a

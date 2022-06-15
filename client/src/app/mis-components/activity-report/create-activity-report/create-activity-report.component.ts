@@ -348,13 +348,6 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       this.budget.forEach((item) => {
         if (item.id === id) {
           if (editing) {
-            if (+newValue <= +item.approvedAmount) {
-              item.totalSpent = newValue;
-            } else {
-              this.alertService.error(`Amount spent should be less than Amount Approved`);
-              return;
-            }
-          } else {
             item.totalSpent = newValue;
           }
         }
