@@ -2364,4 +2364,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "202209011246352ol-cryt") {
+        modifyDataType(columnName: "input_variables", newDataType: "text", tableName: "archive")
+    }
+
+    changeSet(author: "DELL (generated)", id: "202209011246352ol-crytsdisu") {
+        modifyDataType(columnName: "output_variables", newDataType: "text", tableName: "archive")
+    }
+
 }

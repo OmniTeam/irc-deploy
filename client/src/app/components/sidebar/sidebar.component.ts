@@ -170,7 +170,7 @@ export const ROUTES: RouteInfo[] = [
       {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
       {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
-      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
     ]
   },
 
