@@ -144,6 +144,33 @@
                           <div class="row">
                             <div class="col-md-3">
                               <label>
+                                Staff Designation
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <input
+                                      class="form-control"
+                                      placeholder="Staff Designation"
+                                      type="text"
+                                      style="padding-left: 10px;"
+                                      formControlName="designation"
+                                      [ngClass]="{ 'is-invalid': submitted && f.designation.errors }"
+                                    >
+                                    <div *ngIf="submitted && f.designation.errors" class="invalid-feedback">
+                                      <div *ngIf="f.designation.errors.required" class="input-error">Staff Designation is Required is required
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label>
                                 Email
 <!--                                <span class="required-indicator">*</span>-->
                               </label>
@@ -177,44 +204,6 @@
                               </div>
                             </div>
                           </div>
-                          <!--<div class="row">
-                            <div class="col-md-3">
-                              <label>
-                                Telephone
-&lt;!&ndash;                                <span class="required-indicator">*</span>&ndash;&gt;
-                              </label>
-                            </div>
-                            <div class="col-md-9">
-                              <div class="col-md-12">
-                                <div class="form-group ">
-                                  <div class=" input-group input-group-merge">
-                                    <div class=" input-group-prepend">
-                                                <span class="input-group-text" style="padding-right: 10px;">
-                                                    <i class=" fas fa-user"></i>
-                                                </span>
-                                    </div>
-                                    <input
-                                      class="form-control"
-                                      placeholder="Telephone"
-                                      type="text"
-                                      style="padding-left: 10px;"
-                                      formControlName="telephone"
-                                      [ngClass]="{ 'is-invalid': submitted && f.telephone.errors }"
-                                    >
-                                    <div *ngIf="submitted && f.telephone.errors" class="invalid-feedback">
-                                      <div *ngIf="f.telephone.errors.required" class="input-error">Telephone is required</div>
-                                      <div *ngIf="f.telephone.errors.pattern" class="input-error">Telephone should be in format
-                                        07XXXXXXXX
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div *ngIf="f.telephone.hasError('alreadyExist')" >
-                                    <div class="input-error">Telephone number is already in use</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>-->
                           <div class="row">
                             <div class="col-md-3">
                               <label>
@@ -263,53 +252,19 @@
                                                name="datatable_length"
                                                aria-controls="datatable"
                                                style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                               [multiple]="false"
+                                               [multiple]="true"
                                                placeholder="Groups"
                                                formControlName="groups"
                                                [ngClass]="{ 'is-invalid': submitted && f.groups.errors }"
                                                [searchable]="true"
                                                [clearable]="true"
                                     >
-                                      <ng-option [value]="item.name" *ngFor="let item of groups">
+                                      <ng-option [value]="item.id" *ngFor="let item of groups">
                                         {{item.name}}
                                       </ng-option>
                                     </ng-select>
                                     <div *ngIf="submitted && f.groups.errors" class="invalid-feedback">
                                       <div *ngIf="f.groups.errors.required" class="input-error">A role is required</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <label>
-                                Data Collector Type
-                              </label>
-                            </div>
-                            <div class="col-md-9">
-                              <div class="col-md-12">
-                                <div class="form-group ">
-                                  <div class=" input-group input-group-merge">
-                                    <ng-select class="form-control form-control-sm"
-                                               name="datatable_length"
-                                               aria-controls="datatable"
-                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                               [multiple]="false"
-                                               placeholder="Data Collector Type"
-                                               formControlName="data_collector_Type"
-                                               [ngClass]="{ 'is-invalid': submitted && f.data_collector_Type.errors }"
-                                               [searchable]="true"
-                                               [clearable]="true"
-                                    >
-                                      <ng-option [value]="item.name" *ngFor="let item of data_collector_Type">
-                                        {{item.name}}
-                                      </ng-option>
-                                    </ng-select>
-                                    <div *ngIf="submitted && f.data_collector_Type.errors" class="invalid-feedback">
-                                      <div *ngIf="f.data_collector_Type.errors.required" class="input-error">A Data Collector is Required is required
-                                      </div>
                                     </div>
                                   </div>
                                 </div>

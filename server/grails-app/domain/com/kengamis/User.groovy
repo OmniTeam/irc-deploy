@@ -13,6 +13,7 @@ class User {
     String email
     String username
     String password
+    String designation
     boolean enabled = true
     boolean accountExpired = false
     boolean accountLocked = false
@@ -28,6 +29,7 @@ class User {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: true
+        designation nullable: true
 
 
     }

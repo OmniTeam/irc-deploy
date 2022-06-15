@@ -57,6 +57,7 @@ class StartCamundaInstancesJob extends Script {
                 try {
                     if (r.size() > 0) {
                         def result = r.first()
+                        User staff = User.findById(workPlan.staffId)
                         boolean started = startProcessInstance([
                                 PartnerSetupId: workPlan.id,
                                 PartnerId     : workPlan.staffId,
@@ -64,7 +65,9 @@ class StartCamundaInstancesJob extends Script {
                                 StartDate     : result['start_date'],
                                 EndDate       : result['end_date'],
                                 Period        : result['period'],
-                                GroupId       : ""
+                                Assignee      : staff?.email,
+                                Supervisor    : "ccathy@omnitech.co.ug",
+                                MandE         : "ccathy@omnitech.co.ug"
                         ], QUARTERLY_REPORTING)
 
 

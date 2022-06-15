@@ -2372,4 +2372,10 @@ databaseChangeLog = {
         modifyDataType(columnName: "output_variables", newDataType: "text", tableName: "archive")
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1654089682518-4") {
+        addColumn(tableName: "user") {
+            column(name: "designation", type: "varchar(255)")
+        }
+    }
+
 }
