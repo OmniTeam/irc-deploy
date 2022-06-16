@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProgramPartnersService {
-  baseurl = `${environment.serverUrl}/programPartner`
+  baseurl = `${environment.serverUrl}/programPartner`;
   constructor(private http: HttpClient) { }
 
   getProgramPartners(): Observable<any> {
     return this.http.get(this.baseurl);
+  }
+  getUserPartners(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/userPartners`);
   }
 
   getProgramPartnersWithoutWorkPlan(): Observable<any> {

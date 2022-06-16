@@ -117,7 +117,7 @@ export class UsersComponent implements OnInit {
 
   entriesChange($event) {
     this.entries = $event.target.value;
-    console.log(this.entries, 'Entries');
+    // console.log(this.entries, 'Entries');
     this.reloadTable();
   }
 
@@ -125,13 +125,13 @@ export class UsersComponent implements OnInit {
     if (this.router.url.includes('mis-users')) {
       this.usersService.getMISUsers().subscribe((data) => {
         this.users = data;
-        console.log(data, 'mis users');
+        // console.log(data, 'mis users');
       });
 
     } else {
       this.usersService.getUsers().subscribe((data) => {
         this.users = data;
-        console.log(data, 'users');
+        // console.log(data, 'users');
       });
     }
 

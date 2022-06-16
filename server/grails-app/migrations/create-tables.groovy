@@ -2949,25 +2949,25 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "bruno (generated)", id: "1652342523636-12") {
+    /*changeSet(author: "bruno (generated)", id: "1652342523636-12") {
         addColumn(tableName: "program_category") {
             column(name: "form", type: "varchar(255)") {
                 constraints(nullable: "true")
             }
         }
-    }
+    }*/
 
     changeSet(author: "bruno (generated)", id: "1653346363278-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "program_id", tableName: "program_category")
     }
 
-    changeSet(author: "bruno (generated)", id: "16523423456677-12") {
+    /*changeSet(author: "bruno (generated)", id: "16523423456677-12") {
         addColumn(tableName: "project_milestone") {
             column(name: "form", type: "varchar(255)") {
                 constraints(nullable: "true")
             }
         }
-    }
+    }*/
 
     changeSet(author: "bruno (generated)", id: "16533462423566-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "program", tableName: "project_milestone")
@@ -2980,6 +2980,14 @@ databaseChangeLog = {
     changeSet(author: "bruno (generated)", id: "16533445639345-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_comments")
     }
+
+    changeSet(author: "omni-tech (generated)", id: "1655205123672-13") {
+        addColumn(tableName: "tag") {
+            column(name: "partner_id", type: "varchar(255)")
+        }
+    }
+
+
 
     changeSet(author: "bruno (generated)", id: "165412341535377-12") {
         addColumn(tableName: "program_partner") {

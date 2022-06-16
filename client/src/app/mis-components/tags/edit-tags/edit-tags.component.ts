@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AlertService} from "../../../services/alert";
-import {TagService} from "../../../services/tags";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertService} from '../../../services/alert';
+import {TagService} from '../../../services/tags';
+import {ProgramPartnersService} from '../../../services/program-partners.service';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-edit-tags',
@@ -16,23 +18,45 @@ export class EditTagsComponent implements OnInit {
   formData: any;
   tagTypes = [];
   tagId: any;
+  programPartners: any;
+  userRole: any;
+  isAdmin: boolean;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
+              private programPartnersService: ProgramPartnersService,
+              private authService: AuthService,
               private tagService: TagService) { }
 
   ngOnInit(): void {
-    this.tagId = this.route.snapshot.params.id
+    this.tagId = this.route.snapshot.params.id;
     this.tagService.getCurrentTag(this.tagId).subscribe((results: any) => {
-      this.formGroup = this.formBuilder.group({
-        name: [results?.name, [Validators.required]],
-        tagType: [results?.tagTypeId, [Validators.required]]
-      });
+      this.userRole = this.authService.getUserRoles();
+      if (this.userRole.includes('ROLE_SUPER_ADMIN') || this.userRole.includes('ROLE_ADMIN')) {
+        this.isAdmin = true;
+      }
+      if (this.userRole.includes('ROLE_SUPER_ADMIN')  || this.userRole.includes('ROLE_SUPER_ADMIN') ) {
+        this.formGroup = this.formBuilder.group({
+          name: [results?.name, [Validators.required]],
+          tagType: [results?.tagTypeId, [Validators.required]],
+          partner: [results?.partner, Validators.required]
+        });
+      } else {
+        this.formGroup = this.formBuilder.group({
+          name: [results?.name, [Validators.required]],
+          tagType: [results?.tagTypeId, [Validators.required]],
+          partner: [results?.partner, Validators.required]
+        });
+      }
     });
     this.tagService.getAllTagTypes().subscribe((data) => {
       this.tagTypes = data;
     });
+    this.programPartnersService.getProgramPartners().subscribe((data) => {
+      this.programPartners = data;
+    });
+
   }
 
   get f() {

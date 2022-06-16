@@ -1,6 +1,7 @@
 package com.kengamis
 
 import grails.converters.JSON
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.validation.ValidationException
 import org.apache.http.HttpStatus
 import org.springframework.web.multipart.MultipartFile
@@ -19,6 +20,7 @@ class UserController {
 
     UserService userService
     UserRoleService userRoleService
+    SpringSecurityService springSecurityService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -54,6 +56,12 @@ class UserController {
                 enabled: user.enabled
         ]
         respond users
+    }
+
+    def getCurrentUserPartners(){
+        def currentUser = springSecurityService.currentUser
+        def currentUserPartners = UserPartner.getUserPartners(currentUser)
+        respond currentUserPartners
     }
 
     def getMISUsers(){

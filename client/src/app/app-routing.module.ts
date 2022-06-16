@@ -46,7 +46,9 @@ const routes: Routes = [
       {
         path: 'forms', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN
+          ]
         },
         loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
       },
@@ -57,17 +59,8 @@ const routes: Routes = [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_PARTNER_DATA_MANAGER,
-            Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER,
             Roles.ROLE_PARTNER_DATA_VIEWER,
-            Roles.ROLE_VAC_PARTNER_DATA_VIEWER,
-            Roles.ROLE_AGPP_PARTNER_DATA_VIEWER,
-            Roles.ROLE_YCD_PARTNER_DATA_VIEWER,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,
             Roles.ROLE_STAFF_DATA_VIEWER
           ]
         },
@@ -94,9 +87,6 @@ const routes: Routes = [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,
             Roles.ROLE_STAFF_DATA_VIEWER
           ]
         },
@@ -109,9 +99,6 @@ const routes: Routes = [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,
             Roles.ROLE_STAFF_DATA_VIEWER
           ]
 
@@ -125,9 +112,6 @@ const routes: Routes = [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,
             Roles.ROLE_STAFF_DATA_VIEWER
           ]
 
@@ -140,22 +124,7 @@ const routes: Routes = [
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
-            Roles.ROLE_MEAL,
-            Roles.ROLE_FINANCE,
-            Roles.ROLE_ED,
-            Roles.ROLE_PARTNER_DATA_MANAGER,
-            Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER,
-            Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_PARTNER_DATA_VIEWER,
-            Roles.ROLE_VAC_PARTNER_DATA_VIEWER,
-            Roles.ROLE_AGPP_PARTNER_DATA_VIEWER,
-            Roles.ROLE_YCD_PARTNER_DATA_VIEWER,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,
             Roles.ROLE_STAFF_DATA_VIEWER
           ]
         },
@@ -169,9 +138,15 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
       },
       {
-        path: 'grantProcess/:id/:readonly',
+        path: 'grantProcess/:id/:readonly', canActivate: [AuthGuard],
         data: {
-          userRoles: []
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_ED,
+            Roles.ROLE_FINANCE,
+            Roles.ROLE_PROGRAM_OFFICER
+          ]
         },
         loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
       },
@@ -191,19 +166,7 @@ const routes: Routes = [
             Roles.ROLE_MEAL,
             Roles.ROLE_FINANCE,
             Roles.ROLE_ED,
-            Roles.ROLE_PARTNER_DATA_MANAGER,
-            Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER,
-            Roles.ROLE_PARTNER_DATA_VIEWER,
-            Roles.ROLE_VAC_PARTNER_DATA_VIEWER,
-            Roles.ROLE_AGPP_PARTNER_DATA_VIEWER,
-            Roles.ROLE_YCD_PARTNER_DATA_VIEWER,
-            Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
+            Roles.ROLE_PROGRAM_OFFICER
           ]
         },
         loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
@@ -211,13 +174,10 @@ const routes: Routes = [
       {
         path: 'entity', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_VAC_PARTNER_DATA_VIEWER,
-            Roles.ROLE_AGPP_PARTNER_DATA_VIEWER,
-            Roles.ROLE_YCD_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN
+          ]
         },
         loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
       },
@@ -238,13 +198,14 @@ const routes: Routes = [
       {
         path: 'entity/showData/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_VAC_PARTNER_DATA_VIEWER,
-            Roles.ROLE_AGPP_PARTNER_DATA_VIEWER,
-            Roles.ROLE_YCD_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_PARTNER_DATA_MANAGER,
+            Roles.ROLE_PARTNER_DATA_VIEWER,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER
+          ]
         },
         loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
       },
@@ -287,24 +248,26 @@ const routes: Routes = [
       {
         path: 'tags', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_PARTNER_DATA_VIEWER, Roles.ROLE_VAC_PARTNER_DATA_VIEWER,
-            Roles.ROLE_AGPP_PARTNER_DATA_VIEWER,
-            Roles.ROLE_YCD_PARTNER_DATA_VIEWER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_PARTNER_DATA_MANAGER,
+            Roles.ROLE_PARTNER_DATA_VIEWER,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER
+          ]
         },
         loadChildren: () => import('./mis-components/tags/tags.module').then(m => m.TagsModule)
       },
       {
         path: 'tags/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_PARTNER_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_MANAGER
+          ]
         },
         loadChildren: () => import('./mis-components/tags/edit-tags/edit-tags.module').then(m => m.EditTagsModule)
       },
@@ -346,30 +309,36 @@ const routes: Routes = [
       {
         path: 'users', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER, ]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN
+          ]
         },
         loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
       },
       {
         path: 'mis-users', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_VAC_STAFF_DATA_MANAGER, Roles.ROLE_AGPP_STAFF_DATA_MANAGER, Roles.ROLE_YCD_STAFF_DATA_MANAGER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER
+          ]
         },
         loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
       },
       {
         path: 'user/create', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/users/create-user/create-user.module').then(m => m.CreateUserModule)
       },
       {
         path: 'user/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER,]
         },
         loadChildren: () => import('./mis-components/users/edit-user/edit-user.module').then(m => m.EditUserModule)
       }, {
@@ -445,21 +414,26 @@ const routes: Routes = [
       {
         path: 'program',
         data: {
-          userRoles: []
+          userRoles: [
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ]
         },
         loadChildren: () => import('./mis-components/program/program.module').then(m => m.ProgramModule)
       },
       {
         path: 'program/create', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/program/create-program/create-program.module').then(m => m.CreateProgramModule)
       },
       {
         path: 'program/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER]
         },
         loadChildren: () => import('./mis-components/program/edit-program/edit-program.module').then(m => m.EditProgramModule)
       },
@@ -509,33 +483,34 @@ const routes: Routes = [
       {
         path: 'programPartner', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER, ]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER
+          ]
         },
         loadChildren: () => import('./mis-components/program-partners/program-partners.module').then(m => m.ProgramPartnersModule)
       },
       {
         path: 'programPartner/create', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER, ]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER
+          ]
         },
         loadChildren: () => import('./mis-components/program-partners/create-program-partners/create-program-partners.module').then(m => m.CreateProgramPartnersModule)
       },
       {
         path: 'programPartner/edit/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_PARTNER_DATA_MANAGER, Roles.ROLE_VAC_PARTNER_DATA_MANAGER,
-            Roles.ROLE_AGPP_PARTNER_DATA_MANAGER,
-            Roles.ROLE_YCD_PARTNER_DATA_MANAGER, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_VAC_STAFF_DATA_MANAGER,
-            Roles.ROLE_AGPP_STAFF_DATA_MANAGER,
-            Roles.ROLE_YCD_STAFF_DATA_MANAGER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER
+          ]
         },
         loadChildren: () => import('./mis-components/program-partners/edit-program-partners/edit-program-partners.module').then(m => m.EditProgramPartnersModule)
       },
