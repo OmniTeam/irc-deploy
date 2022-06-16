@@ -18,7 +18,6 @@ class StartCamundaInstancesJob extends Script {
     static String camundaApiUrl = Holders.grailsApplication.config.camundaUrl as String
     static String CRVPF_REPORTING = "CRVPF_REPORTING"
     static String GRANT_PROCESS = "GRANT_PROCESS"
-    static String LONG_TERM_GRANT = "LONG_TERM_GRANT"
 
     static queryUserRoles = "SELECT user.username, user.email,role.authority as role, kenga_group.name as group_program " +
             "FROM user INNER JOIN user_role ON user.id = user_role.user_id " +
@@ -29,9 +28,8 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
-//        reportingJob()
-//        planningAndLearningGrantJob()
-        longTermGrantJob()
+        reportingJob()
+        planningAndLearningGrantJob()
         return null
     }
 
@@ -155,52 +153,6 @@ class StartCamundaInstancesJob extends Script {
                         grant.save()
                     }
                 }
-            } catch (e) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    static longTermGrantJob() {
-        Temp.findByType('application' ).each { temp ->
-
-            //def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
-
-            try {
-               // if (r.size() > 0) {
-
-                    def slurper = new JsonSlurper()
-                    def values = slurper.parseText(temp.jsonValue)
-                    println values
-                    /* def orgInfo = slurper.parseText(grant.organisation)
-                     def applicantEmail = orgInfo['email']
-
-                     def edEmail = []
-                     def programTeamEmail = []
-                     def program = Program.get(grant.program)
-
-                    r.each {
-                        if (it['role'] == "ROLE_ED") edEmail << it['email']
-                        if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
-                    }*/
-
-                    boolean started = startProcessInstance([
-                            GrantId          : values['grantId'],
-                            ApplicationId    : temp.id,
-                            Applicant        : "brunojay001@gmail.com",
-                            ProgramTeam      : "brunojay001@gmail.com",
-                            ExecutiveDirector: "brunojay001@gmail.com"
-                    ], LONG_TERM_GRANT)
-
-
-                    if (started) {
-                        print "================ started grant process instance ================"
-                        //grant.status = 'started'
-                        //grant.save(flush: true, failOnError: true)
-                        temp.type = 'application-started'
-                        temp.save(flush: true, failOnError: true)
-                    }
-                //}
             } catch (e) {
                 e.printStackTrace()
             }

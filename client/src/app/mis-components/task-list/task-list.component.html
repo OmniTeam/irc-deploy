@@ -52,6 +52,7 @@
                       <td class='text-center'>
                         <a *ngIf="row.processDefKey=='CRVPF_REPORTING'" [routerLink]="['/reportForm', row.id, false]" style="font-size:20px;" class="text fas fa-external-link-square-alt"></a>
                         <a *ngIf="row.processDefKey=='GRANT_PROCESS'" [routerLink]="['/grantProcess', row.id, false]" style="font-size:20px;" class="text fas fa-external-link-square-alt"></a>
+                        <a *ngIf="row.processDefKey=='LONG_TERM_GRANT'" [routerLink]="['/grantProcess-longTerm', row.id, false]" style="font-size:20px;" class="text fas fa-external-link-square-alt"></a>
                       </td>
                     </tr>
                     </tbody>

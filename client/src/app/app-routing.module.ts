@@ -183,6 +183,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
       },
       {
+        path: 'grantProcess-longTerm/:id/:readonly', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
+      },
+      {
         path: 'reportForm/:id/:readonly', canActivate: [AuthGuard],
         data: {
           userRoles: [

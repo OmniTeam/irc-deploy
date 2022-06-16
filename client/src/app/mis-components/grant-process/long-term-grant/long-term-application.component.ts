@@ -4,6 +4,8 @@ import {CountriesService} from "../../../services/countries.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {Validator} from "../../../helpers/validator";
 import {TempDataService} from "../../../services/temp-data.service";
+import {AlertService} from "../../../services/alert";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'long-term-application',
@@ -19,6 +21,11 @@ export class LongTermApplicationComponent implements OnInit {
   @Input() definitionKey: string;
   @Output() statusChanged: EventEmitter<string> = new EventEmitter();
 
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
+
   formGroupLT: FormGroup;
   submitted = false;
   loading: boolean;
@@ -30,10 +37,13 @@ export class LongTermApplicationComponent implements OnInit {
   status = "not_started";
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
     public fileUploadService:FileUploadService,
     private tempDataService:TempDataService,
+    private alertService: AlertService
   ) { }
 
   get f() {
@@ -130,8 +140,8 @@ export class LongTermApplicationComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-    if (this.formGroupLT.invalid) {
-      console.log('Invalid');
+    if (this.formGroupLT.invalid || this.inValidNumber) {
+      this.alertService.error("Please fill in all fields correctly");
       return;
     }
 
@@ -148,7 +158,28 @@ export class LongTermApplicationComponent implements OnInit {
 
     this.tempDataService.createTempData(formDataR).subscribe(res => {
       console.log("response",res)
+      this.submitted = true
+      this.error = false;
+      this.success = true;
+      this.successMessage = "Updated Application";
+      this.alertService.success(this.successMessage);
+      this.statusChanged.emit(this.status);
+    }, error => {
+      this.error = true;
+      this.success = false;
+      this.errorMessage = "Failed to update Application";
+      this.alertService.error(this.errorMessage);
+      console.log(error);
     });
+
+    setTimeout(() => {
+      if (this.success == true) {
+        this.formGroupLT.reset()
+        this.router.navigate(['/home']);
+      }
+      this.success = false;
+      this.error = false;
+    }, 3000);
 
   }
 

@@ -1,11 +1,13 @@
 package com.kengamis
 
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.validation.ValidationException
+import groovy.json.JsonSlurper
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
@@ -20,7 +22,7 @@ class TempController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond tempService.list(params), model:[tempCount: tempService.count()]
+        respond tempService.list(params), model: [tempCount: tempService.count()]
     }
 
     def show(String id) {
@@ -42,12 +44,13 @@ class TempController {
 
         try {
             tempService.save(temp)
+            startLongTermGrantJob(temp)
         } catch (ValidationException e) {
             respond temp.errors
             return
         }
 
-        respond temp, [status: CREATED, view:"show"]
+        respond temp, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -70,7 +73,7 @@ class TempController {
             return
         }
 
-        respond temp, [status: OK, view:"show"]
+        respond temp, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -84,4 +87,48 @@ class TempController {
 
         render status: NO_CONTENT
     }
+
+    static startLongTermGrantJob(Temp temp) {
+        //def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
+
+        try {
+            // if (r.size() > 0) {
+
+            def slurper = new JsonSlurper()
+            def values = slurper.parseText(temp.jsonValue)
+            println values
+            /* def orgInfo = slurper.parseText(grant.organisation)
+             def applicantEmail = orgInfo['email']
+
+             def edEmail = []
+             def programTeamEmail = []
+             def program = Program.get(grant.program)
+
+            r.each {
+                if (it['role'] == "ROLE_ED") edEmail << it['email']
+                if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+            }*/
+
+            boolean started = StartCamundaInstancesJob.startProcessInstance([
+                    GrantId          : values['grantId'],
+                    ApplicationId    : temp.id,
+                    Applicant        : "brunojay001@gmail.com",
+                    ProgramTeam      : "brunojay001@gmail.com",
+                    ExecutiveDirector: "brunojay001@gmail.com"
+            ], "LONG_TERM_GRANT")
+
+
+            if (started) {
+                print "================ started grant process instance ================"
+                //grant.status = 'started'
+                //grant.save(flush: true, failOnError: true)
+                temp.type = 'application-started'
+                temp.save(flush: true, failOnError: true)
+            }
+            //}
+        } catch (e) {
+            e.printStackTrace()
+        }
+    }
+
 }

@@ -52,7 +52,6 @@ export class LongTermGrantComponent implements OnInit {
   ngOnInit(): void {
     this.isApplication = false;
     this.isReviewApplication = false;
-    this.grantId = "3a126943-dece-46df-9799-35d720c15693"
 
     this.route.params
       .subscribe(p => {
@@ -70,9 +69,6 @@ export class LongTermGrantComponent implements OnInit {
           });
         } else {
           this.isApplication = true
-          // this.isApplication = false
-          // this.applicationId = "91a34504-b694-4e90-922d-59495dc7d952"
-          // this.isReviewApplication = true
         }
       });
   }
@@ -87,13 +83,14 @@ export class LongTermGrantComponent implements OnInit {
 
   setData(data) {
     this.taskRecord = data
-    if (data.taskDefinitionKey === "Application") {
+    if (data.taskDefinitionKey === "Activity_0jrurkg") {
       this.isApplication = true;
     }
     if (data.taskDefinitionKey === "Review") {
       this.isReviewApplication = true;
     }
 
+    this.applicationId = data.id;
     this.grantId = data.grantId;
     this.definitionKey = data.taskDefinitionKey
     this.processInstanceId = data.processInstanceId

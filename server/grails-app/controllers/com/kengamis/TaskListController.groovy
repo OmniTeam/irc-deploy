@@ -109,6 +109,8 @@ class TaskListController {
                 if (grant != null) casee = orgInfo['name']
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
+            } else if (task.processDefKey == "LONG_TERM_GRANT") {
+                ///TODO
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
