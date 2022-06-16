@@ -5,6 +5,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, mapTo, tap} from 'rxjs/operators';
 import {User} from '../models/user';
 import {Roles} from '../models/roles';
+import {ProgramPartnersService} from './program-partners.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +16,20 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
   private readonly USERNAME = 'USERNAME';
   private readonly ROLES: any = [];
-  private readonly PARTNERS: any = [];
   private loggedUser: string;
+  private userPartners: any;
+  private PARTNERS: 'PARTNERS';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private programPartnersService: ProgramPartnersService) {
   }
 
   login(user: { username: string, password: string }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/api/login`, user)
       .pipe(
-        tap(user => this.doLoginUser(user.username, user)),
+        tap(user => {
+          this.doLoginUser(user.username, user);
+          this.getUserPartners();
+        }),
         mapTo(true),
         catchError(error => {
           alert(error.error);
@@ -65,6 +70,13 @@ export class AuthService {
   private getRefreshToken() {
     return localStorage.getItem(this.REFRESH_TOKEN);
   }
+  getUserPartners() {
+    this.programPartnersService.getUserPartners().subscribe((result) => {
+        this.userPartners = result.toString();
+        localStorage.setItem('PARTNERS', this.userPartners.toString());
+      }
+    );
+  }
 
   private storeJwtToken(jwt: string) {
     localStorage.setItem(this.JWT_TOKEN, jwt);
@@ -75,7 +87,6 @@ export class AuthService {
     localStorage.setItem(this.REFRESH_TOKEN, user.refresh_token);
     localStorage.setItem(this.USERNAME, this.loggedUser);
     localStorage.setItem(this.ROLES, user.roles);
-    localStorage.setItem(this.PARTNERS, user.partners);
   }
 
   private removeTokens() {
@@ -83,7 +94,7 @@ export class AuthService {
     localStorage.removeItem(this.REFRESH_TOKEN);
     localStorage.removeItem(this.USERNAME);
     localStorage.removeItem(this.ROLES);
-    localStorage.removeItem(this.PARTNERS);
+    localStorage.removeItem('PARTNERS');
   }
 
   getLoggedInUsername() {
@@ -94,8 +105,8 @@ export class AuthService {
     return localStorage.getItem(this.ROLES).split(',');
   }
 
-  getUserPartners() {
-    return localStorage.getItem(this.PARTNERS).split(',');
+  retrieveUserPartners() {
+    return localStorage.getItem('PARTNERS');
   }
 
   public getSession(): Promise<boolean> {

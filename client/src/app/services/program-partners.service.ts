@@ -13,6 +13,9 @@ export class ProgramPartnersService {
   getProgramPartners(): Observable<any> {
     return this.http.get(this.baseurl);
   }
+  getUserPartners(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/userPartners`);
+  }
 
   getProgramPartnersWithoutWorkPlan(): Observable<any> {
     return this.http.get(`${this.baseurl}/getProgramPartnersWithoutWorkPlan`);

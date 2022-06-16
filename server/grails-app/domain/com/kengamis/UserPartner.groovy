@@ -30,4 +30,9 @@ class UserPartner {
         filters.each { it.delete(flush: true, failOnError: true) }
     }
 
+    static getUserPartners(e){
+        def partners = findAllByUser(e)
+        return partners.collect { it.programPartnerId}
+    }
+
 }

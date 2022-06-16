@@ -73,10 +73,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row" *ngIf="isAdmin">
                   <div class="col-md-3">
                     <label class=" form-control-label" for="tagType">
-                      Partner
+                      Partner/Cluster
                       <span class="required-indicator">*</span>
                     </label>
                   </div>
@@ -85,13 +85,13 @@
                                aria-controls="datatable"
                                style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
                                [multiple]="false"
-                               placeholder=" Tag Type"
+                               placeholder=" Partner/Cluster"
                                formControlName="partner"
                                [ngClass]="{ 'is-invalid': submitted && f.partner.errors }"
                                [searchable]="true"
                                [clearable]="true">
                       <ng-option [value]="item.id" *ngFor="let item of programPartners">
-                        {{item.program}} &nbsp; {{item.country}}
+                        {{item.cluster}}
                       </ng-option>
                     </ng-select>
                     <div *ngIf="submitted && f.partner.errors" class="invalid-feedback">
