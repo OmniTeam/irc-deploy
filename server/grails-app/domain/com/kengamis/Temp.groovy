@@ -3,15 +3,15 @@ package com.kengamis
 class Temp {
 
     String id
-    String key
-    String values
+    String type
+    String jsonValue
 
     static constraints = {
-        values nullable: true
+        jsonValue nullable: true
     }
 
     static mapping = {
         id generator: 'uuid2'
-        values type: 'text'
+        jsonValue type: 'text'
     }
 }

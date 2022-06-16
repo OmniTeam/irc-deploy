@@ -14,9 +14,9 @@ import {TempDataService} from "../../../services/temp-data.service";
 export class LongTermApplicationComponent implements OnInit {
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
+  @Input() applicationId: string;
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
-  @Input() taskStatus: string;
   @Output() statusChanged: EventEmitter<string> = new EventEmitter();
 
   formGroupLT: FormGroup;
@@ -43,6 +43,55 @@ export class LongTermApplicationComponent implements OnInit {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfAvailableCountries();
 
+    if (this.isReadOnly) {
+      this.tempDataService.getTempDataRecord(this.applicationId).subscribe((data: any) => {
+
+        let results : any
+        if(data.jsonValue != undefined) {
+          results = JSON.parse(data.jsonValue)
+          this.documents = JSON.parse(results.documents)
+        }
+        this.formGroupLT = this.formBuilder.group({
+          projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
+          projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}],
+          country: [{value: results?.country, disabled: this.isReadOnly}],
+          city: [{value: results?.city, disabled: this.isReadOnly}],
+          projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}],
+          projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}],
+          amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}],
+          funding: [{value: results?.funding, disabled: this.isReadOnly}],
+          nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}],
+          contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}],
+          bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}],
+
+          problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}],
+          problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}],
+          targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}],
+          reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}],
+          whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}],
+          overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}],
+          midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}],
+          immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}],
+          activities: [{value: results?.activities, disabled: this.isReadOnly}],
+          risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}],
+          partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}],
+          changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}],
+          structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}],
+          totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}],
+          documents: [{value: results?.documents, disabled: this.isReadOnly}],
+
+          grantId: [{value: results?.grantId}],
+          processInstanceId: [{value: results?.processInstanceId}],
+          definitionKey: [{value: results?.definitionKey}],
+          status: [{value: results?.status}],
+        });
+      }, error => {
+        console.log(error)
+      })
+    } else {this.setEmptyForm()}
+  }
+
+  setEmptyForm() {
     this.formGroupLT = this.formBuilder.group({
       projectTitle: [null, [Validators.required]],
       projectDuration: [null],
@@ -91,11 +140,10 @@ export class LongTermApplicationComponent implements OnInit {
       this.formGroupLT.patchValue({documents: value});
     }
     const formData = this.formGroupLT.value;
-    console.log('formData', formData)
 
     let formDataR: { [key: string]: string } = {
-      key: "application",
-      values: JSON.stringify(formData),
+      type: "application",
+      jsonValue: JSON.stringify(formData),
     }
 
     this.tempDataService.createTempData(formDataR).subscribe(res => {

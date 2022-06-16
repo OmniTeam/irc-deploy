@@ -53,7 +53,7 @@ export class PlanningLearningGrantComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.countries = this.countriesService.getListOfAllCountries();
+    this.countries = this.countriesService.getListOfAvailableCountries();
 
     if (this.isReadOnly || this.taskStatus == 'draft') {
       this.grantProcessService.getPlanningAndLearningRecord(this.grantId).subscribe((data: any) => {

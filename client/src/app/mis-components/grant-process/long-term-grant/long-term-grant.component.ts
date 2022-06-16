@@ -17,6 +17,7 @@ export class LongTermGrantComponent implements OnInit {
 
   taskRecord: any;
   grantId: string;
+  applicationId: string;
   definitionKey: string;
   processInstanceId: string;
 
@@ -69,6 +70,9 @@ export class LongTermGrantComponent implements OnInit {
           });
         } else {
           this.isApplication = true
+          // this.isApplication = false
+          // this.applicationId = "91a34504-b694-4e90-922d-59495dc7d952"
+          // this.isReviewApplication = true
         }
       });
   }

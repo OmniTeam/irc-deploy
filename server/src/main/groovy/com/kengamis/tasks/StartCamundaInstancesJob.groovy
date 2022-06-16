@@ -6,6 +6,7 @@ import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
 import com.kengamis.Program
 import com.kengamis.ProgramPartner
+import com.kengamis.Temp
 import grails.util.Holders
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -17,6 +18,7 @@ class StartCamundaInstancesJob extends Script {
     static String camundaApiUrl = Holders.grailsApplication.config.camundaUrl as String
     static String CRVPF_REPORTING = "CRVPF_REPORTING"
     static String GRANT_PROCESS = "GRANT_PROCESS"
+    static String LONG_TERM_GRANT = "LONG_TERM_GRANT"
 
     static queryUserRoles = "SELECT user.username, user.email,role.authority as role, kenga_group.name as group_program " +
             "FROM user INNER JOIN user_role ON user.id = user_role.user_id " +
@@ -27,9 +29,9 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
-        reportingJob()
-        planningAndLearningGrantJob()
-        //longtermGrantJob()
+//        reportingJob()
+//        planningAndLearningGrantJob()
+        longTermGrantJob()
         return null
     }
 
@@ -159,42 +161,46 @@ class StartCamundaInstancesJob extends Script {
         }
     }
 
-    static longtermGrantJob() {
-        GrantLetterOfInterest.findAllByStatus("not_started").each { grant ->
+    static longTermGrantJob() {
+        Temp.findByType('application' ).each { temp ->
 
-            def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
+            //def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
 
             try {
-                if (r.size() > 0) {
+               // if (r.size() > 0) {
 
                     def slurper = new JsonSlurper()
-                    def orgInfo = slurper.parseText(grant.organisation)
-                    def applicantEmail = orgInfo['email']
+                    def values = slurper.parseText(temp.jsonValue)
+                    println values
+                    /* def orgInfo = slurper.parseText(grant.organisation)
+                     def applicantEmail = orgInfo['email']
 
-                    def edEmail = []
-                    def programTeamEmail = []
-                    def program = Program.get(grant.program)
+                     def edEmail = []
+                     def programTeamEmail = []
+                     def program = Program.get(grant.program)
 
                     r.each {
                         if (it['role'] == "ROLE_ED") edEmail << it['email']
                         if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
-                    }
+                    }*/
 
                     boolean started = startProcessInstance([
-                            GrantId          : grant.id,
-                            ApplicationId    : grant.program,
-                            Applicant        : applicantEmail,
-                            ProgramTeam      : programTeamEmail[0],
-                            ExecutiveDirector: edEmail[0]
-                    ], GRANT_PROCESS)
+                            GrantId          : values['grantId'],
+                            ApplicationId    : temp.id,
+                            Applicant        : "brunojay001@gmail.com",
+                            ProgramTeam      : "brunojay001@gmail.com",
+                            ExecutiveDirector: "brunojay001@gmail.com"
+                    ], LONG_TERM_GRANT)
 
 
                     if (started) {
                         print "================ started grant process instance ================"
-                        grant.status = 'started'
-                        grant.save()
+                        //grant.status = 'started'
+                        //grant.save(flush: true, failOnError: true)
+                        temp.type = 'application-started'
+                        temp.save(flush: true, failOnError: true)
                     }
-                }
+                //}
             } catch (e) {
                 e.printStackTrace()
             }

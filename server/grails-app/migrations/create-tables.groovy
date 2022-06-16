@@ -2995,9 +2995,9 @@ databaseChangeLog = {
                 constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tempPK")
             }
 
-            column(name: "values", type: "LONGTEXT")
+            column(name: "json_value", type: "LONGTEXT")
 
-            column(name: "key", type: "VARCHAR(255)") {
+            column(name: "type", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
         }

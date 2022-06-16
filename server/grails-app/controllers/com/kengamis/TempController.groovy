@@ -23,12 +23,13 @@ class TempController {
         respond tempService.list(params), model:[tempCount: tempService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond tempService.get(id)
     }
 
     @Transactional
     def save(Temp temp) {
+        println temp.errors
         if (temp == null) {
             render status: NOT_FOUND
             return
@@ -51,6 +52,7 @@ class TempController {
 
     @Transactional
     def update(Temp temp) {
+        println temp.errors
         if (temp == null) {
             render status: NOT_FOUND
             return

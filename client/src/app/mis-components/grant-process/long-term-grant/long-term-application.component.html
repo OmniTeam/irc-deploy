@@ -1,4 +1,4 @@
-<form [formGroup]="formGroupLT" (ngSubmit)="submitLetter()">
+<form [formGroup]="formGroupLT" (ngSubmit)="submitLetter()" *ngIf="formGroupLT">
 
   <h3 style="margin-left: 40px;">A. The Proposed Project</h3>
   <div class="card">
@@ -12,7 +12,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Title"
                     type="text"
@@ -33,7 +33,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Project Duration"
                     type="text"
@@ -53,7 +53,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <ng-select class="form-control form-control-sm"
-                             [disabled]="isReadOnly"
+
                              name="datatable_length"
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
@@ -77,7 +77,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <ng-select class="form-control form-control-sm"
-                             [disabled]="isReadOnly"
+
                              name="datatable_length"
                              aria-controls="datatable"
                              style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
@@ -104,7 +104,7 @@
                 <div class=" input-group input-group-merge">
                   <input
                     class="form-control"
-                    [disabled]="isReadOnly"
+
                     placeholder="Project proposed"
                     type="date"
                     style="padding-left: 10px;"
@@ -120,7 +120,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Amount"
                     type="number"
@@ -139,7 +139,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Amount"
                     type="number"
@@ -156,7 +156,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <textarea
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Funding"
                     style="padding-left: 10px;"
@@ -175,7 +175,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Name"
                     type="text"
@@ -197,7 +197,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
-                    [disabled]="isReadOnly"
+
                     class="form-control"
                     placeholder="Contact details"
                     type="text"
@@ -221,7 +221,7 @@
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="Name of the Bank:&#10;Bank Address:&#10;Title of the Account:&#10;Account Number:&#10;SWIFT CODE:"
@@ -248,7 +248,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -264,7 +264,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -283,13 +283,13 @@
   <div class="card">
     <div class="card-body">
       <div style="margin: 20px;">
-      <div class="row">
-        <div class="col-sm-6">
-          <label>Who are your target population?</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>Who are your target population?</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -297,15 +297,15 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.targetPopulation.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <label>Why them?</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+          <div class="col-sm-6">
+            <label>Why them?</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="Rational for why you will focus on the specified target groups above"
@@ -313,17 +313,17 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.reasonForTargetPopulation.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <label>What will change in their lives?</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>What will change in their lives?</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="What will be the tangible difference for them because of the program"
@@ -331,15 +331,15 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.whatChangeExpected.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <label>What is your overall goal?</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+          <div class="col-sm-6">
+            <label>What is your overall goal?</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="The long term change you want to see in one sentence"
@@ -347,17 +347,17 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.overallGoal.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <label>List at least 3 major mid-term changes you want to see (above 1 year)</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>List at least 3 major mid-term changes you want to see (above 1 year)</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -365,15 +365,15 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.midtermChanges.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <label>List at least 5 immediate changes you want to see after activity implementation</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+          <div class="col-sm-6">
+            <label>List at least 5 immediate changes you want to see after activity implementation</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -381,17 +381,17 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.immediateChanges.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <label>What activities will you undertake to achieve the above changes?</label>
-          <div class="form-group ">
-            <div class=" input-group input-group-merge">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>What activities will you undertake to achieve the above changes?</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -399,10 +399,10 @@
                 rows="5"
                 [ngClass]="{ 'is-invalid': submitted && f.activities.errors }"
               ></textarea>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -417,7 +417,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -442,7 +442,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder="Please include both those you work with or not. State the need for collaborating with these organizations"
@@ -466,7 +466,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -485,7 +485,7 @@
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
-                [disabled]="isReadOnly"
+
                 class="form-control"
                 style="padding-left: 10px;"
                 placeholder=""
@@ -508,7 +508,7 @@
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <textarea
-              [disabled]="isReadOnly"
+
               class="form-control"
               style="padding-left: 10px;"
               placeholder="Remember to complete a detail budget on the excel sheet using CRVPF approved format"
@@ -542,7 +542,7 @@
                     id="detailedBudget"
                     (change)="handleFileInput($event)">
                   <button
-                    *ngIf="isReadOnly"
+                    *ngIf="isReadOnly && documents.detailedBudget!=null"
                     type="button"
                     (click)="fileUploadService.downloadFile(documents.detailedBudget)"
                     class="btn btn-link">{{fileUploadService.getFileName(documents.detailedBudget)}}  <i
@@ -563,7 +563,7 @@
                     id="workplan"
                     (change)="handleFileInput($event)">
                   <button
-                    *ngIf="isReadOnly"
+                    *ngIf="isReadOnly && documents.workplan!=null"
                     type="button"
                     (click)="fileUploadService.downloadFile(documents.workplan)"
                     class="btn btn-link">{{fileUploadService.getFileName(documents.workplan)}}  <i
@@ -586,7 +586,7 @@
                     id="framework"
                     (change)="handleFileInput($event)">
                   <button
-                    *ngIf="isReadOnly"
+                    *ngIf="isReadOnly && documents.framework!=null"
                     type="button"
                     (click)="fileUploadService.downloadFile(documents.framework)"
                     class="btn btn-link">{{fileUploadService.getFileName(documents.framework)}}  <i
@@ -607,7 +607,7 @@
                     id="clusterGuideline"
                     (change)="handleFileInput($event)">
                   <button
-                    *ngIf="isReadOnly"
+                    *ngIf="isReadOnly && documents.clusterGuideline!=null"
                     type="button"
                     (click)="fileUploadService.downloadFile(documents.clusterGuideline)"
                     class="btn btn-link">{{fileUploadService.getFileName(documents.clusterGuideline)}}  <i
@@ -630,7 +630,7 @@
                     id="mou"
                     (change)="handleFileInput($event)">
                   <button
-                    *ngIf="isReadOnly"
+                    *ngIf="isReadOnly && documents.mou!=null"
                     type="button"
                     (click)="fileUploadService.downloadFile(documents.mou)"
                     class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i
@@ -652,7 +652,7 @@
                     id="staffMembers"
                     (change)="handleFileInput($event)">
                   <button
-                    *ngIf="isReadOnly"
+                    *ngIf="isReadOnly && documents.staffMembers!=null"
                     type="button"
                     (click)="fileUploadService.downloadFile(documents.staffMembers)"
                     class="btn btn-link">{{fileUploadService.getFileName(documents.staffMembers)}}  <i
@@ -671,7 +671,7 @@
   <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
   <input class="form-control" type="hidden" formControlName="status" [ngModel]="status">
 
-  <div class="row">
+  <div class="row" *ngIf="!isReadOnly">
     <div class="col-lg-12 bottom_buttons_row"
          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
       <button class="btn btn-danger" (click)="cancel()">Cancel</button>
