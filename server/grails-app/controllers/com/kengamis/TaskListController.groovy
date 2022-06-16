@@ -63,19 +63,25 @@ class TaskListController {
 
             def currentUserGroup = KengaUserGroup.findAllByUser(currentUser).collect { it.kengaGroup.name }.join(",")
             def casee = ''
+            def assignee = ''
 
             //def c1 = userGroup.contains(groupId)
             boolean c2 = false
             if (task.processDefKey == "CRVPF_REPORTING") {
                 if (task.taskDefinitionKey == "Review_Program_Report" || task.taskDefinitionKey == "Approve_Report") {
+                    assignee = "PROGRAM_OFFICER"
                     if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (task.taskDefinitionKey == "Submit_Report" || task.taskDefinitionKey == "Submit_Final_Report") {
+                    assignee = "${taskPartner.cluster}-${taskProgram.title}"
                     c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
                 } else if (task.taskDefinitionKey == "Review_Performance_Report") {
+                    assignee = "MEAL"
                     c2 = userRoles.contains("ROLE_MEAL")
                 } else if (task.taskDefinitionKey == "Review_Finance_Report" || task.taskDefinitionKey == "Disburse_Funds") {
+                    assignee = "FINANCE"
                     c2 = userRoles.contains("ROLE_FINANCE")
                 } else if (task.taskDefinitionKey == "Approve_Fund_Disbursement") {
+                    assignee = "Executive Director"
                     c2 = userRoles.contains("ROLE_ED")
                 }
                 casee = taskPartner?.cluster
@@ -83,13 +89,16 @@ class TaskListController {
                 if (task.taskDefinitionKey == "Review_and_Conduct_Due_Diligence" ||
                         task.taskDefinitionKey == "Review_Concept" ||
                         task.taskDefinitionKey == "Review_Report") {
-
+                    assignee = "PROGRAM_OFFICER"
                     if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (task.taskDefinitionKey == "Provide_Learning_Grant") {
+                    assignee = "FINANCE"
                     c2 = userRoles.contains("ROLE_FINANCE")
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
+                    assignee = "Executive Director"
                     c2 = userRoles.contains("ROLE_ED")
                 } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
+                    assignee = "APPLICANT"
                     if (userRoles.contains("ROLE_APPLICANT")) {
                         def applicantEmail = ''
                         if (grant != null) applicantEmail = orgInfo['email']
@@ -115,6 +124,7 @@ class TaskListController {
                           grantId          : grantId,
                           programName      : taskProgram.title,
                           case             : casee,
+                          assignee         : assignee,
                           endDate          : endDate,
                           groupId          : groupId,
                           reportingPeriod  : period,

@@ -7,6 +7,7 @@ import {CountriesService} from "../../../services/countries.service";
 import {v4 as uuid} from 'uuid';
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
 import {UsersService} from "../../../services/users.service";
+import {Validator} from "../../../helpers/validator";
 
 @Component({
   selector: 'app-create-program-partners',
@@ -17,6 +18,7 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
 
   formGroup: FormGroup;
   submitted = false;
+  inValidNumber = false;
   formData: any;
   programs = [];
   countries = [];
@@ -36,18 +38,19 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfAvailableCountries();
     this.formGroup = this.formBuilder.group({
-      program: [''],
-      cluster: [''],
-      organisation: [''],
-      physicalAddress: [''],
-      organisationType: [''],
-      nameContactPerson: [''],
-      telephoneContactPerson: [''],
-      emailContactPerson: [''],
-      country: [''],
-      city: [''],
-      dataCollector: [''],
-      organisationsInvolved: ['']
+      program: [null, [Validators.required]],
+      cluster: [null, [Validators.required]],
+      organisation: [null],
+      physicalAddress: [null],
+      organisationType: [null],
+      nameContactPerson: [null],
+      telephoneContactPerson: [null, [Validators.required]],
+      emailContactPerson: [null, [Validators.required, Validators.email]],
+      country: [null],
+      city: [null],
+      dataCollector: [null],
+      organisationsInvolved: [null],
+      areaOfOperation: [null]
     });
     this.programPartnersService.getPrograms().subscribe((data) => {
       this.programs = data;
@@ -107,8 +110,12 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
     }
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue) {
-    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue);
+  validateNumber(value) {
+    this.inValidNumber = Validator.telephoneNumber(value)
+  }
+
+  cellEditor(rowId, tdId, key: string, oldValue, type?:string) {
+    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type);
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {

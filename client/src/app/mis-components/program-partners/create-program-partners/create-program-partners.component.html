@@ -158,6 +158,29 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
+                      Area of Operation
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Area of Operation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="areaOfOperation"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
                       Name of Contact Person
                     </label>
                   </div>
@@ -189,11 +212,17 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder="Telephone"
+                            placeholder="Telephone Number"
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="telephoneContactPerson"
+                            (ngModelChange)="validateNumber($event)"
+                            [ngClass]="{ 'is-invalid': inValidNumber }"
                           >
+                        </div>
+                        <div *ngIf="submitted && inValidNumber">
+                          <div class="input-error">Please put a valid PhoneNumber
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -216,7 +245,12 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="emailContactPerson"
-                          >
+                            [ngClass]="{ 'is-invalid': submitted && f.emailContactPerson.errors }"
+                            email>
+                        </div>
+                        <div *ngIf="submitted && (f.emailContactPerson.errors || f.emailContactPerson.invalid)">
+                          <div class="input-error">Email must be in the format 'example@email.com'
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -338,7 +372,7 @@
                               <td class="text-center" [id]="org.id+'-d'">{{org.contact}}
                                 <div>
                                   <button class="btn btn-link" type="button"
-                                          (click)="cellEditor(org.id,org.id+'-d', 'orgContact', org.contact)"><i
+                                          (click)="cellEditor(org.id,org.id+'-d', 'orgContact', org.contact, 'telephone')"><i
                                     class="fas fa-pencil-alt"></i></button>
                                 </div>
                               </td>

@@ -112,6 +112,29 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
+                      Where is the organization located?
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder=" Physical Address"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="physicalAddress"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
                       Type of Organisation
                     </label>
                   </div>
@@ -135,7 +158,7 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Where is the organization located?
+                      Area of Operation
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -144,10 +167,10 @@
                         <div class=" input-group input-group-merge">
                           <input
                             class="form-control"
-                            placeholder=" Physical Address"
+                            placeholder="Area of Operation"
                             type="text"
                             style="padding-left: 10px;"
-                            formControlName="physicalAddress"
+                            formControlName="areaOfOperation"
                           >
                         </div>
                       </div>
@@ -181,7 +204,36 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
-                      Email of Contact Person
+                      Telephone number of contact person
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Telephone Number"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="telephoneContactPerson"
+                            (change)="validateNumber($event)"
+                            [value]="f.telephoneContactPerson.value | phone"
+                            [ngClass]="{ 'is-invalid': inValidNumber }"
+                          >
+                        </div>
+                        <div *ngIf="submitted && inValidNumber">
+                          <div class="input-error">Please put a valid PhoneNumber</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Email address of contact person
                     </label>
                   </div>
                   <div class="col-md-6">
@@ -194,30 +246,11 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="emailContactPerson"
-                          >
+                            [ngClass]="{ 'is-invalid': submitted && f.emailContactPerson.errors }"
+                            email>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-row">
-                  <div class="col-md-3" style="padding-top: 10px;">
-                    <label>
-                      Telephone of contact person
-                    </label>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Telephone"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="telephoneContactPerson"
-                          >
+                        <div *ngIf="submitted && (f.emailContactPerson.errors || f.emailContactPerson.invalid)">
+                          <div class="input-error">Email must be in the format 'example@email.com'</div>
                         </div>
                       </div>
                     </div>

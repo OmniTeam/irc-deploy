@@ -6,7 +6,7 @@ import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
 import {ProgramService} from "../../services/program.service";
-import {MessagePagesComponent} from "../message-pages/message-pages.component";
+import {Validator} from "../../helpers/validator";
 
 @Component({
   selector: 'application-letter',
@@ -20,6 +20,7 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitted = false;
   loading: boolean;
+  inValidNumber: boolean;
 
   status = 'not_started';
   programs: any;
@@ -30,6 +31,9 @@ export class ApplicationLetterComponent implements OnInit {
 
   /*values*/
   program: string;
+
+  countries: any;
+  cities: any;
 
   /*json*/
   organisation: any = {};
@@ -50,14 +54,10 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.programService.getPrograms().subscribe((data)=>{
-      let results = []
-      if(data!=null) {
-        data.forEach((it)=>{
-          results.push({id: it.id, name: it.title})
-        })
-      }
-      this.programs = results;
+    this.countries = this.countriesService.getListOfAvailableCountries();
+
+    this.programService.getPrograms().subscribe((data) => {
+      this.programs = data;
     })
 
     if (this.isReadOnly) {
@@ -79,6 +79,10 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
+    if (this.organisation.email != null || this.organisation.email != undefined) {
+      console.log('Invalid');
+      return;
+    }
 
     let formData: { [key: string]: string } = {
       program: this.program,
@@ -111,12 +115,19 @@ export class ApplicationLetterComponent implements OnInit {
       }
       this.success = false;
       this.error = false;
+      this.submitted = false;
     }, 3000);
   }
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
     this.uploadFile(files.item(0), event.target.id);
+  }
+
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
+      this.cities = response.data;
+    }, error => console.log(error))
   }
 
   uploadFile(file, id) {
@@ -136,6 +147,10 @@ export class ApplicationLetterComponent implements OnInit {
     }, error => {
       console.log(error)
     });
+  }
+
+  validateNumber(value) {
+    this.inValidNumber = Validator.telephoneNumber(value)
   }
 
   cancel() {

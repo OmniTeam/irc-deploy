@@ -7,6 +7,7 @@ import {CountriesService} from "../../../services/countries.service";
 import {v4 as uuid} from 'uuid';
 import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
 import {UsersService} from "../../../services/users.service";
+import {Validator} from "../../../helpers/validator";
 
 @Component({
   selector: 'app-edit-program-partners',
@@ -17,6 +18,7 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
 
   formGroup: FormGroup;
   submitted = false;
+  inValidNumber = false;
   formData: any;
   programs = [];
   programPartnerId: any;
@@ -42,14 +44,15 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
         cluster: [results?.cluster, [Validators.required]],
         organisation: [results?.organisation],
         physicalAddress: [results?.physicalAddress],
-        emailContactPerson: [results?.emailContactPerson],
-        telephoneContactPerson: [results?.telephoneContactPerson],
+        emailContactPerson: [results?.emailContactPerson, [Validators.required, Validators.email]],
+        telephoneContactPerson: [results?.telephoneContactPerson, [Validators.required, Validators.pattern('/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/')]],
         organisationType: [results?.organisationType],
         country: [results?.country],
         nameContactPerson: [results?.nameContactPerson],
         city: [results?.city],
         dataCollector: [results?.dataCollector],
         organisationsInvolved: [results?.organisationsInvolved],
+        areaOfOperation: [results?.areaOfOperation]
       });
       this.usersService.getCurrentUser(results?.dataCollector).subscribe((data:any) => {
         this.username = data.names;
@@ -99,6 +102,10 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
       let id = uuid();
       this.organisationsInvolved.push({id: id, name: '', contact: ''});
     }
+  }
+
+  validateNumber(value) {
+    this.inValidNumber = Validator.telephoneNumber(value)
   }
 
   cellEditor(rowId, tdId, key: string, oldValue) {
