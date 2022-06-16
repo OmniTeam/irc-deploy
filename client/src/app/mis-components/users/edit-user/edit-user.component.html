@@ -270,7 +270,7 @@
                                                [clearable]="true"
                                     >
                                       <ng-option [value]="item.id" *ngFor="let item of partners">
-                                        {{item.name}}
+                                        {{item.cluster}}
                                       </ng-option>
                                     </ng-select>
                                     <div *ngIf="submitted && f.partner.errors" class="invalid-feedback">
