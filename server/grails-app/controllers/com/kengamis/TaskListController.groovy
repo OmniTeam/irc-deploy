@@ -35,6 +35,7 @@ class TaskListController {
                 if (it.key == 'StartDate') startDate = it.value
                 if (it.key == 'PartnerId') partnerId = it.value
                 if (it.key == 'GrantId') grantId = it.value
+                if (it.key == 'ApplicationId') grantId = it.value
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
                 if (it.key == 'GroupId') groupId = it.value
@@ -123,6 +124,7 @@ class TaskListController {
                           partnerId        : partnerId,
                           partnerName      : taskPartner.cluster,
                           programId        : programId,
+                          grantId          : grantId,
                           grantId          : grantId,
                           programName      : taskProgram.title,
                           case             : casee,

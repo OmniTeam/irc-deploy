@@ -23,6 +23,10 @@ export class GrantProcessService {
    *   get
    */
 
+  getAllLetterOfInterest() {
+    return this.http.get(`${this.letterOfInterest}`);
+  }
+
   getLetterOfInterest(id) {
     return this.http.get(`${this.letterOfInterest}/${id}/`);
   }

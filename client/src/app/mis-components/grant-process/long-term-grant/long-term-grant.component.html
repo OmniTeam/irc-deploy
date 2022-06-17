@@ -33,7 +33,7 @@
 
               <div *ngIf="isReviewApplication" class=" col">
                 <organizational-information [grantId]="grantId"></organizational-information>
-                <long-term-application [isReadOnly]="true" [grantId]="grantId" [applicationId]="applicationId"
+                <long-term-application [isReadOnly]="true" [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
                                        (statusChanged)="statusChangedHandler($event)"></long-term-application>

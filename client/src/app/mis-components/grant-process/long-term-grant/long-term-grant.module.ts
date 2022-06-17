@@ -10,9 +10,10 @@ import {NgSelectModule} from "@ng-select/ng-select";
 import {CommonModule} from "@angular/common";
 import {LongTermGrantRoutingModule} from "./long-term-grant-routing.module";
 import {GrantProcessModule} from "../grant-process.module";
+import {StartLongTermGrantComponent} from "./start-long-term-grant.component";
 
 @NgModule({
-  declarations: [LongTermGrantComponent, LongTermApplicationComponent],
+  declarations: [LongTermGrantComponent, LongTermApplicationComponent, StartLongTermGrantComponent],
   imports: [
     CommonModule,
     LongTermGrantRoutingModule,

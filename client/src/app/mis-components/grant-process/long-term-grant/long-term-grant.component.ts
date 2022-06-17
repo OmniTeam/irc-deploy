@@ -77,8 +77,8 @@ export class LongTermGrantComponent implements OnInit {
     console.log('status', status);
     this.taskRecord.status = status
     this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
-      console.log('successfully Submitted task');
-    }, error => console.log('submit task', error));
+      console.log('successfully updated task success');
+    }, error => console.log(error));
   }
 
   setData(data) {
@@ -86,7 +86,7 @@ export class LongTermGrantComponent implements OnInit {
     if (data.taskDefinitionKey === "Activity_0jrurkg") {
       this.isApplication = true;
     }
-    if (data.taskDefinitionKey === "Review") {
+    if (data.taskDefinitionKey === "Activity_0vdtxm6") {
       this.isReviewApplication = true;
     }
 

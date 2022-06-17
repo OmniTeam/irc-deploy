@@ -44,7 +44,6 @@ class TempController {
 
         try {
             tempService.save(temp)
-            startLongTermGrantJob(temp)
         } catch (ValidationException e) {
             respond temp.errors
             return
@@ -88,46 +87,23 @@ class TempController {
         render status: NO_CONTENT
     }
 
-    static startLongTermGrantJob(Temp temp) {
-        //def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
+    def getTempRecordByValue(String value) {
+        def query = "SELECT * FROM `temp` WHERE json_value LIKE '%${value}%'"
+        def results = AppHolder.withMisSql { rows(query as String) }
+        respond results
+    }
 
-        try {
-            // if (r.size() > 0) {
+    def startLongTermGrantJob() {
+        boolean started = StartCamundaInstancesJob.startProcessInstance([
+                GrantId          : "1e9ede07-1daf-4454-9af7-44dbd05dc95a",
+                ApplicationId    : "",
+                Applicant        : "brunojay001@gmail.com",
+                ProgramTeam      : "brunojay001@gmail.com",
+                ExecutiveDirector: "brunojay001@gmail.com"
+        ], "LONG_TERM_GRANT")
 
-            def slurper = new JsonSlurper()
-            def values = slurper.parseText(temp.jsonValue)
-            println values
-            /* def orgInfo = slurper.parseText(grant.organisation)
-             def applicantEmail = orgInfo['email']
-
-             def edEmail = []
-             def programTeamEmail = []
-             def program = Program.get(grant.program)
-
-            r.each {
-                if (it['role'] == "ROLE_ED") edEmail << it['email']
-                if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
-            }*/
-
-            boolean started = StartCamundaInstancesJob.startProcessInstance([
-                    GrantId          : values['grantId'],
-                    ApplicationId    : temp.id,
-                    Applicant        : "brunojay001@gmail.com",
-                    ProgramTeam      : "brunojay001@gmail.com",
-                    ExecutiveDirector: "brunojay001@gmail.com"
-            ], "LONG_TERM_GRANT")
-
-
-            if (started) {
-                print "================ started grant process instance ================"
-                //grant.status = 'started'
-                //grant.save(flush: true, failOnError: true)
-                temp.type = 'application-started'
-                temp.save(flush: true, failOnError: true)
-            }
-            //}
-        } catch (e) {
-            e.printStackTrace()
+        if (started) {
+            print "================ started grant process instance ================"
         }
     }
 
