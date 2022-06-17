@@ -225,7 +225,7 @@ export class SidebarComponent implements OnInit {
                 roles: ['ROLE_SUPER_ADMIN'],
                 children: [
                   {path: 'submitletterofinterest', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
-                  {path: 'grantProcess-longTerm', title: 'Long Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+                  {path: 'longTermGrantStart', title: 'Long Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
                 ]
               },
             ]

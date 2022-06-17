@@ -34,8 +34,4 @@ export class StartLongTermGrantComponent implements OnInit {
       console.log("Started long term grant",resp)
     })
   }
-
-  onSelectGrant(event) {
-    this.grantId = event
-  }
 }
