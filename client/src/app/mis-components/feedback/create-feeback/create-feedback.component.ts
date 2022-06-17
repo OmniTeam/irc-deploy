@@ -22,6 +22,8 @@ import {ProgramStaffService} from "../../../services/program-staff.service";
 export class CreateFeedbackComponent implements OnInit {
    nationalityValue: '';
    country_of_origin: any;
+   registra: any;
+
 
   constructor(
     private userService: UsersService,
@@ -42,6 +44,7 @@ export class CreateFeedbackComponent implements OnInit {
   formGroup: FormGroup
   submitted = false;
   staffs: any
+  selectedStaff: any;
   updateStatus: any;
 
   staff_Designation =[
@@ -572,6 +575,7 @@ export class CreateFeedbackComponent implements OnInit {
   ];
   referralDecisionPoint: any;
   underReview: string;
+  staffId: any;
 
   get f() {
     return this.formGroup.controls;
@@ -670,7 +674,7 @@ export class CreateFeedbackComponent implements OnInit {
 
     let newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
-      nameOfRegister: formData.nameOfRegister,
+      nameOfRegister: this.registra,
       staffDesignation: formData.staffDesignation,
       typeOfFeedback: formData.typeOfFeedback,
       location: formData.location,
@@ -761,6 +765,17 @@ export class CreateFeedbackComponent implements OnInit {
     });
   }
 
+  getDesignation() {
+    let staffId = this.staffId;
+    this.userService.getCurrentUser(staffId).subscribe(data => {
+      this.selectedStaff = data
+      this.registra = this.selectedStaff.names
+      this.formGroup.get('staffDesignation').setValue(this.selectedStaff.designation)
+
+      // this.formGroup.get('nameOfRegister').setValue(this.selectedStaff.names)
+    });
+  }
+
   checkForAnonStatus(event) {
     if (event === 'Yes') {
       document.getElementById("detailsForUser").hidden = true
@@ -780,10 +795,10 @@ export class CreateFeedbackComponent implements OnInit {
   }
 
   changeChannelPreferred(event) {
-    if (event === 'Email Address') {
+    if (event === 'Email (ADDRESS)') {
       document.getElementById("phone").hidden = true
       document.getElementById("email").hidden = false
-    } else if(event === 'Phone Call' || event === 'SMS'){
+    } else if(event === 'Telephone (NUMBER)' || event === 'Whatsapp'){
       document.getElementById('phone').hidden = false
       document.getElementById('email').hidden = true
     } else {
@@ -829,6 +844,7 @@ export class CreateFeedbackComponent implements OnInit {
 
   /*Save feedback for later*/
 
+
   saveForm() {
     this.clicked = true;
     this.submitted = true;
@@ -861,7 +877,7 @@ export class CreateFeedbackComponent implements OnInit {
     let newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: formData.nameOfRegister,
-      staffDesignation: formData.staffDesignation,
+      staffDesignation:  this.registra,
       typeOfFeedback: formData.typeOfFeedback,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
       location: formData.location,
@@ -995,4 +1011,6 @@ export class CreateFeedbackComponent implements OnInit {
       this.project_sites = this.project_sites_karamoja
     }
   }
+
+
 }
