@@ -495,13 +495,29 @@
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Name Register"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="nameOfRegister"
+<!--                          <input-->
+<!--                            class="form-control"-->
+<!--                            placeholder="Name Register"-->
+<!--                            type="text"-->
+<!--                            style="padding-left: 10px;"-->
+<!--                            formControlName="nameOfRegister"-->
+<!--                          >-->
+
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder=""
+                                     formControlName="nameOfRegister"
+                                     [(ngModel)]="staffId"
+                                     (ngModelChange)="getDesignation()"
+                                     [searchable]="true"
+                                     [clearable]="true"
                           >
+                            <ng-option [value]="item.id" *ngFor="let item of this.staffs">
+                              {{item.names}}
+                            </ng-option>
+                          </ng-select>
                         </div>
                       </div>
                     </div>
@@ -955,7 +971,7 @@
                                            [searchable]="true"
                                            [clearable]="true"
                                 >
-                                  <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
+                                  <ng-option [value]="item.name" *ngFor="let item of irc_list">
                                     {{item.name}}
                                   </ng-option>
                                 </ng-select>
@@ -983,26 +999,26 @@
                           <div class="col-md-12">
                             <div class="form-group ">
                               <div class=" input-group input-group-merge">
-<!--                                <input-->
-<!--                                  class="form-control"-->
-<!--                                  placeholder=""-->
-<!--                                  type="text"-->
-<!--                                  style="padding-left: 10px;"-->
-<!--                                  formControlName="referredOrganization"-->
-<!--                                >-->
-                                <ng-select class="form-control form-control-sm"
-                                           aria-controls="datatable"
-                                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                           [multiple]="false"
-                                           placeholder=""
-                                           formControlName="ircReferredTo"
-                                           [searchable]="true"
-                                           [clearable]="true"
+                                <input
+                                  class="form-control"
+                                  placeholder=""
+                                  type="text"
+                                  style="padding-left: 10px;"
+                                  formControlName="ircReferredTo"
                                 >
-                                  <ng-option [value]="item.name" *ngFor="let item of irc_list">
-                                    {{item.name}}
-                                  </ng-option>
-                                </ng-select>
+<!--                                <ng-select class="form-control form-control-sm"-->
+<!--                                           aria-controls="datatable"-->
+<!--                                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"-->
+<!--                                           [multiple]="false"-->
+<!--                                           placeholder=""-->
+<!--                                           formControlName="ircReferredTo"-->
+<!--                                           [searchable]="true"-->
+<!--                                           [clearable]="true"-->
+<!--                                >-->
+<!--                                  <ng-option [value]="item.name" *ngFor="let item of irc_list">-->
+<!--                                    {{item.name}}-->
+<!--                                  </ng-option>-->
+<!--                                </ng-select>-->
 
                               </div>
                             </div>
@@ -1338,11 +1354,25 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <div class=" input-group input-group-merge">
-                                <input
-                                  class=" form-control"
-                                  type="text"
-                                  formControlName="nameOfReferringOfficer"
-                                />
+<!--                                <input-->
+<!--                                  class=" form-control"-->
+<!--                                  type="text"-->
+<!--                                  formControlName="nameOfReferringOfficer"-->
+<!--                                />-->
+
+                                <ng-select class="form-control form-control-sm"
+                                           aria-controls="datatable"
+                                           style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                           [multiple]="false"
+                                           placeholder=""
+                                           formControlName="nameOfReferringOfficer"
+                                           [searchable]="true"
+                                           [clearable]="true"
+                                >
+                                  <ng-option [value]="item.names" *ngFor="let item of this.staffs">
+                                    {{item.names}}
+                                  </ng-option>
+                                </ng-select>
                               </div>
                             </div>
                           </div>

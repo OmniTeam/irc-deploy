@@ -63,7 +63,8 @@ class UserController {
                     names   : user.names,
                     groups  : kengaGroups,
                     role    : roles,
-                    enabled : user.enabled
+                    enabled : user.enabled,
+                    designation : user.designation,
             ]
         }
         respond users
