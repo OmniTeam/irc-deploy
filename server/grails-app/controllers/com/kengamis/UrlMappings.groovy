@@ -60,7 +60,7 @@ class UrlMappings {
         post "/$controller/uploadExcel(.$format)?"(action:"uploadExcel")
         get "/$controller/getByProcessInstanceId(.$format)?"(action:"getByProcessInstanceId")
         get "/$controller/getDataCollector(.$format)?"(action:"getDataCollector")
-        get "/$controller/startLongTermGrantJob(.$format)?"(action:"startLongTermGrantJob")
+        get "/$controller/startLongTermGrantJob/$grantId(.$format)?"(action:"startLongTermGrantJob")
         get "/$controller/getTempRecordByValue/$value(.$format)?"(action:"getTempRecordByValue")
 
 

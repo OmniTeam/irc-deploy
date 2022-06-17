@@ -16,8 +16,8 @@ export class TempDataService {
     return this.http.get(`${this.baseurl}`);
   }
 
-  startLongTermGrantJob(): Observable<any> {
-    return this.http.get(`${this.baseurl}/startLongTermGrantJob`);
+  startLongTermGrantJob(grantId): Observable<any> {
+    return this.http.get(`${this.baseurl}/startLongTermGrantJob/${grantId}`);
   }
 
   createTempData(formData): Observable<any> {

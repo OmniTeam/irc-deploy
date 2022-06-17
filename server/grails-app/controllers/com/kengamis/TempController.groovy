@@ -93,18 +93,25 @@ class TempController {
         respond results
     }
 
-    def startLongTermGrantJob() {
-        boolean started = StartCamundaInstancesJob.startProcessInstance([
-                GrantId          : "1e9ede07-1daf-4454-9af7-44dbd05dc95a",
-                ApplicationId    : "",
-                Applicant        : "brunojay001@gmail.com",
-                ProgramTeam      : "brunojay001@gmail.com",
-                ExecutiveDirector: "brunojay001@gmail.com"
-        ], "LONG_TERM_GRANT")
+    def startLongTermGrantJob(String grantId) {
+        def message = ["Failed"]
+        GrantLetterOfInterest grant = GrantLetterOfInterest.findByIdAndStatus(grantId, 'started')
+        if(grant) {
+            boolean started = StartCamundaInstancesJob.startProcessInstance([
+                    GrantId          : grantId,
+                    ApplicationId    : "",
+                    Applicant        : "brunojay001@gmail.com",
+                    ProgramTeam      : "brunojay001@gmail.com",
+                    ExecutiveDirector: "brunojay001@gmail.com"
+            ], "LONG_TERM_GRANT")
 
-        if (started) {
-            print "================ started grant process instance ================"
+            if (started) {
+                grant.status = "on-longterm"
+                grant.save()
+                message = ["Started grant process instance"]
+            }
         }
+        respond message
     }
 
 }
