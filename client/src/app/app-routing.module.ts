@@ -237,7 +237,6 @@ const routes: Routes = [
         },
         loadChildren: () => import('./mis-components/entity-views/edit-entity-views/edit-entity-views.module').then(m => m.EditEntityViewsModule)
       },
-
       {
         path: 'entityView/showData/:id', canActivate: [AuthGuard],
         data: {
@@ -341,7 +340,8 @@ const routes: Routes = [
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER,]
         },
         loadChildren: () => import('./mis-components/users/edit-user/edit-user.module').then(m => m.EditUserModule)
-      }, {
+      },
+      {
         path: 'roles', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
@@ -479,7 +479,6 @@ const routes: Routes = [
         },
         loadChildren: () => import('./mis-components/project-milestones/edit-project-milestones/edit-project-milestones.module').then(m => m.EditProjectMilestonesModule)
       },
-
       {
         path: 'programPartner', canActivate: [AuthGuard],
         data: {
@@ -514,7 +513,6 @@ const routes: Routes = [
         },
         loadChildren: () => import('./mis-components/program-partners/edit-program-partners/edit-program-partners.module').then(m => m.EditProgramPartnersModule)
       },
-
       {
         path: 'entityViewFilter', canActivate: [AuthGuard],
         data: {

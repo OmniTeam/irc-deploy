@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']).then(() =>
               window.location.reload()
           );
+          this.authService.getUserPartners();
         }
       }, error => {
         console.log(error.status);

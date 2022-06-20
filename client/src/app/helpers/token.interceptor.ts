@@ -3,8 +3,8 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import {AuthService} from '../services/auth.service';
-import {Router} from "@angular/router";
-import {AlertService} from "../services/alert";
+import {Router} from '@angular/router';
+import {AlertService} from '../services/alert';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -28,8 +28,8 @@ export class TokenInterceptor implements HttpInterceptor {
         errorMessage = 'Error: ' + error.status + '\\nMessage:' + error.message;
       }
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        errorMessage = 'Invalid username or password or your session has expired!';
-        this.alertService.error(errorMessage);
+        // errorMessage = 'Invalid username or password or your session has expired!';
+        // this.alertService.error(errorMessage);
         this.authService.doLogoutUser();
         this.router.navigate(['login']);
       } else {

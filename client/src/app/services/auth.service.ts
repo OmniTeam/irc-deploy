@@ -28,7 +28,6 @@ export class AuthService {
       .pipe(
         tap(user => {
           this.doLoginUser(user.username, user);
-          this.getUserPartners();
         }),
         mapTo(true),
         catchError(error => {
@@ -70,6 +69,7 @@ export class AuthService {
   private getRefreshToken() {
     return localStorage.getItem(this.REFRESH_TOKEN);
   }
+
   getUserPartners() {
     this.programPartnersService.getUserPartners().subscribe((result) => {
         this.userPartners = result.toString();
