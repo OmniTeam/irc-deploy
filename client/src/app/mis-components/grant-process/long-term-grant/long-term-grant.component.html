@@ -14,10 +14,12 @@
         <div class="row">
 
           <div class="card-header" style="width: 100%; text-align: -webkit-center;">
-            <div [style.display]="isApplication ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">LONG TERM GRANT APPLICATION</h6></div>
-            <div [style.display]="isReviewApplication ? 'block' : 'none'"><h6
-              class="h2 d-inline-block mb-0">REVIEW LONG TERM GRANT APPLICATION</h6></div>
+            <div [style.display]="isApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">LONG TERM GRANT APPLICATION</h6></div>
+            <div [style.display]="isReviewApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW LONG TERM GRANT APPLICATION</h6></div>
+            <div [style.display]="isMakeCorrectionsApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">MAKE REVISIONS ON APPLICATION</h6></div>
+            <div [style.display]="isReviewRevisedApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW REVISED APPLICATION</h6></div>
+            <div [style.display]="isMakeRevisionsEdApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">MAKE REVISIONS FROM ED</h6></div>
+            <div [style.display]="isApproveApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE APPLICATION</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
@@ -123,6 +125,130 @@
                       <button class="btn btn-success" (click)="submit('reviewApplication', 'completed')">Submit Review</button>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div *ngIf="isMakeCorrectionsApplication" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="false"
+                                       [isMakeCorrections]="true"
+                                       [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
+              </div>
+              <div *ngIf="isReviewRevisedApplication" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="true" [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
+                <h3 style="margin-left: 40px;">Reviewer Action</h3>
+                <div class="card">
+                  <div class="row" style="margin: 10px;">
+                    <div class="col-sm-12">
+                      <div class="row">
+                        <div class="col">
+                          <p>What was the decision of the review process?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of decisionReviewRevisedApplication">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" style="margin: 10px;">
+                        <label for="reviewerAcComments">Provide any comments</label>
+                        <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerAcComments"
+                                  [(ngModel)]="reviewerComments"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="error || success" class="row align-items-center text-center"
+                       style="display: flex; justify-content: center;">
+                    <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+                      <strong>Error:</strong> {{errorMessage}}
+                    </div>
+                    <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+                      <strong>Success:</strong> {{successMessage}}
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="!isReadOnly">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                      <button class="btn btn-warning" (click)="submit('reviewRevisedApplication', 'draft')">Save for Later</button>
+                      <button class="btn btn-success" (click)="submit('reviewRevisedApplication', 'completed')">Submit Review</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="isMakeRevisionsEdApplication" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="false"
+                                       [isMakeCorrections]="true"
+                                       [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
+              </div>
+              <div *ngIf="isApproveApplication" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="true" [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
+                <h3 style="margin-left: 40px;">Approver Action</h3>
+                <div class="card">
+                  <div class="row" style="margin: 10px;">
+                    <div class="col-sm-12">
+                      <div class="row">
+                        <div class="col">
+                          <p>What was the decision of the review process?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of decisionApproveApplication">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" style="margin: 10px;">
+                        <label for="approverComments">Provide any comments</label>
+                        <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="approverComments"
+                                  [(ngModel)]="approverComments"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="error || success" class="row align-items-center text-center"
+                       style="display: flex; justify-content: center;">
+                    <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+                      <strong>Error:</strong> {{errorMessage}}
+                    </div>
+                    <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+                      <strong>Success:</strong> {{successMessage}}
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="!isReadOnly">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                      <button class="btn btn-warning" (click)="submit('approveApplication', 'draft')">Save for Later</button>
+                      <button class="btn btn-success" (click)="submit('approveApplication', 'completed')">Submit Review</button>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 

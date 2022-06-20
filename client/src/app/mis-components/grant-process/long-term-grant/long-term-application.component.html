@@ -541,13 +541,13 @@
                     style="padding-left: 10px;"
                     id="detailedBudget"
                     (change)="handleFileInput($event)">
-                  <button
-                    *ngIf="isReadOnly && documents.detailedBudget!=null"
-                    type="button"
-                    (click)="fileUploadService.downloadFile(documents.detailedBudget)"
-                    class="btn btn-link">{{fileUploadService.getFileName(documents.detailedBudget)}}  <i
-                    class="fas fa-download"></i></button>
                 </div>
+                <button
+                  *ngIf="documents.detailedBudget!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.detailedBudget)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.detailedBudget)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
             <div class="col-sm-6">
@@ -562,13 +562,13 @@
                     style="padding-left: 10px;"
                     id="workplan"
                     (change)="handleFileInput($event)">
-                  <button
-                    *ngIf="isReadOnly && documents.workplan!=null"
-                    type="button"
-                    (click)="fileUploadService.downloadFile(documents.workplan)"
-                    class="btn btn-link">{{fileUploadService.getFileName(documents.workplan)}}  <i
-                    class="fas fa-download"></i></button>
                 </div>
+                <button
+                  *ngIf="documents.workplan!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.workplan)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.workplan)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -585,13 +585,13 @@
                     style="padding-left: 10px;"
                     id="framework"
                     (change)="handleFileInput($event)">
-                  <button
-                    *ngIf="isReadOnly && documents.framework!=null"
-                    type="button"
-                    (click)="fileUploadService.downloadFile(documents.framework)"
-                    class="btn btn-link">{{fileUploadService.getFileName(documents.framework)}}  <i
-                    class="fas fa-download"></i></button>
                 </div>
+                <button
+                  *ngIf="documents.framework!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.framework)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.framework)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
             <div class="col-sm-6">
@@ -606,13 +606,13 @@
                     style="padding-left: 10px;"
                     id="clusterGuideline"
                     (change)="handleFileInput($event)">
-                  <button
-                    *ngIf="isReadOnly && documents.clusterGuideline!=null"
-                    type="button"
-                    (click)="fileUploadService.downloadFile(documents.clusterGuideline)"
-                    class="btn btn-link">{{fileUploadService.getFileName(documents.clusterGuideline)}}  <i
-                    class="fas fa-download"></i></button>
                 </div>
+                <button
+                  *ngIf="documents.clusterGuideline!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.clusterGuideline)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.clusterGuideline)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -629,13 +629,13 @@
                     style="padding-left: 10px;"
                     id="mou"
                     (change)="handleFileInput($event)">
-                  <button
-                    *ngIf="isReadOnly && documents.mou!=null"
-                    type="button"
-                    (click)="fileUploadService.downloadFile(documents.mou)"
-                    class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i
-                    class="fas fa-download"></i></button>
                 </div>
+                <button
+                  *ngIf="documents.mou!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.mou)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
             <div class="col-sm-6">
@@ -651,13 +651,13 @@
                     style="padding-left: 10px;"
                     id="staffMembers"
                     (change)="handleFileInput($event)">
-                  <button
-                    *ngIf="isReadOnly && documents.staffMembers!=null"
-                    type="button"
-                    (click)="fileUploadService.downloadFile(documents.staffMembers)"
-                    class="btn btn-link">{{fileUploadService.getFileName(documents.staffMembers)}}  <i
-                    class="fas fa-download"></i></button>
                 </div>
+                <button
+                  *ngIf="documents.staffMembers!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.staffMembers)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.staffMembers)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>

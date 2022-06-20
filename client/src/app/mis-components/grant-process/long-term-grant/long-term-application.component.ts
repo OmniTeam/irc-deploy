@@ -15,6 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 export class LongTermApplicationComponent implements OnInit {
   @Input() isReadOnly: boolean;
+  @Input() isMakeCorrections: boolean;
   @Input() grantId: string;
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
@@ -53,48 +54,53 @@ export class LongTermApplicationComponent implements OnInit {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfAvailableCountries();
 
-    if (this.isReadOnly) {
+    if (this.isReadOnly || this.isMakeCorrections) {
       this.tempDataService.getTempRecordByValue(this.grantId).subscribe((data: any) => {
-        if(data!=null) {
-          let results: any
-          if (data[0].json_value != undefined) {
-            results = JSON.parse(data[0].json_value)
-            this.documents = JSON.parse(results.documents)
-          }
-          this.formGroupLT = this.formBuilder.group({
-            projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
-            projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}],
-            country: [{value: results?.country, disabled: this.isReadOnly}],
-            city: [{value: results?.city, disabled: this.isReadOnly}],
-            projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}],
-            projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}],
-            amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}],
-            funding: [{value: results?.funding, disabled: this.isReadOnly}],
-            nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}],
-            contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}],
-            bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}],
+        if (data.some(x => x.type === 'application')) {
+          data.forEach(it => {
+            if (it.type === 'application') {
+              let results: any
+              if (it.json_value != undefined) {
+                results = JSON.parse(it.json_value)
+                if (results.documents != undefined) this.documents = JSON.parse(results.documents)
+              }
+              console.log(results.documents)
+              this.formGroupLT = this.formBuilder.group({
+                projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
+                projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}],
+                country: [{value: results?.country, disabled: this.isReadOnly}],
+                city: [{value: results?.city, disabled: this.isReadOnly}],
+                projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}],
+                projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}],
+                amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}],
+                funding: [{value: results?.funding, disabled: this.isReadOnly}],
+                nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}],
+                contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}],
+                bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}],
 
-            problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}],
-            problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}],
-            targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}],
-            reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}],
-            whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}],
-            overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}],
-            midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}],
-            immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}],
-            activities: [{value: results?.activities, disabled: this.isReadOnly}],
-            risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}],
-            partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}],
-            changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}],
-            structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}],
-            totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}],
-            documents: [{value: results?.documents, disabled: this.isReadOnly}],
+                problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}],
+                problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}],
+                targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}],
+                reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}],
+                whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}],
+                overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}],
+                midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}],
+                immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}],
+                activities: [{value: results?.activities, disabled: this.isReadOnly}],
+                risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}],
+                partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}],
+                changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}],
+                structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}],
+                totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}],
+                documents: [{value: results?.documents, disabled: this.isReadOnly}],
 
-            grantId: [{value: results?.grantId}, [Validators.required]],
-            processInstanceId: [{value: results?.processInstanceId}],
-            definitionKey: [{value: results?.definitionKey}],
-            status: [{value: results?.status}],
-          });
+                grantId: [{value: results?.grantId}, [Validators.required]],
+                processInstanceId: [{value: results?.processInstanceId}],
+                definitionKey: [{value: results?.definitionKey}],
+                status: [{value: results?.status}],
+              });
+            }
+          })
         }
       }, error => {
         console.log(error)
@@ -160,23 +166,43 @@ export class LongTermApplicationComponent implements OnInit {
     }
 
     this.tempDataService.getTempRecordByValue(this.grantId).subscribe(data => {
-      if(data==null || data.length==0) {
-         this.tempDataService.createTempData(formDataR).subscribe(res => {
-           console.log("response", res)
-           this.submitted = true
-           this.error = false;
-           this.success = true;
-           this.successMessage = "Saved Application";
-           this.alertService.success(this.successMessage);
-           this.statusChanged.emit(this.status);
-         }, error => {
-           this.error = true;
-           this.success = false;
-           this.errorMessage = "Failed to save Application";
-           this.alertService.error(this.errorMessage);
-           console.log(error);
-         });
-      } else console.log("Record already exists")
+      if (data.some(x => x.type === 'application')) {
+        data.forEach(it => {
+          if (it.type === 'application') {
+            this.tempDataService.updateTempData(formDataR, it.id).subscribe(res => {
+              console.log("response", res)
+              this.submitted = true
+              this.error = false;
+              this.success = true;
+              this.successMessage = "Updated Application";
+              this.alertService.success(this.successMessage);
+              this.statusChanged.emit(this.status);
+            }, error => {
+              this.error = true;
+              this.success = false;
+              this.errorMessage = "Failed to update Application";
+              this.alertService.error(this.errorMessage);
+              console.log(error);
+            });
+          }
+        });
+      } else {
+        this.tempDataService.createTempData(formDataR).subscribe(res => {
+          console.log("response", res)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Saved Application";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.errorMessage = "Failed to save Application";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
+        });
+      }
     });
 
     setTimeout(() => {

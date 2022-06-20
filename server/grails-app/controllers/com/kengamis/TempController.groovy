@@ -1,16 +1,11 @@
 package com.kengamis
 
 import com.kengamis.tasks.StartCamundaInstancesJob
-import grails.validation.ValidationException
-import groovy.json.JsonSlurper
-
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
-
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class TempController {
@@ -93,6 +88,7 @@ class TempController {
         respond results
     }
 
+    @Transactional
     def startLongTermGrantJob(String grantId) {
         def message = ["Failed"]
         GrantLetterOfInterest grant = GrantLetterOfInterest.findByIdAndStatus(grantId, 'started')
@@ -106,8 +102,9 @@ class TempController {
             ], "LONG_TERM_GRANT")
 
             if (started) {
+                println "=========Started long term grant instance ========="
                 grant.status = "on-longterm"
-                grant.save()
+                grant.save(flush: true, failOnError: true)
                 message = ["Started grant process instance"]
             }
         }

@@ -27,7 +27,7 @@ class TaskListController {
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
-            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = ''
+            def partnerSetupId = '', startDate = '', partnerId = '', programId = '', endDate = '', groupId = '', period = '', grantId = '', applicationId = ''
 
             variables['data'].each {
                 if (it.key == 'PartnerSetupId') partnerSetupId = it.value
@@ -35,7 +35,7 @@ class TaskListController {
                 if (it.key == 'StartDate') startDate = it.value
                 if (it.key == 'PartnerId') partnerId = it.value
                 if (it.key == 'GrantId') grantId = it.value
-                if (it.key == 'ApplicationId') grantId = it.value
+                if (it.key == 'ApplicationId') applicationId = it.value
                 if (it.key == 'ProgramId') programId = it.value
                 if (it.key == 'EndDate') endDate = it.value
                 if (it.key == 'GroupId') groupId = it.value
@@ -111,7 +111,9 @@ class TaskListController {
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
             } else if (task.processDefKey == "LONG_TERM_GRANT") {
-                ///TODO
+                if (grant != null) casee = orgInfo['name']
+                startDate = grant?.dateCreated
+                endDate = grant?.lastUpdated
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
@@ -124,7 +126,6 @@ class TaskListController {
                           partnerId        : partnerId,
                           partnerName      : taskPartner.cluster,
                           programId        : programId,
-                          grantId          : grantId,
                           grantId          : grantId,
                           programName      : taskProgram.title,
                           case             : casee,
@@ -266,6 +267,13 @@ class TaskListController {
         if (deactivateUserAccountTask.size() > 0) {
             deactivateUserAccountTask.each {
                 deactivateUser(it)
+            }
+        }
+
+        TaskList[] createPartnerAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_partner_account' }.findAll()
+        if (createPartnerAccountTask.size() > 0) {
+            createPartnerAccountTask.each {
+                //createPartnerAccount(it)
             }
         }
     }

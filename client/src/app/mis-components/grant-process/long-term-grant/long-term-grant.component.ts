@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TaskListService} from "../../../services/task-list.service";
@@ -14,6 +14,10 @@ import {LongTermGrantService} from "../../../services/long-term-grant-service";
 export class LongTermGrantComponent implements OnInit {
   isApplication: boolean;
   isReviewApplication: boolean;
+  isMakeCorrectionsApplication: boolean;
+  isReviewRevisedApplication: boolean;
+  isMakeRevisionsEdApplication: boolean;
+  isApproveApplication: boolean;
 
   taskRecord: any;
   grantId: string;
@@ -52,15 +56,17 @@ export class LongTermGrantComponent implements OnInit {
   areTheyAdhering: any;
   doesItAdhere: any;
   isConceptInline: any;
+  approverComments: any;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private taskListService: TaskListService,
-    private alertService:AlertService,
-    private tempDataService:TempDataService,
-    private longTermGrantService:LongTermGrantService,
-  ) { }
+    private alertService: AlertService,
+    private tempDataService: TempDataService,
+    private longTermGrantService: LongTermGrantService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.isApplication = false;
@@ -96,11 +102,23 @@ export class LongTermGrantComponent implements OnInit {
 
   setData(data) {
     this.taskRecord = data
-    if (data.taskDefinitionKey === "Activity_0jrurkg") {
+    if (data.taskDefinitionKey === "Submit_Long_Term_Grant") {
       this.isApplication = true;
     }
-    if (data.taskDefinitionKey === "Activity_0vdtxm6") {
+    if (data.taskDefinitionKey === "Review_Long-term_Grant_Application") {
       this.isReviewApplication = true;
+    }
+    if (data.taskDefinitionKey === "Make_Revisions_On_Application") {
+      this.isMakeCorrectionsApplication = true;
+    }
+    if (data.taskDefinitionKey === "Review_Revised_Application") {
+      this.isReviewRevisedApplication = true;
+    }
+    if (data.taskDefinitionKey === "Make_Revisions_From_ED") {
+      this.isMakeRevisionsEdApplication = true;
+    }
+    if (data.taskDefinitionKey === "Approve_Application") {
+      this.isApproveApplication = true;
     }
 
     this.applicationId = data.id;
@@ -118,6 +136,12 @@ export class LongTermGrantComponent implements OnInit {
       case 'reviewApplication':
         this.submitReviewApplication(status)
         break
+      case 'reviewRevisedApplication':
+        this.submitReviewRevisedApplication(status)
+        break
+      case 'approveApplication':
+        this.approveApplication(status)
+        break
     }
 
     setTimeout(() => {
@@ -133,6 +157,11 @@ export class LongTermGrantComponent implements OnInit {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
         processInstanceId: this.processInstanceId,
+        isConceptInline: this.isConceptInline,
+        doesItAdhere: this.doesItAdhere,
+        areTheyAdhering: this.areTheyAdhering,
+        decision: this.decisionOfReviewProcess,
+        comments: this.reviewerComments,
         status: status
       }
 
@@ -144,23 +173,27 @@ export class LongTermGrantComponent implements OnInit {
       //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
       //const params = new HttpParams().set('id', formData.processInstanceId);
       this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
-        if (response[0] != null) {
-          this.tempDataService.updateTempData(formDataR, response[0].id).subscribe((data) => {
-            console.log('response', data)
-            this.error = false;
-            this.success = true;
-            this.successMessage = "Updated";
-            this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
-            this.statusChangedHandler(status)
-            this.alertService.success(this.successMessage);
-            this.router.navigate(['/home']);
-          }, error => {
-            this.error = true;
-            this.errorMessage = "Failed to update";
-            this.alertService.error(this.errorMessage);
-            this.success = false;
-            console.log(error);
-          });
+        if (response.some(x => x.type === 'reviewApplication')) {
+          response.forEach(it => {
+            if (it.type === 'reviewApplication') {
+              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Updated";
+                this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.error = true;
+                this.errorMessage = "Failed to update";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          })
         } else {
           this.tempDataService.createTempData(formDataR).subscribe((data) => {
             console.log('response', data)
@@ -168,6 +201,136 @@ export class LongTermGrantComponent implements OnInit {
             this.success = true;
             this.successMessage = "Submitted";
             this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
+  }
+
+  submitReviewRevisedApplication(status) {
+    if (this.decisionOfReviewProcess != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        decision: this.decisionOfReviewProcess,
+        comments: this.reviewerComments,
+        status: status
+      }
+
+      let formDataR: { [key: string]: string } = {
+        type: "reviewRevisedApplication",
+        jsonValue: JSON.stringify(formData),
+      }
+
+      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
+      //const params = new HttpParams().set('id', formData.processInstanceId);
+      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+        if (response.some(x => x.type === 'reviewRevisedApplication')) {
+          response.forEach(it => {
+            if (it.type === 'reviewRevisedApplication') {
+              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Updated";
+                this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.error = true;
+                this.errorMessage = "Failed to update";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          })
+        } else {
+          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
+  }
+
+  approveApplication(status) {
+    if (this.decisionOfReviewProcess != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        decision: this.decisionOfReviewProcess,
+        comments: this.approverComments,
+        status: status
+      }
+
+      let formDataR: { [key: string]: string } = {
+        type: "approveApplication",
+        jsonValue: JSON.stringify(formData),
+      }
+
+      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
+      //const params = new HttpParams().set('id', formData.processInstanceId);
+      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+        if (response.some(x => x.type === 'approveApplication')) {
+          response.forEach(it => {
+            if (it.type === 'approveApplication') {
+              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Updated";
+                this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.error = true;
+                this.errorMessage = "Failed to update";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          })
+        } else {
+          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
