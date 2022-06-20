@@ -30,6 +30,7 @@ class ProgramPartner {
         city nullable: true
         physicalAddress nullable: true
         areaOfOperation nullable: true
+        organisationsInvolved nullable: true
     }
 
     static mapping = {
