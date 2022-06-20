@@ -273,7 +273,7 @@ class TaskListController {
         TaskList[] createPartnerAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_partner_account' }.findAll()
         if (createPartnerAccountTask.size() > 0) {
             createPartnerAccountTask.each {
-                //createPartnerAccount(it)
+                createPartnerAccount(it)
             }
         }
     }
@@ -311,6 +311,37 @@ class TaskListController {
     }
 
     @Transactional
+    def createPartnerAccount(TaskList task) {
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+
+        variables['data'].each {
+            if (it.key == 'GrantId') {
+                GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
+                def program = ProgramPartner.findById(grant.program)
+                def orgInfo = slurper.parseText(grant.organisation)
+
+                ProgramPartner p = new ProgramPartner()
+                p.cluster = program.cluster
+                p.emailContactPerson = orgInfo['email'] as String
+                p.nameContactPerson = orgInfo['names'] as String
+                p.telephoneContactPerson = orgInfo['contact'] as String
+                p.organisation = orgInfo['name'] as String
+                p.physicalAddress = orgInfo['physicalAddress'] as String
+                p.organisationType = orgInfo['organizationType'] as String
+                p.dataCollector = getDataCollector()
+                p.save(flush: true, failOnError: true)
+
+                println "New Partner created => cluster ${program.cluster}, organization: ${orgInfo['name']}"
+
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
+            }
+        }
+    }
+
+
+    @Transactional
     def deactivateUser(TaskList task) {
         def slurper = new JsonSlurper()
         def variables = slurper.parseText(task.inputVariables)
@@ -346,6 +377,16 @@ class TaskListController {
             increment_value = "0" + increment_value
         }
         return increment_value
+    }
+
+    String getDataCollector() {
+        def dataCollector = ""
+        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
+        def results = AppHolder.withMisSql { rows(query as String) }
+        if (results.size() > 0) {
+            dataCollector = results.first()
+        }
+        return dataCollector
     }
 
     @Transactional

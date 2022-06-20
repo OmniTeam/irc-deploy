@@ -1,14 +1,10 @@
 package com.kengamis
 
-import grails.validation.ValidationException
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
-
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class ProgramPartnerController {
@@ -168,12 +164,19 @@ class ProgramPartnerController {
     }
 
     def getDataCollector() {
-        def dataCollector = ""
-        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
+        def dataCollectors = []
+        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` )"
         def results = AppHolder.withMisSql { rows(query as String) }
         if (results.size() > 0) {
-            dataCollector = results.first()
+            results.each {
+                User user = User.findById(it['user_id'] as String)
+                if (firstTwo(user.username) == "PR") dataCollectors << it
+            }
         }
-        respond dataCollector
+        respond dataCollectors.first()
+    }
+
+    def firstTwo(String str) {
+        return str.length() < 2 ? str : str.substring(0, 2);
     }
 }
