@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {LongTermGrantComponent} from './long-term-grant.component';
+import {StartLongTermGrantComponent} from "./start-long-term-grant.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: LongTermGrantComponent
+    component: StartLongTermGrantComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class LongTermGrantRoutingModule { }
+export class StartLongTermGrantRoutingModule { }

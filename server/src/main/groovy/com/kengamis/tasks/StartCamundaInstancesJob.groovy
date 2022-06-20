@@ -6,6 +6,7 @@ import com.kengamis.GrantLetterOfInterest
 import com.kengamis.PartnerSetup
 import com.kengamis.Program
 import com.kengamis.ProgramPartner
+import com.kengamis.Temp
 import grails.util.Holders
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
@@ -84,6 +85,7 @@ class StartCamundaInstancesJob extends Script {
                         boolean started = startProcessInstance([
                                 PartnerSetupId   : setup.id,
                                 PartnerId        : setup.partnerId,
+                                PartnerName      : partner.cluster,
                                 Assignee         : partner.emailContactPerson,
                                 Meal             : mealEmail,
                                 Finance          : financeEmail,
@@ -112,7 +114,7 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static planningAndLearningGrantJob() {
-        GrantLetterOfInterest.findAllByStatus("not_started").each { it ->
+        GrantLetterOfInterest.findAllByStatus("not_started").each { grant ->
 
             def r = AppHolder.withMisSql { rows(queryUserRoles.toString()) }
 
@@ -120,14 +122,14 @@ class StartCamundaInstancesJob extends Script {
                 if (r.size() > 0) {
 
                     def slurper = new JsonSlurper()
-                    def orgInfo = slurper.parseText(it.organisation)
+                    def orgInfo = slurper.parseText(grant.organisation)
                     def applicantEmail = orgInfo['email']
                     def organization = orgInfo['name']
 
                     def edEmail = []
                     def financeEmail = []
                     def programTeamEmail = []
-                    def program = Program.get(it.program)
+                    def program = Program.get(grant.program)
 
                     r.each {
                         if (it['role'] == "ROLE_ED") edEmail << it['email']
@@ -136,8 +138,8 @@ class StartCamundaInstancesJob extends Script {
                     }
 
                     boolean started = startProcessInstance([
-                            GrantId          : it.id,
-                            ProgramId        : it.program,
+                            GrantId          : grant.id,
+                            ProgramId        : grant.program,
                             Applicant        : applicantEmail,
                             ProgramTeam      : programTeamEmail[0],
                             Finance          : financeEmail[0],
@@ -148,8 +150,8 @@ class StartCamundaInstancesJob extends Script {
 
                     if (started) {
                         print "================ started grant process instance ================"
-                        it.status = 'started'
-                        it.save()
+                        grant.status = 'started'
+                        grant.save()
                     }
                 }
             } catch (e) {
