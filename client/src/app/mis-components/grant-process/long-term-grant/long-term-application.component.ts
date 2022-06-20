@@ -56,7 +56,6 @@ export class LongTermApplicationComponent implements OnInit {
     if (this.isReadOnly) {
       this.tempDataService.getTempRecordByValue(this.grantId).subscribe((data: any) => {
         if(data!=null) {
-          console.log(data[0])
           let results: any
           if (data[0].json_value != undefined) {
             results = JSON.parse(data[0].json_value)

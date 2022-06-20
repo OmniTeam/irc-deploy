@@ -27,9 +27,22 @@ export class LongTermGrantComponent implements OnInit {
     {name: 'Yes', value: 'Yes'},
     {name: 'No', value: 'No'}
   ];
-  decision = [
-    {name: 'Proceed with application', value: 'Yes'},
-    {name: 'Unsuccessful', value: 'No'}
+  decisionReviewApplication = [
+    {name: 'Proceed with application', value: 'proceed'},
+    {name: 'Ask for changes in Application', value: 'changes'},
+    {name: 'Reject Application', value: 'reject'}
+  ];
+  decisionReviewRevisedApplication = [
+    {name: 'Proceed with application', value: 'proceed'},
+    {name: 'Reject Application', value: 'reject'}
+  ];
+  decisionMakeRevisions = [
+    {name: 'Proceed with application', value: 'submit'},
+    {name: 'Reject Application', value: 'reject'}
+  ];
+  decisionApproveApplication = [
+    {name: 'Proceed with application', value: 'approve'},
+    {name: 'Ask for corrections', value: 'corrections'}
   ];
   success: boolean;
   error: boolean;
@@ -123,16 +136,21 @@ export class LongTermGrantComponent implements OnInit {
         status: status
       }
 
-      let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
-      const params = new HttpParams().set('id', formData.processInstanceId);
-      this.longTermGrantService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
-        if (response?.results != null) {
-          this.longTermGrantService.updateReviewApplication(formData, response.results.id).subscribe((data) => {
+      let formDataR: { [key: string]: string } = {
+        type: "reviewApplication",
+        jsonValue: JSON.stringify(formData),
+      }
+
+      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
+      //const params = new HttpParams().set('id', formData.processInstanceId);
+      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+        if (response[0] != null) {
+          this.tempDataService.updateTempData(formDataR, response[0].id).subscribe((data) => {
             console.log('response', data)
             this.error = false;
             this.success = true;
             this.successMessage = "Updated";
-            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+            this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
@@ -144,12 +162,12 @@ export class LongTermGrantComponent implements OnInit {
             console.log(error);
           });
         } else {
-          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
+          this.tempDataService.createTempData(formDataR).subscribe((data) => {
             console.log('response', data)
             this.error = false;
             this.success = true;
             this.successMessage = "Submitted";
-            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+            this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);

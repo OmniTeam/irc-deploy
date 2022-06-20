@@ -133,7 +133,7 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/grantProcess/' + row.id + '/' + false]);
         break;
       case 'LONG_TERM_GRANT':
-        this.router.navigate(['/grantProcess-longTerm/' + row.id + '/' + false]);
+        this.router.navigate(['/longTermGrant/' + row.id + '/' + false]);
         break;
     }
   }
