@@ -132,6 +132,9 @@ export class HomeComponent implements OnInit {
       case 'GRANT_PROCESS':
         this.router.navigate(['/grantProcess/' + row.id + '/' + false]);
         break;
+      case 'LONG_TERM_GRANT':
+        this.router.navigate(['/longTermGrant/' + row.id + '/' + false]);
+        break;
     }
   }
 

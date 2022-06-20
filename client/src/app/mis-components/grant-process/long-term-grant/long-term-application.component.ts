@@ -4,6 +4,8 @@ import {CountriesService} from "../../../services/countries.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {Validator} from "../../../helpers/validator";
 import {TempDataService} from "../../../services/temp-data.service";
+import {AlertService} from "../../../services/alert";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'long-term-application',
@@ -13,11 +15,16 @@ import {TempDataService} from "../../../services/temp-data.service";
 
 export class LongTermApplicationComponent implements OnInit {
   @Input() isReadOnly: boolean;
+  @Input() isMakeCorrections: boolean;
   @Input() grantId: string;
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
-  @Input() taskStatus: string;
   @Output() statusChanged: EventEmitter<string> = new EventEmitter();
+
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+  successMessage: string;
 
   formGroupLT: FormGroup;
   submitted = false;
@@ -27,14 +34,18 @@ export class LongTermApplicationComponent implements OnInit {
   cities: any;
   documents: any = {};
   inValidNumber: boolean;
-  status = "not_started";
+  status = "completed";
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
-    public fileUploadService:FileUploadService,
-    private tempDataService:TempDataService,
-  ) { }
+    public fileUploadService: FileUploadService,
+    private tempDataService: TempDataService,
+    private alertService: AlertService
+  ) {
+  }
 
   get f() {
     return this.formGroupLT.controls;
@@ -43,6 +54,63 @@ export class LongTermApplicationComponent implements OnInit {
   ngOnInit(): void {
     this.countries = this.countriesService.getListOfAvailableCountries();
 
+    if (this.isReadOnly || this.isMakeCorrections) {
+      this.tempDataService.getTempRecordByValue(this.grantId).subscribe((data: any) => {
+        if (data.some(x => x.type === 'application')) {
+          data.forEach(it => {
+            if (it.type === 'application') {
+              let results: any
+              if (it.json_value != undefined) {
+                results = JSON.parse(it.json_value)
+                if (results.documents != undefined) this.documents = JSON.parse(results.documents)
+              }
+              console.log(results.documents)
+              this.formGroupLT = this.formBuilder.group({
+                projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
+                projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}],
+                country: [{value: results?.country, disabled: this.isReadOnly}],
+                city: [{value: results?.city, disabled: this.isReadOnly}],
+                projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}],
+                projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}],
+                amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}],
+                funding: [{value: results?.funding, disabled: this.isReadOnly}],
+                nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}],
+                contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}],
+                bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}],
+
+                problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}],
+                problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}],
+                targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}],
+                reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}],
+                whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}],
+                overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}],
+                midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}],
+                immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}],
+                activities: [{value: results?.activities, disabled: this.isReadOnly}],
+                risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}],
+                partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}],
+                changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}],
+                structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}],
+                totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}],
+                documents: [{value: results?.documents, disabled: this.isReadOnly}],
+
+                grantId: [{value: results?.grantId}, [Validators.required]],
+                processInstanceId: [{value: results?.processInstanceId}],
+                definitionKey: [{value: results?.definitionKey}],
+                status: [{value: results?.status}],
+              });
+            }
+          })
+        }
+      }, error => {
+        console.log(error)
+      })
+    } else {
+      this.setEmptyForm()
+    }
+  }
+
+  setEmptyForm() {
     this.formGroupLT = this.formBuilder.group({
       projectTitle: [null, [Validators.required]],
       projectDuration: [null],
@@ -72,7 +140,7 @@ export class LongTermApplicationComponent implements OnInit {
       totalProjectCost: [null],
       documents: [null],
 
-      grantId: [null],
+      grantId: [null, [Validators.required]],
       processInstanceId: [null],
       definitionKey: [null],
       status: [null],
@@ -81,31 +149,75 @@ export class LongTermApplicationComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-    if (this.formGroupLT.invalid) {
-      console.log('Invalid');
+    if (this.formGroupLT.invalid || this.inValidNumber) {
+      this.alertService.error("Please fill in all fields correctly");
       return;
     }
 
-    if(this.documents!=null) {
+    if (this.documents != null) {
       let value = JSON.stringify(this.documents)
       this.formGroupLT.patchValue({documents: value});
     }
     const formData = this.formGroupLT.value;
-    console.log('formData', formData)
 
     let formDataR: { [key: string]: string } = {
-      key: "application",
-      values: JSON.stringify(formData),
+      type: "application",
+      jsonValue: JSON.stringify(formData),
     }
 
-    this.tempDataService.createTempData(formDataR).subscribe(res => {
-      console.log("response",res)
+    this.tempDataService.getTempRecordByValue(this.grantId).subscribe(data => {
+      if (data.some(x => x.type === 'application')) {
+        data.forEach(it => {
+          if (it.type === 'application') {
+            this.tempDataService.updateTempData(formDataR, it.id).subscribe(res => {
+              console.log("response", res)
+              this.submitted = true
+              this.error = false;
+              this.success = true;
+              this.successMessage = "Updated Application";
+              this.alertService.success(this.successMessage);
+              this.statusChanged.emit(this.status);
+            }, error => {
+              this.error = true;
+              this.success = false;
+              this.errorMessage = "Failed to update Application";
+              this.alertService.error(this.errorMessage);
+              console.log(error);
+            });
+          }
+        });
+      } else {
+        this.tempDataService.createTempData(formDataR).subscribe(res => {
+          console.log("response", res)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Saved Application";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.errorMessage = "Failed to save Application";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
+        });
+      }
     });
+
+    setTimeout(() => {
+      if (this.success == true) {
+        this.formGroupLT.reset()
+        this.router.navigate(['/home']);
+      }
+      this.success = false;
+      this.error = false;
+    }, 3000);
 
   }
 
-  onSelectCountry(country){
-    this.countriesService.getCitiesForCountry(country).subscribe((response)=>{
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
       this.cities = response.data;
     }, error => console.log(error))
   }

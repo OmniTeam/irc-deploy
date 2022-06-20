@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
@@ -7,18 +7,32 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class TempDataService {
+  baseurl = `${environment.serverUrl}/temp`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getTempData(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/temp`);
+    return this.http.get(`${this.baseurl}`);
+  }
+
+  startLongTermGrantJob(grantId): Observable<any> {
+    return this.http.get(`${this.baseurl}/startLongTermGrantJob/${grantId}`);
   }
 
   createTempData(formData): Observable<any> {
-    return this.http.post(`${environment.serverUrl}/temp`, formData);
+    return this.http.post(`${this.baseurl}`, formData);
   }
 
   updateTempData(formData, id): Observable<any> {
-    return this.http.put(`${environment.serverUrl}/temp/${id}`, formData);
+    return this.http.put(`${this.baseurl}/${id}`, formData);
+  }
+
+  getTempDataRecord(id) {
+    return this.http.get(`${this.baseurl}/${id}`);
+  }
+
+  getTempRecordByValue(value): Observable<any> {
+    return this.http.get(`${this.baseurl}/getTempRecordByValue/${value}`);
   }
 }

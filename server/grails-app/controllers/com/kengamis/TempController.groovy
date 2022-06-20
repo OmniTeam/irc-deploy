@@ -1,14 +1,11 @@
 package com.kengamis
 
-import grails.validation.ValidationException
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
-
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class TempController {
@@ -20,15 +17,16 @@ class TempController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond tempService.list(params), model:[tempCount: tempService.count()]
+        respond tempService.list(params), model: [tempCount: tempService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond tempService.get(id)
     }
 
     @Transactional
     def save(Temp temp) {
+        println temp.errors
         if (temp == null) {
             render status: NOT_FOUND
             return
@@ -46,11 +44,12 @@ class TempController {
             return
         }
 
-        respond temp, [status: CREATED, view:"show"]
+        respond temp, [status: CREATED, view: "show"]
     }
 
     @Transactional
     def update(Temp temp) {
+        println temp.errors
         if (temp == null) {
             render status: NOT_FOUND
             return
@@ -68,7 +67,7 @@ class TempController {
             return
         }
 
-        respond temp, [status: OK, view:"show"]
+        respond temp, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -82,4 +81,34 @@ class TempController {
 
         render status: NO_CONTENT
     }
+
+    def getTempRecordByValue(String value) {
+        def query = "SELECT * FROM `temp` WHERE json_value LIKE '%${value}%'"
+        def results = AppHolder.withMisSql { rows(query as String) }
+        respond results
+    }
+
+    @Transactional
+    def startLongTermGrantJob(String grantId) {
+        def message = ["Failed"]
+        GrantLetterOfInterest grant = GrantLetterOfInterest.findByIdAndStatus(grantId, 'started')
+        if(grant) {
+            boolean started = StartCamundaInstancesJob.startProcessInstance([
+                    GrantId          : grantId,
+                    ApplicationId    : "",
+                    Applicant        : "brunojay001@gmail.com",
+                    ProgramTeam      : "brunojay001@gmail.com",
+                    ExecutiveDirector: "brunojay001@gmail.com"
+            ], "LONG_TERM_GRANT")
+
+            if (started) {
+                println "=========Started long term grant instance ========="
+                grant.status = "on-longterm"
+                grant.save(flush: true, failOnError: true)
+                message = ["Started grant process instance"]
+            }
+        }
+        respond message
+    }
+
 }

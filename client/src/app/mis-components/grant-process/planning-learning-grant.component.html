@@ -337,6 +337,16 @@
   <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
   <input class="form-control" type="hidden" formControlName="status" [ngModel]="status">
 
+  <div *ngIf="error || success" class="row align-items-center text-center"
+       style="display: flex; justify-content: center;">
+    <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+      <strong>Error:</strong> {{errorMessage}}
+    </div>
+    <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+      <strong>Success:</strong> {{successMessage}}
+    </div>
+  </div>
+
   <div class="row" *ngIf="!isReadOnly">
     <div class="col-lg-12 bottom_buttons_row"
          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
