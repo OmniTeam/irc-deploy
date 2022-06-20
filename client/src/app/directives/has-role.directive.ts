@@ -29,7 +29,7 @@ export class HasRoleDirective implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    let roles = this.authService.getUserRoles();
+    const roles = this.authService.getUserRoles();
     if (!roles) {
       // Remove element from DOM
       this.viewContainerRef.clear();

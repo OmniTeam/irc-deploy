@@ -110,6 +110,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getUserPartners();
     this.userRole = this.authService.getUserRoles();
     this.userPartner = this.authService.retrieveUserPartners();
     this.route.params.subscribe(params => {
