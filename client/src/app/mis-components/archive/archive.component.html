@@ -121,3 +121,112 @@
     </div>
   </div>
 </div>
+
+<!--<div class=" col-md-12 col-sm-12" style="margin-top: 40px;">-->
+<!--  <div class=" row">-->
+<!--    <div class=" col">-->
+
+<!--      <div class="card">-->
+<!--        <div class="card-header">-->
+<!--          <div class="row">-->
+<!--            <h3 style="margin-left: 40px;">ONGOING TASKS</h3>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="card-body col-sm-12">-->
+<!--          <div class="row">-->
+
+<!--            <div class="dataTables_wrapper py-4">-->
+<!--              <div class="row" style="display: flex; width: 100%">-->
+<!--                <div class="col-sm-6">-->
+<!--                  <div class="dataTables_length" id="datatable_length">-->
+<!--                    <label>-->
+<!--                      Show-->
+<!--                      <select-->
+<!--                        name="datatable_length"-->
+<!--                        aria-controls="datatable"-->
+<!--                        class="form-control form-control-sm"-->
+<!--                        (change)="entriesChange($event)"-->
+<!--                        style="width: 200%;"-->
+<!--                      >-->
+<!--                        <option value="10" [selected]="entries == 10">10</option>-->
+<!--                        <option value="25" [selected]="entries == 25">25</option>-->
+<!--                        <option value="50" [selected]="entries == 50">50</option>-->
+<!--                        <option value="-1" [selected]="entries == -1">All</option>-->
+<!--                      </select>-->
+<!--                      entries-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-sm-6">-->
+<!--                  <div id="datatable_filter" class="dataTables_filter">-->
+<!--                    <label>-->
+<!--                      <input-->
+<!--                        type="search"-->
+<!--                        class="form-control form-control-sm"-->
+<!--                        placeholder="Search Ongoing Tasks"-->
+<!--                        aria-controls="datatable"-->
+<!--                        (keyup)="onChangeSearch($event)"-->
+<!--                        (search)="onSearch($event)"-->
+<!--                        style="width: 200%;"-->
+<!--                      />-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div class="row" style="display: flex; margin-top: 10px; margin-bottom: 20px;">-->
+<!--                <div class="btn-group" role="group" aria-label="switch_button" style="margin-left: 20px;">-->
+<!--                  <button type="button" class="btn btn-default_btn" [class.active_btn]="isReferrals"-->
+<!--                          (click)="switchRowsData('referrals')">Referrals-->
+<!--                  </button>-->
+<!--                  <button type="button" class="btn btn-default_btn" [class.active_btn]="isFeedback"-->
+<!--                          (click)="switchRowsData('feedback')">Feedback-->
+<!--                  </button>-->
+<!--                  <button type="button" class="btn btn-default_btn" [class.active_btn]="isQuarterlyReport"-->
+<!--                          (click)="switchRowsData('quarterly_report')">Progress Report-->
+<!--                  </button>-->
+<!--                  <button type="button" class="btn btn-default_btn" [class.active_btn]="isActivityReport"-->
+<!--                          (click)="switchRowsData('activity_report')">Activity Report-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <ngx-datatable-->
+<!--                class="bootstrap selection-cell"-->
+<!--                [columnMode]="'force'"-->
+<!--                [headerHeight]="50"-->
+<!--                [footerHeight]="50"-->
+<!--                [rowHeight]="'auto'"-->
+<!--                [limit]="entries != -1 ? entries : undefined"-->
+<!--                [rows]="rows">-->
+
+<!--                <ngx-datatable-column name="Process" prop="task_type">-->
+<!--                  <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"-->
+<!--                               ngx-datatable-cell-template>-->
+<!--                    {{value | replace: '_' : ' '}}-->
+<!--                  </ng-template>-->
+<!--                </ngx-datatable-column>-->
+<!--                <ngx-datatable-column name="Task Name" prop="task_name">-->
+<!--                  <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"-->
+<!--                               ngx-datatable-cell-template>-->
+<!--                    {{value | replace: '_' : ' '}}-->
+<!--                  </ng-template>-->
+<!--                </ngx-datatable-column>-->
+<!--                <ngx-datatable-column name="Case" prop="task_case"></ngx-datatable-column>-->
+<!--                <ngx-datatable-column name="Assignee" prop="assignee"></ngx-datatable-column>-->
+<!--                <ngx-datatable-column name="Date assigned" prop="date_assigned">-->
+<!--                  <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"-->
+<!--                               ngx-datatable-cell-template>-->
+<!--                    {{ value | date: 'medium' }}-->
+<!--                  </ng-template>-->
+<!--                </ngx-datatable-column>-->
+<!--                <ngx-datatable-column name="Task Age" prop="task_age"></ngx-datatable-column>-->
+<!--              </ngx-datatable>-->
+
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

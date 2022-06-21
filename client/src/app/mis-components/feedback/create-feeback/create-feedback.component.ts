@@ -273,9 +273,6 @@ export class CreateFeedbackComponent implements OnInit {
       'name': 'Nigerian'
     },
     {
-      'name': 'Nigerian'
-    },
-    {
       'name': 'Rwandese'
     },
     {
