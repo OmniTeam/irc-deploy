@@ -353,9 +353,10 @@ class TaskListController {
                 def email = orgInfo['email'] as String
 
                 def user = User.findByEmail(email)
-                user.enabled = false
-                user.save(flush: true, failOnError: true)
-
+                if (user != null) {
+                    user.enabled = false
+                    user.save(flush: true, failOnError: true)
+                }
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
             }

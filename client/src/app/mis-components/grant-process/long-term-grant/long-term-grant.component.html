@@ -196,6 +196,7 @@
                                        [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
+                                       (valuesChanged)="variablesChangedHandler($event)"
                                        (statusChanged)="statusChangedHandler($event)"></long-term-application>
               </div>
               <div *ngIf="isApproveApplication" class=" col">

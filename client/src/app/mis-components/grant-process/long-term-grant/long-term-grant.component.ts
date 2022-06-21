@@ -100,6 +100,15 @@ export class LongTermGrantComponent implements OnInit {
     }, error => console.log(error));
   }
 
+  variablesChangedHandler(value: string) {
+    if(this.isMakeRevisionsEdApplication) {
+      this.taskRecord.outputVariables = '{"MakeRevisions": "' + value + '"}'
+      this.taskListService.updateTask(this.taskRecord, this.taskRecord.id).subscribe((data) => {
+        console.log('successfully updated task variables');
+      }, error => console.log(error));
+    }
+  }
+
   setData(data) {
     this.taskRecord = data
     if (data.taskDefinitionKey === "Submit_Long_Term_Grant") {

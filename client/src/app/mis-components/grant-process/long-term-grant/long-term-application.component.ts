@@ -6,6 +6,7 @@ import {Validator} from "../../../helpers/validator";
 import {TempDataService} from "../../../services/temp-data.service";
 import {AlertService} from "../../../services/alert";
 import {ActivatedRoute, Router} from "@angular/router";
+import {TaskListService} from "../../../services/task-list.service";
 
 @Component({
   selector: 'long-term-application',
@@ -20,6 +21,7 @@ export class LongTermApplicationComponent implements OnInit {
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
   @Output() statusChanged: EventEmitter<string> = new EventEmitter();
+  @Output() valuesChanged: EventEmitter<string> = new EventEmitter();
 
   error: boolean;
   success: boolean;
@@ -43,7 +45,8 @@ export class LongTermApplicationComponent implements OnInit {
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
     private tempDataService: TempDataService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private taskListService: TaskListService
   ) {
   }
 
@@ -250,4 +253,9 @@ export class LongTermApplicationComponent implements OnInit {
     this.formGroupLT.reset()
     this.submitted = false
   }
+
+  updateOutputVariables(value: string) {
+    if(this.isMakeCorrections) this.valuesChanged.emit(value);
+  }
+
 }
