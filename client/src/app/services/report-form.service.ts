@@ -69,4 +69,8 @@ export class ReportFormService {
   saveRecommendation(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/reportFormRecommendations`, formData);
   }
+
+  getMilestonePerformance(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/getMilestonePerformance`);
+  }
 }

@@ -97,7 +97,7 @@ class StartCamundaInstancesJob extends Script {
                                 StartDate     : activity.startDate,
                                 Case          : activity.milestone,
                                 Assignee      : activity.assignee,
-                                Name          : findUser.names,
+                                Name          : findUser?.names,
 
                         ], IRC_ACTIVITY_REPORT)
                         if (started) {
@@ -127,7 +127,7 @@ class StartCamundaInstancesJob extends Script {
                             StartDate     : referral.dateOfReferral,
                             Case          : referral.organizationReferredTo,
                             Assignee      : referral.assignee,
-                            Name          : findUser.names,
+                            Name          : findUser?.names,
 
                     ], IRC_REFERRAL)
 
@@ -151,7 +151,7 @@ class StartCamundaInstancesJob extends Script {
             boolean startInstance = true
             //find user by email
             def findUser = User.findByEmail(feed.assignee)
-            print(findUser.names)
+            print(findUser?.names)
 
             if (startInstance) {
                 try {
@@ -161,7 +161,7 @@ class StartCamundaInstancesJob extends Script {
                             StartDate     : feed.dateFeedbackReceived,
                             Case          : feed.typeOfFeedback,
                             Assignee      : feed.assignee,
-                            Name          : findUser.names
+                            Name          : findUser?.names
 
                     ], IRC_FEEDBACK)
 
