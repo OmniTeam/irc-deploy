@@ -2949,25 +2949,25 @@ databaseChangeLog = {
         }
     }
 
-    /*changeSet(author: "bruno (generated)", id: "1652342523636-12") {
+    changeSet(author: "bruno (generated)", id: "1652342523636-12") {
         addColumn(tableName: "program_category") {
             column(name: "form", type: "varchar(255)") {
                 constraints(nullable: "true")
             }
         }
-    }*/
+    }
 
     changeSet(author: "bruno (generated)", id: "1653346363278-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "program_id", tableName: "program_category")
     }
 
-    /*changeSet(author: "bruno (generated)", id: "16523423456677-12") {
+    changeSet(author: "bruno (generated)", id: "16523423456677-12") {
         addColumn(tableName: "project_milestone") {
             column(name: "form", type: "varchar(255)") {
                 constraints(nullable: "true")
             }
         }
-    }*/
+    }
 
     changeSet(author: "bruno (generated)", id: "16533462423566-28") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "program", tableName: "project_milestone")
