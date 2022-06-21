@@ -229,7 +229,7 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.id" *ngFor="let item of partnerUserRoles">
+                            <ng-option [value]="[item.id]" *ngFor="let item of partnerUserRoles">
                               {{item.authority}}
                             </ng-option>
                           </ng-select>

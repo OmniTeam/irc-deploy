@@ -166,6 +166,7 @@ export class TagsComponent implements OnInit {
       if (this.userRole.includes('ROLE_SUPER_ADMIN') || this.userRole.includes('ROLE_ADMIN') || this.userRole.includes('ROLE_STAFF_DATA_MANAGER') ) {
         this.rows = data;
       } else {
+        console.log(this.userPartners, 'partnerssssss');
         this.rows = data.filter(a => a.partnerId === this.userPartners);
       }
 

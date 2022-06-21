@@ -5,7 +5,7 @@
   (mouseover)="onMouseEnterSidenav()"
   (mouseout)="onMouseLeaveSidenav()"
 >
-  <perfect-scrollbar *ngIf="authService.isLoggedIn()">
+  <perfect-scrollbar *ngIf="this.authService.isUserLoggedIn">
     <div class="scrollbar-inner">
       <div class="sidenav-header d-flex align-items-center">
         <a class="navbar-brand" [routerLink]="['/home']">
