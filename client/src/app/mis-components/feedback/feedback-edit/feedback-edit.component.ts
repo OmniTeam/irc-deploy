@@ -73,9 +73,6 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
     {
       'name': 'Forwarded For Action'
     },
-    {
-      'name': 'Referral'
-    }
   ];
   location = [
     {
@@ -236,9 +233,6 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
     },
     {
       'name': 'Ethiopian'
-    },
-    {
-      'name': 'Nigerian'
     },
     {
       'name': 'Nigerian'
@@ -849,10 +843,10 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
   }
 
   changeChannelPreferred(event) {
-    if (event === 'Email Address') {
+    if (event === 'Email (ADDRESS)') {
       document.getElementById("phone").hidden = true
       document.getElementById("email").hidden = false
-    } else if(event === 'Phone Call' || event === 'SMS'){
+    } else if(event === 'Telephone (NUMBER)' || event === 'Whatsapp'){
       document.getElementById('phone').hidden = false
       document.getElementById('email').hidden = true
     } else {
@@ -881,13 +875,11 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       document.getElementById('referral').hidden = false
 
     } else if(event === 'Under Review' ) {
-
       document.getElementById('actionDetails').hidden = true
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
       this.underReview =  this.authService.getLoggedInUsername()
     } else {
-
       document.getElementById('actionDetails').hidden = true
       document.getElementById('assignee').hidden = true
       document.getElementById('referral').hidden = true
@@ -905,137 +897,6 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
     const formData = this.formGroup.value;
     if(this.underReview != undefined) this.formGroup.get('assignee').setValue(this.underReview)
 
-    //create a referral
-    let submitData: {[key:string]: string} = {
-      dateOfReferral: formData.dateFeedbackReceived,
-      nameOfReferringOfficer: formData.nameOfReferringOfficer,
-      reasonForReferral: formData.reasonForReferral,
-      organizationReferredTo: formData.organizationReferredTo,
-      followupNeeded: formData.followupNeeded,
-      status: 'Pending',
-      nameOfClientBeingReferred: formData.nameOfClient,
-      gender: formData.gender,
-      ageCategory: formData.age,
-      nationalityStatus: formData.nationalityStatus,
-      assignee: formData.assignee,
-      phoneNumber: formData.phoneNumber,
-      countryOfOrigin: formData.countryOfOrigin,
-      disability: formData.disability
-
-    }
-    //create feedback
-    let statusSave:string = formData.currentStatusOfFeedback
-
-    let newFormData: {[key:string]: string} = {
-      dateFeedbackReceived: formData.dateFeedbackReceived,
-      nameOfRegister: formData.nameOfRegister,
-      staffDesignation: formData.staffDesignation,
-      typeOfFeedback: formData.typeOfFeedback,
-      location: formData.location,
-      projectSector: formData.projectSector,
-      subSector: formData.subSector,
-      nameOfClient: formData.nameOfClient,
-      remainAnonymous: formData.remainAnonymous,
-      nationalityStatus: formData.nationalityStatus,
-      clientType: formData.clientType,
-      preferredChannel: formData.preferredChannel,
-      phoneNumber: formData.phoneNumber,
-      email: formData.email,
-      age: (formData.age).toString(),
-      serialNumber: formData.serialNumber,
-      gender: formData.gender,
-      project: formData.project,
-      district: formData.district,
-      projectSite: formData.projectSite,
-      ircReferredTo:formData.ircReferredTo,
-      referredPerson:formData.referredPerson,
-      responseType: formData.responseType,
-      countryOfOrigin:formData.countryOfOrigin,
-      currentStatusOfFeedback: formData.currentStatusOfFeedback,
-      assignee: formData.assignee,
-      feedbackDetails: formData.feedbackDetails,
-      nameOfReferringOfficer: formData.nameOfReferringOfficer,
-      reasonForReferral: formData.reasonForReferral,
-      organizationReferredTo: formData.organizationReferredTo,
-      followupNeeded: formData.followupNeeded,
-      feedbackCategory: formData.feedbackCategory,
-      feedbackPriority: formData.feedbackPriority,
-      feedbackReferredShared: formData.feedbackReferredShared,
-      feedbackInternallyExternally: formData.feedbackInternallyExternally,
-      referredPersonName: formData.referredPersonName,
-      referredPersonPosition: formData.referredPersonPosition,
-      referredOrganization: formData.referredOrganization,
-      dateFeedbackReferredShared: formData.dateFeedbackReferredShared,
-      responseTypeRequired: formData.responseTypeRequired,
-      actionFollowupNeeded: formData.actionFollowupNeeded,
-      inFeedbackRegistry: formData.inFeedbackRegistry,
-      dateFeedbackClient: formData.dateFeedbackClient,
-      actionTaken: formData.actionTaken,
-      staffProvidedResponse: formData.staffProvidedResponse,
-      responseSummary: formData.responseSummary,
-      supervisor: formData.supervisor,
-      dataEntryFocalPoint: formData.dataEntryFocalPoint,
-
-    }
-    console.log(formData, "submitted data")
-    if(formData.currentStatusOfFeedback == 'Referral'){
-
-      /** save feedback */
-      this.feedbackService.updateFeedback(this.feedbackId, submitData).subscribe((result) => {
-        console.warn(result, 'Feedback Updated Successfully');
-        this.updateTask("completed")
-        this.alertService.success(`Feedback has been successfully updated`)
-        this.router.navigate(['/feedback-list']);
-      }, error => {
-        this.alertService.error(`Failed to update feedback`)
-      });
-      /** save referral */
-      this.referralsService.createReferral(submitData).subscribe((result) => {
-        console.warn(result, 'Referral Created Successfully');
-        this.alertService.success(`Referral has been successfully created`)
-        // this.router.navigate(['/referrals-list']);
-      });
-    } else {
-      this.feedbackService.createFeedback(formData).subscribe((result) => {
-        this.alertService.success(`feedback is created successfully`);
-        this.router.navigate(['/feedback-list']);
-      }, error => {
-        this.alertService.error("Failed to Create feedback")
-      });
-    }
-
-  }
-
-  /*save feedback*/
-  saveForm() {
-    this.clicked = true;
-    this.submitted = true;
-    if (this.formGroup.invalid) {
-      console.log('Invalid');
-      return;
-    }
-    const formData = this.formGroup.value;
-    if(this.underReview != undefined) this.formGroup.get('assignee').setValue(this.underReview)
-
-    let submitData: {[key:string]: string} = {
-      dateOfReferral: formData.dateFeedbackReceived,
-      nameOfReferringOfficer: formData.nameOfReferringOfficer,
-      reasonForReferral: formData.reasonForReferral,
-      organizationReferredTo: formData.organizationReferredTo,
-      followupNeeded: formData.followupNeeded,
-      status: 'Saved',
-      nameOfClientBeingReferred: formData.nameOfClient,
-      gender: formData.gender,
-      ageCategory: formData.age,
-      nationalityStatus: formData.nationalityStatus,
-      assignee: formData.assignee,
-      phoneNumber: formData.phoneNumber,
-      countryOfOrigin: formData.countryOfOrigin,
-      disability: formData.disability
-
-    }
-
-    let statusSave = 'Saved'
     let newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: formData.nameOfRegister,
@@ -1088,34 +949,97 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       status: 'Saved'
     }
     console.log(formData, "submitted data")
-    if(this.referralDecisionPoint == 'Referral'){
+    if(this.referralDecisionPoint != 'Referral'){
 
       console.log("Feedback",newFormData);
       /** save feedback */
-      this.feedbackService.updateFeedback(this.feedbackId, submitData).subscribe((result) => {
-        console.warn(result, 'Feedback Updated Successfully');
-        // this.updateTask("completed")
+      this.feedbackService.updateFeedback(this.feedbackId, newFormData).subscribe((result) => {
         this.alertService.success(`Feedback has been successfully updated`)
         this.router.navigate(['/feedback-list']);
       }, error => {
         this.alertService.error(`Failed to update feedback`)
       });
-      /** save referral */
-      this.referralsService.createReferral(submitData).subscribe((result) => {
-        console.warn(result, 'Referral Created Successfully');
-        this.alertService.success(`Referral has been successfully created`)
-        // this.router.navigate(['/referrals-list']);
-      }, error => {
-        this.alertService.error(`Failed to create Referral`)
-      });
     } else {
+      this.alertService.error("Failed to Update feedback")
+    }
 
-      this.feedbackService.createFeedback(formData).subscribe((result) => {
-        this.alertService.success(`feedback is created successfully`);
+  }
+
+  /*save feedback*/
+  saveForm() {
+    this.clicked = true;
+    this.submitted = true;
+    if (this.formGroup.invalid) {
+      console.log('Invalid');
+      return;
+    }
+    const formData = this.formGroup.value;
+    if(this.underReview != undefined) this.formGroup.get('assignee').setValue(this.underReview)
+
+    let newFormData: {[key:string]: string} = {
+      dateFeedbackReceived: formData.dateFeedbackReceived,
+      nameOfRegister: formData.nameOfRegister,
+      staffDesignation: formData.staffDesignation,
+      typeOfFeedback: formData.typeOfFeedback,
+      currentStatusOfFeedback: formData.currentStatusOfFeedback,
+      location: formData.location,
+      district: formData.district,
+      projectSite: formData.projectSite,
+      ircReferredTo:formData.ircReferredTo,
+      referredPerson:formData.referredPerson,
+      responseType: formData.responseType,
+      projectSector: formData.projectSector,
+      subSector: formData.subSector,
+      nameOfClient: formData.nameOfClient,
+      remainAnonymous: formData.remainAnonymous,
+      nationalityStatus: formData.nationalityStatus,
+      clientType: formData.clientType,
+      preferredChannel: formData.preferredChannel,
+      phoneNumber: formData.phoneNumber,
+      email: formData.email,
+      age: formData.age,
+      serialNumber: formData.serialNumber,
+      gender: formData.gender,
+      project: formData.project,
+      assignee: formData.assignee,
+      feedbackDetails: formData.feedbackDetails,
+      nameOfReferringOfficer: formData.nameOfReferringOfficer,
+      reasonForReferral: formData.reasonForReferral,
+      organizationReferredTo: formData.organizationReferredTo,
+      followupNeeded: formData.followupNeeded,
+      feedbackCategory: formData.feedbackCategory,
+      feedbackPriority: formData.feedbackPriority,
+      countryOfOrigin:formData.countryOfOrigin,
+      feedbackReferredShared: formData.feedbackReferredShared,
+      feedbackInternallyExternally: formData.feedbackInternallyExternally,
+      referredPersonName: formData.referredPersonName,
+      referredPersonPosition: formData.referredPersonPosition,
+      referredOrganization: formData.referredOrganization,
+      dateFeedbackReferredShared: formData.dateFeedbackReferredShared,
+      responseTypeRequired: formData.responseTypeRequired,
+      actionFollowupNeeded: formData.actionFollowupNeeded,
+      inFeedbackRegistry: formData.inFeedbackRegistry,
+      dateFeedbackClient: formData.dateFeedbackClient,
+      actionTaken: formData.actionTaken,
+      staffProvidedResponse: formData.staffProvidedResponse,
+      responseSummary: formData.responseSummary,
+      supervisor: formData.supervisor,
+      dataEntryFocalPoint: formData.dataEntryFocalPoint,
+      status: 'Saved'
+    }
+    console.log(formData, "submitted data")
+    if(this.referralDecisionPoint != 'Referral'){
+
+      console.log("Feedback",newFormData);
+      /** save feedback */
+      this.feedbackService.updateFeedback(this.feedbackId, newFormData).subscribe((result) => {
+        this.alertService.success(`Feedback has been successfully updated`)
         this.router.navigate(['/feedback-list']);
       }, error => {
-        this.alertService.error("Failed to Create feedback")
+        this.alertService.error(`Failed to update feedback`)
       });
+    } else {
+        this.alertService.error("Failed to Update feedback")
     }
   }
 

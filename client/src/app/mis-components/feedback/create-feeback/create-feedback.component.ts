@@ -586,7 +586,7 @@ export class CreateFeedbackComponent implements OnInit {
     })
     this.loadProgramStaff();
     this.formGroup = this.formBuilder.group({
-      dateFeedbackReceived: [''],
+      dateFeedbackReceived: ['',[Validators.required]],
       nameOfRegister: [''],
       staffDesignation: [''],
       typeOfFeedback: [''],
@@ -608,6 +608,7 @@ export class CreateFeedbackComponent implements OnInit {
       gender:[''],
       project:[''],
       assignee:[''],
+      disability:[''],
       feedbackDetails:[''],
       nameOfReferringOfficer:[''],
       reasonForReferral:[''],
@@ -669,7 +670,7 @@ export class CreateFeedbackComponent implements OnInit {
     //create feedback
     let statusSave:string = formData.currentStatusOfFeedback
 
-    let newFormData: {[key:string]: string} = {
+    var newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: this.registra,
       staffDesignation: formData.staffDesignation,
@@ -738,7 +739,7 @@ export class CreateFeedbackComponent implements OnInit {
         // this.router.navigate(['/referrals-list']);
       });
     } else {
-      this.feedbackService.createFeedback(formData).subscribe((result) => {
+      this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
         this.router.navigate(['/feedback-list']);
       }, error => {
@@ -768,8 +769,8 @@ export class CreateFeedbackComponent implements OnInit {
       this.selectedStaff = data
       this.registra = this.selectedStaff.names
       this.formGroup.get('staffDesignation').setValue(this.selectedStaff.designation)
-
-      // this.formGroup.get('nameOfRegister').setValue(this.selectedStaff.names)
+      // this.formGroup.value('nameOfRegister').append(this.registra)
+      // this.formGroup.get('nameOfRegister').setValue(this.registra)
     });
   }
 
@@ -871,10 +872,10 @@ export class CreateFeedbackComponent implements OnInit {
     }
 
     let statusSave = 'Saved'
-    let newFormData: {[key:string]: string} = {
+    var newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
-      nameOfRegister: formData.nameOfRegister,
-      staffDesignation:  this.registra,
+      nameOfRegister: this.registra,
+      staffDesignation:  formData.staffDesignation,
       typeOfFeedback: formData.typeOfFeedback,
       currentStatusOfFeedback: formData.currentStatusOfFeedback,
       location: formData.location,
@@ -944,7 +945,7 @@ export class CreateFeedbackComponent implements OnInit {
       });
     } else {
 
-      this.feedbackService.createFeedback(formData).subscribe((result) => {
+      this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
         this.router.navigate(['/feedback-list']);
       }, error => {

@@ -476,8 +476,12 @@
                             class=" form-control"
                             type="date"
                             formControlName="dateFeedbackReceived"
+                            [ngClass]="{'is-invalid': submitted && f.dateFeedbackReceived.errors}"
                             [max]="getToday()"
                           />
+                          <div *ngIf="submitted && f.dateFeedbackReceived.errors" class="invalid-feedback">
+                            <div *ngIf="f.dateFeedbackReceived.errors.required">Date is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -807,6 +811,7 @@
                                      formControlName="currentStatusOfFeedback"
                                      (change)="chooseActionForFeedback($event)"
                                      [(ngModel)]="referralDecisionPoint"
+                                     [ngClass]="{'is-invalid': submitted && f.currentStatusOfFeedback.errors}"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -814,6 +819,9 @@
                               {{item.name}}
                             </ng-option>
                           </ng-select>
+                          <div *ngIf="submitted && f.currentStatusOfFeedback.errors" class="invalid-feedback">
+                            <div *ngIf="f.currentStatusOfFeedback.errors.required">Current Status of the Feedback is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -189,7 +189,9 @@
               <div class="card">
                 <div class="card-header">
                   <div class="row">
-                    <h3 style="margin-left: 40px;">ONGOING TASKS</h3>
+                    <h3 style="margin-left: 40px;">PROGRESS AGAINST WORKPLAN</h3>
+                    <h4 style="margin-left: 40px;align-items: center">The Following milestones have been computed based on the logs for the reporting period.
+                      You should review them and provide any comments on these activities. </h4>
                   </div>
                 </div>
                 <div class="card-body col-sm-12">
@@ -234,22 +236,7 @@
                         </div>
                       </div>
 
-                      <div class="row" style="display: flex; margin-top: 10px; margin-bottom: 20px;">
-                        <div class="btn-group" role="group" aria-label="switch_button" style="margin-left: 20px;">
-                          <button type="button" class="btn btn-default_btn" [class.active_btn]="isReferrals"
-                                  (click)="switchRowsData('referrals')">Referrals
-                          </button>
-                          <button type="button" class="btn btn-default_btn" [class.active_btn]="isFeedback"
-                                  (click)="switchRowsData('feedback')">Feedback
-                          </button>
-                          <button type="button" class="btn btn-default_btn" [class.active_btn]="isQuarterlyReport"
-                                  (click)="switchRowsData('quarterly_report')">Progress Report
-                          </button>
-                          <button type="button" class="btn btn-default_btn" [class.active_btn]="isActivityReport"
-                                  (click)="switchRowsData('activity_report')">Activity Report
-                          </button>
-                        </div>
-                      </div>
+<!--                       -->
 
                       <ngx-datatable
                         class="bootstrap selection-cell"
@@ -258,29 +245,19 @@
                         [footerHeight]="50"
                         [rowHeight]="'auto'"
                         [limit]="entries != -1 ? entries : undefined"
-                        [rows]="rows">
+                        [rows]="displayMilestones">
 
-                        <ngx-datatable-column name="Process" prop="task_type">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{value | replace: '_' : ' '}}
-                          </ng-template>
+                        <ngx-datatable-column name="Milestone" prop="milestone">
+
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Task Name" prop="task_name">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{value | replace: '_' : ' '}}
-                          </ng-template>
+                        <ngx-datatable-column name="Overall Target" prop="target">
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Case" prop="task_case"></ngx-datatable-column>
-                        <ngx-datatable-column name="Assignee" prop="assignee"></ngx-datatable-column>
-                        <ngx-datatable-column name="Date assigned" prop="date_assigned">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{ value | date: 'medium' }}
-                          </ng-template>
+                        <ngx-datatable-column name="Cumulative" prop=""></ngx-datatable-column>
+                        <ngx-datatable-column name="Percentage Achievement" prop=""></ngx-datatable-column>
+                        <ngx-datatable-column name="Budget" prop="">
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Task Age" prop="task_age"></ngx-datatable-column>
+                        <ngx-datatable-column name="Expenses to date" prop=""></ngx-datatable-column>
+                        <ngx-datatable-column name="Efficiency" prop=""></ngx-datatable-column>
                       </ngx-datatable>
 
                     </div>

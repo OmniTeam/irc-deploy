@@ -8,6 +8,7 @@ import {UsersService} from "../../services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {DateAgoPipe} from "../../pipes/date-ago.pipe";
+import {WorkPlanService} from '../../services/work-plan-setup.service';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,10 @@ import {DateAgoPipe} from "../../pipes/date-ago.pipe";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  indicators: any;
+  displayMilestones: any[];
+  overallTarget: any[];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +28,7 @@ export class HomeComponent implements OnInit {
     private feedbackService: FeedbackService,
     private taskListService: TaskListService,
     private activityReportService: ActivityReportService,
+    private workPlanService: WorkPlanService,
     private usersService: UsersService,
   ) {
   }
@@ -39,6 +45,7 @@ export class HomeComponent implements OnInit {
   isFeedback: boolean;
   isQuarterlyReport: boolean;
   isActivityReport: boolean;
+  milestones: any;
 
   filterCounter: { filter: string, count: number }[] = []
   filters = [
@@ -52,6 +59,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.reloadTable(true);
+    this.getMilestones();
     //load filter counts
     this.filters.forEach((filter) => {
       this.setFilters(filter, true)
@@ -119,6 +127,29 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getMilestones(){
+    this.workPlanService.getWorkPlan().subscribe((data)=>{
+      let overallTarget = []
+      let milestones = []
+
+      this.milestones = data
+      console.log(data);
+      if(this.milestones != null){
+        this.milestones.forEach((d) =>{
+          console.log("erer",d);
+          let values = JSON.parse(d.setupValues);
+          this.indicators = JSON.parse(values.indicators);
+          this.indicators.forEach((mile) =>{
+            milestones.push(this.getMile(mile.name,mile.overallTarget,"","","","",""))
+          })
+        })
+        this.displayMilestones = milestones
+        console.log(this.displayMilestones);
+      }
+    })
+  }
+
+
   getRow(id, assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
     let taskAge = new DateAgoPipe().transform(dateAssigned)
     let filterCategory = this.setFilterCategory(taskAge)
@@ -134,6 +165,21 @@ export class HomeComponent implements OnInit {
         filter_category: filterCategory
       }
     );
+  }
+
+  getMile(milestone,target,cumulative,achievement,budget,expenses,efficiency){
+    return (
+      {
+        milestone: milestone,
+        target: target,
+        cumulative: cumulative,
+        achievement: achievement,
+        budget: budget,
+        expenses: expenses,
+        efficiency: efficiency
+      }
+    )
+
   }
 
   getStaff(id): any {
