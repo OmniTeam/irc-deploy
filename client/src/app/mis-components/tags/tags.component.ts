@@ -45,6 +45,7 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getUserPartners();
     this.userPartners = this.authService.retrieveUserPartners();
     this.reloadTable();
     this.userRole = this.authService.getUserRoles();

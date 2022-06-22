@@ -97,7 +97,7 @@ export class EditUserComponent implements OnInit {
       this.formGroup = this.formBuilder.group({
         username: [results?.username, [Validators.required]],
         names: [results?.names, [Validators.required]],
-        email: [results?.email/*, [Validators.required, Validators.email]*/],
+        email: [results?.email, [Validators.required, Validators.email]],
         password: [results?.password],
         role: [results?.role],
         partner: [results?.partner],

@@ -22,7 +22,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private programPartnersService: ProgramPartnersService) {
   }
-  public isUserLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   login(user: { username: string, password: string }): Observable<any> {
     return this.http.post<any>(`${environment.serverUrl}/api/login`, user)
