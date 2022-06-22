@@ -25,7 +25,8 @@ import {CreateProgramPartnersModule} from "../program-partners/create-program-pa
         GrantReportComponent
     ],
     exports: [
-        OrganizationalInformationComponent
+        OrganizationalInformationComponent,
+        ApplicationLetterComponent
     ],
     imports: [
         CommonModule,
