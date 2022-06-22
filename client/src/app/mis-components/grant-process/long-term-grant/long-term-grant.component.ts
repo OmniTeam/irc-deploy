@@ -18,6 +18,7 @@ export class LongTermGrantComponent implements OnInit {
   isReviewRevisedApplication: boolean;
   isMakeRevisionsEdApplication: boolean;
   isApproveApplication: boolean;
+  isSignAgreement: boolean;
 
   taskRecord: any;
   grantId: string;
@@ -57,6 +58,8 @@ export class LongTermGrantComponent implements OnInit {
   doesItAdhere: any;
   isConceptInline: any;
   approverComments: any;
+  signAgreementComments: any;
+  dateAgreement: any;
 
   constructor(
     private router: Router,
@@ -129,6 +132,9 @@ export class LongTermGrantComponent implements OnInit {
     if (data.taskDefinitionKey === "Approve_Application") {
       this.isApproveApplication = true;
     }
+    if (data.taskDefinitionKey === "Sign_Agreement") {
+      this.isSignAgreement = true;
+    }
 
     this.applicationId = data.id;
     this.grantId = data.grantId;
@@ -150,6 +156,9 @@ export class LongTermGrantComponent implements OnInit {
         break
       case 'approveApplication':
         this.approveApplication(status)
+        break
+      case 'signAgreement':
+        this.signAgreement(status)
         break
     }
 
@@ -340,6 +349,70 @@ export class LongTermGrantComponent implements OnInit {
             this.success = true;
             this.successMessage = "Submitted";
             this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
+  }
+
+  signAgreement(status) {
+    if (this.decisionOfReviewProcess != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        decision: this.decisionOfReviewProcess,
+        dateAgreement: this.dateAgreement,
+        comments: this.signAgreementComments,
+        status: status
+      }
+
+      let formDataR: { [key: string]: string } = {
+        type: "signAgreement",
+        jsonValue: JSON.stringify(formData),
+      }
+
+      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
+      //const params = new HttpParams().set('id', formData.processInstanceId);
+      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+        if (response.some(x => x.type === 'signAgreement')) {
+          response.forEach(it => {
+            if (it.type === 'signAgreement') {
+              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Updated";
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.error = true;
+                this.errorMessage = "Failed to update";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          })
+        } else {
+          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);

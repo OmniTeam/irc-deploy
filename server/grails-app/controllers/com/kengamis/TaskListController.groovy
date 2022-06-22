@@ -123,10 +123,16 @@ class TaskListController {
                 if (task.taskDefinitionKey == "Review_Long-term_Grant_Application" ||
                         task.taskDefinitionKey == "Review_Revised_Application" ||
                         task.taskDefinitionKey == "Make_Revisions_From_ED") {
+                    assignee = "FINANCE"
                     c2 = userRoles.contains("ROLE_FINANCE")
                 }
                 if (task.taskDefinitionKey == "Approve_Application") {
+                    assignee = "Executive Director"
                     c2 = userRoles.contains("ROLE_ED")
+                }
+                if (task.taskDefinitionKey == "Sign_Agreement") {
+                    assignee = "PROGRAM_OFFICER"
+                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
                 }
                 if (grant != null) casee = orgInfo['name']
                 startDate = grant?.dateCreated
