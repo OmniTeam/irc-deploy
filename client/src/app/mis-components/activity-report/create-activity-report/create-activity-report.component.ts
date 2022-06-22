@@ -396,7 +396,6 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   getBudgetLines() {
     this.workPlanService.getWorkPlan().subscribe((data) => {
-      console.log(data);
       this.budgetHolder = data;
     });
   }
@@ -477,7 +476,6 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   getBudgetHolderBudgetLines() {
     let staffId = this.budgetHolderId;
-    console.log(staffId);
     let newBudgetLine: any = [];
     let newMilestone: any = [];
     this.budgetHolder.forEach((d) => {

@@ -126,6 +126,43 @@ class ReportFormController {
         respond reportData
     }
 
+    def getMilestonePerformance() {
+        def slurper = new JsonSlurper()
+        def milestones = []
+
+        ReportForm.all.each {
+            def values = slurper.parseText(it.reportValues)
+            def performanceReport = slurper.parseText(values['performanceReport'] as String)
+            def financialReport = slurper.parseText(values['financialReport'] as String)
+            if (performanceReport != null) {
+                performanceReport.each { p ->
+                    ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
+                    def expenseToDate = ''
+                    def approvedBudget = ''
+                    financialReport.each { f ->
+                        if (f['budget_line'] == pm.name) {
+                            expenseToDate = f['expense_to_date']
+                            approvedBudget = f['approved_budget']
+
+                        }
+                    }
+                    milestones << [
+                            milestoneId          : pm.id,
+                            staffId              : it.userId,
+                            milestone            : pm.name,
+                            overallTarget        : p['overall_target'],
+                            cumulativeAchievement: p['cumulative_achievement'],
+                            percentageAchievement: p['percentage_achievement'],
+                            expenseToDate        : expenseToDate,
+                            approvedBudget       : approvedBudget,
+
+                    ]
+                }
+            }
+        }
+        respond milestones
+    }
+
     def getActivityReportRecord() {
         def milestone = params.milestone as String
         def startDate = params.startDate as String

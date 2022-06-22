@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ReferralsService} from "../../services/referrals.service";
-import {FeedbackService} from "../../services/feedback.service";
-import {TaskListService} from "../../services/task-list.service";
-import {ActivityReportService} from "../../services/activity-report.service";
-import {OngoingTask} from "../../models/ongoing-task";
-import {UsersService} from "../../services/users.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Subject} from "rxjs";
-import {DateAgoPipe} from "../../pipes/date-ago.pipe";
+import {ReferralsService} from '../../services/referrals.service';
+import {FeedbackService} from '../../services/feedback.service';
+import {TaskListService} from '../../services/task-list.service';
+import {ActivityReportService} from '../../services/activity-report.service';
+import {OngoingTask} from '../../models/ongoing-task';
+import {UsersService} from '../../services/users.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DateAgoPipe} from '../../pipes/date-ago.pipe';
+import {WorkPlanService} from '../../services/work-plan-setup.service';
+import {ReportFormService} from '../../services/report-form.service';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,10 @@ import {DateAgoPipe} from "../../pipes/date-ago.pipe";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  indicators: any;
+  displayMilestones: any[];
+  overallTarget: any[];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +28,8 @@ export class HomeComponent implements OnInit {
     private feedbackService: FeedbackService,
     private taskListService: TaskListService,
     private activityReportService: ActivityReportService,
+    private workPlanService: WorkPlanService,
+    private reportFormService: ReportFormService,
     private usersService: UsersService,
   ) {
   }
@@ -39,6 +46,7 @@ export class HomeComponent implements OnInit {
   isFeedback: boolean;
   isQuarterlyReport: boolean;
   isActivityReport: boolean;
+  milestones: any;
 
   filterCounter: { filter: string, count: number }[] = []
   filters = [
@@ -49,9 +57,12 @@ export class HomeComponent implements OnInit {
     {name: 'All'},
   ];
   taskListRows: OngoingTask[];
+  budgetHolders: any;
 
   ngOnInit(): void {
     this.reloadTable(true);
+    this.getMilestones();
+    this.getBudgetLines();
     //load filter counts
     this.filters.forEach((filter) => {
       this.setFilters(filter, true)
@@ -119,6 +130,41 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getMilestones(){
+    this.reportFormService.getMilestonePerformance().subscribe((data)=>{
+      let milestones = []
+      this.milestones = data
+      console.log("rest ffgfg",data);
+      if(this.milestones != null){
+        this.milestones.forEach((d) =>{
+            milestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,d.percentageAchievement,d.approvedBudget,d.expenseToDate,""))
+        })
+        this.displayMilestones = milestones
+
+      }
+    })
+  }
+
+  getBudgetLines() {
+    this.workPlanService.getWorkPlan().subscribe((data) => {
+      console.log(data);
+      this.budgetHolders = data;
+    });
+  }
+
+  filterMilestonesList(event) {
+    let staffId = event
+    let staffMilestones = []
+    this.milestones.forEach((d) =>{
+      if(d.staffId === staffId){
+        staffMilestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,d.percentageAchievement,d.approvedBudget,d.expenseToDate,""))
+        console.log(d.milestone);
+      }
+    })
+    this.displayMilestones = staffMilestones
+    console.log(staffId)
+  }
+
   getRow(id, assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
     let taskAge = new DateAgoPipe().transform(dateAssigned)
     let filterCategory = this.setFilterCategory(taskAge)
@@ -134,6 +180,30 @@ export class HomeComponent implements OnInit {
         filter_category: filterCategory
       }
     );
+  }
+
+  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: string, expenses: string, efficiency: string){
+    return (
+      {
+        milestone: milestone,
+        target: target,
+        cumulative: cumulative,
+        achievement: this.getEfficiency(target,cumulative),
+        budget: budget,
+        expenses: expenses,
+        efficiency: this.getEfficiency(budget,expenses)
+      }
+    )
+
+  }
+
+  getEfficiency(budget,expenses){
+    if(!isNaN(Math.round((expenses / budget) * 100))){
+      return Math.round((expenses / budget) * 100);
+    } else {
+      return 0;
+    }
+
   }
 
   getStaff(id): any {
@@ -275,4 +345,6 @@ export class HomeComponent implements OnInit {
     }
     return number
   }
+
+
 }
