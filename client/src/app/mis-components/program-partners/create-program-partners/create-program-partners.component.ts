@@ -9,6 +9,7 @@ import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
 import {UsersService} from '../../../services/users.service';
 import {Validator} from '../../../helpers/validator';
 import {GroupsService} from '../../../services/groups.service';
+import {AclGroupMappingService} from '../../../services/acl-group-mapping.service';
 
 @Component({
   selector: 'app-create-program-partners',
@@ -29,11 +30,25 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   groupName: any;
   groupParent: any;
   groupCreationFormGroup: FormGroup;
+  createdGroupId: any;
+  formConditionalQuery: any;
+  entityConditionalQuery: any;
+  formNames = [
+    '__37_xxx_safe_environment_for_adolescents',
+    '__38_xxx_economic_empowerment_activity',
+    '__39_xxx_good_school_environment',
+    '__40_xxx_monitoring_and_learning',
+    '__41_xxx_parenting_skills_and_spousal_relationship'
+  ];
+  entityNames = ['entity_beneficiary_list'];
+  aclsFormGroup: FormGroup;
+  editIndex = -1;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private countriesService: CountriesService,
+              private aclGroupMappingService: AclGroupMappingService,
               private router: Router,
               private usersService: UsersService,
               private groupsService: GroupsService,
@@ -96,14 +111,53 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
     this.groupCreationFormGroup = this.formBuilder.group({
       name: [this.groupName],
       parentGroupId: [this.groupParent],
-      users: [null]
     });
 
     // creating a group after creating a partner
     console.log(this.groupCreationFormGroup.value, 'group controls');
     this.groupsService.createGroup(JSON.stringify(this.groupCreationFormGroup.value)).subscribe((result) => {
       console.warn(result, 'Group created Successfully');
+      this.createdGroupId = result.id;
       this.alertService.success(`Group has been created`);
+
+      // creating acls after creating the partner
+      // assigning conditional queries for forms and entities
+      this.formConditionalQuery = `where cluster =` + '"' + programPartner['cluster'] + '"';
+      this.entityConditionalQuery = 'where _cluster = ' + '"' + programPartner['cluster'] + '"';
+
+      const queryArray = [];
+      // loop through form and entity arrays and create objects and push to queryArray
+      for (const form of this.formNames) {
+        console.log(form);
+        const obj = {};
+        obj['form'] = form;
+        obj['groupConditionQuery'] = this.formConditionalQuery;
+        queryArray.push(obj);
+      }
+      for (const form of this.entityNames) {
+        console.log(form);
+        const obj = {};
+        obj['form'] = form;
+        obj['groupConditionQuery'] = this.entityConditionalQuery;
+        queryArray.push(obj);
+      }
+
+      //  make the form group
+      this.aclsFormGroup = this.formBuilder.group({
+        group: [this.createdGroupId],
+        permissions: [1],
+        queryArray: [queryArray],
+      });
+      console.log(queryArray, 'querry array');
+      console.log(this.aclsFormGroup.value, 'acls form group values');
+
+      // create acls
+      this.aclGroupMappingService.createGroupMapping2(this.aclsFormGroup.value).subscribe((acl) => {
+        console.warn(acl, 'ACL created Successfully');
+        this.alertService.success(`ACL has been created`);
+      }, error => {
+        this.alertService.error('Failed to Create the ACL');
+      });
     }, error => {
       this.alertService.error('Failed to Create the Group');
     });
