@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
 import {FileUploadService} from "../../services/file-upload.service";
@@ -15,6 +15,7 @@ import {Validator} from "../../helpers/validator";
 })
 
 export class ApplicationLetterComponent implements OnInit {
+  @Output() triggerNextProcess: EventEmitter<string> = new EventEmitter();
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
 
@@ -79,8 +80,12 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-    if (this.organisation.email != null || this.organisation.email != undefined) {
-      console.log('Invalid');
+    if (this.organisation.email == null) {
+      this.alertService.success("Please fill in the email");
+      return;
+    }
+    if (this.program == null) {
+      this.alertService.success("Please choose the Program");
       return;
     }
 
@@ -93,15 +98,15 @@ export class ApplicationLetterComponent implements OnInit {
       documents: JSON.stringify(this.documents),
       status: this.status
     }
-    console.log('formData', formData)
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
-      console.log(data)
+      console.log('response',data)
       this.submitted = true
       this.error = false;
       this.success = true;
       this.successMessage = "Application Successfully Submitted";
       this.alertService.success(this.successMessage);
+      this.triggerNextProcess.emit(data.id);
     }, error => {
       this.error = true;
       this.success = false;

@@ -74,7 +74,7 @@ class TaskListController {
                     if (userRoles.contains("ROLE_PROGRAM_OFFICER")) c2 = currentUserGroup.contains(taskProgram.title)
                 } else if (task.taskDefinitionKey == "Submit_Report" || task.taskDefinitionKey == "Submit_Final_Report") {
                     assignee = "${taskPartner.cluster}-${taskProgram.title}"
-                    c2 = userPartner.contains(partnerId) && userProgram.contains(programId)
+                    c2 = userPartner.contains(partnerId) && userProgram.contains(programId) && userRoles.contains("ROLE_PARTNER_DATA_MANAGER")
                 } else if (task.taskDefinitionKey == "Review_Performance_Report") {
                     assignee = "MEAL"
                     c2 = userRoles.contains("ROLE_MEAL")
@@ -353,9 +353,10 @@ class TaskListController {
                 def email = orgInfo['email'] as String
 
                 def user = User.findByEmail(email)
-                user.enabled = false
-                user.save(flush: true, failOnError: true)
-
+                if (user != null) {
+                    user.enabled = false
+                    user.save(flush: true, failOnError: true)
+                }
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
             }
