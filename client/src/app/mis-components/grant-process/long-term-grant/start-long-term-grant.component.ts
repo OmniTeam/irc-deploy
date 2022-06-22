@@ -46,7 +46,7 @@ export class StartLongTermGrantComponent implements OnInit {
       this.success = false;
       console.log(error);
       this.errorMessage = "Failed to start instance"
-      this.alertService.success(this.successMessage);
+      this.alertService.error(this.errorMessage);
     })
     setTimeout(() => {
       if (this.success == true) {
