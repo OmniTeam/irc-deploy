@@ -945,6 +945,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       staffProvidedResponse: formData.staffProvidedResponse,
       responseSummary: formData.responseSummary,
       supervisor: formData.supervisor,
+      disability: formData.disability,
       dataEntryFocalPoint: formData.dataEntryFocalPoint,
       status: 'Saved'
     }
@@ -1024,6 +1025,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       staffProvidedResponse: formData.staffProvidedResponse,
       responseSummary: formData.responseSummary,
       supervisor: formData.supervisor,
+      disability: formData.disability,
       dataEntryFocalPoint: formData.dataEntryFocalPoint,
       status: 'Saved'
     }

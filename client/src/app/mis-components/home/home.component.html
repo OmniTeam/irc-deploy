@@ -222,15 +222,27 @@
                         <div class="col-sm-6">
                           <div id="datatable_filter" class="dataTables_filter">
                             <label>
-                              <input
-                                type="search"
-                                class="form-control form-control-sm"
-                                placeholder="Search Ongoing Tasks"
-                                aria-controls="datatable"
-                                (keyup)="onChangeSearch($event)"
-                                (search)="onSearch($event)"
-                                style="width: 200%;"
-                              />
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Select staff to filter.."
+                                         [searchable]="true"
+                                         (change)="filterMilestonesList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.staffId" *ngFor="let item of budgetHolders">
+                                  {{item.staff}}
+                                </ng-option>
+                              </ng-select>
+<!--                              <input-->
+<!--                                type="search"-->
+<!--                                class="form-control form-control-sm"-->
+<!--                                placeholder="Search Ongoing Tasks"-->
+<!--                                aria-controls="datatable"-->
+<!--                                (keyup)="onChangeSearch($event)"-->
+<!--                                (search)="onSearch($event)"-->
+<!--                                style="width: 200%;"-->
+<!--                              />-->
                             </label>
                           </div>
                         </div>
@@ -252,12 +264,14 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Overall Target" prop="target">
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Cumulative" prop=""></ngx-datatable-column>
-                        <ngx-datatable-column name="Percentage Achievement" prop=""></ngx-datatable-column>
-                        <ngx-datatable-column name="Budget" prop="">
+                        <ngx-datatable-column name="Cumulative" prop="cumulative"></ngx-datatable-column>
+                        <ngx-datatable-column name="Percentage Achievement" prop="achievement"></ngx-datatable-column>
+                        <ngx-datatable-column name="Budget" prop="budget">
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Expenses to date" prop=""></ngx-datatable-column>
-                        <ngx-datatable-column name="Efficiency" prop=""></ngx-datatable-column>
+                        <ngx-datatable-column name="Expenses to date" prop="expenses"></ngx-datatable-column>
+                        <ngx-datatable-column name="Efficiency (%)" prop="efficiency">
+<!--                          <ng-template>{{getEfficiency(displayMilestones.budget, displayMilestones.expenses)}}</ng-template>-->
+                        </ngx-datatable-column>
                       </ngx-datatable>
 
                     </div>

@@ -132,15 +132,30 @@ class ReportFormController {
 
         ReportForm.all.each {
             def values = slurper.parseText(it.reportValues)
-            def performanceReport = values['performanceReport']
+            def performanceReport = slurper.parseText(values['performanceReport'] as String)
+            def financialReport = slurper.parseText(values['financialReport'] as String)
             if (performanceReport != null) {
                 performanceReport.each { p ->
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
+                    def expenseToDate = ''
+                    def approvedBudget = ''
+                    financialReport.each { f ->
+                        if (f['budget_line'] == pm.name) {
+                            expenseToDate = f['expense_to_date']
+                            approvedBudget = f['approved_budget']
+
+                        }
+                    }
                     milestones << [
+                            milestoneId          : pm.id,
+                            staffId              : it.userId,
                             milestone            : pm.name,
-                            oervallTarget        : p['overall_target'],
+                            overallTarget        : p['overall_target'],
                             cumulativeAchievement: p['cumulative_achievement'],
                             percentageAchievement: p['percentage_achievement'],
+                            expenseToDate        : expenseToDate,
+                            approvedBudget       : approvedBudget,
+
                     ]
                 }
             }

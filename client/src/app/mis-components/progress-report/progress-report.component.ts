@@ -497,7 +497,7 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processInstanceId: this.taskRecord.processInstanceId,
-      userId: this.authService.getLoggedInUsername(),
+      userId: this.taskRecord.staffId,
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
       reportValues: JSON.stringify(reportValues),

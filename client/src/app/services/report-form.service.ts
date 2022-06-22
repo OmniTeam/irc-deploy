@@ -71,6 +71,6 @@ export class ReportFormService {
   }
 
   getMilestonePerformance(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/getMilestonePerformance`);
+    return this.http.get(`${environment.serverUrl}/reportForm/getMilestonePerformance`);
   }
 }
