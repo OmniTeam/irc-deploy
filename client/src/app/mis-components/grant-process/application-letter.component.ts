@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
 import {FileUploadService} from "../../services/file-upload.service";
@@ -15,6 +15,7 @@ import {Validator} from "../../helpers/validator";
 })
 
 export class ApplicationLetterComponent implements OnInit {
+  @Output() triggerNextProcess: EventEmitter<string> = new EventEmitter();
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
 
@@ -102,6 +103,7 @@ export class ApplicationLetterComponent implements OnInit {
       this.success = true;
       this.successMessage = "Application Successfully Submitted";
       this.alertService.success(this.successMessage);
+      this.triggerNextProcess.emit(data.id);
     }, error => {
       this.error = true;
       this.success = false;

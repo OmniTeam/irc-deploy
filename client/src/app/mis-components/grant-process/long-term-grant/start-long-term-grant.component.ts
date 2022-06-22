@@ -33,8 +33,8 @@ export class StartLongTermGrantComponent implements OnInit {
     })
   }
 
-  triggerStartInstances() {
-    this.tempDataService.startLongTermGrantJob(this.grantId).subscribe(resp => {
+  triggerStartInstances(grantId) {
+    this.tempDataService.startLongTermGrantJob(grantId).subscribe(resp => {
       this.error = false;
       this.success = true;
       this.successMessage = resp[0];
