@@ -97,7 +97,7 @@ export class ApplicationLetterComponent implements OnInit {
     console.log('formData', formData)
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
-      console.log(data)
+      console.log('response',data)
       this.submitted = true
       this.error = false;
       this.success = true;
