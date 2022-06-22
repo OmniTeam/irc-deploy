@@ -80,8 +80,12 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-    if (this.organisation.email != null || this.organisation.email != undefined) {
-      console.log('Invalid');
+    if (this.organisation.email == null) {
+      this.alertService.success("Please fill in the email");
+      return;
+    }
+    if (this.program == null) {
+      this.alertService.success("Please choose the Program");
       return;
     }
 
@@ -94,7 +98,6 @@ export class ApplicationLetterComponent implements OnInit {
       documents: JSON.stringify(this.documents),
       status: this.status
     }
-    console.log('formData', formData)
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
       console.log('response',data)

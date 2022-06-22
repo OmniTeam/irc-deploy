@@ -98,7 +98,7 @@ class TempController {
     @Transactional
     def startLongTermGrantJob(String grantId) {
         def message = ["Failed"]
-        GrantLetterOfInterest grant = GrantLetterOfInterest.findByIdAndStatus(grantId, 'started')
+        GrantLetterOfInterest grant = GrantLetterOfInterest.findById(grantId)
         if (grant) {
             createUser(grant)
             boolean started = StartCamundaInstancesJob.startProcessInstance([
@@ -111,7 +111,7 @@ class TempController {
 
             if (started) {
                 println "=========Started long term grant instance ========="
-                grant.status = "on-longterm"
+                grant.status = "started-longterm"
                 grant.save(flush: true, failOnError: true)
                 message = ["Started grant process instance"]
             }

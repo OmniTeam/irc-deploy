@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GrantProcessService} from "../../../services/grant-process.service";
 import {TempDataService} from "../../../services/temp-data.service";
+import {AlertService} from "../../../services/alert";
 
 @Component({
   selector: 'start-long-term-grant',
@@ -19,7 +20,8 @@ export class StartLongTermGrantComponent implements OnInit {
 
   constructor(
     private grantProcessService: GrantProcessService,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
+    private alertService: AlertService
   ) {
   }
 
@@ -38,12 +40,13 @@ export class StartLongTermGrantComponent implements OnInit {
       this.error = false;
       this.success = true;
       this.successMessage = resp[0];
-
+      this.alertService.success(this.successMessage);
     }, error => {
       this.error = true;
       this.success = false;
       console.log(error);
       this.errorMessage = "Failed to start instance"
+      this.alertService.success(this.successMessage);
     })
     setTimeout(() => {
       if (this.success == true) {
