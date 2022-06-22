@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AlertService} from "../../../services/alert";
-import {ProgramPartnersService} from "../../../services/program-partners.service";
-import {CountriesService} from "../../../services/countries.service";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertService} from '../../../services/alert';
+import {ProgramPartnersService} from '../../../services/program-partners.service';
+import {CountriesService} from '../../../services/countries.service';
 import {v4 as uuid} from 'uuid';
-import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
-import {UsersService} from "../../../services/users.service";
-import {Validator} from "../../../helpers/validator";
+import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
+import {UsersService} from '../../../services/users.service';
+import {Validator} from '../../../helpers/validator';
+import {GroupsService} from '../../../services/groups.service';
 
 @Component({
   selector: 'app-edit-program-partners',
@@ -26,10 +27,15 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
   cities = [];
   organisationsInvolved: any = [];
   username: string;
+  initialGroupName: any;
+  groupName: any;
+  groupParent: any;
+  groupCreationFormGroup: FormGroup;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private countriesService: CountriesService,
+              private groupsService: GroupsService,
               private usersService: UsersService,
               private router: Router,
               private programPartnersService: ProgramPartnersService) { }
@@ -38,7 +44,8 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
     this.countries = this.countriesService.getListOfAllCountries();
     this.programPartnerId = this.route.snapshot.params.id;
     this.programPartnersService.getCurrentProgramPartner(this.programPartnerId).subscribe((results: any) => {
-      if(results?.organisationsInvolved!="") this.organisationsInvolved = JSON.parse(results?.organisationsInvolved)
+      // tslint:disable-next-line:triple-equals
+      if (results?.organisationsInvolved != '') { this.organisationsInvolved = JSON.parse(results?.organisationsInvolved); }
       this.formGroup = this.formBuilder.group({
         program: [results?.programId, [Validators.required]],
         cluster: [results?.cluster, [Validators.required]],
@@ -54,7 +61,9 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
         organisationsInvolved: [results?.organisationsInvolved],
         areaOfOperation: [results?.areaOfOperation]
       });
-      this.usersService.getCurrentUser(results?.dataCollector).subscribe((data:any) => {
+      this.initialGroupName = this.formGroup.controls['cluster'].value;
+      console.log(this.initialGroupName, 'initial group');
+      this.usersService.getCurrentUser(results?.dataCollector).subscribe((data: any) => {
         this.username = data.names;
       });
     });
@@ -75,12 +84,29 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
     }
     this.formGroup.patchValue({organisationsInvolved: JSON.stringify(this.organisationsInvolved)});
     const programPartner = this.formGroup.value;
-    console.log("Form Data", programPartner)
+    console.log('Form Data', programPartner);
     this.programPartnersService.updateProgramPartner(this.programPartnerId, programPartner).subscribe(results => {
       this.alertService.success(`${programPartner.cluster} has been successfully updated `);
     }, error => {
       this.alertService.error(`${programPartner.cluster} could not be updated`);
     });
+    if (this.initialGroupName !== this.formGroup.controls['cluster'].value) {
+        console.log('method to update group');
+      // creating a form group for creating a group
+      /*this.groupCreationFormGroup = this.formBuilder.group({
+        id: [null],
+        name: [this.groupName],
+        parentGroupId: [this.groupParent],
+      });
+
+    //  update the group
+      this.groupsService.updateGroup(id, JSON.stringify(this.groupCreationFormGroup.value)).subscribe((result) => {
+        console.warn(result, 'Group created Successfully');
+        this.alertService.success(`Group has been updated`);
+      }, error => {
+        this.alertService.error('Failed to update the Group');
+      });*/
+    }
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -94,18 +120,18 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
   onSelectCountry(country) {
     this.countriesService.getCitiesForCountry(country).subscribe((response) => {
       this.cities = response.data;
-    }, error => console.log(error))
+    }, error => console.log(error));
   }
 
   addOrganization() {
-    if(this.organisationsInvolved.length<5) {
-      let id = uuid();
+    if (this.organisationsInvolved.length < 5) {
+      const id = uuid();
       this.organisationsInvolved.push({id: id, name: '', contact: ''});
     }
   }
 
   validateNumber(value) {
-    this.inValidNumber = Validator.telephoneNumber(value)
+    this.inValidNumber = Validator.telephoneNumber(value);
   }
 
   cellEditor(rowId, tdId, key: string, oldValue) {
@@ -113,13 +139,13 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {
-    if (value !== null && value !== undefined)
+    if (value !== null && value !== undefined) {
       switch (key) {
         case 'orgName':
           if (this.organisationsInvolved.some(x => x.id === rowId)) {
             this.organisationsInvolved.forEach(function (item) {
               if (item.id === rowId) {
-                item.name = value
+                item.name = value;
               }
             });
           }
@@ -128,12 +154,13 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
           if (this.organisationsInvolved.some(x => x.id === rowId)) {
             this.organisationsInvolved.forEach(function (item) {
               if (item.id === rowId) {
-                item.contact = value
+                item.contact = value;
               }
             });
           }
           break;
       }
+    }
   }
 
   cancel(): void {

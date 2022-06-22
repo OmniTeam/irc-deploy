@@ -1,13 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AlertService} from "../../../services/alert";
-import {ProgramPartnersService} from "../../../services/program-partners.service";
-import {CountriesService} from "../../../services/countries.service";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertService} from '../../../services/alert';
+import {ProgramPartnersService} from '../../../services/program-partners.service';
+import {CountriesService} from '../../../services/countries.service';
 import {v4 as uuid} from 'uuid';
-import {CellEdit, OnUpdateCell} from "../../../helpers/cell-edit";
-import {UsersService} from "../../../services/users.service";
-import {Validator} from "../../../helpers/validator";
+import {CellEdit, OnUpdateCell} from '../../../helpers/cell-edit';
+import {UsersService} from '../../../services/users.service';
+import {Validator} from '../../../helpers/validator';
+import {GroupsService} from '../../../services/groups.service';
+import {AclGroupMappingService} from '../../../services/acl-group-mapping.service';
 
 @Component({
   selector: 'app-create-program-partners',
@@ -25,13 +27,31 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   cities = [];
   organisationsInvolved: any = [];
   username: string;
+  groupName: any;
+  groupParent: any;
+  groupCreationFormGroup: FormGroup;
+  createdGroupId: any;
+  formConditionalQuery: any;
+  entityConditionalQuery: any;
+  formNames = [
+    '__37_xxx_safe_environment_for_adolescents',
+    '__38_xxx_economic_empowerment_activity',
+    '__39_xxx_good_school_environment',
+    '__40_xxx_monitoring_and_learning',
+    '__41_xxx_parenting_skills_and_spousal_relationship'
+  ];
+  entityNames = ['entity_beneficiary_list'];
+  aclsFormGroup: FormGroup;
+  editIndex = -1;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private countriesService: CountriesService,
+              private aclGroupMappingService: AclGroupMappingService,
               private router: Router,
               private usersService: UsersService,
+              private groupsService: GroupsService,
               private programPartnersService: ProgramPartnersService) {
   }
 
@@ -76,11 +96,70 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
 
     this.formGroup.patchValue({organisationsInvolved: JSON.stringify(this.organisationsInvolved)});
     const programPartner = this.formGroup.value;
-    console.log("Form Data", programPartner)
+    console.log('Form Data', programPartner);
     this.programPartnersService.createProgramPartner(programPartner).subscribe(results => {
       this.alertService.success(`${programPartner.cluster} has been successfully created `);
     }, error => {
       this.alertService.error(`${programPartner.cluster} could not be created`);
+    });
+
+    // collecting variables for creating the group
+    this.groupName = programPartner['cluster'];
+    this.groupParent = programPartner['program'];
+
+    // creating a form group for creating a group
+    this.groupCreationFormGroup = this.formBuilder.group({
+      name: [this.groupName],
+      parentGroupId: [this.groupParent],
+    });
+
+    // creating a group after creating a partner
+    console.log(this.groupCreationFormGroup.value, 'group controls');
+    this.groupsService.createGroup(JSON.stringify(this.groupCreationFormGroup.value)).subscribe((result) => {
+      console.warn(result, 'Group created Successfully');
+      this.createdGroupId = result.id;
+      this.alertService.success(`Group has been created`);
+
+      // creating acls after creating the partner
+      // assigning conditional queries for forms and entities
+      this.formConditionalQuery = `where cluster =` + '"' + programPartner['cluster'] + '"';
+      this.entityConditionalQuery = 'where _cluster = ' + '"' + programPartner['cluster'] + '"';
+
+      const queryArray = [];
+      // loop through form and entity arrays and create objects and push to queryArray
+      for (const form of this.formNames) {
+        console.log(form);
+        const obj = {};
+        obj['form'] = form;
+        obj['groupConditionQuery'] = this.formConditionalQuery;
+        queryArray.push(obj);
+      }
+      for (const form of this.entityNames) {
+        console.log(form);
+        const obj = {};
+        obj['form'] = form;
+        obj['groupConditionQuery'] = this.entityConditionalQuery;
+        queryArray.push(obj);
+      }
+
+      //  make the form group
+      this.aclsFormGroup = this.formBuilder.group({
+        group: [this.createdGroupId],
+        permissions: [1],
+        queryArray: [queryArray],
+      });
+      console.log(queryArray, 'querry array');
+      console.log(this.aclsFormGroup.value, 'acls form group values');
+
+      // create acls
+      this.aclGroupMappingService.createGroupMapping2(this.aclsFormGroup.value).subscribe((acl) => {
+        console.warn(acl, 'ACL created Successfully');
+        this.alertService.success(`ACL has been created`);
+      }, error => {
+        this.alertService.error('Failed to Create the ACL');
+      });
+    }, error => {
+      this.alertService.error('Failed to Create the Group');
     });
 
     if (this.formGroup.valid) {
@@ -95,7 +174,7 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
   onSelectCountry(country) {
     this.countriesService.getCitiesForCountry(country).subscribe((response) => {
       this.cities = response.data;
-    }, error => console.log(error))
+    }, error => console.log(error));
   }
 
   onReset() {
@@ -105,27 +184,27 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
 
   addOrganization() {
     if (this.organisationsInvolved.length < 5) {
-      let id = uuid();
+      const id = uuid();
       this.organisationsInvolved.push({id: id, name: '', contact: ''});
     }
   }
 
   validateNumber(value) {
-    this.inValidNumber = Validator.telephoneNumber(value)
+    this.inValidNumber = Validator.telephoneNumber(value);
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue, type?:string) {
+  cellEditor(rowId, tdId, key: string, oldValue, type?: string) {
     new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type);
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {
-    if (value !== null && value !== undefined)
+    if (value !== null && value !== undefined) {
       switch (key) {
         case 'orgName':
           if (this.organisationsInvolved.some(x => x.id === rowId)) {
             this.organisationsInvolved.forEach(function (item) {
               if (item.id === rowId) {
-                item.name = value
+                item.name = value;
               }
             });
           }
@@ -134,12 +213,13 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
           if (this.organisationsInvolved.some(x => x.id === rowId)) {
             this.organisationsInvolved.forEach(function (item) {
               if (item.id === rowId) {
-                item.contact = value
+                item.contact = value;
               }
             });
           }
           break;
       }
+    }
   }
 
 }
