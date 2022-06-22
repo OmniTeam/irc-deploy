@@ -130,23 +130,27 @@ export class CreateUserComponent implements OnInit {
 
 
       // insert the user's partner in the user partner table
-      const userPartnerData = new FormData();
-      userPartnerData.append('user', result.id);
-      userPartnerData.append('programPartner', formData.partner);
+      if (formData.partner) {
+        const userPartnerData = new FormData();
+        userPartnerData.append('user', result.id);
+        userPartnerData.append('programPartner', formData.partner);
 
-      this.userService.createUserPartner(userPartnerData).subscribe(data => {
-        console.log(data, 'User Partner');
-      }, error => {console.log('Did not create partner', error); });
+        this.userService.createUserPartner(userPartnerData).subscribe(data => {
+          console.log(data, 'User Partner');
+        }, error => {console.log('Did not create partner', error); });
+      }
 
       // inserts user_id group_id pairs into the user group table
-      for (let i = 0; i < formData.kengaGroup.length; i++) {
-        const userGroupData = new FormData();
-        userGroupData.append('user', result.id);
-        userGroupData.append('kengaGroup', formData.kengaGroup[i]);
+      if (formData.kengaGroup) {
+        for (let i = 0; i < formData.kengaGroup.length; i++) {
+          const userGroupData = new FormData();
+          userGroupData.append('user', result.id);
+          userGroupData.append('kengaGroup', formData.kengaGroup[i]);
 
-        this.userService.createUserGroup(userGroupData).subscribe(data => {
-          console.log(data , 'User group');
-        }, error => {this.alertService.error('failed to create user acls Entries'); });
+          this.userService.createUserGroup(userGroupData).subscribe(data => {
+            console.log(data , 'User group');
+          }, error => {this.alertService.error('failed to create user groups Entries'); });
+        }
       }
 
       this.router.navigate(['/users']);
@@ -161,13 +165,19 @@ export class CreateUserComponent implements OnInit {
       this.formGroup.controls['role'].reset();
       document.getElementById('role_partner').hidden = false;
       document.getElementById('role_staff').hidden = true;
+      document.getElementById('partners').hidden = false;
+      document.getElementById('groups').hidden = true;
     } else if (event === 'CRVPF Staff') {
       this.formGroup.controls['role'].reset();
       document.getElementById('role_staff').hidden = false;
       document.getElementById('role_partner').hidden = true;
+      document.getElementById('groups').hidden = false;
+      document.getElementById('partners').hidden = true;
     } else {
       document.getElementById('role_staff').hidden = true;
       document.getElementById('role_partner').hidden = true;
+      document.getElementById('groups').hidden = true;
+      document.getElementById('partners').hidden = true;
     }
 
 
