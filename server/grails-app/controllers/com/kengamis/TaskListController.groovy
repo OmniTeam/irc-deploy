@@ -111,6 +111,23 @@ class TaskListController {
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
             } else if (task.processDefKey == "LONG_TERM_GRANT") {
+                if (task.taskDefinitionKey == "Submit_Long_Term_Grant" ||
+                        task.taskDefinitionKey == "Make_Revisions_On_Application") {
+                    assignee = "APPLICANT"
+                    if (userRoles.contains("ROLE_APPLICANT")) {
+                        def applicantEmail = ''
+                        if (grant != null) applicantEmail = orgInfo['email']
+                        c2 = (applicantEmail == currentUser.email)
+                    }
+                }
+                if (task.taskDefinitionKey == "Review_Long-term_Grant_Application" ||
+                        task.taskDefinitionKey == "Review_Revised_Application" ||
+                        task.taskDefinitionKey == "Make_Revisions_From_ED") {
+                    c2 = userRoles.contains("ROLE_FINANCE")
+                }
+                if (task.taskDefinitionKey == "Approve_Application") {
+                    c2 = userRoles.contains("ROLE_ED")
+                }
                 if (grant != null) casee = orgInfo['name']
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
