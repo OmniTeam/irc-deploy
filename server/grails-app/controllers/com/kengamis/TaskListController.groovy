@@ -364,10 +364,13 @@ class TaskListController {
                 def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
 
                 User user = User.findByEmail(orgInfo['email'] as String)
-                UserRole userRole = UserRole.findByUser(user)
+
+                //update user role
+                UserRole.deleteOldRecords(user)
                 Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
-                userRole.role = partnerRole
-                userRole.save(flush: true, failOnError: true)
+                UserRole.create(user, partnerRole, true)
+
+                //update username
                 user.username = username
                 user.save(flush: true, failOnError: true)
 
