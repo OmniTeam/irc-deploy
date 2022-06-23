@@ -3019,4 +3019,20 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "longtext", columnName: "organisations_involved", tableName: "program_partner")
     }
 
+    changeSet(author: "bruno (generated)", id: "1655986984290-14") {
+        addColumn(tableName: "temp") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1655986984290-15") {
+        addColumn(tableName: "temp") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }
