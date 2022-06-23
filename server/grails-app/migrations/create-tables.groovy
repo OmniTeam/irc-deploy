@@ -3016,7 +3016,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "bruno (generated)", id: "16533442342556-28") {
-        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "organisations_involved", tableName: "program_partner")
+        dropNotNullConstraint(columnDataType: "longtext", columnName: "organisations_involved", tableName: "program_partner")
     }
 
 }
