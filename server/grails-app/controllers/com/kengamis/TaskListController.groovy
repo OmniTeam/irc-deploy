@@ -364,13 +364,12 @@ class TaskListController {
                 def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
 
                 User user = User.findByEmail(orgInfo['email'] as String)
-                user.username = username
-                user.save(flush: true, failOnError: true)
-
-                Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
                 UserRole userRole = UserRole.findByUser(user)
+                Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
                 userRole.role = partnerRole
                 userRole.save(flush: true, failOnError: true)
+                user.username = username
+                user.save(flush: true, failOnError: true)
 
                 println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
 
