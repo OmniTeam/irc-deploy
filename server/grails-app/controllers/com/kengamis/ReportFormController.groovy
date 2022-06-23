@@ -137,7 +137,7 @@ class ReportFormController {
                 performanceReport.each { p ->
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
                     milestones << [
-                            milestone            : pm.name,
+                            milestone            : pm?.name,
                             oervallTarget        : p['overall_target'],
                             cumulativeAchievement: p['cumulative_achievement'],
                             percentageAchievement: p['percentage_achievement'],
