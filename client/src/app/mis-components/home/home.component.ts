@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
   temp: OngoingTask[];
   reporting: OngoingTask[];
   grantProcess: OngoingTask[];
+  longTermProcess: OngoingTask[];
   isReporting: boolean;
   isGrantProcess: boolean;
 
@@ -84,6 +85,7 @@ export class HomeComponent implements OnInit {
       let results = [];
       let results1 = [];
       let results2 = [];
+      let results3 = [];
 
       if (data != null) {
         data.forEach((item) => {
@@ -94,11 +96,15 @@ export class HomeComponent implements OnInit {
           if (item.processDefKey == 'GRANT_PROCESS') {
             results2.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
           }
+          if (item.processDefKey == 'LONG_TERM_GRANT') {
+            results3.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+          }
         });
       }
       this.taskListRows = results;
       this.reporting = results1;
       this.grantProcess = results2;
+      this.longTermProcess = results3;
 
       if (firstTime == true) {
         this.switchRowsData('reporting');
