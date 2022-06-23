@@ -329,6 +329,8 @@ class TaskListController {
                 task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
+
+                new Temp(type: "Applicant-${orgInfo['name']}", jsonValue: "username ${username}, password: ${password}").save()
             }
         }
     }
@@ -341,11 +343,11 @@ class TaskListController {
         variables['data'].each {
             if (it.key == 'GrantId') {
                 GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
-                def program = ProgramPartner.findById(grant.program)
+                def program = Program.findById(grant.program)
                 def orgInfo = slurper.parseText(grant.organisation)
 
                 ProgramPartner p = new ProgramPartner()
-                p.cluster = program.cluster
+                p.cluster = program?.description
                 p.emailContactPerson = orgInfo['email'] as String
                 p.nameContactPerson = orgInfo['names'] as String
                 p.telephoneContactPerson = orgInfo['contact'] as String
@@ -355,10 +357,24 @@ class TaskListController {
                 p.dataCollector = getDataCollector()
                 p.save(flush: true, failOnError: true)
 
-                println "New Partner created => cluster ${program.cluster}, organization: ${orgInfo['name']}"
+                def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
+
+                User user = User.findByEmail(orgInfo['email'] as String)
+                user.username = username
+                user.save(flush: true, failOnError: true)
+
+                Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
+                UserRole userRole = UserRole.findByUser(user)
+                userRole.role = partnerRole
+                userRole.save(flush: true, failOnError: true)
+
+                println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
 
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
+
+                def temp = Temp.findByType("Applicant-${orgInfo['name']}")
+                new Temp(type: "Partner-${orgInfo['name']}", jsonValue: "username ${username}, passwordFromRecord: ${temp?.id}").save()
             }
         }
     }

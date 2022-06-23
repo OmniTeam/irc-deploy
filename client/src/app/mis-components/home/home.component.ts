@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {TaskListService} from "../../services/task-list.service";
-import {OngoingTask} from "../../models/ongoing-task";
-import {ActivatedRoute, Router} from "@angular/router";
-import {DateAgoPipe} from "../../pipes/date-ago.pipe";
-import {ProgramPartnersService} from "../../services/program-partners.service";
+import {TaskListService} from '../../services/task-list.service';
+import {OngoingTask} from '../../models/ongoing-task';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DateAgoPipe} from '../../pipes/date-ago.pipe';
+import {ProgramPartnersService} from '../../services/program-partners.service';
+import {ReportFormService} from '../../services/report-form.service';
+import {PartnerSetupService} from '../../services/partner-setup.service';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +13,15 @@ import {ProgramPartnersService} from "../../services/program-partners.service";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  milestones: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private taskListService: TaskListService,
     private programPartnersService: ProgramPartnersService,
+    private reportFormService: ReportFormService,
+    private partnerSetupService: PartnerSetupService,
   ) {
   }
 
@@ -29,7 +34,7 @@ export class HomeComponent implements OnInit {
   isReporting: boolean;
   isGrantProcess: boolean;
 
-  filterCounter: { filter: string, count: number }[] = []
+  filterCounter: { filter: string, count: number }[] = [];
   filters = [
     {name: '0 to 1 Week'},
     {name: '1 to 2 Week'},
@@ -38,13 +43,18 @@ export class HomeComponent implements OnInit {
     {name: 'All'},
   ];
   taskListRows: OngoingTask[];
+  budgetHolders: any;
+  displayMilestones: any[];
+
 
   ngOnInit(): void {
     this.reloadTable(true);
+    this.getMilestones();
+    this.getBudgetLines();
     //load filter counts
     this.filters.forEach((filter) => {
-      this.setFilters(filter, true)
-    })
+      this.setFilters(filter, true);
+    });
   }
 
   switchRowsData(type: string) {
@@ -71,28 +81,34 @@ export class HomeComponent implements OnInit {
 
   reloadTable(firstTime?: boolean) {
     this.taskListService.getTaskList().subscribe(data => {
-      let results = []
+      let results = [];
       let results1 = [];
       let results2 = [];
 
       if (data != null) {
         data.forEach((item) => {
-          results.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
-          if (item.processDefKey == "CRVPF_REPORTING") results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
-          if (item.processDefKey == "GRANT_PROCESS") results2.push(this.getRow(item.id,  item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
+          results.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+          if (item.processDefKey == 'CRVPF_REPORTING') {
+            results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+          }
+          if (item.processDefKey == 'GRANT_PROCESS') {
+            results2.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+          }
         });
       }
       this.taskListRows = results;
       this.reporting = results1;
       this.grantProcess = results2;
 
-      if (firstTime == true) this.switchRowsData('reporting');
+      if (firstTime == true) {
+        this.switchRowsData('reporting');
+      }
     });
   }
 
   getRow(id, taskName, type, assignee, dateAssigned, taskCase): OngoingTask {
-    let taskAge = new DateAgoPipe().transform(dateAssigned)
-    let filterCategory = this.setFilterCategory(taskAge)
+    let taskAge = new DateAgoPipe().transform(dateAssigned);
+    let filterCategory = this.setFilterCategory(taskAge);
     return (
       {
         id: id,
@@ -105,6 +121,28 @@ export class HomeComponent implements OnInit {
         filter_category: filterCategory
       }
     );
+  }
+
+  getMilestones() {
+    this.reportFormService.getMilestonePerformance().subscribe((data) => {
+      let milestones = [];
+      this.milestones = data;
+      console.log('rest ffgfg', data);
+      if (this.milestones != null) {
+        this.milestones.forEach((d) => {
+          milestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement, d.percentageAchievement, d.approvedBudget, d.expenseToDate, ''));
+        });
+        this.displayMilestones = milestones;
+
+      }
+    });
+  }
+
+  getBudgetLines() {
+    this.partnerSetupService.getPartnerSetup().subscribe((data) => {
+      console.log("partner",data);
+      this.budgetHolders = data;
+    });
   }
 
   onChangeSearch(event) {
@@ -139,49 +177,55 @@ export class HomeComponent implements OnInit {
   }
 
   setFilterCategory(taskAge: string) {
-    let filterCategory: any
+    let filterCategory: any;
     if (taskAge?.includes('week')) {
-      filterCategory = {period: 'week', duration: taskAge?.charAt(0)}
+      filterCategory = {period: 'week', duration: taskAge?.charAt(0)};
     } else if (taskAge?.includes('month')) {
-      filterCategory = {period: 'month', duration: taskAge?.charAt(0)}
+      filterCategory = {period: 'month', duration: taskAge?.charAt(0)};
     } else if (taskAge?.includes('year')) {
-      filterCategory = {period: 'year', duration: taskAge?.charAt(0)}
+      filterCategory = {period: 'year', duration: taskAge?.charAt(0)};
     }
-    return filterCategory
+    return filterCategory;
   }
 
   setFilters(filter, firstTime?: boolean) {
     this.taskListService.getTaskList().subscribe(data => {
-      let results = []
-      let rts = []
+      let results = [];
+      let rts = [];
       if (data != null) {
         data.forEach((item) => {
-          rts.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case))
+          rts.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
         });
         rts.forEach((task) => {
           if (task.filter_category != undefined) {
             if (filter.name == 'More than 4 Weeks') {
-              if (task.filter_category.period == 'month' || task.filter_category.period == 'year') results.push(task)
-              this.filterCount(filter, results.length)
+              if (task.filter_category.period == 'month' || task.filter_category.period == 'year') {
+                results.push(task);
+              }
+              this.filterCount(filter, results.length);
             } else if (filter.name == '0 to 1 Week') {
               if (task.filter_category.period == 'week' && task.filter_category.duration <= 1) {
-                results.push(task)
-              } else if (task.filter_category.period == 'day') results.push(task)
-              this.filterCount(filter, results.length)
+                results.push(task);
+              } else if (task.filter_category.period == 'day') {
+                results.push(task);
+              }
+              this.filterCount(filter, results.length);
             } else if (filter.name == '1 to 2 Week') {
               if (task.filter_category.period == 'week' && task.filter_category.duration >= 1 && task.filter_category.duration <= 2) {
-                results.push(task)
+                results.push(task);
               }
-              this.filterCount(filter, results.length)
+              this.filterCount(filter, results.length);
             } else if (filter.name == '3 to 4 Week') {
               if (task.filter_category.period == 'week' && task.filter_category.duration >= 3 && task.filter_category.duration <= 4) {
-                results.push(task)
+                results.push(task);
               }
-              this.filterCount(filter, results.length)
+              this.filterCount(filter, results.length);
             }
           }
-        })
-        if (firstTime != true) this.taskListRows = results;
+        });
+        if (firstTime != true) {
+          this.taskListRows = results;
+        }
       }
     });
 
@@ -193,19 +237,52 @@ export class HomeComponent implements OnInit {
   filterCount(filter, count: number) {
     if (this.filterCounter.some(x => x.filter === filter.name)) {
       this.filterCounter.forEach((item) => {
-        if (item.filter == filter.name) item.count = count
-      })
-    } else this.filterCounter.push({filter: filter.name, count: count})
+        if (item.filter == filter.name) {
+          item.count = count;
+        }
+      });
+    } else {
+      this.filterCounter.push({filter: filter.name, count: count});
+    }
   }
 
   getNumberOfRecordsForFilter(filterName): number {
-    let number = 0
+    let number = 0;
     this.filterCounter.forEach((item) => {
-      if (item.filter == filterName) number = item.count
-    })
+      if (item.filter == filterName) {
+        number = item.count;
+      }
+    });
     if (filterName == 'All') {
-      number = this.taskListRows?.length
+      number = this.taskListRows?.length;
     }
-    return number
+    return number;
+  }
+
+  filterMilestonesList(event: any) {
+
+  }
+
+   getMile(milestone: any, target, cumulative: any, achievement: any, budget: any, expenses: any, efficiency: string) {
+    return (
+      {
+        milestone: milestone,
+        target: target,
+        cumulative: cumulative,
+        achievement: this.getEfficiency(target,cumulative),
+        budget: budget,
+        expenses: expenses,
+        efficiency: this.getEfficiency(budget,expenses)
+      }
+    )
+  }
+
+  getEfficiency(budget,expenses){
+    if(!isNaN(Math.round((expenses / budget) * 100))){
+      return Math.round((expenses / budget) * 100);
+    } else {
+      return 0;
+    }
+
   }
 }
