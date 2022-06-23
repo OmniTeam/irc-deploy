@@ -618,7 +618,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         let fileRecord: { [key: string]: string } = {
           taskId: this.taskRecord.id,
           processInstanceId: this.taskRecord.processInstanceId,
-          userId: this.authService.getLoggedInUsername(),
+          userId: this.taskRecord.partnerId,
           groupId: this.taskRecord.groupId,
           taskDefinitionKey: this.taskRecord.taskDefinitionKey,
           path: attachment.value,

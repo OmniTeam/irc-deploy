@@ -42,6 +42,7 @@ class UrlMappings {
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
         get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
         get "/$controller/getMilestonesByProgram(.$format)?"(action:"getMilestonesByProgram")
+        get "/$controller/getMilestonePerformance(.$format)?"(action:"getMilestonePerformance")
         get "/$controller/defaultFilterQuery(.$format)?"(action:"defaultFilterQuery")
         get "/$controller/filterFiltersByEntityView(.$format)?"(action:"filterFiltersByEntityView")
         get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
