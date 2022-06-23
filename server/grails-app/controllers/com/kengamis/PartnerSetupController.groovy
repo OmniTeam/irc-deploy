@@ -99,14 +99,15 @@ class PartnerSetupController {
 
         //delete all tasks, calendar trigger dates and reports linked to this partner
         def partnerSetup = partnerSetupService.get(params.id)
-        def tasks = TaskList.findAllByInputVariablesIlike('%' + partnerSetup.partnerId + '%')
-        tasks.each {
+        def tasks = Archive.findAllByInputVariablesIlike('%' + partnerSetup.partnerId + '%')
+        tasks.each {Archive it ->
             def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
             if (deletedFromCamunda) {
                 ReportForm.findAllByTaskId(it.taskId).each { it.delete() }
                 ReportFormFiles.findAllByTaskId(it.taskId).each { it.delete() }
                 ReportFormRecommendations.findAllByTaskId(it.taskId).each { it.delete() }
                 ReportFormComments.findAllByTaskId(it.taskId).each { it.delete() }
+                TaskList.findAllByTaskId(it.taskId).each { it.delete() }
                 it.delete()
             }
         }
