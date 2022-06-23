@@ -99,7 +99,7 @@ class WorkPlanController {
 
         //delete all tasks, calendar trigger dates and reports linked to this partner
         def workPlan = workPlanService.get(params.id)
-        def tasks = Archive.findAllByInputVariablesIlike('%' + partnerSetup.partnerId + '%')
+        def tasks = Archive.findAllByInputVariablesIlike('%' + workPlan.staffId + '%')
         tasks.each {Archive it ->
             def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
             if (deletedFromCamunda) {
