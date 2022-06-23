@@ -50,7 +50,7 @@ export class ProgramPartnersComponent implements OnInit {
     if (confirm('Are you sure to delete this Program Partner?')) {
       this.programPartnersService.deleteProgramPartner(deletedRow).subscribe((result) => {
           this.alertService.warning(`Program Partner has been  deleted `);
-          this.router.navigate(['/programCategory']);
+          this.router.navigate(['/programPartner']);
           this.reloadTable();
         }, error => {
           this.alertService.error(`Program Partner could not be deleted`);

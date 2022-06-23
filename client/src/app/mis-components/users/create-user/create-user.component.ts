@@ -50,7 +50,6 @@ export class CreateUserComponent implements OnInit {
   userRoles: any;
   partnerUserRoles: any;
   staffUserRoles: any;
-  // represents the user roles
   userTypeFilled: any;
   partners: any;
   type_of_user = [
@@ -90,7 +89,7 @@ export class CreateUserComponent implements OnInit {
       password: ['', [Validators.required]],
       username: ['', [Validators.required, UsernameValidator.validateUsername(this.userService)]],
       names: ['', [Validators.required]],
-      email: [''/*, [Validators.required, Validators.email]*/],
+      email: ['', [Validators.required, Validators.email]],
       role: [null],
       partner: [null],
       kengaGroup: [null],
@@ -105,11 +104,6 @@ export class CreateUserComponent implements OnInit {
   createUser() {
     this.clicked = true;
     this.submitted = true;
-    /*console.log((<HTMLInputElement>document.getElementById('user_type')).value, 'user type')
-    if (!(<HTMLInputElement>document.getElementById('user_type')).value) {
-      this.formGroup.setErrors({'incorrect': true});
-      this.userTypeFilled = true;
-    }*/
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;
@@ -136,23 +130,27 @@ export class CreateUserComponent implements OnInit {
 
 
       // insert the user's partner in the user partner table
-      const userPartnerData = new FormData();
-      userPartnerData.append('user', result.id);
-      userPartnerData.append('programPartner', formData.partner);
+      if (formData.partner) {
+        const userPartnerData = new FormData();
+        userPartnerData.append('user', result.id);
+        userPartnerData.append('programPartner', formData.partner);
 
-      this.userService.createUserPartner(userPartnerData).subscribe(data => {
-        console.log(data, 'User Partner');
-      }, error => {console.log('Did not creatte partner', error); });
+        this.userService.createUserPartner(userPartnerData).subscribe(data => {
+          console.log(data, 'User Partner');
+        }, error => {console.log('Did not create partner', error); });
+      }
 
       // inserts user_id group_id pairs into the user group table
-      for (let i = 0; i < formData.kengaGroup.length; i++) {
-        const userGroupData = new FormData();
-        userGroupData.append('user', result.id);
-        userGroupData.append('kengaGroup', formData.kengaGroup[i]);
+      if (formData.kengaGroup) {
+        for (let i = 0; i < formData.kengaGroup.length; i++) {
+          const userGroupData = new FormData();
+          userGroupData.append('user', result.id);
+          userGroupData.append('kengaGroup', formData.kengaGroup[i]);
 
-        this.userService.createUserGroup(userGroupData).subscribe(data => {
-          console.log(data , 'User group');
-        }, error => {this.alertService.error('failed to create user aclsEntries'); });
+          this.userService.createUserGroup(userGroupData).subscribe(data => {
+            console.log(data , 'User group');
+          }, error => {this.alertService.error('failed to create user groups Entries'); });
+        }
       }
 
       this.router.navigate(['/users']);
@@ -167,10 +165,19 @@ export class CreateUserComponent implements OnInit {
       this.formGroup.controls['role'].reset();
       document.getElementById('role_partner').hidden = false;
       document.getElementById('role_staff').hidden = true;
+      document.getElementById('partners').hidden = false;
+      document.getElementById('groups').hidden = true;
     } else if (event === 'CRVPF Staff') {
       this.formGroup.controls['role'].reset();
       document.getElementById('role_staff').hidden = false;
       document.getElementById('role_partner').hidden = true;
+      document.getElementById('groups').hidden = false;
+      document.getElementById('partners').hidden = true;
+    } else {
+      document.getElementById('role_staff').hidden = true;
+      document.getElementById('role_partner').hidden = true;
+      document.getElementById('groups').hidden = true;
+      document.getElementById('partners').hidden = true;
     }
 
 

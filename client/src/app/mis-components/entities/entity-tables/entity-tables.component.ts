@@ -168,7 +168,15 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', tagTypeId);
     this.tagService.getTagsByTagType(params).subscribe((data) => {
-      this.tags = data;
+      // this.tags = data;
+      if (this.userRole.includes('ROLE_SUPER_ADMIN') || this.userRole.includes('ROLE_ADMIN') ) {
+        this.tags = data;
+      } else {
+        // tslint:disable-next-line:max-line-length
+        // console.log(this.tagFilters = data.filter(a => Object.keys(a?.partner).map(key => a?.partner[key])[0]), 'tag filter partner id');
+        // console.log(this.userPartner, 'user partner id');
+        this.tags = data.filter(a => Object.keys(a?.partner).map(key => a?.partner[key])[0] === this.userPartner);
+      }
     }, error => console.log(error));
   }
 

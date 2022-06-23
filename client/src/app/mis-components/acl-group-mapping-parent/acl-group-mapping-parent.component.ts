@@ -29,7 +29,7 @@ export class AclGroupMappingParentComponent implements OnInit {
 
   constructor(
     private groupsService: GroupsService,
-    private AclGroupMappingService: AclGroupMappingService,
+    private aclGroupMappingService: AclGroupMappingService,
     private formService: FormService,
     private tagsService: TagService,
     private alertService: AlertService,
@@ -186,7 +186,7 @@ export class AclGroupMappingParentComponent implements OnInit {
     const formData = this.formGroup.value;
     this.formGroup.markAsPristine();
     console.log(formData);
-    this.AclGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
+    this.aclGroupMappingService.createGroupMapping2(formData).subscribe((result) => {
       console.warn(result, 'ACL created Successfully');
       this.alertService.success(`ACL has been created`);
       this.router.navigate(['/acl-group-mapping-lists']);

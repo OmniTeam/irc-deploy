@@ -107,7 +107,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('++++++++++');
+    // console.log('++++++++++');
     this.usersRoles = this.authService.getUserRoles();
 
     this.router.events.subscribe(event => {
@@ -115,7 +115,7 @@ export class SidebarComponent implements OnInit {
     });
     console.log(this.authService.isLoggedIn());
     if (this.authService.isLoggedIn()) {
-      console.log('am being loaded');
+      // console.log('am being loaded');
       this.formService.getEnabledForms().subscribe(data => {
         for (const form of data) {
           const formObject = {};

@@ -26,6 +26,40 @@
                     <form [formGroup]="formGroup" (ngSubmit)="updateUser()" *ngIf="formGroup" style="padding:30px">
                       <div class="row">
                         <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                          <!--<div class="row">
+                            <div class="col-md-3">
+                              <label>
+                                User Type
+                                <span class="required-indicator">*</span>
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <ng-select class="form-control form-control-sm" id="user_type"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="false"
+                                               placeholder="User Type"
+                                               (change)="userType($event)"
+                                               [searchable]="true"
+                                               [clearable]="true"
+                                    >
+                                      <ng-option [value]="item.name" *ngFor="let item of type_of_user">
+                                        {{item.name}}
+                                      </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="userTypeFilled" class="invalid-feedback">
+                                      <div class="input-error">Please select a User Type</div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>-->
                           <div class="row">
                             <div class="col-md-3">
                               <label>
@@ -145,7 +179,7 @@
                             <div class="col-md-3">
                               <label>
                                 Email
-<!--                                <span class="required-indicator">*</span>-->
+                                <span class="required-indicator">*</span>
                               </label>
                             </div>
                             <div class="col-md-9">
@@ -177,45 +211,40 @@
                               </div>
                             </div>
                           </div>
-                          <!--<div class="row">
+                          <!--<div class="row" id="role_partner" [hidden]="true">
                             <div class="col-md-3">
                               <label>
-                                Telephone
-&lt;!&ndash;                                <span class="required-indicator">*</span>&ndash;&gt;
+                                Role
                               </label>
                             </div>
                             <div class="col-md-9">
                               <div class="col-md-12">
                                 <div class="form-group ">
                                   <div class=" input-group input-group-merge">
-                                    <div class=" input-group-prepend">
-                                                <span class="input-group-text" style="padding-right: 10px;">
-                                                    <i class=" fas fa-user"></i>
-                                                </span>
-                                    </div>
-                                    <input
-                                      class="form-control"
-                                      placeholder="Telephone"
-                                      type="text"
-                                      style="padding-left: 10px;"
-                                      formControlName="telephone"
-                                      [ngClass]="{ 'is-invalid': submitted && f.telephone.errors }"
+                                    <ng-select class="form-control form-control-sm"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="false"
+                                               placeholder="Role"
+                                               formControlName="role"
+                                               [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
+                                               [searchable]="true"
+                                               [clearable]="true"
                                     >
-                                    <div *ngIf="submitted && f.telephone.errors" class="invalid-feedback">
-                                      <div *ngIf="f.telephone.errors.required" class="input-error">Telephone is required</div>
-                                      <div *ngIf="f.telephone.errors.pattern" class="input-error">Telephone should be in format
-                                        07XXXXXXXX
-                                      </div>
+                                      <ng-option [value]="item.id" *ngFor="let item of partnerUserRoles">
+                                        {{item.authority}}
+                                      </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+                                      <div *ngIf="f.role.errors.required" class="input-error">A role is required</div>
                                     </div>
-                                  </div>
-                                  <div *ngIf="f.telephone.hasError('alreadyExist')" >
-                                    <div class="input-error">Telephone number is already in use</div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>-->
-                          <div class="row">
+                          <div class="row" >
                             <div class="col-md-3">
                               <label>
                                 Role
