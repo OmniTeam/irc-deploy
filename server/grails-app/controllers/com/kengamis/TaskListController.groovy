@@ -347,14 +347,17 @@ class TaskListController {
                 def orgInfo = slurper.parseText(grant.organisation)
 
                 ProgramPartner p = new ProgramPartner()
-                p.cluster = program?.description
-                p.emailContactPerson = orgInfo['email'] as String
-                p.nameContactPerson = orgInfo['names'] as String
-                p.telephoneContactPerson = orgInfo['contact'] as String
+                p.cluster = orgInfo['nameCluster'] as String
                 p.organisation = orgInfo['name'] as String
                 p.physicalAddress = orgInfo['physicalAddress'] as String
                 p.organisationType = orgInfo['organizationType'] as String
+                p.nameContactPerson = orgInfo['names'] as String
+                p.telephoneContactPerson = orgInfo['contact'] as String
+                p.emailContactPerson = orgInfo['email'] as String
+                p.country = orgInfo['country'] as String
+                p.city = orgInfo['city'] as String
                 p.dataCollector = getDataCollector()
+                p.areaOfOperation = orgInfo['areaOfOperation'] as String
                 p.program = program
                 p.save(flush: true, failOnError: true)
 
