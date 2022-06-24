@@ -151,7 +151,7 @@ class StartCamundaInstancesJob extends Script {
             boolean startInstance = true
             //find user by email
             def findUser = User.findByEmail(feed.assignee)
-            print(findUser?.names)
+
 
             if (startInstance) {
                 try {
@@ -169,7 +169,8 @@ class StartCamundaInstancesJob extends Script {
                     if (started) {
                         print "================ Yes Here We Go!!! ================"
                         println("IRC PROCESS STARTED")
-                        feed.currentStatusOfFeedback = "Running"
+                        feed.currentStatusOfFeedback = "Forwarded for Action"
+                        feed.status = "Started"
                         feed.save()
                     }
 
