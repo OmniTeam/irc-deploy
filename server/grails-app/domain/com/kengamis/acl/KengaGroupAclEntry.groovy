@@ -1,5 +1,6 @@
 package com.kengamis.acl
 
+import com.kengamis.EntityViewFilters
 import com.kengamis.KengaGroup
 import com.kengamis.User
 

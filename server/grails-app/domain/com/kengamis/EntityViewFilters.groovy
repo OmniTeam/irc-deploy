@@ -29,6 +29,11 @@ class EntityViewFilters {
     public String toString() {
         return "${name}"
     }
+    static  create(name,filterQuery, entityView) {
+        def instance = new EntityViewFilters(name:name, filterQuery: filterQuery, entityView:entityView)
+        instance.save(flush: true)
+        return  instance
+    }
 
     Set<User> getUsers() {
         (UserEntityViewFilters.findAllByEntityViewFilters(this) as List<UserEntityViewFilters>)*.user as Set<User>
