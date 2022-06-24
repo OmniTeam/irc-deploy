@@ -147,9 +147,9 @@ class ReportFormController {
                         }
                     }
                     milestones << [
-                            milestoneId          : pm.id,
+                            milestoneId          : pm?.id,
                             staffId              : it.userId,
-                            milestone            : pm.name,
+                            milestone            : pm?.name,
                             overallTarget        : p['overall_target'],
                             cumulativeAchievement: p['cumulative_achievement'],
                             percentageAchievement: p['percentage_achievement'],

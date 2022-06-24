@@ -32,7 +32,7 @@ class WorkPlanController {
             def user = User.findById(workPlan.staffId)
 
             list << [id         : workPlan.id,
-                     staff       : user.names,
+                     staff      : user?.names,
                      staffId    : workPlan.staffId,
                      lastUpdated: workPlan.lastUpdated,
                      dateCreated: workPlan.dateCreated,
