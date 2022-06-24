@@ -170,6 +170,7 @@
                        placeholder="Country"
                        (ngModelChange)="onSelectCountry($event)"
                        [(ngModel)]="organisation.country"
+                       [disabled]="isReadOnly"
                        [searchable]="true"
                        [clearable]="true"
             >
@@ -192,6 +193,7 @@
                        [multiple]="false"
                        placeholder="City"
                        [(ngModel)]="organisation.city"
+                       [disabled]="isReadOnly"
                        [searchable]="true"
                        [clearable]="true"
             >
