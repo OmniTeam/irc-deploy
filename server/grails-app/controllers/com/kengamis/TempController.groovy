@@ -99,22 +99,45 @@ class TempController {
     def startLongTermGrantJob(String grantId) {
         def message = ["Failed"]
         GrantLetterOfInterest grant = GrantLetterOfInterest.findById(grantId)
-        if (grant) {
-            createUser(grant)
-            boolean started = StartCamundaInstancesJob.startProcessInstance([
-                    GrantId          : grantId,
-                    ApplicationId    : "",
-                    Applicant        : "brunojay001@gmail.com",
-                    ProgramTeam      : "brunojay001@gmail.com",
-                    ExecutiveDirector: "brunojay001@gmail.com"
-            ], "LONG_TERM_GRANT")
 
-            if (started) {
-                println "=========Started long term grant instance ========="
-                grant.status = "started-longterm"
-                grant.save(flush: true, failOnError: true)
-                message = ["Started grant process instance"]
+        def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
+
+        try {
+            if (r.size() > 0) {
+                def slurper = new JsonSlurper()
+                def orgInfo = slurper.parseText(grant.organisation)
+                def applicantEmail = orgInfo['email']
+                def applicantName = orgInfo['names']
+                def organization = orgInfo['name']
+                def edEmail = []
+                def programTeamEmail = []
+                def program = Program.get(grant.program)
+
+                r.each {
+                    if (it['role'] == "ROLE_ED") edEmail << it['email']
+                    if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                }
+                if (grant) {
+                    createUser(grant)
+                    boolean started = StartCamundaInstancesJob.startProcessInstance([
+                            GrantId          : grantId,
+                            ApplicantName    : applicantName,
+                            Organization     : organization,
+                            Applicant        : applicantEmail,
+                            ProgramTeam      : programTeamEmail[0],
+                            ExecutiveDirector: edEmail[0],
+                    ], "LONG_TERM_GRANT")
+
+                    if (started) {
+                        println "=========Started long term grant instance ========="
+                        grant.status = "started-longterm"
+                        grant.save(flush: true, failOnError: true)
+                        message = ["Started grant process instance"]
+                    }
+                }
             }
+        } catch (e) {
+            e.printStackTrace()
         }
         respond message
     }
