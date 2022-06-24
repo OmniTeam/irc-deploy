@@ -7,6 +7,30 @@
   </div>
 </div>
 
+<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
+<div *ngIf="openCommentsPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Comments</h3>
+  </div>
+  <div *ngIf="!loading" class="card-body d-flex flex-column">
+    <div class="row">
+      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
+      <div class="col-sm-11">
+        <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
+        <div style="display: flex;justify-content: end;">
+          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addComment()">Send</button>
+        </div>
+      </div>
+    </div>
+    <hr style="margin-top: 0; margin-bottom: 0;"/>
+    <app-comments [comments]="comments" (onNewComment)="onNewCommentHandler($event)"></app-comments>
+  </div>
+  <div *ngIf="loading" >Loading...</div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>
+  </div>
+</div>
+
 <div class=" container-fluid mt--6">
   <div class=" row">
     <div class=" col">
@@ -161,6 +185,9 @@
                             </ul>
                           </div>
                         </div>
+                        <div class="col-sm-3">
+                          <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                        </div>
                       </div>
                       <div class="row" style="margin: 10px;">
                         <label for="reviewerAcComments">Provide any comments</label>
@@ -223,6 +250,9 @@
                             </ul>
                           </div>
                         </div>
+                        <div class="col-sm-3">
+                          <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                        </div>
                       </div>
                       <div class="row" style="margin: 10px;">
                         <label for="approverComments">Provide any comments</label>
@@ -275,6 +305,9 @@
                               </li>
                             </ul>
                           </div>
+                        </div>
+                        <div class="col-sm-3">
+                          <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
                         </div>
                       </div>
                       <div *ngIf="decisionOfReviewProcess=='Yes'" class="row" style="margin: 10px;">

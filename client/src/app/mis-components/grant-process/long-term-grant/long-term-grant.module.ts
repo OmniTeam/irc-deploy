@@ -10,20 +10,22 @@ import {NgSelectModule} from "@ng-select/ng-select";
 import {CommonModule} from "@angular/common";
 import {LongTermGrantRoutingModule} from "./long-term-grant-routing.module";
 import {GrantProcessModule} from "../grant-process.module";
+import {CommentsModule} from "../../comments/comments.module";
 
 @NgModule({
   declarations: [LongTermGrantComponent, LongTermApplicationComponent],
-  imports: [
-    CommonModule,
-    LongTermGrantRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxDatatableModule,
-    ComponentsModule,
-    DataTablesModule,
-    EntityViewTableModule,
-    NgSelectModule,
-    GrantProcessModule,
-  ]
+    imports: [
+        CommonModule,
+        LongTermGrantRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxDatatableModule,
+        ComponentsModule,
+        DataTablesModule,
+        EntityViewTableModule,
+        NgSelectModule,
+        GrantProcessModule,
+        CommentsModule,
+    ]
 })
 export class LongTermGrantModule { }

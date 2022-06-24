@@ -309,10 +309,11 @@ class TaskListController {
         variables['data'].each {
             if (it.key == 'GrantId') {
                 GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
+                Program program = Program.findById(g.program)
                 def orgInfo = slurper.parseText(g.organisation)
                 def email = orgInfo['email'] as String
                 def names = orgInfo['names'] as String
-                def username = generateCode("AP", generator(('0'..'9').join(), 4)) as String
+                def username = generateCode(program!=null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
                 def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
                 def user = new User(email: email, names: names, username: username, password: password)
@@ -356,7 +357,7 @@ class TaskListController {
                 p.emailContactPerson = orgInfo['email'] as String
                 p.country = orgInfo['country'] as String
                 p.city = orgInfo['city'] as String
-                p.dataCollector = getDataCollector()
+                p.dataCollector = getDataCollector()['user_id']
                 p.areaOfOperation = orgInfo['areaOfOperation'] as String
                 p.program = program
                 p.save(flush: true, failOnError: true)
