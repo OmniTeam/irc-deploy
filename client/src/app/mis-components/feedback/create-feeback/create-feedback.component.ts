@@ -47,20 +47,7 @@ export class CreateFeedbackComponent implements OnInit {
   selectedStaff: any;
   updateStatus: any;
 
-  staff_Designation =[
-    {
-      'name': 'AAP Officer'
-    },
-    {
-      'name': 'CCEO'
-    },
-    {
-      'name': 'Monitoring & Evaluation Officer'
-    },
-    {
-      'name': 'Program Staff'
-    },
-  ];
+
   action_taken = [
     {
       'name': 'Apology Sent'
@@ -85,13 +72,25 @@ export class CreateFeedbackComponent implements OnInit {
     },
   ];
   type_of_feedback = [
-    {
-      'name': 'Old'
-    },
-    {
-      'name': 'New'
-    },
+    {'name':'Domestic violence'},
+    {'name':'Rape cases'},
+    {'name':'Missing drugs'},
+    {'name':'Child abuse'},
+    {'name':'Lost documents'},
+    {'name':'Missed food'},
+    {'name':'Defilement'},
+    {'name':'Forced marriage'},
+    {'name':'Child marriage'},
+    {'name':'Missed cash support'},
+    {'name': 'Others'}
   ];
+
+  priority_of_feedback = [
+    {'name':'Critical'},
+    {'name':'High'},
+    {'name':'Low'},
+    {'name':'Medium'},
+  ]
   feedback_status = [
     {
       'name': 'Actioned'
@@ -843,6 +842,8 @@ export class CreateFeedbackComponent implements OnInit {
   /*Save feedback for later*/
 
 
+
+
   saveForm() {
     this.clicked = true;
     this.submitted = true;
@@ -871,7 +872,7 @@ export class CreateFeedbackComponent implements OnInit {
 
     }
 
-    let statusSave = 'Saved'
+
     var newFormData: {[key:string]: string} = {
       dateFeedbackReceived: formData.dateFeedbackReceived,
       nameOfRegister: this.registra,
