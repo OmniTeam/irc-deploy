@@ -47,10 +47,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   isDisburseFunds: boolean;
   isApproveFundDisbursement: boolean;
 
-  totalAmountCommitted: string;
-  totalAmountSpent: string;
-  totalSpendingPlanForPeriod: string;
-  balance: string;
+  totalAmountCommitted: number;
+  totalAmountSpent: number;
+  totalSpendingPlanForPeriod: number;
+  balance: number;
 
   openCommentsPopup: boolean;
   openRecommendationsPopup: boolean;
@@ -192,8 +192,12 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
     //set organizational Info
     this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
-      if (results !== null && results !== undefined) {
-        this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
+      if (results !== null) {
+        if (results.organisationsInvolved !== undefined)
+        if (results.organisationsInvolved.length>0){
+          console.log(results.organisationsInvolved)
+          this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
+        }
         this.organisationalInfo = results;
       }
     });
@@ -555,6 +559,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processInstanceId: this.taskRecord.processInstanceId,
+      partnerSetupId: this.taskRecord.partnerSetupId,
+      partnerId: this.taskRecord.partnerId,
       userId: this.authService.getLoggedInUsername(),
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
@@ -618,7 +624,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         let fileRecord: { [key: string]: string } = {
           taskId: this.taskRecord.id,
           processInstanceId: this.taskRecord.processInstanceId,
-          userId: this.authService.getLoggedInUsername(),
+          userId: this.taskRecord.partnerId,
           groupId: this.taskRecord.groupId,
           taskDefinitionKey: this.taskRecord.taskDefinitionKey,
           path: attachment.value,
@@ -772,9 +778,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       tas += +b.expense_to_date;
       tb += +b.variance
     })
-    this.totalAmountCommitted = tac.toString()
-    this.totalAmountSpent = tas.toString()
-    this.balance = tb.toString()
+    this.totalAmountCommitted = tac
+    this.totalAmountSpent = tas
+    this.balance = tb
   }
 
   updateTaskStatus(status) {

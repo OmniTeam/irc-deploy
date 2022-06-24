@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
+import groovy.json.JsonSlurper
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
 import grails.gorm.transactions.ReadOnly
@@ -21,7 +22,7 @@ class ReportFormController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reportFormService.list(params), model:[reportFormCount: reportFormService.count()]
+        respond reportFormService.list(params), model: [reportFormCount: reportFormService.count()]
     }
 
     def show(Long id) {
@@ -47,7 +48,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: CREATED, view:"show"]
+        respond reportForm, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -69,7 +70,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: OK, view:"show"]
+        respond reportForm, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -87,5 +88,41 @@ class ReportFormController {
     def getReportForTask() {
         def reportData = [report: ReportForm.findByProcessInstanceId(params.processInstanceId)]
         respond reportData
+    }
+
+    def getMilestonePerformance() {
+        def slurper = new JsonSlurper()
+        def milestones = []
+
+        ReportForm.all.each {
+            def values = slurper.parseText(it.reportValues)
+            def performanceReport = slurper.parseText(values['performanceReport'] as String)
+            def financialReport = slurper.parseText(values['financialReport'] as String)
+            if (performanceReport != null) {
+                performanceReport.each { p ->
+                    ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
+                    def expenseToDate = ''
+                    def approvedBudget = ''
+                    financialReport.each { f ->
+                        if (f['budget_line'] == pm?.name) {
+                            expenseToDate = f['expense_to_date']
+                            approvedBudget = f['approved_budget']
+                        }
+                    }
+                    milestones << [
+                            milestoneId          : pm?.id,
+                            partnerId            : it.partnerId,
+                            milestone            : pm?.name,
+                            overallTarget        : p['overall_target'],
+                            cumulativeAchievement: p['cumulative_achievement'],
+                            percentageAchievement: p['percentage_achievement'],
+                            expenseToDate        : expenseToDate,
+                            approvedBudget       : approvedBudget,
+
+                    ]
+                }
+            }
+        }
+        respond milestones
     }
 }

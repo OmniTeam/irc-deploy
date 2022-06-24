@@ -5,6 +5,9 @@ import {TaskListService} from "../../../services/task-list.service";
 import {AlertService} from "../../../services/alert";
 import {TempDataService} from "../../../services/temp-data.service";
 import {LongTermGrantService} from "../../../services/long-term-grant-service";
+import {CommentNode} from "../../comments/comments.component";
+import {v4 as uuid} from 'uuid';
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-long-term-grant',
@@ -18,6 +21,7 @@ export class LongTermGrantComponent implements OnInit {
   isReviewRevisedApplication: boolean;
   isMakeRevisionsEdApplication: boolean;
   isApproveApplication: boolean;
+  isSignAgreement: boolean;
 
   taskRecord: any;
   grantId: string;
@@ -57,6 +61,12 @@ export class LongTermGrantComponent implements OnInit {
   doesItAdhere: any;
   isConceptInline: any;
   approverComments: any;
+  signAgreementComments: any;
+  dateAgreement: any;
+  loading: boolean;
+  comments: Array<CommentNode> = [];
+  openCommentsPopup: boolean;
+  openPopup: boolean;
 
   constructor(
     private router: Router,
@@ -64,6 +74,7 @@ export class LongTermGrantComponent implements OnInit {
     private taskListService: TaskListService,
     private alertService: AlertService,
     private tempDataService: TempDataService,
+    public authService: AuthService,
     private longTermGrantService: LongTermGrantService,
   ) {
   }
@@ -129,6 +140,9 @@ export class LongTermGrantComponent implements OnInit {
     if (data.taskDefinitionKey === "Approve_Application") {
       this.isApproveApplication = true;
     }
+    if (data.taskDefinitionKey === "Sign_Agreement") {
+      this.isSignAgreement = true;
+    }
 
     this.applicationId = data.id;
     this.grantId = data.grantId;
@@ -136,8 +150,42 @@ export class LongTermGrantComponent implements OnInit {
     this.processInstanceId = data.processInstanceId
   }
 
-  cancel() {
-    this.router.navigate(['/home']);
+  getAllComments() {
+    this.loading = true;
+    this.comments = []
+    this.tempDataService.getTempRecordByValue(this.grantId).subscribe((results: any) => {
+      results.forEach(it => {
+        let data: any
+        if (it.json_value != undefined) {
+          data = JSON.parse(it.json_value)
+          this.comments.push(new CommentNode(data.grantId, data.comments, null, [], [], null));
+        }
+      });
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+    })
+  }
+
+  viewComments(): void {
+    this.getAllComments()
+    this.openCommentsPopup = !this.openCommentsPopup;
+    this.openPopup = this.openCommentsPopup;
+  }
+
+  addComment() {
+    let text = (document.getElementById("addComment") as HTMLTextAreaElement);
+    if (text.value !== "") {
+      this.comments.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], [], new Date()));
+      text.value = "";
+    }
+  }
+
+  onNewCommentHandler(comment: CommentNode) {
+    console.log("New comment", comment);
+    this.reviewerComments = comment.text
+    this.approverComments = comment.text
+    this.signAgreementComments = comment.text
   }
 
   submit(key, status) {
@@ -150,6 +198,9 @@ export class LongTermGrantComponent implements OnInit {
         break
       case 'approveApplication':
         this.approveApplication(status)
+        break
+      case 'signAgreement':
+        this.signAgreement(status)
         break
     }
 
@@ -356,5 +407,73 @@ export class LongTermGrantComponent implements OnInit {
       this.alertService.error('Please fill in all required details');
       return;
     }
+  }
+
+  signAgreement(status) {
+    if (this.decisionOfReviewProcess != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        decision: this.decisionOfReviewProcess,
+        dateAgreement: this.dateAgreement,
+        comments: this.signAgreementComments,
+        status: status
+      }
+
+      let formDataR: { [key: string]: string } = {
+        type: "signAgreement",
+        jsonValue: JSON.stringify(formData),
+      }
+
+      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
+      //const params = new HttpParams().set('id', formData.processInstanceId);
+      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+        if (response.some(x => x.type === 'signAgreement')) {
+          response.forEach(it => {
+            if (it.type === 'signAgreement') {
+              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Updated";
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.error = true;
+                this.errorMessage = "Failed to update";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          })
+        } else {
+          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
+  }
+
+  cancel() {
+    this.router.navigate(['/home']);
   }
 }

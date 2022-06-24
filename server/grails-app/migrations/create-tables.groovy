@@ -2981,13 +2981,11 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_comments")
     }
 
-    /*changeSet(author: "omni-tech (generated)", id: "1655205123672-13") {
+    changeSet(author: "omni-tech (generated)", id: "1655205123672-13") {
         addColumn(tableName: "tag") {
             column(name: "partner_id", type: "varchar(255)")
         }
-    }*/
-
-
+    }
 
     changeSet(author: "bruno (generated)", id: "165412341535377-12") {
         addColumn(tableName: "program_partner") {
@@ -2997,7 +2995,7 @@ databaseChangeLog = {
         }
     }
 
-    /*changeSet(author: "bruno (generated)", id: "1655213433311-13") {
+    changeSet(author: "bruno (generated)", id: "1655213433311-13") {
         createTable(tableName: "temp") {
             column(name: "id", type: "VARCHAR(255)") {
                 constraints(nullable: "false", primaryKey: "true", primaryKeyName: "tempPK")
@@ -3009,11 +3007,43 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
         }
-    }*/
+    }
 
     changeSet(author: "bruno (generated)", id: "1655213433311-14") {
         addColumn(tableName: "grant_letter_of_interest_review") {
             column(name: "recommendations", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16533442342556-28") {
+        dropNotNullConstraint(columnDataType: "longtext", columnName: "organisations_involved", tableName: "program_partner")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1655986984290-14") {
+        addColumn(tableName: "temp") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1655986984290-15") {
+        addColumn(tableName: "temp") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656057038764-14") {
+        addColumn(tableName: "report_form") {
+            column(name: "partner_id", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656057038764-15") {
+        addColumn(tableName: "report_form") {
+            column(name: "partner_setup_id", type: "varchar(255)")
         }
     }
 

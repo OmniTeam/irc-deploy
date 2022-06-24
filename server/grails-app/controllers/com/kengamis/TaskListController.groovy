@@ -111,6 +111,29 @@ class TaskListController {
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
             } else if (task.processDefKey == "LONG_TERM_GRANT") {
+                if (task.taskDefinitionKey == "Submit_Long_Term_Grant" ||
+                        task.taskDefinitionKey == "Make_Revisions_On_Application") {
+                    assignee = "APPLICANT"
+                    if (userRoles.contains("ROLE_APPLICANT")) {
+                        def applicantEmail = ''
+                        if (grant != null) applicantEmail = orgInfo['email']
+                        c2 = (applicantEmail == currentUser.email)
+                    }
+                }
+                if (task.taskDefinitionKey == "Review_Long-term_Grant_Application" ||
+                        task.taskDefinitionKey == "Review_Revised_Application" ||
+                        task.taskDefinitionKey == "Make_Revisions_From_ED") {
+                    assignee = "FINANCE"
+                    c2 = userRoles.contains("ROLE_FINANCE")
+                }
+                if (task.taskDefinitionKey == "Approve_Application") {
+                    assignee = "Executive Director"
+                    c2 = userRoles.contains("ROLE_ED")
+                }
+                if (task.taskDefinitionKey == "Sign_Agreement") {
+                    assignee = "PROGRAM_OFFICER"
+                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
+                }
                 if (grant != null) casee = orgInfo['name']
                 startDate = grant?.dateCreated
                 endDate = grant?.lastUpdated
@@ -286,10 +309,11 @@ class TaskListController {
         variables['data'].each {
             if (it.key == 'GrantId') {
                 GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
+                Program program = Program.findById(g.program)
                 def orgInfo = slurper.parseText(g.organisation)
                 def email = orgInfo['email'] as String
                 def names = orgInfo['names'] as String
-                def username = generateCode("AP", generator(('0'..'9').join(), 4)) as String
+                def username = generateCode(program!=null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
                 def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
                 def user = new User(email: email, names: names, username: username, password: password)
@@ -306,6 +330,8 @@ class TaskListController {
                 task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
+
+                new Temp(type: "Applicant-${orgInfo['name']}", jsonValue: "username ${username}, password: ${password}").save()
             }
         }
     }
@@ -318,24 +344,44 @@ class TaskListController {
         variables['data'].each {
             if (it.key == 'GrantId') {
                 GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
-                def program = ProgramPartner.findById(grant.program)
+                Program program = Program.findById(grant.program)
                 def orgInfo = slurper.parseText(grant.organisation)
 
                 ProgramPartner p = new ProgramPartner()
-                p.cluster = program.cluster
-                p.emailContactPerson = orgInfo['email'] as String
-                p.nameContactPerson = orgInfo['names'] as String
-                p.telephoneContactPerson = orgInfo['contact'] as String
+                p.cluster = orgInfo['nameCluster'] as String
                 p.organisation = orgInfo['name'] as String
                 p.physicalAddress = orgInfo['physicalAddress'] as String
                 p.organisationType = orgInfo['organizationType'] as String
-                p.dataCollector = getDataCollector()
+                p.nameContactPerson = orgInfo['names'] as String
+                p.telephoneContactPerson = orgInfo['contact'] as String
+                p.emailContactPerson = orgInfo['email'] as String
+                p.country = orgInfo['country'] as String
+                p.city = orgInfo['city'] as String
+                p.dataCollector = getDataCollector()['user_id']
+                p.areaOfOperation = orgInfo['areaOfOperation'] as String
+                p.program = program
                 p.save(flush: true, failOnError: true)
 
-                println "New Partner created => cluster ${program.cluster}, organization: ${orgInfo['name']}"
+                def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
+
+                User user = User.findByEmail(orgInfo['email'] as String)
+
+                //update user role
+                UserRole.deleteOldRecords(user)
+                Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
+                UserRole.create(user, partnerRole, true)
+
+                //update username
+                user.username = username
+                user.save(flush: true, failOnError: true)
+
+                println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
 
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
+
+                def temp = Temp.findByType("Applicant-${orgInfo['name']}")
+                new Temp(type: "Partner-${orgInfo['name']}", jsonValue: "username ${username}, passwordFromRecord: ${temp?.id}").save()
             }
         }
     }

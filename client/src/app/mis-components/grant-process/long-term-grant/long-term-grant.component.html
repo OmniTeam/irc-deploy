@@ -7,6 +7,30 @@
   </div>
 </div>
 
+<div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
+<div *ngIf="openCommentsPopup" class="card window__container">
+  <div class="card-header" style="text-align: center">
+    <h3>Comments</h3>
+  </div>
+  <div *ngIf="!loading" class="card-body d-flex flex-column">
+    <div class="row">
+      <div class="col-sm-1 text-center" style="font-size: 32px;"><i class="fas fa-user"></i></div>
+      <div class="col-sm-11">
+        <textarea class="form-control" id="addComment" placeholder="Add a comment" cols="50" rows="3"></textarea>
+        <div style="display: flex;justify-content: end;">
+          <button class="btn btn-success comment_btn" style="margin: 10px;" (click)="addComment()">Send</button>
+        </div>
+      </div>
+    </div>
+    <hr style="margin-top: 0; margin-bottom: 0;"/>
+    <app-comments [comments]="comments" (onNewComment)="onNewCommentHandler($event)"></app-comments>
+  </div>
+  <div *ngIf="loading" >Loading...</div>
+  <div class="card-footer" style="text-align: end">
+    <button class="btn btn-dark comment_btn" (click)="viewComments()">Close</button>
+  </div>
+</div>
+
 <div class=" container-fluid mt--6">
   <div class=" row">
     <div class=" col">
@@ -20,6 +44,7 @@
             <div [style.display]="isReviewRevisedApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW REVISED APPLICATION</h6></div>
             <div [style.display]="isMakeRevisionsEdApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">MAKE REVISIONS FROM ED</h6></div>
             <div [style.display]="isApproveApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">APPROVE APPLICATION</h6></div>
+            <div [style.display]="isSignAgreement ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SIGN AGREEMENT</h6></div>
           </div>
 
           <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
@@ -160,6 +185,9 @@
                             </ul>
                           </div>
                         </div>
+                        <div class="col-sm-3">
+                          <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                        </div>
                       </div>
                       <div class="row" style="margin: 10px;">
                         <label for="reviewerAcComments">Provide any comments</label>
@@ -222,6 +250,9 @@
                             </ul>
                           </div>
                         </div>
+                        <div class="col-sm-3">
+                          <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                        </div>
                       </div>
                       <div class="row" style="margin: 10px;">
                         <label for="approverComments">Provide any comments</label>
@@ -247,6 +278,70 @@
                       <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
                       <button class="btn btn-warning" (click)="submit('approveApplication', 'draft')">Save for Later</button>
                       <button class="btn btn-success" (click)="submit('approveApplication', 'completed')">Submit Review</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div *ngIf="isSignAgreement" class=" col">
+                <organizational-information [grantId]="grantId"></organizational-information>
+                <long-term-application [isReadOnly]="true" [grantId]="grantId"
+                                       [processInstanceId]="processInstanceId"
+                                       [definitionKey]="definitionKey"
+                                       (statusChanged)="statusChangedHandler($event)"></long-term-application>
+
+                <div class="card">
+                  <div class="row" style="margin: 10px;">
+                    <div class="col-sm-12">
+                      <div class="row">
+                        <div class="col">
+                          <p>Has the agreement been signed?</p>
+                          <div class="text-left">
+                            <ul style="list-style: none;" *ngFor="let item of items">
+                              <li>
+                                <input [disabled]="isReadOnly" type="radio" name="how_to_proceed" [(ngModel)]="decisionOfReviewProcess"
+                                       value="{{item.value}}"/>
+                                {{item.name}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="col-sm-3">
+                          <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                        </div>
+                      </div>
+                      <div *ngIf="decisionOfReviewProcess=='Yes'" class="row" style="margin: 10px;">
+                        <label class="col-sm-6" for="dateAgreement">Date when the agreement was signed</label>
+                        <input [disabled]="isReadOnly"
+                               class="form-control col-sm-6"
+                               type="date"
+                               id="dateAgreement"
+                               [(ngModel)]="dateAgreement"/>
+                      </div>
+                      <div class="row" style="margin: 10px;">
+                        <label for="signAgreementComments">Provide any comments</label>
+                        <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="signAgreementComments"
+                                  [(ngModel)]="signAgreementComments"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="error || success" class="row align-items-center text-center"
+                       style="display: flex; justify-content: center;">
+                    <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+                      <strong>Error:</strong> {{errorMessage}}
+                    </div>
+                    <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+                      <strong>Success:</strong> {{successMessage}}
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="!isReadOnly">
+                    <div class="col-lg-12 bottom_buttons_row"
+                         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                      <button class="btn btn-warning" (click)="submit('signAgreement', 'draft')">Save for Later</button>
+                      <button class="btn btn-success" (click)="submit('signAgreement', 'completed')">Submit Review</button>
                     </div>
                   </div>
 

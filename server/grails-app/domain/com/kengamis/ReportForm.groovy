@@ -5,6 +5,8 @@ class ReportForm {
     String id
     String groupId
     String processInstanceId
+    String partnerSetupId
+    String partnerId
     String taskId
     String taskDefinitionKey
     String userId
@@ -18,5 +20,7 @@ class ReportForm {
     }
     static constraints = {
         groupId nullable: true
+        processInstanceId nullable: true
+        partnerSetupId nullable: true
     }
 }
