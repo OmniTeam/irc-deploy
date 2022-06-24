@@ -220,6 +220,8 @@
                       <th class='text-center'>Milestone</th>
                       <th class='text-center'>Overall Target</th>
                       <th class='text-center'>Disaggregation</th>
+                      <th class='text-center'>Start Date</th>
+                      <th class='text-center'>End Date</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -232,6 +234,21 @@
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
+                      <td [id]="milestone.id + '-d1'">
+                        <div>{{ milestone.startDate }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(milestone.id, milestone.id + '-d1', 'startDate', milestone.startDate, 'date')"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+
+                      </td>
+                      <td  [id]="milestone.id + '-d2'">
+                        <div>{{ milestone.endDate }}
+                          <button class="btn btn-link"
+                                  (click)="cellEditor(milestone.id, milestone.id + '-d2', 'endDate', milestone.endDate, 'date')"><i
+                            class="fas fa-pencil-alt"></i></button>
+                        </div>
+                      </td>
                       <td class="text-center">{{milestone.overallTarget | number }}</td>
                       <td class='text-center'>
                         <button class="btn btn-link" [id]="'btn' + milestone.id"
@@ -241,6 +258,7 @@
                                 (click)="removeIndicator(milestone)"><i
                           class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
+
                     </tr>
                     </tbody>
                   </table>
