@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 })
 export class EntityViewFiltersService {
 
-  baseurl = `${environment.serverUrl}/entityViewFilters`
+  baseurl = `${environment.serverUrl}/entityViewFilters`;
   constructor(private http: HttpClient) { }
 
   getEntityViewFilters(): Observable<any> {
@@ -33,6 +33,9 @@ export class EntityViewFiltersService {
 
   getDefaultFilterQuery(params) {
     return this.http.get(`${this.baseurl}/defaultFilterQuery`, {params});
+  }
+  generateFullFilterQuery(params) {
+    return this.http.get(`${this.baseurl}/generateFullFilterQuery`, {params});
   }
 
   filterFiltersByEntityView(params) {

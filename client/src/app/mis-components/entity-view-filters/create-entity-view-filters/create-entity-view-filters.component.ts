@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AlertService} from "../../../services/alert";
-import {EntityViewFiltersService} from "../../../services/entity-view-filters.service";
-import {HttpParams} from "@angular/common/http";
-import {UsersService} from "../../../services/users.service";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertService} from '../../../services/alert';
+import {EntityViewFiltersService} from '../../../services/entity-view-filters.service';
+import {HttpParams} from '@angular/common/http';
+import {UsersService} from '../../../services/users.service';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-entity-view-filters',
@@ -24,9 +24,10 @@ export class CreateEntityViewFiltersComponent implements OnInit {
   temp: Object[];
   columns = [];
   closeModal: string;
-  entries: number = 5;
+  entries = 5;
   selected: any[] = [];
   activeRow: any;
+  querry: any;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
@@ -65,11 +66,11 @@ export class CreateEntityViewFiltersComponent implements OnInit {
       return;
     }
     this.formData = this.formGroup.value;
-    let entityView = {"entityView": this.entityViewId};
+    const entityView = {'entityView': this.entityViewId};
     this.formData = Object.assign(this.formData, entityView);
-    let users = this.formData.users;
+    const users = this.formData.users;
     this.entityViewFiltersService.createEntityViewFilter(this.formData).subscribe(results => {
-      console.log(results['id'])
+      console.log(results['id']);
       const params = new HttpParams()
         .set('id', results['id'])
         .set('users', users);
@@ -92,7 +93,7 @@ export class CreateEntityViewFiltersComponent implements OnInit {
   runFilterQueryNow() {
     const filterQueryControl = this.formGroup.get('filterQuery');
     this.submittedViewQuery = true;
-    let inputValue = (<HTMLInputElement>document.getElementById('query')).value;
+    const inputValue = (<HTMLInputElement>document.getElementById('query')).value;
     if (inputValue) {
       const params = new HttpParams()
         .set('query', inputValue);
@@ -102,16 +103,15 @@ export class CreateEntityViewFiltersComponent implements OnInit {
           this.rows = data['dataList'];
           this.columns = this.formattedColumns(data['headerList']);
           this.openFormModal(this.showQueryData);
-        }
-        else {
+        } else {
           filterQueryControl.setErrors({
-            "queryError": true
+            'queryError': true
           });
         }
       }, error => console.log(error));
     } else {
       filterQueryControl.setErrors({
-        "isEmpty": true
+        'isEmpty': true
       });
     }
   }
@@ -150,7 +150,7 @@ export class CreateEntityViewFiltersComponent implements OnInit {
   }
 
   filterTable(event) {
-    let val = event.target.value.toLowerCase();
+    const val = event.target.value.toLowerCase();
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
         if (d[key] !== null && d[key]?.toLowerCase().indexOf(val) !== -1) {

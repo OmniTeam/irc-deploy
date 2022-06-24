@@ -56,6 +56,18 @@ class EntityViewFiltersController {
         def res = ["viewQuery": query]
         respond res
     }
+    def generateFullFilterQuery(){
+        def name = params.name as String
+        def groupName = params.group as String
+        def entity = EntityView.findByName(name)
+        if (entity){
+            def query = """
+                SELECT ${entity.viewFields.collect { it.fieldType == 'Key Field' ? (it.name + ' as keyField') : it.name }.join(",")} FROM ${entity.tableName} WHERE ${(entity.viewFields.find {it ->if(it.name.contains('cluster')){it.name} } )}= '${groupName}'
+                """.toString()
+            def res = ["viewQuery": query]
+            respond res
+        }
+    }
 
 
     def filterFiltersByEntityView() {

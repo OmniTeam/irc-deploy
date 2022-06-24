@@ -10,6 +10,9 @@ import {UsersService} from '../../../services/users.service';
 import {Validator} from '../../../helpers/validator';
 import {GroupsService} from '../../../services/groups.service';
 import {AclGroupMappingService} from '../../../services/acl-group-mapping.service';
+import {HttpParams} from '@angular/common/http';
+import {EntityViewFiltersService} from '../../../services/entity-view-filters.service';
+import {EntityService} from '../../../services/entity.service';
 
 @Component({
   selector: 'app-create-program-partners',
@@ -41,17 +44,36 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
     '__41_xxx_parenting_skills_and_spousal_relationship'
   ];
   entityNames = ['entity_beneficiary_list'];
+  entityViews = [
+    'Schools',
+    'Parent groups',
+    'Parents',
+    'Leaders',
+    'Safe Spaces',
+    'Clusters',
+    'Club Members',
+    'Youth and women',
+    'Adolescents',
+    'VSLA Groups',
+    'Youth and women groups'
+  ];
   aclsFormGroup: FormGroup;
   editIndex = -1;
+  entityViewFilterGroup: FormGroup;
+  createdGroupName: any;
+  currentDataCollector: any;
+  views: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private countriesService: CountriesService,
               private aclGroupMappingService: AclGroupMappingService,
+              private entityViewFiltersService: EntityViewFiltersService,
               private router: Router,
               private usersService: UsersService,
               private groupsService: GroupsService,
+              private entityService: EntityService,
               private programPartnersService: ProgramPartnersService) {
   }
 
@@ -72,10 +94,14 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
       organisationsInvolved: [null],
       areaOfOperation: [null]
     });
+    this.entityService.getEntityViews().subscribe((data) => {
+      this.views = data;
+    });
     this.programPartnersService.getPrograms().subscribe((data) => {
       this.programs = data;
     });
     this.programPartnersService.getDataCollector().subscribe(res => {
+      this.currentDataCollector = res.user_id;
       this.formGroup.patchValue({dataCollector: res.user_id});
       this.usersService.getCurrentUser(res.user_id).subscribe((data: any) => {
         this.username = data.names;
@@ -113,12 +139,48 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
       parentGroupId: [this.groupParent],
     });
 
-    // creating a group after creating a partner
+    // creating a group
     console.log(this.groupCreationFormGroup.value, 'group controls');
     this.groupsService.createGroup(JSON.stringify(this.groupCreationFormGroup.value)).subscribe((result) => {
       console.warn(result, 'Group created Successfully');
       this.createdGroupId = result.id;
+      this.createdGroupName = result.name;
       this.alertService.success(`Group has been created`);
+
+      // create entityViewFilter
+      // loop through the array containing entity views and for each create a filter list
+      this.views.forEach((oneView) => {
+        const params = new HttpParams()
+          .set('name', oneView.name)
+          .set('group', result.name);
+        this.entityViewFiltersService.generateFullFilterQuery(params).subscribe((results: any) => {
+          // const query = results.viewQuery;
+          // create the entity view filter from here
+          this.entityViewFilterGroup = this.formBuilder.group({
+            name: [this.createdGroupName + ' ' + oneView.name],
+            entityView: [oneView.id],
+            filterQuery: [results?.viewQuery],
+            users: [this.currentDataCollector]
+          });
+          // send data to the end points
+          this.formData = this.entityViewFilterGroup.value;
+          this.entityViewFiltersService.createEntityViewFilter(this.formData).subscribe(res => {
+            const parameters = new HttpParams()
+              .set('id', res['id'])
+              .set('users', this.formData.users);
+            this.entityViewFiltersService.saveUserEntityViewFilter(parameters).subscribe(data => {
+              this.router.navigate(['/entityViewFilter']);
+              this.alertService.success(`${this.formData.name} has been successfully created `);
+            });
+          }, error => {
+            this.alertService.error(`${this.formData.name} could not be created`);
+          });
+
+          console.log(results?.viewQuery, 'full query');
+        }, error => console.log(error));
+
+      });
+
 
       // creating acls after creating the partner
       // assigning conditional queries for forms and entities

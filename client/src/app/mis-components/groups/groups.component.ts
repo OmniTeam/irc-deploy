@@ -80,10 +80,10 @@ export class GroupsComponent implements OnInit {
     deletedRow.forEach((p) => {
         this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
           console.warn(result, 'Groups have been deleted');
-          this.reloadTable();
         });
       }
     );
+    this.reloadTable();
   }
   deleteGroup(row) {
     const currentId = row.id;
