@@ -1,11 +1,14 @@
 <div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
-<div *ngIf="openPopup" class="card window__container">
+<div *ngIf="openPopup" class="card window__container_lg">
   <div class="card-header" style="text-align: center">
     <h3>Review Letter Of Interest</h3>
   </div>
+  <div style="text-align: end; margin-left: 0;">
+    <button class="btn btn-danger" (click)="openPopUp()">Close</button>
+  </div>
   <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
   <h3 style="margin-left: 40px;">Review</h3>
-  <div class="card">
+  <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-12">
         <div class="row">
@@ -82,7 +85,7 @@
     </div>
   </div>
   <div class="card-footer" style="text-align: end">
-    <button class="btn btn-dark comment_btn" (click)="openPopUp()">Close</button>
+    <button class="btn btn-danger" (click)="openPopUp()">Close</button>
   </div>
 </div>
 
