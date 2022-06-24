@@ -65,7 +65,9 @@ export class LongTermGrantComponent implements OnInit {
   dateAgreement: any;
   loading: boolean;
   comments: Array<CommentNode> = [];
+  recommendations: Array<CommentNode> = [];
   openCommentsPopup: boolean;
+  openRecommendationsPopup: boolean;
   openPopup: boolean;
 
   constructor(
@@ -167,10 +169,33 @@ export class LongTermGrantComponent implements OnInit {
     })
   }
 
+  getAllRecommendations() {
+    this.loading = true;
+    this.recommendations = []
+    this.tempDataService.getTempRecordByValue(this.grantId).subscribe((results: any) => {
+      results.forEach(it => {
+        let data: any
+        if (it.json_value != undefined) {
+          data = JSON.parse(it.json_value)
+          this.recommendations.push(new CommentNode(data.grantId, data.recommendations, null, [], [], null));
+        }
+      });
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+    })
+  }
+
   viewComments(): void {
     this.getAllComments()
     this.openCommentsPopup = !this.openCommentsPopup;
     this.openPopup = this.openCommentsPopup;
+  }
+
+  viewRecommendations(): void {
+    this.getAllRecommendations()
+    this.openRecommendationsPopup = !this.openRecommendationsPopup;
+    this.openPopup = this.openRecommendationsPopup;
   }
 
   addComment() {
@@ -181,11 +206,23 @@ export class LongTermGrantComponent implements OnInit {
     }
   }
 
+  addRecommendation() {
+    let text = (document.getElementById("addRecommendation") as HTMLTextAreaElement);
+    if (text.value !== "") {
+      this.recommendations.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], [], new Date()));
+      text.value = "";
+    }
+  }
+
   onNewCommentHandler(comment: CommentNode) {
     console.log("New comment", comment);
     this.reviewerComments = comment.text
     this.approverComments = comment.text
     this.signAgreementComments = comment.text
+  }
+
+  onNewRecommendationsHandler(comment: CommentNode) {
+    console.log("New recommendation", comment);
   }
 
   submit(key, status) {
