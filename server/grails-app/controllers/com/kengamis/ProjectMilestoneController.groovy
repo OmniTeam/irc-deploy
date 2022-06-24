@@ -28,7 +28,7 @@ class ProjectMilestoneController {
             def categoryId = projectMilestone.programCategory.id
             def category = ProgramCategory.findById(categoryId)
             def form = ""
-            if(projectMilestone.program!=null) {
+            if (projectMilestone.program != null) {
                 def program = Program.findById(category.program.id)
                 form = program.title
             } else form = projectMilestone.form
@@ -54,7 +54,7 @@ class ProjectMilestoneController {
         def category = ProgramCategory.findById(categoryId)
         def form = ""
         def programId = ""
-        if(projectMilestone.program!=null) {
+        if (projectMilestone.program != null) {
             def program = Program.findById(category.program.id)
             form = program.title
             programId = program.id
@@ -92,7 +92,7 @@ class ProjectMilestoneController {
             return
         }
 
-        respond projectMilestone, [status: CREATED, view:"show"]
+        respond projectMilestone, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -114,7 +114,7 @@ class ProjectMilestoneController {
             return
         }
 
-        respond projectMilestone, [status: OK, view:"show"]
+        respond projectMilestone, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -160,12 +160,12 @@ class ProjectMilestoneController {
         def milestone = []
         def projectMilestone = projectMilestoneService.get(params.id)
         def reportingQuery
-        if(projectMilestone!=null) reportingQuery = projectMilestone.reportingQuery
+        if (projectMilestone != null) reportingQuery = projectMilestone.reportingQuery
 
-        if(reportingQuery!=null) {
+        if (reportingQuery != null) {
             try {
                 def queryC = "${reportingQuery}".toString()
-                def clause = queryC.contains("where") ? " and" : " where"
+                def clause = (queryC.contains("where") || queryC.contains("WHERE")) ? " and" : " where"
                 def queryQ = queryC + clause + " activity_date between '${params.startDate}' and '${params.endDate}'"
 
                 println queryQ

@@ -22,7 +22,7 @@ class ReportFormController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reportFormService.list(params), model:[reportFormCount: reportFormService.count()]
+        respond reportFormService.list(params), model: [reportFormCount: reportFormService.count()]
     }
 
     def show(Long id) {
@@ -48,7 +48,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: CREATED, view:"show"]
+        respond reportForm, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -70,7 +70,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: OK, view:"show"]
+        respond reportForm, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -90,7 +90,7 @@ class ReportFormController {
         respond reportData
     }
 
-    def getMilestonePerformance(){
+    def getMilestonePerformance() {
         def slurper = new JsonSlurper()
         def milestones = []
 
@@ -111,7 +111,7 @@ class ReportFormController {
                     }
                     milestones << [
                             milestoneId          : pm?.id,
-                            staffId              : it.userId,
+                            partnerId            : it.partnerId,
                             milestone            : pm?.name,
                             overallTarget        : p['overall_target'],
                             cumulativeAchievement: p['cumulative_achievement'],

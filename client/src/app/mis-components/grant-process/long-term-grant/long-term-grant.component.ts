@@ -5,6 +5,9 @@ import {TaskListService} from "../../../services/task-list.service";
 import {AlertService} from "../../../services/alert";
 import {TempDataService} from "../../../services/temp-data.service";
 import {LongTermGrantService} from "../../../services/long-term-grant-service";
+import {CommentNode} from "../../comments/comments.component";
+import {v4 as uuid} from 'uuid';
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-long-term-grant',
@@ -60,6 +63,10 @@ export class LongTermGrantComponent implements OnInit {
   approverComments: any;
   signAgreementComments: any;
   dateAgreement: any;
+  loading: boolean;
+  comments: Array<CommentNode> = [];
+  openCommentsPopup: boolean;
+  openPopup: boolean;
 
   constructor(
     private router: Router,
@@ -67,6 +74,7 @@ export class LongTermGrantComponent implements OnInit {
     private taskListService: TaskListService,
     private alertService: AlertService,
     private tempDataService: TempDataService,
+    public authService: AuthService,
     private longTermGrantService: LongTermGrantService,
   ) {
   }
@@ -142,8 +150,42 @@ export class LongTermGrantComponent implements OnInit {
     this.processInstanceId = data.processInstanceId
   }
 
-  cancel() {
-    this.router.navigate(['/home']);
+  getAllComments() {
+    this.loading = true;
+    this.comments = []
+    this.tempDataService.getTempRecordByValue(this.grantId).subscribe((results: any) => {
+      results.forEach(it => {
+        let data: any
+        if (it.json_value != undefined) {
+          data = JSON.parse(it.json_value)
+          this.comments.push(new CommentNode(data.grantId, data.comments, null, [], [], null));
+        }
+      });
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+    })
+  }
+
+  viewComments(): void {
+    this.getAllComments()
+    this.openCommentsPopup = !this.openCommentsPopup;
+    this.openPopup = this.openCommentsPopup;
+  }
+
+  addComment() {
+    let text = (document.getElementById("addComment") as HTMLTextAreaElement);
+    if (text.value !== "") {
+      this.comments.push(new CommentNode(uuid(), text.value, this.authService.getLoggedInUsername(), [], [], new Date()));
+      text.value = "";
+    }
+  }
+
+  onNewCommentHandler(comment: CommentNode) {
+    console.log("New comment", comment);
+    this.reviewerComments = comment.text
+    this.approverComments = comment.text
+    this.signAgreementComments = comment.text
   }
 
   submit(key, status) {
@@ -429,5 +471,9 @@ export class LongTermGrantComponent implements OnInit {
       this.alertService.error('Please fill in all required details');
       return;
     }
+  }
+
+  cancel() {
+    this.router.navigate(['/home']);
   }
 }

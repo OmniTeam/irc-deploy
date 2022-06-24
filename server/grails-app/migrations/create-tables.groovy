@@ -3035,4 +3035,16 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1656057038764-14") {
+        addColumn(tableName: "report_form") {
+            column(name: "partner_id", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656057038764-15") {
+        addColumn(tableName: "report_form") {
+            column(name: "partner_setup_id", type: "varchar(255)")
+        }
+    }
+
 }

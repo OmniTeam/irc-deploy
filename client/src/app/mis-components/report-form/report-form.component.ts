@@ -559,6 +559,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processInstanceId: this.taskRecord.processInstanceId,
+      partnerSetupId: this.taskRecord.partnerSetupId,
+      partnerId: this.taskRecord.partnerId,
       userId: this.authService.getLoggedInUsername(),
       groupId: this.taskRecord.groupId,
       taskDefinitionKey: this.taskRecord.taskDefinitionKey,
