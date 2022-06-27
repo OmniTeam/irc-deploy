@@ -252,9 +252,11 @@
                 [disabled]="isReadOnly"
                 class="form-control"
                 placeholder="50-75 words"
+                id="structure"
                 style="padding-left: 10px;"
                 rows="5"
                 maxlength="300"
+                (keyup)="countChars(75, 'structure')"
                 [(ngModel)]="organisation.structure"
               ></textarea>
           </div>
@@ -327,7 +329,7 @@
   <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>11. How many organizations will be involved in the cluster?</label>
+        <label>15. How many organizations will be involved in the cluster?</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -342,7 +344,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>12. Please give a brief description of the cluster/Network members?<span
+        <label>16. Please give a brief description of the cluster/Network members?<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -361,7 +363,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>13. Why do you want to collaborate with these organizations?</label>
+        <label>17. Why do you want to collaborate with these organizations?</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -376,7 +378,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>14. Was the organization consulted or informed about the partnership.</label>
+        <label>18. Was the organization consulted or informed about the partnership.</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                   <textarea
@@ -400,7 +402,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>15. Interventions/activities / strategies - What actions will you take to create change?</label>
+        <label>19. Interventions/activities / strategies - What actions will you take to create change?</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                   <textarea
@@ -415,7 +417,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>16. Suggest few geographic areas where the project will be implemented?</label>
+        <label>20. Suggest few geographic areas where the project will be implemented?</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                <textarea
@@ -432,7 +434,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>17. Describe your organizations’ unique strength or capacity and weaknesses to implement the
+        <label>21. Describe your organizations’ unique strength or capacity and weaknesses to implement the
           interventions proposed.</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -457,7 +459,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>18. How much funds are you requesting? (USD)</label>
+        <label>22. How much funds are you requesting? (USD)</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
@@ -472,7 +474,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>19. What is your organization’s current budget for this financial year? (USD)</label>
+        <label>23. What is your organization’s current budget for this financial year? (USD)</label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                <textarea

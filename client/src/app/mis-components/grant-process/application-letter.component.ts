@@ -154,6 +154,10 @@ export class ApplicationLetterComponent implements OnInit {
     });
   }
 
+  countChars(max, id){
+    (document.getElementById(id) as HTMLTextAreaElement).innerHTML = max
+  }
+
   validateNumber(value) {
     this.inValidNumber = Validator.telephoneNumber(value)
   }
