@@ -421,7 +421,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6" style="align-self: center;">
+        <div *ngIf="!isReadOnly" class="col-sm-6" style="align-self: center;">
           <div class="row" style="display: flex; justify-content: space-evenly;">
             <button *ngIf="ngo!=ngos[0]" class="btn btn-danger" (click)="removeNgoRecord(ngo.id)"><i class="fas fa-minus-circle"></i>&nbsp;Remove</button>
             <button class="btn btn-success" (click)="addNgoRecord()"><i class="fas fa-plus-circle"></i>&nbsp;Add</button>

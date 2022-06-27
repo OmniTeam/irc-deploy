@@ -40,7 +40,14 @@ export class ApplicationLetterComponent implements OnInit {
 
   /*json*/
   organisation: any = {};
-  ngos: any[] = [{id: uuid(),nameOfPartnerOrganization:"",telephoneOfPartnerOrganization:"",members:"",whyCollaborate:"",clusterResponse:""}];
+  ngos: any[] = [{
+    id: uuid(),
+    nameOfPartnerOrganization: "",
+    telephoneOfPartnerOrganization: "",
+    members: "",
+    whyCollaborate: "",
+    clusterResponse: ""
+  }];
   proposal: any = {};
   financial: any = {};
   documents: any = {};
@@ -80,14 +87,42 @@ export class ApplicationLetterComponent implements OnInit {
     }
   }
 
+  validate = (obj, validations) =>
+    validations.every(key => ![undefined, null].includes(key.split('.').reduce((acc, cur) => acc?.[cur], obj)));
+
   submitLetter() {
     this.submitted = true;
     if (this.organisation.email == null) {
-      this.alertService.success("Please fill in the email");
+      this.alertService.error("Please fill in the organization email");
       return;
     }
     if (this.program == null) {
-      this.alertService.success("Please choose the Program");
+      this.alertService.error("Please choose the Program");
+      return;
+    }
+    let orgAllFilled = this.validate(this.organisation, ['name', 'names', 'contact', 'email', 'physicalAddress', 'organizationType', 'nameCluster', 'areaOfOperation', 'country', 'city', 'inspired', 'visionMission', 'structure', 'corePrograms', 'programOnPrevention', 'funding'])
+    let ngosAllFilled = this.validate(this.ngos[0], ['nameOfPartnerOrganization', 'telephoneOfPartnerOrganization', 'members', 'whyCollaborate', 'clusterResponse'])
+    let proposalAllFilled = this.validate(this.proposal, ['actions', 'geographicAreas', 'strength'])
+    let financialAllFilled = this.validate(this.financial, ['fundsAmount', 'budget'])
+    let documentsAllFilled = this.validate(this.documents, ['financial', 'registration', 'listMembers', 'listStaffMembers', 'organizationStructure', 'annualWorkPlan'])
+    if (!orgAllFilled) {
+      this.alertService.error("Please fill in all compulsory fields in Part I");
+      return;
+    }
+    if (!ngosAllFilled) {
+      this.alertService.error("Please fill in all compulsory fields in Part II");
+      return;
+    }
+    if (!proposalAllFilled) {
+      this.alertService.error("Please fill in all compulsory fields in Part III");
+      return;
+    }
+    if (!financialAllFilled) {
+      this.alertService.error("Please fill in all compulsory fields in Part IV");
+      return;
+    }
+    if (!documentsAllFilled) {
+      this.alertService.error("Please fill in all compulsory fields in Part V");
       return;
     }
 
@@ -156,7 +191,7 @@ export class ApplicationLetterComponent implements OnInit {
     });
   }
 
-  countChars(max, id){
+  countChars(max, id) {
     (document.getElementById(id) as HTMLTextAreaElement).innerHTML = max
   }
 
@@ -169,7 +204,14 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   addNgoRecord() {
-    this.ngos.push({id: uuid(),nameOfPartnerOrganization:"",telephoneOfPartnerOrganization:"",members:"",whyCollaborate:"",clusterResponse:""})
+    this.ngos.push({
+      id: uuid(),
+      nameOfPartnerOrganization: "",
+      telephoneOfPartnerOrganization: "",
+      members: "",
+      whyCollaborate: "",
+      clusterResponse: ""
+    })
   }
 
   removeNgoRecord(ngoId) {

@@ -346,6 +346,12 @@ class TaskListController {
                 GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
                 Program program = Program.findById(grant.program)
                 def orgInfo = slurper.parseText(grant.organisation)
+                def ngos = slurper.parseText(grant.ngos)
+                def organizationsInvolved = []
+
+                ngos.each {
+                    organizationsInvolved << '{"id":"' + it['id'] + '","name":"' + it['nameOfPartnerOrganization'] + '","contact":"' + it['telephoneOfPartnerOrganization'] + '"}'
+                }
 
                 ProgramPartner p = new ProgramPartner()
                 p.cluster = orgInfo['nameCluster'] as String
@@ -359,6 +365,7 @@ class TaskListController {
                 p.city = orgInfo['city'] as String
                 p.dataCollector = getDataCollector()['user_id']
                 p.areaOfOperation = orgInfo['areaOfOperation'] as String
+                p.organisationsInvolved = organizationsInvolved
                 p.program = program
                 p.save(flush: true, failOnError: true)
 
