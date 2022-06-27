@@ -4,6 +4,7 @@ import {CountriesService} from "../../services/countries.service";
 import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
+import {v4 as uuid} from 'uuid';
 import {AlertService} from "../../services/alert";
 import {ProgramService} from "../../services/program.service";
 import {Validator} from "../../helpers/validator";
@@ -22,6 +23,7 @@ export class ApplicationLetterComponent implements OnInit {
   submitted = false;
   loading: boolean;
   inValidNumber: boolean;
+  inValidTelephone: boolean;
 
   status = 'not_started';
   programs: any;
@@ -38,7 +40,7 @@ export class ApplicationLetterComponent implements OnInit {
 
   /*json*/
   organisation: any = {};
-  ngos: any = {};
+  ngos: any[] = [{id: uuid(),nameOfPartnerOrganization:"",telephoneOfPartnerOrganization:"",members:"",whyCollaborate:"",clusterResponse:""}];
   proposal: any = {};
   financial: any = {};
   documents: any = {};
@@ -160,6 +162,18 @@ export class ApplicationLetterComponent implements OnInit {
 
   validateNumber(value) {
     this.inValidNumber = Validator.telephoneNumber(value)
+  }
+
+  validateTelephone(value) {
+    this.inValidTelephone = Validator.telephoneNumber(value)
+  }
+
+  addNgoRecord() {
+    this.ngos.push({id: uuid(),nameOfPartnerOrganization:"",telephoneOfPartnerOrganization:"",members:"",whyCollaborate:"",clusterResponse:""})
+  }
+
+  removeNgoRecord(ngoId) {
+    this.ngos = this.ngos.filter(item => item.id != ngoId);
   }
 
   cancel() {

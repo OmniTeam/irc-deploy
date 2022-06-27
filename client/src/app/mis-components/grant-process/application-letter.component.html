@@ -327,67 +327,104 @@
       details for Cluster). </i>
   </div>
   <div class="card-body">
-    <div class="row" style="margin: 10px;">
-      <div class="col-sm-6">
-        <label>15. How many organizations will be involved in the cluster?</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
-              <textarea
-                class="form-control" [disabled]="isReadOnly"
-                placeholder="Name the organisations and their contacts"
-                style="padding-left: 10px;"
-                rows="5"
-                [(ngModel)]="ngos.partnerOrganizations"
-              ></textarea>
+    <div *ngFor="let ngo of ngos">
+      <hr *ngIf="ngo!=ngos[0]" />
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">15. </b>Name of organization involved in the cluster?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                [disabled]="isReadOnly"
+                placeholder="Name of the organisation"
+                type="text"
+                [(ngModel)]="ngo.nameOfPartnerOrganization"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">16. </b>Telephone of organization involved in the cluster?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Telephone Number"
+                type="text"
+                [value]="ngo.telephoneOfPartnerOrganization"
+                (ngModelChange)="validateTelephone($event)"
+                [(ngModel)]="ngo.telephoneOfPartnerOrganization"
+                [ngClass]="{ 'is-invalid': inValidTelephone }">
+            </div>
+            <div *ngIf="submitted && inValidTelephone">
+              <div class="input-error">
+                Telephone Number is invalid
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-6">
-        <label>16. Please give a brief description of the cluster/Network members?<span
-          class="required-indicator">*</span></label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">17. </b>Please give a brief description of the cluster/Network members?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <textarea
                 class="form-control" [disabled]="isReadOnly"
                 placeholder="e.g. year of founding or registration, Vision and mission, objectives, major thematic areas / activities, governance, management, recent accomplishments, membership, geographical area of operation among others )( not more than 50 words)"
                 rows="5"
                 maxlength="300"
                 style="padding-left: 10px;"
-                [(ngModel)]="ngos.members"
+                [(ngModel)]="ngo.members"
               ></textarea>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row" style="margin: 10px;">
-      <div class="col-sm-6">
-        <label>17. Why do you want to collaborate with these organizations?</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">18. </b>Why do you want to collaborate with this organization?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <textarea
                 class="form-control" [disabled]="isReadOnly"
                 placeholder="Reason"
                 style="padding-left: 10px;"
                 rows="5"
-                [(ngModel)]="ngos.whyCollaborate"
+                [(ngModel)]="ngo.whyCollaborate"
               ></textarea>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-6">
-        <label>18. Was the organization consulted or informed about the partnership.</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">19. </b>Was the organization consulted or informed about the partnership.<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
                   <textarea
                     class="form-control" [disabled]="isReadOnly"
                     placeholder="If yes, indicate their response towards the intended cluster formation"
                     style="padding-left: 10px;"
                     rows="3"
-                    [(ngModel)]="ngos.clusterResponse"
+                    [(ngModel)]="ngo.clusterResponse"
                   ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6" style="align-self: center;">
+          <div class="row" style="display: flex; justify-content: space-evenly;">
+            <button *ngIf="ngo!=ngos[0]" class="btn btn-danger" (click)="removeNgoRecord(ngo.id)"><i class="fas fa-minus-circle"></i>&nbsp;Remove</button>
+            <button class="btn btn-success" (click)="addNgoRecord()"><i class="fas fa-plus-circle"></i>&nbsp;Add</button>
           </div>
         </div>
       </div>
@@ -402,7 +439,8 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>19. Interventions/activities / strategies - What actions will you take to create change?</label>
+        <label>20. Interventions/activities / strategies - What actions will you take to create change?<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                   <textarea
@@ -417,7 +455,8 @@
       </div>
 
       <div class="col-sm-6">
-        <label>20. Suggest few geographic areas where the project will be implemented?</label>
+        <label>21. Suggest few geographic areas where the project will be implemented?<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                <textarea
@@ -434,8 +473,8 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>21. Describe your organizations’ unique strength or capacity and weaknesses to implement the
-          interventions proposed.</label>
+        <label>22. Describe your organizations’ unique strength or capacity and weaknesses to implement the
+          interventions proposed.<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                      <textarea
@@ -459,7 +498,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>22. How much funds are you requesting? (USD)</label>
+        <label>22. How much funds are you requesting? (USD)<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
@@ -474,7 +513,8 @@
       </div>
 
       <div class="col-sm-6">
-        <label>23. What is your organization’s current budget for this financial year? (USD)</label>
+        <label>23. What is your organization’s current budget for this financial year? (USD)<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                <textarea
@@ -498,7 +538,8 @@
       <div class="col">
         <div class="row">
           <div class="col-sm-6">
-            <label>i. A copy of financial audited reports or organizational financial report.</label>
+            <label>i. A copy of financial audited reports or organizational financial report.<span
+              class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -519,7 +560,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>ii. A copy of the registration certificate</label>
+            <label>ii. A copy of the registration certificate<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -542,7 +583,8 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>iii. List of members of governing body their affiliations, skills and experience</label>
+            <label>iii. List of members of governing body their affiliations, skills and experience<span
+              class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -563,7 +605,8 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>iv. List of staff members and their titles as well as qualifications and experience</label>
+            <label>iv. List of staff members and their titles as well as qualifications and experience<span
+              class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -586,7 +629,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>v. Organization structure/organogram</label>
+            <label>v. Organization structure/organogram<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -607,7 +650,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>vi. Organizational capacity assessment report if available.<span class="required-indicator">*</span></label>
+            <label>vi. Organizational capacity assessment report if available.</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -630,7 +673,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>vii. Organization strategic plan if available <span class="required-indicator">*</span></label>
+            <label>vii. Organization strategic plan if available</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -651,7 +694,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>viii. Organizational annual work plan and budget.</label>
+            <label>viii. Organizational annual work plan and budget.<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -674,7 +717,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>ix. Draft M.O.U if application is submitted by Cluster <span class="required-indicator">*</span></label>
+            <label>ix. Draft M.O.U if application is submitted by Cluster</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -695,7 +738,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>x. Child safe guard policy /manual if available <span class="required-indicator">*</span></label>
+            <label>x. Child safe guard policy /manual if available</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
