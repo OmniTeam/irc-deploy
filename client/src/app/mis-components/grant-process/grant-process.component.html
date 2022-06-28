@@ -364,6 +364,9 @@
                                              [processInstanceId]="processInstanceId"
                                              [definitionKey]="definitionKey"
                                              (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+              <div class="col-sm-12" style="margin-left: -60px; text-align: end;">
+                <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+              </div>
               <grant-report [grantId]="grantId"
                             [processInstanceId]="processInstanceId"
                             [definitionKey]="definitionKey"
@@ -381,6 +384,10 @@
                             [definitionKey]="definitionKey"
                             (statusChanged)="statusChangedHandler($event)"></grant-report>
 
+              <div class="col-sm-12" style="margin-left: -60px; text-align: end;">
+                <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+              </div>
+
               <h3 style="margin-left: 40px;">Reviewer Action</h3>
               <div class="card">
                 <div class="row" style="margin: 10px;">
@@ -388,7 +395,7 @@
 
                     <div class="row">
                       <div class="col">
-                        <p>Were the activities carried out in-line with the proposed workplan?</p>
+                        <p>Were the activities carried out in-line with the proposed work plan?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -399,9 +406,8 @@
                           </ul>
                         </div>
                       </div>
-
                       <div class="col">
-                        <p>Did they adhere to the budget?</p>
+                        <p>Did they adhere to the budget?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -412,13 +418,10 @@
                           </ul>
                         </div>
                       </div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
-                      </div>
                     </div>
                     <div class="row">
                       <div class="col">
-                        <p>Did they achieve their intended objectives?</p>
+                        <p>Did they achieve their intended objectives?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -430,7 +433,7 @@
                         </div>
                       </div>
                       <div class="col">
-                        <p>What was the decision of the review process?</p>
+                        <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of decision3">
                             <li>
@@ -443,7 +446,7 @@
                       </div>
                     </div>
                     <div class="row" style="margin: 10px;">
-                      <label for="reviewerActionComments">Provide any comments</label>
+                      <label for="reviewerActionComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewReportComments"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>

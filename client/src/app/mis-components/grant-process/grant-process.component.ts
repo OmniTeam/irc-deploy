@@ -55,6 +55,7 @@ export class GrantProcessComponent implements OnInit {
   ];
   decision3 = [
     {name: 'Apply for long term grant', value: 'Yes'},
+    {name: 'Ask for revisions', value: 'Changes'},
     {name: 'Do not apply for long term grant', value: 'No'}
   ];
   isConceptInline: any;
@@ -362,10 +363,10 @@ export class GrantProcessComponent implements OnInit {
   }
 
   planningAndLearningReview(status) {
-    if (this.decisionOfReviewProcess == undefined ||
-      this.isConceptInline == undefined ||
-      this.doesItAdhere == undefined ||
-      this.areTheyAdhering == undefined ||
+    if (this.decisionOfReviewProcess == undefined &&
+      this.isConceptInline == undefined &&
+      this.doesItAdhere == undefined &&
+      this.areTheyAdhering == undefined &&
       this.reviewerComments == undefined) {
       this.alertService.error('Please fill in all compulsory options');
       return;
@@ -425,7 +426,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   planningAndLearningApprove(status) {
-    if (this.decisionOfApproveProcess != undefined || this.approveComments != undefined) {
+    if (this.decisionOfApproveProcess != undefined && this.approveComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
@@ -482,9 +483,9 @@ export class GrantProcessComponent implements OnInit {
   }
 
   provideLearningGrant(status) {
-    if (this.grantAmount != undefined ||
-      this.periodFrom != undefined ||
-      this.periodTo != undefined ||
+    if (this.grantAmount != undefined &&
+      this.periodFrom != undefined &&
+      this.periodTo != undefined &&
       this.financeSectionComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
@@ -542,7 +543,11 @@ export class GrantProcessComponent implements OnInit {
   }
 
   submitGrantReportReview(status) {
-    if (this.decisionOfReviewProcess != undefined) {
+    if (this.decisionOfReviewProcess != undefined &&
+    this.activitiesInlineWithWorkPlan != undefined &&
+    this.adhereToBudget != undefined &&
+    this.achieveIntendedObjectives != undefined &&
+    this.reviewerComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,

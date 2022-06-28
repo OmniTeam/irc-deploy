@@ -3099,4 +3099,16 @@ databaseChangeLog = {
         dropColumn(columnName: "cluster_name", tableName: "grant_provide_learning_grant")
     }
 
+    changeSet(author: "bruno (generated)", id: "1656418572486-132") {
+        dropColumn(columnName: "amount_transferred", tableName: "grant_report")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656418572486-14") {
+        addColumn(tableName: "grant_report") {
+            column(name: "date_report_submitted", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }
