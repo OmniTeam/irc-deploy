@@ -425,7 +425,7 @@ export class GrantProcessComponent implements OnInit {
   }
 
   planningAndLearningApprove(status) {
-    if (this.decisionOfApproveProcess != undefined) {
+    if (this.decisionOfApproveProcess != undefined || this.approveComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
@@ -482,57 +482,63 @@ export class GrantProcessComponent implements OnInit {
   }
 
   provideLearningGrant(status) {
-    let formData: { [key: string]: string } = {
-      grantId: this.grantId,
-      definitionKey: this.definitionKey,
-      processInstanceId: this.processInstanceId,
-      clusterName: this.clusterName,
-      dateFrom: this.periodFrom,
-      dateTo: this.periodTo,
-      leadAgency: this.leadAgency,
-      grantAmount: this.grantAmount,
-      comments: this.financeSectionComments,
-      user: this.authService.getLoggedInUsername(),
-      status: status
-    }
-
-    let apiUrl = `${this.grantProcessService.provideLearningGrant}/getByProcessInstanceId`
-    const params = new HttpParams().set('id', formData.processInstanceId);
-    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
-      if (response?.results != null) {
-        this.grantProcessService.updateProvideLearningGrant(formData, response.results.id).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Updated";
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.error = true;
-          this.errorMessage = "Failed to update";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      } else {
-        this.grantProcessService.createProvideLearningGrant(formData).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Submitted";
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.error = true;
-          this.errorMessage = "Failed to submit";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
+    if (this.grantAmount != undefined ||
+      this.periodFrom != undefined ||
+      this.periodTo != undefined ||
+      this.financeSectionComments != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        dateFrom: this.periodFrom,
+        dateTo: this.periodTo,
+        grantAmount: this.grantAmount,
+        comments: this.financeSectionComments,
+        user: this.authService.getLoggedInUsername(),
+        status: status
       }
-    });
+
+      let apiUrl = `${this.grantProcessService.provideLearningGrant}/getByProcessInstanceId`
+      const params = new HttpParams().set('id', formData.processInstanceId);
+      this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+        if (response?.results != null) {
+          this.grantProcessService.updateProvideLearningGrant(formData, response.results.id).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Updated";
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to update";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        } else {
+          this.grantProcessService.createProvideLearningGrant(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
   }
 
   submitGrantReportReview(status) {

@@ -3091,4 +3091,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "16345353475345-134") {
+        dropColumn(columnName: "lead_agency", tableName: "grant_provide_learning_grant")
+    }
+
+    changeSet(author: "bruno (generated)", id: "165234346535478-135") {
+        dropColumn(columnName: "cluster_name", tableName: "grant_provide_learning_grant")
+    }
+
 }

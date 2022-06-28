@@ -37,7 +37,7 @@
       <div class=" card">
         <div class="row">
 
-          <div style="width: 100%; text-align: -webkit-center; display: block;">
+          <div class="card-header" style="width: 100%; text-align: -webkit-center; display: block;">
             <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT
               LETTER OF INTEREST</h6></div>
             <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
@@ -56,7 +56,7 @@
               REVIEW PLANNING AND LEARNING GRANT REPORT</h6></div>
           </div>
 
-          <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+          <div class="card-body col-md-12 col-sm-12" style="margin-top: 40px;">
 
             <div *ngIf="isSubmitLetterOfInterest" class=" col">
               <application-letter [isReadOnly]="false"></application-letter>
@@ -276,7 +276,7 @@
               <div class="card">
                 <div class="row">
                   <div class="col-sm-9">
-                    <p>What is your recommendation?</p>
+                    <p>What is your recommendation?<span class="required-indicator">*</span></p>
                     <div class="text-left">
                       <ul style="list-style: none;" *ngFor="let item of decision2">
                         <li>
@@ -294,7 +294,7 @@
                 <div class="row" style="margin: 10px;">
                   <div class="col-sm-12">
                     <div class="row" style="margin: 10px;">
-                      <label for="approverComments">Provide any comments</label>
+                      <label for="approverComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="approverComments"
                                 [(ngModel)]="approveComments"></textarea>
                     </div>
@@ -321,13 +321,9 @@
               <h3 style="margin-left: 40px;">Finance Section</h3>
               <div class="card">
                 <div class="row">
-                  <div class="col-sm-5">
-                    <label>Grant Amount</label>
+                  <div class="col-sm-8">
+                    <label>Grant Amount<span class="required-indicator">*</span></label>
                     <input [disabled]="isReadOnly" class="form-control" type="number" [(ngModel)]="grantAmount"/>
-                  </div>
-                  <div class="col-sm-5">
-                    <label>Lead Agency</label>
-                    <input [disabled]="isReadOnly" class="form-control" type="text" [(ngModel)]="leadAgency"/>
                   </div>
                   <div class="col-sm-2 text-right">
                     <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
@@ -335,21 +331,17 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-3">
-                    <label>From:</label><input class="form-control" placeholder="From" type="date"
+                    <label>From:<span class="required-indicator">*</span></label><input class="form-control" placeholder="From" type="date"
                                                [(ngModel)]="periodFrom"/>
                   </div>
                   <div class="col-sm-3">
-                    <label>To:</label><input class="form-control" placeholder="To" type="date" [(ngModel)]="periodTo"/>
-                  </div>
-                  <div class="col-sm-4">
-                    <label>Cluster Name:</label>
-                    <input [disabled]="isReadOnly" class="form-control" type="text" [(ngModel)]="clusterName"/>
+                    <label>To:<span class="required-indicator">*</span></label><input class="form-control" placeholder="To" type="date" [(ngModel)]="periodTo"/>
                   </div>
                 </div>
                 <div class="row" style="margin: 10px;">
                   <div class="col-sm-12">
                     <div class="row" style="margin: 10px;">
-                      <label for="financeSectionComments">Provide any comments</label>
+                      <label for="financeSectionComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="financeSectionComments"
                                 [(ngModel)]="financeSectionComments"></textarea>
                     </div>

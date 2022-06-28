@@ -6,10 +6,8 @@ class GrantProvideLearningGrant {
     String grantId
 
     String grantAmount
-    String leadAgency
     String dateFrom
     String dateTo
-    String clusterName
     String comments
     String user
 
