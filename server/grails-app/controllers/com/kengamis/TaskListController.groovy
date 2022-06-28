@@ -1,6 +1,6 @@
 package com.kengamis
 
-
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import groovy.json.*
@@ -23,6 +23,9 @@ class TaskListController {
 
         //check if task for archive
         archiveReport()
+
+        //check if task starts long term grant
+        startLongTermGrantJob()
 
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
@@ -313,7 +316,7 @@ class TaskListController {
                 def orgInfo = slurper.parseText(g.organisation)
                 def email = orgInfo['email'] as String
                 def names = orgInfo['names'] as String
-                def username = generateCode(program!=null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
+                def username = generateCode(program != null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
                 def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
                 def user = new User(email: email, names: names, username: username, password: password)
@@ -348,6 +351,7 @@ class TaskListController {
                 def orgInfo = slurper.parseText(grant.organisation)
                 def ngos = slurper.parseText(grant.ngos)
                 def organizationsInvolved = []
+                def dataCollector = getDataCollector()
 
                 ngos.each {
                     organizationsInvolved << '{"id":"' + it['id'] + '","name":"' + it['nameOfPartnerOrganization'] + '","contact":"' + it['telephoneOfPartnerOrganization'] + '"}'
@@ -363,7 +367,7 @@ class TaskListController {
                 p.emailContactPerson = orgInfo['email'] as String
                 p.country = orgInfo['country'] as String
                 p.city = orgInfo['city'] as String
-                p.dataCollector = getDataCollector()['user_id']
+                p.dataCollector = dataCollector ? dataCollector['user_id'] : ""
                 p.areaOfOperation = orgInfo['areaOfOperation'] as String
                 p.organisationsInvolved = organizationsInvolved
                 p.program = program
@@ -436,7 +440,7 @@ class TaskListController {
     def getDataCollector() {
         def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
         def results = AppHolder.withMisSql { rows(query as String) }
-        return results?.first()
+        if (results.size() > 0) return results?.first() else return null
     }
 
     @Transactional
@@ -464,6 +468,63 @@ class TaskListController {
                 TaskList taskList = TaskList.findById(task['id'] as String)
                 taskList.status = 'completed'
                 taskList.save(flush: true, failOnError: true)
+            }
+        }
+    }
+
+    @Transactional
+    def startLongTermGrantJob() {
+        TaskList[] startLongTermGrant = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Start_Long_Term_Grant' }.findAll()
+        if (startLongTermGrant.size() > 0) {
+            startLongTermGrant.each { TaskList task ->
+                def slurper = new JsonSlurper()
+                def variables = slurper.parseText(task.inputVariables)
+
+                variables['data'].each { it ->
+                    if (it.key == 'GrantId') {
+                        GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
+
+                        def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
+
+                        try {
+                            if (r.size() > 0) {
+                                def orgInfo = slurper.parseText(grant.organisation)
+                                def applicantEmail = orgInfo['email']
+                                def applicantName = orgInfo['names']
+                                def organization = orgInfo['name']
+                                def edEmail = []
+                                def programTeamEmail = []
+                                def program = Program.get(grant.program)
+
+                                r.each {
+                                    if (it['role'] == "ROLE_ED") edEmail << it['email']
+                                    if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                                }
+                                if (grant) {
+                                    boolean started = StartCamundaInstancesJob.startProcessInstance([
+                                            GrantId          : grant.id,
+                                            ApplicantName    : applicantName,
+                                            Organization     : organization,
+                                            Applicant        : applicantEmail,
+                                            ProgramTeam      : programTeamEmail[0],
+                                            ExecutiveDirector: edEmail[0],
+                                    ], "LONG_TERM_GRANT")
+
+                                    if (started) {
+                                        println "=========Started long term grant instance ========="
+                                        grant.status = "started-longterm"
+                                        grant.save(flush: true, failOnError: true)
+
+                                        task.status = 'completed'
+                                        task.save(flush: true, failOnError: true)
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
             }
         }
     }

@@ -29,6 +29,7 @@ export class GrantReportComponent implements OnInit {
   success: boolean;
   errorMessage: string;
   successMessage: string;
+  negativeBalance: boolean;
 
   constructor(
     private router: Router,
@@ -54,8 +55,9 @@ export class GrantReportComponent implements OnInit {
           this.formGpReport = this.formBuilder.group({
             grantAmount: [{value: data.grantAmount, disabled: this.isReadOnly}, [Validators.required]],
             grantAmountUtilised: [{value: data.grantAmountUtilised, disabled: this.isReadOnly}, [Validators.required]],
+            dateReportSubmitted: [{value: data.dateReportSubmitted, disabled: this.isReadOnly}, [Validators.required]],
             amountTransferred: [{value: data.amountTransferred, disabled: this.isReadOnly}],
-            balance: [{value: data.balance, disabled: this.isReadOnly}, [Validators.required]],
+            balance: [{value: data.balance, disabled: true}, [Validators.required]],
             periodFrom: [{value: data.periodFrom, disabled: this.isReadOnly}, [Validators.required]],
             periodTo: [{value: data.periodTo, disabled: this.isReadOnly}, [Validators.required]],
             reportAttachment: [{value: data.reportAttachment, disabled: this.isReadOnly}, [Validators.required]],
@@ -65,22 +67,24 @@ export class GrantReportComponent implements OnInit {
             status: [data.status],
           });
         }
-      }, error=>{console.log(error)})
+      }, error => {
+        console.log(error)
+      })
     }
   }
 
   setEmptyForm() {
     this.formGpReport = this.formBuilder.group({
-      grantAmount: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      grantAmountUtilised: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      amountTransferred: [{value: '', disabled: this.isReadOnly}],
-      balance: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      periodFrom: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      periodTo: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      reportAttachment: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      grantId: [{value: '', disabled: this.isReadOnly}],
-      processInstanceId: [{value: '', disabled: this.isReadOnly}],
-      definitionKey: [{value: '', disabled: this.isReadOnly}],
+      grantAmount: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      grantAmountUtilised: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      dateReportSubmitted: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      balance: [{value: null, disabled: true}, [Validators.required]],
+      periodFrom: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      periodTo: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      reportAttachment: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      grantId: [{value: null, disabled: this.isReadOnly}],
+      processInstanceId: [{value: null, disabled: this.isReadOnly}],
+      definitionKey: [{value: null, disabled: this.isReadOnly}],
       status: [null],
     });
   }
@@ -99,13 +103,13 @@ export class GrantReportComponent implements OnInit {
       this.submitted = true
       this.error = false;
       this.success = true;
-      this.successMessage = "Saved Report";
+      this.successMessage = "Report Submitted Successfully";
       this.alertService.success(this.successMessage);
       this.statusChanged.emit(this.status);
     }, error => {
       this.error = true;
       this.success = false;
-      this.errorMessage = "Failed to save Report";
+      this.errorMessage = "Failed to submit Report";
       this.alertService.error(this.errorMessage);
       console.log(error);
     });
@@ -137,8 +141,14 @@ export class GrantReportComponent implements OnInit {
     );
   }
 
+  calculateBalance() {
+    this.negativeBalance = false
+    let balance = +this.f.grantAmount.value - +this.f.grantAmountUtilised.value
+    this.formGpReport.patchValue({balance: balance});
+    if (balance < 0) this.negativeBalance = true
+  }
 
-  saveDraft(){
+  saveDraft() {
     this.status = 'draft'
     this.submitReport()
   }

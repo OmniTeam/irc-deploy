@@ -6,8 +6,6 @@ class GrantPlanningLearning {
     String grantId
     String bankDetails
     String contactAuthorizedSignatory
-    String country
-    String city
     String nameAuthorizedSignatory
     String title
     String otherSources
@@ -17,8 +15,10 @@ class GrantPlanningLearning {
     String activitiesAndStrategies
     String risksAndChallenges
     String learningAndDocumentation
-    String costOfProject
+    String costOfProjectLocalCurrency
+    String costOfProjectDollars
     String attachment
+    String mou_attachment
     int amountRequested
     int totalBudgetAmt
     String definitionKey
