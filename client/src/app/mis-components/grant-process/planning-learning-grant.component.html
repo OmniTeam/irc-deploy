@@ -5,7 +5,7 @@
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Title of the Planning and Learning grant: <span class="required-indicator">*</span></label>
+          <label>1. Title of the Planning and Learning grant: <span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -23,7 +23,7 @@
               </div>
             </div>
           </div>
-          <label>Proposed duration (Months):<span class="required-indicator">*</span></label>
+          <label>3. Proposed duration (Months):<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -34,16 +34,16 @@
                 formControlName="proposedDuration"
                 [ngClass]="{ 'is-invalid': submitted && f.proposedDuration.errors }"
               >
-              <div *ngIf="submitted && f.proposedDuration.errors" class="invalid-feedback">
-                <div *ngIf="f.proposedDuration.errors.required" class="input-error">Proposed Duration is
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && f.proposedDuration.errors" class="invalid-feedback">
+              <div *ngIf="f.proposedDuration.errors.required" class="input-error">Proposed Duration is
+                required
               </div>
             </div>
           </div>
         </div>
         <div class="col-sm-6">
-          <label>Location /area of operation ( city and country):</label>
+          <label>2. Location /area of operation ( city and country):<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <ng-select class="form-control form-control-sm"
@@ -62,6 +62,11 @@
                 </ng-option>
               </ng-select>
             </div>
+            <div *ngIf="submitted && f.country.errors">
+              <div *ngIf="f.country.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -79,7 +84,11 @@
                   {{city}}
                 </ng-option>
               </ng-select>
-
+            </div>
+            <div *ngIf="submitted && f.city.errors">
+              <div *ngIf="f.city.errors.required" class="input-error">This value is
+                required
+              </div>
             </div>
           </div>
         </div>
@@ -87,7 +96,7 @@
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Proposed start date (DD MM YEAR)</label>
+          <label>4. Proposed start date (DD MM YEAR)<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -98,14 +107,14 @@
                 formControlName="proposedStartDate"
                 [ngClass]="{ 'is-invalid': submitted && f.proposedStartDate.errors }"
               >
-              <div *ngIf="submitted && f.proposedStartDate.errors" class="invalid-feedback">
-                <div *ngIf="f.proposedStartDate.errors.required" class="input-error">Proposed Start Date is
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && f.proposedStartDate.errors" class="invalid-feedback">
+              <div *ngIf="f.proposedStartDate.errors.required" class="input-error">Proposed Start Date is
+                required
               </div>
             </div>
           </div>
-          <label>Amount requested from CRVP-Fund:<span class="required-indicator">*</span></label>
+          <label>6. Amount requested from CRVP-Fund:<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -116,16 +125,16 @@
                 formControlName="amountRequested"
                 [ngClass]="{ 'is-invalid': submitted && f.amountRequested.errors }"
               >
-              <div *ngIf="submitted && f.amountRequested.errors" class="invalid-feedback">
-                <div *ngIf="f.amountRequested.errors.required" class="input-error">Amount Requested is
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && f.amountRequested.errors" class="invalid-feedback">
+              <div *ngIf="f.amountRequested.errors.required" class="input-error">Amount Requested is
+                required
               </div>
             </div>
           </div>
         </div>
         <div class="col-sm-6">
-          <label>Other sources and amount of funding on this particular Project if any:</label>
+          <label>5. Other sources and amount of funding on this particular Project if any:<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -137,8 +146,13 @@
                 [ngClass]="{ 'is-invalid': submitted && f.otherSources.errors }"
               >
             </div>
+            <div *ngIf="submitted && f.otherSources.errors">
+              <div *ngIf="f.otherSources.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
-          <label>Total Budget amount:<span class="required-indicator">*</span></label>
+          <label>7. Total Budget amount:<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -149,10 +163,10 @@
                 formControlName="totalBudgetAmt"
                 [ngClass]="{ 'is-invalid': submitted && f.totalBudgetAmt.errors }"
               >
-              <div *ngIf="submitted && f.totalBudgetAmt.errors" class="invalid-feedback">
-                <div *ngIf="f.totalBudgetAmt.errors.required" class="input-error">Total Budget Amount is
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && f.totalBudgetAmt.errors" class="invalid-feedback">
+              <div *ngIf="f.totalBudgetAmt.errors.required" class="input-error">Total Budget Amount is
+                required
               </div>
             </div>
           </div>
@@ -161,7 +175,7 @@
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Name of authorized Signatory(ies):<span
+          <label>8. Name of authorized Signatory(ies):<span
             class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -173,15 +187,14 @@
                 formControlName="nameAuthorizedSignatory"
                 [ngClass]="{ 'is-invalid': submitted && f.nameAuthorizedSignatory.errors }"
               >
-              <div *ngIf="submitted && f.nameAuthorizedSignatory.errors" class="invalid-feedback">
-                <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
-                  Signatory is
-                  required
-                </div>
+            </div>
+            <div *ngIf="submitted && f.nameAuthorizedSignatory.errors" class="invalid-feedback">
+              <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
+                Signatory is required
               </div>
             </div>
           </div>
-          <label>Contact details of authorized signatory(ies):</label>
+          <label>10. Contact details of authorized signatory(ies):<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -201,7 +214,7 @@
           </div>
         </div>
         <div class="col-sm-6">
-          <label>Bank Details</label>
+          <label>9. Bank Details<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -213,6 +226,11 @@
                 [ngClass]="{ 'is-invalid': submitted && f.bankDetails.errors }"
               ></textarea>
             </div>
+            <div *ngIf="submitted && f.bankDetails.errors">
+              <div *ngIf="f.bankDetails.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
         </div>
 
@@ -220,7 +238,7 @@
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Describe how the six months planning and learning grant will be managed in the cluster</label>
+          <label>11. Describe how the six months planning and learning grant will be managed in the cluster<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -232,10 +250,15 @@
                 [ngClass]="{ 'is-invalid': submitted && f.sixMonthsManaged.errors }"
               ></textarea>
             </div>
+            <div *ngIf="submitted && f.sixMonthsManaged.errors">
+              <div *ngIf="f.sixMonthsManaged.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
-          <label>List activities and describe strategies you are going to use to achieve the objectives above</label>
+          <label>12. List activities and describe strategies you are going to use to achieve the objectives above<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -247,6 +270,11 @@
                 [ngClass]="{ 'is-invalid': submitted && f.activitiesAndStrategies.errors }"
               ></textarea>
             </div>
+            <div *ngIf="submitted && f.activitiesAndStrategies.errors">
+              <div *ngIf="f.activitiesAndStrategies.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -254,7 +282,7 @@
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
           <label><b>Risks and challenges</b><br>
-            What challenges do you foresee during this period in relation to the following:</label>
+            13. What challenges do you foresee during this period in relation to the following:<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -266,11 +294,16 @@
                 [ngClass]="{ 'is-invalid': submitted && f.risksAndChallenges.errors }"
               ></textarea>
             </div>
+            <div *ngIf="submitted && f.risksAndChallenges.errors">
+              <div *ngIf="f.risksAndChallenges.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
           <label><b>Learning and documentation</b><br>
-            Learning is crucial in this stage. How will you ensure there is learning , how will you document your learning</label>
+            14. Learning is crucial in this stage. How will you ensure there is learning , how will you document your learning<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -282,13 +315,18 @@
                 [ngClass]="{ 'is-invalid': submitted && f.learningAndDocumentation.errors }"
               ></textarea>
             </div>
+            <div *ngIf="submitted && f.learningAndDocumentation.errors">
+              <div *ngIf="f.learningAndDocumentation.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Cost of the project in local currency & US dollars</label>
+          <label>15. Cost of the project in local currency & US dollars<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -300,10 +338,15 @@
                 [ngClass]="{ 'is-invalid': submitted && f.costOfProject.errors }"
               >
             </div>
+            <div *ngIf="submitted && f.costOfProject.errors">
+              <div *ngIf="f.costOfProject.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-sm-6">
-          <label>Detailed Work plan and Budget (Use formats provided by CRVPF)</label>
+          <label>16. Detailed Work plan and Budget (Use formats provided by CRVPF)<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input
@@ -314,6 +357,11 @@
                 style="padding-left: 10px;"
                 id="attachment"
                 (change)="handleFileInput($event)"/>
+            </div>
+            <div *ngIf="submitted && f.attachment.errors">
+              <div *ngIf="f.attachment.errors.required" class="input-error">Attachment is
+                required
+              </div>
             </div>
           </div>
           <button

@@ -90,7 +90,7 @@ export class PlanningLearningGrantComponent implements OnInit {
     this.formGp = this.formBuilder.group({
       proposedDuration: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       proposedStartDate: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
-      amountRequested: [{value: null, disabled: this.isReadOnly}],
+      amountRequested: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       otherSources: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       totalBudgetAmt: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       country: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
