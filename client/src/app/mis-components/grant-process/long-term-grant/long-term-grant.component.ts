@@ -66,9 +66,9 @@ export class LongTermGrantComponent implements OnInit {
   loading: boolean;
   comments: Array<CommentNode> = [];
   recommendations: Array<CommentNode> = [];
-  openCommentsPopup: boolean;
-  openRecommendationsPopup: boolean;
-  openPopup: boolean;
+  openCommentsPopup = false;
+  openRecommendationsPopup = false;
+  openPopup = false;
 
   constructor(
     private router: Router,

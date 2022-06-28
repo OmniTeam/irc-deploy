@@ -349,6 +349,12 @@ class TaskListController {
                 GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
                 Program program = Program.findById(grant.program)
                 def orgInfo = slurper.parseText(grant.organisation)
+                def ngos = slurper.parseText(grant.ngos)
+                def organizationsInvolved = []
+
+                ngos.each {
+                    organizationsInvolved << '{"id":"' + it['id'] + '","name":"' + it['nameOfPartnerOrganization'] + '","contact":"' + it['telephoneOfPartnerOrganization'] + '"}'
+                }
 
                 ProgramPartner p = new ProgramPartner()
                 p.cluster = orgInfo['nameCluster'] as String
@@ -362,6 +368,7 @@ class TaskListController {
                 p.city = orgInfo['city'] as String
                 p.dataCollector = getDataCollector()['user_id']
                 p.areaOfOperation = orgInfo['areaOfOperation'] as String
+                p.organisationsInvolved = organizationsInvolved
                 p.program = program
                 p.save(flush: true, failOnError: true)
 
@@ -475,7 +482,7 @@ class TaskListController {
         return increment_value
     }
 
-    String getDataCollector() {
+    def getDataCollector() {
         def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
         def results = AppHolder.withMisSql { rows(query as String) }
         return results?.first()

@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div *ngIf="openRecommendationsPopup" class="card window__container">
+<div *ngIf="openRecommendationsPopup" class="card window__container_sm">
   <div class="card-header" style="text-align: center">
     <h3>Recommendations</h3>
   </div>
@@ -49,7 +49,7 @@
     </div>
     <hr style="margin-top: 0rem; margin-bottom: 0rem;"/>
     <app-comments [comments]="recommendations" (onNewComment)="onNewRecommendationsHandler($event)"
-                  (commentsChanged)="recommendationsChangedHandler($event)"
+                  (commentsChanged)="onNewRecommendationsHandler($event)"
                   [isRecommendation]=true></app-comments>
   </div>
   <div class="card-footer" style="text-align: end">
