@@ -3047,4 +3047,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "163894123235645-14") {
+        addUniqueConstraint(columnNames: "task_id", constraintName: "UKcda91fa4eda523213r3t34581e9ec6", tableName: "task_list")
+    }
+
+    changeSet(author: "bruno (generated)", id: "16234524763546-28") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "data_collector", tableName: "program_partner")
+    }
+
 }

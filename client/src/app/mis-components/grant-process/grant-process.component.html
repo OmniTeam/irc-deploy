@@ -104,9 +104,6 @@
                           </ul>
                         </div>
                       </div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
-                      </div>
                     </div>
                     <div class="row">
                       <div class="col">
@@ -151,16 +148,9 @@
                       </div>
                     </div>
                     <div class="row" style="margin: 10px;">
-                      <div class="col-sm-6">
-                      <label for="reviewerComments">Provide any comments</label>
+                      <label for="reviewerComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerComments"
                                 [(ngModel)]="reviewerComments"></textarea>
-                      </div>
-                      <div class="col-sm-6">
-                        <label for="reviewerComments">Provide any recommendations</label>
-                        <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerRecommendations"
-                                  [(ngModel)]="reviewerRecommendations"></textarea>
-                      </div>
                     </div>
                   </div>
                 </div>

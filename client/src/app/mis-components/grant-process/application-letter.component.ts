@@ -19,6 +19,7 @@ export class ApplicationLetterComponent implements OnInit {
   @Output() triggerNextProcess: EventEmitter<string> = new EventEmitter();
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
+  @Input() isLongTerm: boolean;
 
   submitted = false;
   loading: boolean;

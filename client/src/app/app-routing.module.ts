@@ -145,7 +145,8 @@ const routes: Routes = [
             Roles.ROLE_ADMIN,
             Roles.ROLE_ED,
             Roles.ROLE_FINANCE,
-            Roles.ROLE_PROGRAM_OFFICER
+            Roles.ROLE_PROGRAM_OFFICER,
+            Roles.ROLE_APPLICANT
           ]
         },
         loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
@@ -153,21 +154,39 @@ const routes: Routes = [
       {
         path: 'longTermGrant', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_ED,
+            Roles.ROLE_PROGRAM_OFFICER,
+            Roles.ROLE_APPLICANT
+          ]
         },
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
       },
       {
         path: 'longTermGrant/:id/:readonly', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_ED,
+            Roles.ROLE_PROGRAM_OFFICER,
+            Roles.ROLE_APPLICANT
+          ]
         },
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
       },
       {
         path: 'longTermGrantStart', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_ED,
+            Roles.ROLE_PROGRAM_OFFICER,
+            Roles.ROLE_APPLICANT
+          ]
         },
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/start-long-term-grant.module').then(m => m.StartLongTermGrantModule)
       },

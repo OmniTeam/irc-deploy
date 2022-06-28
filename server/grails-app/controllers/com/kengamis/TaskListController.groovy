@@ -316,7 +316,7 @@ class TaskListController {
                 def orgInfo = slurper.parseText(g.organisation)
                 def email = orgInfo['email'] as String
                 def names = orgInfo['names'] as String
-                def username = generateCode(program!=null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
+                def username = generateCode(program != null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
                 def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
                 def user = new User(email: email, names: names, username: username, password: password)
@@ -351,6 +351,7 @@ class TaskListController {
                 def orgInfo = slurper.parseText(grant.organisation)
                 def ngos = slurper.parseText(grant.ngos)
                 def organizationsInvolved = []
+                def dataCollector = getDataCollector()
 
                 ngos.each {
                     organizationsInvolved << '{"id":"' + it['id'] + '","name":"' + it['nameOfPartnerOrganization'] + '","contact":"' + it['telephoneOfPartnerOrganization'] + '"}'
@@ -366,7 +367,7 @@ class TaskListController {
                 p.emailContactPerson = orgInfo['email'] as String
                 p.country = orgInfo['country'] as String
                 p.city = orgInfo['city'] as String
-                p.dataCollector = getDataCollector()['user_id']
+                p.dataCollector = dataCollector ? dataCollector['user_id'] : ""
                 p.areaOfOperation = orgInfo['areaOfOperation'] as String
                 p.organisationsInvolved = organizationsInvolved
                 p.program = program
@@ -488,7 +489,7 @@ class TaskListController {
     def getDataCollector() {
         def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
         def results = AppHolder.withMisSql { rows(query as String) }
-        return results?.first()
+        if (results.size() > 0) return results?.first() else return null
     }
 
     @Transactional

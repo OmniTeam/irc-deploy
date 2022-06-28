@@ -423,8 +423,8 @@
         </div>
         <div *ngIf="!isReadOnly" class="col-sm-6" style="align-self: center;">
           <div class="row" style="display: flex; justify-content: space-evenly;">
-            <button *ngIf="ngo!=ngos[0]" class="btn btn-danger" (click)="removeNgoRecord(ngo.id)"><i class="fas fa-minus-circle"></i>&nbsp;Remove</button>
-            <button class="btn btn-success" (click)="addNgoRecord()"><i class="fas fa-plus-circle"></i>&nbsp;Add</button>
+            <button *ngIf="ngo!=ngos[0]" class="btn btn-danger" (click)="removeNgoRecord(ngo.id)"><i class="fas fa-minus-circle"></i>&nbsp;Remove Organization</button>
+            <button class="btn btn-success" (click)="addNgoRecord()"><i class="fas fa-plus-circle"></i>&nbsp;Add Organization</button>
           </div>
         </div>
       </div>
@@ -551,7 +551,7 @@
                   id="financialAttachment"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.financial!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.financial)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i
@@ -572,7 +572,7 @@
                   id="registration"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.registration!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.registration)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i
@@ -596,7 +596,7 @@
                   id="listMembersAttachment"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.listMembers!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listMembers)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i
@@ -618,7 +618,7 @@
                   id="listStaffMembersAttachment"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.listStaffMembers!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listStaffMembers)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i
@@ -641,7 +641,7 @@
                   id="organizationStructure"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.organizationStructure!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.organizationStructure)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i
@@ -662,7 +662,7 @@
                   id="assessmentReport"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.assessmentReport!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.assessmentReport)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i
@@ -685,7 +685,7 @@
                   id="strategicPlan"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.strategicPlan!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.strategicPlan)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i
@@ -706,7 +706,7 @@
                   id="annualWorkPlan"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.annualWorkPlan!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.annualWorkPlan)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i
@@ -717,28 +717,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>ix. Draft M.O.U if application is submitted by Cluster</label>
-            <div class="form-group ">
-              <div class=" input-group input-group-merge">
-                <input
-                  *ngIf="!isReadOnly"
-                  class="form-control" [disabled]="isReadOnly"
-                  placeholder="Attachment"
-                  type="file"
-                  style="padding-left: 10px;"
-                  id="mou"
-                  (change)="handleFileInput($event)">
-                <button
-                  *ngIf="isReadOnly"
-                  type="button"
-                  (click)="fileUploadService.downloadFile(documents.mou)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <label>x. Child safe guard policy /manual if available</label>
+            <label>ix. Child safe guard policy /manual if available</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -750,11 +729,32 @@
                   id="childPolicy"
                   (change)="handleFileInput($event)"/>
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.childPolicy!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.childPolicy)"
                   class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i
                   class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isLongTerm" class="col-sm-6">
+            <label>x. Draft M.O.U if application is submitted by Cluster</label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="mou"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly && documents.mou!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.mou)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i>
+                </button>
               </div>
             </div>
           </div>

@@ -16,8 +16,8 @@ class TaskListSyncJob extends Script {
         downloadTasks(url + '/get-tasks/GRANT_PROCESS/' + '0/50')
         downloadTasks(url + '/get-tasks/LONG_TERM_GRANT/' + '0/50')
         //send data to workflow
-        def data = TaskList.where {status == 'completed' && synced == 'false' }.findAll()
-        data.each {  sendTasksToWorkflow(it as TaskList) }
+        def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
+        data.each { sendTasksToWorkflow(it as TaskList) }
 
         return null
     }
@@ -26,7 +26,7 @@ class TaskListSyncJob extends Script {
         def status = "not_started"
         def synced = "false"
 
-        def taskList = TaskList.findByTaskId("${task['id']}") ?: new TaskList(
+        TaskList.findByTaskId("${task['id']}") ?: new TaskList(
                 taskId: "${task['id']}",
                 userId: "${task['assigne']}",
                 groupId: "${task['group']}",
@@ -38,8 +38,7 @@ class TaskListSyncJob extends Script {
                 processDefKey: "${task['process_def_key']}",
                 synced: synced,
                 taskDefinitionKey: "${task['task_definition_key']}",
-        )
-        TaskList.withNewTransaction { taskList.save(failOnError: true, flush: true) }
+        ).save(failOnError: true, flush: true)
     }
 
     static def downloadTasks(def uri) {
@@ -87,7 +86,7 @@ class TaskListSyncJob extends Script {
     }
 
     def deleteCompletedTask(TaskList task) {
-        if(task.taskDefinitionKey == 'Disburse_Funds') {
+        if (task.taskDefinitionKey == 'Disburse_Funds') {
             Archive archive = new Archive()
             archive.taskId = task.taskId
             archive.inputVariables = task.inputVariables
@@ -103,7 +102,7 @@ class TaskListSyncJob extends Script {
             archive.taskDefinitionKey = task.taskDefinitionKey
             archive.save(flush: true, failOnError: true)
         }
-        TaskList.where {synced == 'true' && id == task.id }.deleteAll()
+        TaskList.where { synced == 'true' && id == task.id }.deleteAll()
     }
 
     static def setTaskSyncStatusToTrue(def id) {
@@ -116,7 +115,7 @@ class TaskListSyncJob extends Script {
         def output = '{"taskId": "' + task.taskId + '", "variables": ' + task.outputVariables + ' }'
         // POST
         try {
-            def http = new HTTPBuilder(url+'/complete-task')
+            def http = new HTTPBuilder(url + '/complete-task')
             http.headers.Accept = ContentType.JSON
             http.request(Method.POST, ContentType.JSON) { req ->
                 body = output
