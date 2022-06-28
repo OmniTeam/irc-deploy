@@ -737,27 +737,6 @@
               </div>
             </div>
           </div>
-          <div *ngIf="isLongTerm" class="col-sm-6">
-            <label>x. Draft M.O.U if application is submitted by Cluster</label>
-            <div class="form-group ">
-              <div class=" input-group input-group-merge">
-                <input
-                  *ngIf="!isReadOnly"
-                  class="form-control" [disabled]="isReadOnly"
-                  placeholder="Attachment"
-                  type="file"
-                  style="padding-left: 10px;"
-                  id="mou"
-                  (change)="handleFileInput($event)">
-                <button
-                  *ngIf="isReadOnly && documents.mou!=null"
-                  type="button"
-                  (click)="fileUploadService.downloadFile(documents.mou)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i>
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -3055,4 +3055,40 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "data_collector", tableName: "program_partner")
     }
 
+    changeSet(author: "bruno (generated)", id: "1656405168814-133") {
+        dropColumn(columnName: "city", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656405168814-134") {
+        dropColumn(columnName: "cost_of_project", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656405168814-135") {
+        dropColumn(columnName: "country", tableName: "grant_planning_learning")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656405168814-14") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "cost_of_project_dollars", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1656405168814-15") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "cost_of_project_local_currency", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "16562342627635-15") {
+        addColumn(tableName: "grant_planning_learning") {
+            column(name: "mou_attachment", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }

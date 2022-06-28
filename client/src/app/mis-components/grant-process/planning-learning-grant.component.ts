@@ -53,8 +53,6 @@ export class PlanningLearningGrantComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.countries = this.countriesService.getListOfAvailableCountries();
-
     if (this.isReadOnly || this.taskStatus == 'draft') {
       this.grantProcessService.getPlanningAndLearningRecord(this.grantId).subscribe((data: any) => {
         this.formGp = this.formBuilder.group({
@@ -63,8 +61,6 @@ export class PlanningLearningGrantComponent implements OnInit {
           amountRequested: [{value: data?.amountRequested, disabled: this.isReadOnly}],
           otherSources: [{value: data?.otherSources, disabled: this.isReadOnly}, [Validators.required]],
           totalBudgetAmt: [{value: data?.totalBudgetAmt, disabled: this.isReadOnly}, [Validators.required]],
-          country: [{value: data?.country, disabled: this.isReadOnly}, [Validators.required]],
-          city: [{value: data?.city, disabled: this.isReadOnly}, [Validators.required]],
           nameAuthorizedSignatory: [{value: data?.nameAuthorizedSignatory, disabled: this.isReadOnly}, [Validators.required]],
           contactAuthorizedSignatory: [{value: data?.contactAuthorizedSignatory, disabled: this.isReadOnly}, [Validators.required]],
           bankDetails: [{value: data?.bankDetails, disabled: this.isReadOnly}, [Validators.required]],
@@ -72,8 +68,10 @@ export class PlanningLearningGrantComponent implements OnInit {
           activitiesAndStrategies: [{value: data?.activitiesAndStrategies, disabled: this.isReadOnly}, [Validators.required]],
           risksAndChallenges: [{value: data?.risksAndChallenges, disabled: this.isReadOnly}, [Validators.required]],
           learningAndDocumentation: [{value: data?.learningAndDocumentation, disabled: this.isReadOnly}, [Validators.required]],
-          costOfProject: [{value: data?.costOfProject, disabled: this.isReadOnly}, [Validators.required]],
+          costOfProjectLocalCurrency: [{value: data?.costOfProjectLocalCurrency, disabled: this.isReadOnly}, [Validators.required]],
+          costOfProjectDollars: [{value: data?.costOfProjectDollars, disabled: this.isReadOnly}, [Validators.required]],
           attachment: [{value: data?.attachment, disabled: this.isReadOnly}, [Validators.required]],
+          mou_attachment: [{value: data?.mou_attachment, disabled: this.isReadOnly}, [Validators.required]],
           grantId: [{value: data?.grantId, disabled: this.isReadOnly}, [Validators.required]],
           processInstanceId: [{value: data?.processInstanceId, disabled: this.isReadOnly}, [Validators.required]],
           definitionKey: [{value: data?.definitionKey, disabled: this.isReadOnly}, [Validators.required]],
@@ -93,8 +91,6 @@ export class PlanningLearningGrantComponent implements OnInit {
       amountRequested: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       otherSources: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       totalBudgetAmt: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
-      country: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
-      city: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       nameAuthorizedSignatory: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       contactAuthorizedSignatory: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       bankDetails: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
@@ -102,20 +98,16 @@ export class PlanningLearningGrantComponent implements OnInit {
       activitiesAndStrategies: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       risksAndChallenges: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       learningAndDocumentation: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
-      costOfProject: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      costOfProjectLocalCurrency: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      costOfProjectDollars: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       attachment: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      mou_attachment: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       grantId: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       processInstanceId: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       definitionKey: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       status: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       title: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
     });
-  }
-
-  onSelectCountry(country) {
-    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
-      this.cities = response.data;
-    }, error => console.log(error))
   }
 
   submitLetter() {
@@ -184,6 +176,7 @@ export class PlanningLearningGrantComponent implements OnInit {
     this.loading = !this.loading;
     this.fileUploadService.upload(file, 'PandL_Grant').subscribe((data) => {
       if (id === "attachment") this.formGp.patchValue({attachment: data.path});
+      if (id === "mou_attachment") this.formGp.patchValue({mou_attachment: data.path});
       this.loading = false;
     }, error => {
       console.log(error)
