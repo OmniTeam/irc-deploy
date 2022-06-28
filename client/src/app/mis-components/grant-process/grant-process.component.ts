@@ -293,65 +293,72 @@ export class GrantProcessComponent implements OnInit {
   }
 
   submitReviewLetterOfInterest(status) {
-    if (this.decisionOfReviewProcess != undefined) {
-      let formData: { [key: string]: string } = {
-        grantId: this.grantId,
-        definitionKey: this.definitionKey,
-        processInstanceId: this.processInstanceId,
-        hasBeenReviewed: this.hasApplicationBeenReviewed,
-        dueDiligence: this.hasDueDiligenceConducted,
-        dateOfDueDiligence: this.dateOfDueDiligence,
-        dueDiligenceReport: this.attachmentDiligenceReport,
-        comments: this.reviewerComments,
-        recommendations: this.reviewerRecommendations,
-        decision: this.decisionOfReviewProcess,
-        user: this.authService.getLoggedInUsername(),
-        status: status
-      }
-
-      let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
-      const params = new HttpParams().set('id', formData.processInstanceId);
-      this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
-        if (response?.results != null) {
-          this.grantProcessService.updateLetterOfInterestReview(formData, response.results.id).subscribe((data) => {
-            console.log('response', data)
-            this.error = false;
-            this.success = true;
-            this.successMessage = "Updated";
-            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
-            this.statusChangedHandler(status)
-            this.alertService.success(this.successMessage);
-            this.router.navigate(['/home']);
-          }, error => {
-            this.error = true;
-            this.errorMessage = "Failed to update";
-            this.alertService.error(this.errorMessage);
-            this.success = false;
-            console.log(error);
-          });
-        } else {
-          this.grantProcessService.createReviewLetterOfInterest(formData).subscribe((data) => {
-            console.log('response', data)
-            this.error = false;
-            this.success = true;
-            this.successMessage = "Submitted";
-            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
-            this.statusChangedHandler(status)
-            this.alertService.success(this.successMessage);
-            this.router.navigate(['/home']);
-          }, error => {
-            this.error = true;
-            this.errorMessage = "Failed to submit";
-            this.alertService.error(this.errorMessage);
-            this.success = false;
-            console.log(error);
-          });
-        }
-      });
-    } else {
-      this.alertService.error('Please fill in all required details');
+    if (this.decisionOfReviewProcess == undefined || this.hasDueDiligenceConducted == undefined || this.reviewerComments == undefined) {
+      this.alertService.error('Please fill in all compulsory options');
       return;
     }
+    if (this.hasDueDiligenceConducted=='Yes' && this.dateOfDueDiligence == undefined) {
+        this.alertService.error('Please provide date of Due Diligence');
+        return;
+    }
+    if (this.hasDueDiligenceConducted=='Yes' && this.attachmentDiligenceReport == undefined) {
+      this.alertService.error('Please provide attachment Diligence Report');
+      return;
+    }
+    let formData: { [key: string]: string } = {
+      grantId: this.grantId,
+      definitionKey: this.definitionKey,
+      processInstanceId: this.processInstanceId,
+      hasBeenReviewed: this.hasApplicationBeenReviewed,
+      dueDiligence: this.hasDueDiligenceConducted,
+      dateOfDueDiligence: this.dateOfDueDiligence,
+      dueDiligenceReport: this.attachmentDiligenceReport,
+      comments: this.reviewerComments,
+      recommendations: this.reviewerRecommendations,
+      decision: this.decisionOfReviewProcess,
+      user: this.authService.getLoggedInUsername(),
+      status: status
+    }
+
+    let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
+    const params = new HttpParams().set('id', formData.processInstanceId);
+    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+      if (response?.results != null) {
+        this.grantProcessService.updateLetterOfInterestReview(formData, response.results.id).subscribe((data) => {
+          console.log('response', data)
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Updated";
+          this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+          this.statusChangedHandler(status)
+          this.alertService.success(this.successMessage);
+          this.router.navigate(['/home']);
+        }, error => {
+          this.error = true;
+          this.errorMessage = "Failed to update";
+          this.alertService.error(this.errorMessage);
+          this.success = false;
+          console.log(error);
+        });
+      } else {
+        this.grantProcessService.createReviewLetterOfInterest(formData).subscribe((data) => {
+          console.log('response', data)
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Submitted";
+          this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+          this.statusChangedHandler(status)
+          this.alertService.success(this.successMessage);
+          this.router.navigate(['/home']);
+        }, error => {
+          this.error = true;
+          this.errorMessage = "Failed to submit";
+          this.alertService.error(this.errorMessage);
+          this.success = false;
+          console.log(error);
+        });
+      }
+    });
   }
 
   planningAndLearningReview(status) {
