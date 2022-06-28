@@ -387,14 +387,17 @@ class TaskListController {
 
                 println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
 
-                task.status = 'completed'
-                task.save(flush: true, failOnError: true)
+                /*task.status = 'completed'
+                task.save(flush: true, failOnError: true)*/
 
                 def temp = Temp.findByType("Applicant-${orgInfo['name']}")
                 new Temp(type: "Partner-${orgInfo['name']}", jsonValue: "username ${username}, passwordFromRecord: ${temp?.id}").save()
 
                 // create  a group
                 def kengaGroup = KengaGroup.create(program.id, p.cluster)
+                print('========')
+                print(kengaGroup)
+                print('=======')
                 // create entity view filters
                 def createdGroupId = kengaGroup.id
                 def createdGroupName = kengaGroup.name
