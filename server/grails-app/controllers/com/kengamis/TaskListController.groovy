@@ -1,6 +1,6 @@
 package com.kengamis
 
-
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import groovy.json.*
@@ -23,6 +23,9 @@ class TaskListController {
 
         //check if task for archive
         archiveReport()
+
+        //check if task starts long term grant
+        startLongTermGrantJob()
 
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
@@ -465,6 +468,63 @@ class TaskListController {
                 TaskList taskList = TaskList.findById(task['id'] as String)
                 taskList.status = 'completed'
                 taskList.save(flush: true, failOnError: true)
+            }
+        }
+    }
+
+    @Transactional
+    def startLongTermGrantJob() {
+        TaskList[] startLongTermGrant = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Start_Long_Term_Grant' }.findAll()
+        if (startLongTermGrant.size() > 0) {
+            startLongTermGrant.each { TaskList task ->
+                def slurper = new JsonSlurper()
+                def variables = slurper.parseText(task.inputVariables)
+
+                variables['data'].each { it ->
+                    if (it.key == 'GrantId') {
+                        GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
+
+                        def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
+
+                        try {
+                            if (r.size() > 0) {
+                                def orgInfo = slurper.parseText(grant.organisation)
+                                def applicantEmail = orgInfo['email']
+                                def applicantName = orgInfo['names']
+                                def organization = orgInfo['name']
+                                def edEmail = []
+                                def programTeamEmail = []
+                                def program = Program.get(grant.program)
+
+                                r.each {
+                                    if (it['role'] == "ROLE_ED") edEmail << it['email']
+                                    if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                                }
+                                if (grant) {
+                                    boolean started = StartCamundaInstancesJob.startProcessInstance([
+                                            GrantId          : grant.id,
+                                            ApplicantName    : applicantName,
+                                            Organization     : organization,
+                                            Applicant        : applicantEmail,
+                                            ProgramTeam      : programTeamEmail[0],
+                                            ExecutiveDirector: edEmail[0],
+                                    ], "LONG_TERM_GRANT")
+
+                                    if (started) {
+                                        println "=========Started long term grant instance ========="
+                                        grant.status = "started-longterm"
+                                        grant.save(flush: true, failOnError: true)
+
+                                        task.status = 'completed'
+                                        task.save(flush: true, failOnError: true)
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
             }
         }
     }

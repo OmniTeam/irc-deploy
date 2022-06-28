@@ -50,7 +50,7 @@
               APPROVE PLANNING AND LEARNING GRANT</h6></div>
             <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               PROVIDE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isSubmitReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+            <div [style.display]="isSubmitReport || isMakeCorrectionsOnReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               SUBMIT PLANNING AND LEARNING GRANT REPORT</h6></div>
             <div [style.display]="isReviewReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               REVIEW PLANNING AND LEARNING GRANT REPORT</h6></div>
@@ -358,7 +358,7 @@
               </div>
             </div>
 
-            <div *ngIf="isSubmitReport" class="col">
+            <div *ngIf="isSubmitReport || isMakeCorrectionsOnReport" class="col">
               <organizational-information [grantId]="grantId"></organizational-information>
               <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
                                              [processInstanceId]="processInstanceId"

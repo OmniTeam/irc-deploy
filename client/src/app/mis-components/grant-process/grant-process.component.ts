@@ -23,6 +23,7 @@ export class GrantProcessComponent implements OnInit {
   isProvidePlanningLearningGrant: boolean;
   isSubmitReport: boolean;
   isReviewReport: boolean;
+  isMakeCorrectionsOnReport: boolean;
 
   taskRecord: any;
 
@@ -100,6 +101,7 @@ export class GrantProcessComponent implements OnInit {
     this.isProvidePlanningLearningGrant = false;
     this.isSubmitReport = false;
     this.isReviewReport = false;
+    this.isMakeCorrectionsOnReport = false;
 
     this.route.params
       .subscribe(p => {
@@ -156,7 +158,7 @@ export class GrantProcessComponent implements OnInit {
     if (data.taskDefinitionKey === "Approve_Learning_Grant") {
       this.isApprovePlanningLearningGrant = true;
       this.grantProcessService.getPlanningAndLearningApprove(data.grantId).subscribe((data: any) => {
-        console.log('apply PlanningAndLearningApprove record available', data)
+        console.log('PlanningAndLearningApprove record available', data)
         this.decisionOfApproveProcess = data.decision
         this.approveComments = data.comments
       })
@@ -164,16 +166,16 @@ export class GrantProcessComponent implements OnInit {
     if (data.taskDefinitionKey === "Provide_Learning_Grant") {
       this.isProvidePlanningLearningGrant = true;
       this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data) => {
-        console.log('apply ProvideLearningGrant record available', data)
+        console.log('ProvideLearningGrant record available', data)
       })
     }
     if (data.taskDefinitionKey === "Submit_Report") {
       this.isSubmitReport = true;
       this.grantProcessService.getGrantReport(data.grantId).subscribe((data) => {
-        console.log('apply GrantReport record available', data)
+        console.log('GrantReport record available', data)
       })
     }
-    if (data.taskDefinitionKey === "Review_Report" || data.taskDefinitionKey === "Archive_Report") {
+    if (data.taskDefinitionKey === "Review_Report") {
       this.isReviewReport = true;
       this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data: any) => {
         this.activitiesInlineWithWorkPlan = data.activitiesInlineWithWorkPlan;
@@ -182,6 +184,9 @@ export class GrantProcessComponent implements OnInit {
         this.decisionOfReviewProcess = data.decision;
         this.reviewerComments = data.comments;
       })
+    }
+    if (data.taskDefinitionKey === "Make_Corrections") {
+      this.isMakeCorrectionsOnReport = true
     }
     this.grantId = data.grantId;
     this.definitionKey = data.taskDefinitionKey
