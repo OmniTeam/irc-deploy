@@ -89,15 +89,15 @@ export class HomeComponent implements OnInit {
 
       if (data != null) {
         data.forEach((item) => {
-          results.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+          results.push(this.getRow(item.id, item.taskName, item.processDefKey, item.assignee, item.startDate, item.case));
           if (item.processDefKey == 'CRVPF_REPORTING') {
-            results1.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+            results1.push(this.getRow(item.id, item.taskName, item.processDefKey, item.assignee, item.startDate, item.case));
           }
           if (item.processDefKey == 'GRANT_PROCESS') {
-            results2.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+            results2.push(this.getRow(item.id, item.taskName, item.processDefKey, item.assignee, item.startDate, item.case));
           }
           if (item.processDefKey == 'LONG_TERM_GRANT') {
-            results3.push(this.getRow(item.id, item.taskDefinitionKey, item.processDefKey, item.assignee, item.startDate, item.case));
+            results3.push(this.getRow(item.id, item.taskName, item.processDefKey, item.assignee, item.startDate, item.case));
           }
         });
       }
