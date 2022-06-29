@@ -334,7 +334,7 @@ class TaskListController {
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
 
-                new Temp(type: "Applicant-${orgInfo['name']}", jsonValue: "username ${username}, password: ${password}").save()
+                new Temp(type: "Applicant-${orgInfo['name']}", jsonValue: '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}').save()
             }
         }
     }
@@ -375,10 +375,12 @@ class TaskListController {
 
                 def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
 
-                User user = User.findByEmail(orgInfo['email'] as String)
+                def oldUsername = getUserNameFromTempByType("Applicant-${orgInfo['name']}")
+                User user = User.findByUsername(oldUsername)
 
                 //update user role
-                UserRole.deleteOldRecords(user)
+                def userRole = UserRole.findByUser(user)
+                if(userRole) UserRole.deleteOldRecords(user)
                 Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
                 UserRole.create(user, partnerRole, true)
 
@@ -407,11 +409,12 @@ class TaskListController {
             if (it.key == 'GrantId') {
                 GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
                 def orgInfo = slurper.parseText(g.organisation)
-                def email = orgInfo['email'] as String
 
-                def user = User.findByEmail(email)
+                def username = getUserNameFromTempByType("Applicant-${orgInfo['name']}")
+                User user = User.findByUsername(username)
                 if (user != null) {
                     user.enabled = false
+                    user.accountLocked = true
                     user.save(flush: true, failOnError: true)
                 }
                 task.status = 'completed'
@@ -420,6 +423,12 @@ class TaskListController {
         }
     }
 
+    def getUserNameFromTempByType(String type) {
+        def slurper = new JsonSlurper()
+        def j = Temp.findByType(type)
+        def jsonValue = slurper.parseText(j['jsonValue'] as String)
+        jsonValue['ApplicantUserName'] as String
+    }
 
     def generateCode(def prefix, def increment_value) {
         def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)

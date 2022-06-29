@@ -14,6 +14,7 @@ import {AlertService} from "../../services/alert";
 
 export class GrantReportComponent implements OnInit {
   @Input() isReadOnly: boolean;
+  @Input() isMakeCorrections: boolean;
   @Input() grantId: string;
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
@@ -47,30 +48,30 @@ export class GrantReportComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (!this.isReadOnly) {
-      this.setEmptyForm()
-    } else {
+    if (this.isReadOnly || this.isMakeCorrections) {
+      let disabled = this.isReadOnly
+      if(this.isMakeCorrections) disabled = false
       this.grantProcessService.getGrantReport(this.grantId).subscribe((data: any) => {
         if (data != null) {
           this.formGpReport = this.formBuilder.group({
-            grantAmount: [{value: data.grantAmount, disabled: this.isReadOnly}, [Validators.required]],
-            grantAmountUtilised: [{value: data.grantAmountUtilised, disabled: this.isReadOnly}, [Validators.required]],
-            dateReportSubmitted: [{value: data.dateReportSubmitted, disabled: this.isReadOnly}, [Validators.required]],
-            amountTransferred: [{value: data.amountTransferred, disabled: this.isReadOnly}],
+            grantAmount: [{value: data.grantAmount, disabled: disabled}, [Validators.required]],
+            grantAmountUtilised: [{value: data.grantAmountUtilised, disabled: disabled}, [Validators.required]],
+            dateReportSubmitted: [{value: data.dateReportSubmitted, disabled: disabled}, [Validators.required]],
+            amountTransferred: [{value: data.amountTransferred, disabled: disabled}],
             balance: [{value: data.balance, disabled: true}, [Validators.required]],
-            periodFrom: [{value: data.periodFrom, disabled: this.isReadOnly}, [Validators.required]],
-            periodTo: [{value: data.periodTo, disabled: this.isReadOnly}, [Validators.required]],
-            reportAttachment: [{value: data.reportAttachment, disabled: this.isReadOnly}, [Validators.required]],
-            grantId: [{value: data.grantId, disabled: this.isReadOnly}],
-            processInstanceId: [{value: data.processInstanceId, disabled: this.isReadOnly}],
-            definitionKey: [{value: data.definitionKey, disabled: this.isReadOnly}],
+            periodFrom: [{value: data.periodFrom, disabled: disabled}, [Validators.required]],
+            periodTo: [{value: data.periodTo, disabled: disabled}, [Validators.required]],
+            reportAttachment: [{value: data.reportAttachment, disabled: disabled}, [Validators.required]],
+            grantId: [{value: data.grantId, disabled: disabled}],
+            processInstanceId: [{value: data.processInstanceId, disabled: disabled}],
+            definitionKey: [{value: data.definitionKey, disabled: disabled}],
             status: [data.status],
           });
         }
       }, error => {
         console.log(error)
       })
-    }
+    } else this.setEmptyForm()
   }
 
   setEmptyForm() {
