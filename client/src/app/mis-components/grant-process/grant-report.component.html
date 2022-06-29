@@ -139,7 +139,7 @@
               (click)="fileUploadService.downloadFile('Planning and learning report format.docx')"
               class="btn btn-link">Download Template Here <i class="fas fa-download"></i></button>
             <button
-              *ngIf="isReadOnly && f.reportAttachment.value!=null"
+              *ngIf="(isReadOnly || isMakeCorrections) && f.reportAttachment.value!=null"
               type="button"
               (click)="fileUploadService.downloadFile(f.reportAttachment.value)"
               class="btn btn-link">{{fileUploadService.getFileName(f.reportAttachment.value)}}</button>

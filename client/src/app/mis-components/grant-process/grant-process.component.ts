@@ -177,7 +177,7 @@ export class GrantProcessComponent implements OnInit {
     }
     if (data.taskDefinitionKey === "Review_Report") {
       this.isReviewReport = true;
-      this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data: any) => {
+      if (data.status == "draft") this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data: any) => {
         this.activitiesInlineWithWorkPlan = data.activitiesInlineWithWorkPlan;
         this.adhereToBudget = data.adhereToBudget;
         this.achieveIntendedObjectives = data.achieveIntendedObjectives;
@@ -549,10 +549,10 @@ export class GrantProcessComponent implements OnInit {
 
   submitGrantReportReview(status) {
     if (this.decisionOfReviewProcess != undefined &&
-    this.activitiesInlineWithWorkPlan != undefined &&
-    this.adhereToBudget != undefined &&
-    this.achieveIntendedObjectives != undefined &&
-    this.reviewerComments != undefined) {
+      this.activitiesInlineWithWorkPlan != undefined &&
+      this.adhereToBudget != undefined &&
+      this.achieveIntendedObjectives != undefined &&
+      this.reviewerComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,

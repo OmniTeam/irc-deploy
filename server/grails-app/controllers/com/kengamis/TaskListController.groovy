@@ -378,7 +378,8 @@ class TaskListController {
                 User user = User.findByEmail(orgInfo['email'] as String)
 
                 //update user role
-                UserRole.deleteOldRecords(user)
+                def userRole = UserRole.findByUser(user)
+                if(userRole) UserRole.deleteOldRecords(user)
                 Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
                 UserRole.create(user, partnerRole, true)
 
