@@ -378,15 +378,17 @@ class TaskListController {
                 def oldUsername = getUserNameFromTempByType("Applicant-${orgInfo['name']}")
                 User user = User.findByUsername(oldUsername)
 
-                //update user role
-                def userRole = UserRole.findByUser(user)
-                if(userRole) UserRole.deleteOldRecords(user)
-                Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
-                UserRole.create(user, partnerRole, true)
+                if(user!=null) {
+                    //update user role
+                    def userRole = UserRole.findByUser(user)
+                    if (userRole) UserRole.deleteOldRecords(user)
+                    Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
+                    UserRole.create(user, partnerRole, true)
 
-                //update username
-                user.username = username
-                user.save(flush: true, failOnError: true)
+                    //update username
+                    user.username = username
+                    user.save(flush: true, failOnError: true)
+                }
 
                 println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
 
@@ -424,10 +426,14 @@ class TaskListController {
     }
 
     def getUserNameFromTempByType(String type) {
+        def result = null
         def slurper = new JsonSlurper()
         def j = Temp.findByType(type)
-        def jsonValue = slurper.parseText(j['jsonValue'] as String)
-        jsonValue['ApplicantUserName'] as String
+        if (j != null) {
+            def jsonValue = slurper.parseText(j['jsonValue'] as String)
+            result = jsonValue['ApplicantUserName'] as String
+        }
+        return result
     }
 
     def generateCode(def prefix, def increment_value) {
