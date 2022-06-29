@@ -47,7 +47,8 @@ export class GrantReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    console.log("isMakeCorrections",this.isMakeCorrections)
+    console.log("isReadOnly",this.isReadOnly)
     if (this.isReadOnly || this.isMakeCorrections) {
       let disabled = this.isReadOnly
       if(this.isMakeCorrections) disabled = false

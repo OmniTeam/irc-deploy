@@ -368,7 +368,8 @@
                 <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
               </div>
               <grant-report [grantId]="grantId"
-                            [isMakeCorrections]="true"
+                            [isMakeCorrections]="isMakeCorrectionsOnReport"
+                            [isReadOnly]="false"
                             [processInstanceId]="processInstanceId"
                             [definitionKey]="definitionKey"
                             (statusChanged)="statusChangedHandler($event)"></grant-report>
@@ -381,6 +382,7 @@
                                              [definitionKey]="definitionKey"
                                              (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
               <grant-report [grantId]="grantId" [isReadOnly]="true"
+                            [isMakeCorrections]="false"
                             [processInstanceId]="processInstanceId"
                             [definitionKey]="definitionKey"
                             (statusChanged)="statusChangedHandler($event)"></grant-report>
