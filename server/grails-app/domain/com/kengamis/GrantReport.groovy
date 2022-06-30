@@ -6,10 +6,10 @@ class GrantReport {
     String grantId
     int grantAmount
     int grantAmountUtilised
-    int amountTransferred
     int balance
     String periodFrom
     String periodTo
+    String dateReportSubmitted
     String reportAttachment
     String processInstanceId
     String definitionKey

@@ -5,6 +5,7 @@ import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'grant-report',
@@ -14,6 +15,7 @@ import {AlertService} from "../../services/alert";
 
 export class GrantReportComponent implements OnInit {
   @Input() isReadOnly: boolean;
+  @Input() isMakeCorrections: boolean;
   @Input() grantId: string;
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
@@ -29,6 +31,8 @@ export class GrantReportComponent implements OnInit {
   success: boolean;
   errorMessage: string;
   successMessage: string;
+  negativeBalance: boolean;
+  balance: number;
 
   constructor(
     private router: Router,
@@ -45,42 +49,44 @@ export class GrantReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    if (!this.isReadOnly) {
-      this.setEmptyForm()
-    } else {
+    if (this.isReadOnly || this.isMakeCorrections) {
+      let disabled = this.isReadOnly
+      if (this.isMakeCorrections) disabled = false
       this.grantProcessService.getGrantReport(this.grantId).subscribe((data: any) => {
         if (data != null) {
+          this.balance = data.balance
           this.formGpReport = this.formBuilder.group({
-            grantAmount: [{value: data.grantAmount, disabled: this.isReadOnly}, [Validators.required]],
-            grantAmountUtilised: [{value: data.grantAmountUtilised, disabled: this.isReadOnly}, [Validators.required]],
-            amountTransferred: [{value: data.amountTransferred, disabled: this.isReadOnly}],
-            balance: [{value: data.balance, disabled: this.isReadOnly}, [Validators.required]],
-            periodFrom: [{value: data.periodFrom, disabled: this.isReadOnly}, [Validators.required]],
-            periodTo: [{value: data.periodTo, disabled: this.isReadOnly}, [Validators.required]],
-            reportAttachment: [{value: data.reportAttachment, disabled: this.isReadOnly}, [Validators.required]],
-            grantId: [{value: data.grantId, disabled: this.isReadOnly}],
-            processInstanceId: [{value: data.processInstanceId, disabled: this.isReadOnly}],
-            definitionKey: [{value: data.definitionKey, disabled: this.isReadOnly}],
+            grantAmount: [{value: data.grantAmount, disabled: disabled}, [Validators.required]],
+            grantAmountUtilised: [{value: data.grantAmountUtilised, disabled: disabled}, [Validators.required]],
+            dateReportSubmitted: [{value: data.dateReportSubmitted, disabled: disabled}, [Validators.required]],
+            balance: [{value: data.balance}, [Validators.required]],
+            periodFrom: [{value: data.periodFrom, disabled: disabled}, [Validators.required]],
+            periodTo: [{value: data.periodTo, disabled: disabled}, [Validators.required]],
+            reportAttachment: [{value: data.reportAttachment, disabled: disabled}, [Validators.required]],
+            grantId: [{value: data.grantId, disabled: disabled}],
+            processInstanceId: [{value: data.processInstanceId, disabled: disabled}],
+            definitionKey: [{value: data.definitionKey, disabled: disabled}],
             status: [data.status],
           });
         }
-      }, error=>{console.log(error)})
-    }
+      }, error => {
+        console.log(error)
+      })
+    } else this.setEmptyForm()
   }
 
   setEmptyForm() {
     this.formGpReport = this.formBuilder.group({
-      grantAmount: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      grantAmountUtilised: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      amountTransferred: [{value: '', disabled: this.isReadOnly}],
-      balance: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      periodFrom: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      periodTo: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      reportAttachment: [{value: '', disabled: this.isReadOnly}, [Validators.required]],
-      grantId: [{value: '', disabled: this.isReadOnly}],
-      processInstanceId: [{value: '', disabled: this.isReadOnly}],
-      definitionKey: [{value: '', disabled: this.isReadOnly}],
+      grantAmount: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      grantAmountUtilised: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      dateReportSubmitted: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      balance: [{value: null}, [Validators.required]],
+      periodFrom: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      periodTo: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      reportAttachment: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
+      grantId: [{value: null, disabled: this.isReadOnly}],
+      processInstanceId: [{value: null, disabled: this.isReadOnly}],
+      definitionKey: [{value: null, disabled: this.isReadOnly}],
       status: [null],
     });
   }
@@ -94,30 +100,52 @@ export class GrantReportComponent implements OnInit {
     const formData = this.formGpReport.value;
     console.log('formData', formData)
 
-    this.grantProcessService.createGrantReport(formData).subscribe(data => {
-      console.log(data)
-      this.submitted = true
-      this.error = false;
-      this.success = true;
-      this.successMessage = "Saved Report";
-      this.alertService.success(this.successMessage);
-      this.statusChanged.emit(this.status);
-    }, error => {
-      this.error = true;
-      this.success = false;
-      this.errorMessage = "Failed to save Report";
-      this.alertService.error(this.errorMessage);
-      console.log(error);
-    });
-    setTimeout(() => {
-      if (this.success == true) {
-        (document.getElementById('reportAttachment') as HTMLInputElement).value = ''
-        this.formGpReport.reset()
-        this.onBackPressed()
+    let apiUrl = `${this.grantProcessService.grantReport}/getByProcessInstanceId`
+    const params = new HttpParams().set('id', formData.processInstanceId);
+    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+      if (response?.results != null) {
+        this.grantProcessService.updateGrantReport(formData, response.results.id).subscribe(data => {
+          console.log(data)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Report Updated Successfully";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.errorMessage = "Failed to update Report";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
+        });
+      } else {
+        this.grantProcessService.createGrantReport(formData).subscribe(data => {
+          console.log(data)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Report Submitted Successfully";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.errorMessage = "Failed to submit Report";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
+        });
       }
-      this.success = false;
-      this.error = false;
-    }, 3000);
+      setTimeout(() => {
+        if (this.success == true) {
+          (document.getElementById('reportAttachment') as HTMLInputElement).value = ''
+          this.formGpReport.reset()
+          this.onBackPressed()
+        }
+        this.success = false;
+        this.error = false;
+      }, 3000);
+    });
   }
 
   handleFileInput(event) {
@@ -137,8 +165,14 @@ export class GrantReportComponent implements OnInit {
     );
   }
 
+  calculateBalance() {
+    this.negativeBalance = false
+    this.balance = +this.f.grantAmount.value - +this.f.grantAmountUtilised.value
+    this.formGpReport.patchValue({balance: this.balance});
+    if (this.balance < 0) this.negativeBalance = true
+  }
 
-  saveDraft(){
+  saveDraft() {
     this.status = 'draft'
     this.submitReport()
   }

@@ -2,6 +2,7 @@ package com.kengamis
 
 import com.kengamis.acl.KengaGroupAclEntry
 import com.kengamis.acl.KengaGroupAclEntryService
+import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import groovy.json.*
@@ -15,17 +16,10 @@ class TaskListController {
     EntityViewFilterQueryService entityViewFilterQueryService
     KengaGroupAclEntryService kengaGroupAclEntryService
 
-    static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+    def index() {
         def tasks = []
-
-        //check for tasks that need to create/deactivate new account
-        userAccountTasks()
-
-        //check if task for archive
-        archiveReport()
 
         TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
             def slurper = new JsonSlurper()
@@ -101,7 +95,9 @@ class TaskListController {
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
                     assignee = "Executive Director"
                     c2 = userRoles.contains("ROLE_ED")
-                } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
+                } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" ||
+                        task.taskDefinitionKey == "Submit_Report" ||
+                        task.taskDefinitionKey == "Make_Corrections") {
                     assignee = "APPLICANT"
                     if (userRoles.contains("ROLE_APPLICANT")) {
                         def applicantEmail = ''
@@ -275,119 +271,59 @@ class TaskListController {
         render status: NO_CONTENT
     }
 
-    static generator = { String alphabet, int n ->
-        new Random().with {
-            (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
-        }
-    }
-
-    def userAccountTasks() {
-        TaskList[] createUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_account_in_MIS' }.findAll()
-        if (createUserAccountTask.size() > 0) {
-            createUserAccountTask.each {
-                createUser(it)
-            }
-        }
-
-        TaskList[] deactivateUserAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Deactivate_account' }.findAll()
-        if (deactivateUserAccountTask.size() > 0) {
-            deactivateUserAccountTask.each {
-                deactivateUser(it)
-            }
-        }
-
-        TaskList[] createPartnerAccountTask = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Create_partner_account' }.findAll()
-        if (createPartnerAccountTask.size() > 0) {
-            createPartnerAccountTask.each {
-                createPartnerAccount(it)
-            }
-        }
-    }
-
     @Transactional
-    def createUser(TaskList task) {
-        def slurper = new JsonSlurper()
-        def variables = slurper.parseText(task.inputVariables)
+    def startLongTermGrantJob() {
+        TaskList[] startLongTermGrant = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Start_Long_Term_Grant' }.findAll()
+        if (startLongTermGrant.size() > 0) {
+            startLongTermGrant.each { TaskList task ->
+                def slurper = new JsonSlurper()
+                def variables = slurper.parseText(task.inputVariables)
 
-        variables['data'].each {
-            if (it.key == 'GrantId') {
-                GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
-                Program program = Program.findById(g.program)
-                def orgInfo = slurper.parseText(g.organisation)
-                def email = orgInfo['email'] as String
-                def names = orgInfo['names'] as String
-                def username = generateCode(program != null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
-                def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
+                variables['data'].each { it ->
+                    if (it.key == 'GrantId') {
+                        GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
 
-                def user = new User(email: email, names: names, username: username, password: password)
-                user.save(flush: true, failOnError: true)
+                        def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
 
-                Role applicant = Role.findByAuthority("ROLE_APPLICANT")
-                def role = new UserRole(user: user, role: applicant)
-                role.save(flush: true, failOnError: true)
+                        try {
+                            if (r.size() > 0) {
+                                def orgInfo = slurper.parseText(grant.organisation)
+                                def applicantEmail = orgInfo['email']
+                                def applicantName = orgInfo['names']
+                                def organization = orgInfo['name']
+                                def edEmail = []
+                                def programTeamEmail = []
+                                def program = Program.get(grant.program)
 
-                println "New User created => username ${username}, password: ${password}"
+                                r.each {
+                                    if (it['role'] == "ROLE_ED") edEmail << it['email']
+                                    if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                                }
+                                if (grant) {
+                                    boolean started = StartCamundaInstancesJob.startProcessInstance([
+                                            GrantId          : grant.id,
+                                            ApplicantName    : applicantName,
+                                            Organization     : organization,
+                                            Applicant        : applicantEmail,
+                                            ProgramTeam      : programTeamEmail[0],
+                                            ExecutiveDirector: edEmail[0],
+                                    ], "LONG_TERM_GRANT")
 
-                //update input variables with username and password for camunda to pick for email to the applicant
-                // and also flag task as complete
-                task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
-                task.status = 'completed'
-                task.save(flush: true, failOnError: true)
+                                    if (started) {
+                                        println "=========Started long term grant instance ========="
+                                        grant.status = "started-longterm"
+                                        grant.save(flush: true, failOnError: true)
 
-                new Temp(type: "Applicant-${orgInfo['name']}", jsonValue: "username ${username}, password: ${password}").save()
-            }
-        }
-    }
-
-    @Transactional
-    def createPartnerAccount(TaskList task) {
-        def slurper = new JsonSlurper()
-        def variables = slurper.parseText(task.inputVariables)
-
-        variables['data'].each {
-            if (it.key == 'GrantId') {
-                GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
-                Program program = Program.findById(grant.program)
-                def orgInfo = slurper.parseText(grant.organisation)
-                def ngos = slurper.parseText(grant.ngos)
-                def organizationsInvolved = []
-                def dataCollector = getDataCollector()
-
-                ngos.each {
-                    organizationsInvolved << '{"id":"' + it['id'] + '","name":"' + it['nameOfPartnerOrganization'] + '","contact":"' + it['telephoneOfPartnerOrganization'] + '"}'
+                                        task.status = 'completed'
+                                        task.save(flush: true, failOnError: true)
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
-
-                ProgramPartner p = new ProgramPartner()
-                p.cluster = orgInfo['nameCluster'] as String
-                p.organisation = orgInfo['name'] as String
-                p.physicalAddress = orgInfo['physicalAddress'] as String
-                p.organisationType = orgInfo['organizationType'] as String
-                p.nameContactPerson = orgInfo['names'] as String
-                p.telephoneContactPerson = orgInfo['contact'] as String
-                p.emailContactPerson = orgInfo['email'] as String
-                p.country = orgInfo['country'] as String
-                p.city = orgInfo['city'] as String
-                p.dataCollector = dataCollector ? dataCollector['user_id'] : ""
-                p.areaOfOperation = orgInfo['areaOfOperation'] as String
-                p.organisationsInvolved = organizationsInvolved
-                p.program = program
-                p.save(flush: true, failOnError: true)
-
-                def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
-
-                User user = User.findByEmail(orgInfo['email'] as String)
-
-                //update user role
-                UserRole.deleteOldRecords(user)
-                Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
-                UserRole.create(user, partnerRole, true)
-
-                //update username
-                user.username = username
-                user.save(flush: true, failOnError: true)
-
-                println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
-
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
 

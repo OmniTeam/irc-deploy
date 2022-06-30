@@ -11,7 +11,9 @@ export class OrganizationalInformationComponent implements OnInit {
 
   @Input() grantId: string;
   organisationalInfo: any;
-  openPopup: boolean;
+  organisationsInvolved: any;
+  openLetterPopup: boolean;
+  openInstructionsPopup: boolean;
 
   items = [
     {name: 'Yes', value: 'Yes'},
@@ -36,6 +38,7 @@ export class OrganizationalInformationComponent implements OnInit {
     this.grantProcessService.getLetterOfInterest(this.grantId).subscribe((results: any) => {
       if (results !== null && results !== undefined) {
         this.organisationalInfo = JSON.parse(results.organisation);
+        this.organisationsInvolved = JSON.parse(results.ngos);
       }
     });
 
@@ -51,7 +54,11 @@ export class OrganizationalInformationComponent implements OnInit {
     });
   }
 
-  openPopUp() {
-    this.openPopup = !this.openPopup;
+  openLetterPopUp() {
+    this.openLetterPopup = !this.openLetterPopup;
+  }
+
+  openInstructionsPopUp() {
+    this.openInstructionsPopup = !this.openInstructionsPopup;
   }
 }
