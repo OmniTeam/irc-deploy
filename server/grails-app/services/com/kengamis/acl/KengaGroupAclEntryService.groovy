@@ -31,6 +31,7 @@ class KengaGroupAclEntryService {
     }
     @Transactional
     def saveGroupMappings(groupId, permission, queryArray){
+        print(queryArray)
 //        loop through the array and assign the acls per iteration
         queryArray.each{ it ->
             def formName = it.form
@@ -50,7 +51,7 @@ class KengaGroupAclEntryService {
 
             // gets the id label of the kengaDataTable may be __id or id
             // that's its significance
-            def idLabel= kengaDataTable.idLabel
+            def idLabel= kengaDataTable?.idLabel
 
             // create entries
             createAcls(records, groupId,permission, idLabel)
@@ -80,8 +81,9 @@ class KengaGroupAclEntryService {
                     kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
                     kengaGroup: groupId,
                     mask: permissionNumber
-            ).save(flush: true, failOnError: true)
+            ).save(flush: true/*, failOnError: true*/)
         }
     }
+
 
 }

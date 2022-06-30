@@ -388,62 +388,89 @@ class TaskListController {
 
                 println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
 
-                /*task.status = 'completed'
-                task.save(flush: true, failOnError: true)*/
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
 
                 def temp = Temp.findByType("Applicant-${orgInfo['name']}")
                 new Temp(type: "Partner-${orgInfo['name']}", jsonValue: "username ${username}, passwordFromRecord: ${temp?.id}").save()
 
-                // create  a group
-                def kengaGroup = KengaGroup.create(program.id, p.cluster)
-                print('========')
-                print(kengaGroup)
-                print('=======')
-                // create entity view filters
-                def createdGroupId = kengaGroup.id
-                def createdGroupName = kengaGroup.name
-                EntityView.all.each {
-                    def entityViewFilterName = createdGroupName + ' ' + it.name
-                    def entityViewId = it.id
-                    def entityViewFilterQuery = entityViewFilterQueryService.generateFullFilterQuery( it.name, createdGroupName)
-                    def entityViewFilterUser = p.dataCollector
+                def entityDataCollectorId = p.dataCollector
+                def clusterName = p.cluster
 
-                    // create the entity view filter
-                    EntityViewFilters.create(entityViewFilterName,entityViewFilterQuery,entityViewId)
-                    // save the data collectors
-                    UserEntityViewFilters.create(entityViewFilterUser as User, it.id as EntityViewFilters, true)
+
+                // create  a group. Check if the group already exist. Otherwise retrieve that group and use it for creating other stuff eg Acls
+                if(!KengaGroup.findByName(clusterName)){
+                    def parentGroup = KengaGroup.findByName(p.program.title)
+                    def kengaGroup = KengaGroup.create(parentGroup, clusterName)
+
+                    def createdGroupName = kengaGroup.name
+                    def createdGroupId = kengaGroup.id
+
+                    createEntityViewFilters(createdGroupName, entityDataCollectorId)
+                    createAcls(createdGroupName, createdGroupId)
+                } else {
+                    def existingGroup = KengaGroup.findByName(p.cluster)
+                    def existingGroupName = existingGroup.name
+                    def existingGroupId = existingGroup.id
+
+                    createEntityViewFilters(existingGroupName, entityDataCollectorId)
+                    createAcls(existingGroupName, existingGroupId)
                 }
-
-                // create the acls
-                //  will hold the queryArray
-                def queryArray = []
-
-                // queries
-                def formConditionalQuery ="where cluster = ${p.cluster}"
-                def entityConditionalQuery ="where _cluster = ${p.cluster}"
-                // first collect the  form and entity names
-                def listOfFormNames = Form.all.collect {
-                    if(it.enabled){it.name}
-                }
-                listOfFormNames?.each {
-                    def obj = new LinkedHashMap();
-                    obj['form']= it
-                    obj['groupConditionQuery']= formConditionalQuery
-                    queryArray << obj
-                }
-
-                def listOfEntityBeneficiaries = ['entity_beneficiary_list']
-                listOfEntityBeneficiaries?.each {
-                    def obj = new LinkedHashMap();
-                    obj['form']= it
-                    obj['groupConditionQuery']= entityConditionalQuery
-                    queryArray << obj
-                }
-
-                kengaGroupAclEntryService.saveGroupMappings(createdGroupId, 1, queryArray)
-
             }
         }
+    }
+
+    def createAcls(clusterName, groupId){
+        //  will hold the queryArray
+        def queryArray = []
+
+        // queries
+        def formConditionalQuery = "where cluster = '${clusterName}'"
+        def entityConditionalQuery = "where _cluster = '${clusterName}'"
+
+        // first collect the  form and entity names
+        def listOfFormNames = Form.all.collect {
+            if (it.enabled) {it.name}
+        }
+
+        listOfFormNames?.each {
+            def obj = new LinkedHashMap();
+            obj['form'] = it
+            obj['groupConditionQuery'] = formConditionalQuery
+            queryArray << obj
+        }
+
+        def listOfEntityBeneficiaries = ['entity_beneficiary_list']
+        listOfEntityBeneficiaries?.each {
+            def obj = new LinkedHashMap();
+            obj['form'] = it
+            obj['groupConditionQuery'] = entityConditionalQuery
+            queryArray << obj
+        }
+
+        kengaGroupAclEntryService.saveGroupMappings(groupId, 1, queryArray)
+    }
+
+    @Transactional
+    def createEntityViewFilters(createdGroupName, entityDataCollectorId){
+        def listOfEntityViews = EntityView.all
+        listOfEntityViews.each {
+            def entityViewFilterName = createdGroupName + ' ' + it.name
+            def entityViewId = it.id
+            def entityViewFilterQuery = (entityViewFilterQueryService.generateFullFilterQuery( it.name, createdGroupName).viewQuery).toString()
+            def entityViewFilterUser = entityDataCollectorId
+
+            // create the entity view filter
+            def entityViewFilters = EntityViewFilters.create(entityViewFilterName,entityViewFilterQuery,entityViewId)
+
+            // save the data collectors
+            if(entityViewFilterUser){
+                def entityDataViewFilterCollector = User.findById(entityViewFilterUser)
+                def entityViewObject = EntityViewFilters.findById(entityViewFilters.id)
+                UserEntityViewFilters.createUserEntityViewFilters(entityDataViewFilterCollector, entityViewObject)
+            }
+        }
+
     }
 
 

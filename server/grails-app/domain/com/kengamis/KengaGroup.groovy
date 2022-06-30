@@ -22,10 +22,11 @@ class KengaGroup {
         parentGroup nullable: true, unique: false
     }
 
-    static KengaGroup create(program, name) {
-        def instance = new KengaGroup(parentGroup: program, name: name)
-        instance.save(flush: true)
+    static def Object create(KengaGroup program, String s) {
+        def instance = new KengaGroup(parentGroup: program,name: s)
+        instance.save(flush: true, failOnError: true)
         return  instance
+
     }
 
 

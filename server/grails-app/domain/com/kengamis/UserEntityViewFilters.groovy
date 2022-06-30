@@ -29,6 +29,12 @@ class UserEntityViewFilters {
         new UserEntityViewFilters(user: user, entityViewFilters: entityViewFilters).save(flush: flush, insert: true)
     }
 
+    static  createUserEntityViewFilters(User user, EntityViewFilters entityViewFilters) {
+        def instance = new UserEntityViewFilters(user: user, entityViewFilters: entityViewFilters)
+        instance.save(flush: true, failOnError: true)
+        return  instance
+    }
+
     static boolean remove(User user, EntityViewFilters entityViewFilters, boolean flush = false) {
         int rowCount = (int) where {
             user == User.load(user.id) && entityViewFilters == EntityViewFilters.load(entityViewFilters.id)
