@@ -234,6 +234,15 @@
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
+                      <td class="text-center">{{milestone.overallTarget | number }}</td>
+                      <td class='text-center'>
+                        <button class="btn btn-link" [id]="'btn' + milestone.id"
+                                (click)="toggleDisaggregation('btn' + milestone.id, milestone)"><i
+                          class="text fas fa-plus"></i></button>
+                        <button class="btn btn-link"
+                                (click)="removeIndicator(milestone)"><i
+                          class="text fas fa-trash-alt" style="color: red"></i></button>
+                      </td>
                       <td [id]="milestone.id + '-d1'">
                         <div>{{ milestone.startDate }}
                           <button class="btn btn-link"
@@ -249,16 +258,6 @@
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class="text-center">{{milestone.overallTarget | number }}</td>
-                      <td class='text-center'>
-                        <button class="btn btn-link" [id]="'btn' + milestone.id"
-                                (click)="toggleDisaggregation('btn' + milestone.id, milestone)"><i
-                          class="text fas fa-plus"></i></button>
-                        <button class="btn btn-link"
-                                (click)="removeIndicator(milestone)"><i
-                          class="text fas fa-trash-alt" style="color: red"></i></button>
-                      </td>
-
                     </tr>
                     </tbody>
                   </table>
