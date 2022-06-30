@@ -129,7 +129,7 @@ export class PlanningLearningGrantComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-
+    console.log('formData', this.formGp.value)
     if (this.formGp.invalid) {
       this.alertService.error("Please fill in all fields correctly");
       return;

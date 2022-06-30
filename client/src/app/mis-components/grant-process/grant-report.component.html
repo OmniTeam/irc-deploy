@@ -172,10 +172,10 @@
       </div>
 
       <br>
-      <input class="form-control" type="hidden" formControlName="grantId" [value]="grantId">
-      <input class="form-control" type="hidden" formControlName="processInstanceId" [value]="processInstanceId">
-      <input class="form-control" type="hidden" formControlName="definitionKey" [value]="definitionKey">
-      <input class="form-control" type="hidden" id="status" [value]="status">
+      <input class="form-control" type="hidden" formControlName="grantId" ngModel="{{grantId}}">
+      <input class="form-control" type="hidden" formControlName="processInstanceId" ngModel="{{processInstanceId}}">
+      <input class="form-control" type="hidden" formControlName="definitionKey" ngModel="{{definitionKey}}">
+      <input class="form-control" type="hidden" id="status" ngModel="{{status}}">
 
       <div class="row" *ngIf="!isReadOnly">
         <div class="col-lg-12 bottom_buttons_row"
