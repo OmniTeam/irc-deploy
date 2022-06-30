@@ -101,7 +101,9 @@ class TaskListController {
                 } else if (task.taskDefinitionKey == "Approve_Learning_Grant") {
                     assignee = "Executive Director"
                     c2 = userRoles.contains("ROLE_ED")
-                } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" || task.taskDefinitionKey == "Submit_Report") {
+                } else if (task.taskDefinitionKey == "Apply_for_Learning_Planning_Grant" ||
+                        task.taskDefinitionKey == "Submit_Report" ||
+                        task.taskDefinitionKey == "Make_Corrections") {
                     assignee = "APPLICANT"
                     if (userRoles.contains("ROLE_APPLICANT")) {
                         def applicantEmail = ''

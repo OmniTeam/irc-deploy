@@ -132,6 +132,10 @@ export class GrantProcessService {
     return this.http.put(`${this.provideLearningGrant}/${id}`, formData);
   }
 
+  updateGrantReport(formData, id): Observable<any> {
+    return this.http.put(`${this.grantReport}/${id}`, formData);
+  }
+
   updateGrantReportReview(formData, id): Observable<any> {
     return this.http.put(`${this.grantReportReview}/${id}`, formData);
   }

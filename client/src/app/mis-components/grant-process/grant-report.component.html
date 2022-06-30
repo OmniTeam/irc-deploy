@@ -64,9 +64,10 @@
                 placeholder="Amount"
                 type="number"
                 style="padding-left: 10px;"
-                formControlName="balance"
+                value="{{balance}}"
+                id="balance"
                 [ngClass]="{ 'is-invalid': negativeBalance || (submitted && f.balance.errors) }"
-              >
+              disabled>
             </div>
             <div *ngIf="submitted && f.balance.errors" >
               <div *ngIf="f.balance.errors.required" class="input-error">This value is
@@ -171,10 +172,10 @@
       </div>
 
       <br>
-      <input class="form-control" type="hidden" formControlName="grantId" [ngModel]="grantId">
-      <input class="form-control" type="hidden" formControlName="processInstanceId" [ngModel]="processInstanceId">
-      <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
-      <input class="form-control" type="hidden" id="status" [ngModel]="status">
+      <input class="form-control" type="hidden" formControlName="grantId" [value]="grantId">
+      <input class="form-control" type="hidden" formControlName="processInstanceId" [value]="processInstanceId">
+      <input class="form-control" type="hidden" formControlName="definitionKey" [value]="definitionKey">
+      <input class="form-control" type="hidden" id="status" [value]="status">
 
       <div class="row" *ngIf="!isReadOnly">
         <div class="col-lg-12 bottom_buttons_row"

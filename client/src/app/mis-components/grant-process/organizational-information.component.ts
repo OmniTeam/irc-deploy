@@ -39,7 +39,6 @@ export class OrganizationalInformationComponent implements OnInit {
       if (results !== null && results !== undefined) {
         this.organisationalInfo = JSON.parse(results.organisation);
         this.organisationsInvolved = JSON.parse(results.ngos);
-        console.log("ngos",this.organisationsInvolved)
       }
     });
 

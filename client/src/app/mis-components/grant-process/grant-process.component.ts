@@ -334,14 +334,14 @@ export class GrantProcessComponent implements OnInit {
           console.log('response', data)
           this.error = false;
           this.success = true;
-          this.successMessage = "Updated";
+          this.successMessage = "Submitted";
           this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
           this.statusChangedHandler(status)
           this.alertService.success(this.successMessage);
           this.router.navigate(['/home']);
         }, error => {
           this.error = true;
-          this.errorMessage = "Failed to update";
+          this.errorMessage = "Failed to submit";
           this.alertService.error(this.errorMessage);
           this.success = false;
           console.log(error);
@@ -450,7 +450,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -512,7 +512,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
@@ -574,7 +574,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -591,7 +591,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Submitted";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);

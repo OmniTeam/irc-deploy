@@ -5,6 +5,7 @@ import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
 import {AlertService} from "../../services/alert";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'grant-report',
@@ -31,6 +32,7 @@ export class GrantReportComponent implements OnInit {
   errorMessage: string;
   successMessage: string;
   negativeBalance: boolean;
+  balance: number;
 
   constructor(
     private router: Router,
@@ -49,15 +51,15 @@ export class GrantReportComponent implements OnInit {
   ngOnInit(): void {
     if (this.isReadOnly || this.isMakeCorrections) {
       let disabled = this.isReadOnly
-      if(this.isMakeCorrections) disabled = false
+      if (this.isMakeCorrections) disabled = false
       this.grantProcessService.getGrantReport(this.grantId).subscribe((data: any) => {
         if (data != null) {
+          this.balance = data.balance
           this.formGpReport = this.formBuilder.group({
             grantAmount: [{value: data.grantAmount, disabled: disabled}, [Validators.required]],
             grantAmountUtilised: [{value: data.grantAmountUtilised, disabled: disabled}, [Validators.required]],
             dateReportSubmitted: [{value: data.dateReportSubmitted, disabled: disabled}, [Validators.required]],
-            amountTransferred: [{value: data.amountTransferred, disabled: disabled}],
-            balance: [{value: data.balance, disabled: true}, [Validators.required]],
+            balance: [{value: data.balance}, [Validators.required]],
             periodFrom: [{value: data.periodFrom, disabled: disabled}, [Validators.required]],
             periodTo: [{value: data.periodTo, disabled: disabled}, [Validators.required]],
             reportAttachment: [{value: data.reportAttachment, disabled: disabled}, [Validators.required]],
@@ -78,7 +80,7 @@ export class GrantReportComponent implements OnInit {
       grantAmount: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       grantAmountUtilised: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       dateReportSubmitted: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
-      balance: [{value: null, disabled: true}, [Validators.required]],
+      balance: [{value: null}, [Validators.required]],
       periodFrom: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       periodTo: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
       reportAttachment: [{value: null, disabled: this.isReadOnly}, [Validators.required]],
@@ -98,30 +100,52 @@ export class GrantReportComponent implements OnInit {
     const formData = this.formGpReport.value;
     console.log('formData', formData)
 
-    this.grantProcessService.createGrantReport(formData).subscribe(data => {
-      console.log(data)
-      this.submitted = true
-      this.error = false;
-      this.success = true;
-      this.successMessage = "Report Submitted Successfully";
-      this.alertService.success(this.successMessage);
-      this.statusChanged.emit(this.status);
-    }, error => {
-      this.error = true;
-      this.success = false;
-      this.errorMessage = "Failed to submit Report";
-      this.alertService.error(this.errorMessage);
-      console.log(error);
-    });
-    setTimeout(() => {
-      if (this.success == true) {
-        (document.getElementById('reportAttachment') as HTMLInputElement).value = ''
-        this.formGpReport.reset()
-        this.onBackPressed()
+    let apiUrl = `${this.grantProcessService.grantReport}/getByProcessInstanceId`
+    const params = new HttpParams().set('id', formData.processInstanceId);
+    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+      if (response?.results != null) {
+        this.grantProcessService.updateGrantReport(formData, response.results.id).subscribe(data => {
+          console.log(data)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Report Updated Successfully";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.errorMessage = "Failed to update Report";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
+        });
+      } else {
+        this.grantProcessService.createGrantReport(formData).subscribe(data => {
+          console.log(data)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Report Submitted Successfully";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.errorMessage = "Failed to submit Report";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
+        });
       }
-      this.success = false;
-      this.error = false;
-    }, 3000);
+      setTimeout(() => {
+        if (this.success == true) {
+          (document.getElementById('reportAttachment') as HTMLInputElement).value = ''
+          this.formGpReport.reset()
+          this.onBackPressed()
+        }
+        this.success = false;
+        this.error = false;
+      }, 3000);
+    });
   }
 
   handleFileInput(event) {
@@ -143,9 +167,9 @@ export class GrantReportComponent implements OnInit {
 
   calculateBalance() {
     this.negativeBalance = false
-    let balance = +this.f.grantAmount.value - +this.f.grantAmountUtilised.value
-    this.formGpReport.patchValue({balance: balance});
-    if (balance < 0) this.negativeBalance = true
+    this.balance = +this.f.grantAmount.value - +this.f.grantAmountUtilised.value
+    this.formGpReport.patchValue({balance: this.balance});
+    if (this.balance < 0) this.negativeBalance = true
   }
 
   saveDraft() {
