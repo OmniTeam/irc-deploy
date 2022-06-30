@@ -94,6 +94,7 @@ class UrlMappings {
         "/userPartners"(controller: 'user', action:'getCurrentUserPartners',method: 'GET' )
         "/getMISUsers"(controller: 'user', action:'getMISUsers',method: 'GET' )
         "/allMisTables"(controller: 'kengaGroupAclEntry', action:'allMisTables',method: 'GET' )
+        "/entityViewFilters/generateFullFilterQuery"(controller: 'entityViewFilters', action:'generateFullFilterQuery',method: 'GET' )
         "/api/v1/aclGroupMapping/tables"(controller: 'kengaGroupAclEntry', action:'allMisTables')
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
