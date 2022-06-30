@@ -391,10 +391,10 @@
     </div>
   </div>
 
-  <input class="form-control" type="hidden" formControlName="grantId" [ngModel]="grantId">
-  <input class="form-control" type="hidden" formControlName="processInstanceId" [ngModel]="processInstanceId">
-  <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
-  <input class="form-control" type="hidden" formControlName="status" [ngModel]="status">
+  <input class="form-control" type="hidden" formControlName="grantId" ngModel="{{grantId}}">
+  <input class="form-control" type="hidden" formControlName="processInstanceId" ngModel="{{processInstanceId}}">
+  <input class="form-control" type="hidden" formControlName="definitionKey" ngModel="{{definitionKey}}">
+  <input class="form-control" type="hidden" formControlName="status" ngModel="{{status}}">
 
   <div *ngIf="error || success" class="row align-items-center text-center"
        style="display: flex; justify-content: center;">

@@ -334,14 +334,14 @@ export class GrantProcessComponent implements OnInit {
           console.log('response', data)
           this.error = false;
           this.success = true;
-          this.successMessage = "Updated";
+          this.successMessage = "Submitted";
           this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
           this.statusChangedHandler(status)
           this.alertService.success(this.successMessage);
           this.router.navigate(['/home']);
         }, error => {
           this.error = true;
-          this.errorMessage = "Failed to update";
+          this.errorMessage = "Failed to submit";
           this.alertService.error(this.errorMessage);
           this.success = false;
           console.log(error);
@@ -368,66 +368,67 @@ export class GrantProcessComponent implements OnInit {
   }
 
   planningAndLearningReview(status) {
-    if (this.decisionOfReviewProcess == undefined &&
-      this.isConceptInline == undefined &&
-      this.doesItAdhere == undefined &&
-      this.areTheyAdhering == undefined &&
-      this.reviewerComments == undefined) {
+    if (this.decisionOfReviewProcess != undefined &&
+      this.isConceptInline != undefined &&
+      this.doesItAdhere != undefined &&
+      this.areTheyAdhering != undefined &&
+      this.reviewerComments != undefined) {
+
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        isConceptInline: this.isConceptInline,
+        doesItAdhere: this.doesItAdhere,
+        areTheyAdhering: this.areTheyAdhering,
+        comments: this.reviewerComments,
+        decision: this.decisionOfReviewProcess,
+        user: this.authService.getLoggedInUsername(),
+        status: status
+      }
+      let apiUrl = `${this.grantProcessService.planningLearningReview}/getByProcessInstanceId`
+      const params = new HttpParams().set('id', formData.processInstanceId);
+      this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+        if (response?.results != null) {
+          this.grantProcessService.updatePlanningAndLearningReview(formData, response.results.id).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted Successfully";
+            this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to update";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        } else {
+          this.grantProcessService.createPlanningAndLearningReview(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
       this.alertService.error('Please fill in all compulsory options');
       return;
     }
-
-    let formData: { [key: string]: string } = {
-      grantId: this.grantId,
-      definitionKey: this.definitionKey,
-      processInstanceId: this.processInstanceId,
-      isConceptInline: this.isConceptInline,
-      doesItAdhere: this.doesItAdhere,
-      areTheyAdhering: this.areTheyAdhering,
-      comments: this.reviewerComments,
-      decision: this.decisionOfReviewProcess,
-      user: this.authService.getLoggedInUsername(),
-      status: status
-    }
-    let apiUrl = `${this.grantProcessService.planningLearningReview}/getByProcessInstanceId`
-    const params = new HttpParams().set('id', formData.processInstanceId);
-    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
-      if (response?.results != null) {
-        this.grantProcessService.updatePlanningAndLearningReview(formData, response.results.id).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Success";
-          this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.error = true;
-          this.errorMessage = "Failed to update";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      } else {
-        this.grantProcessService.createPlanningAndLearningReview(formData).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Submitted";
-          this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.error = true;
-          this.errorMessage = "Failed to submit";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      }
-    });
   }
 
   planningAndLearningApprove(status) {
@@ -450,7 +451,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -467,7 +468,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Submitted";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -512,7 +513,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
@@ -528,7 +529,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Submitted";
+            this.successMessage = "Submitted Successfully";
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
@@ -574,7 +575,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -591,7 +592,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Submitted";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);

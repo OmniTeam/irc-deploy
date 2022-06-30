@@ -113,7 +113,7 @@ export class SidebarComponent implements OnInit {
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
-    console.log(this.authService.isLoggedIn());
+    // console.log(this.authService.isLoggedIn());
     if (this.authService.isLoggedIn()) {
       // console.log('am being loaded');
       this.formService.getEnabledForms().subscribe(data => {
