@@ -301,6 +301,8 @@ class TaskListController {
                                             ApplicantName    : applicantName,
                                             Organization     : organization,
                                             Applicant        : applicantEmail,
+                                            ApplicantUserName: applicantEmail,
+                                            ApplicantPassword: applicantEmail,
                                             ProgramTeam      : programTeamEmail[0],
                                             ExecutiveDirector: edEmail[0],
                                     ], "LONG_TERM_GRANT")

@@ -18,7 +18,7 @@ class TaskListSyncJob extends Script {
         def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
         data.each { sendTasksToWorkflow(it as TaskList) }
 
-        downloadTasks(url + '/get-tasks/CRVPF_REPORTING/','0/50')
+        downloadTasks(url + '/get-tasks/CRVPF_REPORTING/', '0/50')
         downloadTasks(url + '/get-tasks/GRANT_PROCESS/', '0/50')
         downloadTasks(url + '/get-tasks/LONG_TERM_GRANT/', '0/50')
 
@@ -169,16 +169,19 @@ class TaskListSyncJob extends Script {
                 def orgInfo = slurper.parseText(g.organisation)
                 def email = orgInfo['email'] as String
                 def names = orgInfo['names'] as String
+                def orgName = orgInfo['name'] as String
                 def username = generateCode(program != null ? program.title : "AP", generator(('0'..'9').join(), 4)) as String
                 def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
                 def user = new User(email: email, names: names, username: username, password: password)
                 user.save(flush: true, failOnError: true)
 
-                Role applicant = Role.findByAuthority("ROLE_APPLICANT")
-                def role = new UserRole(user: user, role: applicant)
+                Role applicantRole = Role.findByAuthority("ROLE_APPLICANT")
+                def role = new UserRole(user: user, role: applicantRole)
                 role.save(flush: true, failOnError: true)
 
+                Applicant applicant = new Applicant(username: username, password: password, grantId: g.id, email: email, names: names, organization: orgName, user: user)
+                applicant.save(flush: true, failOnError: true)
                 println "New User created => username ${username}, password: ${password}"
 
                 //update input variables with username and password for camunda to pick for email to the applicant
@@ -186,12 +189,6 @@ class TaskListSyncJob extends Script {
                 task.outputVariables = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
                 task.status = 'completed'
                 task.save(flush: true, failOnError: true)
-
-                def value = '{"ApplicantUserName": "' + username + '","ApplicantPassword": "' + password + '"}'
-                def temp = Temp.findByType("Applicant-${orgInfo['name']}")
-                temp.jsonValue = value
-                temp ? temp.save(flush: true, failOnError: true)
-                        : new Temp(type: "Applicant-${orgInfo['name']}", jsonValue: value).save(flush: true, failOnError: true)
             }
         }
     }
@@ -213,50 +210,37 @@ class TaskListSyncJob extends Script {
                     organizationsInvolved << '{"id":"' + it['id'] + '","name":"' + it['nameOfPartnerOrganization'] + '","contact":"' + it['telephoneOfPartnerOrganization'] + '"}'
                 }
 
-                ProgramPartner p = new ProgramPartner()
-                p.cluster = orgInfo['nameCluster'] as String
-                p.organisation = orgInfo['name'] as String
-                p.physicalAddress = orgInfo['physicalAddress'] as String
-                p.organisationType = orgInfo['organizationType'] as String
-                p.nameContactPerson = orgInfo['names'] as String
-                p.telephoneContactPerson = orgInfo['contact'] as String
-                p.emailContactPerson = orgInfo['email'] as String
-                p.country = orgInfo['country'] as String
-                p.city = orgInfo['city'] as String
-                p.dataCollector = dataCollector ? dataCollector['user_id'] : ""
-                p.areaOfOperation = orgInfo['areaOfOperation'] as String
-                p.organisationsInvolved = organizationsInvolved
-                p.program = program
-                p.save(flush: true, failOnError: true)
+                Applicant applicant = Applicant.findByOrganization(orgInfo['name'] as String)
+                if (applicant != null) {
+                    //Creat program partner
+                    ProgramPartner p = new ProgramPartner()
+                    p.cluster = orgInfo['nameCluster'] as String
+                    p.organisation = orgInfo['name'] as String
+                    p.physicalAddress = orgInfo['physicalAddress'] as String
+                    p.organisationType = orgInfo['organizationType'] as String
+                    p.nameContactPerson = orgInfo['names'] as String
+                    p.telephoneContactPerson = orgInfo['contact'] as String
+                    p.emailContactPerson = orgInfo['email'] as String
+                    p.country = orgInfo['country'] as String
+                    p.city = orgInfo['city'] as String
+                    p.dataCollector = dataCollector ? dataCollector['user_id'] : ""
+                    p.areaOfOperation = orgInfo['areaOfOperation'] as String
+                    p.organisationsInvolved = organizationsInvolved
+                    p.program = program
+                    p.save(flush: true, failOnError: true)
 
-                def username = generateCode(program?.title, generator(('0'..'9').join(), 4)) as String
-
-                def oldUsername = getUserNameFromTempByType("Applicant-${orgInfo['name']}")
-                User user = User.findByUsername(oldUsername)
-
-                if (user != null) {
                     //update user role
+                    User user = applicant.user
                     def userRole = UserRole.findByUser(user)
                     if (userRole) UserRole.deleteOldRecords(user)
                     Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
                     UserRole.create(user, partnerRole, true)
 
-                    //update username
-                    user.username = username
-                    user.save(flush: true, failOnError: true)
-                }
+                    println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  ${applicant.username}"
 
-                println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  $username"
-
-                task.status = 'completed'
-                task.save(flush: true, failOnError: true)
-
-                def temp = Temp.findByType("Applicant-${orgInfo['name']}")
-                def value = "username ${username}, passwordFromRecord: ${temp?.id}"
-                def temp2 = Temp.findByType("Partner-${orgInfo['name']}")
-                temp2.jsonValue = value
-                temp2 ? temp2.save(flush: true, failOnError: true)
-                        : new Temp(type: "Partner-${orgInfo['name']}", jsonValue: value).save(flush: true, failOnError: true)
+                    task.status = 'completed'
+                    task.save(flush: true, failOnError: true)
+                } else { print "Applicant Does Not exist"}
             }
         }
     }
@@ -270,8 +254,8 @@ class TaskListSyncJob extends Script {
                 GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
                 def orgInfo = slurper.parseText(g.organisation)
 
-                def username = getUserNameFromTempByType("Applicant-${orgInfo['name']}")
-                User user = User.findByUsername(username)
+                Applicant applicant = Applicant.findByOrganization(orgInfo['name'] as String)
+                User user = applicant.user
                 if (user != null) {
                     user.enabled = false
                     user.accountLocked = true
@@ -287,17 +271,6 @@ class TaskListSyncJob extends Script {
         return new Random().with {
             (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
         }
-    }
-
-    def getUserNameFromTempByType(String type) {
-        def result = null
-        def slurper = new JsonSlurper()
-        def j = Temp.findByType(type)
-        if (j != null) {
-            def jsonValue = slurper.parseText(j['jsonValue'] as String)
-            result = jsonValue['ApplicantUserName'] as String
-        }
-        return result
     }
 
     def generateCode(def prefix, def increment_value) {
@@ -317,9 +290,20 @@ class TaskListSyncJob extends Script {
     }
 
     def getDataCollector() {
-        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
+        def dataCollectors = []
+        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` )"
         def results = AppHolder.withMisSql { rows(query as String) }
-        if (results.size() > 0) return results?.first() else return null
+        if (results.size() > 0) {
+            results.each {
+                User user = User.findById(it['user_id'] as String)
+                if (firstTwo(user.username) == "PR") dataCollectors << it
+            }
+        }
+        return dataCollectors.first()
+    }
+
+    def firstTwo(String str) {
+        return str.length() < 2 ? str : str.substring(0, 2);
     }
 
     def handleArchiveTask() {
