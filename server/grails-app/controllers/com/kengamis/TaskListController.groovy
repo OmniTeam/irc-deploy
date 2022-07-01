@@ -136,8 +136,12 @@ class TaskListController {
             }
 
             boolean c3 = userRoles.contains("ROLE_SUPER_ADMIN")
+            boolean c4 = (task.taskDefinitionKey != "Create_account_in_MIS" &&
+                    task.taskDefinitionKey != "Deactivate_account" &&
+                    task.taskDefinitionKey != "Start_Long_Term_Grant" &&
+                    task.taskDefinitionKey != "Create_partner_account")
 
-            if (c2 || c3) {
+            if ((c2 || c3) && c4) {
                 tasks << [id               : task.id,
                           taskName         : task.taskName,
                           partnerSetupId   : partnerSetupId,
