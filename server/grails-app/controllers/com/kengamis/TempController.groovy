@@ -1,10 +1,9 @@
 package com.kengamis
 
-import com.kengamis.tasks.StartCamundaInstancesJob
+import com.kengamis.tasks.TaskListSyncJob
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
-import groovy.json.JsonSlurper
 
 import static org.springframework.http.HttpStatus.*
 
@@ -13,7 +12,6 @@ class TempController {
 
     TempService tempService
 
-    static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -89,99 +87,21 @@ class TempController {
         respond results
     }
 
-    static generator = { String alphabet, int n ->
-        new Random().with {
-            (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
-        }
-    }
-
     @Transactional
     def startLongTermGrantJob(String grantId) {
         def message = ["Failed"]
         GrantLetterOfInterest grant = GrantLetterOfInterest.findById(grantId)
         createUser(grant)
-        def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
-
-        try {
-            if (r.size() > 0) {
-                def slurper = new JsonSlurper()
-                def orgInfo = slurper.parseText(grant.organisation)
-                def applicantEmail = orgInfo['email'] as String
-                def applicantName = orgInfo['names'] as String
-                def organization = orgInfo['name'] as String
-                def edEmail = []
-                def programTeamEmail = []
-                def program = Program.get(grant.program)
-
-                def applicant = Applicant.findByOrganization(organization)
-
-                r.each {
-                    if (it['role'] == "ROLE_ED") edEmail << it['email']
-                    if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
-                }
-
-
-                    boolean started = StartCamundaInstancesJob.startProcessInstance([
-                            GrantId          : grant.id,
-                            ApplicantName    : applicantName,
-                            Organization     : organization,
-                            Applicant        : applicantEmail,
-                            ApplicantUserName: applicant.username,
-                            ApplicantPassword: applicant.password,
-                            ProgramTeam      : programTeamEmail[0],
-                            ExecutiveDirector: edEmail[0],
-                    ], "LONG_TERM_GRANT")
-
-                    if (started) {
-                        println "=========Started long term grant instance ========="
-                        grant.status = "started-longterm"
-                        grant.save(flush: true, failOnError: true)
-                        message = ["Started grant process instance"]
-                    }
-
-            }
-        } catch (e) {
-            e.printStackTrace()
+        boolean started = TaskListSyncJob.startLongTermGrant(grantId)
+        if (started) {
+            message = ["Started grant process instance"]
         }
         respond message
     }
 
     @Transactional
     def createUser(GrantLetterOfInterest g) {
-        def slurper = new JsonSlurper()
-        def orgInfo = slurper.parseText(g.organisation)
-        def email = orgInfo['email'] as String
-        def names = orgInfo['names'] as String
-        def orgName = orgInfo['name'] as String
-        def username = generateCode("AP", generator(('0'..'9').join(), 4)) as String
-        def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
-
-        def user = new User(email: email, names: names, username: username, password: password)
-        user.save(flush: true, failOnError: true)
-
-        Role applicantRole = Role.findByAuthority("ROLE_APPLICANT")
-        def role = new UserRole(user: user, role: applicantRole)
-        role.save(flush: true, failOnError: true)
-
-        Applicant applicant = new Applicant(username: username, password: password, grantId: g.id, email: email, names: names, organization: orgName, user: user)
-        applicant.save(flush: true, failOnError: true)
-        println "New User created => username ${username}, password: ${password}"
-    }
-
-    def generateCode(def prefix, def increment_value) {
-        def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
-        def code = prefix.toString() + '/' + actualIncrementValue.toString()
-        return code
-    }
-
-    def addingLeadingZerosToIncrement(def increment_value) {
-        def stringLength = 6
-        def incrementValueLen = increment_value.toString().size()
-        def expectedLen = stringLength.toInteger() - incrementValueLen.toInteger()
-        for (def i = 0; i <= expectedLen - 1; i++) {
-            increment_value = "0" + increment_value
-        }
-        return increment_value
+        def nUser = TaskListSyncJob.createUserAccount(g.id)
     }
 
 }
