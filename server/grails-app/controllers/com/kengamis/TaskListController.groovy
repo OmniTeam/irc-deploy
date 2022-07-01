@@ -268,9 +268,4 @@ class TaskListController {
         render status: NO_CONTENT
     }
 
-    @Transactional
-    def startLongTermGrantJob() {
-        TaskListSyncJob.startLongTermGrantJob()
-    }
-
 }
