@@ -3111,4 +3111,32 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1656595864005-14") {
+        createTable(tableName: "query_table") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "query_tablePK")
+            }
+
+            column(name: "kenga_group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "query", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "permission", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1656657785112-14") {
+        addColumn(tableName: "query_table") {
+            column(name: "id_label", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 }
