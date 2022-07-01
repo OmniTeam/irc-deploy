@@ -177,13 +177,13 @@ export class LongTermApplicationComponent implements OnInit {
               this.submitted = true
               this.error = false;
               this.success = true;
-              this.successMessage = "Updated Application";
+              this.successMessage = "Submitted Application";
               this.alertService.success(this.successMessage);
               this.statusChanged.emit(this.status);
             }, error => {
               this.error = true;
               this.success = false;
-              this.errorMessage = "Failed to update Application";
+              this.errorMessage = "Failed to submit Application";
               this.alertService.error(this.errorMessage);
               console.log(error);
             });
@@ -195,13 +195,13 @@ export class LongTermApplicationComponent implements OnInit {
           this.submitted = true
           this.error = false;
           this.success = true;
-          this.successMessage = "Saved Application";
+          this.successMessage = "Submitted Application";
           this.alertService.success(this.successMessage);
           this.statusChanged.emit(this.status);
         }, error => {
           this.error = true;
           this.success = false;
-          this.errorMessage = "Failed to save Application";
+          this.errorMessage = "Failed to submitted Application";
           this.alertService.error(this.errorMessage);
           console.log(error);
         });

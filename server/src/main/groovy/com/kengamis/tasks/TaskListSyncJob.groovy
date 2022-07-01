@@ -315,12 +315,8 @@ class TaskListSyncJob extends Script {
 
                     println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  ${applicant.username}"
 
-                    task.status = 'completed'
-                    task.save(flush: true, failOnError: true)
-
                     def entityDataCollectorId = p.dataCollector
                     def clusterName = p.cluster
-
 
                     // create  a group. Check if the group already exist. Otherwise retrieve that group and use it for creating other stuff eg Acls
                     if (!KengaGroup.findByName(clusterName)) {
@@ -340,6 +336,9 @@ class TaskListSyncJob extends Script {
                         createEntityViewFilters(existingGroupName, entityDataCollectorId)
                         createAcls(existingGroupName, existingGroupId)
                     }
+
+                    task.status = 'completed'
+                    task.save(flush: true, failOnError: true)
 
                 } else {
                     print "Applicant Does Not exist"
