@@ -99,7 +99,7 @@ class TempController {
     def startLongTermGrantJob(String grantId) {
         def message = ["Failed"]
         GrantLetterOfInterest grant = GrantLetterOfInterest.findById(grantId)
-
+        createUser(grant)
         def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
 
         try {
@@ -119,8 +119,8 @@ class TempController {
                     if (it['role'] == "ROLE_ED") edEmail << it['email']
                     if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
                 }
-                if (grant) {
-                    createUser(grant)
+
+
                     boolean started = StartCamundaInstancesJob.startProcessInstance([
                             GrantId          : grant.id,
                             ApplicantName    : applicantName,
@@ -138,7 +138,7 @@ class TempController {
                         grant.save(flush: true, failOnError: true)
                         message = ["Started grant process instance"]
                     }
-                }
+
             }
         } catch (e) {
             e.printStackTrace()
@@ -152,16 +152,19 @@ class TempController {
         def orgInfo = slurper.parseText(g.organisation)
         def email = orgInfo['email'] as String
         def names = orgInfo['names'] as String
+        def orgName = orgInfo['name'] as String
         def username = generateCode("AP", generator(('0'..'9').join(), 4)) as String
         def password = generator((('A'..'Z') + ('0'..'9')).join(), 9) as String
 
         def user = new User(email: email, names: names, username: username, password: password)
         user.save(flush: true, failOnError: true)
 
-        Role applicant = Role.findByAuthority("ROLE_APPLICANT")
-        def role = new UserRole(user: user, role: applicant)
+        Role applicantRole = Role.findByAuthority("ROLE_APPLICANT")
+        def role = new UserRole(user: user, role: applicantRole)
         role.save(flush: true, failOnError: true)
 
+        Applicant applicant = new Applicant(username: username, password: password, grantId: g.id, email: email, names: names, organization: orgName, user: user)
+        applicant.save(flush: true, failOnError: true)
         println "New User created => username ${username}, password: ${password}"
     }
 
