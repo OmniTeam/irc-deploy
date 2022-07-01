@@ -49,9 +49,6 @@ export class StartLongTermGrantComponent implements OnInit {
       this.alertService.error(this.errorMessage);
     })
     setTimeout(() => {
-      if (this.success == true) {
-        window.location.reload();
-      }
       this.success = false;
       this.error = false;
     }, 3000);

@@ -3111,6 +3111,42 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1656595297502-14") {
+        createTable(tableName: "applicant") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "applicantPK")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "username", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "organization", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "password", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "names", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "email", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
     changeSet(author: "omni-tech (generated)", id: "1656595864005-14") {
         createTable(tableName: "query_table") {
             column(name: "id", type: "VARCHAR(255)") {
