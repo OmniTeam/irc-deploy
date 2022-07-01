@@ -1,5 +1,7 @@
 package com.kengamis
 
+import com.kengamis.acl.KengaGroupAclEntry
+import com.kengamis.acl.KengaGroupAclEntryService
 import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
@@ -11,6 +13,8 @@ import static org.springframework.http.HttpStatus.*
 class TaskListController {
 
     TaskListService taskListService
+    EntityViewFilterQueryService entityViewFilterQueryService
+    KengaGroupAclEntryService kengaGroupAclEntryService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -322,6 +326,162 @@ class TaskListController {
                         }
                     }
                 }
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
+
+                def temp = Temp.findByType("Applicant-${orgInfo['name']}")
+                new Temp(type: "Partner-${orgInfo['name']}", jsonValue: "username ${username}, passwordFromRecord: ${temp?.id}").save()
+
+                def entityDataCollectorId = p.dataCollector
+                def clusterName = p.cluster
+
+
+                // create  a group. Check if the group already exist. Otherwise retrieve that group and use it for creating other stuff eg Acls
+                if(!KengaGroup.findByName(clusterName)){
+                    def parentGroup = KengaGroup.findByName(p.program.title)
+                    def kengaGroup = KengaGroup.create(parentGroup, clusterName)
+
+                    def createdGroupName = kengaGroup.name
+                    def createdGroupId = kengaGroup.id
+
+                    createEntityViewFilters(createdGroupName, entityDataCollectorId)
+                    createAcls(createdGroupName, createdGroupId)
+                } else {
+                    def existingGroup = KengaGroup.findByName(p.cluster)
+                    def existingGroupName = existingGroup.name
+                    def existingGroupId = existingGroup.id
+
+                    createEntityViewFilters(existingGroupName, entityDataCollectorId)
+                    createAcls(existingGroupName, existingGroupId)
+                }
+            }
+        }
+    }
+
+    def createAcls(clusterName, groupId){
+        //  will hold the queryArray
+        def queryArray = []
+
+        // queries
+        def formConditionalQuery = "where cluster = '${clusterName}'"
+        def entityConditionalQuery = "where _cluster = '${clusterName}'"
+
+        // first collect the  form and entity names
+        def listOfFormNames = Form.all.collect {
+            if (it.enabled) {it.name}
+        }
+
+        listOfFormNames?.each {
+            def obj = new LinkedHashMap();
+            obj['form'] = it
+            obj['groupConditionQuery'] = formConditionalQuery
+            queryArray << obj
+        }
+
+        def listOfEntityBeneficiaries = ['entity_beneficiary_list']
+        listOfEntityBeneficiaries?.each {
+            def obj = new LinkedHashMap();
+            obj['form'] = it
+            obj['groupConditionQuery'] = entityConditionalQuery
+            queryArray << obj
+        }
+
+        kengaGroupAclEntryService.saveGroupMappings(groupId, 1, queryArray)
+    }
+
+    @Transactional
+    def createEntityViewFilters(createdGroupName, entityDataCollectorId){
+        def listOfEntityViews = EntityView.all
+        listOfEntityViews.each {
+            def entityViewFilterName = createdGroupName + ' ' + it.name
+            def entityViewId = it.id
+            def entityViewFilterQuery = (entityViewFilterQueryService.generateFullFilterQuery( it.name, createdGroupName).viewQuery).toString()
+            def entityViewFilterUser = entityDataCollectorId
+
+            // create the entity view filter
+            def entityViewFilters = EntityViewFilters.create(entityViewFilterName,entityViewFilterQuery,entityViewId)
+
+            // save the data collectors
+            if(entityViewFilterUser){
+                def entityDataViewFilterCollector = User.findById(entityViewFilterUser)
+                def entityViewObject = EntityViewFilters.findById(entityViewFilters.id)
+                UserEntityViewFilters.createUserEntityViewFilters(entityDataViewFilterCollector, entityViewObject)
+            }
+        }
+
+    }
+
+
+    @Transactional
+    def deactivateUser(TaskList task) {
+        def slurper = new JsonSlurper()
+        def variables = slurper.parseText(task.inputVariables)
+
+        variables['data'].each {
+            if (it.key == 'GrantId') {
+                GrantLetterOfInterest g = GrantLetterOfInterest.findById(it.value)
+                def orgInfo = slurper.parseText(g.organisation)
+                def email = orgInfo['email'] as String
+
+                def user = User.findByEmail(email)
+                if (user != null) {
+                    user.enabled = false
+                    user.save(flush: true, failOnError: true)
+                }
+                task.status = 'completed'
+                task.save(flush: true, failOnError: true)
+            }
+        }
+    }
+
+
+    def generateCode(def prefix, def increment_value) {
+        def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
+        def code = prefix.toString() + '/' + actualIncrementValue.toString()
+        return code
+    }
+
+    def addingLeadingZerosToIncrement(def increment_value) {
+        def stringLength = 6
+        def incrementValueLen = increment_value.toString().size()
+        def expectedLen = stringLength.toInteger() - incrementValueLen.toInteger()
+        for (def i = 0; i <= expectedLen - 1; i++) {
+            increment_value = "0" + increment_value
+        }
+        return increment_value
+    }
+
+    def getDataCollector() {
+        def query = "SELECT user_id, role.authority FROM `user_role` INNER JOIN role ON user_role.role_id = role.id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` ) LIMIT 1"
+        def results = AppHolder.withMisSql { rows(query as String) }
+        if (results.size() > 0) return results?.first() else return null
+    }
+
+    @Transactional
+    def archiveReport() {
+        def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Archive_Report')"
+        def forArchiving = AppHolder.withMisSql { rows(query as String) }
+        if (forArchiving.size() > 0) {
+            forArchiving.each { task ->
+                Archive archive = new Archive()
+                archive.taskId = task['task_id']
+                archive.inputVariables = task['input_variables']
+                archive.outputVariables = task['output_variables']
+                archive.status = task['status']
+                archive.formId = task['form_id']
+                archive.groupId = task['group_id']
+                archive.userId = task['user_id']
+                archive.taskName = task['task_name']
+                archive.processInstanceId = task['process_instance_id']
+                archive.processDefKey = task['process_def_key']
+                archive.synced = task['synced']
+                archive.taskDefinitionKey = task['task_definition_key']
+                archive.save(flush: true, failOnError: true)
+
+                //complete the archived task
+                TaskList taskList = TaskList.findById(task['id'] as String)
+                taskList.status = 'completed'
+                taskList.save(flush: true, failOnError: true)
             }
         }
     }
