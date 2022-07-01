@@ -2378,4 +2378,84 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1656662376760-6") {
+        createTable(tableName: "budget_activity") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "budget_activityPK")
+            }
+
+            column(name: "approved_amount", type: "VARCHAR(255)")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "budget_line", type: "VARCHAR(255)")
+
+            column(name: "total_spent", type: "VARCHAR(255)")
+
+            column(name: "quarterly_budget", type: "VARCHAR(255)"){}
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "activity_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1656671632729-6") {
+        createTable(tableName: "people_referred") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "people_referredPK")
+            }
+
+            column(name: "female_pwd", type: "VARCHAR(255)")
+
+            column(name: "female36", type: "VARCHAR(255)")
+
+            column(name: "female_nationals", type: "VARCHAR(255)")
+
+            column(name: "male18", type: "VARCHAR(255)")
+
+            column(name: "female_refugee", type: "VARCHAR(255)")
+
+            column(name: "male36", type: "VARCHAR(255)")
+
+            column(name: "male_refugee", type: "VARCHAR(255)")
+
+            column(name: "male_nationals", type: "VARCHAR(255)")
+
+            column(name: "activity_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "female18", type: "VARCHAR(255)")
+
+            column(name: "male_pwd", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1656674512508-6") {
+        createTable(tableName: "updated_budget_activity") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "updated_budget_activityPK")
+            }
+
+            column(name: "balance", type: "VARCHAR(255)")
+
+            column(name: "total_spent", type: "VARCHAR(255)")
+
+            column(name: "budget_disburse", type: "VARCHAR(255)")
+
+            column(name: "activity_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "total_approved", type: "VARCHAR(255)")
+        }
+    }
+
 }

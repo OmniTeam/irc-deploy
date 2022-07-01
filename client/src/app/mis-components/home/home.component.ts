@@ -134,7 +134,6 @@ export class HomeComponent implements OnInit {
     this.reportFormService.getMilestonePerformance().subscribe((data)=>{
       let milestones = []
       this.milestones = data
-      console.log("rest ffgfg",data);
       if(this.milestones != null){
         this.milestones.forEach((d) =>{
             milestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,d.percentageAchievement,d.approvedBudget,d.expenseToDate,""))

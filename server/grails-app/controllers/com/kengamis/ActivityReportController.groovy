@@ -44,6 +44,9 @@ class ActivityReportController {
             return
         }
 
+        parseActivityTableJson(activityReport)
+        getPeopleJson(activityReport)
+        getFinancialActivityFromJson(activityReport)
         respond activityReport, [status: CREATED, view: "show"]
     }
 
@@ -81,7 +84,7 @@ class ActivityReportController {
         def tasks = TaskList.findAllByInputVariablesIlike('%' + activitySetup.id + '%')
         tasks.each {
             def deleteFromCamunda = WorkPlanController.deleteProcessInstance(it.processInstanceId)
-            if(deleteFromCamunda) {
+            if (deleteFromCamunda) {
                 it.delete()
             }
         }
@@ -98,7 +101,7 @@ class ActivityReportController {
             def slurper = new JsonSlurper()
             def query = "SELECT * FROM `work_plan` WHERE setup_values LIKE '%${id}%'"
             def v = AppHolder.withMisSql { rows(query.toString()) }
-            if(v.size() > 0){
+            if (v.size() > 0) {
                 def setup = v.first()
                 def variables = slurper.parseText(setup['setup_values'] as String)
                 variables['budget'].each {
@@ -107,5 +110,62 @@ class ActivityReportController {
             }
         }
         budgetLine
+    }
+
+    def parseActivityTableJson(record) {
+        def slurper = new JsonSlurper()
+        def activityId = record.id
+        def budgetJson = slurper.parseText(record['costAssociated'] as String)
+        def budget = budgetJson['budget']
+        budget.each {
+            def  budgetActivity = new BudgetActivity(
+                    budgetLine: it['budgetLine'],
+                    activityId: activityId,
+                    totalSpent: it['totalSpent'],
+                    quarterlyBudget: it['quarterlyBudget'],
+                    approvedAmount: it['approvedAmount'])
+            budgetActivity.save(flush: true, failOnError: true)
+        }
+    }
+
+    def getPeopleJson(record) {
+        def slurper = new JsonSlurper()
+        def activityId = record.id
+        def budgetJson = slurper.parseText(record['costAssociated'] as String)
+        def people = budgetJson['people']
+
+        def peopleActivity = new PeopleReferred(
+                activityId: activityId,
+                female18: people['total1835'],
+                male18: people['total1835M'],
+                female36: people['total36F'],
+                male36: people['total36M'],
+                femaleNationals: people['totalNationalF'],
+                maleNationals: people['totalNationalM'],
+                femaleRefugee: people['totalRefugeeF'],
+                maleRefugee: people['totalRefugeeM'],
+                malePwd: people['totalPwdM'],
+                femalePwd: people['totalPwdF'],
+        )
+        peopleActivity.save(flush:true,failOnError:true)
+    }
+
+    def getFinancialActivityFromJson(record){
+        def slurper = new JsonSlurper()
+        def activityId = record.id
+        def budgetJson = slurper.parseText(record['costAssociated'] as String)
+        def balance = budgetJson['balance']
+        def totalApproved = budgetJson['totalApproved']
+        def totalSpent = budgetJson['totalSpent']
+        def budgetDisburse = budgetJson['budgetDisburse']
+
+        def updateFinancial = new UpdatedBudgetActivity(
+                activityId: activityId,
+                balance: balance,
+                totalApproved: totalApproved,
+                totalSpent: totalSpent,
+                budgetDisburse: budgetDisburse
+        )
+        updateFinancial.save(flush:true,failOnError:true)
     }
 }
