@@ -106,12 +106,14 @@ class TempController {
             if (r.size() > 0) {
                 def slurper = new JsonSlurper()
                 def orgInfo = slurper.parseText(grant.organisation)
-                def applicantEmail = orgInfo['email']
-                def applicantName = orgInfo['names']
-                def organization = orgInfo['name']
+                def applicantEmail = orgInfo['email'] as String
+                def applicantName = orgInfo['names'] as String
+                def organization = orgInfo['name'] as String
                 def edEmail = []
                 def programTeamEmail = []
                 def program = Program.get(grant.program)
+
+                def applicant = Applicant.findByOrganization(organization)
 
                 r.each {
                     if (it['role'] == "ROLE_ED") edEmail << it['email']
@@ -120,10 +122,12 @@ class TempController {
                 if (grant) {
                     createUser(grant)
                     boolean started = StartCamundaInstancesJob.startProcessInstance([
-                            GrantId          : grantId,
+                            GrantId          : grant.id,
                             ApplicantName    : applicantName,
                             Organization     : organization,
                             Applicant        : applicantEmail,
+                            ApplicantUserName: applicant.username,
+                            ApplicantPassword: applicant.password,
                             ProgramTeam      : programTeamEmail[0],
                             ExecutiveDirector: edEmail[0],
                     ], "LONG_TERM_GRANT")

@@ -1,7 +1,6 @@
 package com.kengamis.tasks
 
 import com.kengamis.*
-import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
@@ -18,7 +17,7 @@ class TaskListSyncJob extends Script {
     Object run() {
         runUserAccountTasks()
         handleArchiveTask()
-        TaskListController.startLongTermGrantJob()
+        startLongTermGrantJob()
         //send data to workflow
         def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
         data.each { sendTasksToWorkflow(it as TaskList) }
@@ -109,6 +108,66 @@ class TaskListSyncJob extends Script {
         archive.taskDefinitionKey = task.taskDefinitionKey
         archive.save(flush: true, failOnError: true)
         TaskList.where { synced == 'true' && id == task.id }.deleteAll()
+    }
+
+    static def startLongTermGrantJob() {
+        TaskList[] startLongTermGrant = TaskList.where { status == 'not_started' && taskDefinitionKey == 'Start_Long_Term_Grant' }.findAll()
+        if (startLongTermGrant.size() > 0) {
+            startLongTermGrant.each { TaskList task ->
+                def slurper = new JsonSlurper()
+                def variables = slurper.parseText(task.inputVariables)
+
+                variables['data'].each { it ->
+                    if (it.key == 'GrantId') {
+                        GrantLetterOfInterest grant = GrantLetterOfInterest.findById(it.value)
+
+                        def r = AppHolder.withMisSql { rows(StartCamundaInstancesJob.queryUserRoles.toString()) }
+
+                        try {
+                            if (r.size() > 0) {
+                                def orgInfo = slurper.parseText(grant.organisation)
+                                def applicantEmail = orgInfo['email'] as String
+                                def applicantName = orgInfo['names'] as String
+                                def organization = orgInfo['name'] as String
+                                def edEmail = []
+                                def programTeamEmail = []
+                                def program = Program.get(grant.program)
+
+                                def applicant = Applicant.findByOrganization(organization)
+
+                                r.each {
+                                    if (it['role'] == "ROLE_ED") edEmail << it['email']
+                                    if (it['role'] == "ROLE_PROGRAM_OFFICER" && it['group_program'] == program.title) programTeamEmail << it['email']
+                                }
+                                if (grant) {
+                                    boolean started = StartCamundaInstancesJob.startProcessInstance([
+                                            GrantId          : grant.id,
+                                            ApplicantName    : applicantName,
+                                            Organization     : organization,
+                                            Applicant        : applicantEmail,
+                                            ApplicantUserName: applicant.username,
+                                            ApplicantPassword: applicant.password,
+                                            ProgramTeam      : programTeamEmail[0],
+                                            ExecutiveDirector: edEmail[0],
+                                    ], "LONG_TERM_GRANT")
+
+                                    if (started) {
+                                        println "=========Started long term grant instance ========="
+                                        grant.status = "started-longterm"
+                                        grant.save(flush: true, failOnError: true)
+
+                                        task.status = 'completed'
+                                        task.save(flush: true, failOnError: true)
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     static setTaskSyncStatusToTrue(def id) {
@@ -305,7 +364,6 @@ class TaskListSyncJob extends Script {
         kengaGroupAclEntryService.saveGroupMappings(groupId, 1, queryArray)
     }
 
-    @Transactional
     def createEntityViewFilters(createdGroupName, entityDataCollectorId){
         def listOfEntityViews = EntityView.all
         listOfEntityViews.each {
