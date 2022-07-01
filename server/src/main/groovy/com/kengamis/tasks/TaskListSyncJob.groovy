@@ -1,7 +1,12 @@
 package com.kengamis.tasks
 
 import com.kengamis.*
+import com.kengamis.acl.KengaAclTableRecordIdentity
+import com.kengamis.acl.KengaDataTable
+import com.kengamis.acl.KengaGroupAclEntry
 import com.kengamis.acl.KengaGroupAclEntryService
+import com.kengamis.EntityViewFilterQueryService
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
@@ -10,8 +15,8 @@ import groovyx.net.http.Method
 
 class TaskListSyncJob extends Script {
     static def url = StartCamundaInstancesJob.camundaApiUrl
-    EntityViewFilterQueryService entityViewFilterQueryService
     KengaGroupAclEntryService kengaGroupAclEntryService
+    EntityViewFilterQueryService entityViewFilterQueryService
 
     @Override
     Object run() {
@@ -328,6 +333,7 @@ class TaskListSyncJob extends Script {
 
                         createEntityViewFilters(createdGroupName, entityDataCollectorId)
                         createAcls(createdGroupName, createdGroupId)
+
                     } else {
                         def existingGroup = KengaGroup.findByName(p.cluster)
                         def existingGroupName = existingGroup.name
@@ -335,6 +341,7 @@ class TaskListSyncJob extends Script {
 
                         createEntityViewFilters(existingGroupName, entityDataCollectorId)
                         createAcls(existingGroupName, existingGroupId)
+
                     }
 
                     task.status = 'completed'
@@ -377,7 +384,8 @@ class TaskListSyncJob extends Script {
             queryArray << obj
         }
 
-        kengaGroupAclEntryService.saveGroupMappings(groupId, 1, queryArray)
+//        saveGroupMappings(groupId, 1, queryArray)
+        QueryTable.create(groupId,1,queryArray.toString())
     }
 
     def createEntityViewFilters(createdGroupName, entityDataCollectorId) {
@@ -385,7 +393,7 @@ class TaskListSyncJob extends Script {
         listOfEntityViews.each {
             def entityViewFilterName = createdGroupName + ' ' + it.name
             def entityViewId = it.id
-            def entityViewFilterQuery = (entityViewFilterQueryService.generateFullFilterQuery(it.name, createdGroupName).viewQuery).toString()
+            def entityViewFilterQuery = (generateFullFilterQuery(it.name, createdGroupName).viewQuery).toString()
             def entityViewFilterUser = entityDataCollectorId
 
             // create the entity view filter
@@ -399,6 +407,57 @@ class TaskListSyncJob extends Script {
             }
         }
 
+    }
+
+    def generateFullFilterQuery(name, groupName){
+        def entity = EntityView.findByName(name)
+        if (entity){
+            def query = """
+                SELECT ${entity.viewFields.collect { it.fieldType == 'Key Field' ? (it.name + ' as keyField') : it.name }.join(",")} FROM ${entity.tableName} WHERE ${(entity.viewFields.find {it ->if(it.name.contains('cluster')){it.name} } )}= '${groupName}'
+                """.toString()
+            def res = ["viewQuery": query]
+            return res
+        }
+    }
+
+    @Transactional
+    def saveGroupMappings(groupId, permission, queryArray){
+        queryArray.each{ it ->
+            def formName = it.form
+            def grpConditionQuery = it.groupConditionQuery
+
+            def kengaGroup = KengaGroup.get(groupId)
+            def kengaDataTable = KengaDataTable.findByTableName(formName)
+            def records = AppHolder.withMisSqlNonTx {
+                def query = "select * from ${formName} ${grpConditionQuery}"
+                log.info(query)
+                rows(query.toString())
+            }
+            log.info("==============size${records.size()}")
+            def idLabel= kengaDataTable?.idLabel
+            // here add to the query table
+//            QueryTable.create(groupId,permission,records,idLabel)
+            createAclsSaveGroupMappings(records, groupId,permission, idLabel)
+            def parentGroupId = kengaGroup.parentGroup.collect{it.id}[0]
+            while(parentGroupId !=null){
+                def myCurrentObject = kengaGroup.get(parentGroupId)
+                // here add to the query table
+//                QueryTable.create(myCurrentObject,permission,records,idLabel)
+                createAclsSaveGroupMappings(records,myCurrentObject,permission,idLabel)
+                parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
+            }
+        }
+    }
+
+    def createAclsSaveGroupMappings(aclRecords,groupId, permissionNumber, idLabel){
+        aclRecords.each { record ->
+            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$idLabel")
+            new KengaGroupAclEntry(
+                    kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
+                    kengaGroup: groupId,
+                    mask: permissionNumber
+            ).save(flush: true/*, failOnError: true*/)
+        }
     }
 
     def deactivateUser(TaskList task) {

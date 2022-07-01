@@ -3175,4 +3175,22 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1656687777121-14") {
+        addColumn(tableName: "query_table") {
+            column(name: "query_string", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+    changeSet(author: "omni-tech (generated)", id: "1656690506020-132") {
+        dropColumn(columnName: "query_string", tableName: "query_table")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1656691348278-132") {
+        dropColumn(columnName: "id_label", tableName: "query_table")
+    }
+    changeSet(author: "omni-tech (generated)", id: "20220701193135-01") {
+        modifyDataType(columnName: "query", newDataType: "LONGTEXT", tableName: "query_table")
+    }
+
 }

@@ -3,6 +3,7 @@ package com.kengamis.acl
 import com.kengamis.AppHolder
 import com.kengamis.Form
 import com.kengamis.KengaGroup
+import com.kengamis.QueryTable
 import grails.converters.JSON
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.CREATED
@@ -85,6 +86,14 @@ class KengaGroupAclEntryController {
         kengaGroupAclEntryService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    @Transactional
+    def saveQueryToTable(){
+        def json=request.JSON
+        def groupId = json.group
+        def queryArray = json.queryArray
+        QueryTable.create(groupId,1,queryArray.toString())
     }
 
     @Transactional

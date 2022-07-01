@@ -8,7 +8,7 @@ import {environment} from '../../environments/environment';
 })
 export class AclGroupMappingService {
   baseurl = environment.serverUrl;
-  urlMapping = `${this.baseurl}/aclGroupMappings/`;
+  urlMapping = `${this.baseurl}/saveQueryToTable/`;
   urlAcl = `${this.baseurl}/kengaGroupAclEntry/`;
 
   constructor(private http: HttpClient) { }

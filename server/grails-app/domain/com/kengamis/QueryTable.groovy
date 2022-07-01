@@ -5,13 +5,14 @@ class QueryTable {
     String kengaGroupId
     int permission
     String query
-    String idLabel
 
 
     static constraints = {
     }
     static mapping = {
         id generator: 'uuid2'
+        query type: "text"
+        cache true
     }
 
     @Override	// Override toString for a nicer / more descriptive UI
@@ -19,8 +20,8 @@ class QueryTable {
         return "${query}"
     }
 
-    static def Object create(kengaGroupId,permission, query, idLabel){
-        def instance = new QueryTable(kengaGroupId: kengaGroupId,permission: permission, query: query, idLabel: idLabel)
+    static Object create(kengaGroupId, permission, queryArray){
+        def instance = new QueryTable(kengaGroupId: kengaGroupId,permission: permission, query: queryArray)
         instance.save(flush: true, failOnError: true)
     }
 }
