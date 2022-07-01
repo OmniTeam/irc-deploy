@@ -152,9 +152,9 @@ export class ApplicationLetterComponent implements OnInit {
       console.log(error);
     });
     setTimeout(() => {
-      /*if (this.success == true) {
+      if (this.success == true) {
         this.router.navigate(['/messagePage/success']);
-      }*/
+      }
       this.success = false;
       this.error = false;
       this.submitted = false;

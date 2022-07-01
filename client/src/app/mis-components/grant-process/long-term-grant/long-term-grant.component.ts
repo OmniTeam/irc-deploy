@@ -277,14 +277,14 @@ export class LongTermGrantComponent implements OnInit {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
-                this.successMessage = "Updated";
+                this.successMessage = "Success";
                 this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
                 this.statusChangedHandler(status)
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
                 this.error = true;
-                this.errorMessage = "Failed to update";
+                this.errorMessage = "Failed to submit";
                 this.alertService.error(this.errorMessage);
                 this.success = false;
                 console.log(error);
@@ -342,14 +342,14 @@ export class LongTermGrantComponent implements OnInit {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
-                this.successMessage = "Updated";
+                this.successMessage = "Success";
                 this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
                 this.statusChangedHandler(status)
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
                 this.error = true;
-                this.errorMessage = "Failed to update";
+                this.errorMessage = "Failed to submitted";
                 this.alertService.error(this.errorMessage);
                 this.success = false;
                 console.log(error);
@@ -407,14 +407,14 @@ export class LongTermGrantComponent implements OnInit {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
-                this.successMessage = "Updated";
+                this.successMessage = "Success";
                 this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
                 this.statusChangedHandler(status)
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
                 this.error = true;
-                this.errorMessage = "Failed to update";
+                this.errorMessage = "Failed to submit";
                 this.alertService.error(this.errorMessage);
                 this.success = false;
                 console.log(error);
@@ -473,13 +473,13 @@ export class LongTermGrantComponent implements OnInit {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
-                this.successMessage = "Updated";
+                this.successMessage = "Success";
                 this.statusChangedHandler(status)
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
                 this.error = true;
-                this.errorMessage = "Failed to update";
+                this.errorMessage = "Failed to submit";
                 this.alertService.error(this.errorMessage);
                 this.success = false;
                 console.log(error);
