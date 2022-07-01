@@ -424,19 +424,19 @@ class TaskListSyncJob extends Script {
         }
     }
 
-    def generator(String alphabet, int n) {
+    static def generator(String alphabet, int n) {
         return new Random().with {
             (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
         }
     }
 
-    def generateCode(def prefix, def increment_value) {
+    static def generateCode(def prefix, def increment_value) {
         def actualIncrementValue = addingLeadingZerosToIncrement(increment_value)
         def code = prefix.toString() + '/' + actualIncrementValue.toString()
         return code
     }
 
-    def addingLeadingZerosToIncrement(String increment_value) {
+    static def addingLeadingZerosToIncrement(String increment_value) {
         def stringLength = 6
         def incrementValueLen = increment_value.toString().size()
         def expectedLen = stringLength.toInteger() - incrementValueLen.toInteger()
@@ -453,7 +453,7 @@ class TaskListSyncJob extends Script {
         if (results.size() > 0) {
             results.each {
                 User user = User.findById(it['user_id'] as String)
-                if (firstTwo(user.username) == "PR") dataCollectors << it
+                if (this.firstTwo(user.username) == "PR") dataCollectors << it
             }
         }
         return dataCollectors.first()
@@ -463,7 +463,7 @@ class TaskListSyncJob extends Script {
         return str.length() < 2 ? str : str.substring(0, 2);
     }
 
-    def handleArchiveTask() {
+    static def handleArchiveTask() {
         def query = "SELECT * FROM task_list WHERE status = 'not_started' AND (task_definition_key = 'Archive_Report')"
         def forArchiving = AppHolder.withMisSql { rows(query as String) }
         if (forArchiving.size() > 0) {
