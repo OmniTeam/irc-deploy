@@ -1,19 +1,24 @@
 package com.kengamis.tasks
 
 import com.kengamis.*
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
+import com.kengamis.acl.KengaGroupAclEntryService
 
 class TaskListSyncJob extends Script {
     static def url = StartCamundaInstancesJob.camundaApiUrl
+    EntityViewFilterQueryService entityViewFilterQueryService
+    KengaGroupAclEntryService kengaGroupAclEntryService
 
     @Override
     Object run() {
         runUserAccountTasks()
         handleArchiveTask()
+        TaskListController.startLongTermGrantJob()
         //send data to workflow
         def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
         data.each { sendTasksToWorkflow(it as TaskList) }
@@ -240,9 +245,86 @@ class TaskListSyncJob extends Script {
 
                     task.status = 'completed'
                     task.save(flush: true, failOnError: true)
+
+                    def entityDataCollectorId = p.dataCollector
+                    def clusterName = p.cluster
+
+
+                    // create  a group. Check if the group already exist. Otherwise retrieve that group and use it for creating other stuff eg Acls
+                    if(!KengaGroup.findByName(clusterName)){
+                        def parentGroup = KengaGroup.findByName(p.program.title)
+                        def kengaGroup = KengaGroup.create(parentGroup, clusterName)
+
+                        def createdGroupName = kengaGroup.name
+                        def createdGroupId = kengaGroup.id
+
+                        createEntityViewFilters(createdGroupName, entityDataCollectorId)
+                        createAcls(createdGroupName, createdGroupId)
+                    } else {
+                        def existingGroup = KengaGroup.findByName(p.cluster)
+                        def existingGroupName = existingGroup.name
+                        def existingGroupId = existingGroup.id
+
+                        createEntityViewFilters(existingGroupName, entityDataCollectorId)
+                        createAcls(existingGroupName, existingGroupId)
+                    }
+
                 } else { print "Applicant Does Not exist"}
             }
         }
+    }
+
+    def createAcls(clusterName, groupId){
+        //  will hold the queryArray
+        def queryArray = []
+
+        // queries
+        def formConditionalQuery = "where cluster = '${clusterName}'"
+        def entityConditionalQuery = "where _cluster = '${clusterName}'"
+
+        // first collect the  form and entity names
+        def listOfFormNames = Form.all.collect {
+            if (it.enabled) {it.name}
+        }
+
+        listOfFormNames?.each {
+            def obj = new LinkedHashMap();
+            obj['form'] = it
+            obj['groupConditionQuery'] = formConditionalQuery
+            queryArray << obj
+        }
+
+        def listOfEntityBeneficiaries = ['entity_beneficiary_list']
+        listOfEntityBeneficiaries?.each {
+            def obj = new LinkedHashMap();
+            obj['form'] = it
+            obj['groupConditionQuery'] = entityConditionalQuery
+            queryArray << obj
+        }
+
+        kengaGroupAclEntryService.saveGroupMappings(groupId, 1, queryArray)
+    }
+
+    @Transactional
+    def createEntityViewFilters(createdGroupName, entityDataCollectorId){
+        def listOfEntityViews = EntityView.all
+        listOfEntityViews.each {
+            def entityViewFilterName = createdGroupName + ' ' + it.name
+            def entityViewId = it.id
+            def entityViewFilterQuery = (entityViewFilterQueryService.generateFullFilterQuery( it.name, createdGroupName).viewQuery).toString()
+            def entityViewFilterUser = entityDataCollectorId
+
+            // create the entity view filter
+            def entityViewFilters = EntityViewFilters.create(entityViewFilterName,entityViewFilterQuery,entityViewId)
+
+            // save the data collectors
+            if(entityViewFilterUser){
+                def entityDataViewFilterCollector = User.findById(entityViewFilterUser)
+                def entityViewObject = EntityViewFilters.findById(entityViewFilters.id)
+                UserEntityViewFilters.createUserEntityViewFilters(entityDataViewFilterCollector, entityViewObject)
+            }
+        }
+
     }
 
     def deactivateUser(TaskList task) {
