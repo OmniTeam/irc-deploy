@@ -77,7 +77,7 @@
             <div class=" row">
 
               <div *ngIf="isApplication" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="false" [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
@@ -85,7 +85,7 @@
               </div>
 
               <div *ngIf="isReviewApplication" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="true" [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
@@ -97,7 +97,7 @@
 
                       <div class="row">
                         <div class="col">
-                          <p>Is the concept in line with the objectives of the project?</p>
+                          <p>Is the concept in line with the objectives of the project?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of items">
                               <li>
@@ -110,7 +110,7 @@
                         </div>
 
                         <div class="col">
-                          <p>Does it adhere to the strategic objectives of the organization?</p>
+                          <p>Does it adhere to the strategic objectives of the organization?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of items">
                               <li>
@@ -124,7 +124,7 @@
                       </div>
                       <div class="row">
                         <div class="col">
-                          <p>Are they adhering to the purpose of the planning and learning grant?</p>
+                          <p>Are they adhering to the purpose of the planning and learning grant?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of items">
                               <li>
@@ -138,7 +138,7 @@
                       </div>
                       <div class="row">
                         <div class="col">
-                          <p>What was the decision of the review process?</p>
+                          <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of decisionReviewApplication">
                               <li>
@@ -151,7 +151,7 @@
                         </div>
                       </div>
                       <div class="row" style="margin: 10px;">
-                        <label for="reviewerActionComments">Provide any comments</label>
+                        <label for="reviewerActionComments">Provide any comments<span class="required-indicator">*</span></label>
                         <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerActionComments"
                                   [(ngModel)]="reviewerComments"></textarea>
                       </div>
@@ -180,7 +180,7 @@
               </div>
 
               <div *ngIf="isMakeCorrectionsApplication" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="false"
                                        [isMakeCorrections]="true"
                                        [grantId]="grantId"
@@ -189,7 +189,7 @@
                                        (statusChanged)="statusChangedHandler($event)"></long-term-application>
               </div>
               <div *ngIf="isReviewRevisedApplication" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="true" [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
@@ -244,7 +244,7 @@
                 </div>
               </div>
               <div *ngIf="isMakeRevisionsEdApplication" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="false"
                                        [isMakeCorrections]="true"
                                        [grantId]="grantId"
@@ -254,7 +254,7 @@
                                        (statusChanged)="statusChangedHandler($event)"></long-term-application>
               </div>
               <div *ngIf="isApproveApplication" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="true" [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
@@ -265,7 +265,7 @@
                     <div class="col-sm-12">
                       <div class="row">
                         <div class="col">
-                          <p>What was the decision of the review process?</p>
+                          <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of decisionApproveApplication">
                               <li>
@@ -281,7 +281,7 @@
                         </div>
                       </div>
                       <div class="row" style="margin: 10px;">
-                        <label for="approverComments">Provide any comments</label>
+                        <label for="approverComments">Provide any comments<span class="required-indicator">*</span></label>
                         <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="approverComments"
                                   [(ngModel)]="approverComments"></textarea>
                       </div>
@@ -310,7 +310,7 @@
                 </div>
               </div>
               <div *ngIf="isSignAgreement" class=" col">
-                <organizational-information [grantId]="grantId"></organizational-information>
+                <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="true" [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
@@ -321,7 +321,7 @@
                     <div class="col-sm-12">
                       <div class="row">
                         <div class="col">
-                          <p>Has the agreement been signed?</p>
+                          <p>Has the agreement been signed?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of items">
                               <li>
@@ -338,7 +338,7 @@
                         </div>
                       </div>
                       <div *ngIf="decisionOfReviewProcess=='Yes'" class="row" style="margin: 10px;">
-                        <label class="col-sm-6" for="dateAgreement">Date when the agreement was signed</label>
+                        <label class="col-sm-6" for="dateAgreement">Date when the agreement was signed<span class="required-indicator">*</span></label>
                         <input [disabled]="isReadOnly"
                                class="form-control col-sm-6"
                                type="date"
@@ -346,7 +346,7 @@
                                [(ngModel)]="dateAgreement"/>
                       </div>
                       <div class="row" style="margin: 10px;">
-                        <label for="signAgreementComments">Provide any comments</label>
+                        <label for="signAgreementComments">Provide any comments<span class="required-indicator">*</span></label>
                         <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="signAgreementComments"
                                   [(ngModel)]="signAgreementComments"></textarea>
                       </div>

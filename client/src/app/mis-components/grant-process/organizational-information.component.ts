@@ -10,6 +10,7 @@ import {GrantProcessService} from "../../services/grant-process.service";
 export class OrganizationalInformationComponent implements OnInit {
 
   @Input() grantId: string;
+  @Input() isLongTerm: boolean = false;
   organisationalInfo: any;
   organisationsInvolved: any;
   openLetterPopup: boolean;

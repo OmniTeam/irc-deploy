@@ -1,14 +1,15 @@
 <div id="dark_container" [style.display]="openLetterPopup || openInstructionsPopup ? 'block' : 'none'"></div>
 <div *ngIf="openLetterPopup" class="card window__container_lg">
   <div class="card-header" style="text-align: center">
-    <h3>Review Letter Of Interest</h3>
+    <h3 *ngIf="!isLongTerm">Review Letter Of Interest</h3>
+    <h3 *ngIf="isLongTerm">Letter Of Interest</h3>
   </div>
   <div style="text-align: end; margin-left: 0;">
     <button class="btn btn-danger" (click)="openLetterPopUp()">Close</button>
   </div>
-  <application-letter [isReadOnly]="true" [grantId]="grantId"></application-letter>
-  <h3 style="margin-left: 40px;">Review</h3>
-  <div class="card-body">
+  <application-letter [isReadOnly]="true" [grantId]="grantId" [isLongTerm]="isLongTerm"></application-letter>
+  <h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Review</h3>
+  <div class="card-body" *ngIf="!isLongTerm">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-12">
         <div class="row">
@@ -150,7 +151,7 @@
     <div class="row">
       <div class="col-sm-6">
         <ul style="list-style: none; font-size: 16px">
-          <li>Name of Organization: <b>{{organisationalInfo?.name}}</b></li>
+          <li>Name of Lead Organization: <b>{{organisationalInfo?.name}}</b></li>
           <li>Type of Organization: <b>{{organisationalInfo?.organizationType}}</b></li>
           <li>Location: <b>{{organisationalInfo?.physicalAddress}}</b></li>
           <li>
