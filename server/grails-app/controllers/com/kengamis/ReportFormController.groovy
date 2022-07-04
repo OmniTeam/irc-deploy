@@ -153,7 +153,7 @@ class ReportFormController {
 
                         def perfReport = slurper.parseText(reportValues['performanceReport'] as String)
                         perfReport.each { r ->
-                            cumulativeAchievement = r['cumulative_achievement']
+                            if(r['milestoneId'] == p['milestoneId']) cumulativeAchievement = r['cumulative_achievement']
                         }
                         print cumulativeAchievement
                     }
