@@ -8,7 +8,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Title of the project:<span class="required-indicator">*</span></label>
+              <label>1. Title of the project:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -22,14 +22,14 @@
                   >
                 </div>
                 <div *ngIf="submitted && f.projectTitle.errors">
-                  <div *ngIf="f.projectTitle.errors.required" class="input-error">Project is
+                  <div *ngIf="f.projectTitle.errors.required" class="input-error">This value is
                     required
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-sm-6">
-              <label>Proposed duration of the project:<span class="required-indicator">*</span></label>
+              <label>2. Proposed duration of the project:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -48,7 +48,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Project proposed start date:<span class="required-indicator">*</span></label>
+              <label>3. Project proposed start date:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -65,7 +65,7 @@
             </div>
 
             <div class="col-sm-6">
-              <label>Total project amount (USD)<span class="required-indicator">*</span></label>
+              <label>4. Total project amount (USD)<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -84,7 +84,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Amount requested from CRVPF (USD)<span class="required-indicator">*</span></label>
+              <label>5. Amount requested from CRVPF (USD)<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -101,7 +101,7 @@
             </div>
 
             <div class="col-sm-6">
-              <label>Other sources and amount of funding on this particular Project if any:<span class="required-indicator">*</span></label>
+              <label>6. Other sources and amount of funding on this particular Project if any:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <textarea
@@ -119,19 +119,18 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Name of authorized Signatory(ies):<span
+              <label>7. Name of authorized Signatory(ies):<span
                 class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
-                  <input
-
+                  <textarea
                     class="form-control"
                     placeholder="Name"
-                    type="text"
+                    rows="3"
                     style="padding-left: 10px;"
                     formControlName="nameAuthorizedSignatory"
                     [ngClass]="{ 'is-invalid': submitted && f.nameAuthorizedSignatory.errors }"
-                  >
+                  ></textarea>
                   <div *ngIf="submitted && f.nameAuthorizedSignatory.errors" class="invalid-feedback">
                     <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
                       Signatory is
@@ -142,7 +141,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label>Contact details of authorized signatory(ies):<span class="required-indicator">*</span></label>
+              <label>8. Contact details of authorized signatory(ies):<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -161,7 +160,7 @@
                   </div>
                 </div>
                 <div *ngIf="submitted && f.projectTitle.errors">
-                  <div *ngIf="f.projectTitle.errors.required" class="input-error">Project is
+                  <div *ngIf="f.projectTitle.errors.required" class="input-error">This value is
                     required
                   </div>
                 </div>
@@ -171,7 +170,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Bank Details<span class="required-indicator">*</span></label>
+              <label>9. Bank Details<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
               <textarea
@@ -198,7 +197,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Briefly describe the social, economic, political context related to the project area.<span class="required-indicator">*</span></label>
+          <label>10. Briefly describe the social, economic, political context related to the project area.<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -214,7 +213,7 @@
           </div>
         </div>
         <div class="col-sm-6">
-          <label>What specific problem will your proposed project address?<span class="required-indicator">*</span></label>
+          <label>11. What specific problem will your proposed project address?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -239,7 +238,7 @@
       <div style="margin: 20px;">
         <div class="row">
           <div class="col-sm-6">
-            <label>Who are your target population?<span class="required-indicator">*</span></label>
+            <label>12. Who are your target population?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -255,7 +254,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>Why them?<span class="required-indicator">*</span></label>
+            <label>13. Why them?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -273,7 +272,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>What will change in their lives?<span class="required-indicator">*</span></label>
+            <label>14. What will change in their lives?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -289,7 +288,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>What is your overall goal?<span class="required-indicator">*</span></label>
+            <label>15. What is your overall goal?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -307,7 +306,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>List at least 3 major mid-term changes you want to see (above 1 year)<span class="required-indicator">*</span></label>
+            <label>16. List at least 3 major mid-term changes you want to see (above 1 year)<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -323,7 +322,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>List at least 5 immediate changes you want to see after activity implementation<span class="required-indicator">*</span></label>
+            <label>17. List at least 5 immediate changes you want to see after activity implementation<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -341,7 +340,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>What activities will you undertake to achieve the above changes?<span class="required-indicator">*</span></label>
+            <label>18. What activities will you undertake to achieve the above changes?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -366,7 +365,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-12">
-          <label>What are some of the challenges (both internal and external) that are likely to be experienced and
+          <label>19. What are some of the challenges (both internal and external) that are likely to be experienced and
             hinder the implementation this project and how will you address them?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -391,7 +390,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-12">
-          <label>Who are the key strategic partners, whether institutions or individuals, in the broader field in which
+          <label>20. Who are the key strategic partners, whether institutions or individuals, in the broader field in which
             you work?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -416,7 +415,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Please describe how the change envisioned by your project will be sustained in the future<span class="required-indicator">*</span></label>
+          <label>21. Please describe how the change envisioned by your project will be sustained in the future<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -433,7 +432,7 @@
         </div>
 
         <div class="col-sm-6">
-          <label>What structures and plans are in place to ensure your organization’s sustainability in the future –
+          <label>22. What structures and plans are in place to ensure your organization’s sustainability in the future –
             including plans to strengthen the organization’s leadership, management and financial health – over
             time?<span class="required-indicator">*</span></label>
           <div class="form-group ">
@@ -459,7 +458,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Provide the total project cost in local currency<span class="required-indicator">*</span></label>
+          <label>23. Provide the total project cost in local currency<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
             <input
@@ -473,7 +472,7 @@
           </div>
         </div>
         <div class="col-sm-6">
-          <label>Provide the total project cost in US dollars<span class="required-indicator">*</span></label>
+          <label>24. Provide the total project cost in US dollars<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <input

@@ -67,12 +67,10 @@ export class LongTermApplicationComponent implements OnInit {
                 results = JSON.parse(it.json_value)
                 if (results.documents != undefined) this.documents = JSON.parse(results.documents)
               }
-              console.log(results.documents)
+
               this.formGroupLT = this.formBuilder.group({
                 projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
                 projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}, [Validators.required]],
-                country: [{value: results?.country, disabled: this.isReadOnly}, [Validators.required]],
-                city: [{value: results?.city, disabled: this.isReadOnly}, [Validators.required]],
                 projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}, [Validators.required]],
                 projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}, [Validators.required]],
                 amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}, [Validators.required]],
@@ -94,7 +92,8 @@ export class LongTermApplicationComponent implements OnInit {
                 partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}, [Validators.required]],
                 changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}, [Validators.required]],
                 structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}, [Validators.required]],
-                totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}, [Validators.required]],
+                totalProjectCostLocalCurrency: [{value: results?.totalProjectCostLocalCurrency, disabled: this.isReadOnly}, [Validators.required]],
+                totalProjectCostDollars: [{value: results?.totalProjectCostDollars, disabled: this.isReadOnly}, [Validators.required]],
                 documents: [{value: results?.documents, disabled: this.isReadOnly}],
 
                 grantId: [{value: results?.grantId}, [Validators.required]],
