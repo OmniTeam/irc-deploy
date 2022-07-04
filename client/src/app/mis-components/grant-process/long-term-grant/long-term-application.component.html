@@ -8,7 +8,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Title of the project:</label>
+              <label>Title of the project:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label>Proposed duration of the project:</label>
+              <label>Proposed duration of the project:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -46,60 +46,9 @@
             </div>
           </div>
 
-          <b>Project location /area of operation:</b>
           <div class="row">
             <div class="col-sm-6">
-              <label>Country:</label>
-              <div class="form-group ">
-                <div class=" input-group input-group-merge">
-                  <ng-select class="form-control form-control-sm"
-
-                             name="datatable_length"
-                             aria-controls="datatable"
-                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                             [multiple]="false"
-                             placeholder="Country"
-                             formControlName="country"
-                             (ngModelChange)="onSelectCountry($event)"
-                             [ngClass]="{ 'is-invalid': submitted && f.country.errors }"
-                             [searchable]="true"
-                             [clearable]="true"
-                  >
-                    <ng-option [value]="country" *ngFor="let country of countries">
-                      {{country}}
-                    </ng-option>
-                  </ng-select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <label>City:</label>
-              <div class="form-group ">
-                <div class=" input-group input-group-merge">
-                  <ng-select class="form-control form-control-sm"
-
-                             name="datatable_length"
-                             aria-controls="datatable"
-                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                             [multiple]="false"
-                             placeholder="City"
-                             formControlName="city"
-                             [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
-                             [searchable]="true"
-                             [clearable]="true"
-                  >
-                    <ng-option [value]="city" *ngFor="let city of cities">
-                      {{city}}
-                    </ng-option>
-                  </ng-select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-6">
-              <label>Project proposed start date:</label>
+              <label>Project proposed start date:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -116,7 +65,7 @@
             </div>
 
             <div class="col-sm-6">
-              <label>Total project amount:</label>
+              <label>Total project amount (USD)<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -135,7 +84,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Amount requested from CRVPF:</label>
+              <label>Amount requested from CRVPF (USD)<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -152,7 +101,7 @@
             </div>
 
             <div class="col-sm-6">
-              <label>Other sources and amount of funding on this particular Project if any:</label>
+              <label>Other sources and amount of funding on this particular Project if any:<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <textarea
@@ -193,7 +142,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label>Contact details of authorized signatory(ies):</label>
+              <label>Contact details of authorized signatory(ies):<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -206,9 +155,14 @@
                     (ngModelChange)="validateNumber($event)"
                     [ngClass]="{ 'is-invalid': inValidNumber }"
                   >
-                  <div *ngIf="submitted && inValidNumber">
-                    <div class="input-error">Please put valid number
-                    </div>
+                </div>
+                <div *ngIf="submitted && inValidNumber">
+                  <div class="input-error">Please put valid number
+                  </div>
+                </div>
+                <div *ngIf="submitted && f.projectTitle.errors">
+                  <div *ngIf="f.projectTitle.errors.required" class="input-error">Project is
+                    required
                   </div>
                 </div>
               </div>
@@ -217,7 +171,7 @@
 
           <div class="row">
             <div class="col-sm-6">
-              <label>Bank Details</label>
+              <label>Bank Details<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
               <textarea
@@ -244,7 +198,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Briefly describe the social, economic, political context related to the project area.</label>
+          <label>Briefly describe the social, economic, political context related to the project area.<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -260,7 +214,7 @@
           </div>
         </div>
         <div class="col-sm-6">
-          <label>What specific problem will your proposed project address?</label>
+          <label>What specific problem will your proposed project address?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -285,7 +239,7 @@
       <div style="margin: 20px;">
         <div class="row">
           <div class="col-sm-6">
-            <label>Who are your target population?</label>
+            <label>Who are your target population?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -301,7 +255,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>Why them?</label>
+            <label>Why them?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -319,7 +273,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>What will change in their lives?</label>
+            <label>What will change in their lives?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -335,7 +289,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>What is your overall goal?</label>
+            <label>What is your overall goal?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -353,7 +307,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>List at least 3 major mid-term changes you want to see (above 1 year)</label>
+            <label>List at least 3 major mid-term changes you want to see (above 1 year)<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -369,7 +323,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <label>List at least 5 immediate changes you want to see after activity implementation</label>
+            <label>List at least 5 immediate changes you want to see after activity implementation<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -387,7 +341,7 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>What activities will you undertake to achieve the above changes?</label>
+            <label>What activities will you undertake to achieve the above changes?<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
               <textarea
@@ -413,7 +367,7 @@
       <div class="row" style="margin: 10px;">
         <div class="col-sm-12">
           <label>What are some of the challenges (both internal and external) that are likely to be experienced and
-            hinder the implementation this project and how will you address them?</label>
+            hinder the implementation this project and how will you address them?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -438,7 +392,7 @@
       <div class="row" style="margin: 10px;">
         <div class="col-sm-12">
           <label>Who are the key strategic partners, whether institutions or individuals, in the broader field in which
-            you work?</label>
+            you work?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -462,7 +416,7 @@
     <div class="card-body">
       <div class="row" style="margin: 10px;">
         <div class="col-sm-6">
-          <label>Please describe how the change envisioned by your project will be sustained in the future </label>
+          <label>Please describe how the change envisioned by your project will be sustained in the future<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -481,7 +435,7 @@
         <div class="col-sm-6">
           <label>What structures and plans are in place to ensure your organization’s sustainability in the future –
             including plans to strengthen the organization’s leadership, management and financial health – over
-            time?</label>
+            time?<span class="required-indicator">*</span></label>
           <div class="form-group ">
             <div class=" input-group input-group-merge">
               <textarea
@@ -503,19 +457,33 @@
   <h3 style="margin-left: 40px;">G. Cost of the project</h3>
   <div class="card">
     <div class="card-body">
-      <div class="col-sm-6" style="margin: 10px;">
-        <label>Provide the total project cost in local currency & US dollars</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
-            <textarea
-
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>Provide the total project cost in local currency<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+            <input
               class="form-control"
-              style="padding-left: 10px;"
-              placeholder="Remember to complete a detail budget on the excel sheet using CRVPF approved format"
-              formControlName="totalProjectCost"
-              rows="2"
-              [ngClass]="{ 'is-invalid': submitted && f.totalProjectCost.errors }"
-            ></textarea>
+              placeholder="Amount"
+              formControlName="totalProjectCostLocalCurrency"
+              type="number"
+              [ngClass]="{ 'is-invalid': submitted && f.totalProjectCostLocalCurrency.errors }"
+            />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>Provide the total project cost in US dollars<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                formControlName="totalProjectCostDollars"
+                type="number"
+                [ngClass]="{ 'is-invalid': submitted && f.totalProjectCostDollars.errors }"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -530,7 +498,7 @@
         <div class="col">
           <div class="row">
             <div class="col-sm-6">
-              <label>i. Detailed Budget.</label>
+              <label>i. Detailed Budget.<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -543,6 +511,11 @@
                     (change)="handleFileInput($event)">
                 </div>
                 <button
+                  *ngIf="!isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile('Copy of BUDGET Templete.xls')"
+                  class="btn btn-link">Download Template Here <i class="fas fa-download"></i></button>
+                <button
                   *ngIf="documents.detailedBudget!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.detailedBudget)"
@@ -551,7 +524,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label>ii. Work plan</label>
+              <label>ii. Work plan<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -574,7 +547,7 @@
           </div>
           <div class="row">
             <div class="col-sm-6">
-              <label>iii. Monitoring, Evaluation and learning framework</label>
+              <label>iii. Monitoring, Evaluation and learning framework<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -595,7 +568,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label>iv. Signed cluster guideline</label>
+              <label>iv. Signed cluster guideline<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input
@@ -618,7 +591,7 @@
           </div>
           <div class="row">
             <div class="col-sm-6">
-              <label>v. Draft M.O.U if application is submitted by Cluster</label>
+              <label>v. Draft M.O.U if application is submitted by Cluster<span class="required-indicator">*</span></label>
               <div class="form-group ">
                 <div class=" input-group input-group-merge">
                   <input

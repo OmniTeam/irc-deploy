@@ -3147,4 +3147,12 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "165334347898875-28") {
+        dropNotNullConstraint(columnDataType: "longtext", columnName: "proposal", tableName: "grant_letter_of_interest")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1653353447689566-28") {
+        dropNotNullConstraint(columnDataType: "longtext", columnName: "financial", tableName: "grant_letter_of_interest")
+    }
+
 }

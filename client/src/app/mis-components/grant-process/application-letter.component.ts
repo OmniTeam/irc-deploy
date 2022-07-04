@@ -19,6 +19,7 @@ export class ApplicationLetterComponent implements OnInit {
   @Output() triggerNextProcess: EventEmitter<string> = new EventEmitter();
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
+  @Input() isLongTerm: boolean;
 
   submitted = false;
   loading: boolean;
@@ -77,9 +78,9 @@ export class ApplicationLetterComponent implements OnInit {
           this.program = data.program
           this.organisation = JSON.parse(data.organisation);
           this.ngos = JSON.parse(data.ngos);
-          this.proposal = JSON.parse(data.proposal);
-          this.financial = JSON.parse(data.financial);
           this.documents = JSON.parse(data.documents);
+          if (data.proposal != undefined) this.proposal = JSON.parse(data.proposal);
+          if (data.financial != undefined) this.financial = JSON.parse(data.financial);
         }
       }, error => {
         console.log(error)
@@ -113,11 +114,11 @@ export class ApplicationLetterComponent implements OnInit {
       this.alertService.error("Please fill in all compulsory fields in Part II");
       return;
     }
-    if (!proposalAllFilled) {
+    if (!proposalAllFilled && !this.isLongTerm) {
       this.alertService.error("Please fill in all compulsory fields in Part III");
       return;
     }
-    if (!financialAllFilled) {
+    if (!financialAllFilled && !this.isLongTerm) {
       this.alertService.error("Please fill in all compulsory fields in Part IV");
       return;
     }
@@ -126,18 +127,25 @@ export class ApplicationLetterComponent implements OnInit {
       return;
     }
 
-    let formData: { [key: string]: string } = {
-      program: this.program,
-      organisation: JSON.stringify(this.organisation),
-      ngos: JSON.stringify(this.ngos),
-      proposal: JSON.stringify(this.proposal),
-      financial: JSON.stringify(this.financial),
-      documents: JSON.stringify(this.documents),
-      status: this.status
-    }
+    let formData: { [key: string]: string } = this.isLongTerm ?
+      {
+        program: this.program,
+        organisation: JSON.stringify(this.organisation),
+        ngos: JSON.stringify(this.ngos),
+        documents: JSON.stringify(this.documents),
+        status: this.status
+      } : {
+        program: this.program,
+        organisation: JSON.stringify(this.organisation),
+        ngos: JSON.stringify(this.ngos),
+        proposal: JSON.stringify(this.proposal),
+        financial: JSON.stringify(this.financial),
+        documents: JSON.stringify(this.documents),
+        status: this.status
+      }
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
-      console.log('response',data)
+      console.log('response', data)
       this.submitted = true
       this.error = false;
       this.success = true;

@@ -59,7 +59,7 @@
           <div class="card-body col-md-12 col-sm-12" style="margin-top: 40px;">
 
             <div *ngIf="isSubmitLetterOfInterest" class=" col">
-              <application-letter [isReadOnly]="false"></application-letter>
+              <application-letter [isReadOnly]="false" [isLongTerm]="false"></application-letter>
             </div>
 
             <div *ngIf="isReviewLetterOfInterest" class=" col">

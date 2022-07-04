@@ -70,31 +70,31 @@ export class LongTermApplicationComponent implements OnInit {
               console.log(results.documents)
               this.formGroupLT = this.formBuilder.group({
                 projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
-                projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}],
-                country: [{value: results?.country, disabled: this.isReadOnly}],
-                city: [{value: results?.city, disabled: this.isReadOnly}],
-                projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}],
-                projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}],
-                amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}],
-                funding: [{value: results?.funding, disabled: this.isReadOnly}],
-                nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}],
-                contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}],
-                bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}],
+                projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}, [Validators.required]],
+                country: [{value: results?.country, disabled: this.isReadOnly}, [Validators.required]],
+                city: [{value: results?.city, disabled: this.isReadOnly}, [Validators.required]],
+                projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}, [Validators.required]],
+                projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}, [Validators.required]],
+                amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}, [Validators.required]],
+                funding: [{value: results?.funding, disabled: this.isReadOnly}, [Validators.required]],
+                nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}, [Validators.required]],
+                contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}, [Validators.required]],
+                bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}, [Validators.required]],
 
-                problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}],
-                problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}],
-                targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}],
-                reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}],
-                whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}],
-                overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}],
-                midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}],
-                immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}],
-                activities: [{value: results?.activities, disabled: this.isReadOnly}],
-                risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}],
-                partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}],
-                changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}],
-                structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}],
-                totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}],
+                problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}, [Validators.required]],
+                problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}, [Validators.required]],
+                targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}, [Validators.required]],
+                reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}, [Validators.required]],
+                whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}, [Validators.required]],
+                overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}, [Validators.required]],
+                midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}, [Validators.required]],
+                immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}, [Validators.required]],
+                activities: [{value: results?.activities, disabled: this.isReadOnly}, [Validators.required]],
+                risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}, [Validators.required]],
+                partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}, [Validators.required]],
+                changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}, [Validators.required]],
+                structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}, [Validators.required]],
+                totalProjectCost: [{value: results?.totalProjectCost, disabled: this.isReadOnly}, [Validators.required]],
                 documents: [{value: results?.documents, disabled: this.isReadOnly}],
 
                 grantId: [{value: results?.grantId}, [Validators.required]],
@@ -116,31 +116,30 @@ export class LongTermApplicationComponent implements OnInit {
   setEmptyForm() {
     this.formGroupLT = this.formBuilder.group({
       projectTitle: [null, [Validators.required]],
-      projectDuration: [null],
-      country: [null],
-      city: [null],
-      projectProposed: [null],
-      projectAmount: [null],
-      amountRequested: [null],
-      funding: [null],
-      nameAuthorizedSignatory: [null],
-      contactAuthorizedSignatory: [null],
-      bankDetails: [null],
+      projectDuration: [null, [Validators.required]],
+      projectProposed: [null, [Validators.required]],
+      projectAmount: [null, [Validators.required]],
+      amountRequested: [null, [Validators.required]],
+      funding: [null, [Validators.required]],
+      nameAuthorizedSignatory: [null, [Validators.required]],
+      contactAuthorizedSignatory: [null, [Validators.required]],
+      bankDetails: [null, [Validators.required]],
 
-      problemBackground: [null],
-      problemAddressed: [null],
-      targetPopulation: [null],
-      reasonForTargetPopulation: [null],
-      whatChangeExpected: [null],
-      overallGoal: [null],
-      midtermChanges: [null],
-      immediateChanges: [null],
-      activities: [null],
-      risksAndChallenges: [null],
-      partnershipsAndNetworks: [null],
-      changeEnvisioned: [null],
-      structuresAndPlans: [null],
-      totalProjectCost: [null],
+      problemBackground: [null, [Validators.required]],
+      problemAddressed: [null, [Validators.required]],
+      targetPopulation: [null, [Validators.required]],
+      reasonForTargetPopulation: [null, [Validators.required]],
+      whatChangeExpected: [null, [Validators.required]],
+      overallGoal: [null, [Validators.required]],
+      midtermChanges: [null, [Validators.required]],
+      immediateChanges: [null, [Validators.required]],
+      activities: [null, [Validators.required]],
+      risksAndChallenges: [null, [Validators.required]],
+      partnershipsAndNetworks: [null, [Validators.required]],
+      changeEnvisioned: [null, [Validators.required]],
+      structuresAndPlans: [null, [Validators.required]],
+      totalProjectCostLocalCurrency: [null, [Validators.required]],
+      totalProjectCostDollars: [null, [Validators.required]],
       documents: [null],
 
       grantId: [null, [Validators.required]],
@@ -150,10 +149,19 @@ export class LongTermApplicationComponent implements OnInit {
     });
   }
 
+  validate = (obj, validations) =>
+    validations.every(key => ![undefined, null].includes(key.split('.').reduce((acc, cur) => acc?.[cur], obj)));
+
   submitLetter() {
     this.submitted = true;
+    console.log("formData", this.formGroupLT.value)
     if (this.formGroupLT.invalid || this.inValidNumber) {
       this.alertService.error("Please fill in all fields correctly");
+      return;
+    }
+    let documentsAllFilled = this.validate(this.documents, ['detailedBudget', 'workplan', 'framework', 'clusterGuideline', 'mou', 'staffMembers'])
+    if (!documentsAllFilled) {
+      this.alertService.error("Please fill in all compulsory fields in Part H");
       return;
     }
 
