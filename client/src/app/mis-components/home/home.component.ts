@@ -58,6 +58,12 @@ export class HomeComponent implements OnInit {
   ];
   taskListRows: OngoingTask[];
   budgetHolders: any;
+  progress = [
+    {name: 'Within Time'},
+    {name: 'Slow Progress'},
+    {name: 'Late'},
+    {name: 'All'},
+  ];
 
   ngOnInit(): void {
     this.reloadTable(true);
@@ -195,7 +201,7 @@ export class HomeComponent implements OnInit {
         startDate: startDate,
         endDate: endDate,
         efficiency: this.getEfficiency(budget,expenses),
-        progress: this.getRowProgress(startDate, endDate, target)
+        progress: this.getRowProgress(startDate, endDate, target,cumulative)
       }
     )
 
@@ -210,7 +216,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  getRowProgress(start:any,end:any,target){
+  getRowProgress(start:any,end:any,target,achieved){
     //calculate the days days between
     const startDate = new Date(start)
     const endDate = new Date(end)
@@ -225,10 +231,14 @@ export class HomeComponent implements OnInit {
     const currentTime = Math.abs(today - startDate)
     let newDays = Math.round(currentTime / (1000 * 60 * 60 * 24))
 
+    let expected =  daily * newDays
 
+    if(achieved <= expected ){
+        return 'Slow Progress'
+    } else if (achieved > expected){
+      return 'Within Time'
+    }
 
-    console.log(newDays);
-    return diff
   //   console.log("my date",startDate);
   //   let diff =  Math.abs(endDate - startDate)
   //
