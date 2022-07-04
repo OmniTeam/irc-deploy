@@ -134,9 +134,11 @@ export class HomeComponent implements OnInit {
     this.reportFormService.getMilestonePerformance().subscribe((data)=>{
       let milestones = []
       this.milestones = data
+      console.log(data);
       if(this.milestones != null){
         this.milestones.forEach((d) =>{
-            milestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,d.percentageAchievement,d.approvedBudget,d.expenseToDate,""))
+            milestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,d.percentageAchievement,
+              d.approvedBudget,d.expenseToDate,"",d.endDate,d.startDate,""))
         })
         this.displayMilestones = milestones
 
@@ -156,12 +158,12 @@ export class HomeComponent implements OnInit {
     let staffMilestones = []
     this.milestones.forEach((d) =>{
       if(d.staffId === staffId){
-        staffMilestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,d.percentageAchievement,d.approvedBudget,d.expenseToDate,""))
-        console.log(d.milestone);
+        staffMilestones.push(this.getMile(d.milestone,d.overallTarget,d.cumulativeAchievement,
+          d.percentageAchievement,d.approvedBudget,d.expenseToDate,"",d.endDate,d.startDate,""))
+        console.log(d);
       }
     })
     this.displayMilestones = staffMilestones
-    console.log(staffId)
   }
 
   getRow(id, assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
@@ -181,7 +183,7 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: string, expenses: string, efficiency: string){
+  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: string, expenses: string, efficiency: string, endDate: string, startDate: string,progress: any){
     return (
       {
         milestone: milestone,
@@ -190,7 +192,10 @@ export class HomeComponent implements OnInit {
         achievement: this.getEfficiency(target,cumulative),
         budget: budget,
         expenses: expenses,
-        efficiency: this.getEfficiency(budget,expenses)
+        startDate: startDate,
+        endDate: endDate,
+        efficiency: this.getEfficiency(budget,expenses),
+        progress: this.getRowProgress(startDate, endDate, target)
       }
     )
 
@@ -202,6 +207,33 @@ export class HomeComponent implements OnInit {
     } else {
       return 0;
     }
+
+  }
+
+  getRowProgress(start:any,end:any,target){
+    //calculate the days days between
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+
+    // @ts-ignore
+    const diffInMs = Math.abs(endDate - startDate);
+    let diff = diffInMs / (1000 * 60 * 60 * 24);
+
+    let daily = Math.round(target / diff)
+    let today = new Date()
+    // @ts-ignore
+    const currentTime = Math.abs(today - startDate)
+    let newDays = Math.round(currentTime / (1000 * 60 * 60 * 24))
+
+
+
+    console.log(newDays);
+    return diff
+  //   console.log("my date",startDate);
+  //   let diff =  Math.abs(endDate - startDate)
+  //
+  //   console.log(diff);
+  // return diff
 
   }
 

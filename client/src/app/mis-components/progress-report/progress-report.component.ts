@@ -300,7 +300,9 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
                     cumulative_achievement: cumulative,
                     quarter_achievement: quarter,
                     quarter_target: target,
-                    percentage_achievement: percentageAchievement
+                    percentage_achievement: percentageAchievement,
+                    start_date: i.startDate,
+                    end_date: i.endDate
                   });
                 }
               }
