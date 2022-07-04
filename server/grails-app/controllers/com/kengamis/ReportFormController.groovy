@@ -130,29 +130,49 @@ class ReportFormController {
         def slurper = new JsonSlurper()
         def milestones = []
 
-        ReportForm.all.each {
-            def values = slurper.parseText(it.reportValues)
-            def performanceReport = slurper.parseText(values['performanceReport'] as String)
-            def financialReport = slurper.parseText(values['financialReport'] as String)
+        WorkPlan.all.each {
+            def values = slurper.parseText(it.setupValues)
+            def performanceReport = slurper.parseText(values['indicators'] as String)
+            def financialReport = values['budget']
+
+                def expenseToDate = ''
+                def approvedBudget = ''
+                def cumulativeAchievement = 0
+                    financialReport.each { f ->
+                            expenseToDate = f['totalSpent']
+                            approvedBudget = f['approvedAmount']
+                    }
             if (performanceReport != null) {
                 performanceReport.each { p ->
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
-                    def expenseToDate = ''
-                    def approvedBudget = ''
-                    financialReport.each { f ->
-                        if (f['budget_line'] == pm.name) {
-                            expenseToDate = f['expense_to_date']
-                            approvedBudget = f['approved_budget']
 
+
+                    ReportForm rf = ReportForm.findByUserId(it.staffId)
+                    if(rf != null){
+                        def reportValues = slurper.parseText(rf.reportValues)
+
+                        def perfReport = slurper.parseText(reportValues['performanceReport'] as String)
+                        perfReport.each { r ->
+                            cumulativeAchievement = r['cumulative_achievement']
                         }
+                        print cumulativeAchievement
                     }
+
+//                    def expenseToDate = ''
+//                    def approvedBudget = ''
+//                    financialReport.each { f ->
+//                            expenseToDate = f['totalSpent']
+//                            approvedBudget = f['approvedAmount']
+//                    }
                     milestones << [
                             milestoneId          : pm?.id,
                             staffId              : it.userId,
                             milestone            : pm?.name,
-                            overallTarget        : p['overall_target'],
-                            cumulativeAchievement: p['cumulative_achievement'],
-                            percentageAchievement: p['percentage_achievement'],
+                            overallTarget        : p['overallTarget'],
+                            cumulativeAchievement: cumulativeAchievement,
+//                            percentageAchievement: p['percentage_achievement'],
+                            startDate            : p['startDate'],
+                            endDate              : p['endDate'],
                             expenseToDate        : expenseToDate,
                             approvedBudget       : approvedBudget,
 

@@ -2458,4 +2458,138 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1656683897484-7") {
+        createTable(tableName: "quarterly_commitment") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "quarterly_commitmentPK")
+            }
+
+            column(name: "start_date", type: "VARCHAR(255)")
+
+            column(name: "work_plan_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_period", type: "VARCHAR(255)")
+
+            column(name: "commitment", type: "VARCHAR(255)")
+
+            column(name: "end_date", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1656688616045-6") {
+        createTable(tableName: "milestone_disaggregation") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "milestone_disaggregationPK")
+            }
+
+            column(name: "work_plan_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "target", type: "VARCHAR(255)")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "milestone_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_period", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1656688616045-8") {
+        createTable(tableName: "quarterly_budget") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "quarterly_budgetPK")
+            }
+
+            column(name: "work_plan_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_period", type: "VARCHAR(255)")
+
+            column(name: "work_plan_budget_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "amount", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1656688616045-9") {
+        createTable(tableName: "workplan_budget") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "workplan_budgetPK")
+            }
+
+            column(name: "work_plan_id", type: "VARCHAR(255)")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "budget_line", type: "VARCHAR(255)")
+
+            column(name: "total_spent", type: "VARCHAR(255)")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "quarterly_spending_plan", type: "VARCHAR(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1656688616045-10") {
+        createTable(tableName: "workplan_milestone") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "workplan_milestonePK")
+            }
+
+            column(name: "work_plan_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "overall_target", type: "VARCHAR(255)")
+
+            column(name: "milestone_id", type: "VARCHAR(255)")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)")
+        }
+    }
+
 }
