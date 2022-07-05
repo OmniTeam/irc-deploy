@@ -17,6 +17,7 @@ import {TaskListService} from "../../../services/task-list.service";
 export class LongTermApplicationComponent implements OnInit {
   @Input() isReadOnly: boolean;
   @Input() isMakeCorrections: boolean;
+  @Input() isMakeCorrectionsED: boolean = false;
   @Input() grantId: string;
   @Input() processInstanceId: string;
   @Input() definitionKey: string;
@@ -156,10 +157,12 @@ export class LongTermApplicationComponent implements OnInit {
     console.log("formData", this.formGroupLT.value)
     if (this.formGroupLT.invalid || this.inValidNumber) {
       this.alertService.error("Please fill in all fields correctly");
+      this.submitted = false;
       return;
     }
     let documentsAllFilled = this.validate(this.documents, ['detailedBudget', 'workplan', 'framework', 'clusterGuideline', 'mou', 'staffMembers'])
     if (!documentsAllFilled) {
+      this.submitted = false;
       this.alertService.error("Please fill in all compulsory fields in Part H");
       return;
     }
@@ -190,6 +193,7 @@ export class LongTermApplicationComponent implements OnInit {
             }, error => {
               this.error = true;
               this.success = false;
+              this.submitted = false;
               this.errorMessage = "Failed to submit Application";
               this.alertService.error(this.errorMessage);
               console.log(error);
@@ -208,6 +212,7 @@ export class LongTermApplicationComponent implements OnInit {
         }, error => {
           this.error = true;
           this.success = false;
+          this.submitted = false;
           this.errorMessage = "Failed to submitted Application";
           this.alertService.error(this.errorMessage);
           console.log(error);
@@ -220,6 +225,7 @@ export class LongTermApplicationComponent implements OnInit {
         this.formGroupLT.reset()
         this.router.navigate(['/home']);
       }
+      this.submitted = false;
       this.success = false;
       this.error = false;
     }, 3000);
@@ -263,6 +269,10 @@ export class LongTermApplicationComponent implements OnInit {
 
   updateOutputVariables(value: string) {
     if(this.isMakeCorrections) this.valuesChanged.emit(value);
+  }
+
+  updateStatus(value: string) {
+    this.status = value
   }
 
 }

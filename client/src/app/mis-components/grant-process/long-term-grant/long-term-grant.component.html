@@ -181,6 +181,9 @@
 
               <div *ngIf="isMakeCorrectionsApplication" class=" col">
                 <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
+                <div class="col-sm-12 text-right">
+                  <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                </div>
                 <long-term-application [isReadOnly]="false"
                                        [isMakeCorrections]="true"
                                        [grantId]="grantId"
@@ -247,6 +250,7 @@
                 <organizational-information [grantId]="grantId" [isLongTerm]="true"></organizational-information>
                 <long-term-application [isReadOnly]="false"
                                        [isMakeCorrections]="true"
+                                       [isMakeCorrectionsED]="true"
                                        [grantId]="grantId"
                                        [processInstanceId]="processInstanceId"
                                        [definitionKey]="definitionKey"
