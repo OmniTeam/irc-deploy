@@ -169,11 +169,11 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
               .set('id', res['id'])
               .set('users', this.formData.users);
             this.entityViewFiltersService.saveUserEntityViewFilter(parameters).subscribe(data => {
-              this.router.navigate(['/entityViewFilter']);
+              // this.router.navigate(['/entityViewFilter']);
               this.alertService.success(`${this.formData.name} has been successfully created `);
             });
           }, error => {
-            this.alertService.error(`${this.formData.name} could not be created`);
+            // this.alertService.error(`${this.formData.name} could not be created`);
           });
 
           console.log(results?.viewQuery, 'full query');
@@ -216,12 +216,12 @@ export class CreateProgramPartnersComponent implements OnInit, OnUpdateCell {
       // create acls
       this.aclGroupMappingService.createGroupMapping2(this.aclsFormGroup.value).subscribe((acl) => {
         console.warn(acl, 'ACL created Successfully');
-        this.alertService.success(`ACL has been created`);
+        // this.alertService.success(`ACL has been created`);
       }, error => {
-        this.alertService.error('Failed to Create the ACL');
+        // this.alertService.error('Failed to Create the ACL');
       });
     }, error => {
-      this.alertService.error('Failed to Create the Group');
+      // this.alertService.error('Failed to Create the Group');
     });
 
     if (this.formGroup.valid) {

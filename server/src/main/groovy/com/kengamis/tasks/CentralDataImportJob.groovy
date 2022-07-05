@@ -168,7 +168,7 @@ class CentralDataImportJob extends Script {
                 def formName = it['form']
                 def grpConditionQuery = it['groupConditionQuery']
                 def kengaGroup = KengaGroup.get(groupId)
-                def kengaDataTable = KengaDataTable.findByTableName(formName)
+                def kengaDataTable = KengaDataTable.findByTableName(formName as String)
 
                 //query records
                 def data = AppHolder.withMisSqlNonTx {
@@ -206,20 +206,14 @@ class CentralDataImportJob extends Script {
             def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(recordz."$idLabel")
 //            to make sure that the acl for a group is not repeated
             def groupObject = KengaGroup.findById(groupId)
-//            def recordIdentityObject = KengaAclTableRecordIdentity.findByDataTableRecordId(groupId)
-//            def identityData = KengaGroupAclEntry.findByKengaAclTableRecordIdentity(recordz."$idLabel")
 
-//            def groupData = KengaGroupAclEntry.findByKengaGroup(groupObject)
-//            def bool1 = (identityData == null)
-//            def bool2 = (groupData == null)
-
-//            if( bool1 && bool2){
+            if( !(KengaGroupAclEntry.findByKengaAclTableRecordIdentityAndKengaGroup(kengaAclTableRecordIdentity,groupObject))){
                 new KengaGroupAclEntry(
                         kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
                         kengaGroup: groupObject,
                         mask: permissionNumber
                 ).save(flush: true, failOnError: true)
-//            }
+            }
         }
     }
 
