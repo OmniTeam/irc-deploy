@@ -4,8 +4,6 @@ import com.kengamis.*
 import com.kengamis.acl.KengaAclTableRecordIdentity
 import com.kengamis.acl.KengaDataTable
 import com.kengamis.acl.KengaGroupAclEntry
-import com.kengamis.acl.KengaGroupAclEntryService
-import com.kengamis.EntityViewFilterQueryService
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
@@ -15,8 +13,6 @@ import groovyx.net.http.Method
 
 class TaskListSyncJob extends Script {
     static def url = StartCamundaInstancesJob.camundaApiUrl
-    KengaGroupAclEntryService kengaGroupAclEntryService
-    EntityViewFilterQueryService entityViewFilterQueryService
 
     @Override
     Object run() {
@@ -333,7 +329,6 @@ class TaskListSyncJob extends Script {
 
                         createEntityViewFilters(createdGroupName, entityDataCollectorId)
                         createAcls(createdGroupName, createdGroupId)
-
                     } else {
                         def existingGroup = KengaGroup.findByName(p.cluster)
                         def existingGroupName = existingGroup.name
@@ -341,7 +336,6 @@ class TaskListSyncJob extends Script {
 
                         createEntityViewFilters(existingGroupName, entityDataCollectorId)
                         createAcls(existingGroupName, existingGroupId)
-
                     }
 
                     task.status = 'completed'

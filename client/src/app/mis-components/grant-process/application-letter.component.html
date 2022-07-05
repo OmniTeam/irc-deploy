@@ -433,8 +433,8 @@
   </div>
 </div>
 
-<h3 style="margin-left: 40px;">Part III: Proposal</h3>
-<div class="card">
+<h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Part III: Proposal</h3>
+<div class="card" *ngIf="!isLongTerm">
   <div class="card-body">
 
     <div class="row" style="margin: 10px;">
@@ -492,13 +492,13 @@
   </div>
 </div>
 
-<h3 style="margin-left: 40px;">Part IV: Financial Information</h3>
-<div class="card">
+<h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Part IV: Financial Information</h3>
+<div class="card" *ngIf="!isLongTerm">
   <div class="card-body">
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>22. How much funds are you requesting? (USD)<span class="required-indicator">*</span></label>
+        <label>23. How much funds are you requesting? (USD)<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
@@ -513,7 +513,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>23. What is your organization’s current budget for this financial year? (USD)<span
+        <label>24. What is your organization’s current budget for this financial year? (USD)<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -532,7 +532,8 @@
   </div>
 </div>
 
-<h3 style="margin-left: 40px;">Part V: Other documents to share (if available)</h3>
+<h3 style="margin-left: 40px;" *ngIf="isLongTerm">Part III: Other documents to share (if available)</h3>
+<h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Part V: Other documents to share (if available)</h3>
 <div class="card">
   <div class="card-body">
     <div class="row" style="margin: 10px;">
