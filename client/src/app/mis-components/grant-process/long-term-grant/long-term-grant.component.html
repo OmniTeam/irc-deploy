@@ -203,7 +203,7 @@
                     <div class="col-sm-12">
                       <div class="row">
                         <div class="col">
-                          <p>What was the decision of the review process?</p>
+                          <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
                           <div class="text-left">
                             <ul style="list-style: none;" *ngFor="let item of decisionReviewRevisedApplication">
                               <li>
@@ -219,7 +219,7 @@
                         </div>
                       </div>
                       <div class="row" style="margin: 10px;">
-                        <label for="reviewerAcComments">Provide any comments</label>
+                        <label for="reviewerAcComments">Provide any comments<span class="required-indicator">*</span></label>
                         <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerAcComments"
                                   [(ngModel)]="reviewerComments"></textarea>
                       </div>
@@ -239,9 +239,11 @@
                   <div class="row" *ngIf="!isReadOnly">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
-                      <button class="btn btn-warning" (click)="submit('reviewRevisedApplication', 'draft')">Save for Later</button>
-                      <button class="btn btn-success" (click)="submit('reviewRevisedApplication', 'completed')">Submit Review</button>
+                      <button [disabled]="submitted" class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+                      <button [disabled]="submitted" class="btn btn-warning" (click)="submit('reviewRevisedApplication', 'draft')">Save for Later</button>
+                      <button [disabled]="submitted" class="btn btn-success" (click)="submit('reviewRevisedApplication', 'completed')">
+                        <span *ngIf="!submitted">Submit Review</span>
+                        <span *ngIf="submitted">Loading ...</span></button>
                     </div>
                   </div>
                 </div>
@@ -338,7 +340,6 @@
                         </div>
                         <div class="col-sm-3">
                           <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
-                          <button class="btn btn-success comment_btn" (click)="viewRecommendations()">View Recommendations</button>
                         </div>
                       </div>
                       <div *ngIf="decisionOfReviewProcess=='Yes'" class="row" style="margin: 10px;">
