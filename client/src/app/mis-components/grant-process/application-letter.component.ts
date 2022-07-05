@@ -93,11 +93,18 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
+    if (this.inValidNumber || this.inValidTelephone) {
+      this.alertService.error("Please fill in valid number");
+      this.submitted = false;
+      return;
+    }
     if (this.organisation.email == null) {
+      this.submitted = false;
       this.alertService.error("Please fill in the organization email");
       return;
     }
     if (this.program == null) {
+      this.submitted = false;
       this.alertService.error("Please choose the Program");
       return;
     }
@@ -107,23 +114,29 @@ export class ApplicationLetterComponent implements OnInit {
     let financialAllFilled = this.validate(this.financial, ['fundsAmount', 'budget'])
     let documentsAllFilled = this.validate(this.documents, ['financial', 'registration', 'listMembers', 'listStaffMembers', 'organizationStructure', 'annualWorkPlan'])
     if (!orgAllFilled) {
+      this.submitted = false;
       this.alertService.error("Please fill in all compulsory fields in Part I");
       return;
     }
     if (!ngosAllFilled) {
+      this.submitted = false;
       this.alertService.error("Please fill in all compulsory fields in Part II");
       return;
     }
     if (!proposalAllFilled && !this.isLongTerm) {
+      this.submitted = false;
       this.alertService.error("Please fill in all compulsory fields in Part III");
       return;
     }
     if (!financialAllFilled && !this.isLongTerm) {
+      this.submitted = false;
       this.alertService.error("Please fill in all compulsory fields in Part IV");
       return;
     }
     if (!documentsAllFilled) {
-      this.alertService.error("Please fill in all compulsory fields in Part V");
+      this.submitted = false;
+      if (this.isLongTerm) this.alertService.error("Please fill in all compulsory fields in Part III");
+      else this.alertService.error("Please fill in all compulsory fields in Part V");
       return;
     }
 
