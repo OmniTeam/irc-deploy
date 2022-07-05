@@ -410,6 +410,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/acl-group-mapping-parent/acl-group-mapping-parent.module').then(m => m.AclGroupMappingParentModule)
       },
       {
+        path: 'acl-group-mapping-edit/:id', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/acl-group-mapping-edit/acl-group-mapping-edit.module').then(m => m.AclGroupMappingEditModule)
+      },
+      {
         path: 'acl-group-mapping-lists', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN]

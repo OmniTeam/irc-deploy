@@ -115,8 +115,12 @@
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Group Name" prop="group"></ngx-datatable-column>
-            <ngx-datatable-column name="Table Name" prop="table"></ngx-datatable-column>
+            <ngx-datatable-column name="Group Name" prop="kengaGroupId">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a routerLink="/acl-group-mapping-edit/{{row.id}}">{{row?.kengaGroupId}}</a>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Query" prop="query"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

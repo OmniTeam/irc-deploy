@@ -17,7 +17,9 @@ class KengaGroupAclJob extends Script {
         log.info("starting job for KengaGroupAclJob===============")
         createKengaDataTablesFrmForm()
         KengaDataTable.list().each { kengaDataTable ->
-            generateKengaAclRecordIdentities(kengaDataTable)
+            if(kengaDataTable.tableName != 'kenga_data_table'){
+                generateKengaAclRecordIdentities(kengaDataTable)
+            }
         }
         Form.list().each { form ->
             def tableName = form.name
@@ -54,12 +56,12 @@ class KengaGroupAclJob extends Script {
             }
 
             records.each { record ->
-                def myRecord = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel")
-                if (myRecord?.dataTableRecordId == null){
-                    KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
+                if (!(KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel"))){
+                   def createdAcl = new KengaAclTableRecordIdentity(
                             kengaDataTable: kengaDataTable,
                             dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
                     ).save(flush: true, failOnError: true)
+//
                 }
             }
         } catch (Exception ex) {
