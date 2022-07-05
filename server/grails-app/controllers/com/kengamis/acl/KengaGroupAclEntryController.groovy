@@ -6,6 +6,8 @@ import com.kengamis.KengaGroup
 import com.kengamis.QueryTable
 import grails.converters.JSON
 import grails.validation.ValidationException
+import groovy.json.JsonBuilder
+
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -25,7 +27,7 @@ class KengaGroupAclEntryController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond kengaGroupAclEntryService.list(params), model:[kengaGroupAclEntryCount: kengaGroupAclEntryService.count()]
+        respond kengaGroupAclEntryService.list(params), model: [kengaGroupAclEntryCount: kengaGroupAclEntryService.count()]
     }
 
     def show(Long id) {
@@ -51,7 +53,7 @@ class KengaGroupAclEntryController {
             return
         }
 
-        respond kengaGroupAclEntry, [status: CREATED, view:"show"]
+        respond kengaGroupAclEntry, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -73,7 +75,7 @@ class KengaGroupAclEntryController {
             return
         }
 
-        respond kengaGroupAclEntry, [status: OK, view:"show"]
+        respond kengaGroupAclEntry, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -89,23 +91,35 @@ class KengaGroupAclEntryController {
     }
 
     @Transactional
-    def saveQueryToTable(){
-        def json=request.JSON
+    def saveQueryToTable() {
+        def json = request.JSON
         def groupId = json.group
         def queryArray = json.queryArray
-        QueryTable.create(groupId,1,queryArray.toString())
+        def jsonBuilder = new JsonBuilder()
+        jsonBuilder {
+            queryData (
+                    queryArray.collect {
+                        [
+                                form               : it.form,
+                                groupConditionQuery: it.groupConditionQuery
+                        ]
+                    }
+            )
+        }
+        print(jsonBuilder.toPrettyString())
+        QueryTable.create(groupId, 1, jsonBuilder)
     }
 
     @Transactional
-    def saveGroupMappings(){
-        def json=request.JSON
+    def saveGroupMappings() {
+        def json = request.JSON
         def groupId = json.group
         def permission = json.permissions
         def queryArray = json.queryArray
 
 
 //        loop through the array and assign the acls per iteration
-        queryArray.each{ it ->
+        queryArray.each { it ->
             def formName = it.form
             def grpConditionQuery = it.groupConditionQuery
 
@@ -123,30 +137,30 @@ class KengaGroupAclEntryController {
 
             // gets the id label of the kengaDataTable may be __id or id
             // that's its significance
-            def idLabel= kengaDataTable.idLabel
+            def idLabel = kengaDataTable.idLabel
 
             // create entries
-            createAcls(records, groupId,permission, idLabel)
+            createAcls(records, groupId, permission, idLabel)
 
             // after creating the acls of the immediate group, create the function that checks for the parent of groups
             // until the last parent has no parent
 
-            def parentGroupId = kengaGroup.parentGroup.collect{it.id}[0]
+            def parentGroupId = kengaGroup.parentGroup.collect { it.id }[0]
 
-            while(parentGroupId !=null){
+            while (parentGroupId != null) {
                 // getting the parent object which will be used to create the acl
                 def myCurrentObject = kengaGroup.get(parentGroupId)
 
                 // create acl for the parent
-                createAcls(records,myCurrentObject,permission,idLabel)
+                createAcls(records, myCurrentObject, permission, idLabel)
 
                 // update the parent ID to the new parent of the current parent
-                parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
+                parentGroupId = myCurrentObject.parentGroup.collect { it.id }[0]
             }
         }
     }
 
-    def createAcls(aclRecords,groupId, permissionNumber, idLabel){
+    def createAcls(aclRecords, groupId, permissionNumber, idLabel) {
         aclRecords.each { record ->
             def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$idLabel")
             new KengaGroupAclEntry(
@@ -166,11 +180,11 @@ class KengaGroupAclEntryController {
         render tables as JSON
     }
 
-    def listAllACLS (){
+    def listAllACLS() {
         def acls = []
-        KengaGroupAclEntry.all.each {aclEntry ->
+        KengaGroupAclEntry.all.each { aclEntry ->
             acls << [
-                    id: aclEntry.id,
+                    id   : aclEntry.id,
                     group: aclEntry.kengaGroup.name,
                     table: aclEntry.kengaAclTableRecordIdentity.kengaDataTable.tableName
             ]
