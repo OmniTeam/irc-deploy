@@ -11,6 +11,17 @@
   width: auto;
 }
 
+/deep/ .row-color1 {
+  background-color: rgb(144, 238, 144);
+}
+/deep/ .row-color2 {
+  background-color: rgb(133, 193, 233 );
+}
+
+/deep/ .row-color3 {
+  background-color: rgb(247, 220, 111);
+}
+
 .justify-center {
   justify-content: center;
   display: flex;
