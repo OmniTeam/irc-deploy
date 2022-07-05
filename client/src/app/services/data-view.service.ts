@@ -27,8 +27,11 @@ export class DataViewService {
     return this.http.get(`${this.baseurl}/getDataViewData`, {params});
   }
 
-  dataViewRunNow(params) {
-    return this.http.get(`${this.baseurl}/dataViewRunNow`, {params});
+  dataViewRunNow(params?:string):Observable<any> {
+    const formData = new FormData();
+    formData.append("params",params)
+    console.log(formData);
+    return this.http.post(`${this.baseurl}/dataViewRunNow`, formData);
   }
 
   updateDataView(id, formData): Observable<any> {

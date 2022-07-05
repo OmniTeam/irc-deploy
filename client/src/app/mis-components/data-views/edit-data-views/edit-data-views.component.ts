@@ -74,7 +74,8 @@ export class EditDataViewsComponent implements OnInit {
     if (inputValue) {
       const params = new HttpParams()
         .set('query', inputValue);
-      this.dataViewService.dataViewRunNow(params).subscribe((data) => {
+      this.dataViewService.dataViewRunNow(inputValue).subscribe((data) => {
+        console.log(data);
         if (data['headerList'].length > 0) {
           this.temp = [...data['dataList']];
           this.rows = data['dataList'];
