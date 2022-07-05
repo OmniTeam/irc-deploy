@@ -8,7 +8,7 @@
       </div>
       <div class="container-fluid">
         <div class=" row">
-          <div class=" col-xl-4 col-md-6">
+          <div class=" col-xl-4 col-md-6" (click)="clickWithinTime()">
             <div class=" card card-stats">
               <div>
                 <div class=" row">
@@ -17,7 +17,7 @@
                       Within Time
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{14}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.displayMilestones?.length}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -43,7 +43,7 @@
                   </div>
 
                   <div class=" col-auto">
-                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                    <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
                       <i class=" ni "> </i>
                     </div>
                   </div>
@@ -65,7 +65,7 @@
                   </div>
 
                   <div class=" col-auto">
-                    <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
                       <i class=" ni"> </i>
                     </div>
                   </div>
@@ -113,7 +113,7 @@
                   </div>
 
                   <div class=" col-auto">
-                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                    <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
                       <i class=""> </i>
                     </div>
                   </div>
@@ -135,7 +135,7 @@
                   </div>
 
                   <div class=" col-auto">
-                    <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
                       <i class=" "> </i>
                     </div>
                   </div>
@@ -155,14 +155,14 @@
                 <div class=" row">
                   <div class=" col">
                     <h3 class=" card-title text-uppercase text-muted mb-0">
-                      < 50% achieved
+                      Over 75% achieved
                     </h3>
 
                     <span class=" h2 font-weight-bold mb-0"> {{4}} </span>
                   </div>
 
                   <div class=" col-auto">
-                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                    <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
                       <i class=" "> </i>
                     </div>
                   </div>
@@ -198,14 +198,14 @@
                 <div class=" row">
                   <div class=" col">
                     <h3 class=" card-title text-uppercase text-muted mb-0">
-                      Over 75% achieved
+                      < 50% achieved
                     </h3>
 
                     <span class=" h2 font-weight-bold mb-0"> {{6}} </span>
                   </div>
 
                   <div class=" col-auto">
-                    <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
                       <i class=" "> </i>
                     </div>
                   </div>
@@ -250,9 +250,9 @@
                                 (change)="entriesChange($event)"
                                 style="width: 200%;"
                               >
-                                <option value="10" [selected]="entries == 10">10</option>
-                                <option value="25" [selected]="entries == 25">25</option>
-                                <option value="50" [selected]="entries == 50">50</option>
+                                <option value="30" [selected]="entries == 10">30</option>
+                                <option value="60" [selected]="entries == 25">60</option>
+                                <option value="90" [selected]="entries == 50">90</option>
                                 <option value="-1" [selected]="entries == -1">All</option>
                               </select>
                               entries
@@ -285,11 +285,11 @@
                                          aria-controls="datatable"
                                          style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
                                          [multiple]="false"
-                                         placeholder="Filter progress.."
+                                         placeholder="Filter outcome.."
                                          [searchable]="true"
-                                         (change)="filterMilestonesList($event)"
+                                         (change)="filterOutcomeList($event)"
                                          [clearable]="true">
-                                <ng-option [value]="item.name" *ngFor="let item of progress">
+                                <ng-option [value]="item.id" *ngFor="let item of progress">
                                   {{item.name}}
                                 </ng-option>
                               </ng-select>
@@ -305,12 +305,11 @@
                         [columnMode]="'force'"
                         [headerHeight]="50"
                         [footerHeight]="50"
+                        [rowClass] = "getRowClass"
                         [rowHeight]="'auto'"
                         [limit]="entries != -1 ? entries : undefined"
                         [rows]="displayMilestones">
-
                         <ngx-datatable-column name="Activity" prop="milestone">
-
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Target" prop="target">
                         </ngx-datatable-column>
@@ -320,7 +319,6 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Expenses to date" prop="expenses"></ngx-datatable-column>
                         <ngx-datatable-column name="Expenditure (%)" prop="efficiency">
-                          <!--                          <ng-template>{{getEfficiency(displayMilestones.budget, displayMilestones.expenses)}}</ng-template>-->
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Start Date" prop="startDate"></ngx-datatable-column>
                         <ngx-datatable-column name="End Date" prop="endDate"></ngx-datatable-column>
@@ -335,13 +333,13 @@
           </div>
         </div>
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+        <div class=" col-md-12 col-sm-12" style="margin-top: 40px">
           <div class=" row">
             <div class=" col">
-              <div class="card">
-                <div class="card-header">
+              <div class="card" style="background-color: #fbca3d">
+                <div class="card-header" style="background-color: #fbca3d">
                   <div class="row">
-                    <h3 style="margin-left: 40px;">PERFORMANCE</h3>
+                    <h3 style="margin-left: 40px;">MY ACTIVITIES</h3>
                   </div>
                 </div>
                 <div class="card-body col-sm-12">
@@ -485,7 +483,7 @@
                   <div class="row" *ngFor="let filter of filters">
                     <button class="btn" (click)="setFilters(filter)">
                       <div class="row">
-                        <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
                           <i class="ni ni-time-alarm"> </i>
                         </div>
                         <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
