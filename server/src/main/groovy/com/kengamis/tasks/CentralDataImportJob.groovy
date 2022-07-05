@@ -161,14 +161,12 @@ class CentralDataImportJob extends Script {
         QueryTable.all.each {qt ->
             def groupId = qt.kengaGroupId
             def permission = qt.permission
-            def query_to_slurp = qt.query
-            def slurper = new JsonSlurper()
-            def queryArray = slurper.parseText(query_to_slurp)
-            print(queryArray)
-            // loop through the array and assign the acls per iteration
-            queryArray.each{ it ->
-                def formName = it.form
-                def grpConditionQuery = it.groupConditionQuery
+            def queryArray = new JsonSlurper().parseText(qt.query)
+            def queryData = queryArray['queryData']
+            print(queryData)
+            queryData.each{ it ->
+                def formName = it['form']
+                def grpConditionQuery = it['groupConditionQuery']
                 def kengaGroup = KengaGroup.get(groupId)
                 def kengaDataTable = KengaDataTable.findByTableName(formName)
 
@@ -196,6 +194,8 @@ class CentralDataImportJob extends Script {
                         parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
                     }
                 }
+
+
             }
 
         }
@@ -205,13 +205,21 @@ class CentralDataImportJob extends Script {
         aclRecords.each { recordz ->
             def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(recordz."$idLabel")
 //            to make sure that the acl for a group is not repeated
-            if( !(KengaGroupAclEntry.findByKengaAclTableRecordIdentity(aclRecords) && KengaGroupAclEntry.findByKengaGroup(groupId))){
+            def groupObject = KengaGroup.findById(groupId)
+//            def recordIdentityObject = KengaAclTableRecordIdentity.findByDataTableRecordId(groupId)
+//            def identityData = KengaGroupAclEntry.findByKengaAclTableRecordIdentity(recordz."$idLabel")
+
+//            def groupData = KengaGroupAclEntry.findByKengaGroup(groupObject)
+//            def bool1 = (identityData == null)
+//            def bool2 = (groupData == null)
+
+//            if( bool1 && bool2){
                 new KengaGroupAclEntry(
                         kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                        kengaGroup: groupId,
+                        kengaGroup: groupObject,
                         mask: permissionNumber
                 ).save(flush: true, failOnError: true)
-            }
+//            }
         }
     }
 

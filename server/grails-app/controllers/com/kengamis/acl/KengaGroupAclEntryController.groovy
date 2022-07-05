@@ -107,7 +107,7 @@ class KengaGroupAclEntryController {
             )
         }
         print(jsonBuilder.toPrettyString())
-        QueryTable.create(groupId, 1, jsonBuilder)
+        QueryTable.create(groupId, 1, jsonBuilder as String)
     }
 
     @Transactional

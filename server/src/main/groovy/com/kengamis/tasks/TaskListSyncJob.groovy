@@ -378,8 +378,21 @@ class TaskListSyncJob extends Script {
             queryArray << obj
         }
 
+        def jsonBuilder = new JsonBuilder()
+        jsonBuilder {
+            queryData (
+                    queryArray.collect {
+                        [
+                                form               : it.form,
+                                groupConditionQuery: it.groupConditionQuery
+                        ]
+                    }
+            )
+        }
+        print(jsonBuilder.toPrettyString())
+
 //        saveGroupMappings(groupId, 1, queryArray)
-        QueryTable.create(groupId,1,queryArray.toString())
+        QueryTable.create(groupId,1, jsonBuilder as String)
     }
 
     def createEntityViewFilters(createdGroupName, entityDataCollectorId) {
