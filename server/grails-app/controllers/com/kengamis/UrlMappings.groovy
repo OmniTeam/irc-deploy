@@ -90,6 +90,7 @@ class UrlMappings {
         }
 
         "/aclGroupMappings"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
+        "/saveQueryToTable"(controller: 'kengaGroupAclEntry', action:'saveQueryToTable',method: 'POST' )
         "/listAllACLS"(controller: 'kengaGroupAclEntry', action:'listAllACLS',method: 'GET' )
         "/userPartners"(controller: 'user', action:'getCurrentUserPartners',method: 'GET' )
         "/getMISUsers"(controller: 'user', action:'getMISUsers',method: 'GET' )

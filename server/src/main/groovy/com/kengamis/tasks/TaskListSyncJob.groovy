@@ -7,12 +7,15 @@ import com.kengamis.acl.KengaGroupAclEntry
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
+import groovy.util.logging.Log4j
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
 
+@Log4j
 class TaskListSyncJob extends Script {
     static def url = StartCamundaInstancesJob.camundaApiUrl
+//    KengaGroupsService kengaGroupService = AppHolder.bean(KengaGroupsService)
 
     @Override
     Object run() {
@@ -378,7 +381,120 @@ class TaskListSyncJob extends Script {
             queryArray << obj
         }
 
-        saveGroupMappings(groupId, 1, queryArray)
+        def jsonBuilder = new JsonBuilder()
+        jsonBuilder {
+            queryData(
+                    queryArray.collect {
+                        [
+                                form               : it.form,
+                                groupConditionQuery: it.groupConditionQuery
+                        ]
+                    }
+            )
+        }
+        print(jsonBuilder.toPrettyString())
+
+//        saveGroupMappings(groupId, 1, queryArray)
+        QueryTable.create(groupId, 1, jsonBuilder as String)
+
+//        here check if the data exists in the db
+        queryArray.each {
+            def formName = it['form']
+            def grpConditionQuery = it['groupConditionQuery']
+            def kengaGroup = KengaGroup.get(groupId)
+
+            def data = AppHolder.withMisSqlNonTx {
+                def query = "select * from ${formName} ${grpConditionQuery}"
+                log.info(query)
+                rows(query.toString())
+            }
+            log.info("==============size${data.size()}")
+            if (data.size() > 0) {
+                def kengaDataTable = KengaDataTable.findByTableName(formName as String)
+                data.each { singleRow ->
+                    def recordId = singleRow.idLabel
+                    generateKengaAclRecordIdentities(kengaDataTable, recordId)
+                }
+                createAclsForRecords()
+            }
+
+        }
+    }
+
+    static def generateKengaAclRecordIdentities(KengaDataTable kengaDataTable, recordId) {
+        try {
+            // if the record doesnt exist in the table then add it
+            if (!(KengaAclTableRecordIdentity.findByDataTableRecordId(recordId))) {
+                new KengaAclTableRecordIdentity(
+                        kengaDataTable: kengaDataTable,
+                        dataTableRecordId: recordId
+                ).save(flush: true, failOnError: true)
+            }
+
+        } catch (Exception ex) {
+            log.error(ex.getMessage())
+        }
+    }
+
+    static def createAclsForRecords() {
+        QueryTable.all.each { qt ->
+            def groupId = qt.kengaGroupId
+            def permission = qt.permission
+            def queryArray = new JsonSlurper().parseText(qt.query)
+            def queryData = queryArray['queryData']
+            print(queryData)
+            queryData.each { it ->
+                def formName = it['form']
+                def grpConditionQuery = it['groupConditionQuery']
+                def kengaGroup = KengaGroup.get(groupId)
+                def kengaDataTable = KengaDataTable.findByTableName(formName as String)
+
+                //query records
+                def data = AppHolder.withMisSqlNonTx {
+                    def query = "select * from ${formName} ${grpConditionQuery}"
+                    log.info(query)
+                    rows(query.toString())
+                }
+                log.info("==============size${data.size()}")
+
+                if (data.size() > 0) {
+                    def idLabel = kengaDataTable.idLabel
+                    createAclsTaskList(data, groupId, permission, idLabel)
+                    def parentGroupId = kengaGroup.parentGroup.collect { it.id }[0]
+
+                    while (parentGroupId != null) {
+                        // getting the parent object which will be used to create the acl
+                        def myCurrentObject = kengaGroup.get(parentGroupId)
+
+                        // create acl for the parent
+                        createAclsTaskList(data, myCurrentObject, permission, idLabel)
+
+                        // update the parent ID to the new parent of the current parent
+                        parentGroupId = myCurrentObject.parentGroup.collect { it.id }[0]
+                    }
+                }
+
+
+            }
+
+        }
+
+    }
+
+    static def createAclsTaskList(aclRecords, groupId, permissionNumber, idLabel) {
+        aclRecords.each { recordz ->
+            def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(recordz."$idLabel")
+            def groupObject = KengaGroup.findById(groupId)
+            if (!(KengaGroupAclEntry.findByKengaAclTableRecordIdentityAndKengaGroup(kengaAclTableRecordIdentity, groupObject))) {
+                new KengaGroupAclEntry(
+                        kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
+                        kengaGroup: groupObject,
+                        mask: permissionNumber
+                ).save(flush: true, failOnError: true)
+            }
+
+//            }
+        }
     }
 
     def createEntityViewFilters(createdGroupName, entityDataCollectorId) {
@@ -402,11 +518,11 @@ class TaskListSyncJob extends Script {
 
     }
 
-    def generateFullFilterQuery(name, groupName){
+    static def generateFullFilterQuery(name, groupName) {
         def entity = EntityView.findByName(name)
-        if (entity){
+        if (entity) {
             def query = """
-                SELECT ${entity.viewFields.collect { it.fieldType == 'Key Field' ? (it.name + ' as keyField') : it.name }.join(",")} FROM ${entity.tableName} WHERE ${(entity.viewFields.find {it ->if(it.name.contains('cluster')){it.name} } )}= '${groupName}'
+                SELECT ${entity.viewFields.collect { it.fieldType == 'Key Field' ? (it.name + ' as keyField') : it.name }.join(",")} FROM ${entity.tableName} WHERE ${(entity.viewFields.find { it -> if (it.name.contains('cluster')) { it.name } })}= '${groupName}'
                 """.toString()
             def res = ["viewQuery": query]
             return res
@@ -414,51 +530,35 @@ class TaskListSyncJob extends Script {
     }
 
     @Transactional
-    def saveGroupMappings(groupId, permission, queryArray){
-        print(queryArray)
-//        loop through the array and assign the acls per iteration
-        queryArray.each{ it ->
+    def saveGroupMappings(groupId, permission, queryArray) {
+        queryArray.each { it ->
             def formName = it.form
             def grpConditionQuery = it.groupConditionQuery
 
             def kengaGroup = KengaGroup.get(groupId)
-//            def form = Form.get(formId)
             def kengaDataTable = KengaDataTable.findByTableName(formName)
-
-            //query records
             def records = AppHolder.withMisSqlNonTx {
                 def query = "select * from ${formName} ${grpConditionQuery}"
                 log.info(query)
                 rows(query.toString())
             }
             log.info("==============size${records.size()}")
-
-            // gets the id label of the kengaDataTable may be __id or id
-            // that's its significance
-            def idLabel= kengaDataTable?.idLabel
-
-            // create entries
-            createAcls(records, groupId,permission, idLabel)
-
-            // after creating the acls of the immediate group, create the function that checks for the parent of groups
-            // until the last parent has no parent
-
-            def parentGroupId = kengaGroup.parentGroup.collect{it.id}[0]
-
-            while(parentGroupId !=null){
-                // getting the parent object which will be used to create the acl
+            def idLabel = kengaDataTable?.idLabel
+            // here add to the query table
+//            QueryTable.create(groupId,permission,records,idLabel)
+            createAclsSaveGroupMappings(records, groupId, permission, idLabel)
+            def parentGroupId = kengaGroup.parentGroup.collect { it.id }[0]
+            while (parentGroupId != null) {
                 def myCurrentObject = kengaGroup.get(parentGroupId)
-
-                // create acl for the parent
-                createAcls(records,myCurrentObject,permission,idLabel)
-
-                // update the parent ID to the new parent of the current parent
-                parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
+                // here add to the query table
+//                QueryTable.create(myCurrentObject,permission,records,idLabel)
+                createAclsSaveGroupMappings(records, myCurrentObject, permission, idLabel)
+                parentGroupId = myCurrentObject.parentGroup.collect { it.id }[0]
             }
         }
     }
 
-    def createAcls(aclRecords,groupId, permissionNumber, idLabel){
+    static def createAclsSaveGroupMappings(aclRecords, groupId, permissionNumber, idLabel) {
         aclRecords.each { record ->
             def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(record."$idLabel")
             new KengaGroupAclEntry(

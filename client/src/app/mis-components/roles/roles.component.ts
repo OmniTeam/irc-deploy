@@ -4,9 +4,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '../../services/alert';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {TagService} from '../../services/tags';
-import {HttpParams} from '@angular/common/http';
-import {GroupsService} from '../../services/groups.service';
 import {RolesService} from '../../services/roles.service';
 
 @Component({

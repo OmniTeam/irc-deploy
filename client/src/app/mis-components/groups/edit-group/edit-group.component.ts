@@ -10,11 +10,11 @@ import {
   Validators
 } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UsersService} from "../../../services/users.service";
-import {AlertService} from "../../../services/alert";
-import {AuthService} from "../../../services/auth.service";
-import {GroupsService} from "../../../services/groups.service";
-import {HttpParams} from "@angular/common/http";
+import {UsersService} from '../../../services/users.service';
+import {AlertService} from '../../../services/alert';
+import {AuthService} from '../../../services/auth.service';
+import {GroupsService} from '../../../services/groups.service';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-group',
@@ -49,8 +49,8 @@ export class EditGroupComponent implements OnInit {
       'name': 'Field Staff'
     }
   ];
-  parents: any
-  permissions =[
+  parents: any;
+  permissions = [
     {
       'name': 'Data Tables'
     },
@@ -60,8 +60,8 @@ export class EditGroupComponent implements OnInit {
     {
       'name': 'Reports'
     },
-  ]
-  users: any
+  ];
+  users: any;
 
 
   get f() {
@@ -69,12 +69,12 @@ export class EditGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.groupsService.getGroups().subscribe(data =>{
-      this.parents=data
-    }, error => {this.alertService.error("Failed to get Parents")})
-    this.usersService.getUsers().subscribe(data =>{
-      this.users=data
-    }, error => {this.alertService.error("Failed to get Users")})
+    this.groupsService.getGroups().subscribe(data => {
+      this.parents = data;
+    }, error => {this.alertService.error('Failed to get Parents'); });
+    this.usersService.getUsers().subscribe(data => {
+      this.users = data;
+    }, error => {this.alertService.error('Failed to get Users'); });
     this.groupsService.getCurrentGroup(this.route.snapshot.params.id).subscribe((results: any) => {
       this.formGroup = this.formBuilder.group({
         name: [results[0]?.name],
@@ -89,10 +89,10 @@ export class EditGroupComponent implements OnInit {
       console.log(
         this.groupsService.deleteCurrentGroup(this.route.snapshot.params.id).subscribe((result) => {
             console.warn(result, 'Group has been deleted');
-            this.alertService.warning(`Group has been deleted`)
-            this.router.navigate(['/aclsEntries']);
+            this.alertService.warning(`Group has been deleted`);
+            this.router.navigate(['/groups']);
           }, error => {
-            this.alertService.error(`Failed to delete Group: ${this.formGroup.controls.name.value}`)
+            this.alertService.error(`Failed to delete Group: ${this.formGroup.controls.name.value}`);
           }
         ));
     }
@@ -106,15 +106,17 @@ export class EditGroupComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
-    const params =new HttpParams()
+    const params = new HttpParams()
       .set('id', this.route.snapshot.params.id)
-      .set('users',submitData.users)
+      .set('users', submitData.users);
 
     this.groupsService.updateGroup(this.route.snapshot.params.id, submitData, params).subscribe((result) => {
-      this.alertService.success(`Group: ${result.name} has been successfully updated`)
-      this.router.navigate(['/aclsEntries']);
+      this.alertService.success(`Group: ${result.name} has been successfully updated`);
+      this.router.navigate(['/groups']);
     }, error => {
-      this.alertService.error(`Failed to update group: ${this.formGroup.controls.name.value}`)
+      this.alertService.error(`Failed to update group: ${this.formGroup.controls.name.value}`);
     });
+
+    this.router.navigate(['/groups']);
   }
 }

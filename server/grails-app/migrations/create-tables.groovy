@@ -3155,4 +3155,50 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "longtext", columnName: "financial", tableName: "grant_letter_of_interest")
     }
 
+    changeSet(author: "omni-tech (generated)", id: "1656595864005-14") {
+        createTable(tableName: "query_table") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "query_tablePK")
+            }
+
+            column(name: "kenga_group_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "query", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "permission", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1656657785112-14") {
+        addColumn(tableName: "query_table") {
+            column(name: "id_label", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1656687777121-14") {
+        addColumn(tableName: "query_table") {
+            column(name: "query_string", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+    changeSet(author: "omni-tech (generated)", id: "1656690506020-132") {
+        dropColumn(columnName: "query_string", tableName: "query_table")
+    }
+
+    changeSet(author: "omni-tech (generated)", id: "1656691348278-132") {
+        dropColumn(columnName: "id_label", tableName: "query_table")
+    }
+    changeSet(author: "omni-tech (generated)", id: "20220701193135-01") {
+        modifyDataType(columnName: "query", newDataType: "LONGTEXT", tableName: "query_table")
+    }
+
 }
