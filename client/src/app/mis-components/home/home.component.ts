@@ -264,11 +264,11 @@ export class HomeComponent implements OnInit {
 
   }
 
-  getRowClass = (row) => {
+  getRowClass = (row, column, value) => {
     return {
-      'row-color2': row.progress == 'Slow Progress',
-      'row-color1': row.progress == 'Within Time',
-      'row-color3': row.progress == 'Late'
+      'row-color2': value === 'Slow Progress',
+      'row-color1': value === 'Within Time',
+      'row-color3': value === 'Late'
     };
   };
 
@@ -416,10 +416,12 @@ export class HomeComponent implements OnInit {
     this.filterCounter.forEach((item) => {
       if (item.filter == filterName) {
         number = item.count;
+        this.perc = Math.round((number/this.taskListRows?.length) * 100)
       }
     });
     if (filterName == 'All') {
       number = this.taskListRows?.length;
+      this.perc = 0
     }
     return number;
   }
@@ -439,6 +441,7 @@ export class HomeComponent implements OnInit {
   }
 
   //filter table with cards
+  perc: any;
   clickWithinTime() {
     this.active_div = 'clickActioned'
     let newFilter = [];

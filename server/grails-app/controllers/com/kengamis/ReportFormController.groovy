@@ -147,11 +147,13 @@ class ReportFormController {
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
 
 
-                    ReportForm rf = ReportForm.findByUserId(it.staffId)
+                    ReportForm rf = ReportForm.findByUserId(it.userId)
                     if (rf != null) {
+                        print rf.reportValues
                         def reportValues = slurper.parseText(rf.reportValues)
 
                         def perfReport = slurper.parseText(reportValues['performanceReport'] as String)
+                        println perfReport
                         perfReport.each { r ->
                             if (r['milestoneId'] == p['milestoneId']) cumulativeAchievement = r['cumulative_achievement']
                         }
