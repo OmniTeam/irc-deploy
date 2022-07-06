@@ -7,8 +7,8 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class LongTermGrantService {
-  application = `${environment.serverUrl}/temp`
-  reviewApplication = `${environment.serverUrl}/temp`;
+  application = `${environment.serverUrl}/longTermGrantApplication`
+  reviewApplication = `${environment.serverUrl}/longTermGrantReview`;
 
   constructor(private http: HttpClient) {
   }
@@ -21,22 +21,22 @@ export class LongTermGrantService {
     return this.http.get(`${this.application}/${id}/`);
   }
 
+  getApplicationByGrantId(grantId) {
+    return this.http.get(`${this.application}/getApplicationByGrantId/${grantId}/`);
+  }
+
   getReviewApplication(id) {
     return this.http.get(`${this.reviewApplication}/${id}/`);
   }
 
-  /***
-   * get by Process Instance Id
-   * */
-  getRecordByProcessInstanceId(route, params: any): Observable<any> {
-    return this.http.get(route, {params});
+  getReviewApplicationByGrantId(grantId) {
+    return this.http.get(`${this.reviewApplication}/getApplicationByGrantId/${grantId}/`);
   }
+
 
   /***
    *   create
    */
-
-
   createApplication(formData): Observable<any> {
     return this.http.post(this.application, formData);
   }
@@ -55,6 +55,13 @@ export class LongTermGrantService {
 
   updateReviewApplication(formData, id): Observable<any> {
     return this.http.put(`${this.reviewApplication}/${id}`, formData);
+  }
+
+
+
+
+  startLongTermGrantJob(grantId): Observable<any> {
+    return this.http.get(`${this.application}/startLongTermGrantJob/${grantId}`);
   }
 
 }

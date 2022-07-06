@@ -3,10 +3,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../../services/countries.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {Validator} from "../../../helpers/validator";
-import {TempDataService} from "../../../services/temp-data.service";
 import {AlertService} from "../../../services/alert";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TaskListService} from "../../../services/task-list.service";
+import {LongTermGrantService} from "../../../services/long-term-grant.service";
 
 @Component({
   selector: 'long-term-application',
@@ -45,9 +44,8 @@ export class LongTermApplicationComponent implements OnInit {
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
-    private tempDataService: TempDataService,
     private alertService: AlertService,
-    private taskListService: TaskListService
+    private longTermGrantService:LongTermGrantService
   ) {
   }
 
@@ -59,7 +57,7 @@ export class LongTermApplicationComponent implements OnInit {
     this.countries = this.countriesService.getListOfAvailableCountries();
 
     if (this.isReadOnly || this.isMakeCorrections) {
-      this.tempDataService.getTempRecordByValue(this.grantId).subscribe((data: any) => {
+      this.longTermGrantService.getApplicationByGrantId(this.grantId).subscribe((data: any) => {
         if (data.some(x => x.type === 'application')) {
           data.forEach(it => {
             if (it.type === 'application') {
@@ -173,16 +171,9 @@ export class LongTermApplicationComponent implements OnInit {
     }
     const formData = this.formGroupLT.value;
 
-    let formDataR: { [key: string]: string } = {
-      type: "application",
-      jsonValue: JSON.stringify(formData),
-    }
-
-    this.tempDataService.getTempRecordByValue(this.grantId).subscribe(data => {
-      if (data.some(x => x.type === 'application')) {
-        data.forEach(it => {
-          if (it.type === 'application') {
-            this.tempDataService.updateTempData(formDataR, it.id).subscribe(res => {
+    this.longTermGrantService.getApplicationByGrantId(this.grantId).subscribe((data:any) => {
+      console.log(data)
+            this.longTermGrantService.updateApplication(formData, data.record.id).subscribe(res => {
               console.log("response", res)
               this.submitted = true
               this.error = false;
@@ -198,10 +189,8 @@ export class LongTermApplicationComponent implements OnInit {
               this.alertService.error(this.errorMessage);
               console.log(error);
             });
-          }
-        });
-      } else {
-        this.tempDataService.createTempData(formDataR).subscribe(res => {
+      },(error) => {
+        this.longTermGrantService.createApplication(formData).subscribe(res => {
           console.log("response", res)
           this.submitted = true
           this.error = false;
@@ -217,7 +206,6 @@ export class LongTermApplicationComponent implements OnInit {
           this.alertService.error(this.errorMessage);
           console.log(error);
         });
-      }
     });
 
     setTimeout(() => {
