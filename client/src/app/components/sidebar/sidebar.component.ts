@@ -100,7 +100,7 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
   {
-    path: 'workPlanList',
+    path: '',
     title: 'Work Plan',
     type: 'sub',
     icontype: 'fa fa-briefcase',
@@ -154,7 +154,7 @@ export const ROUTES: RouteInfo[] = [
     path: '/',
     title: 'Configuration',
     type: 'sub',
-    icontype: 'fas fa-tools text-purple',
+    icontype: 'fas fa-tools',
     isCollapsed: true,
     roles: ['ROLE_SUPER_ADMIN'],
     children: [
@@ -178,7 +178,7 @@ export const ROUTES: RouteInfo[] = [
     path: '',
     title: 'User',
     type: 'sub',
-    icontype: 'fas fa-user-tie text-green',
+    icontype: 'fas fa-user-tie',
     roles: ['ROLE_SUPER_ADMIN'],
     isCollapsed: true,
     children: [
