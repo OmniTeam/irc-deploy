@@ -149,7 +149,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       endDate: ['',[Validators.required]],
       designation: ['', [Validators.required]],
       location: ['',[Validators.required]],
-      milestone: ['',[Validators.required]],
+      milestone: [''],
       activityName: ['',[Validators.required]],
       activityObjectives: [''],
       activityResults: [''],
@@ -220,7 +220,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
       activityName: activityReport.activityName,
-      milestone: activityReport.milestone,
+      milestone: this.budgetLineName,
       startDate: activityReport.startDate,
       status: statusSave
     };
@@ -551,7 +551,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
       activityName: activityReport.activityName,
-      milestone: activityReport.milestone,
+      milestone: this.budgetLineName,
       startDate: activityReport.startDate,
       status: statusSave
     };
