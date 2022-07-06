@@ -8,7 +8,7 @@
       </div>
       <div class="container-fluid" style="margin-top:-15px">
         <div class=" row">
-          <div class=" col-xl-4 col-md-6" (click)="clickWithinTime()">
+          <div class=" col-xl-4 col-md-6" (click)="clickWithinTime('Within Time')">
             <div class=" card card-stats">
               <div>
                 <div class=" row">
@@ -30,7 +30,7 @@
             </div>
           </div>
 
-          <div class=" col-xl-4 col-md-6">
+          <div class=" col-xl-4 col-md-6" (click)="clickWithinTime('Slow Progress')">
             <div class=" card card-stats">
               <div>
                 <div class=" row">
@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <div class=" col-xl-4 col-md-6">
+          <div class=" col-xl-4 col-md-6" (click)="clickWithinTime('Late')">
             <div class=" card card-stats">
               <div>
                 <div class=" row">
@@ -147,7 +147,7 @@
 
         </div>
 
-        <div class=" row" style="margin-top:-15px">
+        <div class=" row" style="margin-top:-15px" [hidden]="true">
           <div class=" col-xl-4 col-md-6">
             <div class=" card card-stats">
               <div>
@@ -223,7 +223,7 @@
     <div class=" col">
       <div class="row">
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 10px;">
+        <div class=" col-md-12" style="margin-top: 10px;margin-bottom: -10px">
           <div class=" row">
             <div class=" col">
 
@@ -249,9 +249,9 @@
                                 (change)="entriesChange($event)"
                                 style="width: 200%;"
                               >
-                                <option value="30" [selected]="entries == 10">30</option>
-                                <option value="60" [selected]="entries == 25">60</option>
-                                <option value="90" [selected]="entries == 50">90</option>
+                                <option value="10" [selected]="entries == 10">10</option>
+                                <option value="25" [selected]="entries == 25">25</option>
+                                <option value="50" [selected]="entries == 50">50</option>
                                 <option value="-1" [selected]="entries == -1">All</option>
                               </select>
                               entries
@@ -321,7 +321,8 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Start Date" prop="startDate"></ngx-datatable-column>
                         <ngx-datatable-column name="End Date" prop="endDate"></ngx-datatable-column>
-                        <ngx-datatable-column name="Progress" headerClass="row-color1" [cellClass]="getRowClass"  prop="progress"></ngx-datatable-column>
+                        <ngx-datatable-column name="Progress" headerClass="row-color1" [cellClass]="getRowClass"
+                                              prop="progress"></ngx-datatable-column>
                       </ngx-datatable>
 
                     </div>
@@ -335,142 +336,47 @@
         <div class=" col-md-12 col-sm-12" style="margin-top: -10px; margin-bottom: -40px">
           <div class=" row">
             <div class=" col">
-              <div class="card">
+              <div class="card" style="">
                 <div class="card-header" style="background-color: #fbca3d">
                   <div class="row">
-                    <h3 style="margin-left: 40px;margin-bottom: -10px">MY ACTIVITIES</h3>
+                    <h3 style="margin-left: 20px;margin-bottom: 10px">MY ACTIVITIES</h3>
                   </div>
                 </div>
                 <div class="card-body col-sm-12">
                   <div class="row" style="margin-bottom: -30px;margin-top: -20px">
-<!--                    <div class=" col-xl-3 col-md-6">-->
-<!--                      <div class=" card card-stats">-->
-<!--                        <div>-->
-<!--                          <div class=" row">-->
-<!--                            <div class=" col">-->
-<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
-<!--                                FEEDBACK-->
-<!--                              </h3>-->
-
-<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.feedback?.length}} </span>-->
-<!--                            </div>-->
-
-<!--                            <div class=" col-auto">-->
-<!--                              <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">-->
-<!--                                <i class=" ni ni-favourite-28"> </i>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class=" col-xl-3 col-md-6">-->
-<!--                      <div class=" card card-stats">-->
-<!--                        <div>-->
-<!--                          <div class=" row">-->
-<!--                            <div class=" col">-->
-<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
-<!--                                REFERRALS-->
-<!--                              </h3>-->
-
-<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.referrals?.length}} </span>-->
-<!--                            </div>-->
-
-<!--                            <div class=" col-auto">-->
-<!--                              <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">-->
-<!--                                <i class=" ni ni-tag"> </i>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class=" col-xl-3 col-md-6">-->
-<!--                      <div class=" card card-stats">-->
-<!--                        <div>-->
-<!--                          <div class=" row">-->
-<!--                            <div class=" col">-->
-<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
-<!--                                QUARTERLY REPORT-->
-<!--                              </h3>-->
-
-<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.quarterly_report?.length}} </span>-->
-<!--                            </div>-->
-
-<!--                            <div class=" col-auto">-->
-<!--                              <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">-->
-<!--                                <i class=" ni ni-like-2"> </i>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class=" col-xl-3 col-md-6">-->
-<!--                      <div class=" card card-stats">-->
-<!--                        <div>-->
-<!--                          <div class=" row">-->
-<!--                            <div class=" col">-->
-<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
-<!--                                ACTIVITY REPORT-->
-<!--                              </h3>-->
-
-<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.activity_report?.length}} </span>-->
-<!--                            </div>-->
-
-<!--                            <div class=" col-auto">-->
-<!--                              <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">-->
-<!--                                <i class=" ni ni-tag"> </i>-->
-<!--                              </div>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-                    <div class="container">
-                      <div class="row">
-                        <div class="col-md-3">
-                          <div class="card-counter primary">
-                            <i class="fa fa-code-fork"></i>
-                            <span class="count-numbers">12</span>
-                            <span class="count-name">Flowz</span>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="card-counter danger">
-                            <i class="fa fa-ticket"></i>
-                            <span class="count-numbers">599</span>
-                            <span class="count-name">Instances</span>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="card-counter success">
-                            <i class="fa fa-database"></i>
-                            <span class="count-numbers">6875</span>
-                            <span class="count-name">Data</span>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="card-counter info">
-                            <i class="fa fa-users"></i>
-                            <span class="count-numbers">35</span>
-                            <span class="count-name">Users</span>
-                          </div>
-                        </div>
+                    <div class=" col-xl-3 col-md-6">
+                      <div class="card-counter info">
+                        <i class="fa fa-solid fa-clipboard-list"></i>
+                        <span class="count-numbers">{{this.feedback?.length}}</span>
+                        <span class="count-name">FEEDBACK</span>
                       </div>
                     </div>
 
+                    <div class=" col-xl-3 col-md-6">
+                      <div class="card-counter primary">
+                        <i class="fa fa-users"></i>
+                        <span class="count-numbers">{{this.referrals?.length}}</span>
+                        <span class="count-name">REFERRALS</span>
+                      </div>
+                    </div>
 
-                    <!--                    <button class="btn btn-default" (click)="createReferral()">New Referral</button>-->
-                    <!--                    <button class="btn btn-default" (click)="createActivityReport()">New Activity Report</button>-->
-                    <!--                    <button class="btn btn-default" (click)="createFeedback()">New Feedback</button>-->
+                    <div class=" col-xl-3 col-md-6">
+                      <div class="card-counter success">
+                        <i class="fa fa-database"></i>
+                        <span class="count-numbers">{{this.quarterly_report?.length}}</span>
+                        <span class="count-name">QUARTERLY REPORT</span>
+                      </div>
+                    </div>
+
+                    <div class=" col-xl-3 col-md-6">
+                      <div class="card-counter danger">
+                        <i class="fa fa-light fa-calendar-check"></i>
+                        <span class="count-numbers">{{this.activity_report?.length}}</span>
+                        <span class="count-name">ACTIVITY REPORT</span>
+                      </div>
+
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -492,12 +398,12 @@
                   <div class="row" *ngFor="let row of taskListRows">
                     <button class="btn" (click)="openForm(row.task_type, row)">
                       <div class="row">
-                        <span style="border-left: 4px solid #2dce89;"></span>
-                        <div class="col text-left" style="display: grid">
-                          <span>{{row.task_case}}</span>
-                          <span>{{ row.task_type | replace: '_' : ' ' }}</span>
-                          <span><b>{{ row.task_name | replace: '_' : ' ' }}</b></span>
-                          <span><i>{{ row.date_assigned | date: 'mediumDate' }}</i></span>
+                        <span style="border-left: 4px solid #fbca3d;"></span>
+                        <div class="col text-left" style="display: grid;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+                          <span><b>Task:  {{ row.task_name | replace: '_' : ' ' }}</b></span>
+                          <span> Case  :  {{row.task_case}}</span>
+                          <span>Process:  {{ row.task_type | replace: '_' : ' ' }}</span>
+                          <span><i>Date:  {{ row.date_assigned | date: 'mediumDate' }}</i></span>
                         </div>
                       </div>
                     </button>
@@ -540,8 +446,6 @@
                       </div>
                         </span>
                       </div>
-
-
                     </button>
                   </div>
                 </div>
