@@ -157,7 +157,7 @@ class UserController {
         }
 
         def userGroup = params.groups as String
-        def currentGroup = KengaGroup.findByName(userGroup)
+        def currentGroup = KengaGroup.findById(userGroup)
         UserGroup.create(currentGroup, currentUser, true)
     }
 
