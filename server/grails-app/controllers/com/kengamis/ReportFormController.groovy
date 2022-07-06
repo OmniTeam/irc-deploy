@@ -129,7 +129,6 @@ class ReportFormController {
     def getMilestonePerformance() {
         def slurper = new JsonSlurper()
         def milestones = []
-
         WorkPlan.all.each {
             def values = slurper.parseText(it.setupValues)
             def performanceIndicators = slurper.parseText(values['indicators'] as String)
@@ -137,7 +136,7 @@ class ReportFormController {
 
             def expenseToDate = ''
             def approvedBudget = ''
-            def cumulativeAchievement = 0
+
             financialBudget.each { f ->
                 expenseToDate = f['totalSpent']
                 approvedBudget = f['approvedAmount']
@@ -146,16 +145,19 @@ class ReportFormController {
                 performanceIndicators.each { p ->
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
 
-
-                    ReportForm rf = ReportForm.findByUserId(it.staffId)
+                    def cumulativeAchievement = 0
+                    ReportForm rf = ReportForm.findByUserId(it.userId)
                     if (rf != null) {
+//                        print rf.reportValues
                         def reportValues = slurper.parseText(rf.reportValues)
 
                         def perfReport = slurper.parseText(reportValues['performanceReport'] as String)
+//                        println perfReport
                         perfReport.each { r ->
-                            if (r['milestoneId'] == p['milestoneId']) cumulativeAchievement = r['cumulative_achievement']
+                            if (r['milestoneId'] == p['milestoneId']){
+                                cumulativeAchievement = r['cumulative_achievement']
+                            }
                         }
-                        print cumulativeAchievement
                     }
                     milestones << [
                             milestoneId          : pm?.id,
@@ -171,7 +173,9 @@ class ReportFormController {
 
                     ]
                 }
+
             }
+
         }
         respond milestones
     }

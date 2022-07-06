@@ -22,6 +22,8 @@ export class HomeComponent implements OnInit {
   displayMilestones: any[];
   overallTarget: any[];
   active_div = '';
+  perc: any;
+  barColor: any;
 
 
   constructor(
@@ -146,6 +148,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  clickReset() {
+    this.active_div=''
+    this.getMilestones()
+  }
+
   getProgramCategories() {
     this.programCategory.getProgramCategories().subscribe((data) => {
       console.log('Categories', data);
@@ -254,6 +261,8 @@ export class HomeComponent implements OnInit {
       return 'Slow Progress';
     } else if (achieved > expected) {
       return 'Within Time';
+    } else {
+      return 'Late';
     }
 
     //   console.log("my date",startDate);
@@ -264,11 +273,11 @@ export class HomeComponent implements OnInit {
 
   }
 
-  getRowClass = (row) => {
+  getRowClass = (row, column, value) => {
     return {
-      'row-color2': row.progress == 'Slow Progress',
-      'row-color1': row.progress == 'Within Time',
-      'row-color3': row.progress == 'Late'
+      'row-color2': value === 'Slow Progress',
+      'row-color1': value === 'Within Time',
+      'row-color3': value === 'Late'
     };
   };
 
@@ -413,15 +422,35 @@ export class HomeComponent implements OnInit {
 
   getNumberOfRecordsForFilter(filterName): number {
     let number = 0;
+    this.setProgressColor(filterName)
     this.filterCounter.forEach((item) => {
       if (item.filter == filterName) {
         number = item.count;
+        this.perc = Math.round((number/this.taskListRows?.length) * 100)
       }
     });
     if (filterName == 'All') {
       number = this.taskListRows?.length;
+      this.barColor === 'red'
+      this.perc = 0
     }
     return number;
+  }
+
+  setProgressColor(filter): any {
+    this.filterCounter.forEach((item) =>{
+      if(item.filter == '0 to 1 Week'){
+        this.barColor = 'primary'
+      } else if (item.filter == '1 to 2 Week'){
+        this.barColor == 'success'
+      } else if (item.filter == '3 to 4 Week'){
+        this.barColor = 'info'
+      } else if (item.filter == 'More than 4 Weeks') {
+        this.barColor == 'danger'
+      }
+    })
+
+    return this.barColor
   }
 
 
@@ -439,11 +468,12 @@ export class HomeComponent implements OnInit {
   }
 
   //filter table with cards
-  clickWithinTime() {
+
+  clickWithinTime(progress) {
     this.active_div = 'clickActioned'
     let newFilter = [];
     this.displayMilestones.filter((a) => {
-      if (a.progress != undefined && a.progress.includes('Within Time')) {
+      if (a.progress != undefined && a.progress === progress) {
         newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
           a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, ''))
       }
