@@ -105,8 +105,9 @@ class DataViewController {
     def dataViewRunNow() {
         def dataViewData
         def viewQuery = params.query as String
+        def view = request.getParameter('params')
         try {
-            def query = "${viewQuery}".toString()
+            def query = "${view}".toString()
             def data = AppHolder.withMisSql {
                 toCSV(it, query)
             }.csv
