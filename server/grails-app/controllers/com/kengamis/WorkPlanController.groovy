@@ -67,7 +67,7 @@ class WorkPlanController {
         }
 
 //        getQuarterlyCommitment(workPlan)
-//        getBudgetItems(workPlan)
+        getBudgetItems(workPlan)
 //        getIndicators(workPlan)
         respond workPlan, [status: CREATED, view: "show"]
     }

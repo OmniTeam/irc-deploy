@@ -6,7 +6,7 @@
           <h5 class=" h2 text-white d-inline-block mb-0">PERFORMANCE SUMMARY</h5>
         </div>
       </div>
-      <div class="container-fluid">
+      <div class="container-fluid" style="margin-top:-15px">
         <div class=" row">
           <div class=" col-xl-4 col-md-6" (click)="clickWithinTime()">
             <div class=" card card-stats">
@@ -22,7 +22,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                      <i class=""> </i>
+                      <i class="fas fa-solid fa-check-double"> </i>
                     </div>
                   </div>
                 </div>
@@ -44,7 +44,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                      <i class=" ni "> </i>
+                      <i class="fas fa-solid fa-adjust"> </i>
                     </div>
                   </div>
                 </div>
@@ -66,7 +66,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                      <i class=" ni"> </i>
+                      <i class="ni ni-bold-down"> </i>
                     </div>
                   </div>
                 </div>
@@ -76,7 +76,7 @@
 
 
         </div>
-        <div class=" row">
+        <div class=" row" style="margin-top:-15px">
 
           <div class=" col-xl-4 col-md-6">
             <div class=" card card-stats">
@@ -92,7 +92,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                      <i class=""> </i>
+                      <i class="ni ni-check-bold"> </i>
                     </div>
                   </div>
                 </div>
@@ -114,7 +114,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                      <i class=""> </i>
+                      <i class="ni ni-chart-bar-32"> </i>
                     </div>
                   </div>
                 </div>
@@ -136,7 +136,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                      <i class=" "> </i>
+                      <i class="fas fa-solid fa-window-minimize"> </i>
                     </div>
                   </div>
                 </div>
@@ -147,8 +147,7 @@
 
         </div>
 
-        <div class=" row">
-
+        <div class=" row" style="margin-top:-15px">
           <div class=" col-xl-4 col-md-6">
             <div class=" card card-stats">
               <div>
@@ -163,7 +162,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                      <i class=" "> </i>
+                      <i class="ni ni-bold-up"> </i>
                     </div>
                   </div>
                 </div>
@@ -185,7 +184,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-orange  text-white rounded-circle shadow">
-                      <i class=" "> </i>
+                      <i class="fas fa-solid fa-sync"> </i>
                     </div>
                   </div>
                 </div>
@@ -206,7 +205,7 @@
 
                   <div class=" col-auto">
                     <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                      <i class=" "> </i>
+                      <i class="fas fa-solid fa-arrow-down"></i>
                     </div>
                   </div>
                 </div>
@@ -224,7 +223,7 @@
     <div class=" col">
       <div class="row">
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+        <div class=" col-md-12 col-sm-12" style="margin-top: 10px;">
           <div class=" row">
             <div class=" col">
 
@@ -238,7 +237,7 @@
                   <div class="row">
 
                     <div class="dataTables_wrapper py-4">
-                      <div class="row" style="display: flex; width: 100%">
+                      <div class="row" style="display: flex; width: 100%; margin-top: -24px">
                         <div class="col-sm-4">
                           <div class="dataTables_length" id="datatable_length">
                             <label>
@@ -303,9 +302,9 @@
                       <ngx-datatable
                         class="bootstrap selection-cell"
                         [columnMode]="'force'"
-                        [headerHeight]="50"
-                        [footerHeight]="50"
-                        [rowClass] = "getRowClass"
+                        [headerHeight]="40"
+                        [footerHeight]="40"
+                        [rowClass]=""
                         [rowHeight]="'auto'"
                         [limit]="entries != -1 ? entries : undefined"
                         [rows]="displayMilestones">
@@ -322,7 +321,7 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Start Date" prop="startDate"></ngx-datatable-column>
                         <ngx-datatable-column name="End Date" prop="endDate"></ngx-datatable-column>
-                        <ngx-datatable-column name="Progress" prop="progress"></ngx-datatable-column>
+                        <ngx-datatable-column name="Progress" headerClass="row-color1" [cellClass]="getRowClass"  prop="progress"></ngx-datatable-column>
                       </ngx-datatable>
 
                     </div>
@@ -333,109 +332,145 @@
           </div>
         </div>
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px">
+        <div class=" col-md-12 col-sm-12" style="margin-top: -10px; margin-bottom: -40px">
           <div class=" row">
             <div class=" col">
-              <div class="card" style="background-color: #fbca3d">
+              <div class="card">
                 <div class="card-header" style="background-color: #fbca3d">
                   <div class="row">
-                    <h3 style="margin-left: 40px;">MY ACTIVITIES</h3>
+                    <h3 style="margin-left: 40px;margin-bottom: -10px">MY ACTIVITIES</h3>
                   </div>
                 </div>
                 <div class="card-body col-sm-12">
-                  <div class="row">
-                              <div class=" col-xl-3 col-md-6">
-                                <div class=" card card-stats">
-                                  <div>
-                                    <div class=" row">
-                                      <div class=" col">
-                                        <h3 class=" card-title text-uppercase text-muted mb-0">
-                                          FEEDBACK
-                                        </h3>
+                  <div class="row" style="margin-bottom: -30px;margin-top: -20px">
+<!--                    <div class=" col-xl-3 col-md-6">-->
+<!--                      <div class=" card card-stats">-->
+<!--                        <div>-->
+<!--                          <div class=" row">-->
+<!--                            <div class=" col">-->
+<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
+<!--                                FEEDBACK-->
+<!--                              </h3>-->
 
-                                        <span class=" h2 font-weight-bold mb-0"> {{this.feedback?.length}} </span>
-                                      </div>
+<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.feedback?.length}} </span>-->
+<!--                            </div>-->
 
-                                      <div class=" col-auto">
-                                        <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                                          <i class=" ni ni-favourite-28"> </i>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+<!--                            <div class=" col-auto">-->
+<!--                              <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">-->
+<!--                                <i class=" ni ni-favourite-28"> </i>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
 
-                    <div class=" col-xl-3 col-md-6">
-                      <div class=" card card-stats">
-                        <div>
-                          <div class=" row">
-                            <div class=" col">
-                              <h3 class=" card-title text-uppercase text-muted mb-0">
-                              REFERRALS
-                              </h3>
+<!--                    <div class=" col-xl-3 col-md-6">-->
+<!--                      <div class=" card card-stats">-->
+<!--                        <div>-->
+<!--                          <div class=" row">-->
+<!--                            <div class=" col">-->
+<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
+<!--                                REFERRALS-->
+<!--                              </h3>-->
 
-                              <span class=" h2 font-weight-bold mb-0"> {{this.referrals?.length}} </span>
-                            </div>
+<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.referrals?.length}} </span>-->
+<!--                            </div>-->
 
-                            <div class=" col-auto">
-                              <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                                <i class=" ni ni-tag"> </i>
-                              </div>
-                            </div>
+<!--                            <div class=" col-auto">-->
+<!--                              <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">-->
+<!--                                <i class=" ni ni-tag"> </i>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+<!--                    <div class=" col-xl-3 col-md-6">-->
+<!--                      <div class=" card card-stats">-->
+<!--                        <div>-->
+<!--                          <div class=" row">-->
+<!--                            <div class=" col">-->
+<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
+<!--                                QUARTERLY REPORT-->
+<!--                              </h3>-->
+
+<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.quarterly_report?.length}} </span>-->
+<!--                            </div>-->
+
+<!--                            <div class=" col-auto">-->
+<!--                              <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">-->
+<!--                                <i class=" ni ni-like-2"> </i>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+<!--                    <div class=" col-xl-3 col-md-6">-->
+<!--                      <div class=" card card-stats">-->
+<!--                        <div>-->
+<!--                          <div class=" row">-->
+<!--                            <div class=" col">-->
+<!--                              <h3 class=" card-title text-uppercase text-muted mb-0">-->
+<!--                                ACTIVITY REPORT-->
+<!--                              </h3>-->
+
+<!--                              <span class=" h2 font-weight-bold mb-0"> {{this.activity_report?.length}} </span>-->
+<!--                            </div>-->
+
+<!--                            <div class=" col-auto">-->
+<!--                              <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">-->
+<!--                                <i class=" ni ni-tag"> </i>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="card-counter primary">
+                            <i class="fa fa-code-fork"></i>
+                            <span class="count-numbers">12</span>
+                            <span class="count-name">Flowz</span>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="card-counter danger">
+                            <i class="fa fa-ticket"></i>
+                            <span class="count-numbers">599</span>
+                            <span class="count-name">Instances</span>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="card-counter success">
+                            <i class="fa fa-database"></i>
+                            <span class="count-numbers">6875</span>
+                            <span class="count-name">Data</span>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="card-counter info">
+                            <i class="fa fa-users"></i>
+                            <span class="count-numbers">35</span>
+                            <span class="count-name">Users</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                              <div class=" col-xl-3 col-md-6">
-                                <div class=" card card-stats">
-                                  <div>
-                                    <div class=" row">
-                                      <div class=" col">
-                                        <h3 class=" card-title text-uppercase text-muted mb-0">
-                                          QUARTERLY REPORT
-                                        </h3>
 
-                                        <span class=" h2 font-weight-bold mb-0"> {{this.quarterly_report?.length}} </span>
-                                      </div>
-
-                                      <div class=" col-auto">
-                                        <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                                          <i class=" ni ni-like-2"> </i>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class=" col-xl-3 col-md-6">
-                                <div class=" card card-stats">
-                                  <div>
-                                    <div class=" row">
-                                      <div class=" col">
-                                        <h3 class=" card-title text-uppercase text-muted mb-0">
-                                          ACTIVITY REPORT
-                                        </h3>
-
-                                        <span class=" h2 font-weight-bold mb-0"> {{this.activity_report?.length}} </span>
-                                      </div>
-
-                                      <div class=" col-auto">
-                                        <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                                          <i class=" ni ni-tag"> </i>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-
-<!--                    <button class="btn btn-default" (click)="createReferral()">New Referral</button>-->
-<!--                    <button class="btn btn-default" (click)="createActivityReport()">New Activity Report</button>-->
-<!--                    <button class="btn btn-default" (click)="createFeedback()">New Feedback</button>-->
+                    <!--                    <button class="btn btn-default" (click)="createReferral()">New Referral</button>-->
+                    <!--                    <button class="btn btn-default" (click)="createActivityReport()">New Activity Report</button>-->
+                    <!--                    <button class="btn btn-default" (click)="createFeedback()">New Feedback</button>-->
                   </div>
                 </div>
               </div>
@@ -486,9 +521,27 @@
                         <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
                           <i class="ni ni-time-alarm"> </i>
                         </div>
-                        <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
-                        <span style="margin-left: 60px; width: 80%; border-bottom: 4px solid #eeeeee"></span>
+                        <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}
+                          ({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
+                        <span style="margin-left: 60px;margin-bottom: -10px; width: 80%; border-bottom: 4px">
+                          <div class="progress-wrapper" style="margin-top: -50px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{this.perc}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar bg-primary" role="progressbar" [attr.aria-valuenow]="perc"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="perc+'%'"></div>
+                        </div>
                       </div>
+                        </span>
+                      </div>
+
+
                     </button>
                   </div>
                 </div>
@@ -497,7 +550,6 @@
             </div>
           </div>
         </div>
-
 
 
       </div>
