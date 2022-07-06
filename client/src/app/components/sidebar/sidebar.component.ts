@@ -136,11 +136,42 @@ export const ROUTES: RouteInfo[] = [
   dataMenu,
   listsMenu,
   {
-    path: 'referrals-list',
+    path: '/referrals',
     title: 'Referrals',
-    type: 'link',
+    type: 'sub',
     icontype: 'ni-single-copy-04 text-pink',
     roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
+    isCollapsed: true,
+    children: [
+      {path: 'list', title: 'Referrals', type: 'link', icontype: 'ni-single-copy-04 text-pink',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+      {path: 'referral-dashboard', title: 'Referral Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+      {path: 'irc-feedback', title: 'Feedback Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+      {path: 'irc-activity', title: 'Activity Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+    ]
   },
   {
     path: 'feedback-list',

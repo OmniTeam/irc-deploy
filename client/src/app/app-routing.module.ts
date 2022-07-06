@@ -197,7 +197,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/tag-type/edit-tag-type/edit-tag-type.module').then(m => m.EditTagTypeModule)
       },
       {
-        path: 'referrals-list', canActivate: [AuthGuard],
+        path: 'referrals', canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
