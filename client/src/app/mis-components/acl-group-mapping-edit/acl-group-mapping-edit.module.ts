@@ -12,7 +12,7 @@ import {FormNamePipe} from '../../form-name-pipe';
 
 
 @NgModule({
-  declarations: [AclGroupMappingEditComponent, FormNamePipe],
+  declarations: [AclGroupMappingEditComponent],
   imports: [
     CommonModule,
     AclGroupMappingEditRoutingModule,

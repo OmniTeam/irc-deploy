@@ -19,7 +19,7 @@ import {fakeBackendProvider} from './helpers/fake-backend-interceptor';
 @NgModule({
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
   ],
   imports: [
     BrowserAnimationsModule,

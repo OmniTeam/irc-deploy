@@ -8,7 +8,7 @@
               <div class=" row">
                 <div class=" col">
                   <h3 class=" card-title text-uppercase text-muted mb-0" style="padding-bottom: 10px">
-                    ACCESS CONTROL LISTS
+                    ACCESS CONTROL QUERIES
                   </h3>
 
                   <div class="row">
@@ -103,21 +103,13 @@
               [width]="15"
               prop="id"
             >
-              <!--<ng-template
-                ngx-datatable-header-template
-                let-value="value"
-                let-allRowsSelected="allRowsSelected"
-                let-selectFn="selectFn"
-              >
-                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
-              </ng-template>-->
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Group Name" prop="kengaGroupId">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/acl-group-mapping-edit/{{row.id}}">{{row?.kengaGroupId}}</a>
+                <a routerLink="/acl-group-mapping-edit/{{row.id}}">{{row?.kengaGroupId | formName:  groups  }}</a>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Query" prop="query"></ngx-datatable-column>
