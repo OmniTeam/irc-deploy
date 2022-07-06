@@ -8,11 +8,10 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {AclGroupMappingEditComponent} from './acl-group-mapping-edit.component';
 import {ComponentsModule} from '../../components/components.module';
-import {FormNamePipe} from '../../form-name-pipe';
 
 
 @NgModule({
-  declarations: [AclGroupMappingEditComponent, FormNamePipe],
+  declarations: [AclGroupMappingEditComponent],
   imports: [
     CommonModule,
     AclGroupMappingEditRoutingModule,
