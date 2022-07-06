@@ -24,6 +24,7 @@ class ActivityReportController {
     def show(String id) {
         respond activityReportService.get(id)
     }
+    //TODO: EDIT SHOULD ALSO UPDATE THE JSON TABLES
 
     @Transactional
     def save(ActivityReport activityReport) {
