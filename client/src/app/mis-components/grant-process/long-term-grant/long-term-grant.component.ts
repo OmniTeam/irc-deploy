@@ -69,6 +69,7 @@ export class LongTermGrantComponent implements OnInit {
   openCommentsPopup = false;
   openRecommendationsPopup = false;
   openPopup = false;
+  submitted: boolean;
 
   constructor(
     private router: Router,
@@ -270,6 +271,7 @@ export class LongTermGrantComponent implements OnInit {
   }
 
   submit(key, status) {
+    this.submitted = true
     switch (key) {
       case 'reviewApplication':
         this.submitReviewApplication(status)
@@ -331,6 +333,7 @@ export class LongTermGrantComponent implements OnInit {
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
+                this.submitted = false
                 this.error = true;
                 this.errorMessage = "Failed to submit";
                 this.alertService.error(this.errorMessage);
@@ -350,6 +353,7 @@ export class LongTermGrantComponent implements OnInit {
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
           }, error => {
+            this.submitted = false
             this.error = true;
             this.errorMessage = "Failed to submit";
             this.alertService.error(this.errorMessage);
@@ -359,13 +363,15 @@ export class LongTermGrantComponent implements OnInit {
         }
       });
     } else {
+      this.submitted = false
       this.alertService.error('Please fill in all required details');
       return;
     }
   }
 
   submitReviewRevisedApplication(status) {
-    if (this.decisionOfReviewProcess != undefined) {
+    if (this.decisionReviewRevisedApplication != undefined &&
+      this.reviewerComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
@@ -396,6 +402,7 @@ export class LongTermGrantComponent implements OnInit {
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
+                this.submitted = false
                 this.error = true;
                 this.errorMessage = "Failed to submitted";
                 this.alertService.error(this.errorMessage);
@@ -415,6 +422,7 @@ export class LongTermGrantComponent implements OnInit {
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
           }, error => {
+            this.submitted = false
             this.error = true;
             this.errorMessage = "Failed to submit";
             this.alertService.error(this.errorMessage);
@@ -424,6 +432,7 @@ export class LongTermGrantComponent implements OnInit {
         }
       });
     } else {
+      this.submitted = false
       this.alertService.error('Please fill in all required details');
       return;
     }
@@ -461,6 +470,7 @@ export class LongTermGrantComponent implements OnInit {
                 this.alertService.success(this.successMessage);
                 this.router.navigate(['/home']);
               }, error => {
+                this.submitted = false
                 this.error = true;
                 this.errorMessage = "Failed to submit";
                 this.alertService.error(this.errorMessage);
@@ -480,6 +490,7 @@ export class LongTermGrantComponent implements OnInit {
             this.alertService.success(this.successMessage);
             this.router.navigate(['/home']);
           }, error => {
+            this.submitted = false
             this.error = true;
             this.errorMessage = "Failed to submit";
             this.alertService.error(this.errorMessage);
@@ -489,6 +500,7 @@ export class LongTermGrantComponent implements OnInit {
         }
       });
     } else {
+      this.submitted = false
       this.alertService.error('Please fill in all required details');
       return;
     }
@@ -496,10 +508,12 @@ export class LongTermGrantComponent implements OnInit {
 
   signAgreement(status) {
     if (this.decisionOfReviewProcess == undefined || this.signAgreementComments == undefined) {
+      this.submitted = false
       this.alertService.error('Please fill in all required details');
       return;
     }
     if (this.decisionOfReviewProcess == 'Yes' && this.dateAgreement == undefined) {
+      this.submitted = false
       this.alertService.error('Please fill in Date when the agreement was signed');
       return;
     }
@@ -534,6 +548,7 @@ export class LongTermGrantComponent implements OnInit {
               this.alertService.success(this.successMessage);
               this.router.navigate(['/home']);
             }, error => {
+              this.submitted = false
               this.error = true;
               this.errorMessage = "Failed to submit";
               this.alertService.error(this.errorMessage);
@@ -552,6 +567,7 @@ export class LongTermGrantComponent implements OnInit {
           this.alertService.success(this.successMessage);
           this.router.navigate(['/home']);
         }, error => {
+          this.submitted = false
           this.error = true;
           this.errorMessage = "Failed to submit";
           this.alertService.error(this.errorMessage);

@@ -121,7 +121,10 @@ class TaskListController {
                         task.taskDefinitionKey == "Make_Revisions_From_ED" ||
                         task.taskDefinitionKey == "Sign_Agreement") {
                     assignee = "PROGRAM_OFFICER"
-                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER")
+                    def query2 = "SELECT user.id as user_id, user.username, program.id as program_id, program.title FROM user INNER JOIN kenga_user_group ON user.id = kenga_user_group.user_id INNER JOIN kenga_group ON kenga_group.id = kenga_user_group.kenga_group_id INNER JOIN program ON program.title = kenga_group.`name` WHERE user.id = '${currentUser.id}' "
+                    def userProgram2 = AppHolder.withMisSql { rows(query2.toString()) }
+                    def result = userProgram2.collect { it['program_id'] }.join(",")
+                    c2 = userRoles.contains("ROLE_PROGRAM_OFFICER") && result.contains(grant.program)
                 }
                 if (task.taskDefinitionKey == "Approve_Application") {
                     assignee = "Executive Director"

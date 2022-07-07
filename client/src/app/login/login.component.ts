@@ -10,6 +10,7 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 
+  wrongCredentials: boolean = false;
   loginForm: FormGroup;
   loading = false;
   submitted = false;
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.submitted = true;
+    this.wrongCredentials = false;
     if (this.loginForm.invalid) {
       return;
     }
@@ -49,13 +51,15 @@ export class LoginComponent implements OnInit {
     )
       .subscribe(success => {
         if (success) {
+          this.wrongCredentials = false;
           this.router.navigate(['/']).then(() =>
-              window.location.reload()
+            window.location.reload()
           );
           // this.authService.isUserLoggedIn.next(true);
           this.authService.getUserPartners();
         }
       }, error => {
+        this.wrongCredentials = true
         console.log(error.status);
       });
   }
