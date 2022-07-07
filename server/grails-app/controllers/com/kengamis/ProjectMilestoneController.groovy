@@ -160,15 +160,15 @@ class ProjectMilestoneController {
                 if (queryC.contains("services")) queryQ = queryC + clause + " date_of_service between '${params.startDate}' and '${params.endDate}'"
                 if (queryC.contains("activity_report")) queryQ = queryC + clause + " start_date >= '${params.startDate}' and end_date <= '${params.endDate}'"
 
-                if (queryQ != null) {
-                    println queryQ
+                println "queryCummulaive ==> $queryC"
 
-                    def quarter = AppHolder.withMisSql { rows(queryQ as String) }.first()
+                def quarter = [total:0]
+                if (queryQ != null) quarter = AppHolder.withMisSql { rows(queryQ as String) }.first()
 
-                    def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                def cumulative = [total:0]
+                if (queryC != null) cumulative = AppHolder.withMisSql { rows(queryC) }.first()
 
-                    milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
-                }
+                milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
 
             } catch (Exception e) {
                 log.error("Error fetching data", e)
