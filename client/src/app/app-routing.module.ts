@@ -74,14 +74,14 @@ const routes: Routes = [
       {
         path: 'workPlan', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
         loadChildren: () => import('./mis-components/work-plan/work-plan-setup.module').then(m => m.WorkPlanSetupModule)
       },
       {
         path: 'workPlan/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
         loadChildren: () => import('./mis-components/work-plan/work-plan-setup.module').then(m => m.WorkPlanSetupModule)
       },
@@ -95,7 +95,7 @@ const routes: Routes = [
       {
         path: 'workPlanList', canActivate: [AuthGuard],
         data: {
-          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
+          userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
         },
         loadChildren: () => import('./mis-components/work-plan/work-plan-list/work-plan-list.module').then(m => m.WorkPlanListModule)
       },
@@ -523,6 +523,20 @@ const routes: Routes = [
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
         },
         loadChildren: () => import('./mis-components/activity-report/activity-form/activity-form.module').then(m => m.ActivityFormModule)
+      },
+      {
+        path: 'irc-activity',
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
+        },
+        loadChildren: () => import('./mis-components/referrals/irc-activity/irc-activity-routing.module').then(m => m.IrcActivityRoutingModule)
+      },
+      {
+        path: 'irc-feedback',
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
+        },
+        loadChildren: () => import('./mis-components/referrals/irc-activity/irc-activity-routing.module').then(m => m.IrcActivityRoutingModule)
       },
       { path: 'feedback-edit/:id',
         data: {

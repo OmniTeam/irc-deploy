@@ -141,15 +141,22 @@ export class GenerateReferralComponent implements OnInit {
   ];
   organization_referred_to = [
     {
-      'name': 'AVSI FOUNDATION'
+      'name': 'IRC'
     },
     {
-      'name': 'JRS'
+      'name': 'Relon'
     },
     {
-      'name': 'REFUGEPOINT'
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
     },
   ];
+
   identification_document = [
     {
       'name': 'National ID'
