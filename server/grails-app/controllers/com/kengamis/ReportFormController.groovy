@@ -129,36 +129,53 @@ class ReportFormController {
     def getMilestonePerformance() {
         def slurper = new JsonSlurper()
         def milestones = []
+        WorkPlan.all.each {
+            def values = slurper.parseText(it.setupValues)
+            def performanceIndicators = slurper.parseText(values['indicators'] as String)
+            def financialBudget = values['budget']
 
-        ReportForm.all.each {
-            def values = slurper.parseText(it.reportValues)
-            def performanceReport = slurper.parseText(values['performanceReport'] as String)
-            def financialReport = slurper.parseText(values['financialReport'] as String)
-            if (performanceReport != null) {
-                performanceReport.each { p ->
+            def expenseToDate = ''
+            def approvedBudget = ''
+
+            financialBudget.each { f ->
+                expenseToDate = f['totalSpent']
+                approvedBudget = f['approvedAmount']
+            }
+            if (performanceIndicators != null) {
+                performanceIndicators.each { p ->
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
-                    def expenseToDate = ''
-                    def approvedBudget = ''
-                    financialReport.each { f ->
-                        if (f['budget_line'] == pm.name) {
-                            expenseToDate = f['expense_to_date']
-                            approvedBudget = f['approved_budget']
 
+                    def cumulativeAchievement = 0
+                    ReportForm rf = ReportForm.findByUserId(it.userId)
+                    if (rf != null) {
+//                        print rf.reportValues
+                        def reportValues = slurper.parseText(rf.reportValues)
+
+                        def perfReport = slurper.parseText(reportValues['performanceReport'] as String)
+//                        println perfReport
+                        perfReport.each { r ->
+                            if (r['milestoneId'] == p['milestoneId']){
+                                cumulativeAchievement = r['cumulative_achievement']
+                            }
                         }
                     }
                     milestones << [
                             milestoneId          : pm?.id,
-                            staffId              : it.userId,
+                            staffId              : it.staffId,
                             milestone            : pm?.name,
-                            overallTarget        : p['overall_target'],
-                            cumulativeAchievement: p['cumulative_achievement'],
-                            percentageAchievement: p['percentage_achievement'],
+                            categoryId           : pm?.programCategoryId,
+                            overallTarget        : p['overallTarget'],
+                            cumulativeAchievement: cumulativeAchievement,
+                            startDate            : p['startDate'],
+                            endDate              : p['endDate'],
                             expenseToDate        : expenseToDate,
                             approvedBudget       : approvedBudget,
 
                     ]
                 }
+
             }
+
         }
         respond milestones
     }

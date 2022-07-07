@@ -126,6 +126,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
    responsiblePerson: any;
    budgetLineName: any;
    singleMilestone: any;
+   userDesignation: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -148,7 +149,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       endDate: ['',[Validators.required]],
       designation: ['', [Validators.required]],
       location: ['',[Validators.required]],
-      milestone: ['',[Validators.required]],
+      milestone: [''],
       activityName: ['',[Validators.required]],
       activityObjectives: [''],
       activityResults: [''],
@@ -219,7 +220,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
       activityName: activityReport.activityName,
-      milestone: activityReport.milestone,
+      milestone: this.budgetLineName,
       startDate: activityReport.startDate,
       status: statusSave
     };
@@ -476,6 +477,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   getBudgetHolderBudgetLines() {
     let staffId = this.budgetHolderId;
+    this.getDesignation()
     let newBudgetLine: any = [];
     let newMilestone: any = [];
     this.budgetHolder.forEach((d) => {
@@ -497,6 +499,16 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
         });
       }
     });
+
+  }
+
+  getDesignation(){
+   let staffId =  this.budgetHolderId
+    this.userService.getCurrentUser(staffId).subscribe(a =>{
+      this.userDesignation = a
+      this.formGroup.get('designation').setValue(this.userDesignation.designation)
+      console.log("user",this.userDesignation.designation);
+    })
 
   }
 
@@ -539,7 +551,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       lessonsLearned: activityReport.lessonsLearned,
       location: activityReport.location,
       activityName: activityReport.activityName,
-      milestone: activityReport.milestone,
+      milestone: this.budgetLineName,
       startDate: activityReport.startDate,
       status: statusSave
     };

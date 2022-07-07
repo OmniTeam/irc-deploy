@@ -16,13 +16,8 @@ const formsMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: [
-    'ROLE_BUDGET_HOLDER',
-    'ROLE_SUPER_ADMIN',
-    'ROLE_ADMIN'
-  ],
-  children: [
-  ]
+  roles: ['ROLE_SUPER_ADMIN'],
+  children: []
 };
 
 const dataMenu: any = {
@@ -31,27 +26,11 @@ const dataMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: [
-    'ROLE_BUDGET_HOLDER',
-    'ROLE_SUPER_ADMIN',
-    'ROLE_ADMIN',
-    'ROLE_REBUILD_DATA_MANAGER'
-  ],
+  roles: ['ROLE_SUPER_ADMIN'],
   children: [
-    {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red',
-      roles: [
-        'ROLE_BUDGET_HOLDER',
-        'ROLE_SUPER_ADMIN',
-        'ROLE_ADMIN',
-        'ROLE_REBUILD_DATA_MANAGER'
-      ], },
+    {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red', roles: [ 'ROLE_SUPER_ADMIN']},
       {path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6', title: 'Services', type: 'link', icontype: 'ni-single-copy-04 text-red',
-      roles: [
-        'ROLE_BUDGET_HOLDER',
-        'ROLE_SUPER_ADMIN',
-        'ROLE_ADMIN',
-        'ROLE_REBUILD_DATA_MANAGER'
-      ], },
+      roles: ['ROLE_SUPER_ADMIN']},
   ]
 };
 
@@ -61,13 +40,8 @@ const listsMenu: any = {
   type: 'sub',
   icontype: 'fas fa-list-alt text-maroon',
   isCollapsed: true,
-  children: [
-  ],
-  roles: [
-    'ROLE_BUDGET_HOLDER',
-    'ROLE_SUPER_ADMIN',
-    'ROLE_ADMIN',
-  ]
+  children: [  ],
+  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_WORK_PLAN'  ]
 };
 
 
@@ -76,7 +50,7 @@ const formSettingsMenu: any = {
   title: 'Form Settings',
   type: 'sub',
   isCollapsed: true,
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
+  roles: ['ROLE_SUPER_ADMIN'],
   children: []
 };
 
@@ -117,71 +91,85 @@ export const ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'fas fa-home',
     roles: [
-      'ROLE_BUDGET_HOLDER',
       'ROLE_SUPER_ADMIN',
       'ROLE_ADMIN',
-      'ROLE_REBUILD_DATA_VIEWER',
-      'ROLE_REBUILD_DATA_MANAGER'
+      'ROLE_FEEDBACK',
+      'ROLE_REFERRALS',
+      'ROLE_WORK_PLAN',
 
     ]
   },
   {
-    path: 'activity-list',
-    title: 'Activity Report',
-    type: 'link',
-    icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER' ],
+    path: '',
+    title: 'Work Plan',
+    type: 'sub',
+    icontype: 'fa fa-briefcase',
+    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN'],
+    isCollapsed: true,
+    children: [
+      { path: 'activity-list', title: 'Activity Report', type: 'link', roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']},
+      { path: 'archive', title: 'Archive', type: 'link', roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']},
+      dataMenu,
+      {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']},
+    ]
   },
-  // formsMenu,
-  dataMenu,
-  listsMenu,
   {
-    path: 'referrals-list',
+    path: '/referrals',
     title: 'Referrals',
-    type: 'link',
-    icontype: 'ni-single-copy-04 text-pink',
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
+    type: 'sub',
+    icontype: 'fa fa-retweet',
+    roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REFERRALS'],
+    isCollapsed: true,
+    children: [
+      {path: 'list', title: 'Referrals', type: 'link', icontype: 'ni-single-copy-04 text-pink',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+      {path: 'referral-dashboard', title: 'Referral Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+      {path: 'irc-feedback', title: 'Feedback Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+      {path: 'irc-activity', title: 'Activity Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_BUDGET_HOLDER',
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_REBUILD_DATA_MANAGER'
+        ], },
+    ]
   },
   {
     path: 'feedback-list',
     title: 'FeedBack',
     type: 'link',
     icontype: 'fa fa-comment-dots',
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_VIEWER', 'ROLE_REBUILD_DATA_MANAGER'],
+    roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK'],
   },
-  {
-    path: 'archive',
-    title: 'Archive',
-    type: 'link',
-    icontype: 'fas fa-tasks text-pink',
-    roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
-  },
-
   {
     path: '/',
     title: 'Admin',
     type: 'sub',
     icontype: 'fas fa-user-cog',
     isCollapsed: true,
-    roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER'],
+    roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
     children: [
-      {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
-      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
-      {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
-      {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
-      {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
-      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_BUDGET_HOLDER', 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REBUILD_DATA_MANAGER']},
-    ]
-  },
 
-  {
-    path: '/',
-    title: 'Set-Up',
-    type: 'sub',
-    icontype: 'fas fa-cog text-blue',
-    isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
-    children: [
+      {path: 'taskList', title: 'Task List', type: 'link', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      // {path: 'programStaff', title: 'Program Staff', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {path: 'issdugdata.net:3000', title: 'Analytics', type: 'analytics', roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
       {
         path: '', title: 'Program', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
         children: [
@@ -189,45 +177,46 @@ export const ROUTES: RouteInfo[] = [
           {path: 'programCategory', title: 'Add Program Category', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
         ]
       },
-      {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']}
+      {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+      {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
     ]
   },
-
   {
     path: '/',
     title: 'Configuration',
     type: 'sub',
-    icontype: 'fas fa-tools text-purple',
+    icontype: 'fas fa-tools',
     isCollapsed: true,
-    roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/],
+    roles: ['ROLE_SUPER_ADMIN'],
     children: [
-      {path: 'forms', title: 'Forms', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+      {path: 'forms', title: 'Forms', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
       formSettingsMenu,
       {
-        path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/],
+        path: '', title: 'Entities', type: 'sub', isCollapsed: true, roles: ['ROLE_SUPER_ADMIN'],
         children: [
-          {path: 'entity', title: 'Entities', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
-          {path: 'entityView', title: 'Entity Views', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
-          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
-          {path: 'dataView', title: 'Data View', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+          {path: 'entity', title: 'Entities', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+          {path: 'entityView', title: 'Entity Views', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+          {path: 'entityViewFilter', title: 'Entity View Filters', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+          {path: 'dataView', title: 'Data View', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
         ]
       },
-      {path: 'tagType', title: 'Tag Type', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
-      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ['ROLE_SUPER_ADMIN'/*, 'ROLE_ADMIN'*/], },
+      {path: 'tags', title: 'Tags', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+      {path: 'tagType', title: 'Tag Type', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+      {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
     ]
   },
   {
     path: '',
     title: 'User',
     type: 'sub',
-    icontype: 'fas fa-user-tie text-green',
-    roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
+    icontype: 'fas fa-user-tie',
+    roles: ['ROLE_SUPER_ADMIN'],
     isCollapsed: true,
     children: [
-      {path: 'groups', title: 'Groups', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-      {path: 'roles', title: 'Roles', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-      {path: 'users', title: 'User Management', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], },
-      {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'], }
+      {path: 'groups', title: 'Groups', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+      {path: 'roles', title: 'Roles', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+      {path: 'users', title: 'User Management', type: 'link', roles: ['ROLE_SUPER_ADMIN'], },
+      {path: 'requestMaps', title: 'Request Maps', type: 'link', roles: ['ROLE_SUPER_ADMIN'], }
     ]
   },
 

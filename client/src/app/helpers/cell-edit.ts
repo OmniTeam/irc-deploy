@@ -102,6 +102,9 @@ export class CellEdit {
         if (type == 'number') {
           input = document.createElement('input');
           input.type = 'number';
+        } else if (type == 'date') {
+          input = document.createElement('input');
+          input.type = 'date';
         } else {
           input = document.createElement('textarea');
           input.setAttribute('rows', '1');

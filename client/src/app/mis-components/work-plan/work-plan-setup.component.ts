@@ -364,7 +364,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     }
 
     const id = uuid();
-    this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: []});
+    this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: [], startDate: '', endDate: ''});
   }
 
   createNewBudgetItem() {
@@ -458,6 +458,25 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
             });
           }
           this.setMilestoneDisaggregation(rowId);
+          break;
+        case 'startDate':
+          if (this.indicators.some(x => x.id === rowId)) {
+            this.indicators.forEach((item) => {
+              if (item.id === rowId) {
+                item.startDate = value;
+
+              }
+            });
+          }
+          break;
+        case 'endDate':
+          if (this.indicators.some(x => x.id === rowId)) {
+            this.indicators.forEach((item) => {
+              if (item.id === rowId) {
+                item.endDate = value;
+              }
+            });
+          }
           break;
       }
     }

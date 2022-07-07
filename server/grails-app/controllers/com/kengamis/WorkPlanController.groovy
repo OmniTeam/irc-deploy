@@ -2,6 +2,7 @@ package com.kengamis
 
 import com.kengamis.tasks.StartCamundaInstancesJob
 import grails.validation.ValidationException
+import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -65,7 +66,10 @@ class WorkPlanController {
             return
         }
 
-        respond workPlan, [status: CREATED, view:"show"]
+//        getQuarterlyCommitment(workPlan)
+        getBudgetItems(workPlan)
+//        getIndicators(workPlan)
+        respond workPlan, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -87,7 +91,7 @@ class WorkPlanController {
             return
         }
 
-        respond workPlan, [status: OK, view:"show"]
+        respond workPlan, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -99,19 +103,18 @@ class WorkPlanController {
 
         //delete all tasks, calendar trigger dates and reports linked to this partner
         def workPlan = workPlanService.get(params.id)
-        def tasks = Archive.findAllByInputVariablesIlike('%' + workPlan.staffId + '%')
-        tasks.each {Archive it ->
+        def tasks = TaskList.findAllByInputVariablesIlike('%' + workPlan.staffId + '%')
+        tasks.each {
             def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
             if (deletedFromCamunda) {
-                ReportForm.findAllByTaskId(it.taskId).each {it.delete()}
-                ReportFormFiles.findAllByTaskId(it.taskId).each {it.delete()}
-                ReportFormRecommendations.findAllByTaskId(it.taskId).each {it.delete()}
-                ReportFormComments.findAllByTaskId(it.taskId).each {it.delete()}
-                TaskList.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportForm.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormFiles.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormRecommendations.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormComments.findAllByTaskId(it.taskId).each { it.delete() }
                 it.delete()
             }
         }
-        CalendarTriggerDates.findAllByWorkPlanId(workPlan.id).each {it.delete()}
+        CalendarTriggerDates.findAllByWorkPlanId(workPlan.id).each { it.delete() }
 
 
         workPlanService.delete(id ?: params.id)
@@ -140,4 +143,78 @@ class WorkPlanController {
         }
         return deleted
     }
+
+    def getQuarterlyCommitment(record) {
+        def slurper = new JsonSlurper()
+        def workPlanId = record.id
+        def quarterlyCommit = slurper.parseText(record['setupValues'] as String)
+        def quarter = quarterlyCommit['quarterlyCommitment']
+        quarter.each {
+            def quarterly = new QuarterlyCommitment(
+                    datePeriod: it['datePeriod'],
+                    workPlanId: workPlanId,
+                    startDate: it['startDate'],
+                    endDate: it['endDate'],
+                    commitment: it['commitment'])
+            quarterly.save(flush: true, failOnError: true)
+        }
+    }
+
+
+    def getBudgetItems(record) {
+        def slurper = new JsonSlurper()
+        def workPlanId = record.id
+        def quarterlyCommit = slurper.parseText(record['setupValues'] as String)
+        def budget = quarterlyCommit['budget']
+        def quarterlyBudget = budget['quarterlyBudget']
+        budget.each {
+            def budgetly = new WorkPLanBudget(
+                    budgetLine: it['datePeriod'],
+                    workPlanId: workPlanId,
+                    totalSpent: it['startDate'],
+                    quarterlySpendingPlan: it['endDate']
+
+            )
+            budgetly.save(flush: true, failOnError: true)
+            quarterlyBudget.each { q ->
+                def qB = new QuarterlyBudget(
+                        workPlanBudgetId: budgetly.id,
+                        workPlanId: workPlanId,
+                        datePeriod: q['datePeriod'],
+                        amount: q['amount']
+                )
+                qB.save(flush: true, failOnError: true)
+            }
+        }
+
+    }
+
+    def getIndicators(record) {
+        def slurper = new JsonSlurper()
+        def workPlanId = record.id
+        def quarterlyCommit = slurper.parseText(record['setupValues'] as String)
+        def budget = quarterlyCommit['indicators']
+        def quarterlyBudget = budget['disaggregation']
+        budget.each {
+            def milestone = new WorkPLanMilestone(
+                    name: it['name'],
+                    workPlanId: workPlanId,
+                    milestoneId: it['milestoneId'],
+                    overallTarget: it['overallTarget']
+
+            )
+            milestone.save(flush: true, failOnError: true)
+            quarterlyBudget.each { q ->
+                def qB = new MilestoneDisaggregation(
+                        milestoneId: milestone.id,
+                        workPlanId: workPlanId,
+                        datePeriod: q['datePeriod'],
+                        target: q['target']
+                )
+                qB.save(flush: true, failOnError: true)
+            }
+        }
+
+    }
+
 }

@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../../services/alert";
 import {DataViewService} from "../../../services/data-view.service";
-import {HttpParams} from "@angular/common/http";
+import {HttpParams, HttpParameterCodec, HttpUrlEncodingCodec} from '@angular/common/http';
 import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -11,7 +11,7 @@ import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
   templateUrl: './create-data-views.component.html',
   styleUrls: ['./create-data-views.component.css']
 })
-export class CreateDataViewsComponent implements OnInit {
+export class CreateDataViewsComponent implements OnInit,HttpParameterCodec {
   @ViewChild('showQueryData') showQueryData: any;
   formGroup: FormGroup;
   entries: number = 5;
@@ -31,6 +31,15 @@ export class CreateDataViewsComponent implements OnInit {
               private modalService: NgbModal,
               private dataViewService: DataViewService,
               private alertService: AlertService) {
+  }
+
+  encodeKey(k: string): string { return this.standardEncoding(k); }
+  encodeValue(v: string): string { return this.standardEncoding(v); }
+  decodeKey(k: string): string { return decodeURIComponent(k); }
+  decodeValue(v: string) { return decodeURIComponent(v); }
+
+   standardEncoding(v: string): string {
+    return encodeURIComponent(v);
   }
 
   ngOnInit(): void {
@@ -64,12 +73,13 @@ export class CreateDataViewsComponent implements OnInit {
 
   runQueryNow() {
     const viewQueryControl = this.formGroup.get('viewQuery');
+    console.log(viewQueryControl);
     this.submittedViewQuery = true;
     let inputValue = (<HTMLInputElement>document.getElementById('query')).value;
     if (inputValue) {
       const params = new HttpParams()
         .set('query', inputValue);
-      this.dataViewService.dataViewRunNow(params).subscribe((data) => {
+      this.dataViewService.dataViewRunNow(inputValue).subscribe((data) => {
         if (data['headerList'].length > 0) {
           this.temp = [...data['dataList']];
           this.rows = data['dataList'];
