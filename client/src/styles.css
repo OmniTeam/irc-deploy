@@ -104,4 +104,12 @@ td a {
   color: #7851a9 !important;
 }
 
+html {
+  overflow:   scroll;
+}
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
 

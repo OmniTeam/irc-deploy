@@ -128,6 +128,13 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
   {
+    path: 'ongoing-tasks',
+    title: 'Tasks',
+    type: 'link',
+    icontype: 'fa fa-tasks',
+    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS'],
+  },
+  {
     path: '',
     title: 'Work Plan',
     type: 'sub',
@@ -140,77 +147,13 @@ export const ROUTES: RouteInfo[] = [
         title: 'Activity Dashboard',
         type: 'link',
         icontype: 'ni-single-copy-04 text-red',
-        roles: [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_WORK_PLAN'
-        ]
+        roles: [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_WORK_PLAN'],
       },
       { path: 'activity-list',
         title: 'Activity Report',
         type: 'link',
         roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']
-      },
-      {
-        path: 'workPlanList',
-        title: 'Work Plan',
-        type: 'link',
-        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']
-      },
-    ]
-  },
-  {
-    path: '',
-    title: 'Tasks',
-    type: 'sub',
-    icontype: 'fa fa-tasks',
-    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS'],
-    isCollapsed: true,
-    children: [
-      {
-        path: 'archive',
-        title: 'Archive',
-        type: 'link',
-        roles: [
-          'ROLE_SUPER_ADMIN',
-          'ROLE_ADMIN',
-          'ROLE_FEEDBACK',
-          'ROLE_REFERRALS',
-          'ROLE_WORK_PLAN',
-        ]
-      },
-      {
-        path: 'ongoing-tasks',
-        title: 'Ongoing Tasks',
-        type: 'link',
-        roles: [
-          'ROLE_SUPER_ADMIN',
-          'ROLE_ADMIN',
-          'ROLE_FEEDBACK',
-          'ROLE_REFERRALS',
-          'ROLE_WORK_PLAN',
-        ]
-      },
-    ]
-  },
-  {
-    path: 'dataView/showData',
-    title: 'Comcare Data',
-    type: 'sub',
-    icontype: 'fa fa-table',
-    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
-    isCollapsed: true,
-    children: [
-      {
-        path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd',
-        title: 'Clients', type: 'link',
-        icontype: 'ni-single-copy-04 text-red',
-        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
-      },
-      {
-        path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6',
-        title: 'Services',
-        type: 'link',
-        icontype: 'ni-single-copy-04 text-red',
-        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
-      },
+      }
     ]
   },
   {
@@ -258,6 +201,29 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
   {
+    path: 'dataView/showData',
+    title: 'Comcare Data',
+    type: 'sub',
+    icontype: 'fa fa-table',
+    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
+    isCollapsed: true,
+    children: [
+      {
+        path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd',
+        title: 'Clients', type: 'link',
+        icontype: 'ni-single-copy-04 text-red',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
+      },
+      {
+        path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6',
+        title: 'Services',
+        type: 'link',
+        icontype: 'ni-single-copy-04 text-red',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
+      },
+    ]
+  },
+  {
     path: '/',
     title: 'Admin',
     type: 'sub',
@@ -278,6 +244,12 @@ export const ROUTES: RouteInfo[] = [
       },
       {path: 'milestones', title: 'Project Milestones', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
       {path: 'users', title: 'Users', type: 'link', roles:  ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN']},
+      {
+        path: 'workPlanList',
+        title: 'Work Plan',
+        type: 'link',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN']
+      },
     ]
   },
   {
