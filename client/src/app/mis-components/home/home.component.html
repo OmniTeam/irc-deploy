@@ -9,7 +9,7 @@
       <div class="container-fluid" style="margin-top:-15px">
         <div class=" row">
           <div class=" col-xl-4 col-md-6" (click)="clickWithinTime('Within Time')">
-            <div class=" card card-stats">
+            <div class=" card card-stats" [ngClass]="{'selected-div':  active_div === 'clickActioned'}">
               <div>
                 <div class=" row">
                   <div class=" col">
@@ -17,7 +17,7 @@
                       Within Time
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{this.displayMilestones?.length}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.withinTime}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -39,7 +39,7 @@
                       Slow Progress
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{15}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.slowProgress}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -61,7 +61,7 @@
                       Late
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{2}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.lateProgress}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -87,7 +87,7 @@
                       Within Budget
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{4}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.withinBudget}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -109,7 +109,7 @@
                       Beyond Budget
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{3}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.beyondBudget}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -131,7 +131,7 @@
                       No Expenditure
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> {{2}} </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.noBudget}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -147,7 +147,7 @@
 
         </div>
 
-        <div class=" row" style="margin-top:-15px" [hidden]="true">
+        <div class=" row" style="margin-top:-15px">
           <div class=" col-xl-4 col-md-6">
             <div class=" card card-stats">
               <div>
@@ -228,9 +228,20 @@
             <div class=" col">
 
               <div class="card">
-                <div class="card-header">
+                <div class="card-header" style="display: flex;justify-content: space-between">
                   <div class="row">
                     <h3 style="margin-left: 40px;">PROGRESS AGAINST WORKPLAN</h3>
+                    <div class="col-md-4" (click)="clickReset()">
+                      <div
+                        class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                      >
+                        <i class=" fa fa-eraser"> </i>
+
+                      </div>
+                      <h3 style="color: black">
+                        Reset
+                      </h3>
+                    </div>
                   </div>
                 </div>
                 <div class="card-body col-sm-12">
@@ -312,17 +323,65 @@
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Target" prop="target">
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Achieved" prop="cumulative"></ngx-datatable-column>
-                        <ngx-datatable-column name="Achievement (%)" prop="achievement"></ngx-datatable-column>
-                        <ngx-datatable-column name="Budget" prop="budget">
+                                                <ngx-datatable-column name="Achieved" prop="cumulative"></ngx-datatable-column>
+                        <ngx-datatable-column name="Achievement (%)" prop="achievement">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>
+                              <div class="progress-wrapper" style="margin-top: -10px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{row.achievement}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar " [style.background-color]="getColor(row.achievement)"
+                               role="progressbar" [attr.aria-valuenow]="row.achievement"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="row.achievement+'%'"></div>
+                        </div>
+                      </div>
+                            </span>
+                          </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Expenses to date" prop="expenses"></ngx-datatable-column>
+                        <ngx-datatable-column name="Budget (Euros)" prop="budget">
+                          <ng-template let-value="value" let-row="row"
+                                       ngx-datatable-cell-template>{{row.budget | number}}</ng-template>
+                        </ngx-datatable-column>
+                        <!--                        <ngx-datatable-column name="Expenses to date" prop="expenses"></ngx-datatable-column>-->
                         <ngx-datatable-column name="Expenditure (%)" prop="efficiency">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>
+                              <div class="progress-wrapper" style="margin-top: -10px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+                          </div>
+                          <div class="progress-percentage">
+                            <span>({{row.expenses | number}}) {{row.efficiency}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="row.efficiency"
+                               aria-valuemin="0" aria-valuemax="100" [style.background-color]="getColor(row.efficiency)"
+                               [style.width]="row.efficiency+'%'"></div>
+                        </div>
+                      </div>
+                            </span>
+                          </ng-template>
                         </ngx-datatable-column>
                         <ngx-datatable-column name="Start Date" prop="startDate"></ngx-datatable-column>
                         <ngx-datatable-column name="End Date" prop="endDate"></ngx-datatable-column>
-                        <ngx-datatable-column name="Progress" headerClass="row-color1" [cellClass]="getRowClass"
-                                              prop="progress"></ngx-datatable-column>
+                        <ngx-datatable-column name="Progress" headerClass="row-color1" prop="progress">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <div class="wrap">
+                              <a id="circle1" [style.background]="getColorProgress(row.progress)">
+                                <span class="tooltip">{{row.progress}}</span>
+                              </a>
+                            </div>
+                            <!--                            <button class="button button5" style="width: 10px" [style.background-color]="getColorProgress(row.progress)" ></button>-->
+                          </ng-template>
+                        </ngx-datatable-column>
                       </ngx-datatable>
 
                     </div>
