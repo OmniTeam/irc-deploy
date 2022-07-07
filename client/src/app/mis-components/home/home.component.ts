@@ -24,6 +24,12 @@ export class HomeComponent implements OnInit {
   active_div = '';
   perc: any;
   barColor: any;
+  withinTime: number;
+  slowProgress: number;
+  lateProgress: number;
+  withinBudget: number;
+  beyondBudget: number;
+  noBudget: number;
 
 
   constructor(
@@ -171,7 +177,7 @@ export class HomeComponent implements OnInit {
             d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, ''));
         });
         this.displayMilestones = milestones;
-
+        this.cardsData()
       }
     });
   }
@@ -190,10 +196,10 @@ export class HomeComponent implements OnInit {
       if (d.staffId === staffId) {
         staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
           d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, ''));
-        console.log(d);
       }
     });
     this.displayMilestones = staffMilestones;
+    this.cardsData()
   }
 
   getRow(id, assignee, taskName, type, dateAssigned, taskCase): OngoingTask {
@@ -213,15 +219,15 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: string, expenses: string, efficiency: string, endDate: string, startDate: string, progress: any) {
+  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: number, expenses: number, efficiency: string, endDate: string, startDate: string, progress: any) {
     return (
       {
         milestone: milestone,
         target: target,
         cumulative: cumulative,
         achievement: this.getEfficiency(target, cumulative),
-        budget: budget,
-        expenses: expenses,
+        budget: Math.round((budget/4100)),
+        expenses: Math.round((expenses/4100)),
         startDate: startDate,
         endDate: endDate,
         efficiency: this.getEfficiency(budget, expenses),
@@ -257,13 +263,14 @@ export class HomeComponent implements OnInit {
 
     let expected = daily * newDays;
 
-    if (achieved <= expected) {
+    if (achieved >= expected * 0.5 && achieved <= expected * 0.7) {
       return 'Slow Progress';
-    } else if (achieved > expected) {
+    } else if (achieved > expected * 0.7) {
       return 'Within Time';
     } else {
       return 'Late';
     }
+
 
     //   console.log("my date",startDate);
     //   let diff =  Math.abs(endDate - startDate)
@@ -465,9 +472,35 @@ export class HomeComponent implements OnInit {
       }
     });
     this.displayMilestones = staffMilestones
+    this.cardsData()
   }
 
+  cardsData() {
+    this.withinTime = this.displayMilestones.filter(a => a.progress.includes("Within Time")).length;
+    this.slowProgress = this.displayMilestones.filter(a => a.progress.includes("Slow Progress")).length;
+    this.lateProgress = this.displayMilestones.filter(a => a.progress.includes("Late")).length;
+    this.withinBudget = this.displayMilestones.filter(a => a.efficiency < 100).length;
+    this.beyondBudget = this.displayMilestones.filter(a => a.efficiency > 100).length;
+    this.noBudget = this.displayMilestones.filter(a => a.efficiency <= 0).length;
+
+    // this. = this.feedback.filter(a => a.currentStatusOfFeedback.includes("No Actioned Required")).length
+    // this.feedbackForwarded = this.feedback.filter(a => a.currentStatusOfFeedback.includes("Forwarded For Action")).length
+  }
+
+
   //filter table with cards
+  backgroundColor: string
+
+  getColor(achievement) {
+    if(achievement >= 80 && achievement <= 100){
+      return 'green'
+    } else if (achievement < 80 && achievement >= 50){
+      return 'orange'
+    } else {
+      return 'red'
+    }
+  }
+
 
   clickWithinTime(progress) {
     this.active_div = 'clickActioned'
@@ -479,6 +512,16 @@ export class HomeComponent implements OnInit {
       }
     });
     console.log(newFilter);
+    this.cardsData()
     this.displayMilestones = newFilter
+  }
+  getColorProgress(prog){
+    if(prog === 'Within Time'){
+      return 'green'
+    } else if (prog === 'Slow Progress'){
+      return 'orange'
+    } else {
+      return 'red'
+    }
   }
 }

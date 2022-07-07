@@ -146,18 +146,21 @@ class ReportFormController {
                     ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
 
                     def cumulativeAchievement = 0
-                    ReportForm rf = ReportForm.findByUserId(it.userId)
-                    if (rf != null) {
-//                        print rf.reportValues
-                        def reportValues = slurper.parseText(rf.reportValues)
 
+
+                    def query = "SELECT report_values FROM report_form WHERE user_id IN (SELECT staff_id FROM work_plan WHERE setup_values LIKE '%${p['milestoneId']}%')"
+                    def result = AppHolder.withMisSql { rows(query.toString()) }
+
+                    if (result != null) {
+                        def reportValues = slurper.parseText(result['report_values'] as String)
                         def perfReport = slurper.parseText(reportValues['performanceReport'] as String)
-//                        println perfReport
+
                         perfReport.each { r ->
-                            if (r['milestoneId'] == p['milestoneId']){
+                            if ((r['milestoneId'] as String).contains(p['milestoneId'] as String)){
                                 cumulativeAchievement = r['cumulative_achievement']
                             }
                         }
+
                     }
                     milestones << [
                             milestoneId          : pm?.id,
