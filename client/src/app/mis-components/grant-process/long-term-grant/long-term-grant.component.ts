@@ -123,8 +123,8 @@ export class LongTermGrantComponent implements OnInit {
 
   setData(task) {
     this.taskRecord = task
-    this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((application: any) => {
-      this.applicationId = application.id;
+    this.longTermGrantService.getApplicationByGrantId(task.grantId).subscribe((application: any) => {
+      this.applicationId = application.record.id;
     })
     if (task.taskDefinitionKey === "Submit_Long_Term_Grant") {
       this.isApplication = true;
@@ -132,17 +132,18 @@ export class LongTermGrantComponent implements OnInit {
     if (task.taskDefinitionKey === "Review_Long-term_Grant_Application") {
       this.isReviewApplication = true;
       this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
-        data.record.forEach((it) => {
-          if (it.type == "reviewApplication") {
-            console.log('review record available', data)
-            let results = JSON.parse(it.json_value)
-            this.isConceptInline = results.isConceptInline
-            this.doesItAdhere = results.doesItAdhere
-            this.decisionOfReviewProcess = results.decision
-            this.areTheyAdhering = results.areTheyAdhering
-            this.reviewerComments = results.comments
-          }
-        })
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'reviewApplication') {
+              console.log("reviewApplication", record)
+              this.isConceptInline = record.isConceptInLine
+              this.doesItAdhere = record.doesItAdhere
+              this.decisionOfReviewProcess = record.decision
+              this.areTheyAdhering = record.areTheyAdhering
+              this.reviewerComments = record.comments
+            }
+          })
+        }
       })
     }
     if (task.taskDefinitionKey === "Make_Revisions_On_Application") {
@@ -151,44 +152,48 @@ export class LongTermGrantComponent implements OnInit {
     if (task.taskDefinitionKey === "Review_Revised_Application") {
       this.isReviewRevisedApplication = true;
       this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
-        data.record.forEach((it) => {
-          if (it.type == "reviewRevisedApplication") {
-            console.log('review record available', data)
-            let results = JSON.parse(it.json_value)
-            this.decisionOfReviewProcess = results.decision
-            this.reviewerComments = results.comments
-          }
-        })
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'reviewRevisedApplication') {
+              console.log(record)
+              this.decisionOfReviewProcess = record.decision
+              this.reviewerComments = record.comments
+            }
+          })
+        }
       })
     }
+
     if (task.taskDefinitionKey === "Make_Revisions_From_ED") {
       this.isMakeRevisionsEdApplication = true;
     }
     if (task.taskDefinitionKey === "Approve_Application") {
       this.isApproveApplication = true;
       this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
-        data.record.forEach((it) => {
-          if (it.type == "approveApplication") {
-            console.log('review record available', data)
-            let results = JSON.parse(it.json_value)
-            this.decisionOfReviewProcess = results.decision
-            this.approverComments = results.comments
-          }
-        })
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'approveApplication') {
+              console.log("approveApplication", record)
+              this.decisionOfReviewProcess = record.decision
+              this.approverComments = record.comments
+            }
+          })
+        }
       })
     }
     if (task.taskDefinitionKey === "Sign_Agreement") {
       this.isSignAgreement = true;
       this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
-        data.record.forEach((it) => {
-          if (it.type == "signAgreement") {
-            console.log('sign record available', data)
-            let results = JSON.parse(it.json_value)
-            this.decisionOfReviewProcess = results.decision
-            this.signAgreementComments = results.comments
-            this.dateAgreement = results.dateAgreement
-          }
-        })
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'signAgreement') {
+              console.log(record)
+              this.decisionOfReviewProcess = record.decision
+              this.signAgreementComments = record.comments
+              this.dateAgreement = record.dateOfAgreement
+            }
+          })
+        }
       })
     }
 
@@ -200,12 +205,12 @@ export class LongTermGrantComponent implements OnInit {
   getAllComments() {
     this.loading = true;
     this.comments = []
-    this.longTermGrantService.getReviewApplicationByGrantId(this.grantId).subscribe((data: any) => {
-      data.record.forEach(results => {
-        if (results != undefined) {
+    this.longTermGrantService.getReviewApplications().subscribe((data: any) => {
+      if (data != undefined) {
+        data.forEach(results => {
           if (results.comments != "" && results.comments != undefined) this.comments.push(new CommentNode(results.grantId, results.comments, results.user, [], [], null));
-        }
-      });
+        })
+      }
       this.loading = false;
     }, error => {
       this.loading = false;
@@ -215,16 +220,17 @@ export class LongTermGrantComponent implements OnInit {
   getAllRecommendations() {
     this.loading = true;
     this.recommendations = []
-    this.longTermGrantService.getReviewApplicationByGrantId(this.grantId).subscribe((data: any) => {
-      data.record.forEach(results => {
-        if (results != undefined) {
-          if (results.recommendations != "" && results.recommendations != undefined) this.recommendations.push(new CommentNode(results.grantId, results.recommendations, null, [], [], null));
+    this.longTermGrantService.getReviewApplications().subscribe((data: any) => {
+        if (data != undefined) {
+          data.forEach(results => {
+            if (results.recommendations != "" && results.recommendations != undefined) this.recommendations.push(new CommentNode(results.grantId, results.recommendations, null, [], [], null));
+          })
         }
-      });
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-    })
+        this.loading = false;
+      }, error => {
+        this.loading = false;
+      }
+    )
   }
 
   viewComments(): void {
@@ -302,7 +308,7 @@ export class LongTermGrantComponent implements OnInit {
         user: this.authService.getLoggedInUsername(),
         definitionKey: this.definitionKey,
         processInstanceId: this.processInstanceId,
-        isConceptInline: this.isConceptInline,
+        isConceptInLine: this.isConceptInline,
         doesItAdhere: this.doesItAdhere,
         areTheyAdhering: this.areTheyAdhering,
         decision: this.decisionOfReviewProcess,
@@ -312,46 +318,48 @@ export class LongTermGrantComponent implements OnInit {
       }
 
       this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
-        response.record.forEach(it => {
-          if (it.type === 'reviewApplication') {
-            this.longTermGrantService.updateReviewApplication(formData, it.id).subscribe((data) => {
-              console.log('response', data)
-              this.error = false;
-              this.success = true;
-              this.successMessage = "Success";
-              this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
-              this.statusChangedHandler(status)
-              this.alertService.success(this.successMessage);
-              this.router.navigate(['/home']);
-            }, error => {
-              this.submitted = false
-              this.error = true;
-              this.errorMessage = "Failed to submit";
-              this.alertService.error(this.errorMessage);
-              this.success = false;
-              console.log(error);
-            });
-          }
-        })
-      }, error => {
-        this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Submitted";
-          this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.submitted = false
-          this.error = true;
-          this.errorMessage = "Failed to submit";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      });
+        if (response.some(x => x.type === 'reviewApplication')) {
+          response.forEach(record => {
+            if (record.type === 'reviewApplication') {
+              this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Success";
+                this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.submitted = false
+                this.error = true;
+                this.errorMessage = "Failed to submit";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          });
+        } else {
+          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.taskRecord.outputVariables = '{"ReviewLongTerm": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.submitted = false
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      }, error => console.log(error));
     } else {
       this.submitted = false
       this.alertService.error('Please fill in all required details');
@@ -375,46 +383,48 @@ export class LongTermGrantComponent implements OnInit {
       }
 
       this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
-        response.recordforEach(it => {
-          if (it.type === 'reviewRevisedApplication') {
-            this.longTermGrantService.updateReviewApplication(formData, it.id).subscribe((data) => {
-              console.log('response', data)
-              this.error = false;
-              this.success = true;
-              this.successMessage = "Success";
-              this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
-              this.statusChangedHandler(status)
-              this.alertService.success(this.successMessage);
-              this.router.navigate(['/home']);
-            }, error => {
-              this.submitted = false
-              this.error = true;
-              this.errorMessage = "Failed to submitted";
-              this.alertService.error(this.errorMessage);
-              this.success = false;
-              console.log(error);
-            });
-          }
-        })
-      }, error => {
-        this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Submitted";
-          this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.submitted = false
-          this.error = true;
-          this.errorMessage = "Failed to submit";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      });
+        if (response.some(x => x.type === 'reviewRevisedApplication')) {
+          response.forEach(record => {
+            if (record.type === 'reviewRevisedApplication') {
+              this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Success";
+                this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.submitted = false
+                this.error = true;
+                this.errorMessage = "Failed to submitted";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          });
+        } else {
+          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.taskRecord.outputVariables = '{"ReviewApplication": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.submitted = false
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      }, error => console.log(error));
     } else {
       this.submitted = false
       this.alertService.error('Please fill in all required details');
@@ -437,46 +447,48 @@ export class LongTermGrantComponent implements OnInit {
       }
 
       this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
-        response.recordforEach(it => {
-          if (it.type === 'approveApplication') {
-            this.longTermGrantService.updateReviewApplication(formData, it.id).subscribe((data) => {
-              console.log('response', data)
-              this.error = false;
-              this.success = true;
-              this.successMessage = "Success";
-              this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
-              this.statusChangedHandler(status)
-              this.alertService.success(this.successMessage);
-              this.router.navigate(['/home']);
-            }, error => {
-              this.submitted = false
-              this.error = true;
-              this.errorMessage = "Failed to submit";
-              this.alertService.error(this.errorMessage);
-              this.success = false;
-              console.log(error);
-            });
-          }
-        })
-      }, error => {
-        this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Submitted";
-          this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.submitted = false
-          this.error = true;
-          this.errorMessage = "Failed to submit";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      });
+        if (response.some(x => x.type === 'approveApplication')) {
+          response.forEach(record => {
+            if (record.type === 'approveApplication') {
+              this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
+                console.log('response', data)
+                this.error = false;
+                this.success = true;
+                this.successMessage = "Success";
+                this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
+                this.statusChangedHandler(status)
+                this.alertService.success(this.successMessage);
+                this.router.navigate(['/home']);
+              }, error => {
+                this.submitted = false
+                this.error = true;
+                this.errorMessage = "Failed to submit";
+                this.alertService.error(this.errorMessage);
+                this.success = false;
+                console.log(error);
+              });
+            }
+          });
+        } else {
+          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted";
+            this.taskRecord.outputVariables = '{"Approve": "' + this.decisionOfReviewProcess + '"}'
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.submitted = false
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      }, error => console.log(error));
     } else {
       this.submitted = false
       this.alertService.error('Please fill in all required details');
@@ -503,51 +515,53 @@ export class LongTermGrantComponent implements OnInit {
       definitionKey: this.definitionKey,
       processInstanceId: this.processInstanceId,
       decision: this.decisionOfReviewProcess,
-      dateAgreement: this.dateAgreement,
+      dateOfAgreement: this.dateAgreement,
       comments: this.signAgreementComments,
       type: "signAgreement",
       status: status
     }
 
     this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
-      response.recordforEach(it => {
-        if (it.type === 'signAgreement') {
-          this.longTermGrantService.updateReviewApplication(formData, it.id).subscribe((data) => {
-            console.log('response', data)
-            this.error = false;
-            this.success = true;
-            this.successMessage = "Success";
-            this.statusChangedHandler(status)
-            this.alertService.success(this.successMessage);
-            this.router.navigate(['/home']);
-          }, error => {
-            this.submitted = false
-            this.error = true;
-            this.errorMessage = "Failed to submit";
-            this.alertService.error(this.errorMessage);
-            this.success = false;
-            console.log(error);
-          });
-        }
-      })
-    }, error => {
-      this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
-        console.log('response', data)
-        this.error = false;
-        this.success = true;
-        this.successMessage = "Submitted";
-        this.statusChangedHandler(status)
-        this.alertService.success(this.successMessage);
-        this.router.navigate(['/home']);
-      }, error => {
-        this.submitted = false
-        this.error = true;
-        this.errorMessage = "Failed to submit";
-        this.alertService.error(this.errorMessage);
-        this.success = false;
-        console.log(error);
-      });
-    });
+      if (response.some(x => x.type === 'signAgreement')) {
+        response.forEach(record => {
+          if (record.type === 'signAgreement') {
+            this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
+              console.log('response', data)
+              this.error = false;
+              this.success = true;
+              this.successMessage = "Success";
+              this.statusChangedHandler(status)
+              this.alertService.success(this.successMessage);
+              this.router.navigate(['/home']);
+            }, error => {
+              this.submitted = false
+              this.error = true;
+              this.errorMessage = "Failed to submit";
+              this.alertService.error(this.errorMessage);
+              this.success = false;
+              console.log(error);
+            });
+          }
+        });
+      } else {
+        this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
+          console.log('response', data)
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Submitted";
+          this.statusChangedHandler(status)
+          this.alertService.success(this.successMessage);
+          this.router.navigate(['/home']);
+        }, error => {
+          this.submitted = false
+          this.error = true;
+          this.errorMessage = "Failed to submit";
+          this.alertService.error(this.errorMessage);
+          this.success = false;
+          console.log(error);
+        });
+      }
+    }, error => console.log(error));
   }
 
   cancel() {

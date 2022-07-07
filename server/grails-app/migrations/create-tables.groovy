@@ -3372,5 +3372,44 @@ databaseChangeLog = {
             }
         }
     }
+    changeSet(author: "omni-tech (generated)", id: "1656687235436561-14") {
+        addColumn(tableName: "long_term_grant_application") {
+            column(name: "project_proposed", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+    changeSet(author: "bruno (generated)", id: "1657200535467-14") {
+        addColumn(tableName: "long_term_grant_application") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657200535467-15") {
+        addColumn(tableName: "long_term_grant_review") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657200535467-17") {
+        addColumn(tableName: "long_term_grant_application") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657200535467-18") {
+        addColumn(tableName: "long_term_grant_review") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
 
 }

@@ -17,6 +17,14 @@ export class LongTermGrantService {
    *   get
    */
 
+  getApplications() {
+    return this.http.get(`${this.application}`);
+  }
+
+  getReviewApplications() {
+    return this.http.get(`${this.reviewApplication}`);
+  }
+
   getApplication(id) {
     return this.http.get(`${this.application}/${id}/`);
   }

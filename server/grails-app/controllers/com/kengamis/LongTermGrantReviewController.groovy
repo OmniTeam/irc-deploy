@@ -29,6 +29,7 @@ class LongTermGrantReviewController {
 
     @Transactional
     def save(LongTermGrantReview longTermGrantReview) {
+        println longTermGrantReview.errors
         if (longTermGrantReview == null) {
             render status: NOT_FOUND
             return
@@ -51,6 +52,7 @@ class LongTermGrantReviewController {
 
     @Transactional
     def update(LongTermGrantReview longTermGrantReview) {
+        println longTermGrantReview.errors
         if (longTermGrantReview == null) {
             render status: NOT_FOUND
             return
@@ -84,7 +86,7 @@ class LongTermGrantReviewController {
     }
 
     def getApplicationByGrantId(String id) {
-        def data = [record: LongTermGrantReview.findByGrantId(id)]
+        def data = LongTermGrantReview.where{grantId == id}.list(sort: 'lastUpdated', order: 'desc')
         respond data
     }
 }

@@ -18,6 +18,9 @@ class LongTermGrantReview {
     String doesItAdhere
     String areTheyAdhering
 
+    Date dateCreated
+    Date lastUpdated
+
     static mapping = {
         id generator: 'uuid2'
         comments type: 'text'

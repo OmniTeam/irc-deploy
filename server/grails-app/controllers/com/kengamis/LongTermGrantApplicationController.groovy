@@ -30,6 +30,7 @@ class LongTermGrantApplicationController {
 
     @Transactional
     def save(LongTermGrantApplication longTermGrantApplication) {
+        println longTermGrantApplication.errors
         if (longTermGrantApplication == null) {
             render status: NOT_FOUND
             return
@@ -52,6 +53,7 @@ class LongTermGrantApplicationController {
 
     @Transactional
     def update(LongTermGrantApplication longTermGrantApplication) {
+        println longTermGrantApplication.errors
         if (longTermGrantApplication == null) {
             render status: NOT_FOUND
             return

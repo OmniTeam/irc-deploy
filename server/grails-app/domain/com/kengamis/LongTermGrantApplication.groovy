@@ -6,6 +6,7 @@ class LongTermGrantApplication {
     String projectTitle
     String projectDuration
     String projectAmount
+    String projectProposed
     String amountRequested
     String funding
     String nameAuthorizedSignatory
@@ -32,6 +33,9 @@ class LongTermGrantApplication {
     String processInstanceId
     String definitionKey
     String status
+
+    Date dateCreated
+    Date lastUpdated
 
     static mapping = {
         id generator: 'uuid2'
