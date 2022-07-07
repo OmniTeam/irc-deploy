@@ -6,6 +6,7 @@ import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.componen
 import {AuthGuard} from './guards/auth.guard';
 import {LoggedInGuard} from './guards/loggedin.guard';
 import {Roles} from './models/roles';
+// @ts-ignore
 const routes: Routes = [
   {
     path: '',
@@ -41,6 +42,13 @@ const routes: Routes = [
           userRoles: [] // All User Can Access but must be login
         },
         loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
+      },
+      {
+        path: 'ongoing-tasks', canActivate: [AuthGuard],
+        data: {
+          userRoles: [] // All User Can Access but must be login
+        },
+        loadChildren: () => import('./mis-components/ongoing-tasks/ongoing-tasks.module').then(m => m.OngoingTasksModule)
       },
       {
         path: 'forms', canActivate: [AuthGuard],
@@ -94,7 +102,7 @@ const routes: Routes = [
       {
         path: 'archive', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         },
         loadChildren: () => import('./mis-components/archive/archive.module').then(m => m.ArchiveModule)
       },
@@ -499,7 +507,7 @@ const routes: Routes = [
       {
         path: 'dataView/showData/:id', canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN, Roles.ROLE_REFERRALS, Roles.ROLE_FEEDBACK]
         },
         loadChildren: () => import('./mis-components/data-views/data-view-table/data-view-table.module').then(m => m.DataViewTableModule)
       },

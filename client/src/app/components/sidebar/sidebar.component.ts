@@ -26,11 +26,40 @@ const dataMenu: any = {
   type: 'sub',
   icontype: 'ni-single-copy-04 text-red',
   isCollapsed: true,
-  roles: ['ROLE_SUPER_ADMIN'],
+  roles: [
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN',
+    'ROLE_FEEDBACK',
+    'ROLE_REFERRALS',
+    'ROLE_WORK_PLAN',
+  ],
   children: [
-    {path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd', title: 'Clients', type: 'link', icontype: 'ni-single-copy-04 text-red', roles: [ 'ROLE_SUPER_ADMIN']},
-      {path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6', title: 'Services', type: 'link', icontype: 'ni-single-copy-04 text-red',
-      roles: ['ROLE_SUPER_ADMIN']},
+    {
+      path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd',
+      title: 'Clients',
+      type: 'link',
+      icontype: 'ni-single-copy-04 text-red',
+      roles: [
+        'ROLE_SUPER_ADMIN',
+        'ROLE_ADMIN',
+        'ROLE_FEEDBACK',
+        'ROLE_REFERRALS',
+        'ROLE_WORK_PLAN',
+      ]
+    },
+    {
+      path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6',
+      title: 'Services',
+      type: 'link',
+      icontype: 'ni-single-copy-04 text-red',
+        roles: [
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_FEEDBACK',
+          'ROLE_REFERRALS',
+          'ROLE_WORK_PLAN',
+        ]
+      },
   ]
 };
 
@@ -96,7 +125,6 @@ export const ROUTES: RouteInfo[] = [
       'ROLE_FEEDBACK',
       'ROLE_REFERRALS',
       'ROLE_WORK_PLAN',
-
     ]
   },
   {
@@ -107,10 +135,82 @@ export const ROUTES: RouteInfo[] = [
     roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN'],
     isCollapsed: true,
     children: [
-      { path: 'activity-list', title: 'Activity Report', type: 'link', roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']},
-      { path: 'archive', title: 'Archive', type: 'link', roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']},
-      dataMenu,
-      {path: 'workPlanList', title: 'Work Plan', type: 'link', roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']},
+      {
+        path: 'irc-activity',
+        title: 'Activity Dashboard',
+        type: 'link',
+        icontype: 'ni-single-copy-04 text-red',
+        roles: [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_WORK_PLAN'
+        ]
+      },
+      { path: 'activity-list',
+        title: 'Activity Report',
+        type: 'link',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']
+      },
+      {
+        path: 'workPlanList',
+        title: 'Work Plan',
+        type: 'link',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN']
+      },
+    ]
+  },
+  {
+    path: '',
+    title: 'Tasks',
+    type: 'sub',
+    icontype: 'fa fa-tasks',
+    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS'],
+    isCollapsed: true,
+    children: [
+      {
+        path: 'archive',
+        title: 'Archive',
+        type: 'link',
+        roles: [
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_FEEDBACK',
+          'ROLE_REFERRALS',
+          'ROLE_WORK_PLAN',
+        ]
+      },
+      {
+        path: 'ongoing-tasks',
+        title: 'Ongoing Tasks',
+        type: 'link',
+        roles: [
+          'ROLE_SUPER_ADMIN',
+          'ROLE_ADMIN',
+          'ROLE_FEEDBACK',
+          'ROLE_REFERRALS',
+          'ROLE_WORK_PLAN',
+        ]
+      },
+    ]
+  },
+  {
+    path: 'dataView/showData',
+    title: 'Comcare Data',
+    type: 'sub',
+    icontype: 'fa fa-table',
+    roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
+    isCollapsed: true,
+    children: [
+      {
+        path: '94a360ee-9fef-4659-9b08-ed1aa8a24ccd',
+        title: 'Clients', type: 'link',
+        icontype: 'ni-single-copy-04 text-red',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
+      },
+      {
+        path: 'ee9eea88-edc0-4316-8fdf-9219f92c01d6',
+        title: 'Services',
+        type: 'link',
+        icontype: 'ni-single-copy-04 text-red',
+        roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK', 'ROLE_REFERRALS', 'ROLE_WORK_PLAN'],
+      },
     ]
   },
   {
@@ -121,42 +221,41 @@ export const ROUTES: RouteInfo[] = [
     roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REFERRALS'],
     isCollapsed: true,
     children: [
-      {path: 'list', title: 'Referrals', type: 'link', icontype: 'ni-single-copy-04 text-pink',
-        roles: [
-          'ROLE_BUDGET_HOLDER',
-          'ROLE_SUPER_ADMIN',
-          'ROLE_ADMIN',
-          'ROLE_REBUILD_DATA_MANAGER'
-        ], },
-      {path: 'referral-dashboard', title: 'Referral Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
-        roles: [
-          'ROLE_BUDGET_HOLDER',
-          'ROLE_SUPER_ADMIN',
-          'ROLE_ADMIN',
-          'ROLE_REBUILD_DATA_MANAGER'
-        ], },
-      {path: 'irc-feedback', title: 'Feedback Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
-        roles: [
-          'ROLE_BUDGET_HOLDER',
-          'ROLE_SUPER_ADMIN',
-          'ROLE_ADMIN',
-          'ROLE_REBUILD_DATA_MANAGER'
-        ], },
-      {path: 'irc-activity', title: 'Activity Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
-        roles: [
-          'ROLE_BUDGET_HOLDER',
-          'ROLE_SUPER_ADMIN',
-          'ROLE_ADMIN',
-          'ROLE_REBUILD_DATA_MANAGER'
-        ], },
+      {
+        path: 'referral-dashboard',
+        title: 'Referral Dashboard', type: 'link', icontype: 'ni-single-copy-04 text-red',
+        roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REFERRALS'],
+      },
+      {
+        path: 'list',
+        title: 'Referrals List',
+        type: 'link',
+        icontype: 'ni-single-copy-04 text-pink',
+        roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_REFERRALS'],
+      },
     ]
   },
   {
-    path: 'feedback-list',
+    path: '',
     title: 'FeedBack',
-    type: 'link',
+    type: 'sub',
     icontype: 'fa fa-comment-dots',
+    isCollapsed: true,
     roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK'],
+    children: [
+      {
+        path: 'irc-feedback',
+        title: 'Feedback Dashboard',
+        type: 'link',
+        roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK'],
+      },
+      {
+        path: 'irc-feedback-list',
+        title: 'Feedback List',
+        type: 'link',
+        roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_FEEDBACK']
+      },
+    ]
   },
   {
     path: '/',
