@@ -108,7 +108,7 @@ export class CellEdit {
           input = document.createElement('input');
           input.placeholder = "Telephone Number";
           input.type = "text";
-          input.addEventListener("keypress", (e: Event) => this.validateNumber(e));
+          input.addEventListener("keyup", (e: Event) => this.validateNumber(e));
         } else {
           input = document.createElement('textarea');
           input.setAttribute('rows', '1');
@@ -173,7 +173,7 @@ export class CellEdit {
 
   validateNumber(event) {
     if (!new RegExp(/^0[0-9]{9}$/).test(event.target.value)) {
-      //event.target.classList.add("is-invalid")
+      event.target.classList.add("is-invalid")
     } else event.target.classList.remove("is-invalid");
   }
 }

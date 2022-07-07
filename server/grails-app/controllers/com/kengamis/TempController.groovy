@@ -86,22 +86,4 @@ class TempController {
         def results = AppHolder.withMisSql { rows(query as String) }
         respond results
     }
-
-    @Transactional
-    def startLongTermGrantJob(String grantId) {
-        def message = ["Failed"]
-        GrantLetterOfInterest grant = GrantLetterOfInterest.findById(grantId)
-        createUser(grant)
-        boolean started = TaskListSyncJob.startLongTermGrant(grantId)
-        if (started) {
-            message = ["Started grant process instance"]
-        }
-        respond message
-    }
-
-    @Transactional
-    def createUser(GrantLetterOfInterest g) {
-        def nUser = TaskListSyncJob.createUserAccount(g.id)
-    }
-
 }

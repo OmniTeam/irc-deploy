@@ -3201,4 +3201,215 @@ databaseChangeLog = {
         modifyDataType(columnName: "query", newDataType: "LONGTEXT", tableName: "query_table")
     }
 
+    changeSet(author: "bruno (generated)", id: "1657118042234-14") {
+        createTable(tableName: "long_term_grant_application") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "long_term_grant_applicationPK")
+            }
+
+            column(name: "structures_and_plans", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "partnerships_and_networks", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "risks_and_challenges", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "documents", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "problem_addressed", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "midterm_changes", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "total_project_cost_local_currency", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "change_envisioned", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "contact_authorized_signatory", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "amount_requested", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "reason_for_target_population", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "bank_details", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "target_population", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "project_amount", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "activities", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "project_title", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "project_duration", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "immediate_changes", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "funding", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "overall_goal", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "problem_background", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name_authorized_signatory", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "total_project_cost_dollars", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "what_change_expected", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657118042234-15") {
+        createTable(tableName: "long_term_grant_review") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "long_term_grant_reviewPK")
+            }
+
+            column(name: "comments", type: "LONGTEXT") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_of_agreement", type: "VARCHAR(255)")
+
+            column(name: "definition_key", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "grant_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "decision", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "user", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "type", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "are_they_adhering", type: "VARCHAR(255)")
+
+            column(name: "process_instance_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "status", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "does_it_adhere", type: "VARCHAR(255)")
+
+            column(name: "is_concept_in_line", type: "VARCHAR(255)")
+
+            column(name: "application_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+    changeSet(author: "omni-tech (generated)", id: "1656687235436561-14") {
+        addColumn(tableName: "long_term_grant_application") {
+            column(name: "project_proposed", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+    changeSet(author: "bruno (generated)", id: "1657200535467-14") {
+        addColumn(tableName: "long_term_grant_application") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657200535467-15") {
+        addColumn(tableName: "long_term_grant_review") {
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657200535467-17") {
+        addColumn(tableName: "long_term_grant_application") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657200535467-18") {
+        addColumn(tableName: "long_term_grant_review") {
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+
 }

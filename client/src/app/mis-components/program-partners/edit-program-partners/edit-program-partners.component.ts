@@ -51,11 +51,11 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
         cluster: [results?.cluster, [Validators.required]],
         organisation: [results?.organisation],
         physicalAddress: [results?.physicalAddress],
-        emailContactPerson: [results?.emailContactPerson, [Validators.required, Validators.email]],
-        telephoneContactPerson: [results?.telephoneContactPerson, [Validators.required, Validators.pattern('/^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/')]],
         organisationType: [results?.organisationType],
-        country: [results?.country],
         nameContactPerson: [results?.nameContactPerson],
+        telephoneContactPerson: [results?.telephoneContactPerson, [Validators.required]],
+        emailContactPerson: [results?.emailContactPerson, [Validators.required, Validators.email]],
+        country: [results?.country],
         city: [results?.city],
         dataCollector: [results?.dataCollector],
         organisationsInvolved: [results?.organisationsInvolved],
@@ -77,8 +77,9 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
   }
 
   editProgramPartner() {
+    console.log('Form Data',  this.formGroup.value);
     this.submitted = true;
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.inValidNumber) {
       console.log('Invalid');
       return;
     }
@@ -134,8 +135,8 @@ export class EditProgramPartnersComponent implements OnInit, OnUpdateCell  {
     this.inValidNumber = Validator.telephoneNumber(value);
   }
 
-  cellEditor(rowId, tdId, key: string, oldValue) {
-    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue);
+  cellEditor(rowId, tdId, key: string, oldValue, type?: string) {
+    new CellEdit().edit(rowId, tdId, oldValue, key, this.saveCellValue, type);
   }
 
   saveCellValue = (value: string, key: string, rowId): void => {

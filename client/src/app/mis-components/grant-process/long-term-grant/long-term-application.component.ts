@@ -3,10 +3,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CountriesService} from "../../../services/countries.service";
 import {FileUploadService} from "../../../services/file-upload.service";
 import {Validator} from "../../../helpers/validator";
-import {TempDataService} from "../../../services/temp-data.service";
 import {AlertService} from "../../../services/alert";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TaskListService} from "../../../services/task-list.service";
+import {LongTermGrantService} from "../../../services/long-term-grant.service";
 
 @Component({
   selector: 'long-term-application',
@@ -45,9 +44,8 @@ export class LongTermApplicationComponent implements OnInit {
     private countriesService: CountriesService,
     private formBuilder: FormBuilder,
     public fileUploadService: FileUploadService,
-    private tempDataService: TempDataService,
     private alertService: AlertService,
-    private taskListService: TaskListService
+    private longTermGrantService: LongTermGrantService
   ) {
   }
 
@@ -59,51 +57,88 @@ export class LongTermApplicationComponent implements OnInit {
     this.countries = this.countriesService.getListOfAvailableCountries();
 
     if (this.isReadOnly || this.isMakeCorrections) {
-      this.tempDataService.getTempRecordByValue(this.grantId).subscribe((data: any) => {
-        if (data.some(x => x.type === 'application')) {
-          data.forEach(it => {
-            if (it.type === 'application') {
-              let results: any
-              if (it.json_value != undefined) {
-                results = JSON.parse(it.json_value)
-                if (results.documents != undefined) this.documents = JSON.parse(results.documents)
-              }
+      this.longTermGrantService.getApplicationByGrantId(this.grantId).subscribe((data: any) => {
+        if (data.record != null) {
+          let results = data.record
+          if (results.documents != undefined) this.documents = JSON.parse(results.documents)
 
-              this.formGroupLT = this.formBuilder.group({
-                projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
-                projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}, [Validators.required]],
-                projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}, [Validators.required]],
-                projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}, [Validators.required]],
-                amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}, [Validators.required]],
-                funding: [{value: results?.funding, disabled: this.isReadOnly}, [Validators.required]],
-                nameAuthorizedSignatory: [{value: results?.nameAuthorizedSignatory, disabled: this.isReadOnly}, [Validators.required]],
-                contactAuthorizedSignatory: [{value: results?.contactAuthorizedSignatory, disabled: this.isReadOnly}, [Validators.required]],
-                bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}, [Validators.required]],
+          this.formGroupLT = this.formBuilder.group({
+            projectTitle: [{value: results?.projectTitle, disabled: this.isReadOnly}, [Validators.required]],
+            projectDuration: [{value: results?.projectDuration, disabled: this.isReadOnly}, [Validators.required]],
+            projectProposed: [{value: results?.projectProposed, disabled: this.isReadOnly}, [Validators.required]],
+            projectAmount: [{value: results?.projectAmount, disabled: this.isReadOnly}, [Validators.required]],
+            amountRequested: [{value: results?.amountRequested, disabled: this.isReadOnly}, [Validators.required]],
+            funding: [{value: results?.funding, disabled: this.isReadOnly}, [Validators.required]],
+            nameAuthorizedSignatory: [{
+              value: results?.nameAuthorizedSignatory,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            contactAuthorizedSignatory: [{
+              value: results?.contactAuthorizedSignatory,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            bankDetails: [{value: results?.bankDetails, disabled: this.isReadOnly}, [Validators.required]],
 
-                problemBackground: [{value: results?.problemBackground, disabled: this.isReadOnly}, [Validators.required]],
-                problemAddressed: [{value: results?.problemAddressed, disabled: this.isReadOnly}, [Validators.required]],
-                targetPopulation: [{value: results?.targetPopulation, disabled: this.isReadOnly}, [Validators.required]],
-                reasonForTargetPopulation: [{value: results?.reasonForTargetPopulation, disabled: this.isReadOnly}, [Validators.required]],
-                whatChangeExpected: [{value: results?.whatChangeExpected, disabled: this.isReadOnly}, [Validators.required]],
-                overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}, [Validators.required]],
-                midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}, [Validators.required]],
-                immediateChanges: [{value: results?.immediateChanges, disabled: this.isReadOnly}, [Validators.required]],
-                activities: [{value: results?.activities, disabled: this.isReadOnly}, [Validators.required]],
-                risksAndChallenges: [{value: results?.risksAndChallenges, disabled: this.isReadOnly}, [Validators.required]],
-                partnershipsAndNetworks: [{value: results?.partnershipsAndNetworks, disabled: this.isReadOnly}, [Validators.required]],
-                changeEnvisioned: [{value: results?.changeEnvisioned, disabled: this.isReadOnly}, [Validators.required]],
-                structuresAndPlans: [{value: results?.structuresAndPlans, disabled: this.isReadOnly}, [Validators.required]],
-                totalProjectCostLocalCurrency: [{value: results?.totalProjectCostLocalCurrency, disabled: this.isReadOnly}, [Validators.required]],
-                totalProjectCostDollars: [{value: results?.totalProjectCostDollars, disabled: this.isReadOnly}, [Validators.required]],
-                documents: [{value: results?.documents, disabled: this.isReadOnly}],
+            problemBackground: [{
+              value: results?.problemBackground,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            problemAddressed: [{
+              value: results?.problemAddressed,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            targetPopulation: [{
+              value: results?.targetPopulation,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            reasonForTargetPopulation: [{
+              value: results?.reasonForTargetPopulation,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            whatChangeExpected: [{
+              value: results?.whatChangeExpected,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            overallGoal: [{value: results?.overallGoal, disabled: this.isReadOnly}, [Validators.required]],
+            midtermChanges: [{value: results?.midtermChanges, disabled: this.isReadOnly}, [Validators.required]],
+            immediateChanges: [{
+              value: results?.immediateChanges,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            activities: [{value: results?.activities, disabled: this.isReadOnly}, [Validators.required]],
+            risksAndChallenges: [{
+              value: results?.risksAndChallenges,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            partnershipsAndNetworks: [{
+              value: results?.partnershipsAndNetworks,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            changeEnvisioned: [{
+              value: results?.changeEnvisioned,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            structuresAndPlans: [{
+              value: results?.structuresAndPlans,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            totalProjectCostLocalCurrency: [{
+              value: results?.totalProjectCostLocalCurrency,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            totalProjectCostDollars: [{
+              value: results?.totalProjectCostDollars,
+              disabled: this.isReadOnly
+            }, [Validators.required]],
+            documents: [{value: results?.documents, disabled: this.isReadOnly}],
 
-                grantId: [{value: results?.grantId}, [Validators.required]],
-                processInstanceId: [{value: results?.processInstanceId}],
-                definitionKey: [{value: results?.definitionKey}],
-                status: [{value: results?.status}],
-              });
-            }
-          })
+            grantId: [{value: results?.grantId}, [Validators.required]],
+            processInstanceId: [{value: results?.processInstanceId}],
+            definitionKey: [{value: results?.definitionKey}],
+            status: [{value: results?.status}],
+          });
+        } else {
+          this.setEmptyForm()
         }
       }, error => {
         console.log(error)
@@ -173,35 +208,26 @@ export class LongTermApplicationComponent implements OnInit {
     }
     const formData = this.formGroupLT.value;
 
-    let formDataR: { [key: string]: string } = {
-      type: "application",
-      jsonValue: JSON.stringify(formData),
-    }
-
-    this.tempDataService.getTempRecordByValue(this.grantId).subscribe(data => {
-      if (data.some(x => x.type === 'application')) {
-        data.forEach(it => {
-          if (it.type === 'application') {
-            this.tempDataService.updateTempData(formDataR, it.id).subscribe(res => {
-              console.log("response", res)
-              this.submitted = true
-              this.error = false;
-              this.success = true;
-              this.successMessage = "Submitted Application";
-              this.alertService.success(this.successMessage);
-              this.statusChanged.emit(this.status);
-            }, error => {
-              this.error = true;
-              this.success = false;
-              this.submitted = false;
-              this.errorMessage = "Failed to submit Application";
-              this.alertService.error(this.errorMessage);
-              console.log(error);
-            });
-          }
+    this.longTermGrantService.getApplicationByGrantId(this.grantId).subscribe((data: any) => {
+      if (data.record != null) {
+        this.longTermGrantService.updateApplication(formData, data.record.id).subscribe(res => {
+          console.log("response", res)
+          this.submitted = true
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Submitted Application";
+          this.alertService.success(this.successMessage);
+          this.statusChanged.emit(this.status);
+        }, error => {
+          this.error = true;
+          this.success = false;
+          this.submitted = false;
+          this.errorMessage = "Failed to submit Application";
+          this.alertService.error(this.errorMessage);
+          console.log(error);
         });
       } else {
-        this.tempDataService.createTempData(formDataR).subscribe(res => {
+        this.longTermGrantService.createApplication(formData).subscribe(res => {
           console.log("response", res)
           this.submitted = true
           this.error = false;
@@ -218,7 +244,7 @@ export class LongTermApplicationComponent implements OnInit {
           console.log(error);
         });
       }
-    });
+    }, error => console.log(error));
 
     setTimeout(() => {
       if (this.success == true) {
@@ -268,7 +294,7 @@ export class LongTermApplicationComponent implements OnInit {
   }
 
   updateOutputVariables(value: string) {
-    if(this.isMakeCorrections) this.valuesChanged.emit(value);
+    if (this.isMakeCorrections) this.valuesChanged.emit(value);
   }
 
   updateStatus(value: string) {
