@@ -77,8 +77,6 @@ export class CreateDataViewsComponent implements OnInit,HttpParameterCodec {
     this.submittedViewQuery = true;
     let inputValue = (<HTMLInputElement>document.getElementById('query')).value;
     if (inputValue) {
-      const params = new HttpParams()
-        .set('query', inputValue);
       this.dataViewService.dataViewRunNow(inputValue).subscribe((data) => {
         if (data['headerList'].length > 0) {
           this.temp = [...data['dataList']];
