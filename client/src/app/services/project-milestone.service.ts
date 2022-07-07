@@ -46,7 +46,10 @@ export class ProjectMilestoneService {
     return this.http.delete(`${this.baseurl}/${id}/`);
   }
 
-  runQuery(params) {
-    return this.http.get(`${this.baseurl}/runQuery`, {params});
+  runQuery(query) {
+    const formData = new FormData();
+    formData.append("params",query)
+    console.log(formData);
+    return this.http.post(`${this.baseurl}/runQuery`, formData);
   }
 }
