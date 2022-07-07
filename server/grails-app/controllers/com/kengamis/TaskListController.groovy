@@ -72,7 +72,7 @@ class TaskListController {
 
             boolean c2 = (userRoles.contains("ROLE_SUPER_ADMIN")||userRoles.contains("ROLE_ADMIN"))
 
-            if (assignee == currentUser.email || c2)
+            if (assignee == currentUser?.email || c2)
                 tasks << [id               : task.id,
                           taskName         : task.taskName,
                           workPlanId       : workPlanId,
