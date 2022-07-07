@@ -97,9 +97,7 @@ export class CreateProjectMilestonesComponent implements OnInit {
     this.submittedViewQuery = true;
     let inputValue = (<HTMLInputElement>document.getElementById('reportingQuery')).value;
     if (inputValue) {
-      const params = new HttpParams()
-        .set('query', inputValue);
-      this.projectMilestoneService.runQuery(params).subscribe((data) => {
+      this.projectMilestoneService.runQuery(inputValue).subscribe((data) => {
         if (data['headerList'].length > 0) {
           this.temp = [...data['dataList']];
           this.rows = data['dataList'];
@@ -124,9 +122,7 @@ export class CreateProjectMilestonesComponent implements OnInit {
     this.submittedViewQuery = true;
     let inputValue = (<HTMLInputElement>document.getElementById('dashboardQuery')).value;
     if (inputValue) {
-      const params = new HttpParams()
-        .set('query', inputValue);
-      this.projectMilestoneService.runQuery(params).subscribe((data) => {
+      this.projectMilestoneService.runQuery(inputValue).subscribe((data) => {
         if (data['headerList'].length > 0) {
           this.temp = [...data['dataList']];
           this.rows = data['dataList'];

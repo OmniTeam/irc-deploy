@@ -47,7 +47,7 @@ class UrlMappings {
         get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
         get "/$controller/getDataViewData(.$format)?"(action:"getDataViewData")
         post "/$controller/dataViewRunNow(.$format)?"(action:"dataViewRunNow")
-        get "/$controller/runQuery(.$format)?"(action:"runQuery")
+        post "/$controller/runQuery(.$format)?"(action:"runQuery")
         get "/$controller/syncViewToMetabase(.$format)?"(action:"syncViewToMetabase")
         get "/$controller/getDataCollectors(.$format)?"(action:"getDataCollectors")
         get "/$controller/runFilterQuery(.$format)?"(action:"runFilterQuery")

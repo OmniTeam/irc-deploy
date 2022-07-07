@@ -128,7 +128,7 @@ class ProjectMilestoneController {
 
     def runQuery() {
         def milestoneData
-        def milestoneQuery = params.query as String
+        def milestoneQuery = request.getParameter('params')
         try {
             def query = "${milestoneQuery}".toString()
             def data = AppHolder.withMisSql {
