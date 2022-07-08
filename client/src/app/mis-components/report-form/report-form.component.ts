@@ -15,8 +15,6 @@ import {PartnerSetupService} from '../../services/partner-setup.service';
 import {ProjectMilestoneService} from '../../services/project-milestone.service';
 import {AlertService} from '../../services/alert';
 
-//import {SampleData} from "../../helpers/sample-data";
-
 @Component({
   selector: 'app-report-form',
   templateUrl: './report-form.component.html',
@@ -234,8 +232,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.report = data.report;
         let reports = JSON.parse(data.report.reportValues);
 
-        this.financialReport = JSON.parse(reports.financialReport);
-        this.performanceReport = JSON.parse(reports.performanceReport);
+        this.financialReport = data.report.financialReport;
+        this.performanceReport = data.report.performanceReport;
 
         if (reports.reviewerInformation !== null && reports.reviewerInformation !== undefined) {
           this.reviewerInformation = JSON.parse(reports.reviewerInformation);
@@ -331,10 +329,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           });
         }
 
-        let reportValues: { [key: string]: string } = {
-          financialReport: JSON.stringify(this.financialReport),
-          performanceReport: JSON.stringify(this.performanceReport),
-        };
+        let reportValues: { [key: string]: string } = {};
         this.saveReport(reportValues, 'draft');
       }
     }, error => console.log(error));
@@ -544,10 +539,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     //update project overview values
     this.updateProjectOverview();
     //update report in DB
-    let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
-    };
+    let reportValues: { [key: string]: string } = {};
     this.saveReport(reportValues, 'draft');
   };
 
@@ -572,6 +564,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.reportFormService.getReportForTask(params).subscribe(data => {
       if (data.report !== null && data.report !== undefined) {
         this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {
+          console.log(data)
+          this.saveFinancialReport(data.id)
+          this.savePerformanceReport(data.id)
           this.error = false;
           this.success = true;
           this.successMessage = 'Updated Report';
@@ -583,6 +578,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         });
       } else {
         this.reportFormService.createReport(reportRecord).subscribe((data) => {
+          this.saveFinancialReport(data.id)
+          this.savePerformanceReport(data.id)
           this.error = false;
           this.success = true;
           this.successMessage = 'Saved Report';
@@ -603,13 +600,63 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }, 3000);
   }
 
+  saveFinancialReport(reportId) {
+    this.financialReport.forEach((fr)=>{
+      let formData: { [key: string]: string } = {
+        reportId: reportId,
+        budgetLine: fr.budget_line,
+        approvedBudget: fr.approved_budget,
+        expenseToDate: fr.expense_to_date,
+        totalAdvanced: fr.total_advanced,
+        variance: fr.variance,
+        quarterExpenses: fr.quarter_expenses,
+      };
+      this.reportFormService.getFinancialReportByReportId(reportId).subscribe(data => {
+        if (data.report !== null && data.report !== undefined) {
+          this.reportFormService.updateFinancialReport(formData, data.report.id).subscribe((res)=>{
+            console.log("Updated financial report",res)
+          })
+        } else {
+          this.reportFormService.createFinancialReport(formData).subscribe((res)=>{
+            console.log("Updated financial report",res)
+          })
+        }
+      })
+    })
+  }
+
+  savePerformanceReport(reportId) {
+    this.performanceReport.forEach((pr)=>{
+      let formData: { [key: string]: string } = {
+        reportId: reportId,
+        milestoneId: pr.milestoneId,
+        outputIndicators: pr.output_indicators,
+        overallTarget: pr.overall_target,
+        cumulativeAchievement: pr.cumulative_achievement,
+        quarterAchievement: pr.quarter_achievement,
+        quarterTarget: pr.quarter_target,
+        percentageAchievement: pr.percentage_achievement,
+        commentOnResult: pr.comment_on_result,
+      };
+      this.reportFormService.getPerformanceReportByReportId(reportId).subscribe(data => {
+        if (data.report !== null && data.report !== undefined) {
+          this.reportFormService.updatePerformanceReport(formData, data.report.id).subscribe((res)=>{
+            console.log("Updated performance report",res)
+          })
+        } else {
+          this.reportFormService.createPerformanceReport(formData).subscribe((res)=>{
+            console.log("Updated performance report",res)
+          })
+        }
+      })
+    })
+  }
+
   submitReport(status) {
     this.error = false;
     this.success = false;
 
     let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
       reviewerInformation: JSON.stringify(this.reviewerInformation),
       approverInformation: JSON.stringify(this.approverInformation)
     };
@@ -665,8 +712,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.saveCommentsAndRecommendations()
 
     let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
       approverInformation: JSON.stringify(this.approverInformation),
       reviewerInformation: JSON.stringify({
         expenses_realistic: this.radioExpensesRealistic,
@@ -703,8 +748,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.saveCommentsAndRecommendations()
 
     let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
       reviewerInformation: JSON.stringify(this.reviewerInformation),
       approverInformation: JSON.stringify({
         suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
