@@ -217,8 +217,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="telephoneContactPerson"
-                            (change)="validateNumber($event)"
-                            [value]="f.telephoneContactPerson.value | phone"
+                            (ngModelChange)="validateNumber($event)"
                             [ngClass]="{ 'is-invalid': inValidNumber }"
                           >
                         </div>
@@ -372,7 +371,7 @@
                               <td class="text-center" [id]="org.id+'-d'">{{org.contact}}
                                 <div>
                                   <button class="btn btn-link" type="button"
-                                          (click)="cellEditor(org.id,org.id+'-d', 'orgContact', org.contact)"><i
+                                          (click)="cellEditor(org.id,org.id+'-d', 'orgContact', org.contact, 'telephone')"><i
                                     class="fas fa-pencil-alt"></i></button>
                                 </div>
                               </td>

@@ -16,10 +16,6 @@ export class TempDataService {
     return this.http.get(`${this.baseurl}`);
   }
 
-  startLongTermGrantJob(grantId): Observable<any> {
-    return this.http.get(`${this.baseurl}/startLongTermGrantJob/${grantId}`);
-  }
-
   createTempData(formData): Observable<any> {
     return this.http.post(`${this.baseurl}`, formData);
   }
@@ -34,5 +30,12 @@ export class TempDataService {
 
   getTempRecordByValue(value): Observable<any> {
     return this.http.get(`${this.baseurl}/getTempRecordByValue/${value}`);
+  }
+
+  /***
+   * get by Process Instance Id
+   * */
+  getRecordByProcessInstanceId(route, params: any): Observable<any> {
+    return this.http.get(route, {params});
   }
 }

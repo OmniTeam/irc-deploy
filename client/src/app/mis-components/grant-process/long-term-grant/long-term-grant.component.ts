@@ -3,8 +3,7 @@ import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TaskListService} from "../../../services/task-list.service";
 import {AlertService} from "../../../services/alert";
-import {TempDataService} from "../../../services/temp-data.service";
-import {LongTermGrantService} from "../../../services/long-term-grant-service";
+import {LongTermGrantService} from "../../../services/long-term-grant.service";
 import {CommentNode} from "../../comments/comments.component";
 import {v4 as uuid} from 'uuid';
 import {AuthService} from "../../../services/auth.service";
@@ -76,7 +75,6 @@ export class LongTermGrantComponent implements OnInit {
     private route: ActivatedRoute,
     private taskListService: TaskListService,
     private alertService: AlertService,
-    private tempDataService: TempDataService,
     public authService: AuthService,
     private longTermGrantService: LongTermGrantService,
   ) {
@@ -92,12 +90,12 @@ export class LongTermGrantComponent implements OnInit {
 
         if (p['id'] != undefined) {
           const params = new HttpParams().set('id', p['id']);
-          this.taskListService.getTaskRecord(params).subscribe((data) => {
-            this.setData(data)
+          this.taskListService.getTaskRecord(params).subscribe((task) => {
+            this.setData(task)
           }, (error) => {
-            this.taskListService.getArchivedRecord(params).subscribe((data) => {
-              console.log(data);
-              this.setData(data);
+            this.taskListService.getArchivedRecord(params).subscribe((task) => {
+              console.log(task);
+              this.setData(task);
             }, error => console.log(error));
           });
         } else {
@@ -123,91 +121,96 @@ export class LongTermGrantComponent implements OnInit {
     }
   }
 
-  setData(data) {
-    this.taskRecord = data
-    if (data.taskDefinitionKey === "Submit_Long_Term_Grant") {
+  setData(task) {
+    this.taskRecord = task
+    this.longTermGrantService.getApplicationByGrantId(task.grantId).subscribe((application: any) => {
+      this.applicationId = application.record.id;
+    })
+    if (task.taskDefinitionKey === "Submit_Long_Term_Grant") {
       this.isApplication = true;
     }
-    if (data.taskDefinitionKey === "Review_Long-term_Grant_Application") {
+    if (task.taskDefinitionKey === "Review_Long-term_Grant_Application") {
       this.isReviewApplication = true;
-      this.tempDataService.getTempRecordByValue(data.processInstanceId).subscribe((data: any) => {
-        console.log('review record available', data)
-        data.forEach((it) => {
-          if (it.type == "reviewApplication") {
-            let results = JSON.parse(it.json_value)
-            this.isConceptInline = results.isConceptInline
-            this.doesItAdhere = results.doesItAdhere
-            this.decisionOfReviewProcess = results.decision
-            this.areTheyAdhering = results.areTheyAdhering
-            this.reviewerComments = results.comments
-          }
-        })
+      this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'reviewApplication') {
+              console.log("reviewApplication", record)
+              this.isConceptInline = record.isConceptInLine
+              this.doesItAdhere = record.doesItAdhere
+              this.decisionOfReviewProcess = record.decision
+              this.areTheyAdhering = record.areTheyAdhering
+              this.reviewerComments = record.comments
+            }
+          })
+        }
       })
     }
-    if (data.taskDefinitionKey === "Make_Revisions_On_Application") {
+    if (task.taskDefinitionKey === "Make_Revisions_On_Application") {
       this.isMakeCorrectionsApplication = true;
     }
-    if (data.taskDefinitionKey === "Review_Revised_Application") {
+    if (task.taskDefinitionKey === "Review_Revised_Application") {
       this.isReviewRevisedApplication = true;
-      this.tempDataService.getTempRecordByValue(data.processInstanceId).subscribe((data: any) => {
-        console.log('review record available', data)
-        data.forEach((it) => {
-          if (it.type == "reviewRevisedApplication") {
-            let results = JSON.parse(it.json_value)
-            this.decisionOfReviewProcess = results.decision
-            this.reviewerComments = results.comments
-          }
-        })
-      })
-    }
-    if (data.taskDefinitionKey === "Make_Revisions_From_ED") {
-      this.isMakeRevisionsEdApplication = true;
-    }
-    if (data.taskDefinitionKey === "Approve_Application") {
-      this.isApproveApplication = true;
-      this.tempDataService.getTempRecordByValue(data.processInstanceId).subscribe((data: any) => {
-        console.log('review record available', data)
-        data.forEach((it) => {
-          if (it.type == "approveApplication") {
-            let results = JSON.parse(it.json_value)
-            this.decisionOfReviewProcess = results.decision
-            this.approverComments = results.comments
-          }
-        })
-      })
-    }
-    if (data.taskDefinitionKey === "Sign_Agreement") {
-      this.isSignAgreement = true;
-      this.tempDataService.getTempRecordByValue(data.processInstanceId).subscribe((data: any) => {
-        console.log('sign record available', data)
-        data.forEach((it) => {
-          if (it.type == "signAgreement") {
-            let results = JSON.parse(it.json_value)
-            this.decisionOfReviewProcess = results.decision
-            this.signAgreementComments = results.comments
-            this.dateAgreement = results.dateAgreement
-          }
-        })
+      this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'reviewRevisedApplication') {
+              console.log(record)
+              this.decisionOfReviewProcess = record.decision
+              this.reviewerComments = record.comments
+            }
+          })
+        }
       })
     }
 
-    this.applicationId = data.id;
-    this.grantId = data.grantId;
-    this.definitionKey = data.taskDefinitionKey
-    this.processInstanceId = data.processInstanceId
+    if (task.taskDefinitionKey === "Make_Revisions_From_ED") {
+      this.isMakeRevisionsEdApplication = true;
+    }
+    if (task.taskDefinitionKey === "Approve_Application") {
+      this.isApproveApplication = true;
+      this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'approveApplication') {
+              console.log("approveApplication", record)
+              this.decisionOfReviewProcess = record.decision
+              this.approverComments = record.comments
+            }
+          })
+        }
+      })
+    }
+    if (task.taskDefinitionKey === "Sign_Agreement") {
+      this.isSignAgreement = true;
+      this.longTermGrantService.getReviewApplicationByGrantId(task.grantId).subscribe((data: any) => {
+        if (data != null) {
+          data.forEach(record => {
+            if (record.type === 'signAgreement') {
+              console.log(record)
+              this.decisionOfReviewProcess = record.decision
+              this.signAgreementComments = record.comments
+              this.dateAgreement = record.dateOfAgreement
+            }
+          })
+        }
+      })
+    }
+
+    this.grantId = task.grantId;
+    this.definitionKey = task.taskDefinitionKey
+    this.processInstanceId = task.processInstanceId
   }
 
   getAllComments() {
     this.loading = true;
     this.comments = []
-    this.tempDataService.getTempRecordByValue(this.grantId).subscribe((results: any) => {
-      results.forEach(it => {
-        let data: any
-        if (it.json_value != undefined) {
-          data = JSON.parse(it.json_value)
-          if (data.comments != "" && data.comments != undefined) this.comments.push(new CommentNode(data.grantId, data.comments, data.user, [], [], null));
-        }
-      });
+    this.longTermGrantService.getReviewApplications().subscribe((data: any) => {
+      if (data != undefined) {
+        data.forEach(results => {
+          if (results.comments != "" && results.comments != undefined) this.comments.push(new CommentNode(results.grantId, results.comments, results.user, [], [], null));
+        })
+      }
       this.loading = false;
     }, error => {
       this.loading = false;
@@ -217,18 +220,17 @@ export class LongTermGrantComponent implements OnInit {
   getAllRecommendations() {
     this.loading = true;
     this.recommendations = []
-    this.tempDataService.getTempRecordByValue(this.grantId).subscribe((results: any) => {
-      results.forEach(it => {
-        let data: any
-        if (it.json_value != undefined) {
-          data = JSON.parse(it.json_value)
-          if (data.recommendations != "" && data.recommendations != undefined) this.recommendations.push(new CommentNode(data.grantId, data.recommendations, null, [], [], null));
+    this.longTermGrantService.getReviewApplications().subscribe((data: any) => {
+        if (data != undefined) {
+          data.forEach(results => {
+            if (results.recommendations != "" && results.recommendations != undefined) this.recommendations.push(new CommentNode(results.grantId, results.recommendations, null, [], [], null));
+          })
         }
-      });
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-    })
+        this.loading = false;
+      }, error => {
+        this.loading = false;
+      }
+    )
   }
 
   viewComments(): void {
@@ -302,28 +304,24 @@ export class LongTermGrantComponent implements OnInit {
       this.reviewerComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
+        applicationId: this.applicationId,
+        user: this.authService.getLoggedInUsername(),
         definitionKey: this.definitionKey,
         processInstanceId: this.processInstanceId,
-        isConceptInline: this.isConceptInline,
+        isConceptInLine: this.isConceptInline,
         doesItAdhere: this.doesItAdhere,
         areTheyAdhering: this.areTheyAdhering,
         decision: this.decisionOfReviewProcess,
         comments: this.reviewerComments,
+        type: "reviewApplication",
         status: status
       }
 
-      let formDataR: { [key: string]: string } = {
-        type: "reviewApplication",
-        jsonValue: JSON.stringify(formData),
-      }
-
-      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
-      //const params = new HttpParams().set('id', formData.processInstanceId);
-      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+      this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
         if (response.some(x => x.type === 'reviewApplication')) {
-          response.forEach(it => {
-            if (it.type === 'reviewApplication') {
-              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+          response.forEach(record => {
+            if (record.type === 'reviewApplication') {
+              this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
@@ -341,9 +339,9 @@ export class LongTermGrantComponent implements OnInit {
                 console.log(error);
               });
             }
-          })
+          });
         } else {
-          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
             console.log('response', data)
             this.error = false;
             this.success = true;
@@ -361,7 +359,7 @@ export class LongTermGrantComponent implements OnInit {
             console.log(error);
           });
         }
-      });
+      }, error => console.log(error));
     } else {
       this.submitted = false
       this.alertService.error('Please fill in all required details');
@@ -374,25 +372,21 @@ export class LongTermGrantComponent implements OnInit {
       this.reviewerComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
+        applicationId: this.applicationId,
+        user: this.authService.getLoggedInUsername(),
         definitionKey: this.definitionKey,
         processInstanceId: this.processInstanceId,
         decision: this.decisionOfReviewProcess,
         comments: this.reviewerComments,
+        type: "reviewRevisedApplication",
         status: status
       }
 
-      let formDataR: { [key: string]: string } = {
-        type: "reviewRevisedApplication",
-        jsonValue: JSON.stringify(formData),
-      }
-
-      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
-      //const params = new HttpParams().set('id', formData.processInstanceId);
-      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+      this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
         if (response.some(x => x.type === 'reviewRevisedApplication')) {
-          response.forEach(it => {
-            if (it.type === 'reviewRevisedApplication') {
-              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+          response.forEach(record => {
+            if (record.type === 'reviewRevisedApplication') {
+              this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
@@ -410,9 +404,9 @@ export class LongTermGrantComponent implements OnInit {
                 console.log(error);
               });
             }
-          })
+          });
         } else {
-          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
             console.log('response', data)
             this.error = false;
             this.success = true;
@@ -430,7 +424,7 @@ export class LongTermGrantComponent implements OnInit {
             console.log(error);
           });
         }
-      });
+      }, error => console.log(error));
     } else {
       this.submitted = false
       this.alertService.error('Please fill in all required details');
@@ -442,25 +436,21 @@ export class LongTermGrantComponent implements OnInit {
     if (this.decisionOfReviewProcess != undefined && this.approverComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
+        applicationId: this.applicationId,
+        user: this.authService.getLoggedInUsername(),
         definitionKey: this.definitionKey,
         processInstanceId: this.processInstanceId,
         decision: this.decisionOfReviewProcess,
         comments: this.approverComments,
+        type: "approveApplication",
         status: status
       }
 
-      let formDataR: { [key: string]: string } = {
-        type: "approveApplication",
-        jsonValue: JSON.stringify(formData),
-      }
-
-      //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
-      //const params = new HttpParams().set('id', formData.processInstanceId);
-      this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+      this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
         if (response.some(x => x.type === 'approveApplication')) {
-          response.forEach(it => {
-            if (it.type === 'approveApplication') {
-              this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+          response.forEach(record => {
+            if (record.type === 'approveApplication') {
+              this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
                 console.log('response', data)
                 this.error = false;
                 this.success = true;
@@ -478,9 +468,9 @@ export class LongTermGrantComponent implements OnInit {
                 console.log(error);
               });
             }
-          })
+          });
         } else {
-          this.tempDataService.createTempData(formDataR).subscribe((data) => {
+          this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
             console.log('response', data)
             this.error = false;
             this.success = true;
@@ -498,7 +488,7 @@ export class LongTermGrantComponent implements OnInit {
             console.log(error);
           });
         }
-      });
+      }, error => console.log(error));
     } else {
       this.submitted = false
       this.alertService.error('Please fill in all required details');
@@ -520,26 +510,22 @@ export class LongTermGrantComponent implements OnInit {
 
     let formData: { [key: string]: string } = {
       grantId: this.grantId,
+      applicationId: this.applicationId,
+      user: this.authService.getLoggedInUsername(),
       definitionKey: this.definitionKey,
       processInstanceId: this.processInstanceId,
       decision: this.decisionOfReviewProcess,
-      dateAgreement: this.dateAgreement,
+      dateOfAgreement: this.dateAgreement,
       comments: this.signAgreementComments,
+      type: "signAgreement",
       status: status
     }
 
-    let formDataR: { [key: string]: string } = {
-      type: "signAgreement",
-      jsonValue: JSON.stringify(formData),
-    }
-
-    //let apiUrl = `${this.longTermGrantService.reviewApplication}/getByProcessInstanceId`
-    //const params = new HttpParams().set('id', formData.processInstanceId);
-    this.tempDataService.getTempRecordByValue(formData.processInstanceId).subscribe((response: any) => {
+    this.longTermGrantService.getReviewApplicationByGrantId(formData.grantId).subscribe((response: any) => {
       if (response.some(x => x.type === 'signAgreement')) {
-        response.forEach(it => {
-          if (it.type === 'signAgreement') {
-            this.tempDataService.updateTempData(formDataR, it.id).subscribe((data) => {
+        response.forEach(record => {
+          if (record.type === 'signAgreement') {
+            this.longTermGrantService.updateReviewApplication(formData, record.id).subscribe((data) => {
               console.log('response', data)
               this.error = false;
               this.success = true;
@@ -556,9 +542,9 @@ export class LongTermGrantComponent implements OnInit {
               console.log(error);
             });
           }
-        })
+        });
       } else {
-        this.tempDataService.createTempData(formDataR).subscribe((data) => {
+        this.longTermGrantService.createReviewApplication(formData).subscribe((data) => {
           console.log('response', data)
           this.error = false;
           this.success = true;
@@ -575,7 +561,7 @@ export class LongTermGrantComponent implements OnInit {
           console.log(error);
         });
       }
-    });
+    }, error => console.log(error));
   }
 
   cancel() {

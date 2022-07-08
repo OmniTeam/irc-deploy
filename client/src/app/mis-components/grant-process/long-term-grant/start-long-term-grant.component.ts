@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GrantProcessService} from "../../../services/grant-process.service";
-import {TempDataService} from "../../../services/temp-data.service";
 import {AlertService} from "../../../services/alert";
+import {LongTermGrantService} from "../../../services/long-term-grant.service";
 
 @Component({
   selector: 'start-long-term-grant',
@@ -20,8 +20,8 @@ export class StartLongTermGrantComponent implements OnInit {
 
   constructor(
     private grantProcessService: GrantProcessService,
-    private tempDataService: TempDataService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private longTermGrantService:LongTermGrantService
   ) {
   }
 
@@ -36,7 +36,7 @@ export class StartLongTermGrantComponent implements OnInit {
   }
 
   triggerStartInstances(grantId) {
-    this.tempDataService.startLongTermGrantJob(grantId).subscribe(resp => {
+    this.longTermGrantService.startLongTermGrantJob(grantId).subscribe(resp => {
       this.error = false;
       this.success = true;
       this.successMessage = resp[0];

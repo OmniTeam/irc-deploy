@@ -125,6 +125,7 @@ class StartCamundaInstancesJob extends Script {
                     def orgInfo = slurper.parseText(grant.organisation)
                     def applicantEmail = orgInfo['email']
                     def organization = orgInfo['name']
+                    def cluster = orgInfo['nameCluster']
 
                     def edEmail = []
                     def financeEmail = []
@@ -140,6 +141,7 @@ class StartCamundaInstancesJob extends Script {
                     boolean started = startProcessInstance([
                             GrantId          : grant.id,
                             ProgramId        : grant.program,
+                            Cluster          : cluster,
                             Applicant        : applicantEmail,
                             ProgramTeam      : programTeamEmail[0],
                             Finance          : financeEmail[0],

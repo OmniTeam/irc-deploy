@@ -23,6 +23,7 @@ class UrlMappings {
         get "/$controller/getReportForTask(.$format)?"(action:"getReportForTask")
         get "/$controller/getFileByTaskAndName(.$format)?"(action:"getFileByTaskAndName")
         get "/$controller/getFilesForTask(.$format)?"(action:"getFilesForTask")
+        get "/$controller/getApplicationByGrantId/$id(.$format)?"(action:"getApplicationByGrantId")
         get "/$controller/getCommentsForTask(.$format)?"(action:"getCommentsForTask")
         get "/$controller/getRecommendationsForTask(.$format)?"(action:"getRecommendationsForTask")
         get "/$controller/getRecommendationById(.$format)?"(action:"getRecommendationById")
