@@ -15,7 +15,7 @@ const formsMenu: any = {
   path: 'forms/data',
   title: 'Data',
   type: 'sub',
-  icontype: 'ni-single-copy-04 text-red',
+  icontype: 'ni-single-copy-04',
   isCollapsed: true,
   roles: [
     'ROLE_SUPER_ADMIN',
@@ -32,7 +32,7 @@ const listsMenu: any = {
   path: 'entity/showData/',
   title: 'Lists',
   type: 'sub',
-  icontype: 'fas fa-list-alt text-maroon',
+  icontype: 'fas fa-list-alt',
   isCollapsed: true,
   children: [],
   roles: [
@@ -168,7 +168,7 @@ export class SidebarComponent implements OnInit {
             path: 'archive',
             title: 'Archive',
             type: 'link',
-            icontype: 'fas fa-tasks text-pink',
+            icontype: 'fas fa-tasks',
             roles: [
               'ROLE_SUPER_ADMIN',
               'ROLE_ADMIN',
@@ -189,6 +189,7 @@ export class SidebarComponent implements OnInit {
               'ROLE_STAFF_DATA_VIEWER',
               'ROLE_PARTNER_DATA_MANAGER',
               'ROLE_PARTNER_DATA_VIEWER',
+              'ROLE_PROGRAM_OFFICER'
             ],
             children: [
               {
@@ -264,10 +265,10 @@ export class SidebarComponent implements OnInit {
                 title: 'Grant Process',
                 type: 'sub',
                 isCollapsed: true,
-                roles: ['ROLE_SUPER_ADMIN'],
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_PROGRAM_OFFICER'],
                 children: [
                   {path: 'submitletterofinterest', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
-                  {path: 'longTermGrantApplication', title: 'Long Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+                  {path: 'longTermGrantApplication', title: 'Long Term Grant Application', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_PROGRAM_OFFICER']},
                 ]
               },
             ]
@@ -277,7 +278,7 @@ export class SidebarComponent implements OnInit {
             path: '/',
             title: 'Set-Up',
             type: 'sub',
-            icontype: 'fas fa-cog text-blue',
+            icontype: 'fas fa-cog',
             roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             isCollapsed: true,
             children: [
@@ -296,7 +297,7 @@ export class SidebarComponent implements OnInit {
             path: '/',
             title: 'Configuration',
             type: 'sub',
-            icontype: 'fas fa-tools text-purple',
+            icontype: 'fas fa-tools',
             isCollapsed: true,
             roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             children: [
@@ -324,7 +325,7 @@ export class SidebarComponent implements OnInit {
             path: '',
             title: 'User',
             type: 'sub',
-            icontype: 'fas fa-user-tie text-green',
+            icontype: 'fas fa-user-tie',
             roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             isCollapsed: true,
             children: [
