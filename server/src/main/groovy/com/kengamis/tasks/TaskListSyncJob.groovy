@@ -320,11 +320,11 @@ class TaskListSyncJob extends Script {
                     print user.username
                     print '========='
 
-                    /*// assign the partner to the user
+                    // assign the partner to the user
                     def userPartner = UserPartner.findByUser(user)
                     if (userPartner) UserPartner.deleteOldRecords(user)
                     def partnerObject = ProgramPartner.findById(p.id)
-                    UserPartner.create( partnerObject,  user, true)*/
+                    UserPartner.create( partnerObject,  user, true)
 
                     println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  ${applicant.username}"
 
