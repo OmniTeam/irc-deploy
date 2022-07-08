@@ -121,7 +121,10 @@ class ProgramPartnerController {
             render status: NOT_FOUND
             return
         }
-
+        def recordToDelete = programPartnerService.get(id)
+        UserPartner.findAllByProgramPartner(recordToDelete).each {
+            it.delete()
+        }
         programPartnerService.delete(id)
 
         render status: NO_CONTENT

@@ -316,6 +316,15 @@ class TaskListSyncJob extends Script {
                     if (userRole) UserRole.deleteOldRecords(user)
                     Role partnerRole = Role.findByAuthority("ROLE_PARTNER_DATA_MANAGER")
                     UserRole.create(user, partnerRole, true)
+                    print '========='
+                    print user.username
+                    print '========='
+
+                    /*// assign the partner to the user
+                    def userPartner = UserPartner.findByUser(user)
+                    if (userPartner) UserPartner.deleteOldRecords(user)
+                    def partnerObject = ProgramPartner.findById(p.id)
+                    UserPartner.create( partnerObject,  user, true)*/
 
                     println "New Partner created => cluster ${program?.title}, organization: ${orgInfo['name']}, username:  ${applicant.username}"
 
