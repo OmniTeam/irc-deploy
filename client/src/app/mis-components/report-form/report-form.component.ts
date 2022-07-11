@@ -54,6 +54,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   openRecommendationsPopup: boolean;
   openPopup: boolean;
   loading: boolean = false;
+  submitting: boolean = false;
   report: any;
 
   reviewerInformation: any;
@@ -552,6 +553,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
+    this.submitting = true;
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processInstanceId: this.taskRecord.processInstanceId,
@@ -596,6 +598,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
     });
     setTimeout(() => {
+      this.submitting = false;
       if (status != 'draft') {
         this.router.navigate(['/home']);
       }

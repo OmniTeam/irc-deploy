@@ -178,15 +178,9 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
       },
       {
-        path: 'longTermGrantApplication', canActivate: [AuthGuard],
+        path: 'longTermGrantApplication',
         data: {
-          userRoles: [
-            Roles.ROLE_SUPER_ADMIN,
-            Roles.ROLE_ADMIN,
-            Roles.ROLE_ED,
-            Roles.ROLE_PROGRAM_OFFICER,
-            Roles.ROLE_APPLICANT
-          ]
+          userRoles: []
         },
         loadChildren: () => import('./mis-components/grant-process/long-term-grant/start-long-term-grant.module').then(m => m.StartLongTermGrantModule)
       },

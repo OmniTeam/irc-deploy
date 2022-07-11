@@ -103,18 +103,18 @@ class PartnerSetupController {
         tasks.each { TaskList it ->
             def deletedFromCamunda = deleteProcessInstance(it.processInstanceId)
             if (deletedFromCamunda) {
-                ReportForm.findAllByTaskId(it.taskId).each {
-                    ReportFormFinancial.findAllByReportId(it.id).each { it.delete() }
-                    ReportFormPerformance.findAllByReportId(it.id).each { it.delete() }
-                    it.delete()
+                ReportForm.findAllByProcessInstanceId(it.processInstanceId).each { ReportForm rf ->
+                    ReportFormFinancial.findAllByReportId(it.id).each { ReportFormFinancial rff -> rff.delete() }
+                    ReportFormPerformance.findAllByReportId(it.id).each { ReportFormPerformance rfp -> rfp.delete() }
+                    rf.delete()
                 }
-                ReportFormFiles.findAllByTaskId(it.taskId).each { it.delete() }
-                ReportFormRecommendations.findAllByTaskId(it.taskId).each { it.delete() }
-                ReportFormComments.findAllByTaskId(it.taskId).each { it.delete() }
+                ReportFormFiles.findAllByProcessInstanceId(it.processInstanceId).each { ReportFormFiles files -> files.delete() }
+                ReportFormRecommendations.findAllByProcessInstanceId(it.processInstanceId).each { ReportFormRecommendations recommendations -> recommendations.delete() }
+                ReportFormComments.findAllByProcessInstanceId(it.processInstanceId).each { ReportFormComments comments -> comments.delete() }
                 it.delete()
             }
         }
-        CalendarTriggerDates.findAllByPartnerSetupId(partnerSetup.id).each { it.delete() }
+        CalendarTriggerDates.findAllByPartnerSetupId(partnerSetup.id).each { CalendarTriggerDates it -> it.delete() }
 
         partnerSetupService.delete(id ?: params.id)
 

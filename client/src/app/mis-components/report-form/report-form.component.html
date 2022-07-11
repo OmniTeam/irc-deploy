@@ -660,24 +660,33 @@
                   <div class="row" [style.display]="isSubmitVisible || isSubmitFinalVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
-                      <button class="btn btn-warning" (click)="submitReport('save')">Save For Later</button>
-                      <button class="btn btn-success" (click)="submitReport('submit')">Submit Report</button>
+                      <button class="btn btn-danger" [disabled]="submitting"  (click)="onBackPressed()">Cancel</button>
+                      <button class="btn btn-warning" [disabled]="submitting"  (click)="submitReport('save')">Save For Later</button>
+                      <button class="btn btn-success" [disabled]="submitting"  (click)="submitReport('submit')">
+                        <span *ngIf="!submitting">Submit Report</span>
+                        <span *ngIf="submitting">Loading ...</span>
+                      </button>
                     </div>
                   </div>
                   <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-warning" (click)="reviewReport('revise')">Save For Later</button>
-                      <button class="btn btn-success" (click)="reviewReport('submit')">Approve Review</button>
+                      <button class="btn btn-warning" [disabled]="submitting"  (click)="reviewReport('revise')">Save For Later</button>
+                      <button class="btn btn-success" [disabled]="submitting"  (click)="reviewReport('submit')">
+                        <span *ngIf="!submitting">Approve Review</span>
+                        <span *ngIf="submitting">Loading ...</span>
+                      </button>
                     </div>
                   </div>
                   <div class="row"
                        [style.display]="isApproveVisible || isApproveFundDisbursement || isDisburseFunds ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
-                      <button class="btn btn-success" (click)="approveReport()">Approve Report</button>
+                      <button class="btn btn-danger" [disabled]="submitting"  (click)="onBackPressed()">Cancel</button>
+                      <button class="btn btn-success" [disabled]="submitting"  (click)="approveReport()">
+                        <span *ngIf="!submitting">Approve Report</span>
+                        <span *ngIf="submitting">Loading ...</span>
+                      </button>
                     </div>
                   </div>
                 </div>

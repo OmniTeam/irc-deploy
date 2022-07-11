@@ -168,11 +168,13 @@ class ProjectMilestoneController {
                 def clause = (queryC.contains("where") || queryC.contains("WHERE")) ? " and" : " where"
                 def queryQ = queryC + clause + " activity_date between '${params.startDate}' and '${params.endDate}'"
 
-                println queryQ
+                println "queryCummulaive ==> $queryC"
 
-                def quarter = AppHolder.withMisSql { rows(queryQ) }.first()
+                def quarter = [total:0]
+                if (queryQ != null) quarter = AppHolder.withMisSql { rows(queryQ as String) }.first()
 
-                def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                def cumulative = [total:0]
+                if (queryC != null) cumulative = AppHolder.withMisSql { rows(queryC) }.first()
 
                 milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
 
