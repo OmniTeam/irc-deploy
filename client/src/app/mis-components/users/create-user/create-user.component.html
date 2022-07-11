@@ -292,6 +292,7 @@
                                      placeholder="Choose Partner"
                                      formControlName="partner"
                                      [ngClass]="{ 'is-invalid': submitted && f.partner.errors }"
+                                     (change) = "onChangePartner($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
