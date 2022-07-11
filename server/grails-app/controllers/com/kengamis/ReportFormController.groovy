@@ -25,7 +25,7 @@ class ReportFormController {
         respond reportFormService.list(params), model: [reportFormCount: reportFormService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond reportFormService.get(id)
     }
 
@@ -86,41 +86,52 @@ class ReportFormController {
     }
 
     def getReportForTask() {
-        def reportData = [report: ReportForm.findByProcessInstanceId(params.processInstanceId)]
+        def report = ReportForm.findByProcessInstanceId(params.processInstanceId)
+        def reportData = [report: null]
+        if (report != null) {
+            reportData = [report: [
+                    id               : report.id,
+                    groupId          : report.groupId,
+                    processInstanceId: report.processInstanceId,
+                    partnerSetupId   : report.partnerSetupId,
+                    partnerId        : report.partnerId,
+                    taskId           : report.taskId,
+                    taskDefinitionKey: report.taskDefinitionKey,
+                    userId           : report.userId,
+                    reportValues     : report.reportValues,
+                    status           : report.status
+            ]]
+        }
         respond reportData
     }
 
     def getMilestonePerformance() {
-        def slurper = new JsonSlurper()
         def milestones = []
 
         ReportForm.all.each {
-            def values = slurper.parseText(it.reportValues)
-            def performanceReport = slurper.parseText(values['performanceReport'] as String)
-            def financialReport = slurper.parseText(values['financialReport'] as String)
-            if (performanceReport != null) {
-                performanceReport.each { p ->
-                    ProjectMilestone pm = ProjectMilestone.findById(p['milestoneId'] as String)
-                    def expenseToDate = ''
-                    def approvedBudget = ''
-                    financialReport.each { f ->
-                        if (f['budget_line'] == pm?.name) {
-                            expenseToDate = f['expense_to_date']
-                            approvedBudget = f['approved_budget']
-                        }
-                    }
-                    milestones << [
-                            milestoneId          : pm?.id,
-                            partnerId            : it.partnerId,
-                            milestone            : pm?.name,
-                            overallTarget        : p['overall_target'],
-                            cumulativeAchievement: p['cumulative_achievement'],
-                            percentageAchievement: p['percentage_achievement'],
-                            expenseToDate        : expenseToDate,
-                            approvedBudget       : approvedBudget,
+            def performanceReport = ReportFormPerformance.findByReportId(it.id)
+            def financialReport = ReportFormFinancial.findByReportId(it.id)
+            if (performanceReport != null && financialReport != null) {
+                ProjectMilestone pm = ProjectMilestone.findById(performanceReport.milestoneId)
+                def expenseToDate = ''
+                def approvedBudget = ''
 
-                    ]
+                if (financialReport.budgetLine == pm?.name) {
+                    expenseToDate = financialReport.expenseToDate
+                    approvedBudget = financialReport.approvedBudget
                 }
+
+                milestones << [
+                        milestoneId          : pm?.id,
+                        partnerId            : it.partnerId,
+                        milestone            : pm?.name,
+                        overallTarget        : performanceReport.overallTarget,
+                        cumulativeAchievement: performanceReport.cumulativeAchievement,
+                        percentageAchievement: performanceReport.percentageAchievement,
+                        expenseToDate        : expenseToDate,
+                        approvedBudget       : approvedBudget,
+
+                ]
             }
         }
         respond milestones
