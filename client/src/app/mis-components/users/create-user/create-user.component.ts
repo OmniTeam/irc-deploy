@@ -28,6 +28,8 @@ import {ProgramPartnersService} from '../../../services/program-partners.service
 })
 export class CreateUserComponent implements OnInit {
    userTypeValue: any;
+   partnerId: any;
+   userGroupViaPartner = [];
 
     constructor(
     private userService: UsersService,
@@ -101,6 +103,22 @@ export class CreateUserComponent implements OnInit {
     this.fieldTextType = !this.fieldTextType;
   }
 
+  onChangePartner(event) {
+    console.log(event);
+    if (this.userTypeValue === 'Partner') {
+      const params = new HttpParams()
+        .set('partnerId', event);
+      if (event) {
+        this.userService.getUserGroup(params).subscribe((result) => {
+          this.userGroupViaPartner.push(result.id);
+          this.formGroup.controls['kengaGroup'].setValue(this.userGroupViaPartner);
+          console.log(this.formGroup.value, 'The form group');
+        });
+      }
+
+    }
+  }
+
   createUser() {
     this.clicked = true;
     this.submitted = true;
@@ -149,7 +167,8 @@ export class CreateUserComponent implements OnInit {
 
           this.userService.createUserGroup(userGroupData).subscribe(data => {
             console.log(data , 'User group');
-          }, error => {this.alertService.error('failed to create user groups Entries'); });
+          }, error => {
+            console.log('failed to create user groups Entries'); });
         }
       }
 
@@ -163,12 +182,16 @@ export class CreateUserComponent implements OnInit {
     this.userTypeValue = event;
     if (event === 'Partner') {
       this.formGroup.controls['role'].reset();
+      this.formGroup.controls['kengaGroup'].reset();
+      this.formGroup.controls['partner'].reset();
       document.getElementById('role_partner').hidden = false;
       document.getElementById('role_staff').hidden = true;
       document.getElementById('partners').hidden = false;
       document.getElementById('groups').hidden = true;
     } else if (event === 'CRVPF Staff') {
       this.formGroup.controls['role'].reset();
+      this.formGroup.controls['kengaGroup'].reset();
+      this.formGroup.controls['partner'].reset();
       document.getElementById('role_staff').hidden = false;
       document.getElementById('role_partner').hidden = true;
       document.getElementById('groups').hidden = false;

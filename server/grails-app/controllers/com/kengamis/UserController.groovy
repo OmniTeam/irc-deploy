@@ -188,4 +188,12 @@ class UserController {
             UserPartner.create(currentPartner,currentUser, true)
         }
     }
+
+    def getUserGroupUsingPartner(){
+        def partnerId = params.partnerId
+        def partnerObject = ProgramPartner.findById(partnerId)
+        def partnerName = partnerObject.cluster
+        def kengaGroup = KengaGroup.findByName(partnerName)
+        respond kengaGroup
+    }
 }
