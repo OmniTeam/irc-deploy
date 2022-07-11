@@ -34,6 +34,14 @@ export class ReportFormService {
     return this.http.get(`${environment.serverUrl}/reportFormPerformance/getPerformanceReportByReportId/${reportId}`,);
   }
 
+  deleteAllFinancialReports(reportId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormFinancial/deleteAllFinancialReports/${reportId}`);
+  }
+
+  deleteAllPerformanceReports(reportId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormPerformance/deleteAllPerformanceReports/${reportId}`,);
+  }
+
   createFinancialReport(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/reportFormFinancial`, formData);
   }

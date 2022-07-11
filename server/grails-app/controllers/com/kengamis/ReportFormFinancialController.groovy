@@ -20,16 +20,15 @@ class ReportFormFinancialController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reportFormFinancialService.list(params), model:[reportFormFinancialCount: reportFormFinancialService.count()]
+        respond reportFormFinancialService.list(params), model: [reportFormFinancialCount: reportFormFinancialService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond reportFormFinancialService.get(id)
     }
 
     @Transactional
     def save(ReportFormFinancial reportFormFinancial) {
-        println reportFormFinancial.errors
         if (reportFormFinancial == null) {
             render status: NOT_FOUND
             return
@@ -41,13 +40,27 @@ class ReportFormFinancialController {
         }
 
         try {
-            reportFormFinancialService.save(reportFormFinancial)
+            def rp = ReportFormFinancial.findAllByReportIdAndBudgetLine(reportFormFinancial.reportId, reportFormFinancial.budgetLine)
+            if(rp.size()>0) {
+                rp.each {
+                    it.reportId = reportFormFinancial.reportId
+                    it.budgetLine = reportFormFinancial.budgetLine
+                    it.approvedBudget = reportFormFinancial.approvedBudget
+                    it.expenseToDate = reportFormFinancial.expenseToDate
+                    it.totalAdvanced = reportFormFinancial.totalAdvanced
+                    it.variance = reportFormFinancial.variance
+                    it.quarterExpenses = reportFormFinancial.quarterExpenses
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                reportFormFinancialService.save(reportFormFinancial)
+            }
         } catch (ValidationException e) {
             respond reportFormFinancial.errors
             return
         }
 
-        respond reportFormFinancial, [status: CREATED, view:"show"]
+        respond reportFormFinancial, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -70,11 +83,11 @@ class ReportFormFinancialController {
             return
         }
 
-        respond reportFormFinancial, [status: OK, view:"show"]
+        respond reportFormFinancial, [status: OK, view: "show"]
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
@@ -85,8 +98,8 @@ class ReportFormFinancialController {
         render status: NO_CONTENT
     }
 
-    def getFinancialReportByReportId(reportId){
-        def data = [report: ReportFormFinancial.findByReportId(reportId)]
-        respond data
+    def getFinancialReportByReportId(String reportId) {
+        def reportFinancial = ReportFormFinancial.findAllByReportId(reportId)
+        respond reportFinancial
     }
 }

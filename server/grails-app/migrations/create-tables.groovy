@@ -3421,7 +3421,9 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
-            column(name: "budget_line", type: "VARCHAR(255)")
+            column(name: "budget_line", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
 
             column(name: "quarter_expenses", type: "VARCHAR(255)")
 
@@ -3436,6 +3438,8 @@ databaseChangeLog = {
             column(name: "approved_budget", type: "VARCHAR(255)")
 
             column(name: "expense_to_date", type: "VARCHAR(255)")
+
+            column(name: "reason_for_variance", type: "VARCHAR(255)")
 
             column(name: "report_id", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
@@ -3461,9 +3465,7 @@ databaseChangeLog = {
 
             column(name: "comment_on_result", type: "VARCHAR(255)")
 
-            column(name: "milestone_id", type: "VARCHAR(255)") {
-                constraints(nullable: "false")
-            }
+            column(name: "milestone_id", type: "VARCHAR(255)")
 
             column(name: "last_updated", type: "datetime") {
                 constraints(nullable: "false")

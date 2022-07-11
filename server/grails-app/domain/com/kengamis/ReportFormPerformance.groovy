@@ -21,6 +21,7 @@ class ReportFormPerformance {
     }
     static constraints = {
         overallTarget nullable: true
+        milestoneId nullable: true
         cumulativeAchievement nullable: true
         quarterAchievement nullable: true
         quarterTarget nullable: true

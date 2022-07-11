@@ -10,6 +10,7 @@ class ReportFormFinancial {
     String totalAdvanced
     String variance
     String quarterExpenses
+    String reasonForVariance
 
     Date dateCreated
     Date lastUpdated
@@ -18,11 +19,11 @@ class ReportFormFinancial {
         id generator: 'uuid2'
     }
     static constraints = {
-        budgetLine nullable: true
         approvedBudget nullable: true
         expenseToDate nullable: true
         totalAdvanced nullable: true
         variance nullable: true
         quarterExpenses nullable: true
+        reasonForVariance nullable: true
     }
 }

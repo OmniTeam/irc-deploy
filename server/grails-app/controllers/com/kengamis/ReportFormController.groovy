@@ -89,8 +89,6 @@ class ReportFormController {
         def report = ReportForm.findByProcessInstanceId(params.processInstanceId)
         def reportData = [report: null]
         if (report != null) {
-            def financialReport = ReportFormFinancial.findByReportId(report.id)
-            def performanceReport = ReportFormPerformance.findByReportId(report.id)
             reportData = [report: [
                     id               : report.id,
                     groupId          : report.groupId,
@@ -101,9 +99,7 @@ class ReportFormController {
                     taskDefinitionKey: report.taskDefinitionKey,
                     userId           : report.userId,
                     reportValues     : report.reportValues,
-                    status           : report.status,
-                    financialReport  : financialReport,
-                    performanceReport: performanceReport
+                    status           : report.status
             ]]
         }
         respond reportData

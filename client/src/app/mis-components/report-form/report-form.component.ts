@@ -192,10 +192,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
       if (results !== null) {
         if (results.organisationsInvolved !== undefined)
-        if (results.organisationsInvolved.length>0){
-          console.log(results.organisationsInvolved)
-          this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
-        }
+          if (results.organisationsInvolved.length > 0) {
+            this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
+          }
         this.organisationalInfo = results;
       }
     });
@@ -232,8 +231,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.report = data.report;
         let reports = JSON.parse(data.report.reportValues);
 
-        this.financialReport = data.report.financialReport;
-        this.performanceReport = data.report.performanceReport;
+        this.reportFormService.getFinancialReportByReportId(data.report.id).subscribe(f => {
+          console.log("f", f)
+          if (f !== undefined) this.financialReport = f;
+        });
+
+        this.reportFormService.getPerformanceReportByReportId(data.report.id).subscribe(p => {
+          console.log("p", p)
+          if (p !== undefined) this.performanceReport = p;
+        });
 
         if (reports.reviewerInformation !== null && reports.reviewerInformation !== undefined) {
           this.reviewerInformation = JSON.parse(reports.reviewerInformation);
@@ -280,12 +286,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         })
 
         values.budget.forEach((b) => {
-          if (!this.financialReport.some(x => x.id === b.id)) {
+          if (!this.financialReport.some(x => x.budgetLine === b.budgetLine)) {
             this.financialReport.push({
-              id: b.id,
-              budget_line: b.budgetLine,
-              approved_budget: b.approvedAmount,
-              expense_to_date: b.totalSpent
+              budgetLine: b.budgetLine,
+              approvedBudget: b.approvedAmount,
+              expenseToDate: b.totalSpent
             });
           }
         });
@@ -312,16 +317,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                   percentageAchievement = 0;
                 }
 
-                if (!this.performanceReport.some(x => x.id === i.id)) {
+                if (!this.performanceReport.some(x => x.outputIndicators === i.name)) {
                   this.performanceReport.push({
-                    id: i.id,
                     milestoneId: i.milestoneId,
-                    output_indicators: i.name,
-                    overall_target: i.overallTarget,
-                    cumulative_achievement: cumulative,
-                    quarter_achievement: quarter,
-                    quarter_target: target,
-                    percentage_achievement: percentageAchievement
+                    outputIndicators: i.name,
+                    overallTarget: i.overallTarget,
+                    cumulativeAchievement: cumulative,
+                    quarterAchievement: quarter,
+                    quarterTarget: target,
+                    percentageAchievement: percentageAchievement
                   });
                 }
               }
@@ -486,7 +490,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.performanceReport.some(x => x.id === rowId)) {
             this.performanceReport.forEach(function (item) {
               if (item.id === rowId) {
-                item.comment_on_result = value;
+                item.commentOnResult = value;
               }
             });
           }
@@ -495,7 +499,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.performanceReport.some(x => x.id === rowId)) {
             this.performanceReport.forEach(function (item) {
               if (item.id === rowId) {
-                item.quarter_achievement = value;
+                item.quarterAchievement = value;
               }
             });
           }
@@ -504,13 +508,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                if (+value <= +item.total_advanced) {
-                  item.quarter_expenses = value;
+                if (+value <= +item.totalAdvanced) {
+                  item.quarterExpenses = value;
                 } else {
                   this.alertService.error(`Quarter expense should be less than Total Advanced`);
                   return;
                 }
-                item.variance = +item.total_advanced - +value;
+                item.variance = +item.totalAdvanced - +value;
               }
             });
           }
@@ -519,8 +523,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                item.total_advanced = value;
-                item.variance = +item.total_advanced - +item.quarter_expenses;
+                item.totalAdvanced = value;
+                item.variance = +item.totalAdvanced - +item.quarterExpenses;
               }
             });
           }
@@ -529,7 +533,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
               if (item.id === rowId) {
-                item.reason_for_variance = value;
+                item.reasonForVariance = value;
               }
             });
           }
@@ -601,53 +605,40 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveFinancialReport(reportId) {
-    this.financialReport.forEach((fr)=>{
+    this.financialReport.forEach((fr) => {
       let formData: { [key: string]: string } = {
         reportId: reportId,
-        budgetLine: fr.budget_line,
-        approvedBudget: fr.approved_budget,
-        expenseToDate: fr.expense_to_date,
-        totalAdvanced: fr.total_advanced,
+        budgetLine: fr.budgetLine,
+        approvedBudget: fr.approvedBudget,
+        expenseToDate: fr.expenseToDate,
+        totalAdvanced: fr.totalAdvanced,
         variance: fr.variance,
-        quarterExpenses: fr.quarter_expenses,
+        quarterExpenses: fr.quarterExpenses,
+        reasonForVariance: fr.reasonForVariance
       };
-      this.reportFormService.getFinancialReportByReportId(reportId).subscribe(data => {
-        if (data.report !== null && data.report !== undefined) {
-          this.reportFormService.updateFinancialReport(formData, data.report.id).subscribe((res)=>{
-            console.log("Updated financial report",res)
-          })
-        } else {
-          this.reportFormService.createFinancialReport(formData).subscribe((res)=>{
-            console.log("Updated financial report",res)
-          })
-        }
+
+      this.reportFormService.createFinancialReport(formData).subscribe((res) => {
+        console.log("Updated financial report", res)
       })
     })
   }
 
   savePerformanceReport(reportId) {
-    this.performanceReport.forEach((pr)=>{
+    this.performanceReport.forEach((pr) => {
       let formData: { [key: string]: string } = {
         reportId: reportId,
         milestoneId: pr.milestoneId,
-        outputIndicators: pr.output_indicators,
-        overallTarget: pr.overall_target,
-        cumulativeAchievement: pr.cumulative_achievement,
-        quarterAchievement: pr.quarter_achievement,
-        quarterTarget: pr.quarter_target,
-        percentageAchievement: pr.percentage_achievement,
-        commentOnResult: pr.comment_on_result,
+        outputIndicators: pr.outputIndicators,
+        overallTarget: pr.overallTarget,
+        cumulativeAchievement: pr.cumulativeAchievement,
+        quarterAchievement: pr.quarterAchievement,
+        quarterTarget: pr.quarterTarget,
+        percentageAchievement: pr.percentageAchievement,
+        commentOnResult: pr.commentOnResult,
       };
-      this.reportFormService.getPerformanceReportByReportId(reportId).subscribe(data => {
-        if (data.report !== null && data.report !== undefined) {
-          this.reportFormService.updatePerformanceReport(formData, data.report.id).subscribe((res)=>{
-            console.log("Updated performance report",res)
-          })
-        } else {
-          this.reportFormService.createPerformanceReport(formData).subscribe((res)=>{
-            console.log("Updated performance report",res)
-          })
-        }
+
+      this.reportFormService.createPerformanceReport(formData).subscribe((res) => {
+        console.log("Updated performance report", res)
       })
     })
   }

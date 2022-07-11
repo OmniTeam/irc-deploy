@@ -20,7 +20,7 @@ class ReportFormPerformanceController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reportFormPerformanceService.list(params), model:[reportFormPerformanceCount: reportFormPerformanceService.count()]
+        respond reportFormPerformanceService.list(params), model: [reportFormPerformanceCount: reportFormPerformanceService.count()]
     }
 
     def show(String id) {
@@ -29,7 +29,6 @@ class ReportFormPerformanceController {
 
     @Transactional
     def save(ReportFormPerformance reportFormPerformance) {
-        println reportFormPerformance.errors
         if (reportFormPerformance == null) {
             render status: NOT_FOUND
             return
@@ -41,13 +40,29 @@ class ReportFormPerformanceController {
         }
 
         try {
-            reportFormPerformanceService.save(reportFormPerformance)
+            def rp = ReportFormPerformance.findAllByReportIdAndOutputIndicators(reportFormPerformance.reportId, reportFormPerformance.outputIndicators)
+            if(rp.size()>0) {
+                rp.each {
+                    it.reportId = reportFormPerformance.reportId
+                    it.outputIndicators = reportFormPerformance.outputIndicators
+                    it.percentageAchievement = reportFormPerformance.percentageAchievement
+                    it.cumulativeAchievement = reportFormPerformance.cumulativeAchievement
+                    it.overallTarget = reportFormPerformance.overallTarget
+                    it.milestoneId = reportFormPerformance.milestoneId
+                    it.commentOnResult = reportFormPerformance.commentOnResult
+                    it.quarterAchievement = reportFormPerformance.quarterAchievement
+                    it.quarterTarget = reportFormPerformance.quarterTarget
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                reportFormPerformanceService.save(reportFormPerformance)
+            }
         } catch (ValidationException e) {
             respond reportFormPerformance.errors
             return
         }
 
-        respond reportFormPerformance, [status: CREATED, view:"show"]
+        respond reportFormPerformance, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -70,11 +85,11 @@ class ReportFormPerformanceController {
             return
         }
 
-        respond reportFormPerformance, [status: OK, view:"show"]
+        respond reportFormPerformance, [status: OK, view: "show"]
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return
@@ -85,8 +100,8 @@ class ReportFormPerformanceController {
         render status: NO_CONTENT
     }
 
-    def getPerformanceReportByReportId(reportId){
-        def data = [report: ReportFormPerformance.findByReportId(reportId)]
-        respond data
+    def getPerformanceReportByReportId(String reportId) {
+        def reportPerformance = ReportFormPerformance.findAllByReportId(reportId)
+        respond reportPerformance
     }
 }
