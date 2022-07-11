@@ -15,8 +15,6 @@ import {PartnerSetupService} from '../../services/partner-setup.service';
 import {ProjectMilestoneService} from '../../services/project-milestone.service';
 import {AlertService} from '../../services/alert';
 
-//import {SampleData} from "../../helpers/sample-data";
-
 @Component({
   selector: 'app-report-form',
   templateUrl: './report-form.component.html',
@@ -56,6 +54,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   openRecommendationsPopup: boolean;
   openPopup: boolean;
   loading: boolean = false;
+  submitting: boolean = false;
   report: any;
 
   reviewerInformation: any;
@@ -194,10 +193,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.programPartnersService.getCurrentProgramPartner(this.taskRecord.partnerId).subscribe((results: any) => {
       if (results !== null) {
         if (results.organisationsInvolved !== undefined)
-        if (results.organisationsInvolved.length>0){
-          console.log(results.organisationsInvolved)
-          this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
-        }
+          if (results.organisationsInvolved.length > 0) {
+            this.organisationsInvolved = JSON.parse(results.organisationsInvolved)
+          }
         this.organisationalInfo = results;
       }
     });
@@ -234,8 +232,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         this.report = data.report;
         let reports = JSON.parse(data.report.reportValues);
 
-        this.financialReport = JSON.parse(reports.financialReport);
-        this.performanceReport = JSON.parse(reports.performanceReport);
+        this.reportFormService.getFinancialReportByReportId(data.report.id).subscribe(f => {
+          console.log("f", f)
+          if (f !== undefined) this.financialReport = f;
+        });
+
+        this.reportFormService.getPerformanceReportByReportId(data.report.id).subscribe(p => {
+          console.log("p", p)
+          if (p !== undefined) this.performanceReport = p;
+        });
 
         if (reports.reviewerInformation !== null && reports.reviewerInformation !== undefined) {
           this.reviewerInformation = JSON.parse(reports.reviewerInformation);
@@ -282,12 +287,11 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         })
 
         values.budget.forEach((b) => {
-          if (!this.financialReport.some(x => x.id === b.id)) {
+          if (!this.financialReport.some(x => x.budgetLine === b.budgetLine)) {
             this.financialReport.push({
-              id: b.id,
-              budget_line: b.budgetLine,
-              approved_budget: b.approvedAmount,
-              expense_to_date: b.totalSpent
+              budgetLine: b.budgetLine,
+              approvedBudget: b.approvedAmount,
+              expenseToDate: b.totalSpent
             });
           }
         });
@@ -314,16 +318,15 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                   percentageAchievement = 0;
                 }
 
-                if (!this.performanceReport.some(x => x.id === i.id)) {
+                if (!this.performanceReport.some(x => x.outputIndicators === i.name)) {
                   this.performanceReport.push({
-                    id: i.id,
                     milestoneId: i.milestoneId,
-                    output_indicators: i.name,
-                    overall_target: i.overallTarget,
-                    cumulative_achievement: cumulative,
-                    quarter_achievement: quarter,
-                    quarter_target: target,
-                    percentage_achievement: percentageAchievement
+                    outputIndicators: i.name,
+                    overallTarget: i.overallTarget,
+                    cumulativeAchievement: cumulative,
+                    quarterAchievement: quarter,
+                    quarterTarget: target,
+                    percentageAchievement: percentageAchievement
                   });
                 }
               }
@@ -331,10 +334,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           });
         }
 
-        let reportValues: { [key: string]: string } = {
-          financialReport: JSON.stringify(this.financialReport),
-          performanceReport: JSON.stringify(this.performanceReport),
-        };
+        let reportValues: { [key: string]: string } = {};
         this.saveReport(reportValues, 'draft');
       }
     }, error => console.log(error));
@@ -491,7 +491,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.performanceReport.some(x => x.id === rowId)) {
             this.performanceReport.forEach(function (item) {
               if (item.id === rowId) {
-                item.comment_on_result = value;
+                item.commentOnResult = value;
               }
             });
           }
@@ -500,7 +500,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.performanceReport.some(x => x.id === rowId)) {
             this.performanceReport.forEach(function (item) {
               if (item.id === rowId) {
-                item.quarter_achievement = value;
+                item.quarterAchievement = value;
               }
             });
           }
@@ -509,13 +509,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                if (+value <= +item.total_advanced) {
-                  item.quarter_expenses = value;
+                if (+value <= +item.totalAdvanced) {
+                  item.quarterExpenses = value;
                 } else {
                   this.alertService.error(`Quarter expense should be less than Total Advanced`);
                   return;
                 }
-                item.variance = +item.total_advanced - +value;
+                item.variance = +item.totalAdvanced - +value;
               }
             });
           }
@@ -524,8 +524,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach((item) => {
               if (item.id === rowId) {
-                item.total_advanced = value;
-                item.variance = +item.total_advanced - +item.quarter_expenses;
+                item.totalAdvanced = value;
+                item.variance = +item.totalAdvanced - +item.quarterExpenses;
               }
             });
           }
@@ -534,7 +534,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           if (this.financialReport.some(x => x.id === rowId)) {
             this.financialReport.forEach(function (item) {
               if (item.id === rowId) {
-                item.reason_for_variance = value;
+                item.reasonForVariance = value;
               }
             });
           }
@@ -544,10 +544,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     //update project overview values
     this.updateProjectOverview();
     //update report in DB
-    let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
-    };
+    let reportValues: { [key: string]: string } = {};
     this.saveReport(reportValues, 'draft');
   };
 
@@ -556,6 +553,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
+    this.submitting = true;
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processInstanceId: this.taskRecord.processInstanceId,
@@ -572,6 +570,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.reportFormService.getReportForTask(params).subscribe(data => {
       if (data.report !== null && data.report !== undefined) {
         this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {
+          console.log(data)
+          this.saveFinancialReport(data.id)
+          this.savePerformanceReport(data.id)
           this.error = false;
           this.success = true;
           this.successMessage = 'Updated Report';
@@ -583,6 +584,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         });
       } else {
         this.reportFormService.createReport(reportRecord).subscribe((data) => {
+          this.saveFinancialReport(data.id)
+          this.savePerformanceReport(data.id)
           this.error = false;
           this.success = true;
           this.successMessage = 'Saved Report';
@@ -595,6 +598,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       }
     });
     setTimeout(() => {
+      this.submitting = false;
       if (status != 'draft') {
         this.router.navigate(['/home']);
       }
@@ -603,13 +607,50 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     }, 3000);
   }
 
+  saveFinancialReport(reportId) {
+    this.financialReport.forEach((fr) => {
+      let formData: { [key: string]: string } = {
+        reportId: reportId,
+        budgetLine: fr.budgetLine,
+        approvedBudget: fr.approvedBudget,
+        expenseToDate: fr.expenseToDate,
+        totalAdvanced: fr.totalAdvanced,
+        variance: fr.variance,
+        quarterExpenses: fr.quarterExpenses,
+        reasonForVariance: fr.reasonForVariance
+      };
+
+      this.reportFormService.createFinancialReport(formData).subscribe((res) => {
+        console.log("Updated financial report", res)
+      })
+    })
+  }
+
+  savePerformanceReport(reportId) {
+    this.performanceReport.forEach((pr) => {
+      let formData: { [key: string]: string } = {
+        reportId: reportId,
+        milestoneId: pr.milestoneId,
+        outputIndicators: pr.outputIndicators,
+        overallTarget: pr.overallTarget,
+        cumulativeAchievement: pr.cumulativeAchievement,
+        quarterAchievement: pr.quarterAchievement,
+        quarterTarget: pr.quarterTarget,
+        percentageAchievement: pr.percentageAchievement,
+        commentOnResult: pr.commentOnResult,
+      };
+
+      this.reportFormService.createPerformanceReport(formData).subscribe((res) => {
+        console.log("Updated performance report", res)
+      })
+    })
+  }
+
   submitReport(status) {
     this.error = false;
     this.success = false;
 
     let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
       reviewerInformation: JSON.stringify(this.reviewerInformation),
       approverInformation: JSON.stringify(this.approverInformation)
     };
@@ -665,8 +706,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.saveCommentsAndRecommendations()
 
     let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
       approverInformation: JSON.stringify(this.approverInformation),
       reviewerInformation: JSON.stringify({
         expenses_realistic: this.radioExpensesRealistic,
@@ -703,8 +742,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.saveCommentsAndRecommendations()
 
     let reportValues: { [key: string]: string } = {
-      financialReport: JSON.stringify(this.financialReport),
-      performanceReport: JSON.stringify(this.performanceReport),
       reviewerInformation: JSON.stringify(this.reviewerInformation),
       approverInformation: JSON.stringify({
         suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,

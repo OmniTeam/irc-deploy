@@ -174,27 +174,27 @@
                     <tbody>
                     <tr *ngFor="let row of performance">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'>{{ row.output_indicators }}</td>
-                      <td class='text-center'>{{ row.overall_target | number }}</td>
-                      <td class='text-center'>{{ row.cumulative_achievement | number }}</td>
-                      <td class='text-center'>{{ row.quarter_target | number }}</td>
+                      <td class='text-center'>{{ row.outputIndicators }}</td>
+                      <td class='text-center'>{{ row.overallTarget | number }}</td>
+                      <td class='text-center'>{{ row.cumulativeAchievement | number }}</td>
+                      <td class='text-center'>{{ row.quarterTarget | number }}</td>
                       <td class='text-center'
-                          *ngIf="row.milestoneId!=undefined">{{ row.quarter_achievement  | number }}</td>
+                          *ngIf="row.milestoneId!=undefined">{{ row.quarterAchievement  | number }}</td>
                       <td class='text-center' *ngIf="row.milestoneId==undefined"
-                          id="1-{{row.id}}">{{ row.quarter_achievement | number }}
+                          id="1-{{row.id}}">{{ row.quarterAchievement | number }}
                         <div *ngIf="isSubmitVisible || isReviewPerformance || isReviewProgram || isSubmitFinalVisible">
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarter_achievement, 'number')">
+                                  (click)="cellEditor(row, '1-'+row.id, 'quarter_achievement', row.quarterAchievement, 'number')">
                             <i
                               class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
-                      <td class='text-center'>{{ row.percentage_achievement }}</td>
+                      <td class='text-center'>{{ row.percentageAchievement }}</td>
                       <td class='text-center comment' id="0-{{row.id}}">
-                        {{ row.comment_on_result }}
+                        {{ row.commentOnResult }}
                         <div *ngIf="isSubmitVisible || isReviewPerformance || isReviewProgram || isSubmitFinalVisible">
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.comment_on_result)"><i
+                                  (click)="cellEditor(row, '0-'+row.id, 'summaryComment', row.commentOnResult)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -221,33 +221,33 @@
                     <tbody>
                     <tr *ngFor="let row of financial">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td class='text-center'>{{ row.budget_line }}</td>
-                      <td class='text-center'>{{ row.approved_budget | number }}</td>
-                      <td class='text-center'>{{ row.expense_to_date | number }}</td>
+                      <td class='text-center'>{{ row.budgetLine }}</td>
+                      <td class='text-center'>{{ row.approvedBudget | number }}</td>
+                      <td class='text-center'>{{ row.expenseToDate | number }}</td>
                       <td class='text-center' id="td1-{{row.id}}">
-                        {{ row.total_advanced | number }}
+                        {{ row.totalAdvanced | number }}
                         <div *ngIf="isSubmitVisible || isReviewFinance || isSubmitFinalVisible">
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.total_advanced, 'number')">
+                                  (click)="cellEditor(row,'td1-'+row.id, 'totalAdvanced', row.totalAdvanced, 'number')">
                             <i
                               class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' id="td2-{{row.id}}">
-                        {{ row.quarter_expenses | number }}
+                        {{ row.quarterExpenses | number }}
                         <div *ngIf="isSubmitVisible || isReviewFinance || isSubmitFinalVisible">
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarter_expenses, 'number')">
+                                  (click)="cellEditor(row,'td2-'+row.id, 'quarterExpense', row.quarterExpenses, 'number')">
                             <i
                               class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center'>{{ row.variance }}</td>
                       <td class='text-center comment' [id]="'td3-'+row.id">
-                        {{ row.reason_for_variance }}
+                        {{ row.reasonForVariance }}
                         <div *ngIf="isSubmitVisible || isReviewFinance || isSubmitFinalVisible">
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row,'td3-'+row.id, 'reason_for_variance',row.reason_for_variance)">
+                                  (click)="cellEditor(row,'td3-'+row.id, 'reason_for_variance',row.reasonForVariance)">
                             <i class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
@@ -660,24 +660,33 @@
                   <div class="row" [style.display]="isSubmitVisible || isSubmitFinalVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
-                      <button class="btn btn-warning" (click)="submitReport('save')">Save For Later</button>
-                      <button class="btn btn-success" (click)="submitReport('submit')">Submit Report</button>
+                      <button class="btn btn-danger" [disabled]="submitting"  (click)="onBackPressed()">Cancel</button>
+                      <button class="btn btn-warning" [disabled]="submitting"  (click)="submitReport('save')">Save For Later</button>
+                      <button class="btn btn-success" [disabled]="submitting"  (click)="submitReport('submit')">
+                        <span *ngIf="!submitting">Submit Report</span>
+                        <span *ngIf="submitting">Loading ...</span>
+                      </button>
                     </div>
                   </div>
                   <div class="row" [style.display]="isReviewVisible ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-warning" (click)="reviewReport('revise')">Save For Later</button>
-                      <button class="btn btn-success" (click)="reviewReport('submit')">Approve Review</button>
+                      <button class="btn btn-warning" [disabled]="submitting"  (click)="reviewReport('revise')">Save For Later</button>
+                      <button class="btn btn-success" [disabled]="submitting"  (click)="reviewReport('submit')">
+                        <span *ngIf="!submitting">Approve Review</span>
+                        <span *ngIf="submitting">Loading ...</span>
+                      </button>
                     </div>
                   </div>
                   <div class="row"
                        [style.display]="isApproveVisible || isApproveFundDisbursement || isDisburseFunds ? 'block' : 'none'">
                     <div class="col-lg-12 bottom_buttons_row"
                          style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-                      <button class="btn btn-danger" (click)="onBackPressed()">Cancel</button>
-                      <button class="btn btn-success" (click)="approveReport()">Approve Report</button>
+                      <button class="btn btn-danger" [disabled]="submitting"  (click)="onBackPressed()">Cancel</button>
+                      <button class="btn btn-success" [disabled]="submitting"  (click)="approveReport()">
+                        <span *ngIf="!submitting">Approve Report</span>
+                        <span *ngIf="submitting">Loading ...</span>
+                      </button>
                     </div>
                   </div>
                 </div>

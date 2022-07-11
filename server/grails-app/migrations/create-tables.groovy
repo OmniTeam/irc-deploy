@@ -3411,5 +3411,78 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1657280025069-14") {
+        createTable(tableName: "report_form_financial") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "report_form_financialPK")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "budget_line", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "quarter_expenses", type: "VARCHAR(255)")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "variance", type: "VARCHAR(255)")
+
+            column(name: "total_advanced", type: "VARCHAR(255)")
+
+            column(name: "approved_budget", type: "VARCHAR(255)")
+
+            column(name: "expense_to_date", type: "VARCHAR(255)")
+
+            column(name: "reason_for_variance", type: "VARCHAR(255)")
+
+            column(name: "report_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657280025069-15") {
+        createTable(tableName: "report_form_performance") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "report_form_performancePK")
+            }
+
+            column(name: "quarter_achievement", type: "VARCHAR(255)")
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "overall_target", type: "VARCHAR(255)")
+
+            column(name: "quarter_target", type: "VARCHAR(255)")
+
+            column(name: "comment_on_result", type: "VARCHAR(255)")
+
+            column(name: "milestone_id", type: "VARCHAR(255)")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "output_indicators", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "cumulative_achievement", type: "VARCHAR(255)")
+
+            column(name: "report_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "percentage_achievement", type: "VARCHAR(255)")
+        }
+    }
 
 }
