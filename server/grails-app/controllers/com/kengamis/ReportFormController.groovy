@@ -168,10 +168,12 @@ class ReportFormController {
                             staffId              : it.staffId,
                             milestone            : pm?.name,
                             categoryId           : pm?.programCategoryId,
+                            pillar               : pm?.program,
                             overallTarget        : p['overallTarget'],
                             cumulativeAchievement: cumulativeAchievement,
                             startDate            : p['startDate'],
                             endDate              : p['endDate'],
+                            organization         : it?.organization,
                             expenseToDate        : expenseToDate,
                             approvedBudget       : approvedBudget,
 

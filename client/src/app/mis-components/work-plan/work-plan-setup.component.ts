@@ -262,6 +262,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       this.usersService.getCurrentUserStaff(this.staffChosen).subscribe((results: any) => {
         if (results !== null && results !== undefined) {
           this.organisationalInfo = results;
+          console.log(this.organisationalInfo)
           this.programChosen = results.programId;
           if (this.programChosen != undefined) {
             this.setMilestones(this.programChosen);
