@@ -755,7 +755,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       'evidence_satisfactory',
       'comments',
       'recommendations'])
-    if (!allFilled && status=="submit") {
+    if (!allFilled && status == "submit") {
       this.submitting = false;
       this.alertService.error("Please fill in all required fields");
       return
@@ -791,15 +791,40 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       provideAnyRecommendations: this.provideAnyRecommendations
     }
 
-    let allFilled = Validator.validateJSON(approverInfo, ['suggested_changes_satisfactory',
-      'reports_well_aligned',
-      'recommend_fund',
-      'end_of_partnership',
-      'how_to_proceed',
-      'amountOfFundsDisbursed',
-      'amountOfFundsRemaining',
-      'dateDisbursed',
-      'provideAnyRecommendations'])
+    let allFilled
+
+    if (this.isApproveFundDisbursement) {
+      allFilled = Validator.validateJSON(approverInfo, [
+        'how_to_proceed',
+        'provideAnyRecommendations'])
+    }
+
+    if (this.isDisburseFunds) {
+      allFilled = Validator.validateJSON(approverInfo, [
+        'amountOfFundsDisbursed',
+        'dateDisbursed',
+        'amountOfFundsRemaining'])
+    }
+
+    if (this.isApproveVisible) {
+      if (this.radioRecommendFund == 'Yes') {
+        allFilled = Validator.validateJSON(approverInfo, [
+          'suggested_changes_satisfactory',
+          'reports_well_aligned',
+          'recommend_fund',
+          'end_of_partnership',
+          'amountOfFundsDisbursed',
+          'provideAnyRecommendations'])
+      } else {
+        allFilled = Validator.validateJSON(approverInfo, [
+          'suggested_changes_satisfactory',
+          'reports_well_aligned',
+          'recommend_fund',
+          'end_of_partnership',
+          'provideAnyRecommendations'])
+      }
+    }
+
     if (!allFilled) {
       this.submitting = false;
       this.alertService.error("Please fill in all required fields");
