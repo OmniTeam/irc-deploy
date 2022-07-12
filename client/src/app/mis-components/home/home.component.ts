@@ -14,6 +14,8 @@ import {PartnerSetupService} from '../../services/partner-setup.service';
 })
 export class HomeComponent implements OnInit {
   milestones: any;
+  perc: any;
+  barColor: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -256,10 +258,13 @@ export class HomeComponent implements OnInit {
     this.filterCounter.forEach((item) => {
       if (item.filter == filterName) {
         number = item.count;
+        this.perc = Math.round((number/this.taskListRows?.length) * 100)
       }
     });
     if (filterName == 'All') {
       number = this.taskListRows?.length;
+      this.barColor === 'red'
+      this.perc = 0
     }
     return number;
   }

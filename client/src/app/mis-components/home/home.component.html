@@ -152,7 +152,22 @@
                         </div>
                         <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}
                           ({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
-                        <span style="margin-left: 60px; width: 80%; border-bottom: 4px solid #eeeeee"></span>
+                        <span style="margin-left: 60px;margin-bottom: -10px; width: 80%; border-bottom: 4px">
+                          <div class="progress-wrapper" style="margin-top: -50px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{this.perc}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" [attr.aria-valuenow]="perc"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="perc+'%'"></div>
+                        </div>
+                      </div>
+                        </span>
                       </div>
                     </button>
                   </div>
