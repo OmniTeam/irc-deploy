@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 
@@ -14,11 +14,16 @@ export class UsersService {
   urlUserRole = `${this.baseurl}/UserRole/`;
   urlUserPartner = `${this.baseurl}/UserPartner/`;
   urlDeleteOldRolesAndGroups = `${this.baseurl}/deleteOldRoleAndGroups/`;
+  getUserGroupUrl = `${this.baseurl}/getUserGroupUsingPartner/`;
 
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<any> {
     return this.http.get(this.urlUsers);
+  }
+
+  getUserGroup(params: HttpParams): Observable<any> {
+    return this.http.get(this.getUserGroupUrl, {params});
   }
 
   getMISUsers(): Observable<any> {

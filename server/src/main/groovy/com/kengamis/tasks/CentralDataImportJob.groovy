@@ -210,7 +210,7 @@ class CentralDataImportJob extends Script {
             if( !(KengaGroupAclEntry.findByKengaAclTableRecordIdentityAndKengaGroup(kengaAclTableRecordIdentity,groupObject))){
                 new KengaGroupAclEntry(
                         kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
-                        kengaGroup: groupObject,
+                        kengaGroup: groupId,
                         mask: permissionNumber
                 ).save(flush: true, failOnError: true)
             }
