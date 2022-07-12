@@ -468,6 +468,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   importExcelFormData() {
+    // this.router.navigate(['staging-beneficiary-list']);
     this.openPopup = true;
   }
 

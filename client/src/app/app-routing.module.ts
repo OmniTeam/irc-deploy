@@ -237,6 +237,20 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
       },
       {
+        path: 'staging-beneficiary-list', canActivate: [AuthGuard],
+        data: {
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_PARTNER_DATA_MANAGER,
+            Roles.ROLE_PARTNER_DATA_VIEWER,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER
+          ]
+        },
+        loadChildren: () => import('./mis-components/entities/entity-tables/staging-beneficiary-list/staging-beneficiary-list.module').then(m => m.StagingBeneficiaryListModule)
+      },
+      {
         path: 'entity/linkForm/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]

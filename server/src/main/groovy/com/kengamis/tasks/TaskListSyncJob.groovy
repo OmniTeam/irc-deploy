@@ -4,6 +4,7 @@ import com.kengamis.*
 import com.kengamis.acl.KengaAclTableRecordIdentity
 import com.kengamis.acl.KengaDataTable
 import com.kengamis.acl.KengaGroupAclEntry
+import com.kengamis.acl.KengaGroupAclEntryService
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
@@ -15,10 +16,11 @@ import groovyx.net.http.Method
 @Log4j
 class TaskListSyncJob extends Script {
     static def url = StartCamundaInstancesJob.camundaApiUrl
-//    KengaGroupsService kengaGroupService = AppHolder.bean(KengaGroupsService)
+    KengaGroupAclEntryService kengaGroupAclEntryService = AppHolder.bean(KengaGroupAclEntryService)
 
     @Override
     Object run() {
+        kengaGroupAclEntryService.createAclsForRecords()
         runUserAccountTasks()
         handleArchiveTask()
         startLongTermGrantJob()
@@ -403,7 +405,8 @@ class TaskListSyncJob extends Script {
         }
         print(jsonBuilder.toPrettyString())
 
-//        saveGroupMappings(groupId, 1, queryArray)
+        // saveGroupMappings(groupId, 1, queryArray)
+        // here the query is being saved so that it can be run later by the acl creating methods
         QueryTable.create(groupId, 1, jsonBuilder as String)
 
 //        here check if the data exists in the db
@@ -506,7 +509,7 @@ class TaskListSyncJob extends Script {
         }
     }
 
-    def createEntityViewFilters(createdGroupName, entityDataCollectorId) {
+    static def createEntityViewFilters(createdGroupName, entityDataCollectorId) {
         def listOfEntityViews = EntityView.all
         listOfEntityViews.each {
             def entityViewFilterName = createdGroupName + ' ' + it.name
