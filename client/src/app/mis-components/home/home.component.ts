@@ -14,6 +14,8 @@ import {PartnerSetupService} from '../../services/partner-setup.service';
 })
 export class HomeComponent implements OnInit {
   milestones: any;
+  perc: any;
+  barColor: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +36,7 @@ export class HomeComponent implements OnInit {
   longTermProcess: OngoingTask[];
   isReporting: boolean;
   isGrantProcess: boolean;
+  progress: any;
 
   filterCounter: { filter: string, count: number }[] = [];
   filters = [
@@ -255,10 +258,13 @@ export class HomeComponent implements OnInit {
     this.filterCounter.forEach((item) => {
       if (item.filter == filterName) {
         number = item.count;
+        this.perc = Math.round((number/this.taskListRows?.length) * 100)
       }
     });
     if (filterName == 'All') {
       number = this.taskListRows?.length;
+      this.barColor === 'red'
+      this.perc = 0
     }
     return number;
   }
@@ -267,26 +273,47 @@ export class HomeComponent implements OnInit {
 
   }
 
-   getMile(milestone: any, target, cumulative: any, achievement: any, budget: any, expenses: any, efficiency: string) {
+  getMile(milestone: any, target, cumulative: any, achievement: any, budget: any, expenses: any, efficiency: string) {
     return (
       {
         milestone: milestone,
         target: target,
         cumulative: cumulative,
-        achievement: this.getEfficiency(target,cumulative),
+        achievement: this.getEfficiency(target, cumulative),
         budget: budget,
         expenses: expenses,
-        efficiency: this.getEfficiency(budget,expenses)
+        efficiency: this.getEfficiency(budget, expenses)
       }
     )
   }
 
-  getEfficiency(budget,expenses){
-    if(!isNaN(Math.round((expenses / budget) * 100))){
+  getEfficiency(budget, expenses) {
+    if (!isNaN(Math.round((expenses / budget) * 100))) {
       return Math.round((expenses / budget) * 100);
     } else {
       return 0;
     }
 
+  }
+
+  //filter table with cards
+  backgroundColor: string
+
+  getColor(achievement) {
+    if(achievement >= 80 && achievement <= 100){
+      return 'green'
+    } else if (achievement < 80 && achievement >= 50){
+      return 'orange'
+    } else {
+      return 'red'
+    }
+  }
+
+  filterOutcomeList(event) {
+    ///TODO
+  }
+
+  clickReset() {
+    ///TODO
   }
 }

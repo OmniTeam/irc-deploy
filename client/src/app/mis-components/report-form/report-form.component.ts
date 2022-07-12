@@ -14,6 +14,7 @@ import {ProgramPartnersService} from '../../services/program-partners.service';
 import {PartnerSetupService} from '../../services/partner-setup.service';
 import {ProjectMilestoneService} from '../../services/project-milestone.service';
 import {AlertService} from '../../services/alert';
+import {Validator} from "../../helpers/validator";
 
 @Component({
   selector: 'app-report-form',
@@ -45,9 +46,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   isDisburseFunds: boolean;
   isApproveFundDisbursement: boolean;
 
-  totalAmountCommitted: number;
+  totalGrantAmount: number;
   totalAmountSpent: number;
-  totalSpendingPlanForPeriod: number;
+  totalAdvanced: number;
   balance: number;
 
   openCommentsPopup: boolean;
@@ -85,7 +86,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   shortLink1: string = '';
   shortLink2: string = '';
-
   shortLink3: string = '';
   attachment1: string;
   attachment2: string;
@@ -233,12 +233,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         let reports = JSON.parse(data.report.reportValues);
 
         this.reportFormService.getFinancialReportByReportId(data.report.id).subscribe(f => {
-          console.log("f", f)
           if (f !== undefined) this.financialReport = f;
         });
 
         this.reportFormService.getPerformanceReportByReportId(data.report.id).subscribe(p => {
-          console.log("p", p)
           if (p !== undefined) this.performanceReport = p;
         });
 
@@ -280,13 +278,19 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
+        this.totalGrantAmount = values.currentStatus.totalAmountDisbursed;
+
         values.disbursementPlan.forEach((q) => {
           if (q.datePeriod == this.taskRecord.reportingPeriod) {
-            this.totalSpendingPlanForPeriod = q.disbursement
+            this.totalAdvanced = q.disbursement
           }
         })
 
+        let tac = 0
+        let tas = 0
         values.budget.forEach((b) => {
+          tac += +b.approvedAmount;
+          tas += +b.totalSpent;
           if (!this.financialReport.some(x => x.budgetLine === b.budgetLine)) {
             this.financialReport.push({
               budgetLine: b.budgetLine,
@@ -295,7 +299,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             });
           }
         });
-        this.updateProjectOverview();
+        this.totalGrantAmount = tac
+        this.totalAmountSpent = tas
+        this.updateProjectOverview()
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
@@ -418,16 +424,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.loading = !this.loading;
     console.log(file);
     this.fileUploadService.upload(file, 'reporting-' + this.taskRecord.taskDefinitionKey).subscribe((data) => {
-        if (id === 'attachment1') {
-          this.shortLink1 = data.path;
-        }
-        if (id === 'attachment2') {
-          this.shortLink2 = data.path;
-        }
-        if (id === 'attachment3') {
-          this.shortLink3 = data.path;
-        }
-        console.log('shortlink', this.shortLink1);
+        if (id === 'attachment1') this.shortLink1 = data.path;
+        if (id === 'attachment2') this.shortLink2 = data.path;
+        if (id === 'attachment3') this.shortLink3 = data.path;
         this.loading = false;
       }
     );
@@ -553,7 +552,8 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   }
 
   saveReport(reportValues: { [key: string]: string }, status) {
-    this.submitting = true;
+    this.submitting = true
+
     let reportRecord: { [key: string]: string } = {
       taskId: this.taskRecord.id,
       processInstanceId: this.taskRecord.processInstanceId,
@@ -576,6 +576,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.error = false;
           this.success = true;
           this.successMessage = 'Updated Report';
+          this.updateTaskStatus(status);
         }, error => {
           this.error = true;
           this.errorMessage = 'Failed to update Report';
@@ -589,6 +590,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
           this.error = false;
           this.success = true;
           this.successMessage = 'Saved Report';
+          this.updateTaskStatus(status);
         }, error => {
           this.error = true;
           this.errorMessage = 'Failed to save Report';
@@ -621,7 +623,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       };
 
       this.reportFormService.createFinancialReport(formData).subscribe((res) => {
-        console.log("Updated financial report", res)
+        // console.log("Updated financial report", res)
       })
     })
   }
@@ -641,7 +643,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       };
 
       this.reportFormService.createPerformanceReport(formData).subscribe((res) => {
-        console.log("Updated performance report", res)
+        // console.log("Updated performance report", res)
       })
     })
   }
@@ -649,6 +651,38 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   submitReport(status) {
     this.error = false;
     this.success = false;
+
+    if (status != 'save') {
+      this.financialReport.forEach((fr) => {
+        let financialReportAllFilled = Validator.validateJSON(fr, ['totalAdvanced', 'quarterExpenses', 'reasonForVariance'])
+        if (!financialReportAllFilled) {
+          this.submitting = false;
+          this.alertService.error("Please fill in all compulsory fields in Financial Report");
+          return
+        }
+      })
+
+      this.performanceReport.forEach((pr) => {
+        let performanceReportAllFilled = Validator.validateJSON(pr, ['commentOnResult'])
+        if (!performanceReportAllFilled) {
+          this.submitting = false;
+          this.alertService.error("Please fill in all compulsory fields in Performance Report");
+          return
+        }
+      })
+
+      if (this.attachment1 == undefined) {
+        this.submitting = false;
+        this.alertService.error("Please provide attachment");
+        return
+      }
+
+      if (this.attachment2 == undefined) {
+        this.submitting = false;
+        this.alertService.error("Please provide attachment");
+        return
+      }
+    }
 
     let reportValues: { [key: string]: string } = {
       reviewerInformation: JSON.stringify(this.reviewerInformation),
@@ -690,12 +724,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     });
 
     if (status === 'save') {
-      this.saveReport(reportValues, 'saved_for_later');
-      this.updateTaskStatus('in_progress');
+      this.saveReport(reportValues, 'draft');
     }
     if (status === 'submit') {
-      this.saveReport(reportValues, 'final_submission');
-      this.updateTaskStatus('completed');
+      this.saveReport(reportValues, 'completed');
     }
   }
 
@@ -704,60 +736,107 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.success = false;
 
     this.saveCommentsAndRecommendations()
+    let reviewerInfo = {
+      expenses_realistic: this.radioExpensesRealistic,
+      attachments_verified: this.radioAttachmentsVerified,
+      figures_realistic: this.radioFiguresRealistic,
+      narrative_align: this.radioNarrativeAlign,
+      inline_with_targets: this.radioInlineWithTargets,
+      evidence_satisfactory: this.radioEvidenceSatisfactory,
+      comments: this.reviewerComments,
+      recommendations: this.reviewerRecommendations
+    }
+
+    let allFilled = Validator.validateJSON(reviewerInfo, ['expenses_realistic',
+      'attachments_verified',
+      'figures_realistic',
+      'narrative_align',
+      'inline_with_targets',
+      'evidence_satisfactory',
+      'comments',
+      'recommendations'])
+    if (!allFilled && status == "submit") {
+      this.submitting = false;
+      this.alertService.error("Please fill in all required fields");
+      return
+    }
 
     let reportValues: { [key: string]: string } = {
       approverInformation: JSON.stringify(this.approverInformation),
-      reviewerInformation: JSON.stringify({
-        expenses_realistic: this.radioExpensesRealistic,
-        attachments_verified: this.radioAttachmentsVerified,
-        figures_realistic: this.radioFiguresRealistic,
-        narrative_align: this.radioNarrativeAlign,
-        inline_with_targets: this.radioInlineWithTargets,
-        evidence_satisfactory: this.radioEvidenceSatisfactory,
-        comments: this.reviewerComments,
-        recommendations: this.reviewerRecommendations
-      })
+      reviewerInformation: JSON.stringify(reviewerInfo)
     };
 
     if (status === 'revise') {
-      this.saveReport(reportValues, 'asked_for_revisions');
-      this.updateTaskStatus('needs_revision');
+      this.saveReport(reportValues, 'draft');
     }
     if (status === 'submit') {
-      this.saveReport(reportValues, 'reviewed_and_submitted');
-      this.updateTaskStatus('completed');
+      this.saveReport(reportValues, 'completed');
     }
   }
 
   approveReport() {
-    if (this.taskRecord.taskDefinitionKey === 'Approve_Fund_Disbursement' && this.radioHowToProceed == 'undefined') {
-      this.alertService.error('How would you like to proceed? is Required');
-      return;
-    }
-    if (this.taskRecord.taskDefinitionKey === 'Approve_Report' && this.radioRecommendFund == 'undefined') {
-      this.alertService.error('Do you recommend for further fund disbursement? is Required');
-      return;
-    }
+    this.error = false;
+    this.success = false;
 
     this.saveCommentsAndRecommendations()
+    let approverInfo = {
+      suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
+      reports_well_aligned: this.radioReportsWellAligned,
+      recommend_fund: this.radioRecommendFund,
+      end_of_partnership: this.radioEndOfPartnership,
+      how_to_proceed: this.radioHowToProceed,
+      amountOfFundsDisbursed: this.amountOfFundsDisbursed,
+      amountOfFundsRemaining: this.amountOfFundsRemaining,
+      dateDisbursed: this.dateDisbursed,
+      provideAnyRecommendations: this.provideAnyRecommendations
+    }
+
+    let allFilled
+
+    if (this.isApproveFundDisbursement) {
+      allFilled = Validator.validateJSON(approverInfo, [
+        'how_to_proceed',
+        'provideAnyRecommendations'])
+    }
+
+    if (this.isDisburseFunds) {
+      allFilled = Validator.validateJSON(approverInfo, [
+        'amountOfFundsDisbursed',
+        'dateDisbursed',
+        'amountOfFundsRemaining'])
+    }
+
+    if (this.isApproveVisible) {
+      if (this.radioRecommendFund == 'Yes') {
+        allFilled = Validator.validateJSON(approverInfo, [
+          'suggested_changes_satisfactory',
+          'reports_well_aligned',
+          'recommend_fund',
+          'end_of_partnership',
+          'amountOfFundsDisbursed',
+          'provideAnyRecommendations'])
+      } else {
+        allFilled = Validator.validateJSON(approverInfo, [
+          'suggested_changes_satisfactory',
+          'reports_well_aligned',
+          'recommend_fund',
+          'end_of_partnership',
+          'provideAnyRecommendations'])
+      }
+    }
+
+    if (!allFilled) {
+      this.submitting = false;
+      this.alertService.error("Please fill in all required fields");
+      return
+    }
 
     let reportValues: { [key: string]: string } = {
       reviewerInformation: JSON.stringify(this.reviewerInformation),
-      approverInformation: JSON.stringify({
-        suggested_changes_satisfactory: this.radioSuggestedChangesSatisfactory,
-        reports_well_aligned: this.radioReportsWellAligned,
-        recommend_fund: this.radioRecommendFund,
-        end_of_partnership: this.radioEndOfPartnership,
-        how_to_proceed: this.radioHowToProceed,
-        amountOfFundsDisbursed: this.amountOfFundsDisbursed,
-        amountOfFundsRemaining: this.amountOfFundsRemaining,
-        dateDisbursed: this.dateDisbursed,
-        provideAnyRecommendations: this.provideAnyRecommendations
-      })
+      approverInformation: JSON.stringify(approverInfo)
     };
 
-    this.saveReport(reportValues, 'approved_report');
-    this.updateTaskStatus('completed');
+    this.saveReport(reportValues, 'completed');
   }
 
   saveCommentsAndRecommendations() {
@@ -809,14 +888,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   updateProjectOverview() {
     let tac = 0
     let tas = 0
+    let tad = 0
     let tb = 0
     this.financialReport.forEach(b => {
-      tac += +b.approved_budget;
-      tas += +b.expense_to_date;
+      tac += +b.approvedBudget;
+      if (b.expenseToDate != undefined) tas += (+b.expenseToDate + +b.quarterExpenses); else tas += +b.quarterExpenses;
+      tad += +b.totalAdvanced;
       tb += +b.variance
     })
-    this.totalAmountCommitted = tac
+    this.totalGrantAmount = tac
     this.totalAmountSpent = tas
+    this.totalAdvanced = tad
     this.balance = tb
   }
 

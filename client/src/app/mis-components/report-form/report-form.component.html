@@ -137,8 +137,8 @@
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Total Grant Amount: <b>{{totalAmountCommitted | number}}</b></li>
-                        <li>Amount Transferred in the reporting period: <b>{{totalSpendingPlanForPeriod | number}}</b>
+                        <li>Total Grant Amount: <b>{{totalGrantAmount | number}}</b></li>
+                        <li>Amount Transferred in the reporting period: <b>{{totalAdvanced | number}}</b>
                         </li>
                         <li>Amount Utilized in the period: <b>{{totalAmountSpent | number}}</b></li>
                         <li>Balance Spent/Overspent: <b>{{balance | number}}</b></li>
@@ -263,7 +263,14 @@
                         class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/>
+                        <button
+                          *ngIf="shortLink1!=''"
+                          type="button"
+                          (click)="fileUploadService.downloadFile(shortLink1)"
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink1)}} <i
+                          class="fas fa-download"></i></button>
+                      </div>
                       <div class="col-sm-3">
                         <button
                           type="button"
@@ -275,7 +282,14 @@
                       <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
                         report: <span class="required-indicator">*</span></label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/>
+                        <button
+                          *ngIf="shortLink2!=''"
+                          type="button"
+                          (click)="fileUploadService.downloadFile(shortLink2)"
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink2)}} <i
+                          class="fas fa-download"></i></button>
+                      </div>
                       <div class="col-sm-3">
                         <button
                           type="button"
@@ -284,11 +298,17 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach receipts and supporting documents: <span
-                        class="required-indicator">*</span></label>
+                      <div class="col-sm-3"><label for="attachment3">Attach receipts and supporting documents:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/>
+                        <button
+                          *ngIf="shortLink3!=''"
+                          type="button"
+                          (click)="fileUploadService.downloadFile(shortLink3)"
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink3)}} <i
+                          class="fas fa-download"></i></button>
+                      </div>
                       <div class="col-sm-3">
                         <i>This must be filled for the YCD program</i>
                       </div>
@@ -394,7 +414,7 @@
                   <div class="row">
                     <div class="col">
                       <div style="margin-bottom: 30px;">
-                        <p>Are the expenses realistic?</p>
+                        <p>Are the expenses realistic?<span class="required-indicator">*</span></p>
                         <ul class="list-group list-group-flush" *ngFor="let item of items">
                           <li class="list-group-item">
                             <input type="radio" name="expenses_realistic" [disabled]="isReadOnly"
@@ -405,7 +425,7 @@
                         </ul>
                       </div>
                       <div style="margin-bottom: 30px;">
-                        <p>Have the attachments been verified?</p>
+                        <p>Have the attachments been verified?<span class="required-indicator">*</span></p>
                         <ul class="list-group list-group-flush" *ngFor="let item of items">
                           <li class="list-group-item">
                             <input type="radio" name="attachments_verified" [disabled]="isReadOnly"
@@ -416,7 +436,7 @@
                         </ul>
                       </div>
                       <div>
-                        <p>Are the figures provided realistic?</p>
+                        <p>Are the figures provided realistic?<span class="required-indicator">*</span></p>
                         <ul class="list-group list-group-flush" *ngFor="let item of items">
                           <li class="list-group-item">
                             <input type="radio" name="figures_realistic" [disabled]="isReadOnly"
@@ -430,7 +450,7 @@
 
                     <div class="col">
                       <div style="margin-bottom: 30px;">
-                        <p>Does the narrative align with the objectives of the project?</p>
+                        <p>Does the narrative align with the objectives of the project?<span class="required-indicator">*</span></p>
                         <ul class="list-group list-group-flush" *ngFor="let item of items">
                           <li class="list-group-item">
                             <input type="radio" name="narrative_align" [disabled]="isReadOnly"
@@ -441,7 +461,7 @@
                         </ul>
                       </div>
                       <div style="margin-bottom: 30px;">
-                        <p>Are they in line with the targets?</p>
+                        <p>Are they in line with the targets?<span class="required-indicator">*</span></p>
                         <ul class="list-group list-group-flush" *ngFor="let item of items">
                           <li class="list-group-item">
                             <input type="radio" name="inline_with_targets" [disabled]="isReadOnly"
@@ -452,7 +472,7 @@
                         </ul>
                       </div>
                       <div>
-                        <p>Is the evidence of the activities satisfactory?</p>
+                        <p>Is the evidence of the activities satisfactory?<span class="required-indicator">*</span></p>
                         <ul class="list-group list-group-flush" *ngFor="let item of items">
                           <li class="list-group-item">
                             <input type="radio" name="evidence_satisfactory" [disabled]="isReadOnly"
@@ -481,12 +501,12 @@
 
                   <div class="row">
                     <div class="col">
-                      <p>Comments For Partner </p>
+                      <p>Comments For Partner <span class="required-indicator">*</span></p>
                       <textarea class="form-control" [disabled]="isReadOnly" rows="3"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
                     <div class="col">
-                      <p>Recommendations</p>
+                      <p>Recommendations<span class="required-indicator">*</span></p>
                       <textarea class="form-control" [disabled]="isReadOnly" rows="3"
                                 [(ngModel)]="reviewerRecommendations"></textarea>
                     </div>
@@ -497,7 +517,7 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row">
-                        <div class="col-sm-12"><p>Has the partner satisfactorily affected the suggested changes?</p>
+                        <div class="col-sm-12"><p>Has the partner satisfactorily affected the suggested changes?<span class="required-indicator">*</span></p>
                           <ul class="list-group list-group-flush" *ngFor="let item of items">
                             <li class="list-group-item">
                               <input type="radio" name="suggested_changes_satisfactory" [disabled]="isReadOnly"
@@ -509,7 +529,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Are the financial, performance and narrative reports well aligned?</p>
+                        <div class="col-sm-12"><p>Are the financial, performance and narrative reports well aligned?<span class="required-indicator">*</span></p>
                           <ul class="list-group list-group-flush" *ngFor="let item of items">
                             <li class="list-group-item">
                               <input type="radio" name="reports_well_aligned" [disabled]="isReadOnly"
@@ -521,8 +541,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Do you recommend for further fund disbursement?<span
-                          class="required-indicator">*</span></p>
+                        <div class="col-sm-12"><p>Do you recommend for further fund disbursement?<span class="required-indicator">*</span></p>
                           <ul class="list-group list-group-flush" *ngFor="let item of items">
                             <li class="list-group-item">
                               <input type="radio" name="recommend_fund" [disabled]="isReadOnly"
@@ -534,7 +553,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-12"><p>Is this the end of this partnership?</p>
+                        <div class="col-sm-12"><p>Is this the end of this partnership?<span class="required-indicator">*</span></p>
                           <ul class="list-group list-group-flush" *ngFor="let item of items">
                             <li class="list-group-item">
                               <input type="radio" name="end_of_partnership" [disabled]="isReadOnly"
@@ -563,7 +582,7 @@
                     <div class="col-sm-6" style="margin-bottom: 0; margin-top: 0;"
                          [style.display]="radioRecommendFund=='Yes' ? 'block':'none'">
                       <label>Amount of Funds to be disbursed:</label>
-                      <input [disabled]="isReadOnly" type="text" class="form-control"
+                      <input [disabled]="isReadOnly" type="number" class="form-control"
                              [(ngModel)]="amountOfFundsDisbursed"/>
                     </div>
                     <div class="col-sm-6" style="margin-bottom: 0; margin-top: 0;">
@@ -592,7 +611,7 @@
                         </div>
                       </div>
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                        <div class="col"><p>Provide any recommendations (Internal):</p></div>
+                        <div class="col"><p>Provide any recommendations (Internal):<span class="required-indicator">*</span></p></div>
                         <div class="col text-left"><textarea [disabled]="isReadOnly" class="form-control"
                                                              [(ngModel)]="provideAnyRecommendations"></textarea></div>
                       </div>
@@ -616,17 +635,17 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                        <div class="col"><p>Amount of Funds to be disbursed:</p></div>
+                        <div class="col"><p>Amount of Funds to be disbursed:<span class="required-indicator">*</span></p></div>
                         <div class="col text-left"><input [disabled]="isReadOnly" type="number" class="form-control"
                                                           [(ngModel)]="amountOfFundsDisbursed"/><br></div>
                       </div>
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                        <div class="col"><p>Date disbursed:</p></div>
+                        <div class="col"><p>Date disbursed:<span class="required-indicator">*</span></p></div>
                         <div class="col text-left"><input [disabled]="isReadOnly" type="date" class="form-control"
                                                           [(ngModel)]="dateDisbursed"/><br></div>
                       </div>
                       <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                        <div class="col"><p>Amount of Funds Remaining</p></div>
+                        <div class="col"><p>Amount of Funds Remaining<span class="required-indicator">*</span></p></div>
                         <div class="col text-left"><input [disabled]="isReadOnly" type="number" class="form-control"
                                                           [(ngModel)]="amountOfFundsRemaining"/></div>
                       </div>
