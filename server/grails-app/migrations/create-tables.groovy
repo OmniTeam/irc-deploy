@@ -3485,4 +3485,20 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1657621596932-47") {
+        dropColumn(columnName: "group_id", tableName: "report_form_comments")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657621596932-48") {
+        dropColumn(columnName: "group_id", tableName: "report_form_recommendations")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657621596932-2") {
+        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_comments", validate: "true")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657621596932-3") {
+        addNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_recommendations", validate: "true")
+    }
+
 }
