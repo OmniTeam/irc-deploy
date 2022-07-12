@@ -31,8 +31,9 @@
           <td class="text-center" [id]="row.datePeriod">
             <div>{{row.target | number }}
               <button class="btn btn-link"
-                      (click)="cellEditor(row.datePeriod+' '+indicatorForDisaggregation.id, row.datePeriod, 'disaggregation', row.target, 'number')"><i
-                class="fas fa-pencil-alt"></i></button>
+                      (click)="cellEditor(row.datePeriod+' '+indicatorForDisaggregation.id, row.datePeriod, 'disaggregation', row.target, 'number')">
+                <i
+                  class="fas fa-pencil-alt"></i></button>
             </div>
           </td>
         </tr>
@@ -41,7 +42,8 @@
     </div>
   </div>
   <div class="card-footer" style="text-align: end">
-    <button class="btn btn-dark comment_btn" (click)="toggleDisaggregation(btn_id, indicatorForDisaggregation)">Close</button>
+    <button class="btn btn-dark comment_btn" (click)="toggleDisaggregation(btn_id, indicatorForDisaggregation)">Close
+    </button>
   </div>
 </div>
 
@@ -65,8 +67,9 @@
           <td class="text-center" [id]="row.datePeriod">
             <div>{{row.amount | number }}
               <button class="btn btn-link"
-                      (click)="cellEditor(row.datePeriod+' '+budgetForDisaggregation.id, row.datePeriod, 'quartery_budget', row.amount, 'number')"><i
-                class="fas fa-pencil-alt"></i></button>
+                      (click)="cellEditor(row.datePeriod+' '+budgetForDisaggregation.id, row.datePeriod, 'quartery_budget', row.amount, 'number')">
+                <i
+                  class="fas fa-pencil-alt"></i></button>
             </div>
           </td>
         </tr>
@@ -87,21 +90,42 @@
           <div class=" col-md-12 col-sm-12" style="margin-top: 20px;">
             <div class=" row">
               <div class=" col">
-                <div class="form-group" style="margin: 0 0 30px 30px; width: 60%;">
-                  <label class="control-label" style="margin-left: 12px;"><b>SELECT STAFF: <span class="required-indicator">*</span></b></label>
-                  <ng-select class="form-control form-control-sm"
-                             aria-controls="datatable"
-                             style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                             [multiple]="false"
-                             placeholder="Select Staff"
-                             [searchable]="true"
-                             [clearable]="true"
-                             [(ngModel)]="staffChosen"
-                             (ngModelChange)="onPartnerChange()">
-                    <ng-option [value]="bc.id" *ngFor="let bc of listOfPartners">
-                      {{bc.name}}
-                    </ng-option>
-                  </ng-select>
+                <div class="form-group row" style="margin: 0 0 30px 30px; width: 100%;">
+                  <div class="col-md-6">
+                    <label class="control-label" style="margin-left: 12px;"><b>SELECT STAFF: <span
+                      class="required-indicator">*</span></b></label>
+                    <ng-select class="form-control form-control-sm"
+                               aria-controls="datatable"
+                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                               [multiple]="false"
+                               placeholder="Select Staff"
+                               [searchable]="true"
+                               [clearable]="true"
+                               [(ngModel)]="staffChosen"
+                               (ngModelChange)="onPartnerChange()">
+                      <ng-option [value]="bc.id" *ngFor="let bc of listOfPartners">
+                        {{bc.name}}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="control-label" style="margin-left: 12px;"><b>SELECT ORGANIZATION: <span
+                      class="required-indicator">*</span></b></label>
+                    <ng-select class="form-control form-control-sm"
+                               aria-controls="datatable"
+                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                               [multiple]="false"
+                               placeholder="Select Organization"
+                               [searchable]="true"
+                               [clearable]="true"
+                               [(ngModel)]="orgChosen"
+                              >
+                      <ng-option [value]="bc.name" *ngFor="let bc of irc_list">
+                        {{bc.name}}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+
                 </div>
 
                 <h3 style="margin-left: 40px;">STAFF INFORMATION</h3>
@@ -109,14 +133,15 @@
                   <div class="row" style="margin: 10px;">
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
-                        <li>Program: <b>{{organisationalInfo.program}}</b></li>
+                        <li>Pillar: <b>{{organisationalInfo.program}}</b></li>
+                        <li>Organization: <b>{{this.orgChosen}}</b></li>
                         <li>Staff: <b>{{organisationalInfo.name}}</b></li>
                         <li>Email of Staff: <b>{{organisationalInfo.email}}</b></li>
                         <li>Name of Supervisor: <b>{{organisationalInfo.nameContactPerson}}</b></li>
                         <li>Telephone: <b>{{organisationalInfo.personContact}}</b></li>
                       </ul>
                     </div>
-                    <div class="col-sm-6"> </div>
+                    <div class="col-sm-6"></div>
                   </div>
                 </div>
 
@@ -133,18 +158,21 @@
                       <div class="row">
                         <div class="col-sm-6">Project End Date: <span class="required-indicator">*</span></div>
                         <div class="col-sm-6">
-                          <input class="form-control" type="date" [(ngModel)]="calendar.grantEndDate"  [min]="calendar.projectReportingStartDate"/><br>
+                          <input class="form-control" type="date" [(ngModel)]="calendar.grantEndDate"
+                                 [min]="calendar.projectReportingStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6">Project Reporting Start Date: <span class="required-indicator">*</span></div>
+                        <div class="col-sm-6">Project Reporting Start Date: <span class="required-indicator">*</span>
+                        </div>
                         <div class="col-sm-6">
                           <input class="form-control" type="date"
                                  [(ngModel)]="calendar.projectReportingStartDate"/><br>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-sm-6">Project Reporting End Date: <span class="required-indicator">*</span></div>
+                        <div class="col-sm-6">Project Reporting End Date: <span class="required-indicator">*</span>
+                        </div>
                         <div class="col-sm-6">
                           <input class="form-control" type="date"
                                  [(ngModel)]="calendar.projectReportingEndDate"/><br>
@@ -230,8 +258,9 @@
                       <td class='text-center' [id]="milestone.id">
                         <div>{{ milestone.name }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(milestone.id, milestone.id, 'indicators', milestone.name, 'select', milestones)"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(milestone.id, milestone.id, 'indicators', milestone.name, 'select', milestones)">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class="text-center">{{milestone.overallTarget | number }}</td>
@@ -246,16 +275,18 @@
                       <td [id]="milestone.id + '-d1'">
                         <div>{{ milestone.startDate }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(milestone.id, milestone.id + '-d1', 'startDate', milestone.startDate, 'date')"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(milestone.id, milestone.id + '-d1', 'startDate', milestone.startDate, 'date')">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
 
                       </td>
-                      <td  [id]="milestone.id + '-d2'">
+                      <td [id]="milestone.id + '-d2'">
                         <div>{{ milestone.endDate }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(milestone.id, milestone.id + '-d2', 'endDate', milestone.endDate, 'date')"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(milestone.id, milestone.id + '-d2', 'endDate', milestone.endDate, 'date')">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -291,8 +322,9 @@
                       <td class='text-center' [id]="row.id+'-b'">
                         <div>{{ row.budgetLine }}
                           <button class="btn btn-link"
-                                  (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine,'select', indicators)"><i
-                            class="fas fa-pencil-alt"></i></button>
+                                  (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine,'select', indicators)">
+                            <i
+                              class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id">{{ row.approvedAmount | number  }}
@@ -316,18 +348,18 @@
                       </td>
                       <td class='text-center'>
                         <button class="btn btn-link"
-                                    (click)="removeBudget(row)"><i
-                        class="text fas fa-trash-alt" style="color: red"></i></button>
+                                (click)="removeBudget(row)"><i
+                          class="text fas fa-trash-alt" style="color: red"></i></button>
                       </td>
                     </tr>
                     </tbody>
                     <tfoot>
-                      <tr>
-                        <td class="text-center">Total</td>
-                        <td class="text-center">{{ totalApprovedAmount | number  }}</td>
-                        <td class="text-center">{{ totalQuarterlyPlanAmount | number  }}</td>
-                        <td class="text-center">{{ totalBudgetDisburse | number  }}</td>
-                      </tr>
+                    <tr>
+                      <td class="text-center">Total</td>
+                      <td class="text-center">{{ totalApprovedAmount | number  }}</td>
+                      <td class="text-center">{{ totalQuarterlyPlanAmount | number  }}</td>
+                      <td class="text-center">{{ totalBudgetDisburse | number  }}</td>
+                    </tr>
                     </tfoot>
                   </table>
                 </div>
@@ -356,7 +388,8 @@
                     <tfoot>
                     <tr>
                       <td class="text-center">Total</td>
-                      <td>&nbsp;</td><td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
                       <td class="text-center">{{ totalDisbursement | number }}</td>
                     </tr>
                     </tfoot>
@@ -374,11 +407,11 @@
                       <div class="col">Total Amount Committed:</div>
                       <div class="col text-left">{{currentStatus.totalAmountCommitted | number}}</div>
                     </div>
-                  <!--  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
-                      <div class="col">Date of last Commitment:</div>
-                      <div class="col text-left"><input type="date" class="form-control"
-                                                        [(ngModel)]="currentStatus.dateOfLastCommitment"/><br></div>
-                    </div>-->
+                    <!--  <div class="row" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col">Date of last Commitment:</div>
+                        <div class="col text-left"><input type="date" class="form-control"
+                                                          [(ngModel)]="currentStatus.dateOfLastCommitment"/><br></div>
+                      </div>-->
                     <div class="row" style="margin-bottom: 0; margin-top: 0;">
                       <div class="col">Start Reporting Cycle?</div>
                       <div class="col">

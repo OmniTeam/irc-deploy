@@ -31,6 +31,24 @@ export class HomeComponent implements OnInit {
   beyondBudget: number;
   noBudget: number;
 
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -82,6 +100,8 @@ export class HomeComponent implements OnInit {
       this.setFilters(filter, true);
     });
   }
+
+
 
   switchRowsData(type: string) {
     this.isReferrals = false;
@@ -523,5 +543,9 @@ export class HomeComponent implements OnInit {
     } else {
       return 'red'
     }
+  }
+
+  filterOrganizationList(event) {
+
   }
 }

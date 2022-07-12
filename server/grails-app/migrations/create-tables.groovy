@@ -2592,4 +2592,16 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1657529638421-7") {
+        addColumn(tableName: "work_plan") {
+            column(name: "organization", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1657534608704-7") {
+        addColumn(tableName: "activity_report") {
+            column(name: "organization", type: "varchar(255)")
+        }
+    }
+
 }

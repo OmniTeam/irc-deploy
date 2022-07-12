@@ -250,6 +250,67 @@
                   <div class="row">
 
                     <div class="dataTables_wrapper py-4">
+                      <div class="row" style="display: flex; width: 100%; margin-top: -24px;margin-bottom: 40px">
+                        <div class="col-sm-4">
+                          <div id="datatable_filter1" class="dataTables_filter">
+<!--                            <mat-form-field appearance="fill">-->
+<!--                              <mat-label>Enter a date range</mat-label>-->
+<!--                              <mat-date-range-input [formGroup]="range" [rangePicker]="picker">-->
+<!--                                <input matStartDate formControlName="start" placeholder="Start date">-->
+<!--                                <input matEndDate formControlName="end" placeholder="End date">-->
+<!--                              </mat-date-range-input>-->
+<!--                              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>-->
+<!--                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--                              <mat-date-range-picker #picker></mat-date-range-picker>-->
+
+<!--                              <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>-->
+<!--                              <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>-->
+<!--                            </mat-form-field>
+-->
+
+<!--                            <p>Selected range: {{range.value | json}}</p>-->
+
+                          </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                          <div id="datatable_filter5" class="dataTables_filter">
+                            <label>
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Select organization to filter.."
+                                         [searchable]="true"
+                                         (change)="filterOrganizationList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.name" *ngFor="let item of irc_list">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                          <div id="datatable_filter4" class="dataTables_filter">
+                            <label>
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Select pillar to filter.."
+                                         [searchable]="true"
+                                         (change)="filterMilestonesList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.staffId" *ngFor="let item of budgetHolders">
+                                  {{item.staff}}
+                                </ng-option>
+                              </ng-select>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                       <div class="row" style="display: flex; width: 100%; margin-top: -24px">
                         <div class="col-sm-4">
                           <div class="dataTables_length" id="datatable_length">
@@ -381,7 +442,6 @@
                                 <span class="tooltip">{{row.progress}}</span>
                               </a>
                             </div>
-                            <!--                            <button class="button button5" style="width: 10px" [style.background-color]="getColorProgress(row.progress)" ></button>-->
                           </ng-template>
                         </ngx-datatable-column>
                       </ngx-datatable>
@@ -393,130 +453,6 @@
             </div>
           </div>
         </div>
-
-        <!--<div class=" col-md-12 col-sm-12" style="margin-top: -10px; margin-bottom: -40px">
-          <div class=" row">
-            <div class=" col">
-              <div class="card" style="">
-                <div class="card-header" style="background-color: #fbca3d">
-                  <div class="row">
-                    <h3 style="margin-left: 20px;margin-bottom: 10px">MY ACTIVITIES</h3>
-                  </div>
-                </div>
-                <div class="card-body col-sm-12">
-                  <div class="row" style="margin-bottom: -30px;margin-top: -20px">
-                    <div class=" col-xl-3 col-md-6">
-                      <div class="card-counter info">
-                        <i class="fa fa-solid fa-clipboard-list"></i>
-                        <span class="count-numbers">{{this.feedback?.length}}</span>
-                        <span class="count-name">FEEDBACK</span>
-                      </div>
-                    </div>
-
-                    <div class=" col-xl-3 col-md-6">
-                      <div class="card-counter primary">
-                        <i class="fa fa-users"></i>
-                        <span class="count-numbers">{{this.referrals?.length}}</span>
-                        <span class="count-name">REFERRALS</span>
-                      </div>
-                    </div>
-
-                    <div class=" col-xl-3 col-md-6">
-                      <div class="card-counter success">
-                        <i class="fa fa-database"></i>
-                        <span class="count-numbers">{{this.quarterly_report?.length}}</span>
-                        <span class="count-name">QUARTERLY REPORT</span>
-                      </div>
-                    </div>
-
-                    <div class=" col-xl-3 col-md-6">
-                      <div class="card-counter danger">
-                        <i class="fa fa-light fa-calendar-check"></i>
-                        <span class="count-numbers">{{this.activity_report?.length}}</span>
-                        <span class="count-name">ACTIVITY REPORT</span>
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
-          <div class=" row">
-            <div class=" col">
-
-              <div class="card">
-                <div class="card-header">
-                  <div class="row">
-                    <h3 style="margin-left: 40px;">TO DO LIST ({{taskListRows?.length}})</h3>
-                  </div>
-                </div>
-                <div class="card-body col-sm-12 home-card">
-                  <div class="row" *ngFor="let row of taskListRows">
-                    <button class="btn" (click)="openForm(row.task_type, row)">
-                      <div class="row">
-                        <span style="border-left: 4px solid #fbca3d;"></span>
-                        <div class="col text-left" style="display: grid;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
-                          <span><b>Task:  {{ row.task_name | replace: '_' : ' ' }}</b></span>
-                          <span> Case  :  {{row.task_case}}</span>
-                          <span>Process:  {{ row.task_type | replace: '_' : ' ' }}</span>
-                          <span><i>Date:  {{ row.date_assigned | date: 'mediumDate' }}</i></span>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class=" col">
-
-              <div class="card">
-                <div class="card-header">
-                  <div class="row">
-                    <h3 style="margin-left: 40px;">PROGRESS TRACK</h3>
-                  </div>
-                </div>
-                <div class="card-body col-sm-12 home-card">
-                  <div class="row" *ngFor="let filter of filters">
-                    <button class="btn" (click)="setFilters(filter)">
-                      <div class="row">
-                        <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                          <i class="ni ni-time-alarm"> </i>
-                        </div>
-                        <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}
-                          ({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
-                        <span style="margin-left: 60px;margin-bottom: -10px; width: 80%; border-bottom: 4px">
-                          <div class="progress-wrapper" style="margin-top: -50px">
-                        <div class="progress-info">
-                          <div class="progress-label">
-&lt;!&ndash;                            <span>Pending</span>&ndash;&gt;
-                          </div>
-                          <div class="progress-percentage">
-                            <span>{{this.perc}}%</span>
-                          </div>
-                        </div>
-                        <div class="progress">
-                          <div class="progress-bar bg-primary" role="progressbar" [attr.aria-valuenow]="perc"
-                               aria-valuemin="0" aria-valuemax="100" [style.width]="perc+'%'"></div>
-                        </div>
-                      </div>
-                        </span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>-->
-
-
       </div>
     </div>
 
