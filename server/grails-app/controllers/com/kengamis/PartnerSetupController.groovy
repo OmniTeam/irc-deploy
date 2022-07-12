@@ -60,6 +60,7 @@ class PartnerSetupController {
 
         try {
             partnerSetupService.save(partnerSetup)
+            saveWorkPlanValues(partnerSetup)
         } catch (ValidationException e) {
             respond partnerSetup.errors
             return
@@ -82,6 +83,7 @@ class PartnerSetupController {
 
         try {
             partnerSetupService.save(partnerSetup)
+            saveWorkPlanValues(partnerSetup)
         } catch (ValidationException e) {
             respond partnerSetup.errors
             return
@@ -124,6 +126,82 @@ class PartnerSetupController {
     def getPartnerSetupRecord() {
         def map = [setup: PartnerSetup.findById(params.id)]
         respond map
+    }
+
+    def saveWorkPlanValues(PartnerSetup record) {
+        def slurper = new JsonSlurper()
+        def partnerSetupId = record.id
+        def setupValues = slurper.parseText(record.setupValues)
+        def budget = setupValues['budget']
+        def disbursementPlan = setupValues['disbursementPlan']
+        def milestones = slurper.parseText(setupValues['indicators'] as String)
+
+        budget.each { b ->
+            def psb = PartnerSetupBudget.findAllByPartnerSetupIdAndBudgetLine(partnerSetupId, b['budgetLine'] as String)
+            if (psb.size() > 0) {
+                psb.each {
+                    it.partnerSetupId = partnerSetupId
+                    it.budgetLine = b['budgetLine']
+                    it.milestoneId = b['indicatorId']
+                    it.approvedAmount = b['approvedAmount']
+                    it.totalSpent = b['totalSpent']
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                new PartnerSetupBudget(
+                        partnerSetupId: partnerSetupId,
+                        budgetLine: b['budgetLine'],
+                        milestoneId: b['indicatorId'],
+                        approvedAmount: b['approvedAmount'],
+                        totalSpent: b['totalSpent'],
+                ).save(flush: true, failOnError: true)
+            }
+        }
+
+        disbursementPlan.each { d ->
+            def psd = PartnerSetupDisbursementPlan.findAllByPartnerSetupIdAndDatePeriod(partnerSetupId, d['datePeriod'] as String)
+            if (psd.size() > 0) {
+                psd.each {
+                    it.partnerSetupId = partnerSetupId
+                    it.datePeriod = d['datePeriod']
+                    it.startDate = d['startDate']
+                    it.endDate = d['endDate']
+                    it.disbursement = d['disbursement']
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                new PartnerSetupDisbursementPlan(
+                        partnerSetupId: partnerSetupId,
+                        datePeriod: d['datePeriod'],
+                        startDate: d['startDate'],
+                        endDate: d['endDate'],
+                        disbursement: d['disbursement']
+                ).save(flush: true, failOnError: true)
+            }
+        }
+
+        milestones.each { m ->
+            def psm = PartnerSetupMilestones.findAllByPartnerSetupIdAndName(partnerSetupId, m['name'] as String)
+            if (psm.size() > 0) {
+                psm.each {
+                    it.partnerSetupId = partnerSetupId
+                    it.name = m['name']
+                    it.milestoneId = m['milestoneId']
+                    it.overallTarget = m['overallTarget']
+                    it.disaggregation = m['disaggregation']
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                new PartnerSetupMilestones(
+                        partnerSetupId: partnerSetupId,
+                        name: m['name'],
+                        milestoneId: m['milestoneId'],
+                        overallTarget: m['overallTarget'],
+                        disaggregation: m['disaggregation']
+                ).save(flush: true, failOnError: true)
+            }
+        }
+
     }
 
     static boolean deleteProcessInstance(id) {
