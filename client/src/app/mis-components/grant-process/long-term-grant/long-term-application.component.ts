@@ -184,9 +184,6 @@ export class LongTermApplicationComponent implements OnInit {
     });
   }
 
-  validate = (obj, validations) =>
-    validations.every(key => ![undefined, null].includes(key.split('.').reduce((acc, cur) => acc?.[cur], obj)));
-
   submitLetter() {
     this.submitted = true;
     console.log("formData", this.formGroupLT.value)
@@ -195,7 +192,7 @@ export class LongTermApplicationComponent implements OnInit {
       this.submitted = false;
       return;
     }
-    let documentsAllFilled = this.validate(this.documents, ['detailedBudget', 'workplan', 'framework', 'clusterGuideline', 'mou', 'staffMembers'])
+    let documentsAllFilled = Validator.validateJSON(this.documents, ['detailedBudget', 'workplan', 'framework', 'clusterGuideline', 'mou', 'staffMembers'])
     if (!documentsAllFilled) {
       this.submitted = false;
       this.alertService.error("Please fill in all compulsory fields in Part H");

@@ -4,4 +4,7 @@ export class Validator {
     var phone = value.match(regExp);
     return (phone == null);
   }
+
+  static validateJSON = (obj, validations) =>
+    validations.every(key => ![undefined, null].includes(key.split('.').reduce((acc, cur) => acc?.[cur], obj)));
 }

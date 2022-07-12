@@ -50,6 +50,7 @@ class ReportFormFinancialController {
                     it.totalAdvanced = reportFormFinancial.totalAdvanced
                     it.variance = reportFormFinancial.variance
                     it.quarterExpenses = reportFormFinancial.quarterExpenses
+                    it.reasonForVariance = reportFormFinancial.reasonForVariance
                     it.save(flush: true, failOnError: true)
                 }
             } else {

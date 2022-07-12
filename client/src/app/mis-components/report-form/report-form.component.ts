@@ -14,6 +14,7 @@ import {ProgramPartnersService} from '../../services/program-partners.service';
 import {PartnerSetupService} from '../../services/partner-setup.service';
 import {ProjectMilestoneService} from '../../services/project-milestone.service';
 import {AlertService} from '../../services/alert';
+import {Validator} from "../../helpers/validator";
 
 @Component({
   selector: 'app-report-form',
@@ -45,9 +46,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   isDisburseFunds: boolean;
   isApproveFundDisbursement: boolean;
 
-  totalAmountCommitted: number;
+  totalGrantAmount: number;
   totalAmountSpent: number;
-  totalSpendingPlanForPeriod: number;
+  totalAdvanced: number;
   balance: number;
 
   openCommentsPopup: boolean;
@@ -85,7 +86,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   shortLink1: string = '';
   shortLink2: string = '';
-
   shortLink3: string = '';
   attachment1: string;
   attachment2: string;
@@ -233,12 +233,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
         let reports = JSON.parse(data.report.reportValues);
 
         this.reportFormService.getFinancialReportByReportId(data.report.id).subscribe(f => {
-          console.log("f", f)
           if (f !== undefined) this.financialReport = f;
         });
 
         this.reportFormService.getPerformanceReportByReportId(data.report.id).subscribe(p => {
-          console.log("p", p)
           if (p !== undefined) this.performanceReport = p;
         });
 
@@ -280,13 +278,19 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
         let values = JSON.parse(data.setup.setupValues);
 
+        this.totalGrantAmount = values.currentStatus.totalAmountDisbursed;
+
         values.disbursementPlan.forEach((q) => {
           if (q.datePeriod == this.taskRecord.reportingPeriod) {
-            this.totalSpendingPlanForPeriod = q.disbursement
+            this.totalAdvanced = q.disbursement
           }
         })
 
+        let tac = 0
+        let tas = 0
         values.budget.forEach((b) => {
+          tac += +b.approvedAmount;
+          tas += +b.totalSpent;
           if (!this.financialReport.some(x => x.budgetLine === b.budgetLine)) {
             this.financialReport.push({
               budgetLine: b.budgetLine,
@@ -295,7 +299,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             });
           }
         });
-        this.updateProjectOverview();
+        this.totalGrantAmount = tac
+        this.totalAmountSpent = tas
+        this.updateProjectOverview()
 
         if (values.indicators != undefined) {
           let ind = JSON.parse(values.indicators);
@@ -418,16 +424,9 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.loading = !this.loading;
     console.log(file);
     this.fileUploadService.upload(file, 'reporting-' + this.taskRecord.taskDefinitionKey).subscribe((data) => {
-        if (id === 'attachment1') {
-          this.shortLink1 = data.path;
-        }
-        if (id === 'attachment2') {
-          this.shortLink2 = data.path;
-        }
-        if (id === 'attachment3') {
-          this.shortLink3 = data.path;
-        }
-        console.log('shortlink', this.shortLink1);
+        if (id === 'attachment1') this.shortLink1 = data.path;
+        if (id === 'attachment2') this.shortLink2 = data.path;
+        if (id === 'attachment3') this.shortLink3 = data.path;
         this.loading = false;
       }
     );
@@ -554,57 +553,95 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
 
   saveReport(reportValues: { [key: string]: string }, status) {
     this.submitting = true;
-    let reportRecord: { [key: string]: string } = {
-      taskId: this.taskRecord.id,
-      processInstanceId: this.taskRecord.processInstanceId,
-      partnerSetupId: this.taskRecord.partnerSetupId,
-      partnerId: this.taskRecord.partnerId,
-      userId: this.authService.getLoggedInUsername(),
-      groupId: this.taskRecord.groupId,
-      taskDefinitionKey: this.taskRecord.taskDefinitionKey,
-      reportValues: JSON.stringify(reportValues),
-      status: status
-    };
+    let submitReport = true
 
-    const params = new HttpParams().set('processInstanceId', this.taskRecord.processInstanceId);
-    this.reportFormService.getReportForTask(params).subscribe(data => {
-      if (data.report !== null && data.report !== undefined) {
-        this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {
-          console.log(data)
-          this.saveFinancialReport(data.id)
-          this.savePerformanceReport(data.id)
-          this.error = false;
-          this.success = true;
-          this.successMessage = 'Updated Report';
-        }, error => {
-          this.error = true;
-          this.errorMessage = 'Failed to update Report';
-          this.success = false;
-          console.log(error);
-        });
-      } else {
-        this.reportFormService.createReport(reportRecord).subscribe((data) => {
-          this.saveFinancialReport(data.id)
-          this.savePerformanceReport(data.id)
-          this.error = false;
-          this.success = true;
-          this.successMessage = 'Saved Report';
-        }, error => {
-          this.error = true;
-          this.errorMessage = 'Failed to save Report';
-          this.success = false;
-          console.log(error);
-        });
+    if (status != 'draft') {
+      this.financialReport.forEach((fr) => {
+        let financialReportAllFilled = Validator.validateJSON(fr, ['totalAdvanced', 'quarterExpenses', 'reasonForVariance'])
+        if (!financialReportAllFilled) {
+          this.submitting = false;
+          this.alertService.error("Please fill in all compulsory fields in Financial Report");
+          submitReport = false;
+        }
+      })
+
+      this.performanceReport.forEach((pr) => {
+        let performanceReportAllFilled = Validator.validateJSON(pr, ['commentOnResult'])
+        if (!performanceReportAllFilled) {
+          this.submitting = false;
+          this.alertService.error("Please fill in all compulsory fields in Performance Report");
+          submitReport = false;
+        }
+      })
+
+      if (this.attachment1 == undefined) {
+        this.submitting = false;
+        this.alertService.error("Please provide attachment");
+        submitReport = false;
       }
-    });
-    setTimeout(() => {
-      this.submitting = false;
-      if (status != 'draft') {
-        this.router.navigate(['/home']);
+
+      if (this.attachment2 == undefined) {
+        this.submitting = false;
+        this.alertService.error("Please provide attachment");
+        submitReport = false;
       }
-      this.success = false;
-      this.error = false;
-    }, 3000);
+    }
+
+    if (submitReport) {
+      let reportRecord: { [key: string]: string } = {
+        taskId: this.taskRecord.id,
+        processInstanceId: this.taskRecord.processInstanceId,
+        partnerSetupId: this.taskRecord.partnerSetupId,
+        partnerId: this.taskRecord.partnerId,
+        userId: this.authService.getLoggedInUsername(),
+        groupId: this.taskRecord.groupId,
+        taskDefinitionKey: this.taskRecord.taskDefinitionKey,
+        reportValues: JSON.stringify(reportValues),
+        status: status
+      };
+
+      const params = new HttpParams().set('processInstanceId', this.taskRecord.processInstanceId);
+      this.reportFormService.getReportForTask(params).subscribe(data => {
+        if (data.report !== null && data.report !== undefined) {
+          this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {
+            console.log(data)
+            this.saveFinancialReport(data.id)
+            this.savePerformanceReport(data.id)
+            this.error = false;
+            this.success = true;
+            this.successMessage = 'Updated Report';
+            this.updateTaskStatus(status);
+          }, error => {
+            this.error = true;
+            this.errorMessage = 'Failed to update Report';
+            this.success = false;
+            console.log(error);
+          });
+        } else {
+          this.reportFormService.createReport(reportRecord).subscribe((data) => {
+            this.saveFinancialReport(data.id)
+            this.savePerformanceReport(data.id)
+            this.error = false;
+            this.success = true;
+            this.successMessage = 'Saved Report';
+            this.updateTaskStatus(status);
+          }, error => {
+            this.error = true;
+            this.errorMessage = 'Failed to save Report';
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+      setTimeout(() => {
+        this.submitting = false;
+        if (status != 'draft') {
+          this.router.navigate(['/home']);
+        }
+        this.success = false;
+        this.error = false;
+      }, 3000);
+    }
   }
 
   saveFinancialReport(reportId) {
@@ -621,7 +658,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       };
 
       this.reportFormService.createFinancialReport(formData).subscribe((res) => {
-        console.log("Updated financial report", res)
+        // console.log("Updated financial report", res)
       })
     })
   }
@@ -641,7 +678,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       };
 
       this.reportFormService.createPerformanceReport(formData).subscribe((res) => {
-        console.log("Updated performance report", res)
+        // console.log("Updated performance report", res)
       })
     })
   }
@@ -690,12 +727,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     });
 
     if (status === 'save') {
-      this.saveReport(reportValues, 'saved_for_later');
-      this.updateTaskStatus('in_progress');
+      this.saveReport(reportValues, 'draft');
     }
     if (status === 'submit') {
-      this.saveReport(reportValues, 'final_submission');
-      this.updateTaskStatus('completed');
+      this.saveReport(reportValues, 'completed');
     }
   }
 
@@ -720,12 +755,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     };
 
     if (status === 'revise') {
-      this.saveReport(reportValues, 'asked_for_revisions');
-      this.updateTaskStatus('needs_revision');
+      this.saveReport(reportValues, 'needs_revision');
     }
     if (status === 'submit') {
-      this.saveReport(reportValues, 'reviewed_and_submitted');
-      this.updateTaskStatus('completed');
+      this.saveReport(reportValues, 'completed');
     }
   }
 
@@ -756,8 +789,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
       })
     };
 
-    this.saveReport(reportValues, 'approved_report');
-    this.updateTaskStatus('completed');
+    this.saveReport(reportValues, 'completed');
   }
 
   saveCommentsAndRecommendations() {
@@ -809,14 +841,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
   updateProjectOverview() {
     let tac = 0
     let tas = 0
+    let tad = 0
     let tb = 0
     this.financialReport.forEach(b => {
-      tac += +b.approved_budget;
-      tas += +b.expense_to_date;
+      tac += +b.approvedBudget;
+      if (b.expenseToDate != undefined) tas += (+b.expenseToDate + +b.quarterExpenses); else tas += +b.quarterExpenses;
+      tad += +b.totalAdvanced;
       tb += +b.variance
     })
-    this.totalAmountCommitted = tac
+    this.totalGrantAmount = tac
     this.totalAmountSpent = tas
+    this.totalAdvanced = tad
     this.balance = tb
   }
 

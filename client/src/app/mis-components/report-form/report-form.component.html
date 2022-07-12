@@ -137,8 +137,8 @@
                     </div>
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 15px">
-                        <li>Total Grant Amount: <b>{{totalAmountCommitted | number}}</b></li>
-                        <li>Amount Transferred in the reporting period: <b>{{totalSpendingPlanForPeriod | number}}</b>
+                        <li>Total Grant Amount: <b>{{totalGrantAmount | number}}</b></li>
+                        <li>Amount Transferred in the reporting period: <b>{{totalAdvanced | number}}</b>
                         </li>
                         <li>Amount Utilized in the period: <b>{{totalAmountSpent | number}}</b></li>
                         <li>Balance Spent/Overspent: <b>{{balance | number}}</b></li>
@@ -263,7 +263,14 @@
                         class="required-indicator">*</span></label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment1" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/>
+                        <button
+                          *ngIf="shortLink1!=''"
+                          type="button"
+                          (click)="fileUploadService.downloadFile(shortLink1)"
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink1)}} <i
+                          class="fas fa-download"></i></button>
+                      </div>
                       <div class="col-sm-3">
                         <button
                           type="button"
@@ -275,7 +282,14 @@
                       <div class="col-sm-3"><label for="attachment2">Attach narrative duly signed financial
                         report: <span class="required-indicator">*</span></label></div>
                       <div class="col-sm-6"><input class="form-control" id="attachment2" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/>
+                        <button
+                          *ngIf="shortLink2!=''"
+                          type="button"
+                          (click)="fileUploadService.downloadFile(shortLink2)"
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink2)}} <i
+                          class="fas fa-download"></i></button>
+                      </div>
                       <div class="col-sm-3">
                         <button
                           type="button"
@@ -284,11 +298,17 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <div class="col-sm-3"><label for="attachment3">Attach receipts and supporting documents: <span
-                        class="required-indicator">*</span></label>
+                      <div class="col-sm-3"><label for="attachment3">Attach receipts and supporting documents:</label>
                       </div>
                       <div class="col-sm-6"><input class="form-control" id="attachment3" placeholder="upload document"
-                                                   type="file" (change)="handleFileInput($event)"/></div>
+                                                   type="file" (change)="handleFileInput($event)"/>
+                        <button
+                          *ngIf="shortLink3!=''"
+                          type="button"
+                          (click)="fileUploadService.downloadFile(shortLink3)"
+                          class="btn btn-link">{{fileUploadService.getFileName(shortLink3)}} <i
+                          class="fas fa-download"></i></button>
+                      </div>
                       <div class="col-sm-3">
                         <i>This must be filled for the YCD program</i>
                       </div>
