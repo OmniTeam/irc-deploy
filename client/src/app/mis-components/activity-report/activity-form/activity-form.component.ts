@@ -178,6 +178,7 @@ export class ActivityFormComponent implements OnInit {
             this.formGroup = this.formBuilder.group({
               budgetLine: [{value: this.activity?.budgetLine, disabled: this.isDisabled}, [Validators.required]],
               name: [{value: this.activity?.name, disabled: this.isDisabled}, [Validators.required]],
+              organization: [{value: this.activity?.organization, disabled: this.isDisabled}, [Validators.required]],
               startDate: [{value: this.activity?.startDate, disabled: this.isDisabled}],
               endDate: [{value: this.activity?.endDate, disabled: this.isDisabled}],
               designation: [{value: this.activity?.designation, disabled: this.isDisabled}, [Validators.required]],
@@ -366,6 +367,7 @@ export class ActivityFormComponent implements OnInit {
     let savedActivityRecord: { [key: string]: string } = {
 
       name: activityReport.name,
+      organization: activityReport.organization,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityName: activityReport.activityName,
