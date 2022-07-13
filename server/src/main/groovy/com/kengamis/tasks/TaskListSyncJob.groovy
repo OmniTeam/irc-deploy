@@ -21,9 +21,9 @@ class TaskListSyncJob extends Script {
     @Override
     Object run() {
         //kengaGroupAclEntryService.createAclsForRecords()
-        runUserAccountTasks()
-        handleArchiveTask()
-        startLongTermGrantJob()
+        //runUserAccountTasks()
+        //handleArchiveTask()
+        //startLongTermGrantJob()
         //send data to workflow
         def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
         data.each { sendTasksToWorkflow(it as TaskList) }
