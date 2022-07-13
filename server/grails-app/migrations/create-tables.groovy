@@ -3501,4 +3501,107 @@ databaseChangeLog = {
         addNotNullConstraint(columnDataType: "varchar(255)", columnName: "content", tableName: "report_form_recommendations", validate: "true")
     }
 
+    changeSet(author: "bruno (generated)", id: "1657633001254-14") {
+        createTable(tableName: "partner_setup_budget") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setup_budgetPK")
+            }
+
+            column(name: "partner_setup_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "approved_amount", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "budget_line", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "total_spent", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "milestone_id", type: "VARCHAR(255)")
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657633001254-15") {
+        createTable(tableName: "partner_setup_disbursement_plan") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setup_disbursement_planPK")
+            }
+
+            column(name: "partner_setup_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "start_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_period", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "disbursement", type: "VARCHAR(255)")
+
+            column(name: "end_date", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657633001254-16") {
+        createTable(tableName: "partner_setup_milestones") {
+            column(name: "id", type: "VARCHAR(255)") {
+                constraints(nullable: "false", primaryKey: "true", primaryKeyName: "partner_setup_milestonesPK")
+            }
+
+            column(name: "partner_setup_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "date_created", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "overall_target", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "milestone_id", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "last_updated", type: "datetime") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "name", type: "VARCHAR(255)") {
+                constraints(nullable: "false")
+            }
+
+            column(name: "disaggregation", type: "LONGTEXT")
+        }
+    }
+
+
 }

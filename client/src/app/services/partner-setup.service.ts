@@ -45,4 +45,38 @@ export class PartnerSetupService {
   updateReportingCalendarStatus(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/calendarTriggerDates/updateReportingCalendarStatus`, {params});
   }
+
+
+  /**
+   * PartnerSetupBudget
+   * **/
+  createPartnerSetupBudget(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/partnerSetupBudget`, formData);
+  }
+
+  getSetupBudgetByPartnerSetupId(setupId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/partnerSetupBudget/getSetupBudgetByPartnerSetupId/${setupId}`);
+  }
+
+  /**
+   * PartnerSetupMilestones
+   * **/
+  createPartnerSetupMilestones(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/partnerSetupMilestones`, formData);
+  }
+
+  getSetupMilestonesByPartnerSetupId(setupId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/partnerSetupMilestones/getSetupMilestonesByPartnerSetupId/${setupId}`);
+  }
+
+  /**
+   * PartnerSetupMilestones
+   * **/
+  createPartnerSetupDisbursementPlan(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/partnerSetupDisbursementPlan`, formData);
+  }
+
+  getSetupDisbursementPlanByPartnerSetupId(setupId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/partnerSetupDisbursementPlan/getSetupDisbursementPlanByPartnerSetupId/${setupId}`);
+  }
 }

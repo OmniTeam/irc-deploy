@@ -236,8 +236,8 @@
                     <tbody>
                     <tr *ngFor="let row of budget">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
-                      <td *ngIf="row.indicatorId!=''" class='text-center'>{{ row.budgetLine }}</td>
-                      <td *ngIf="row.indicatorId==''" class='text-center' [id]="row.id+'-b'">
+                      <td *ngIf="row.milestoneId!=''" class='text-center'>{{ row.budgetLine }}</td>
+                      <td *ngIf="row.milestoneId==''" class='text-center' [id]="row.id+'-b'">
                         <div>{{ row.budgetLine }}
                           <button class="btn btn-link"
                                   (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine)"><i

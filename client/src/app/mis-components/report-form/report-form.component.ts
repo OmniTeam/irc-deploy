@@ -276,44 +276,58 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     const params2 = new HttpParams().set('id', this.taskRecord.partnerSetupId);
     this.partnerSetupService.getPartnerSetupRecord(params2).subscribe(data => {
       if (data.setup != undefined && data.setup.setupValues != undefined) {
-        let values = JSON.parse(data.setup.setupValues);
 
-        this.totalGrantAmount = values.currentStatus.totalAmountDisbursed;
+        let setupValues = JSON.parse(data.setup.setupValues);
+        if (setupValues.currentStatus != undefined) this.totalGrantAmount = setupValues.currentStatus.totalAmountDisbursed;
 
-        values.disbursementPlan.forEach((q) => {
-          if (q.datePeriod == this.taskRecord.reportingPeriod) {
-            this.totalAdvanced = q.disbursement
-          }
+        this.partnerSetupService.getSetupDisbursementPlanByPartnerSetupId(data.setup.id).subscribe((res: any) => {
+          console.log("DisbursementPlan", res)
+          res?.forEach((q) => {
+            if (q.datePeriod == this.taskRecord.reportingPeriod) {
+              this.totalAdvanced = q.disbursement
+            }
+          })
         })
 
-        let tac = 0
-        let tas = 0
-        values.budget.forEach((b) => {
-          tac += +b.approvedAmount;
-          tas += +b.totalSpent;
-          if (!this.financialReport.some(x => x.budgetLine === b.budgetLine)) {
-            this.financialReport.push({
-              budgetLine: b.budgetLine,
-              approvedBudget: b.approvedAmount,
-              expenseToDate: b.totalSpent
-            });
-          }
-        });
-        this.totalGrantAmount = tac
-        this.totalAmountSpent = tas
-        this.updateProjectOverview()
+        this.partnerSetupService.getSetupBudgetByPartnerSetupId(data.setup.id).subscribe((res: any) => {
+          console.log("Budget", res)
+          let tac = 0
+          let tas = 0
+          res?.forEach((b) => {
+            tac += +b.approvedAmount;
+            tas += +b.totalSpent;
+            if (!this.financialReport.some(x => x.budgetLine === b.budgetLine)) {
+              this.financialReport.push({
+                budgetLine: b.budgetLine,
+                approvedBudget: b.approvedAmount,
+                expenseToDate: b.totalSpent
+              });
+            } else {
+              this.financialReport.forEach((report) => {
+                if (report.budgetLine == b.budgetLine) {
+                  report.approvedBudget = b.approvedAmount
+                  report.expenseToDate = b.totalSpent
+                }
+              });
+            }
+          });
+          this.totalGrantAmount = tac
+          this.totalAmountSpent = tas
+          this.updateProjectOverview()
+        })
 
-        if (values.indicators != undefined) {
-          let ind = JSON.parse(values.indicators);
-          ind.forEach((i) => {
-            let target = this.getTargetForThisQuarter(i.disaggregation);
+        this.partnerSetupService.getSetupMilestonesByPartnerSetupId(data.setup.id).subscribe((res: any) => {
+          console.log("Milestones", res)
+          res?.forEach((i) => {
+            let disaggregation = JSON.parse(i.disaggregation)
+            let target = this.getTargetForThisQuarter(disaggregation);
             const params = new HttpParams()
               .set('id', i.milestoneId)
+              .set('partnerId', this.taskRecord.partnerId)
               .set('startDate', this.taskRecord.startDate)
               .set('endDate', this.taskRecord.endDate);
             this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone: any) => {
               if (milestone != undefined) {
-
                 let cumulative = milestone.cumulativeAchievement ?? 0;
                 let quarter = milestone.quaterAchievement ?? 0;
                 let percentageAchievement: number;
@@ -334,11 +348,22 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                     quarterTarget: target,
                     percentageAchievement: percentageAchievement
                   });
+                } else {
+                  this.performanceReport.forEach((report) => {
+                    if (report.outputIndicators == i.name) {
+                      report.milestoneId = i.milestoneId
+                      report.overallTarget = i.overallTarget
+                      report.cumulativeAchievement = cumulative
+                      report.quarterAchievement = quarter
+                      report.quarterTarget = target
+                      report.percentageAchievement = percentageAchievement
+                    }
+                  });
                 }
               }
             }, error => console.log(error));
           });
-        }
+        })
 
         let reportValues: { [key: string]: string } = {};
         this.saveReport(reportValues, 'draft');
@@ -570,7 +595,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     this.reportFormService.getReportForTask(params).subscribe(data => {
       if (data.report !== null && data.report !== undefined) {
         this.reportFormService.updateReport(reportRecord, data.report.id).subscribe((data) => {
-          console.log(data)
           this.saveFinancialReport(data.id)
           this.savePerformanceReport(data.id)
           this.error = false;

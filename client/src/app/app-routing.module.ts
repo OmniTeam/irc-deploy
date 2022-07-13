@@ -193,7 +193,8 @@ const routes: Routes = [
             Roles.ROLE_MEAL,
             Roles.ROLE_FINANCE,
             Roles.ROLE_ED,
-            Roles.ROLE_PROGRAM_OFFICER
+            Roles.ROLE_PROGRAM_OFFICER,
+            Roles.ROLE_PARTNER_DATA_MANAGER
           ]
         },
         loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
