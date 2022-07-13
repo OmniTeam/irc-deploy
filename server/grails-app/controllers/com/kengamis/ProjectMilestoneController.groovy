@@ -159,6 +159,7 @@ class ProjectMilestoneController {
     def getMilestoneDataForReports() {
         def milestone = []
         def projectMilestone = projectMilestoneService.get(params.id)
+        def programPartner = ProgramPartner.get(params.partnerId)
         def reportingQuery
         if (projectMilestone != null) reportingQuery = projectMilestone.reportingQuery
 
@@ -177,13 +178,21 @@ class ProjectMilestoneController {
 
                 def queryQ = queryC + clause + column + "between '${params.startDate}' and '${params.endDate}'"
 
-                println "queryCummulaive ==> $queryC"
+                def cumulative = [total: 0]
+                if (queryC != null) {
+                    queryC = queryC + clause + " cluster = '${programPartner.cluster}'"
+                    println "cummulative ==>"
+                    println queryC
+                    cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                }
 
                 def quarter = [total: 0]
-                if (queryQ != null) quarter = AppHolder.withMisSql { rows(queryQ as String) }.first()
-
-                def cumulative = [total: 0]
-                if (queryC != null) cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                if (queryQ != null){
+                    queryQ = queryQ + " and cluster = '${programPartner.cluster}'"
+                    println "quarterly ==>"
+                    println queryQ
+                    quarter = AppHolder.withMisSql { rows(queryQ as String) }.first()
+                }
 
                 milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
 

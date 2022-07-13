@@ -297,6 +297,13 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
               approvedBudget: b.approvedAmount,
               expenseToDate: b.totalSpent
             });
+          } else {
+            this.financialReport.forEach((report) => {
+              if (report.budgetLine == b.budgetLine) {
+                report.approvedBudget = b.approvedAmount
+                report.expenseToDate = b.totalSpent
+              }
+            });
           }
         });
         this.totalGrantAmount = tac
@@ -309,6 +316,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             let target = this.getTargetForThisQuarter(i.disaggregation);
             const params = new HttpParams()
               .set('id', i.milestoneId)
+              .set('partnerId', this.taskRecord.partnerId)
               .set('startDate', this.taskRecord.startDate)
               .set('endDate', this.taskRecord.endDate);
             this.projectMilestoneService.getMilestoneDataForReports(params).subscribe((milestone: any) => {
@@ -333,6 +341,17 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
                     quarterAchievement: quarter,
                     quarterTarget: target,
                     percentageAchievement: percentageAchievement
+                  });
+                } else {
+                  this.performanceReport.forEach((report) => {
+                    if (report.outputIndicators == i.name) {
+                      report.milestoneId = i.milestoneId
+                      report.overallTarget = i.overallTarget
+                      report.cumulativeAchievement = cumulative
+                      report.quarterAchievement = quarter
+                      report.quarterTarget = target
+                      report.percentageAchievement = percentageAchievement
+                    }
                   });
                 }
               }
