@@ -117,6 +117,9 @@ class PartnerSetupController {
             }
         }
         CalendarTriggerDates.findAllByPartnerSetupId(partnerSetup.id).each { CalendarTriggerDates it -> it.delete() }
+        PartnerSetupBudget.findAllByPartnerSetupId(partnerSetup.id).each {PartnerSetupBudget it -> it.delete()}
+        PartnerSetupMilestones.findAllByPartnerSetupId(partnerSetup.id).each {PartnerSetupMilestones it -> it.delete()}
+        PartnerSetupDisbursementPlan.findAllByPartnerSetupId(partnerSetup.id).each {PartnerSetupDisbursementPlan it -> it.delete()}
 
         partnerSetupService.delete(id ?: params.id)
 

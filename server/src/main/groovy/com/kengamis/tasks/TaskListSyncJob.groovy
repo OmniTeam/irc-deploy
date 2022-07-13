@@ -20,7 +20,7 @@ class TaskListSyncJob extends Script {
 
     @Override
     Object run() {
-        kengaGroupAclEntryService.createAclsForRecords()
+        //kengaGroupAclEntryService.createAclsForRecords()
         runUserAccountTasks()
         handleArchiveTask()
         startLongTermGrantJob()
