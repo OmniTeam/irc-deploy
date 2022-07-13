@@ -40,7 +40,19 @@ class PartnerSetupBudgetController {
         }
 
         try {
-            partnerSetupBudgetService.save(partnerSetupBudget)
+            def psb = PartnerSetupBudget.findAllByPartnerSetupIdAndBudgetLine(partnerSetupBudget.partnerSetupId, partnerSetupBudget.budgetLine)
+            if (psb.size() > 0) {
+                psb.each {
+                    it.partnerSetupId = partnerSetupBudget.partnerSetupId
+                    it.budgetLine = partnerSetupBudget.budgetLine
+                    it.milestoneId = partnerSetupBudget.milestoneId
+                    it.approvedAmount = partnerSetupBudget.approvedAmount
+                    it.totalSpent = partnerSetupBudget.totalSpent
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                partnerSetupBudgetService.save(partnerSetupBudget)
+            }
         } catch (ValidationException e) {
             respond partnerSetupBudget.errors
             return
@@ -81,5 +93,10 @@ class PartnerSetupBudgetController {
         partnerSetupBudgetService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getSetupBudgetByPartnerSetupId(String setupId) {
+        def record = PartnerSetupBudget.findAllByPartnerSetupId(setupId)
+        respond record
     }
 }

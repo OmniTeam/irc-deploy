@@ -40,7 +40,19 @@ class PartnerSetupDisbursementPlanController {
         }
 
         try {
-            partnerSetupDisbursementPlanService.save(partnerSetupDisbursementPlan)
+            def psd = PartnerSetupDisbursementPlan.findAllByPartnerSetupIdAndDatePeriod(partnerSetupDisbursementPlan.partnerSetupId, partnerSetupDisbursementPlan.datePeriod)
+            if (psd.size() > 0) {
+                psd.each {
+                    it.partnerSetupId = partnerSetupDisbursementPlan.partnerSetupId
+                    it.datePeriod = partnerSetupDisbursementPlan.datePeriod
+                    it.startDate = partnerSetupDisbursementPlan.startDate
+                    it.endDate = partnerSetupDisbursementPlan.endDate
+                    it.disbursement = partnerSetupDisbursementPlan.disbursement
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                partnerSetupDisbursementPlanService.save(partnerSetupDisbursementPlan)
+            }
         } catch (ValidationException e) {
             respond partnerSetupDisbursementPlan.errors
             return
@@ -81,5 +93,10 @@ class PartnerSetupDisbursementPlanController {
         partnerSetupDisbursementPlanService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getSetupDisbursementPlanByPartnerSetupId(String setupId) {
+        def record = PartnerSetupDisbursementPlan.findAllByPartnerSetupId(setupId)
+        respond record
     }
 }

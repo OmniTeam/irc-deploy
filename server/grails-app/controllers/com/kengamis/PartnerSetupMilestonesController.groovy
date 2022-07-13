@@ -20,7 +20,7 @@ class PartnerSetupMilestonesController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond partnerSetupMilestonesService.list(params), model:[partnerSetupMilestonesCount: partnerSetupMilestonesService.count()]
+        respond partnerSetupMilestonesService.list(params), model: [partnerSetupMilestonesCount: partnerSetupMilestonesService.count()]
     }
 
     def show(String id) {
@@ -40,13 +40,25 @@ class PartnerSetupMilestonesController {
         }
 
         try {
-            partnerSetupMilestonesService.save(partnerSetupMilestones)
+            def psm = PartnerSetupMilestones.findAllByPartnerSetupIdAndName(partnerSetupMilestones.partnerSetupId, partnerSetupMilestones.name)
+            if (psm.size() > 0) {
+                psm.each {
+                    it.partnerSetupId = partnerSetupMilestones.partnerSetupId
+                    it.name = partnerSetupMilestones.name
+                    it.milestoneId = partnerSetupMilestones.milestoneId
+                    it.overallTarget = partnerSetupMilestones.overallTarget
+                    it.disaggregation = partnerSetupMilestones.disaggregation
+                    it.save(flush: true, failOnError: true)
+                }
+            } else {
+                partnerSetupMilestonesService.save(partnerSetupMilestones)
+            }
         } catch (ValidationException e) {
             respond partnerSetupMilestones.errors
             return
         }
 
-        respond partnerSetupMilestones, [status: CREATED, view:"show"]
+        respond partnerSetupMilestones, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -68,7 +80,7 @@ class PartnerSetupMilestonesController {
             return
         }
 
-        respond partnerSetupMilestones, [status: OK, view:"show"]
+        respond partnerSetupMilestones, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -81,5 +93,10 @@ class PartnerSetupMilestonesController {
         partnerSetupMilestonesService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    def getSetupMilestonesByPartnerSetupId(String setupId) {
+        def record = PartnerSetupMilestones.findAllByPartnerSetupId(setupId)
+        respond record
     }
 }

@@ -1,5 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {SampleData} from "../../helpers/sample-data";
 import {Subject} from "rxjs";
 import {v4 as uuid} from 'uuid';
 import {PartnerSetupService} from "../../services/partner-setup.service";
@@ -87,7 +86,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       });
 
     this.projectMilestoneService.getMilestones().subscribe((data) => {
-      console.log('data', data)
       if (data !== null && data !== undefined) {
         this.milestones = data;
       }
@@ -125,24 +123,32 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.startReportingCycle = data.startCycle == "true";
       if (this.partnerChosen != undefined) this.onPartnerChange()
 
-      if (setupValues.disbursementPlan != undefined) {
-        this.disbursementPlan = setupValues.disbursementPlan;
-        this.disbursementPlan.forEach((data) => {
-          this.updateDisbursementPlanValues(data.id, data.disbursement);
-        });
-      }
-
-      if (setupValues.budget != undefined) {
-        this.budget = setupValues.budget;
+      this.partnerSetupService.getSetupBudgetByPartnerSetupId(data.id).subscribe((res:any) => {
+        this.budget = res;
         this.budget.forEach((data) => {
           this.updateBudgetAmount(data.id, data.approvedAmount);
           this.updateBudgetDisburse(data.id, data.totalSpent);
         });
-      }
+      })
+
+      this.partnerSetupService.getSetupMilestonesByPartnerSetupId(data.id).subscribe((res:any) => {
+        res?.forEach((data) => {
+          this.indicators.push({id: data.id,
+            name: data.id,
+            milestoneId: data.milestoneId,
+            overallTarget: data.overallTarget,
+            disaggregation: JSON.parse(data.disaggregation)});
+        });
+      })
+
+      this.partnerSetupService.getSetupDisbursementPlanByPartnerSetupId(data.id).subscribe((res:any) => {
+        this.disbursementPlan = res;
+        this.disbursementPlan.forEach((data) => {
+          this.updateDisbursementPlanValues(data.id, data.disbursement);
+        });
+      })
 
       if (setupValues.currentStatus != undefined) this.currentStatus = setupValues.currentStatus;
-      if (this.isValidJSONStr(setupValues.indicators)) this.indicators = JSON.parse(setupValues.indicators);
-      console.log("this.indicators", this.indicators);
     }
 
     this.dtTrigger.next();
@@ -275,19 +281,19 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   createNewBudgetItem(indicator: Indicator) {
-    if (this.budget.some(x => x.indicatorId === indicator.id)) {
+    if (this.budget.some(x => x.milestoneId === indicator.id)) {
       this.budget.forEach(function (item) {
-        if (item.indicatorId === indicator.id) item.budgetLine = indicator.name;
+        if (item.milestoneId === indicator.id) item.budgetLine = indicator.name;
       });
     } else {
       let id = uuid();
-      this.budget.push({id: id, indicatorId: indicator.id, budgetLine: indicator.name, approvedAmount: ''});
+      this.budget.push({id: id, milestoneId: indicator.id, budgetLine: indicator.name, approvedAmount: ''});
     }
   }
 
   addNewBudgetItem() {
     let id = uuid();
-    this.budget.push({id: id, indicatorId: '', budgetLine: '', approvedAmount: ''});
+    this.budget.push({id: id, milestoneId: '', budgetLine: '', approvedAmount: ''});
     this.setDisaggregation(id);
   }
 
@@ -350,9 +356,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
           let overallTarget: number = 0;
           let arr = rowId.split(' ');
           let datePeriod = arr[0];
-          let indicatorId = arr[1];
+          let milestoneId = arr[1];
           this.indicators.forEach((indicator) => {
-            if (indicator.id === indicatorId) {
+            if (indicator.id === milestoneId) {
               if (indicator.disaggregation.some(x => x.datePeriod === datePeriod)) {
                 indicator.disaggregation.forEach(function (item) {
                   if (item.datePeriod === datePeriod) item.target = value
@@ -385,9 +391,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     console.log("this.indicators", this.indicators);
     let values: { [key: string]: string } = {
-      indicators: JSON.stringify(this.indicators),
-      budget: this.budget,
-      disbursementPlan: this.disbursementPlan,
       currentStatus: this.currentStatus
     }
 
@@ -405,6 +408,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
     if (this.setup) {
       this.partnerSetupService.updatePartnerSetup(partnerSetupRecord, this.setup.id).subscribe((data) => {
+        this.savePartnerSetupBudget(data.id)
+        this.savePartnerSetupMilestones(data.id)
+        this.savePartnerSetupDisbursementPlan(data.id)
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -418,6 +424,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     } else {
       this.partnerSetupService.createPartnerSetup(partnerSetupRecord).subscribe((data) => {
         if (data !== null && data !== undefined) this.saveReportingCalendar(data.id);
+        this.savePartnerSetupBudget(data.id)
+        this.savePartnerSetupMilestones(data.id)
+        this.savePartnerSetupDisbursementPlan(data.id)
         this.setPartnerSetupInfo(data);
         this.error = false;
         this.success = true;
@@ -435,6 +444,55 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.success = false;
       this.error = false;
     }, 3000);
+  }
+
+  savePartnerSetupBudget(partnerSetupId) {
+    this.budget.forEach((budget) => {
+      let formData: { [key: string]: string } = {
+        partnerSetupId: partnerSetupId,
+        budgetLine: budget.budgetLine,
+        milestoneId: budget.milestoneId,
+        approvedAmount: budget.approvedAmount,
+        totalSpent: budget.totalSpent,
+      };
+
+      this.partnerSetupService.createPartnerSetupBudget(formData).subscribe((res) => {
+        console.log("Response", res)
+      })
+    })
+  }
+
+  savePartnerSetupMilestones(partnerSetupId) {
+    this.indicators.forEach((indicator) => {
+      let formData: { [key: string]: string } = {
+        partnerSetupId: partnerSetupId,
+        name: indicator.name,
+        milestoneId: indicator.id,
+        overallTarget: indicator.overallTarget,
+        disaggregation: JSON.stringify(indicator.disaggregation),
+      };
+
+      this.partnerSetupService.createPartnerSetupMilestones(formData).subscribe((res) => {
+        console.log("Response", res)
+      })
+    })
+  }
+
+  savePartnerSetupDisbursementPlan(partnerSetupId) {
+    this.disbursementPlan.forEach((disbursement) => {
+      let formData: { [key: string]: string } = {
+        partnerSetupId: partnerSetupId,
+        datePeriod: disbursement.datePeriod,
+        startDate: disbursement.startDate,
+        endDate: disbursement.endDate,
+        disbursement: disbursement.disbursement,
+      };
+
+      this.partnerSetupService.createPartnerSetupDisbursementPlan(formData).subscribe((res) => {
+        console.log("Response", res)
+      })
+    })
+
   }
 
   saveReportingCalendar(setupId) {
@@ -498,12 +556,12 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.totalApprovedAmount = total.toString();
   }
 
-  private updateBudgetDisburse(id, newValue, editing?:boolean) {
+  private updateBudgetDisburse(id, newValue, editing?: boolean) {
     let total: number = 0;
     if (this.budget.some(x => x.id === id)) {
       this.budget.forEach((item) => {
         if (item.id === id) {
-          if(editing) {
+          if (editing) {
             if (+newValue <= +item.approvedAmount) {
               item.totalSpent = newValue;
             } else {
