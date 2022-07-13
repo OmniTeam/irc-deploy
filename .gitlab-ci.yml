@@ -4,8 +4,8 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   GRADLE_VERSION: "5.1.1"
   # GRAILS_VERSION: "4.0.3"
-  KENGAMIS_SERVER_HOST: "157.230.227.3"
-  KENGAMIS_WEBAPP_FOLDER: "/opt/runnable-jars/kengamis-server/"
+  ISDAP_SERVER_HOST: "157.230.227.3"
+  ISDAP_WEBAPP_FOLDER: "/opt/runnable-jars/isdap-server/"
 
 before_script:
   - apt-get update -qq && apt-get install -y -qq unzip
@@ -26,22 +26,22 @@ before_script:
 # test:
 #   stage: test
 #   script: 
-#     - grails test-app -integration server/src/integration-test/groovy/com/kengamis/DbConnectionSpec.groovy
+#     - grails test-app -integration server/src/integration-test/groovy/com/isdap/DbConnectionSpec.groovy
 
 deploy:
   stage: deploy
   artifacts:
     paths:
-      - server/build/libs/crvpf-server.jar
+      - server/build/libs/isdap-server.jar
   only:
-    - crvpf
+    - isdap
   script:
     - gradle build -x test -x integrationTest
     - sshpass -V
     - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/crvpf-server.jar root@$KENGAMIS_SERVER_HOST:$KENGAMIS_WEBAPP_FOLDER
-    - sshpass -e ssh root@$KENGAMIS_SERVER_HOST "cd $KENGAMIS_WEBAPP_FOLDER; ./start-kengamis.sh"
-    - echo "Done Deploying crvpf server :)" 
+    - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/isdap-server.jar root@$ISDAP_SERVER_HOST:$ISDAP_WEBAPP_FOLDER
+    - sshpass -e ssh root@$ISDAP_SERVER_HOST "cd $ISDAP_WEBAPP_FOLDER; ./start-isdap.sh"
+    - echo "Done Deploying isdap server :)" 
 
 #build:client:
 #  image: node:12
