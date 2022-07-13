@@ -151,9 +151,9 @@ jar {
     archiveName('crvpf-server.jar')
 }
 bootJar {
-    archiveBaseName = 'crvpf-server'
+    archiveBaseName = 'isdap-server'
     archiveVersion = '1.0.0'
-    archiveFileName = 'crvpf-server.jar'
+    archiveFileName = 'isdap-server.jar'
 }
 test {
     ignoreFailures = true
