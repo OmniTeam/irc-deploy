@@ -37,7 +37,8 @@ class WorkPlanController {
                      staffId    : workPlan.staffId,
                      lastUpdated: workPlan.lastUpdated,
                      dateCreated: workPlan.dateCreated,
-                     setupValues: workPlan.setupValues
+                     setupValues: workPlan.setupValues,
+                    organization: workPlan?.organization
             ]
         }
         respond list

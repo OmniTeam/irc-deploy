@@ -136,7 +136,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'Work Plan',
+    title: 'Activity',
     type: 'sub',
     icontype: 'fa fa-briefcase',
     roles: [ 'ROLE_SUPER_ADMIN',  'ROLE_ADMIN', 'ROLE_WORK_PLAN'],

@@ -237,7 +237,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/referrals/action-referral/action-referral.module').then(m => m.ActionReferralModule)
       },
       {
-        path: 'feedback-list', canActivate: [AuthGuard],
+        path: 'irc-feedback-list', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         },

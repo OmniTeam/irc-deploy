@@ -27,6 +27,41 @@
                 <div class="form-row">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
+                      Organization
+                      <span class="required-indicator" style="color: crimson;font-size: 20px">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     formControlName="organization"
+                                     [ngClass]="{ 'is-invalid': submitted && f.organization.errors }"
+                                     [searchable]="true"
+                                     [(ngModel)]="orgChosen"
+                                     [clearable]="true">
+                            <ng-option [value]="item.name" *ngFor="let item of irc_list">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                          <div *ngIf="submitted && f.organization.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.organization.errors.required">Organization is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
                       Responsible Person
                       <span class="required-indicator">*</span>
                     </label>
@@ -119,7 +154,7 @@
                   </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row" [hidden]="true">
                   <div class="col-md-3" style="padding-top: 10px;">
                     <label>
                       Select Related Milestone

@@ -109,12 +109,30 @@ export class EditActivityReportComponent implements OnInit {
       'name': 'SSABAGABO'
     },
   ];
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
   workPlanId: string;
   newUpdatedExpenses: any;
   activity: any;
   activityId: any;
   budgetLineName: any;
   responsiblePerson: any;
+  orgChosen: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -135,12 +153,15 @@ export class EditActivityReportComponent implements OnInit {
     this.getBudgetLines();
     this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
       this.activity = data;
+      console.log("yry",data);
       this.getActivityDetails(data)
       this.choosenBudget =  this.activity?.budgetLine
       this.budgetHolderId = this.activity?.name
+      this.orgChosen = this.activity?.organization
       this.formGroup = this.formBuilder.group({
         budgetLine: [this.activity?.budgetLine, [Validators.required]],
         name: [this.activity?.name, [Validators.required]],
+        organization: [this.activity?.organization, [Validators.required]],
         startDate:[this.activity?.startDate],
         endDate:[this.activity?.endDate],
         designation: [this.activity?.designation, [Validators.required]],
@@ -224,6 +245,7 @@ export class EditActivityReportComponent implements OnInit {
     let savedActivityRecord: { [key: string]: string } = {
 
       name: this.responsiblePerson,
+      organization: this.orgChosen,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
@@ -399,6 +421,7 @@ export class EditActivityReportComponent implements OnInit {
   //   this.totalApprovedAmount = total.toString();
   // }
 
+
   handleFileInput(event) {
     let files: FileList = event.target.files;
     if (event.target.id === 'attachment1') {
@@ -460,11 +483,8 @@ export class EditActivityReportComponent implements OnInit {
         this.budgetLines = values.budget;
         this.budgetLines.forEach((item) => {
           if (item.id == this.choosenBudget) {
-
             item.totalSpent = this.newUpdatedExpenses;
-            console.log("fkdfdf",d);
             this.workPlanService.updateWorkPlan(this.budgetHolder, this.workPlanId).subscribe((data) => {
-
             });
 
           }
@@ -523,6 +543,7 @@ export class EditActivityReportComponent implements OnInit {
 
     let savedActivityRecord: { [key: string]: string } = {
       name: this.responsiblePerson,
+      organization: this.orgChosen,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,

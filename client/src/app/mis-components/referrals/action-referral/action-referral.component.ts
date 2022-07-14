@@ -179,7 +179,7 @@ export class ActionReferralComponent implements OnInit {
     this.taskId = this.route.snapshot.params.id;
     const params = new HttpParams().set('id', this.taskId);
     this.taskService.getTaskRecord(params).subscribe((data) =>{
-      console.log("Data id",data)
+
       this.taskRecord = data;
 
       this.referralsService.getCurrentReferral(this.taskRecord.referralId).subscribe(data => {

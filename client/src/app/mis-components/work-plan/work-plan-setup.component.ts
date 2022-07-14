@@ -53,11 +53,30 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
   showDisaggregation: boolean;
   showQuarterlyBudget: boolean;
   btn_id: string;
+  orgChosen: any;
 
   periodItems = [
     {name: 'Monthly', value: 'month'},
     {name: 'Quarterly', value: 'quarter'},
     {name: 'Annually', value: 'annual'}
+  ];
+
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
   ];
 
   constructor(private router: Router, private route: ActivatedRoute,
@@ -243,6 +262,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       this.usersService.getCurrentUserStaff(this.staffChosen).subscribe((results: any) => {
         if (results !== null && results !== undefined) {
           this.organisationalInfo = results;
+          console.log(this.organisationalInfo)
           this.programChosen = results.programId;
           if (this.programChosen != undefined) {
             this.setMilestones(this.programChosen);
@@ -499,6 +519,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       userId: this.authService.getLoggedInUsername(),
       staffId: this.staffChosen,
       programId: this.programChosen,
+      organization: this.orgChosen,
       setupValues: JSON.stringify(values),
       startDate: this.calendar.grantStartDate,
       endDate: this.calendar.grantEndDate,

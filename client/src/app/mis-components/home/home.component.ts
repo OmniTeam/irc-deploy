@@ -11,6 +11,9 @@ import {WorkPlanService} from '../../services/work-plan-setup.service';
 import {ReportFormService} from '../../services/report-form.service';
 import {ProgramCategoryService} from '../../services/program-category.service';
 import {log} from 'util';
+import {HttpParams} from "@angular/common/http";
+import {ProjectMilestoneService} from "../../services/project-milestone.service";
+import {getElement} from "devextreme-angular";
 
 @Component({
   selector: 'app-home',
@@ -31,6 +34,28 @@ export class HomeComponent implements OnInit {
   beyondBudget: number;
   noBudget: number;
 
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
+  pillars: any;
+  acceptable: number;
+  average: number;
+  under: number;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +67,8 @@ export class HomeComponent implements OnInit {
     private workPlanService: WorkPlanService,
     private reportFormService: ReportFormService,
     private usersService: UsersService,
-    private programCategory: ProgramCategoryService
+    private programCategory: ProgramCategoryService,
+    private projectMilestoneService: ProjectMilestoneService,
   ) {
   }
 
@@ -77,11 +103,14 @@ export class HomeComponent implements OnInit {
     this.getMilestones();
     this.getBudgetLines();
     this.getProgramCategories();
+    this.getPillars()
     //load filter counts
     this.filters.forEach((filter) => {
       this.setFilters(filter, true);
     });
   }
+
+
 
   switchRowsData(type: string) {
     this.isReferrals = false;
@@ -170,11 +199,10 @@ export class HomeComponent implements OnInit {
     this.reportFormService.getMilestonePerformance().subscribe((data) => {
       let milestones = [];
       this.milestones = data;
-      console.log('Mile', data);
       if (this.milestones != null) {
         this.milestones.forEach((d) => {
           milestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement, d.percentageAchievement,
-            d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, ''));
+            d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
         });
         this.displayMilestones = milestones;
         this.cardsData()
@@ -189,13 +217,34 @@ export class HomeComponent implements OnInit {
     });
   }
 
+
+  getPillars(){
+    this.projectMilestoneService.getPrograms().subscribe((data) => {
+      console.log(data);
+      this.pillars = data;
+    });
+  }
+
+  filterPillar(program) {
+    let pillar = program;
+    let staffMilestones = [];
+    this.milestones.forEach((d) => {
+      if (d.pillar === pillar) {
+        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
+          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+      }
+    });
+    this.displayMilestones = staffMilestones;
+    this.cardsData()
+  }
+
   filterMilestonesList(event) {
     let staffId = event;
     let staffMilestones = [];
     this.milestones.forEach((d) => {
       if (d.staffId === staffId) {
         staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
-          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, ''));
+          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
       }
     });
     this.displayMilestones = staffMilestones;
@@ -219,7 +268,7 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: number, expenses: number, efficiency: string, endDate: string, startDate: string, progress: any) {
+  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: number, expenses: number, efficiency: string, endDate: string, startDate: string, progress: any, organization: string,percentage:any) {
     return (
       {
         milestone: milestone,
@@ -231,7 +280,9 @@ export class HomeComponent implements OnInit {
         startDate: startDate,
         endDate: endDate,
         efficiency: this.getEfficiency(budget, expenses),
-        progress: this.getRowProgress(startDate, endDate, target, cumulative)
+        progress: this.getRowProgress(startDate, endDate, target, cumulative),
+        organization: this.getBudgetProgress(target,budget,expenses,cumulative),
+        percentage: this.getActualProgress(target, cumulative),
       }
     );
 
@@ -246,6 +297,7 @@ export class HomeComponent implements OnInit {
 
   }
 
+  //target vs Time
   getRowProgress(start: any, end: any, target, achieved) {
     //calculate the days days between
     const startDate = new Date(start);
@@ -266,18 +318,41 @@ export class HomeComponent implements OnInit {
     if (achieved >= expected * 0.5 && achieved <= expected * 0.7) {
       return 'Slow Progress';
     } else if (achieved > expected * 0.7) {
-      return 'Within Time';
+      return 'Good Progress';
     } else {
       return 'Late';
     }
+  }
 
+  //budget vs Target
+  getBudgetProgress(target, budget, spent, achieved) {
+    //get amount per target
+    let amountPerTarget = budget / target;
+    //get actual performance
+    let actualPerformance = spent / achieved;
+    let calculatedPerformance = (actualPerformance * 100) / amountPerTarget;
 
-    //   console.log("my date",startDate);
-    //   let diff =  Math.abs(endDate - startDate)
-    //
-    //   console.log(diff);
-    // return diff
+    if(calculatedPerformance > 110 ){
+      return 'Over Spend';
+    } else if (calculatedPerformance > 90 && calculatedPerformance < 110) {
+      return 'Good Burn Rate';
+    } else if(calculatedPerformance > 50 && calculatedPerformance < 89){
+      return 'Fair Burn Rate';
+    } else{
+      return 'Low Burn Rate';
+    }
+  }
 
+  //actual vs target
+  getActualProgress(target, achieved) {
+    let percentage = (achieved * 100) / target;
+    if (percentage > 75) {
+      return 'Acceptable Performance';
+    } else if (percentage > 50 && percentage < 74) {
+      return 'Average Performance';
+    } else {
+      return 'Under Performance';
+    }
   }
 
   getRowClass = (row, column, value) => {
@@ -467,8 +542,7 @@ export class HomeComponent implements OnInit {
     this.milestones.forEach((d) => {
       if (d.categoryId === catId) {
         staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
-          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, ''));
-        console.log(d);
+          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
       }
     });
     this.displayMilestones = staffMilestones
@@ -476,12 +550,15 @@ export class HomeComponent implements OnInit {
   }
 
   cardsData() {
-    this.withinTime = this.displayMilestones.filter(a => a.progress.includes("Within Time")).length;
+    this.withinTime = this.displayMilestones.filter(a => a.progress.includes("Good Progress")).length;
     this.slowProgress = this.displayMilestones.filter(a => a.progress.includes("Slow Progress")).length;
     this.lateProgress = this.displayMilestones.filter(a => a.progress.includes("Late")).length;
     this.withinBudget = this.displayMilestones.filter(a => a.efficiency < 100).length;
     this.beyondBudget = this.displayMilestones.filter(a => a.efficiency > 100).length;
     this.noBudget = this.displayMilestones.filter(a => a.efficiency <= 0).length;
+    this.acceptable = this.displayMilestones.filter(a => a.percentage.includes("Acceptable Performance")).length;
+    this.average = this.displayMilestones.filter(a => a.percentage.includes("Average Performance")).length;
+    this.under = this.displayMilestones.filter(a => a.percentage.includes("Under Performance")).length;
 
     // this. = this.feedback.filter(a => a.currentStatusOfFeedback.includes("No Actioned Required")).length
     // this.feedbackForwarded = this.feedback.filter(a => a.currentStatusOfFeedback.includes("Forwarded For Action")).length
@@ -502,26 +579,79 @@ export class HomeComponent implements OnInit {
   }
 
 
+
   clickWithinTime(progress) {
-    this.active_div = 'clickActioned'
+
     let newFilter = [];
     this.displayMilestones.filter((a) => {
-      if (a.progress != undefined && a.progress === progress) {
+      if (a.progress != undefined && a.progress.includes(progress)) {
         newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
-          a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, ''))
+          a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, '',a.organization,''))
       }
     });
-    console.log(newFilter);
-    this.cardsData()
+    console.log(newFilter)
     this.displayMilestones = newFilter
   }
+
+  clickPerformance(perf) {
+    let newFilter = [];
+    console.log("Display",this.displayMilestones)
+    this.displayMilestones.filter((a) => {
+      if (a.percentage != undefined && a.percentage.includes(perf)) {
+        newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
+          a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, '',a.organization,''))
+      }
+    });
+    this.displayMilestones = newFilter
+  }
+
   getColorProgress(prog){
-    if(prog === 'Within Time'){
+    if(prog == 'Good Progress'){
       return 'green'
-    } else if (prog === 'Slow Progress'){
+    } else if (prog == 'Slow Progress'){
       return 'orange'
     } else {
       return 'red'
     }
+  }
+
+  filterOrganizationList(event) {
+    let org = event;
+    let staffMilestones = [];
+    this.milestones.forEach((d) => {
+      if (d.organization === org) {
+        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
+          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+        console.log(d);
+      }
+    });
+    this.displayMilestones = staffMilestones
+    this.cardsData()
+  }
+
+
+
+  onChangeDate() {
+    //get the date range by Id
+    let startDate = document.getElementById('date') as HTMLInputElement;
+    let endDate = document.getElementById('date2') as HTMLInputElement;
+
+
+    let newDate = new Date(startDate.value);
+    let newDate2 = new Date(endDate.value);
+    // filter basing on dates if both are selected
+    if (startDate.value != '' && endDate.value != '') {
+      let newFilter = [];
+      this.milestones.filter((a) => {
+        let startDate = new Date(a.startDate);
+        let endDate = new Date(a.endDate);
+        if (startDate >= newDate && endDate <= newDate2) {
+          newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
+            a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, '',a.organization,''))
+        }
+      });
+      this.displayMilestones = newFilter
+    }
+
   }
 }

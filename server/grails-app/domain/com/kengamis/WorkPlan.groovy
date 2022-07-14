@@ -6,6 +6,7 @@ class WorkPlan {
     String userId
     String staffId
     String programId
+    String organization
     String setupValues
     String startDate
     String endDate
@@ -21,5 +22,6 @@ class WorkPlan {
         id generator: 'uuid2'
     }
     static constraints = {
+        organization nullable: true
     }
 }

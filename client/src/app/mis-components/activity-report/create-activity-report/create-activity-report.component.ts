@@ -45,6 +45,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   budgetHolder: any;
   milestones: any;
   peopleSurvey: any = {};
+  orgChosen: any;
 
   location_id = [
     {
@@ -109,6 +110,24 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
       'name': 'SSABAGABO'
     },
   ];
+
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
   workPlanId: string;
   newUpdatedExpenses: any;
   workPlanUpdate: any;
@@ -145,6 +164,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     this.formGroup = this.formBuilder.group({
       budgetLine: ['', [Validators.required]],
       name: ['', [Validators.required]],
+      organization: ['', [Validators.required]],
       startDate: ['',[Validators.required]],
       endDate: ['',[Validators.required]],
       designation: ['', [Validators.required]],
@@ -203,6 +223,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     let savedActivityRecord: { [key: string]: string } = {
 
       name: this.responsiblePerson,
+      organization : this.orgChosen,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
@@ -477,27 +498,50 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   getBudgetHolderBudgetLines() {
     let staffId = this.budgetHolderId;
+    let org =  this.orgChosen
     this.getDesignation()
     let newBudgetLine: any = [];
     let newMilestone: any = [];
     this.budgetHolder.forEach((d) => {
-      if (d.staffId === staffId) {
-        this.workPlanId = d.id
-        this.responsiblePerson = d.staff
-        let values = JSON.parse(d.setupValues);
-        this.milestones = JSON.parse(values.indicators);
-        this.budgetLines = values.budget;
-        this.budgetLines.forEach((item) => {
-          newBudgetLine.push(item);
-          this.getListBudgetLine = newBudgetLine;
-        });
-        this.milestones.forEach((mile) => {
-          newMilestone.push(mile);
-          this.getMilestone = newMilestone;
-          // this.singleMilestone = this.getMilestone
-          // this.formGroup.get('milestone').setValue(this.singleMilestone)
-        });
+      console.log("sdhsd",d);
+      if(d.organization != null){
+        if (d.staffId === staffId && d.organization == org) {
+          this.workPlanId = d.id
+          this.responsiblePerson = d.staff
+          let values = JSON.parse(d.setupValues);
+          this.milestones = JSON.parse(values.indicators);
+          this.budgetLines = values.budget;
+          this.budgetLines.forEach((item) => {
+            newBudgetLine.push(item);
+            this.getListBudgetLine = newBudgetLine;
+          });
+          this.milestones.forEach((mile) => {
+            newMilestone.push(mile);
+            this.getMilestone = newMilestone;
+            // this.singleMilestone = this.getMilestone
+            // this.formGroup.get('milestone').setValue(this.singleMilestone)
+          });
+        }
+      } else {
+        if (d.staffId === staffId) {
+          this.workPlanId = d.id
+          this.responsiblePerson = d.staff
+          let values = JSON.parse(d.setupValues);
+          this.milestones = JSON.parse(values.indicators);
+          this.budgetLines = values.budget;
+          this.budgetLines.forEach((item) => {
+            newBudgetLine.push(item);
+            this.getListBudgetLine = newBudgetLine;
+          });
+          this.milestones.forEach((mile) => {
+            newMilestone.push(mile);
+            this.getMilestone = newMilestone;
+            // this.singleMilestone = this.getMilestone
+            // this.formGroup.get('milestone').setValue(this.singleMilestone)
+          });
+        }
       }
+
     });
 
   }
@@ -534,6 +578,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
     let savedActivityRecord: { [key: string]: string } = {
       name: this.responsiblePerson,
+      organization : this.orgChosen,
       costAssociated: JSON.stringify(values),
       activityResults: activityReport.activityResults,
       activityUndertaken: activityReport.activityUndertaken,
