@@ -17,6 +17,7 @@ class ReportFormFinancial {
 
     static mapping = {
         id generator: 'uuid2'
+        reasonForVariance type: 'text'
     }
     static constraints = {
         approvedBudget nullable: true

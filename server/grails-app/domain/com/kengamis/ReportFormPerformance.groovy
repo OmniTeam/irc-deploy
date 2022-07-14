@@ -18,6 +18,7 @@ class ReportFormPerformance {
 
     static mapping = {
         id generator: 'uuid2'
+        commentOnResult type: 'text'
     }
     static constraints = {
         overallTarget nullable: true

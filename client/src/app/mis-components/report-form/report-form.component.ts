@@ -322,7 +322,7 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
             let disaggregation = JSON.parse(i.disaggregation)
             let target = this.getTargetForThisQuarter(disaggregation);
             const params = new HttpParams()
-              .set('id', i.milestoneId)
+              .set('name', i.name) //milestone name
               .set('partnerId', this.taskRecord.partnerId)
               .set('startDate', this.taskRecord.startDate)
               .set('endDate', this.taskRecord.endDate);
@@ -508,6 +508,10 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     return this.financialReport;
   }
 
+  cellEditor(row, td_id, key: string, oldValue, type?: string) {
+    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
+  }
+
   saveCellValue = (value: string, key: string, rowId): void => {
     if (value !== null && value !== undefined) {
       switch (key) {
@@ -571,10 +575,6 @@ export class ReportFormComponent implements OnInit, OnUpdateCell {
     let reportValues: { [key: string]: string } = {};
     this.saveReport(reportValues, 'draft');
   };
-
-  cellEditor(row, td_id, key: string, oldValue, type?: string) {
-    new CellEdit().edit(row.id, td_id, oldValue, key, this.saveCellValue, type);
-  }
 
   saveReport(reportValues: { [key: string]: string }, status) {
     this.submitting = true

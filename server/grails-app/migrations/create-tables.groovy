@@ -3619,5 +3619,13 @@ databaseChangeLog = {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "overall_target", tableName: "partner_setup_milestones")
     }
 
+    changeSet(author: "bruno (generated)", id: "20220234534534665-01") {
+        modifyDataType(columnName: "comment_on_result", newDataType: "LONGTEXT", tableName: "report_form_performance")
+    }
+
+    changeSet(author: "bruno (generated)", id: "2022034534534663-01") {
+        modifyDataType(columnName: "reason_for_variance", newDataType: "LONGTEXT", tableName: "report_form_financial")
+    }
+
 
 }
