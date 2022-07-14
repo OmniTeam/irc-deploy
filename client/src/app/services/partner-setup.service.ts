@@ -58,6 +58,10 @@ export class PartnerSetupService {
     return this.http.get(`${environment.serverUrl}/partnerSetupBudget/getSetupBudgetByPartnerSetupId/${setupId}`);
   }
 
+  deletePartnerBudget(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/partnerSetupBudget/${deletedRow}`);
+  }
+
   /**
    * PartnerSetupMilestones
    * **/
@@ -69,8 +73,12 @@ export class PartnerSetupService {
     return this.http.get(`${environment.serverUrl}/partnerSetupMilestones/getSetupMilestonesByPartnerSetupId/${setupId}`);
   }
 
+  deletePartnerMilestone(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/partnerSetupMilestones/${deletedRow}`);
+  }
+
   /**
-   * PartnerSetupMilestones
+   * PartnerSetupDisbursementPlan
    * **/
   createPartnerSetupDisbursementPlan(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/partnerSetupDisbursementPlan`, formData);

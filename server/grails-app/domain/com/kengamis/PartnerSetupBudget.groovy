@@ -15,6 +15,8 @@ class PartnerSetupBudget {
 
     static constraints = {
         milestoneId nullable: true
+        approvedAmount nullable: true
+        totalSpent nullable: true
     }
 
     static mapping = {
