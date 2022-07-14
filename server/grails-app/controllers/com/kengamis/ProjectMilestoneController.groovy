@@ -155,7 +155,7 @@ class ProjectMilestoneController {
         if (reportingQuery != null) {
             try {
                 def queryC = "${reportingQuery}".toString()
-                def clause = queryC.contains("where") ? " and" : " where"
+                def clause = (queryC.contains("where") || queryC.contains("WHERE")) ? " and" : " where"
                 def queryQ
                 if (queryC.contains("services")) queryQ = queryC + clause + " date_of_service between '${params.startDate}' and '${params.endDate}'"
                 if (queryC.contains("activity_report")) queryQ = queryC + clause + " start_date >= '${params.startDate}' and end_date <= '${params.endDate}'"
