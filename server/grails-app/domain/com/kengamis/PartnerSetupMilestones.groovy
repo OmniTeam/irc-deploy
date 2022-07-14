@@ -14,7 +14,9 @@ class PartnerSetupMilestones {
     Date lastUpdated
 
     static constraints = {
+        milestoneId nullable: true
         disaggregation nullable: true
+        overallTarget nullable: true
     }
 
     static mapping = {

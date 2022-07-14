@@ -3603,5 +3603,21 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "bruno (generated)", id: "1657786567724-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "approved_amount", tableName: "partner_setup_budget")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657786567724-7") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "milestone_id", tableName: "partner_setup_milestones")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657786567724-17") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "total_spent", tableName: "partner_setup_budget")
+    }
+
+    changeSet(author: "bruno (generated)", id: "1657786567724-11") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "overall_target", tableName: "partner_setup_milestones")
+    }
+
 
 }

@@ -25,9 +25,9 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
 
   calendar: any = {};
   budget: any = [];
-  totalApprovedAmount: string;
-  totalBudgetDisburse: string;
-  totalDisbursement: string;
+  totalApprovedAmount = 0;
+  totalBudgetDisburse = 0;
+  totalDisbursement = 0;
   startReportingCycle: boolean = false;
   disbursementPlan: any = [];
   currentStatus: any = {};
@@ -123,7 +123,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       this.startReportingCycle = data.startCycle == "true";
       if (this.partnerChosen != undefined) this.onPartnerChange()
 
-      this.partnerSetupService.getSetupBudgetByPartnerSetupId(data.id).subscribe((res:any) => {
+      this.partnerSetupService.getSetupBudgetByPartnerSetupId(data.id).subscribe((res: any) => {
         this.budget = res;
         this.budget.forEach((data) => {
           this.updateBudgetAmount(data.id, data.approvedAmount);
@@ -131,17 +131,21 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         });
       })
 
-      this.partnerSetupService.getSetupMilestonesByPartnerSetupId(data.id).subscribe((res:any) => {
+      this.partnerSetupService.getSetupMilestonesByPartnerSetupId(data.id).subscribe((res: any) => {
         res?.forEach((data) => {
-          this.indicators.push({id: data.id,
-            name: data.id,
-            milestoneId: data.milestoneId,
-            overallTarget: data.overallTarget,
-            disaggregation: JSON.parse(data.disaggregation)});
+          if (!this.indicators.some(x => x.name === data.name)) {
+            this.indicators.push({
+              id: data.id,
+              name: data.name,
+              milestoneId: data.milestoneId,
+              overallTarget: data.overallTarget,
+              disaggregation: JSON.parse(data.disaggregation)
+            });
+          }
         });
       })
 
-      this.partnerSetupService.getSetupDisbursementPlanByPartnerSetupId(data.id).subscribe((res:any) => {
+      this.partnerSetupService.getSetupDisbursementPlanByPartnerSetupId(data.id).subscribe((res: any) => {
         this.disbursementPlan = res;
         this.disbursementPlan.forEach((data) => {
           this.updateDisbursementPlanValues(data.id, data.disbursement);
@@ -322,8 +326,15 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
   }
 
   removeIndicator(indicator: Indicator) {
+    //delete from db
+    this.budget.forEach((data) => {
+      if (data.budgetLine === indicator.name) this.partnerSetupService.deletePartnerBudget(data.id).subscribe(res=> console.log("delete budget"))
+    });
+    this.partnerSetupService.deletePartnerMilestone(indicator.id).subscribe(res=> console.log("delete milestone"))
+    //remove from JSON object list
     this.indicators = this.indicators.filter(item => item.id != indicator.id);
     this.budget = this.budget.filter(item => item.budgetLine != indicator.name);
+    //update budget amounts
     this.budget.forEach((data) => {
       this.updateBudgetAmount(data.id, data.approvedAmount);
     });
@@ -389,7 +400,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
     this.error = false;
     this.success = false;
 
-    console.log("this.indicators", this.indicators);
     let values: { [key: string]: string } = {
       currentStatus: this.currentStatus
     }
@@ -457,7 +467,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       };
 
       this.partnerSetupService.createPartnerSetupBudget(formData).subscribe((res) => {
-        console.log("Response", res)
+        //console.log("Response", res)
       })
     })
   }
@@ -471,9 +481,8 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         overallTarget: indicator.overallTarget,
         disaggregation: JSON.stringify(indicator.disaggregation),
       };
-
       this.partnerSetupService.createPartnerSetupMilestones(formData).subscribe((res) => {
-        console.log("Response", res)
+        //console.log("Response", res)
       })
     })
   }
@@ -489,7 +498,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
       };
 
       this.partnerSetupService.createPartnerSetupDisbursementPlan(formData).subscribe((res) => {
-        console.log("Response", res)
+        //console.log("Response", res)
       })
     })
 
@@ -553,7 +562,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         total += +item.approvedAmount;
       });
     }
-    this.totalApprovedAmount = total.toString();
+    this.totalApprovedAmount = total;
   }
 
   private updateBudgetDisburse(id, newValue, editing?: boolean) {
@@ -573,7 +582,7 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         total += +item.totalSpent;
       });
     }
-    this.totalBudgetDisburse = total.toString();
+    this.totalBudgetDisburse = total;
     this.currentStatus.totalAmountDisbursed = total;
   }
 
@@ -585,6 +594,6 @@ export class PartnerSetupComponent implements OnInit, OnUpdateCell {
         totalD += +item.disbursement;
       });
     }
-    this.totalDisbursement = totalD.toString()
+    this.totalDisbursement = totalD
   }
 }
