@@ -81,7 +81,7 @@ grails:
 ---
 server:
     servlet:
-        context-path: /isdap
+        context-path: /isdapmis
 ---
 hibernate:
     cache:

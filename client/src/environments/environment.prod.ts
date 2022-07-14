@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  serverUrl: 'https://157.230.227.3:8083/isdap/',
+  serverUrl: 'http://157.230.227.3:8083/isdapmis',
   uploadFolder: "/opt/uploads/"
 };
