@@ -319,6 +319,7 @@ export class SidebarComponent implements OnInit {
               },
               {path: 'tagType', title: 'Tag Type', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
               {path: 'project', title: 'Project', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
+              {path: 'project-create', title: 'Create Project', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
               {path: 'scheduledTasks', title: 'Scheduled Tasks', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']},
             ]
           },

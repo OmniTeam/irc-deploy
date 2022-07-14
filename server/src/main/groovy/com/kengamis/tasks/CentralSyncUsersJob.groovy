@@ -21,7 +21,7 @@ class CentralSyncUsersJob extends Script {
         try {
             centralService = AppHolder.bean('centralService')
             def token = centralService.get()
-            def study = Study.findByCentralId('8')
+            def study = Study.findByCentralId('11')
             syncCentralUsers(study, token)
         }
         catch (Exception e) {

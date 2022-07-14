@@ -37,6 +37,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/project/project.module').then(m => m.ProjectModule)
       },
       {
+        path: 'project-create', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+        },
+        loadChildren: () => import('./mis-components/project/project-create/project-create.module').then(m => m.ProjectCreateModule)
+      },
+      {
         path: 'home', canActivate: [AuthGuard],
         data: {
           userRoles: [] // All User Can Access but must be login
