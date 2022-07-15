@@ -19,23 +19,23 @@ export class UsersService {
   }
 
   getUserStaffs(): Observable<any> {
-    return this.http.get(`${this.urlUsers}/userStaffs`);
+    return this.http.get(`${this.urlUsers}userStaffs`);
   }
 
   getUsersWithoutWorkPlan(): Observable<any> {
-    return this.http.get(`${this.urlUsers}/getUsersWithoutWorkPlan`);
+    return this.http.get(`${this.urlUsers}getUsersWithoutWorkPlan`);
   }
 
   getCurrentUserStaff(id) {
-    return this.http.get(`${this.urlUsers}/userStaffsShow/${id}/`);
+    return this.http.get(`${this.urlUsers}userStaffsShow/${id}/`);
   }
 
   getPrograms(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/program/`);
+    return this.http.get(`${environment.serverUrl}program/`);
   }
 
   getDataCollectors(): Observable<any> {
-    return this.http.get(`${this.urlUsers}/getDataCollectors`);
+    return this.http.get(`${this.urlUsers}getDataCollectors`);
   }
 
 
@@ -68,7 +68,7 @@ export class UsersService {
   }
 
   getGroups(): Observable<any> {
-    return this.http.get(`${this.baseurl}/KengaGroup/`);
+    return this.http.get(`${this.baseurl}KengaGroup/`);
   }
 
 }

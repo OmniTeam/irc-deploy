@@ -120,4 +120,8 @@ export class ActivityReportComponent implements OnInit {
     }
     this.reloadTable();
   }
+
+  getArchiveRecords(id) {
+    this.router.navigate(['/archive/' + id]);
+  }
 }

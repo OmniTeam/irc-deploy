@@ -403,6 +403,7 @@
                                      formControlName="receivedFeedback"
                                      [searchable]="true"
                                      [clearable]="true"
+                                     [readonly]="isReadOnly"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of received_feedback">
                               {{item.name}}
@@ -429,6 +430,7 @@
                                           placeholder="Feedback Given"
                                           style="height: 144px;"
                                           type="text"
+                                          [readOnly]="isReadOnly"
                                           formControlName="feedbackGiven"
                                         ></textarea>
                         </div>
@@ -454,6 +456,7 @@
                             class=" form-control"
                             type="date"
                             formControlName="dateOfFeedback"
+                            [readOnly]="isReadOnly"
                           />
                         </div>
                       </div>
@@ -490,7 +493,7 @@
                     </div>
                   </div>
                 </div>
-                <div id="followupAreas" [hidden]="true">
+                <div id="followupAreas" [hidden]="!isReadOnly">
                   <div class="row">
                     <label>
                       Follow Up Area?
@@ -519,7 +522,7 @@
                     </div>
                   </div>
                 </div>
-                <div id="followupOrganization" [hidden]="true">
+                <div id="followupOrganization" [hidden]="!isReadOnly">
                   <div class="row">
                     <label>
                       Follow Up Organization
@@ -539,6 +542,7 @@
                                      formControlName="followupOrganization"
                                      [searchable]="true"
                                      [clearable]="true"
+
                           >
                             <ng-option [value]="item.name" *ngFor="let item of organization_referred_to">
                               {{item.name}}
@@ -569,6 +573,7 @@
                                      formControlName="assignee"
                                      [searchable]="true"
                                      [clearable]="true"
+                                     [readOnly]="isReadOnly"
                           >
                             <ng-option [value]="item.email" *ngFor="let item of this.staffs">
                               {{item.names}}
@@ -585,13 +590,13 @@
             <div class="row">
               <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
 
-                <button
+                <button [hidden]="isReadOnly"
                   class=" btn btn-default"
                   type="submit"
                 >
                   Save
                 </button>
-                <button class=" btn btn-danger" type="button" (click)="close()">
+                <button class=" btn btn-danger" type="button"  (click)="close()">
                   cancel
                 </button>
 

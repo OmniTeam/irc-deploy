@@ -19,7 +19,7 @@ class StartCamundaInstancesJob extends Script {
         ircReportingJob()
         ircActivityReportingJob()
         ircReferralJob()
-        ircFeedbackJob()
+//        ircFeedbackJob()
         return null
     }
 
@@ -115,7 +115,7 @@ class StartCamundaInstancesJob extends Script {
     }
 
     static void ircReferralJob(){
-        Referral.findAllByStatus("Pending").each { referral ->
+        Referral.findAllByStatus("Not Actioned").each { referral ->
             boolean startInstance = true
             def findUser = User.findByEmail(referral.assignee)
 
@@ -135,7 +135,7 @@ class StartCamundaInstancesJob extends Script {
                     if (started) {
                         print "================ Yes Here We Go!!! ================"
                         println("IRC PROCESS STARTED")
-                        referral.status = "Running"
+                        referral.status = "Actioned"
                         referral.save()
                     }
 
@@ -169,7 +169,7 @@ class StartCamundaInstancesJob extends Script {
                     if (started) {
                         print "================ Yes Here We Go!!! ================"
                         println("IRC PROCESS STARTED")
-                        feed.currentStatusOfFeedback = "Forwarded for Action"
+                        feed.currentStatusOfFeedback = "Actioned"
                         feed.status = "Started"
                         feed.save()
                     }

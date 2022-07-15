@@ -64,16 +64,21 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false" [width]="250">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button (click)="editActivityReport(row);" *ngIf="userRole == 'ROLE_SUPER_ADMIN'|| userRole == 'ROLE_ADMIN'"  class="btn btn-default" style="padding: 1px 6px;"
+                <button (click)="editActivityReport(row);" *ngIf="row?.status != 'Running'"   class="btn btn-default" style="padding: 1px 6px;"
                 >
                   <i class="fa fa-pencil-alt"></i>
                 </button>
-                <button (click)="deleteActivityReport(row)" class="btn btn-danger" style="padding: 1px 6px;"
+                <button (click)="deleteActivityReport(row)" *ngIf="row?.status != 'Running'" class="btn btn-danger" style="padding: 1px 6px;"
                         >
                   <i class="fa fa-trash"></i>
                 </button>
-<!--                *hasRole="['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']"-->
-<!--                *hasRole="['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_PARTNER_DATA_MANAGER', 'ROLE_STAFF_DATA_MANAGER']"-->
+                <button
+                  class="btn btn-info btn-sm"
+                  (click)="getArchiveRecords(row?.id)"
+                  *ngIf="row?.status == 'Running'"
+                >
+                  View
+                </button>
               </ng-template>
 
             </ngx-datatable-column>

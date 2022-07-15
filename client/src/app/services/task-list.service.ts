@@ -26,4 +26,11 @@ export class TaskListService {
     return this.http.get(`${environment.serverUrl}/archive`);
   }
 
+  getArchiveRecordDetails(params:any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/archive/getArchiveRecords`,{params});
+  }
+
+  getArchiveRecord(params:any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/archive/getArchiveRecord`,{params});
+  }
 }

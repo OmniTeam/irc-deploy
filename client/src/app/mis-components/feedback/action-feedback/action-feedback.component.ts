@@ -25,6 +25,8 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   FBROS: any;
   taskId: any;
   taskRecord: any;
+  isReadOnly: boolean;
+  processId: any;
 
   constructor(
     private userService: UsersService,
@@ -190,57 +192,110 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    this.taskId = this.route.snapshot.params.id;
-    const params = new HttpParams().set('id', this.taskId);
-    this.loadProgramStaff()
+    this.route.params.subscribe(p => {
+      this.taskId = p['id'];
+      this.isReadOnly = p['readOnly'] == 'true';
 
-    this.taskService.getTaskRecord(params).subscribe((data) =>{
-      this.taskRecord = data;
-      console.log(this.taskRecord, "this.taskRecord")
-      this.feedbackService.getCurrentFeedback(this.taskRecord.feedbackId).subscribe(data => {
-        console.log(data, "feedback data")
+      if(this.isReadOnly != true){
+        const params = new HttpParams().set('id', this.taskId);
+        this.loadProgramStaff()
 
-        this.feedback = data
-        let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
-        console.log(myDate, " this is the date formatted")
-        this.formGroup = this.formBuilder.group({
-          dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
-          nameOfRegister: [this.feedback?.nameOfRegister],
-          staffDesignation: [this.feedback?.staffDesignation],
-          typeOfFeedback: [this.feedback?.typeOfFeedback],
-          currentStatusOfFeedback: [this.feedback?.currentStatusOfFeedback],
-          location: [this.feedback?.location],
-          projectSector: [this.feedback?.projectSector],
-          subSector: [this.feedback?.subSector],
-          nameOfClient: [this.feedback?.nameOfClient],
-          remainAnonymous: [this.feedback?.remainAnonymous],
-          nationalityStatus: [this.feedback?.nationalityStatus],
-          clientType: [this.feedback?.clientType],
-          preferredChannel: [this.feedback?.preferredChannel],
-          phoneNumber: [this.feedback?.phoneNumber],
-          serialNumber: [this.feedback?.serialNumber],
-          feedbackCategory: [this.feedback?.feedbackCategory],
-          feedbackPriority: [this.feedback?.feedbackPriority],
-          feedbackReferredShared: [this.feedback?.feedbackReferredShared],
-          feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
-          referredPersonName: [this.feedback?.referredPersonName],
-          referredPersonPosition: [this.feedback?.referredPersonPosition],
-          referredOrganization: [this.feedback?.referredOrganization],
-          dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
-          responseTypeRequired: [this.feedback?.responseTypeRequired],
-          actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
-          inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
-          dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
-          actionTaken: [this.feedback?.actionTaken],
-          staffProvidedResponse: [this.feedback?.staffProvidedResponse],
-          responseSummary: [this.feedback?.responseSummary],
-          supervisor: [this.feedback?.supervisor],
-          dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
-          assignee:[''],
+        this.taskService.getTaskRecord(params).subscribe((data) =>{
+          this.taskRecord = data;
+          console.log(this.taskRecord, "this.taskRecord")
+          this.feedbackService.getCurrentFeedback(this.taskRecord.feedbackId).subscribe(data => {
+            console.log(data, "feedback data")
+
+            this.feedback = data
+            let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
+            console.log(myDate, " this is the date formatted")
+            this.formGroup = this.formBuilder.group({
+              dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
+              nameOfRegister: [this.feedback?.nameOfRegister],
+              staffDesignation: [this.feedback?.staffDesignation],
+              typeOfFeedback: [this.feedback?.typeOfFeedback],
+              currentStatusOfFeedback: [this.feedback?.currentStatusOfFeedback],
+              location: [this.feedback?.location],
+              projectSector: [this.feedback?.projectSector],
+              subSector: [this.feedback?.subSector],
+              nameOfClient: [this.feedback?.nameOfClient],
+              remainAnonymous: [this.feedback?.remainAnonymous],
+              nationalityStatus: [this.feedback?.nationalityStatus],
+              clientType: [this.feedback?.clientType],
+              preferredChannel: [this.feedback?.preferredChannel],
+              phoneNumber: [this.feedback?.phoneNumber],
+              serialNumber: [this.feedback?.serialNumber],
+              feedbackCategory: [this.feedback?.feedbackCategory],
+              feedbackPriority: [this.feedback?.feedbackPriority],
+              feedbackReferredShared: [this.feedback?.feedbackReferredShared],
+              feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
+              referredPersonName: [this.feedback?.referredPersonName],
+              referredPersonPosition: [this.feedback?.referredPersonPosition],
+              referredOrganization: [this.feedback?.referredOrganization],
+              dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
+              responseTypeRequired: [this.feedback?.responseTypeRequired],
+              actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
+              inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
+              dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
+              actionTaken: [this.feedback?.actionTaken],
+              staffProvidedResponse: [this.feedback?.staffProvidedResponse],
+              responseSummary: [this.feedback?.responseSummary],
+              supervisor: [this.feedback?.supervisor],
+              dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
+              assignee:[''],
+            });
+
+          })
         });
+      } else {
+          this.feedbackService.getCurrentFeedback(this.taskId).subscribe(data => {
+            console.log(data, "feedback data")
+            this.feedback = data
+            let myDate = this.datePipe.transform(this.feedback.date_of_referral, 'dd-MM-yyyy')
+            console.log(myDate, " this is the date formatted")
+            this.formGroup = this.formBuilder.group({
+              dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
+              nameOfRegister: [this.feedback?.nameOfRegister],
+              staffDesignation: [this.feedback?.staffDesignation],
+              typeOfFeedback: [this.feedback?.typeOfFeedback],
+              currentStatusOfFeedback: [this.feedback?.currentStatusOfFeedback],
+              location: [this.feedback?.location],
+              projectSector: [this.feedback?.projectSector],
+              subSector: [this.feedback?.subSector],
+              nameOfClient: [this.feedback?.nameOfClient],
+              remainAnonymous: [this.feedback?.remainAnonymous],
+              nationalityStatus: [this.feedback?.nationalityStatus],
+              clientType: [this.feedback?.clientType],
+              preferredChannel: [this.feedback?.preferredChannel],
+              phoneNumber: [this.feedback?.phoneNumber],
+              serialNumber: [this.feedback?.serialNumber],
+              feedbackCategory: [this.feedback?.feedbackCategory],
+              feedbackPriority: [this.feedback?.feedbackPriority],
+              feedbackReferredShared: [this.feedback?.feedbackReferredShared],
+              feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
+              referredPersonName: [this.feedback?.referredPersonName],
+              referredPersonPosition: [this.feedback?.referredPersonPosition],
+              referredOrganization: [this.feedback?.referredOrganization],
+              dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
+              responseTypeRequired: [this.feedback?.responseTypeRequired],
+              actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
+              inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
+              dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
+              actionTaken: [this.feedback?.actionTaken],
+              staffProvidedResponse: [this.feedback?.staffProvidedResponse],
+              responseSummary: [this.feedback?.responseSummary],
+              supervisor: [this.feedback?.supervisor],
+              dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
+              assignee:[''],
+            });
 
-      })
+          })
+
+      }
+
     });
+
+
 
   }
 

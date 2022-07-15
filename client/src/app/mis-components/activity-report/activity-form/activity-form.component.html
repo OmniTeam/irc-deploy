@@ -803,7 +803,7 @@
 
                 <button class=" btn btn-danger" type="reset" (click)="onReset()">Cancel</button>
 <!--                <button class=" btn btn-warning" type="button" (click)="saveReport()">Save For Later</button>-->
-                <button class=" btn btn-success" type="submit">Submit</button>
+                <button class=" btn btn-success" [hidden]="isReadOnly" type="submit">Submit</button>
               </div>
             </div>
           </form>

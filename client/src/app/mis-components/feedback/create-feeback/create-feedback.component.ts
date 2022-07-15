@@ -502,7 +502,7 @@ export class CreateFeedbackComponent implements OnInit {
 
   reason_for_referral = [
     {
-      'name': 'Food amd Shelter'
+      'name': 'Food and Shelter'
     },
     {
       'name': 'Formal Education'

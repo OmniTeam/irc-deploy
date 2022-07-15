@@ -134,6 +134,8 @@ export class ActivityFormComponent implements OnInit {
   isApprove: boolean;
   workPlanId: any;
   commentDisable: boolean;
+  isReadOnly: boolean;
+  processId: any;
 
   constructor(
     private router: Router,
@@ -158,62 +160,118 @@ export class ActivityFormComponent implements OnInit {
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
-        const params = new HttpParams().set('id', this.taskId);
-        this.taskListService.getTaskRecord(params).subscribe((data) => {
-          this.taskRecord = data;
+        this.processId = p['processId'];
+        this.isReadOnly =  p['readOnly'] == 'true';
+
+        console.log("Read Only", this.isReadOnly)
+        if(this.isReadOnly == false){
+          const params = new HttpParams().set('id', this.taskId);
+          console.log(this.taskId)
+          this.taskListService.getArchiveRecord(params).subscribe((data) => {
+            this.taskRecord = data;
+            console.log(this.taskRecord)
+            this.isReview = this.taskRecord.taskDefinitionKey == "Conduct_Financial_Review"
+            this.isMakeCorrections = (this.taskRecord.taskDefinitionKey == "Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey == "Make_Changes_from_Supervisor")
+            this.isApprove = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report"
+            // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
+            this.isDisabled = true;
+            this.commentDisable = true
 
 
-          this.isReview = this.taskRecord.taskDefinitionKey == "Conduct_Financial_Review"
-          this.isMakeCorrections = (this.taskRecord.taskDefinitionKey == "Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey == "Make_Changes_from_Supervisor")
-          this.isApprove = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report"
-          // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
-          this.isDisabled = true;
-          if(this.isMakeCorrections) this.commentDisable = true
+            this.activityReport.getCurrentActivityReport(this.taskRecord.ActivityId).subscribe(data => {
+              this.activity = data;
+              this.getActivityDetails(data)
+              this.getBudgetLines();
+              this.formGroup = this.formBuilder.group({
+                budgetLine: [{value: this.activity?.budgetLine, disabled: this.isReadOnly}, [Validators.required]],
+                name: [{value: this.activity?.name, disabled: this.isReadOnly}, [Validators.required]],
+                organization: [{value: this.activity?.organization, disabled: this.isReadOnly}, [Validators.required]],
+                startDate: [{value: this.activity?.startDate, disabled: this.isReadOnly}],
+                endDate: [{value: this.activity?.endDate, disabled: this.isReadOnly}],
+                designation: [{value: this.activity?.designation, disabled: this.isReadOnly}, [Validators.required]],
+                location: [{value: this.activity?.location, disabled: this.isReadOnly}],
+                milestone: [{value: this.activity?.milestone, disabled: this.isReadOnly}],
+                activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isReadOnly}],
+                activityResults: [{value: this.activity?.activityResults, disabled: this.isReadOnly}],
+                activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isReadOnly}],
+                activityName: [{value: this.activity?.activityName, disabled: this.isReadOnly}],
+                challenges: [{value: this.activity?.challenges, disabled: this.isReadOnly}],
+                lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isReadOnly}],
+                keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isReadOnly}],
+                peopleReached: [''],
+                costAssociated: [''],
+                budgetProgress: [''],
+                assignee: [this.activity?.assignee],
+                attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isReadOnly}],
+                attachList: [{value: this.activity?.attachList, disabled: this.isReadOnly}],
+                attachStory: [{value: this.activity?.attachStory, disabled: this.isReadOnly}],
+                comments: [{value: this.activity?.comments, disabled: this.commentDisable }],
+                actionRequired: [''],
+                status: ['']
+              });
 
-
-          this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data => {
-            this.activity = data;
-            this.getActivityDetails(data)
-            this.getBudgetLines();
-            this.formGroup = this.formBuilder.group({
-              budgetLine: [{value: this.activity?.budgetLine, disabled: this.isDisabled}, [Validators.required]],
-              name: [{value: this.activity?.name, disabled: this.isDisabled}, [Validators.required]],
-              organization: [{value: this.activity?.organization, disabled: this.isDisabled}, [Validators.required]],
-              startDate: [{value: this.activity?.startDate, disabled: this.isDisabled}],
-              endDate: [{value: this.activity?.endDate, disabled: this.isDisabled}],
-              designation: [{value: this.activity?.designation, disabled: this.isDisabled}, [Validators.required]],
-              location: [{value: this.activity?.location, disabled: this.isDisabled}],
-              milestone: [{value: this.activity?.milestone, disabled: this.isDisabled}],
-              activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isDisabled}],
-              activityResults: [{value: this.activity?.activityResults, disabled: this.isDisabled}],
-              activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isDisabled}],
-              activityName: [{value: this.activity?.activityName, disabled: this.isDisabled}],
-              challenges: [{value: this.activity?.challenges, disabled: this.isDisabled}],
-              lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isDisabled}],
-              keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isDisabled}],
-              peopleReached: [''],
-              costAssociated: [''],
-              budgetProgress: [''],
-              assignee: [this.activity?.assignee],
-              attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isDisabled}],
-              attachList: [{value: this.activity?.attachList, disabled: this.isDisabled}],
-              attachStory: [{value: this.activity?.attachStory, disabled: this.isDisabled}],
-              comments: [{value: this.activity?.comments, disabled: this.commentDisable }],
-              actionRequired: [''],
-              status: ['']
-            });
-
-            this.userServices.getUsers().subscribe((data) => {
-              this.staff = data;
-            });
+              this.userServices.getUsers().subscribe((data) => {
+                this.staff = data;
+              });
+            })
           })
-        })
+        } else {
+          const params = new HttpParams().set('id', this.taskId);
+          console.log(this.taskId)
+          this.taskListService.getArchiveRecord(params).subscribe((data) => {
+            this.taskRecord = data;
+            this.isReview = this.taskRecord.task_name == "Conduct Financial Review"
+            this.isMakeCorrections = (this.taskRecord.task_name == "Make Changes from Finance" || this.taskRecord.task_name == "Make Changes from Supervisor")
+            this.isApprove = this.taskRecord.task_name == "Approve Activity Report"
+            // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
+            this.isDisabled = true;
+            this.commentDisable = true
+
+
+            this.activityReport.getCurrentActivityReport(this.processId).subscribe(data => {
+              this.activity = data;
+              this.getActivityDetails(data)
+              this.getBudgetLines();
+              this.formGroup = this.formBuilder.group({
+                budgetLine: [{value: this.activity?.budgetLine, disabled: this.isReadOnly}, [Validators.required]],
+                name: [{value: this.activity?.name, disabled: this.isReadOnly}, [Validators.required]],
+                organization: [{value: this.activity?.organization, disabled: this.isReadOnly}, [Validators.required]],
+                startDate: [{value: this.activity?.startDate, disabled: this.isReadOnly}],
+                endDate: [{value: this.activity?.endDate, disabled: this.isReadOnly}],
+                designation: [{value: this.activity?.designation, disabled: this.isReadOnly}, [Validators.required]],
+                location: [{value: this.activity?.location, disabled: this.isReadOnly}],
+                milestone: [{value: this.activity?.milestone, disabled: this.isReadOnly}],
+                activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isReadOnly}],
+                activityResults: [{value: this.activity?.activityResults, disabled: this.isReadOnly}],
+                activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isReadOnly}],
+                activityName: [{value: this.activity?.activityName, disabled: this.isReadOnly}],
+                challenges: [{value: this.activity?.challenges, disabled: this.isReadOnly}],
+                lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isReadOnly}],
+                keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isReadOnly}],
+                peopleReached: [''],
+                costAssociated: [''],
+                budgetProgress: [''],
+                assignee: [this.activity?.assignee],
+                attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isReadOnly}],
+                attachList: [{value: this.activity?.attachList, disabled: this.isReadOnly}],
+                attachStory: [{value: this.activity?.attachStory, disabled: this.isReadOnly}],
+                comments: [{value: this.activity?.comments, disabled: this.commentDisable }],
+                actionRequired: [''],
+                status: ['']
+              });
+
+              this.userServices.getUsers().subscribe((data) => {
+                this.staff = data;
+              });
+            })
+          })
+        }
+
       })
 
   }
 
   getActivityDetails(data) {
-
     let values = JSON.parse(data.costAssociated)
     console.log("Values", values)
     this.peopleSurvey = values.people
@@ -222,14 +280,6 @@ export class ActivityFormComponent implements OnInit {
     this.getTotalApproved = values.totalApproved
     this.totalSpent = values.totalSpent
     this.totalBudgetDisburse = values.budgetDisburse
-    console.log(this.budget)
-    // data.forEach((d) => {
-    //   let values = JSON.parse(d.costAssociated)
-    //   this.budget = JSON.parse(values.budget)
-    //   this.peopleSurvey = values.people
-    //   this.totalBalance = values.balance
-    //   console.log(values)
-    // })
   }
 
   get f() {
@@ -362,7 +412,7 @@ export class ActivityFormComponent implements OnInit {
     }
     const activityReport = this.formGroup.value;
     console.log(activityReport)
-    let statusSave = 'Approve'
+    let statusSave = 'Running'
 
     let savedActivityRecord: { [key: string]: string } = {
 
@@ -401,7 +451,7 @@ export class ActivityFormComponent implements OnInit {
 
   }
 
-  ///TODO:
+
   updateTask(status) {
     this.taskRecord.status = status;
     this.taskRecord.groupId = '[]';

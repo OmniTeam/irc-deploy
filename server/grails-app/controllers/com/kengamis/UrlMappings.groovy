@@ -58,6 +58,8 @@ class UrlMappings {
         get "/$controller/getBudgetLine(.$format)?"(action:"getBudgetLine")
         get "/$controller/getMilestonePerformance(.$format)?"(action:"getMilestonePerformance")
         get "/$controller/userStaffsShow/$id(.$format)?"(action:"userStaffsShow")
+        get "/$controller/getArchiveRecords(.$format)?"(action:"getArchiveRecords")
+        get "/$controller/getArchiveRecord(.$format)?"(action:"getArchiveRecord")
         get "/$controller/userStaffs(.$format)?"(action:"userStaffs")
         get "/$controller/getUsersWithoutWorkPlan(.$format)?"(action:"getUsersWithoutWorkPlan")
         get "/$controller/getActivityReportRecord(.$format)?"(action:"getActivityReportRecord")
