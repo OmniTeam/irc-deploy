@@ -168,7 +168,7 @@ class UserController {
             def userGroup = UserGroup.findByUser(user)
             if (userGroup != null) {
                 def programName = (userGroup.group).name
-                def program = Program.findByTitle(programName)
+                def program = Program.findByDescription(programName)
                 newProgramStaffObject['id'] = user.id
                 newProgramStaffObject['name'] = user.names
                 newProgramStaffObject['email'] = user.email
@@ -191,7 +191,7 @@ class UserController {
             def userGroup = UserGroup.findByUser(userStaff)
             if (userGroup != null) {
                 def programName = (userGroup.group).name
-                def program = Program.findByTitle(programName)
+                def program = Program.findByDescription(programName)
                 newProgramStaffObject['id'] = userStaff.id
                 newProgramStaffObject['name'] = userStaff.names
                 newProgramStaffObject['email'] = userStaff.email
@@ -220,7 +220,7 @@ class UserController {
                 def userGroup = UserGroup.findByUser(user)
                 if (userGroup != null) {
                     def programName = (userGroup.group).name
-                    def program = Program.findByTitle(programName)
+                    def program = Program.findByDescription(programName)
                     newProgramStaffObject['id'] = user.id
                     newProgramStaffObject['name'] = user.names
                     newProgramStaffObject['email'] = user.email
@@ -228,8 +228,8 @@ class UserController {
                     //newProgramStaffObject['personContact'] = user.personContact
                     newProgramStaffObject['dateCreated'] = user.dateCreated
                     newProgramStaffObject['lastUpdated'] = user.lastUpdated
-                    newProgramStaffObject['program'] = program.title
-                    newProgramStaffObject['programId'] = program.id
+                    newProgramStaffObject['program'] = program?.title
+                    newProgramStaffObject['programId'] = program?.id
                     programStaff << newProgramStaffObject
                 }
             }
