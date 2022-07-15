@@ -9,6 +9,8 @@ import {RolesService} from "../../services/roles.service";
 import * as XLSX from 'xlsx';
 import {ReferralsService} from "../../services/referrals.service";
 import {AuthService} from '../../services/auth.service';
+import {TaskListService} from "../../services/task-list.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-users',
@@ -91,13 +93,16 @@ export class ReferralsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
     this.searchValue = event.target.value
     if(!this.searchValue){
       this.reloadTable()
     } else {
       this.referrals = this.referrals.filter(a => a.name_of_client_being_referred.toUpperCase().includes(this.searchValue.toUpperCase()))
     }
+  }
+
+  getArchiveRecords(id) {
+    this.router.navigate(['/archive/' + id]);
   }
 
   entriesChange($event) {
@@ -188,5 +193,9 @@ export class ReferralsComponent implements OnInit {
 
   onActivate(event) {
     this.activeRow = event.row;
+  }
+
+  editReferral(id) {
+    this.router.navigate(['/activityReport/edit/' + id]);
   }
 }

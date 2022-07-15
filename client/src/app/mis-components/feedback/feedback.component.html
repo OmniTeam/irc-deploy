@@ -233,12 +233,7 @@
                 <input type="checkbox" [value]="value" (change)="onSelected($event)">
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Client Identifier" prop="nameOfClient">
-
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <a routerLink="/feedback-edit/{{row.id}}">{{row?.nameOfClient}} </a>
-              </ng-template>
-            </ngx-datatable-column>
+            <ngx-datatable-column name="Client Identifier" prop="nameOfClient"></ngx-datatable-column>
             <ngx-datatable-column name="Type Of Client" prop="clientType"></ngx-datatable-column>
             <ngx-datatable-column name="Registering Officer" prop="nameOfRegister"></ngx-datatable-column>
             <ngx-datatable-column name="Project" prop="project"></ngx-datatable-column>
@@ -258,7 +253,26 @@
 <!--            <ngx-datatable-column name="Name of Client" prop="nameOfClient"></ngx-datatable-column>-->
 <!--           -->
             <ngx-datatable-column name="Registration Status" prop="currentStatusOfFeedback"></ngx-datatable-column>
-            <ngx-datatable-column name="Current Status" prop="status"></ngx-datatable-column>
+            <ngx-datatable-column name="Action" prop="status">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="btn-group">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    (click)="editFeedback(row?.id)"
+                    *ngIf="row?.currentStatusOfFeedback !== 'Actioned'"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-info btn-sm"
+                    (click)="getArchiveRecords(row?.id)"
+                    *ngIf="row?.currentStatusOfFeedback == 'Actioned'"
+                  >
+                    View
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

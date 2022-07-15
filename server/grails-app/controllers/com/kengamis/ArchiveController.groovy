@@ -148,6 +148,39 @@ class ArchiveController {
         respond archive, [status: OK, view:"show"]
     }
 
+    def getArchiveRecords() {
+        def archives = []
+        def query = "SELECT * FROM archive WHERE input_variables LIKE '%${params.id}%'"
+        def result = AppHolder.withMisSql { rows(query.toString()) }
+
+        if (result.size() > 0) {
+            result.each {
+//                def slurper = new JsonSlurper()
+//                def variables = slurper.parseText(it.inputVariables)
+//
+                archives << [
+                        taskId : it.task_id,
+                        processName : it.process_def_key,
+                        taskName: it.task_name,
+                        inputVariables : it.input_variables,
+                        startDate : it.date_created,
+                        endDate : it.last_updated,
+//                        assignee: User.findByEmail(assignee)?.names,
+                        referralId:   params.id,
+                ]
+            }
+        }
+        respond archives
+    }
+
+   def getArchiveRecord(){
+        def taskRecord = []
+        def query = "SELECT task_name FROM archive WHERE task_id LIKE '%${params.id}%'"
+        def result = AppHolder.withMisSql { rows(query.toString()) }
+
+        respond result
+    }
+
     @Transactional
     def delete(Long id) {
         if (id == null) {

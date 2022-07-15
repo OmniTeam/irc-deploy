@@ -53,14 +53,11 @@ export class GenerateReferralComponent implements OnInit {
   submitted = false;
   received_feedback = [
     {
-      'name': 'Yes'
+      'name': 'Internal'
     },
     {
-      'name': 'No'
-    },
-    {
-      'name': 'Not Known'
-    },
+      'name': 'External'
+    }
   ];
   nationality_status = [
     {
@@ -101,7 +98,7 @@ export class GenerateReferralComponent implements OnInit {
   ];
   reason_for_referral = [
     {
-      'name': 'Food amd Shelter'
+      'name': 'Food and Shelter'
     },
     {
       'name': 'Formal Education'
@@ -215,28 +212,13 @@ export class GenerateReferralComponent implements OnInit {
         followupNeeded: [''],
         disability: ['' || this.clients?.disability],
         assignee: [''],
-        status: ['Pending'],
+        status: [''],
       });
 
     // })
   }
 
-  // createReferral() {
-  //   this.router.navigate(['/referrals-list']);
-  // }
 
-  // runJobNow(taskName) {
-  //   console.log(taskName)
-  //   this.createReferral()
-  //   const params = new HttpParams()
-  //     .set('taskName', taskName);
-  //   this.scheduledTasksService.runScheduledTask(params).subscribe((data) => {
-  //     // this.reloadTable();
-  //     this.alertService.success(`${taskName} has been triggered`);
-  //   }, error => {
-  //     this.alertService.error(`${taskName} has not been triggered`);
-  //   });
-  // }
 
   createClient() {
     this.router.navigate(['/create-referral']);
@@ -250,24 +232,44 @@ export class GenerateReferralComponent implements OnInit {
       return;
     }
     const submitData = this.formGroup.value;
+    submitData.status = 'Not Actioned';
     console.log("formdata",submitData)
     this.referralsService.createReferral(submitData).subscribe((result) => {
       console.warn(result, 'Referral Created Successfully');
       this.alertService.success(`Referral has been successfully created`)
-      this.router.navigate(['/referrals-list']);
+      this.router.navigate(['/referrals/list']);
+    }, error => {
+      this.alertService.error(`Failed to create Referral`)
+    });
+  }
+
+  saveReferral() {
+    this.clicked = true;
+    this.submitted = true;
+    if (this.formGroup.invalid) {
+      console.log('Invalid');
+      return;
+    }
+    const submitData = this.formGroup.value;
+    //append status
+    submitData.status = 'Pending'
+    console.log("formdata",submitData)
+    this.referralsService.createReferral(submitData).subscribe((result) => {
+      console.warn(result, 'Referral Saved Successfully');
+      this.alertService.success(`Referral has been successfully saved`)
+      this.router.navigate(['/referrals/list']);
     }, error => {
       this.alertService.error(`Failed to create Referral`)
     });
   }
 
   close() {
-    this.router.navigate(['/referrals-list'])
+    this.router.navigate(['/referrals/list'])
   }
 
   loadProgramStaff(){
     this.userService.getUsers().subscribe((data) => {
       this.staffs = data;
-      console.log(data)
     });
   }
 
@@ -307,24 +309,14 @@ export class GenerateReferralComponent implements OnInit {
     console.log(event, "nationality")
     if (!event) {
       this.followUpValue = ''
-      // document.getElementById('followupAreas').hidden = true
-      // document.getElementById('followupOrganization').hidden = true
       document.getElementById('assignee').hidden = true
-      // this.formGroup.controls['followupAreas'].reset();
-      // this.formGroup.controls['followupOrganization'].reset();
       this.formGroup.controls['assignee'].reset();
     } else {
       this.followUpValue = event;
       if (this.followUpValue === "No") {
-        // document.getElementById('followupAreas').hidden = true
-        // document.getElementById('followupOrganization').hidden = true
         document.getElementById('assignee').hidden = true
-        // this.formGroup.controls['followupAreas'].reset();
-        // this.formGroup.controls['followupOrganization'].reset();
         this.formGroup.controls['assignee'].reset();
       } else {
-        // document.getElementById('followupAreas').hidden = false
-        // document.getElementById('followupOrganization').hidden = false
         document.getElementById('assignee').hidden = false
       }
 
@@ -355,11 +347,6 @@ export class GenerateReferralComponent implements OnInit {
       this.clients = data;
       this.reloadForm()
     })
-    // this.searchValue = event.target.value
-    // if(!this.searchValue){
-    //   // this.reloadTable()
-    // } else {
-    //   this.clients = this.clients.filter(a => a.name_of_client_being_referred.toUpperCase().includes(this.searchValue.toUpperCase()))
-    // }
   }
+
 }

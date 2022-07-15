@@ -100,7 +100,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/work-plan/work-plan-list/work-plan-list.module').then(m => m.WorkPlanListModule)
       },
       {
-        path: 'archive', canActivate: [AuthGuard],
+        path: 'archive/:id', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         },
@@ -230,7 +230,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/referrals/generate-referral/generate-referral.module').then(m => m.GenerateReferralModule)
       },
       {
-        path: 'action-referral/:id', canActivate: [AuthGuard],
+        path: 'action-referral/:id/:readonly', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REFERRALS]
         },
@@ -265,14 +265,14 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/activity-report/edit-activity-report/edit-activity-report.module').then(m => m.EditActivityReportModule)
       },
       {
-        path: 'activityForm/:id', canActivate: [AuthGuard],
+        path: 'activityForm/:id/:processId/:readOnly', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
         },
         loadChildren: () => import('./mis-components/activity-report/activity-form/activity-form.module').then(m => m.ActivityFormModule)
       },
       {
-        path: 'action-feedback/:id', canActivate: [AuthGuard],
+        path: 'action-feedback/:id/:readOnly', canActivate: [AuthGuard],
         data: {
           userRoles: [ Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         },

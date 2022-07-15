@@ -29,6 +29,7 @@ export class ActionReferralComponent implements OnInit {
   private staffs: any;
   private taskId : string;
   taskRecord : any;
+  isReadOnly: boolean;
 
 
   constructor(
@@ -100,7 +101,7 @@ export class ActionReferralComponent implements OnInit {
   ];
   reason_for_referral = [
     {
-      'name': 'Food amd Shelter'
+      'name': 'Food and Shelter'
     },
     {
       'name': 'Formal Education'
@@ -176,44 +177,81 @@ export class ActionReferralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.taskId = this.route.snapshot.params.id;
-    const params = new HttpParams().set('id', this.taskId);
-    this.taskService.getTaskRecord(params).subscribe((data) =>{
 
-      this.taskRecord = data;
+    this.route.params.subscribe(p => {
+      this.taskId = p['id'];
+      this.isReadOnly = p['readonly'] == 'true';
 
-      this.referralsService.getCurrentReferral(this.taskRecord.referralId).subscribe(data => {
-        console.log(data, "referral data")
 
-        this.loadProgramStaff();
-        this.referrals = data
-        this.formGroup = this.formBuilder.group({
-          dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
-          nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
-          nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
-          phoneNumber: [this.referrals?.phoneNumber],
-          dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
-          ageCategory: [this.referrals?.ageCategory],
-          countryOfOrigin: [this.referrals?.countryOfOrigin],
-          identificationDocument: [this.referrals?.identificationDocument],
-          identificationNumber: [this.referrals?.identificationNumber],
-          reasonForReferral: [this.referrals?.reasonForReferral],
-          organizationReferredTo: [this.referrals?.organizationReferredTo],
-          receivedFeedback: [this.referrals?.receivedFeedback],
-          feedbackGiven: [this.referrals?.feedbackGiven],
-          dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
-          nationalityStatus: [this.referrals?.nationalityStatus],
-          followupNeeded: [this.referrals?.followupNeeded],
-          followupAreas: [this.referrals?.followupAreas],
-          followupOrganization: [this.referrals?.followupOrganization],
-          disability: [this.referrals?.disability],
-          assignee: [''],
-          status: ['Actioned'],
-        });
+      if(this.isReadOnly != true){
+        const params = new HttpParams().set('id', this.taskId);
+        this.taskService.getTaskRecord(params).subscribe((data) =>{
 
-      })
+          this.taskRecord = data;
 
+          this.referralsService.getCurrentReferral(this.taskRecord.referralId).subscribe(data => {
+            console.log(data, "referral data")
+
+            this.loadProgramStaff();
+            this.referrals = data
+            this.formGroup = this.formBuilder.group({
+              dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
+              nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
+              nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
+              phoneNumber: [this.referrals?.phoneNumber],
+              dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
+              ageCategory: [this.referrals?.ageCategory],
+              countryOfOrigin: [this.referrals?.countryOfOrigin],
+              identificationDocument: [this.referrals?.identificationDocument],
+              identificationNumber: [this.referrals?.identificationNumber],
+              reasonForReferral: [this.referrals?.reasonForReferral],
+              organizationReferredTo: [this.referrals?.organizationReferredTo],
+              receivedFeedback: [this.referrals?.receivedFeedback],
+              feedbackGiven: [this.referrals?.feedbackGiven],
+              dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
+              nationalityStatus: [this.referrals?.nationalityStatus],
+              followupNeeded: [this.referrals?.followupNeeded],
+              followupAreas: [this.referrals?.followupAreas],
+              followupOrganization: [this.referrals?.followupOrganization],
+              disability: [this.referrals?.disability],
+              assignee: [''],
+              status: ['Actioned'],
+            });
+
+          })
+
+        })
+      } else {
+        this.referralsService.getCurrentReferral(this.taskId).subscribe(data => {
+          this.loadProgramStaff();
+          this.referrals = data
+          this.formGroup = this.formBuilder.group({
+            dateOfReferral: [(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd'))],
+            nameOfReferringOfficer: [this.referrals?.nameOfReferringOfficer],
+            nameOfClientBeingReferred: [this.referrals?.nameOfClientBeingReferred],
+            phoneNumber: [this.referrals?.phoneNumber],
+            dateOfBirth: [this.datePipe.transform(this.referrals.dateOfBirth, 'yyyy-MM-dd')],
+            ageCategory: [this.referrals?.ageCategory],
+            countryOfOrigin: [this.referrals?.countryOfOrigin],
+            identificationDocument: [this.referrals?.identificationDocument],
+            identificationNumber: [this.referrals?.identificationNumber],
+            reasonForReferral: [this.referrals?.reasonForReferral],
+            organizationReferredTo: [this.referrals?.organizationReferredTo],
+            receivedFeedback: [this.referrals?.receivedFeedback],
+            feedbackGiven: [this.referrals?.feedbackGiven],
+            dateOfFeedback: [this.datePipe.transform(this.referrals.dateOfFeedback, 'yyyy-MM-dd')],
+            nationalityStatus: [this.referrals?.nationalityStatus],
+            followupNeeded: [{value:this.referrals?.followupNeeded,disabled:this.isReadOnly}],
+            followupAreas: [{value:this.referrals?.followupAreas, disabled:this.isReadOnly}],
+            followupOrganization: [{value:this.referrals?.followupOrganization,disabled:this.isReadOnly}],
+            disability: [this.referrals?.disability],
+            assignee: [''],
+            status: ['Actioned'],
+          });
+        })
+      }
     })
+
 
 
     this.CountriesService.getCountries().subscribe(data => {
@@ -244,7 +282,7 @@ export class ActionReferralComponent implements OnInit {
   }
 
   close() {
-    this.router.navigate(['/referrals-list'])
+    this.router.navigate(['/referrals/list'])
   }
 
   loadProgramStaff(){

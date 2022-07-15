@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ReportFormService} from "../../services/report-form.service";
 import {TaskListService} from "../../services/task-list.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-archive',
@@ -13,15 +14,26 @@ export class ArchiveComponent implements OnInit {
   rows: any = [];
   temp: any = [];
   entries: number = 10;
+  processId: any;
+  archive: any;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private taskListService:TaskListService
   ) {
   }
 
   ngOnInit(): void {
-    this.reloadTable();
+    //get params form route
+    this.route.params.subscribe( p =>{
+      this.processId = p['id'];
+      const params = new HttpParams().set('id', this.processId);
+      this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
+        this.archive = data;
+        console.log("archive",data)
+      });
+    });
   }
 
   reloadTable() {
@@ -52,5 +64,9 @@ export class ArchiveComponent implements OnInit {
 
   onSearch(event) {
     this.reloadTable();
+  }
+
+  opeForm(taskId) {
+
   }
 }

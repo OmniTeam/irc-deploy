@@ -171,7 +171,11 @@ export class FeedbackComponent implements OnInit {
   }
 
   editFeedback(row) {
-    this.router.navigate(['edit-feedback' + row.id]);
+    this.router.navigate(['/feedback-edit/' + row]);
+  }
+
+  getArchiveRecords(id) {
+    this.router.navigate(['/archive/' + id]);
   }
 
   onSelected(event) {
