@@ -106,10 +106,10 @@ td a {
 
 html {
   overflow:   scroll;
+  zoom: 95%;
 }
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent; /* make scrollbar transparent */
 }
-
 

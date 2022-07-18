@@ -429,21 +429,30 @@
                   <div class="col-md-3">
                     <label>
                       Name of Referring Officer
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9">
                     <div class="col-md-12">
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Name Of Referring Officer"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="nameOfReferringOfficer"
-                            [readOnly]="false"
+                          <ng-select class="form-control form-control-sm"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Name of referring officer"
+                                     formControlName="nameOfReferringOfficer"
+                                     [searchable]="true"
+                                     [clearable]="false"
+                                     [readonly]="false"
+                                     [ngClass]="{'is-invalid': submitted && f.nameOfReferringOfficer.errors}"
                           >
+                            <ng-option [value]="item.names" *ngFor="let item of staffs" >
+                              {{item.names}}
+                            </ng-option>
+                          </ng-select>
+                          <div *ngIf="submitted && f.nameOfReferringOfficer.errors" class="invalid-feedback">
+                            <div *ngIf="f.nameOfReferringOfficer.errors.required">Enter a valid Email</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -456,7 +465,7 @@
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date of Referral
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -468,7 +477,11 @@
                             type="date"
                             formControlName="dateOfReferral"
                             [readOnly]="false"
+                            [ngClass]="{'is-invalid': submitted && f.dateOfReferral.errors}"
                           />
+                          <div *ngIf="submitted && f.dateOfReferral.errors" class="invalid-feedback">
+                            <div *ngIf="f.dateOfReferral.errors.required">Field is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -478,7 +491,7 @@
                   <div class="col-md-3">
                     <label>
                       Reason for Referral
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -486,8 +499,6 @@
                       <div class="form-group ">
                         <div class=" input-group input-group-merge">
                           <ng-select class="form-control form-control-sm"
-
-
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
                                      placeholder="Reason for Referral"
@@ -495,11 +506,15 @@
                                      [searchable]="true"
                                      [clearable]="false"
                                      [readonly]="false"
+                                     [ngClass]="{'is-invalid': submitted && f.reasonForReferral.errors}"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of reason_for_referral" >
                               {{item.name}}
                             </ng-option>
                           </ng-select>
+                          <div *ngIf="submitted && f.reasonForReferral.errors" class="invalid-feedback">
+                            <div *ngIf="f.reasonForReferral.errors.required">Field is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -526,11 +541,15 @@
                                      [searchable]="true"
                                      (change)="onChangeInternalUp($event)"
                                      [clearable]="true"
+                                     [ngClass]="{'is-invalid': submitted && f.internalExternal.errors}"
                           >
                             <ng-option [value]="item.name" *ngFor="let item of internal">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
+                          <div *ngIf="submitted && f.internalExternal.errors" class="invalid-feedback">
+                            <div *ngIf="f.internalExternal.errors.required">Field is required</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -553,7 +572,7 @@
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
                                      placeholder="Select Irc Sector"
-                                     formControlName="irc_sector"
+                                     formControlName="ircSector"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
@@ -567,7 +586,7 @@
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="orgReferredTo" [hidden]="true">
                   <div class="col-md-3">
                     <label>
                       Organization Referred to
@@ -603,7 +622,7 @@
                   <div class="col-md-3" >
                     <label>
                       Feedback Given
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -629,7 +648,7 @@
                                                     line-height: 1.5; text-align: left;"
                     >
                       Date of Feedback
-                      <!--                      <span class="required-indicator">*</span>-->
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9" >
@@ -676,7 +695,7 @@
                     </div>
                   </div>
                 </div>
-                <div id="followupAreas" class="row">
+                <div id="followupAreas" [hidden]="true" class="row">
                   <div class="col-md-3">
                     <label>
                       Follow Up Area?
