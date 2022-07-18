@@ -505,6 +505,68 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="row" id="internalExternal">
+                  <div class="col-md-3">
+                    <label>
+                      Referral Internal or External?
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder=""
+                                     formControlName="internalExternal"
+                                     [searchable]="true"
+                                     (change)="onChangeInternalUp($event)"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of internal">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" id="ircSector" [hidden]="true">
+                  <div class="col-md-3">
+                    <label>
+                      Irc Sector
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Select Irc Sector"
+                                     formControlName="irc_sector"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item.name" *ngFor="let item of irc_sector">
+                              {{item.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="row">
                   <div class="col-md-3">
                     <label>
@@ -536,35 +598,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <label>
-                      Referral Internal or External?
-                      <span class="required-indicator">*</span>
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <ng-select class="form-control form-control-sm"
-                                     aria-controls="datatable"
-                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
-                                     [multiple]="false"
-                                     placeholder=""
-                                     formControlName="receivedFeedback"
-                                     [searchable]="true"
-                                     [clearable]="true"
-                          >
-                            <ng-option [value]="item.name" *ngFor="let item of received_feedback">
-                              {{item.name}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
                 <div [hidden]="true" class="row">
                   <div class="col-md-3" >
                     <label>
@@ -642,7 +676,7 @@
                     </div>
                   </div>
                 </div>
-                <div id="followupAreas" [hidden]="true" class="row">
+                <div id="followupAreas" class="row">
                   <div class="col-md-3">
                     <label>
                       Follow Up Area?
@@ -662,7 +696,7 @@
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of followup_areas">
+                            <ng-option [value]="item.name" *ngFor="let item of reason_for_referral">
                               {{item.name}}
                             </ng-option>
                           </ng-select>
@@ -671,6 +705,8 @@
                     </div>
                   </div>
                 </div>
+
+
                 <div id="followupOrganization" [hidden]="true" class="row">
                   <div class="col-md-3">
                     <label>

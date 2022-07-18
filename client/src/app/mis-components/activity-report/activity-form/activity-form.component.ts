@@ -163,48 +163,50 @@ export class ActivityFormComponent implements OnInit {
         this.processId = p['processId'];
         this.isReadOnly =  p['readOnly'] == 'true';
 
-        console.log("Read Only", this.isReadOnly)
-        if(this.isReadOnly == false){
+        console.log("isReadOnly",this.isReadOnly)
+        console.log("p['readonly']",p['readOnly'])
+
+        if(this.isReadOnly != true){
           const params = new HttpParams().set('id', this.taskId);
-          console.log(this.taskId)
-          this.taskListService.getArchiveRecord(params).subscribe((data) => {
+          this.taskListService.getTaskRecord(params).subscribe((data) => {
             this.taskRecord = data;
-            console.log(this.taskRecord)
+
+
             this.isReview = this.taskRecord.taskDefinitionKey == "Conduct_Financial_Review"
             this.isMakeCorrections = (this.taskRecord.taskDefinitionKey == "Make_Changes_from_Finance" || this.taskRecord.taskDefinitionKey == "Make_Changes_from_Supervisor")
             this.isApprove = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report"
             // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
             this.isDisabled = true;
-            this.commentDisable = true
+            if(this.isMakeCorrections) this.commentDisable = true
 
 
-            this.activityReport.getCurrentActivityReport(this.taskRecord.ActivityId).subscribe(data => {
+            this.activityReport.getCurrentActivityReport(this.taskRecord.activityId).subscribe(data => {
               this.activity = data;
               this.getActivityDetails(data)
               this.getBudgetLines();
               this.formGroup = this.formBuilder.group({
-                budgetLine: [{value: this.activity?.budgetLine, disabled: this.isReadOnly}, [Validators.required]],
-                name: [{value: this.activity?.name, disabled: this.isReadOnly}, [Validators.required]],
-                organization: [{value: this.activity?.organization, disabled: this.isReadOnly}, [Validators.required]],
-                startDate: [{value: this.activity?.startDate, disabled: this.isReadOnly}],
-                endDate: [{value: this.activity?.endDate, disabled: this.isReadOnly}],
-                designation: [{value: this.activity?.designation, disabled: this.isReadOnly}, [Validators.required]],
-                location: [{value: this.activity?.location, disabled: this.isReadOnly}],
-                milestone: [{value: this.activity?.milestone, disabled: this.isReadOnly}],
-                activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isReadOnly}],
-                activityResults: [{value: this.activity?.activityResults, disabled: this.isReadOnly}],
-                activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isReadOnly}],
-                activityName: [{value: this.activity?.activityName, disabled: this.isReadOnly}],
-                challenges: [{value: this.activity?.challenges, disabled: this.isReadOnly}],
-                lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isReadOnly}],
-                keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isReadOnly}],
+                budgetLine: [{value: this.activity?.budgetLine, disabled: this.isDisabled}, [Validators.required]],
+                name: [{value: this.activity?.name, disabled: this.isDisabled}, [Validators.required]],
+                organization: [{value: this.activity?.organization, disabled: this.isDisabled}, [Validators.required]],
+                startDate: [{value: this.activity?.startDate, disabled: this.isDisabled}],
+                endDate: [{value: this.activity?.endDate, disabled: this.isDisabled}],
+                designation: [{value: this.activity?.designation, disabled: this.isDisabled}, [Validators.required]],
+                location: [{value: this.activity?.location, disabled: this.isDisabled}],
+                milestone: [{value: this.activity?.milestone, disabled: this.isDisabled}],
+                activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isDisabled}],
+                activityResults: [{value: this.activity?.activityResults, disabled: this.isDisabled}],
+                activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isDisabled}],
+                activityName: [{value: this.activity?.activityName, disabled: this.isDisabled}],
+                challenges: [{value: this.activity?.challenges, disabled: this.isDisabled}],
+                lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isDisabled}],
+                keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isDisabled}],
                 peopleReached: [''],
                 costAssociated: [''],
                 budgetProgress: [''],
                 assignee: [this.activity?.assignee],
-                attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isReadOnly}],
-                attachList: [{value: this.activity?.attachList, disabled: this.isReadOnly}],
-                attachStory: [{value: this.activity?.attachStory, disabled: this.isReadOnly}],
+                attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isDisabled}],
+                attachList: [{value: this.activity?.attachList, disabled: this.isDisabled}],
+                attachStory: [{value: this.activity?.attachStory, disabled: this.isDisabled}],
                 comments: [{value: this.activity?.comments, disabled: this.commentDisable }],
                 actionRequired: [''],
                 status: ['']
@@ -217,7 +219,8 @@ export class ActivityFormComponent implements OnInit {
           })
         } else {
           const params = new HttpParams().set('id', this.taskId);
-          console.log(this.taskId)
+          console.log("taskId22",this.taskId)
+          console.log("processId22",this.processId)
           this.taskListService.getArchiveRecord(params).subscribe((data) => {
             this.taskRecord = data;
             this.isReview = this.taskRecord.task_name == "Conduct Financial Review"
@@ -226,8 +229,6 @@ export class ActivityFormComponent implements OnInit {
             // this.isDisabled = this.taskRecord.taskDefinitionKey == "Approve_Activity_Report";
             this.isDisabled = true;
             this.commentDisable = true
-
-
             this.activityReport.getCurrentActivityReport(this.processId).subscribe(data => {
               this.activity = data;
               this.getActivityDetails(data)
@@ -534,5 +535,9 @@ export class ActivityFormComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  backButton() {
+    this.router.navigate(['/activity-list']);
   }
 }

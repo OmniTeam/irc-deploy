@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
@@ -95,6 +97,9 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
     {name: 'Approve', value: 'Yes'},
     {name: 'Ask for Review', value: 'No'}
   ];
+  processId: any;
+  staffId: any;
+  workPlanId1: any;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -117,34 +122,71 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
     this.route.params
       .subscribe(p => {
         this.taskId = p['id'];
+        this.processId = p['processId'];
+        this.staffId = p['staffId'];
         this.isReadOnly = p['readonly']=='true';
 
-        const params = new HttpParams().set('id', this.taskId);
-        this.taskListService.getTaskRecord(params).subscribe((data) => {
-          this.taskRecord = data;
-          if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
-          if (this.taskRecord.taskDefinitionKey === "Make_Changes_From_MandE") this.isMakeCorrectionsMandE = true;
-          if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
-          if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
-          if (this.taskRecord.taskDefinitionKey === "Approve_Quarterly_Report") this.isApprove = true;
+        if(this.isReadOnly != true) {
 
-          const params = new HttpParams()
-            .set('processInstanceId', this.taskRecord.processInstanceId);
+          const params = new HttpParams().set('id', this.taskId);
+          this.taskListService.getTaskRecord(params).subscribe((data) => {
+            this.taskRecord = data;
+            console.log("this.taskrecord", this.taskRecord);
+            if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
+            if (this.taskRecord.taskDefinitionKey === "Make_Changes_From_MandE") this.isMakeCorrectionsMandE = true;
+            if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
+            if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
+            if (this.taskRecord.taskDefinitionKey === "Approve_Quarterly_Report") this.isApprove = true;
 
-          //set organizational Info
-          this.usersService.getCurrentUserStaff(this.taskRecord.staffId).subscribe((results: any) => {
-            if (results !== null && results !== undefined) {
-              this.organisationalInfo = results;
-            }
-          });
+            const params = new HttpParams()
+              .set('processInstanceId', this.taskRecord.processInstanceId);
 
-          this.setAttachments(params);
+            //set organizational Info
+            this.usersService.getCurrentUserStaff(this.taskRecord.staffId).subscribe((results: any) => {
+              if (results !== null && results !== undefined) {
+                this.organisationalInfo = results;
+              }
+            });
 
-          this.setCommentsAndRecommendations(params);
+            this.setAttachments(params);
 
-          this.setReportsData(params);
+            this.setCommentsAndRecommendations(params);
 
-        }, error => console.log(error));
+            this.setReportsData(params);
+
+          }, error => console.log(error));
+        } else {
+
+          const params = new HttpParams().set('id', this.taskId);
+          this.taskListService.getArchiveRecord(params).subscribe((data) => {
+            this.taskRecord = data;
+            console.log("Archive task record", this.taskRecord);
+            if (this.taskRecord.taskDefinitionKey === "Submit_Quarterly_Report") this.isSubmit = true;
+            if (this.taskRecord.taskDefinitionKey === "Make_Changes_From_MandE") this.isMakeCorrectionsMandE = true;
+            if (this.taskRecord.taskDefinitionKey === "Make_Changes_from_Supervisor") this.isMakeCorrectionsSupervisor = true;
+            if (this.taskRecord.taskDefinitionKey === "Review_Report") this.isReview = true;
+            if (this.taskRecord.taskDefinitionKey === "Approve_Quarterly_Report") this.isApprove = true;
+
+            const params = new HttpParams()
+              .set('processInstanceId', this.taskRecord.processInstanceId);
+
+            //set organizational Info
+            this.usersService.getCurrentUserStaff(this.taskRecord.staffId).subscribe((results: any) => {
+              if (results !== null && results !== undefined) {
+                this.organisationalInfo = results;
+              }
+            });
+
+            this.setAttachments(params);
+
+            this.setCommentsAndRecommendations(params);
+
+            this.setReportsData(params);
+
+          }, error => console.log(error));
+        }
+
+
       });
 
     this.dtOptions = {
@@ -724,5 +766,9 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
 
   onBackPressed() {
     this.router.navigate(['/taskList']);
+  }
+
+  onBack() {
+    this.router.navigate(['/workPlanList']);
   }
 }

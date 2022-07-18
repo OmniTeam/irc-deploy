@@ -78,6 +78,15 @@ export class GenerateReferralComponent implements OnInit {
       'name': 'No'
     },
   ];
+
+  internal = [
+    {
+      'name': 'Internally'
+    },
+    {
+      'name': 'Externally'
+    },
+  ];
   followup_areas = [
     {
       'name': 'Follow Up Area 1'
@@ -93,6 +102,25 @@ export class GenerateReferralComponent implements OnInit {
     },
     {
       'name': 'Follow Up Area 5'
+    },
+
+  ];
+
+  irc_sector = [
+    {
+      'name': 'Health'
+    },
+    {
+      'name': 'WPE'
+    },
+    {
+      'name': 'Economic Recovery and Development'
+    },
+    {
+      'name': 'Education'
+    },
+    {
+      'name': 'PRoL'
     },
 
   ];
@@ -212,6 +240,8 @@ export class GenerateReferralComponent implements OnInit {
         followupNeeded: [''],
         disability: ['' || this.clients?.disability],
         assignee: [''],
+        ircSector: [''],
+        internalExternal: [''],
         status: [''],
       });
 
@@ -349,4 +379,7 @@ export class GenerateReferralComponent implements OnInit {
     })
   }
 
+  onChangeInternalUp(event) {
+    document.getElementById("ircSector").hidden = event !== 'Internally';
+  }
 }

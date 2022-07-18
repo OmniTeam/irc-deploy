@@ -39,6 +39,7 @@
                       <td class='text-center'>
                         <button class="btn btn-link"><a [routerLink]="['/workPlan', row.id]" class="text fas fa-pencil-alt"></a></button>
                         <button class="btn btn-link" (click)="deleteRecord(row.id)"><a class="text fas fa-trash-alt" style="color: red"></a></button>
+                        <button class="btn btn-link" (click)="archiveRecord(row.id)"><a class="btn btn-info btn-sm" style="color: red">view</a></button>
                       </td>
                     </tr>
                     </tbody>

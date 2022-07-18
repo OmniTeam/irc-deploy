@@ -22,6 +22,8 @@ class Referral {
     String followupNeeded
     String followupAreas
     String followupOrganization
+    String ircSector
+    String internalExternal
     String status
     Date dateCreated
     Date lastUpdated
@@ -47,6 +49,8 @@ class Referral {
         status nullable: true
         receivedFeedback nullable: true
         nationalityStatus nullable: true
+        ircSector nullable: true
+        internalExternal nullable: false
         feedbackGiven nullable: true
         dateOfFeedback nullable: true
         followupNeeded nullable: true

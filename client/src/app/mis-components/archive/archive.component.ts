@@ -16,6 +16,7 @@ export class ArchiveComponent implements OnInit {
   entries: number = 10;
   processId: any;
   archive: any;
+  disable: boolean;
 
   constructor(
     private router: Router,
@@ -31,9 +32,15 @@ export class ArchiveComponent implements OnInit {
       const params = new HttpParams().set('id', this.processId);
       this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
         this.archive = data;
-        console.log("archive",data)
+        this.disable = true;
+        this.disable = this.archive[0].staffId == null || this.archive[0].staffId == undefined;
+        console.log("archive",this.archive)
       });
     });
+  }
+
+  getDate(date) {
+    return new Date(date);
   }
 
   reloadTable() {
