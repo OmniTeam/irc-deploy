@@ -26,6 +26,30 @@ export class ReportFormService {
     return this.http.put(`${environment.serverUrl}/reportForm/${id}`, formData);
   }
 
+  getFinancialReportByReportId(reportId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormFinancial/getFinancialReportByReportId/${reportId}`);
+  }
+
+  getPerformanceReportByReportId(reportId): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportFormPerformance/getPerformanceReportByReportId/${reportId}`,);
+  }
+
+  createFinancialReport(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportFormFinancial`, formData);
+  }
+
+  updateFinancialReport(formData, id): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/reportFormFinancial/${id}`, formData);
+  }
+
+  createPerformanceReport(formData): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/reportFormPerformance`, formData);
+  }
+
+  updatePerformanceReport(formData, id): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/reportFormPerformance/${id}`, formData);
+  }
+
   getAttachmentsForTask(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/reportFormFiles/getFilesForTask`, {params});
   }
@@ -64,5 +88,9 @@ export class ReportFormService {
 
   saveRecommendation(formData): Observable<any> {
     return this.http.post(`${environment.serverUrl}/reportFormRecommendations`, formData);
+  }
+
+  getMilestonePerformance(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/reportForm/getMilestonePerformance`);
   }
 }

@@ -184,10 +184,9 @@ class MisEntityController {
         def entityData = []
         try {
             def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
-//            resultList: kengaGroupsService.postFilter(q.data, Permission.READ)
             entityData = [
                     headerList : q.headers,
-                    resultList: kengaGroupsService.postFilter(q.data, Permission.READ),
+                    resultList: q.data,
                     resultListCount: q.count,
                     entity: q.misEntity,
                     tagTypeList: q.tagTypes,

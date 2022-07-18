@@ -22,6 +22,14 @@ class KengaGroup {
         parentGroup nullable: true, unique: false
     }
 
+    static def Object create(KengaGroup program, String s) {
+        def instance = new KengaGroup(parentGroup: program,name: s)
+        instance.save(flush: true, failOnError: true)
+        return  instance
+
+    }
+
+
     Set<User> getUsers() {
         (KengaUserGroup.findAllByKengaGroup(this) as List<KengaUserGroup>)*.user as Set<User>
     }

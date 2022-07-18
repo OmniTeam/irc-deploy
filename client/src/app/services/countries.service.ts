@@ -27,12 +27,26 @@ export class CountriesService {
     return this.http.post(`${this.countriesUrl}/countries/codes`, {country:country});
   }
 
-  getListOfCountries():any[] {
+  getListOfAllCountries():any[] {
     let countries = []
     this.getCountriesAndCities().subscribe((response)=>{
       if (response.data !== null && response.data !== undefined) {
         response.data.forEach((d)=>{
           countries.push(d.country);
+        })
+        return countries
+      }
+    }, error => console.log(error))
+    return countries
+  }
+
+  getListOfAvailableCountries():any[] {
+    let available = ["Uganda","Kenya","Tanzania","Ethiopia"]
+    let countries = []
+    this.getCountriesAndCities().subscribe((response)=>{
+      if (response.data !== null && response.data !== undefined) {
+        response.data.forEach((d)=>{
+          if(available.includes(d.country)) countries.push(d.country);
         })
         return countries
       }

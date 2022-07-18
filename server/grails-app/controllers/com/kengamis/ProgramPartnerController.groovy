@@ -1,14 +1,10 @@
 package com.kengamis
 
-import grails.validation.ValidationException
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
-
 import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
+
+import static org.springframework.http.HttpStatus.*
 
 @ReadOnly
 class ProgramPartnerController {
@@ -25,19 +21,20 @@ class ProgramPartnerController {
             def programId = programPartner.program.id
             def program = Program.findById(programId)
             newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.cluster
-            newProgramPartnerObject['leadCluster'] = programPartner.organisation
+            newProgramPartnerObject['cluster'] = programPartner.cluster
+            newProgramPartnerObject['organisation'] = programPartner.organisation
             newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-
-
-            newProgramPartnerObject['email'] = programPartner.emailContactPerson
-            newProgramPartnerObject['organisation'] = programPartner.organisationType
-
-            newProgramPartnerObject['country'] = programPartner.country
+            newProgramPartnerObject['organisationType'] = programPartner.organisationType
+            newProgramPartnerObject['emailContactPerson'] = programPartner.emailContactPerson
             newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+            newProgramPartnerObject['telephoneContactPerson'] = programPartner.telephoneContactPerson
+            newProgramPartnerObject['country'] = programPartner.country
             newProgramPartnerObject['city'] = programPartner.city
             newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
+            newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
+            newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+            newProgramPartnerObject['areaOfOperation'] = programPartner.areaOfOperation
             newProgramPartnerObject['program'] = program.title
             newProgramPartnerObject['programId'] = program.id
             programPartners << newProgramPartnerObject
@@ -52,20 +49,21 @@ class ProgramPartnerController {
             def programId = programPartner.program.id
             def program = Program.findById(programId)
             newProgramPartnerObject['id'] = programPartner.id
-            newProgramPartnerObject['name'] = programPartner.cluster
-            newProgramPartnerObject['leadCluster'] = programPartner.organisation
+            newProgramPartnerObject['cluster'] = programPartner.cluster
+            newProgramPartnerObject['organisation'] = programPartner.organisation
             newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-
-
-            newProgramPartnerObject['email'] = programPartner.emailContactPerson
-            newProgramPartnerObject['organisation'] = programPartner.organisationType
-
-            newProgramPartnerObject['country'] = programPartner.country
+            newProgramPartnerObject['organisationType'] = programPartner.organisationType
+            newProgramPartnerObject['emailContactPerson'] = programPartner.emailContactPerson
             newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+            newProgramPartnerObject['telephoneContactPerson'] = programPartner.telephoneContactPerson
+            newProgramPartnerObject['country'] = programPartner.country
             newProgramPartnerObject['city'] = programPartner.city
             newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
             newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
-            newProgramPartnerObject['program'] = program.description
+            newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
+            newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+            newProgramPartnerObject['areaOfOperation'] = programPartner.areaOfOperation
+            newProgramPartnerObject['program'] = program.title
             newProgramPartnerObject['programId'] = program.id
         }
         respond newProgramPartnerObject
@@ -73,6 +71,7 @@ class ProgramPartnerController {
 
     @Transactional
     def save(ProgramPartner programPartner) {
+        println programPartner.errors
         if (programPartner == null) {
             render status: NOT_FOUND
             return
@@ -95,6 +94,7 @@ class ProgramPartnerController {
 
     @Transactional
     def update(ProgramPartner programPartner) {
+        println programPartner.errors
         if (programPartner == null) {
             render status: NOT_FOUND
             return
@@ -121,7 +121,10 @@ class ProgramPartnerController {
             render status: NOT_FOUND
             return
         }
-
+        def recordToDelete = programPartnerService.get(id)
+        UserPartner.findAllByProgramPartner(recordToDelete).each {
+            it.delete()
+        }
         programPartnerService.delete(id)
 
         render status: NO_CONTENT
@@ -141,19 +144,20 @@ class ProgramPartnerController {
                 def programId = programPartner.program.id
                 def program = Program.findById(programId)
                 newProgramPartnerObject['id'] = programPartner.id
-                newProgramPartnerObject['name'] = programPartner.cluster
-                newProgramPartnerObject['leadCluster'] = programPartner.organisation
+                newProgramPartnerObject['cluster'] = programPartner.cluster
+                newProgramPartnerObject['organisation'] = programPartner.organisation
                 newProgramPartnerObject['physicalAddress'] = programPartner.physicalAddress
-
-
-                newProgramPartnerObject['email'] = programPartner.emailContactPerson
-                newProgramPartnerObject['organisation'] = programPartner.organisationType
-
-                newProgramPartnerObject['country'] = programPartner.country
+                newProgramPartnerObject['organisationType'] = programPartner.organisationType
+                newProgramPartnerObject['emailContactPerson'] = programPartner.emailContactPerson
                 newProgramPartnerObject['nameContactPerson'] = programPartner.nameContactPerson
+                newProgramPartnerObject['telephoneContactPerson'] = programPartner.telephoneContactPerson
+                newProgramPartnerObject['country'] = programPartner.country
                 newProgramPartnerObject['city'] = programPartner.city
                 newProgramPartnerObject['dateCreated'] = programPartner.dateCreated
                 newProgramPartnerObject['lastUpdated'] = programPartner.lastUpdated
+                newProgramPartnerObject['dataCollector'] = programPartner.dataCollector
+                newProgramPartnerObject['organisationsInvolved'] = programPartner.organisationsInvolved
+                newProgramPartnerObject['areaOfOperation'] = programPartner.areaOfOperation
                 newProgramPartnerObject['program'] = program.title
                 newProgramPartnerObject['programId'] = program.id
                 programPartners << newProgramPartnerObject
@@ -161,4 +165,15 @@ class ProgramPartnerController {
         }
         respond programPartners
     }
+
+    def getDataCollector() {
+        def dataCollectors = []
+        def query = "SELECT user_id, role.authority, user.username FROM `user_role` INNER JOIN role ON user_role.role_id = role.id INNER JOIN user ON user.id=user_id WHERE role.authority ='ROLE_DATA_COLLECTOR' AND user_id NOT IN ( SELECT data_collector FROM `program_partner` WHERE data_collector IS NOT NULL ) AND user.username LIKE BINARY '%PR%' ORDER BY user.username;"
+        def results = AppHolder.withMisSql { rows(query as String) }
+        if (results.size() > 0) {
+            results.each {dataCollectors << it}
+        }
+        respond dataCollectors.first()
+    }
+
 }

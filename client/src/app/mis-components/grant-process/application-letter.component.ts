@@ -1,12 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CountriesService} from "../../services/countries.service";
 import {FileUploadService} from "../../services/file-upload.service";
 import {GrantProcessService} from "../../services/grant-process.service";
 import {Router} from "@angular/router";
+import {v4 as uuid} from 'uuid';
 import {AlertService} from "../../services/alert";
 import {ProgramService} from "../../services/program.service";
-import {MessagePagesComponent} from "../message-pages/message-pages.component";
+import {Validator} from "../../helpers/validator";
 
 @Component({
   selector: 'application-letter',
@@ -15,11 +16,15 @@ import {MessagePagesComponent} from "../message-pages/message-pages.component";
 })
 
 export class ApplicationLetterComponent implements OnInit {
+  @Output() triggerNextProcess: EventEmitter<string> = new EventEmitter();
   @Input() isReadOnly: boolean;
   @Input() grantId: string;
+  @Input() isLongTerm: boolean;
 
   submitted = false;
   loading: boolean;
+  inValidNumber: boolean;
+  inValidTelephone: boolean;
 
   status = 'not_started';
   programs: any;
@@ -31,9 +36,19 @@ export class ApplicationLetterComponent implements OnInit {
   /*values*/
   program: string;
 
+  countries: any;
+  cities: any;
+
   /*json*/
   organisation: any = {};
-  ngos: any = {};
+  ngos: any[] = [{
+    id: uuid(),
+    nameOfPartnerOrganization: "",
+    telephoneOfPartnerOrganization: "",
+    members: "",
+    whyCollaborate: "",
+    clusterResponse: ""
+  }];
   proposal: any = {};
   financial: any = {};
   documents: any = {};
@@ -50,14 +65,10 @@ export class ApplicationLetterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.programService.getPrograms().subscribe((data)=>{
-      let results = []
-      if(data!=null) {
-        data.forEach((it)=>{
-          results.push({id: it.id, name: it.title})
-        })
-      }
-      this.programs = results;
+    this.countries = this.countriesService.getListOfAvailableCountries();
+
+    this.programService.getPrograms().subscribe((data) => {
+      this.programs = data;
     })
 
     if (this.isReadOnly) {
@@ -67,9 +78,9 @@ export class ApplicationLetterComponent implements OnInit {
           this.program = data.program
           this.organisation = JSON.parse(data.organisation);
           this.ngos = JSON.parse(data.ngos);
-          this.proposal = JSON.parse(data.proposal);
-          this.financial = JSON.parse(data.financial);
           this.documents = JSON.parse(data.documents);
+          if (data.proposal != undefined) this.proposal = JSON.parse(data.proposal);
+          if (data.financial != undefined) this.financial = JSON.parse(data.financial);
         }
       }, error => {
         console.log(error)
@@ -79,25 +90,78 @@ export class ApplicationLetterComponent implements OnInit {
 
   submitLetter() {
     this.submitted = true;
-
-    let formData: { [key: string]: string } = {
-      program: this.program,
-      organisation: JSON.stringify(this.organisation),
-      ngos: JSON.stringify(this.ngos),
-      proposal: JSON.stringify(this.proposal),
-      financial: JSON.stringify(this.financial),
-      documents: JSON.stringify(this.documents),
-      status: this.status
+    if (this.inValidNumber || this.inValidTelephone) {
+      this.alertService.error("Please fill in valid number");
+      this.submitted = false;
+      return;
     }
-    console.log('formData', formData)
+    if (this.organisation.email == null) {
+      this.submitted = false;
+      this.alertService.error("Please fill in the organization email");
+      return;
+    }
+    if (this.program == null) {
+      this.submitted = false;
+      this.alertService.error("Please choose the Program");
+      return;
+    }
+    let orgAllFilled = Validator.validateJSON(this.organisation, ['name', 'names', 'contact', 'email', 'physicalAddress', 'organizationType', 'nameCluster', 'areaOfOperation', 'country', 'city', 'inspired', 'visionMission', 'structure', 'corePrograms', 'programOnPrevention', 'funding'])
+    let ngosAllFilled = Validator.validateJSON(this.ngos[0], ['nameOfPartnerOrganization', 'telephoneOfPartnerOrganization', 'members', 'whyCollaborate', 'clusterResponse'])
+    let proposalAllFilled = Validator.validateJSON(this.proposal, ['actions', 'geographicAreas', 'strength'])
+    let financialAllFilled = Validator.validateJSON(this.financial, ['fundsAmount', 'budget'])
+    let documentsAllFilled = Validator.validateJSON(this.documents, ['financial', 'registration', 'listMembers', 'listStaffMembers', 'organizationStructure', 'annualWorkPlan'])
+    if (!orgAllFilled) {
+      this.submitted = false;
+      this.alertService.error("Please fill in all compulsory fields in Part I");
+      return;
+    }
+    if (!ngosAllFilled) {
+      this.submitted = false;
+      this.alertService.error("Please fill in all compulsory fields in Part II");
+      return;
+    }
+    if (!proposalAllFilled && !this.isLongTerm) {
+      this.submitted = false;
+      this.alertService.error("Please fill in all compulsory fields in Part III");
+      return;
+    }
+    if (!financialAllFilled && !this.isLongTerm) {
+      this.submitted = false;
+      this.alertService.error("Please fill in all compulsory fields in Part IV");
+      return;
+    }
+    if (!documentsAllFilled) {
+      this.submitted = false;
+      if (this.isLongTerm) this.alertService.error("Please fill in all compulsory fields in Part III");
+      else this.alertService.error("Please fill in all compulsory fields in Part V");
+      return;
+    }
+
+    let formData: { [key: string]: string } = this.isLongTerm ?
+      {
+        program: this.program,
+        organisation: JSON.stringify(this.organisation),
+        ngos: JSON.stringify(this.ngos),
+        documents: JSON.stringify(this.documents),
+        status: this.status
+      } : {
+        program: this.program,
+        organisation: JSON.stringify(this.organisation),
+        ngos: JSON.stringify(this.ngos),
+        proposal: JSON.stringify(this.proposal),
+        financial: JSON.stringify(this.financial),
+        documents: JSON.stringify(this.documents),
+        status: this.status
+      }
 
     this.grantProcessService.createLetterOfInterest(formData).subscribe(data => {
-      console.log(data)
+      console.log('response', data)
       this.submitted = true
       this.error = false;
       this.success = true;
       this.successMessage = "Application Successfully Submitted";
       this.alertService.success(this.successMessage);
+      this.triggerNextProcess.emit(data.id);
     }, error => {
       this.error = true;
       this.success = false;
@@ -111,12 +175,19 @@ export class ApplicationLetterComponent implements OnInit {
       }
       this.success = false;
       this.error = false;
+      this.submitted = false;
     }, 3000);
   }
 
   handleFileInput(event) {
     let files: FileList = event.target.files;
     this.uploadFile(files.item(0), event.target.id);
+  }
+
+  onSelectCountry(country) {
+    this.countriesService.getCitiesForCountry(country).subscribe((response) => {
+      this.cities = response.data;
+    }, error => console.log(error))
   }
 
   uploadFile(file, id) {
@@ -136,6 +207,33 @@ export class ApplicationLetterComponent implements OnInit {
     }, error => {
       console.log(error)
     });
+  }
+
+  countChars(max, id) {
+    (document.getElementById(id) as HTMLTextAreaElement).innerHTML = max
+  }
+
+  validateNumber(value) {
+    this.inValidNumber = Validator.telephoneNumber(value)
+  }
+
+  validateTelephone(value) {
+    this.inValidTelephone = Validator.telephoneNumber(value)
+  }
+
+  addNgoRecord() {
+    this.ngos.push({
+      id: uuid(),
+      nameOfPartnerOrganization: "",
+      telephoneOfPartnerOrganization: "",
+      members: "",
+      whyCollaborate: "",
+      clusterResponse: ""
+    })
+  }
+
+  removeNgoRecord(ngoId) {
+    this.ngos = this.ngos.filter(item => item.id != ngoId);
   }
 
   cancel() {

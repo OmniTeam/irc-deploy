@@ -23,6 +23,12 @@ class UrlMappings {
         get "/$controller/getReportForTask(.$format)?"(action:"getReportForTask")
         get "/$controller/getFileByTaskAndName(.$format)?"(action:"getFileByTaskAndName")
         get "/$controller/getFilesForTask(.$format)?"(action:"getFilesForTask")
+        get "/$controller/getApplicationByGrantId/$id(.$format)?"(action:"getApplicationByGrantId")
+        get "/$controller/getFinancialReportByReportId/$reportId(.$format)?"(action:"getFinancialReportByReportId")
+        get "/$controller/getPerformanceReportByReportId/$reportId(.$format)?"(action:"getPerformanceReportByReportId")
+        get "/$controller/getSetupBudgetByPartnerSetupId/$setupId(.$format)?"(action:"getSetupBudgetByPartnerSetupId")
+        get "/$controller/getSetupDisbursementPlanByPartnerSetupId/$setupId(.$format)?"(action:"getSetupDisbursementPlanByPartnerSetupId")
+        get "/$controller/getSetupMilestonesByPartnerSetupId/$setupId(.$format)?"(action:"getSetupMilestonesByPartnerSetupId")
         get "/$controller/getCommentsForTask(.$format)?"(action:"getCommentsForTask")
         get "/$controller/getRecommendationsForTask(.$format)?"(action:"getRecommendationsForTask")
         get "/$controller/getRecommendationById(.$format)?"(action:"getRecommendationById")
@@ -42,6 +48,7 @@ class UrlMappings {
         get "/$controller/getHttpMethods(.$format)?"(action:"getHttpMethods")
         get "/$controller/getCategoriesByProgram(.$format)?"(action:"getCategoriesByProgram")
         get "/$controller/getMilestonesByProgram(.$format)?"(action:"getMilestonesByProgram")
+        get "/$controller/getMilestonePerformance(.$format)?"(action:"getMilestonePerformance")
         get "/$controller/defaultFilterQuery(.$format)?"(action:"defaultFilterQuery")
         get "/$controller/filterFiltersByEntityView(.$format)?"(action:"filterFiltersByEntityView")
         get "/$controller/deleteEntityRecord(.$format)?"(action:"deleteEntityRecord")
@@ -59,6 +66,9 @@ class UrlMappings {
         post "/$controller/downloadFile(.$format)?"(action:"downloadFile")
         post "/$controller/uploadExcel(.$format)?"(action:"uploadExcel")
         get "/$controller/getByProcessInstanceId(.$format)?"(action:"getByProcessInstanceId")
+        get "/$controller/getDataCollector(.$format)?"(action:"getDataCollector")
+        get "/$controller/startLongTermGrantJob/$grantId(.$format)?"(action:"startLongTermGrantJob")
+        get "/$controller/getTempRecordByValue/$value(.$format)?"(action:"getTempRecordByValue")
 
 
         group "/odxRest/", {
@@ -86,9 +96,13 @@ class UrlMappings {
         }
 
         "/aclGroupMappings"(controller: 'kengaGroupAclEntry', action:'saveGroupMappings',method: 'POST' )
+        "/saveQueryToTable"(controller: 'kengaGroupAclEntry', action:'saveQueryToTable',method: 'POST' )
         "/listAllACLS"(controller: 'kengaGroupAclEntry', action:'listAllACLS',method: 'GET' )
+        "/userPartners"(controller: 'user', action:'getCurrentUserPartners',method: 'GET' )
         "/getMISUsers"(controller: 'user', action:'getMISUsers',method: 'GET' )
+        "/getUserGroupUsingPartner"(controller: 'user', action:'getUserGroupUsingPartner',method: 'GET' )
         "/allMisTables"(controller: 'kengaGroupAclEntry', action:'allMisTables',method: 'GET' )
+        "/entityViewFilters/generateFullFilterQuery"(controller: 'entityViewFilters', action:'generateFullFilterQuery',method: 'GET' )
         "/api/v1/aclGroupMapping/tables"(controller: 'kengaGroupAclEntry', action:'allMisTables')
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')

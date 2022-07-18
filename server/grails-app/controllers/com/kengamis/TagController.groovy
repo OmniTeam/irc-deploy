@@ -32,6 +32,8 @@ class TagController {
             newTagObject['id'] = tag.id
             newTagObject['name'] = tag.name
             newTagObject['tagType'] = tagTypeId
+            newTagObject['partnerId'] =  tag?.partner?.id
+            newTagObject['partner'] =  tag?.partner?.cluster
             newTagObject['dateCreated'] = tag.dateCreated
             newTagObject['lastUpdated'] = tag.lastUpdated
             newTagObject['tagTypeName'] = tagType.name
@@ -49,6 +51,7 @@ class TagController {
         newTagObject['id'] = tag.id
         newTagObject['name'] = tag.name
         newTagObject['tagType'] = tagTypeId
+        newTagObject['partner'] = tag?.partner?.id
         newTagObject['dateCreated'] = tag.dateCreated
         newTagObject['lastUpdated'] = tag.lastUpdated
         newTagObject['tagTypeName'] = tagType.name
@@ -117,6 +120,17 @@ class TagController {
         def id = params.id as String
         def tagType = TagType.get(id)
         def tags = Tag.findAllByTagType(tagType)
+        def tagsWithPartners = []
+        tags.each { it->
+            tagsWithPartners << [
+                    id: it.id,
+                    dateCreated: it.dateCreated,
+                    lastUpdated: it.lastUpdated,
+                    name: it.name,
+                    tagType: it.tagType,
+                    partner: it?.partner?.collect{it.id}
+            ]
+        }
         respond tags
     }
 

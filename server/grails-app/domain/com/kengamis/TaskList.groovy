@@ -24,5 +24,6 @@ class TaskList {
     static constraints = {
         formId nullable: true
         groupId nullable: true
+        taskId unique: true
     }
 }

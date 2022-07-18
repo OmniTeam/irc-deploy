@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../services/alert";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TagService} from "../../services/tags";
-import {HttpParams} from "@angular/common/http";
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../services/alert';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TagService} from '../../services/tags';
+import {ProgramPartnersService} from '../../services/program-partners.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-tags',
@@ -14,13 +14,13 @@ import {HttpParams} from "@angular/common/http";
 })
 export class TagsComponent implements OnInit {
 
-  entries: number = 10;
+  entries = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
   groups;
   private searchValue = '';
-  tags: any
+  tags: any;
   closeResult: string;
   formGroup: FormGroup;
   formGp: FormGroup;
@@ -29,24 +29,50 @@ export class TagsComponent implements OnInit {
   submitted = false;
   tagTypes = [];
   activeRow: any;
+  programPartners: any;
+  userRole: any;
+  userPartners: any;
+  isAdmin: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private alertService: AlertService,
               private router: Router,
               private modalService: NgbModal,
+              private programPartnersService: ProgramPartnersService,
+              private authService: AuthService,
               private tagService: TagService) {
   }
 
   ngOnInit(): void {
+    this.authService.getUserPartners();
+    this.userPartners = this.authService.retrieveUserPartners();
     this.reloadTable();
-    this.formGroup = this.formBuilder.group({
-      name: ['', Validators.required],
-      tagType: ['', Validators.required]
-    });
+    this.userRole = this.authService.getUserRoles();
+    if (this.userRole.includes('ROLE_SUPER_ADMIN')  || this.userRole.includes('ROLE_SUPER_ADMIN') ) {
+      this.formGroup = this.formBuilder.group({
+        name: ['', Validators.required],
+        tagType: [null, Validators.required],
+        partner: [null, Validators.required]
+      });
+    } else {
+      this.formGroup = this.formBuilder.group({
+        name: ['', Validators.required],
+        tagType: [null, Validators.required],
+        partner: [this.userPartners, Validators.required]
+      });
+    }
     this.tagService.getAllTagTypes().subscribe((data) => {
       this.tagTypes = data;
     });
+    this.programPartnersService.getProgramPartners().subscribe((data) => {
+      this.programPartners = data;
+    });
+    if (this.userRole.toString() === ('ROLE_SUPER_ADMIN') || this.userRole.toString() === ('ROLE_ADMIN')) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
   }
 
   get f() {
@@ -60,6 +86,7 @@ export class TagsComponent implements OnInit {
       return;
     }
     const newTag = this.formGroup.value;
+    console.log(this.formGroup.value, 'to be created');
     this.tagService.addNewTag(newTag).subscribe(results => {
       this.alertService.success(`Tag: ${results.name} has been successfully created `);
       this.reloadTable();
@@ -67,7 +94,8 @@ export class TagsComponent implements OnInit {
       this.alertService.error(`Tag: ${this.formGroup.controls.name.value} could not be created`);
     });
     this.modalService.dismissAll('Dismissed after saving data');
-    this.router.navigate(['/tags']);
+    // this.router.navigate(['/tags']);
+    this.reloadTable();
 
     if (this.formGroup.valid) {
       setTimeout(() => {
@@ -79,7 +107,7 @@ export class TagsComponent implements OnInit {
 
   editTag(row) {
     const id = row.id;
-    this.router.navigate(['/tags/edit/'+ id]);
+    this.router.navigate(['/tags/edit/' + id]);
   }
 
   deleteTag(row) {
@@ -121,7 +149,7 @@ export class TagsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    let val = event.target.value.toLowerCase();
+    const val = event.target.value.toLowerCase();
     // update the rows
     this.rows = this.temp.filter(function (d) {
       for (const key in d) {
@@ -136,7 +164,14 @@ export class TagsComponent implements OnInit {
   reloadTable() {
     this.tagService.getTags().subscribe((data) => {
       this.temp = [...data];
-      this.rows = data;
+      if (this.userRole.includes('ROLE_SUPER_ADMIN') || this.userRole.includes('ROLE_ADMIN') || this.userRole.includes('ROLE_STAFF_DATA_MANAGER') ) {
+        this.rows = data;
+      } else {
+        console.log(this.userPartners, 'partnerssssss');
+        this.rows = data.filter(a => a.partnerId === this.userPartners);
+      }
+
+      console.log(data);
     });
   }
 

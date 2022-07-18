@@ -17,6 +17,8 @@ class GrantLetterOfInterest {
 
     static constraints = {
         status nullable: true
+        financial nullable: true
+        proposal nullable: true
     }
 
     static mapping = {

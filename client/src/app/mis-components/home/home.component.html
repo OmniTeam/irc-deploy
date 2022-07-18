@@ -61,7 +61,7 @@
                       Long Term Grant
                     </h3>
 
-                    <span class=" h2 font-weight-bold mb-0"> 0 </span>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.longTermProcess?.length}} </span>
                   </div>
 
                   <div class=" col-auto">
@@ -150,8 +150,24 @@
                         <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
                           <i class="ni ni-time-alarm"> </i>
                         </div>
-                        <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
-                        <span style="margin-left: 60px; width: 80%; border-bottom: 4px solid #eeeeee"></span>
+                        <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}
+                          ({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
+                        <span style="margin-left: 60px;margin-bottom: -10px; width: 80%; border-bottom: 4px">
+                          <div class="progress-wrapper" style="margin-top: -50px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{this.perc}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" [attr.aria-valuenow]="perc"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="perc+'%'"></div>
+                        </div>
+                      </div>
+                        </span>
                       </div>
                     </button>
                   </div>
@@ -162,14 +178,31 @@
           </div>
         </div>
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;"
+             *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_PROGRAM_OFFICER', 'ROLE_SUPER_ADMIN']">
           <div class=" row">
             <div class=" col">
 
               <div class="card">
                 <div class="card-header">
                   <div class="row">
-                    <h3 style="margin-left: 40px;">ONGOING TASKS</h3>
+                    <div class="col-md-10">
+                      <h3 style="margin-left: 40px;">PROGRESS AGAINST WORKPLAN</h3><br>
+                      <h4 style="margin-left: 40px;align-items: center">The Following milestones have been computed
+                        based on the logs for the reporting period.
+                        You should review them and provide any comments on these activities.</h4>
+                    </div>
+                    <div class="col-md-2 text-right" (click)="clickReset()">
+                      <div
+                        class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                      >
+                        <i class=" fa fa-eraser"> </i>
+
+                      </div>
+                      <h3 style="color: black">
+                        Reset
+                      </h3>
+                    </div>
                   </div>
                 </div>
                 <div class="card-body col-sm-12">
@@ -177,7 +210,7 @@
 
                     <div class="dataTables_wrapper py-4">
                       <div class="row" style="display: flex; width: 100%">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                           <div class="dataTables_length" id="datatable_length">
                             <label>
                               Show
@@ -197,33 +230,46 @@
                             </label>
                           </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                           <div id="datatable_filter" class="dataTables_filter">
                             <label>
-                              <input
-                                type="search"
-                                class="form-control form-control-sm"
-                                placeholder="Search Ongoing Tasks"
-                                aria-controls="datatable"
-                                (keyup)="onChangeSearch($event)"
-                                (search)="onSearch($event)"
-                                style="width: 200%;"
-                              />
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Select cluster to filter.."
+                                         [searchable]="true"
+                                         (change)="filterMilestonesList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.id" *ngFor="let item of budgetHolders">
+                                  {{item.partner}}
+                                </ng-option>
+                              </ng-select>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                          <div id="datatable_filter2" class="dataTables_filter">
+                            <label>
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Filter outcome.."
+                                         [searchable]="true"
+                                         (change)="filterOutcomeList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.id" *ngFor="let item of progress">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
                             </label>
                           </div>
                         </div>
                       </div>
 
-                      <div class="row" style="display: flex; margin-top: 10px; margin-bottom: 20px;">
-                        <div class="btn-group" role="group" aria-label="switch_button" style="margin-left: 20px;">
-                          <button type="button" class="btn btn-default_btn" [class.active_btn]="isReporting"
-                                  (click)="switchRowsData('reporting')">Reporting
-                          </button>
-                          <button type="button" class="btn btn-default_btn" [class.active_btn]="isGrantProcess"
-                                  (click)="switchRowsData('grant_process')">Grant Process
-                          </button>
-                        </div>
-                      </div>
+                      <!--              -->
 
                       <ngx-datatable
                         class="bootstrap selection-cell"
@@ -232,28 +278,60 @@
                         [footerHeight]="50"
                         [rowHeight]="'auto'"
                         [limit]="entries != -1 ? entries : undefined"
-                        [rows]="rows">
+                        [rows]="displayMilestones">
 
-                        <ngx-datatable-column name="Process" prop="task_type">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{value | replace: '_' : ' '}}
+                        <ngx-datatable-column name="Milestone" prop="milestone">
+
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Overall Target" prop="target">
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Cumulative" prop="cumulative"></ngx-datatable-column>
+                        <ngx-datatable-column name="Percentage Achievement" prop="achievement">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>
+                              <div class="progress-wrapper" style="margin-top: -10px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{row.achievement}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar " [style.background-color]="getColor(row.achievement)"
+                               role="progressbar" [attr.aria-valuenow]="row.achievement"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="row.achievement+'%'"></div>
+                        </div>
+                      </div>
+                            </span>
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Task Name" prop="task_name">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{value | replace: '_' : ' '}}
+                        <ngx-datatable-column name="Budget" prop="budget">
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Expenses to date" prop="expenses"></ngx-datatable-column>
+                        <ngx-datatable-column name="Efficiency (%)" prop="efficiency">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>
+                              <div class="progress-wrapper" style="margin-top: -10px">
+                                <div class="progress-info">
+                                  <div class="progress-label">
+
+                                  </div>
+                                  <div class="progress-percentage">
+                                    <span>({{row.expenses | number}}) {{row.efficiency}}%</span>
+                                  </div>
+                                </div>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="row.efficiency"
+                                       aria-valuemin="0" aria-valuemax="100"
+                                       [style.background-color]="getColor(row.efficiency)"
+                                       [style.width]="row.efficiency+'%'"></div>
+                                </div>
+                              </div>
+                            </span>
                           </ng-template>
                         </ngx-datatable-column>
-                        <ngx-datatable-column name="Case" prop="task_case"></ngx-datatable-column>
-                        <ngx-datatable-column name="Date assigned" prop="date_assigned">
-                          <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row"
-                                       ngx-datatable-cell-template>
-                            {{ value | date: 'medium' }}
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column name="Task Age" prop="task_age"></ngx-datatable-column>
                       </ngx-datatable>
 
                     </div>

@@ -78,7 +78,7 @@ export class CreateGroupComponent implements OnInit {
       this.router.navigate(['/groups']);
 
       // insert kenga_group_id and user_id into table. This tracks users who belong to the group
-      for(let i = 0; i < formData.users.length; i++) {
+      for (let i = 0; i < formData.users.length; i++) {
         const KengaUserGroupData = new FormData();
         KengaUserGroupData.append('kengaGroup', result.id);
         KengaUserGroupData.append('user', formData.users[i]);

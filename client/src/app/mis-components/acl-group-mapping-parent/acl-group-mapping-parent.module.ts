@@ -7,12 +7,11 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {HttpClientModule} from '@angular/common/http';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {AclGroupMappingParentComponent} from './acl-group-mapping-parent.component';
-import {ComponentsModule} from "../../components/components.module";
-import {FormNamePipe} from "../../form-name-pipe";
+import {ComponentsModule} from '../../components/components.module';
 
 
 @NgModule({
-  declarations: [AclGroupMappingParentComponent, FormNamePipe],
+  declarations: [AclGroupMappingParentComponent],
   imports: [
     CommonModule,
     AclGroupMappingParentRoutingModule,

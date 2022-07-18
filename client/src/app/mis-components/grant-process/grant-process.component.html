@@ -8,7 +8,7 @@
 </div>
 
 <div id="dark_container" [style.display]="openPopup ? 'block' : 'none'"></div>
-<div *ngIf="openCommentsPopup" class="card window__container">
+<div *ngIf="openCommentsPopup" class="card window__container_sm">
   <div class="card-header" style="text-align: center">
     <h3>Comments</h3>
   </div>
@@ -37,7 +37,7 @@
       <div class=" card">
         <div class="row">
 
-          <div style="width: 100%; text-align: -webkit-center; display: block;">
+          <div class="card-header" style="width: 100%; text-align: -webkit-center; display: block;">
             <div [style.display]="isSubmitLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">SUBMIT
               LETTER OF INTEREST</h6></div>
             <div [style.display]="isReviewLetterOfInterest ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">REVIEW
@@ -45,21 +45,21 @@
             <div [style.display]="isPlanningLearningApplication ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               PLANNING AND LEARNING GRANT APPLICATION</h6></div>
             <div [style.display]="isReviewPlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
-              REVIEW LEARNING GRANT APPLICATION</h6></div>
+              REVIEW PLANNING AND LEARNING GRANT APPLICATION</h6></div>
             <div [style.display]="isApprovePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               APPROVE PLANNING AND LEARNING GRANT</h6></div>
             <div [style.display]="isProvidePlanningLearningGrant ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               PROVIDE PLANNING AND LEARNING GRANT</h6></div>
-            <div [style.display]="isSubmitReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
+            <div [style.display]="isSubmitReport || isMakeCorrectionsOnReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               SUBMIT PLANNING AND LEARNING GRANT REPORT</h6></div>
             <div [style.display]="isReviewReport ? 'block' : 'none'"><h6 class="h2 d-inline-block mb-0">
               REVIEW PLANNING AND LEARNING GRANT REPORT</h6></div>
           </div>
 
-          <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+          <div class="card-body col-md-12 col-sm-12" style="margin-top: 40px;">
 
             <div *ngIf="isSubmitLetterOfInterest" class=" col">
-              <application-letter [isReadOnly]="false"></application-letter>
+              <application-letter [isReadOnly]="false" [isLongTerm]="false"></application-letter>
             </div>
 
             <div *ngIf="isReviewLetterOfInterest" class=" col">
@@ -104,9 +104,6 @@
                           </ul>
                         </div>
                       </div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
-                      </div>
                     </div>
                     <div class="row">
                       <div class="col">
@@ -124,7 +121,7 @@
                         </div>
                       </div>
 
-                      <div class="col">
+                      <div class="col" *ngIf="hasDueDiligenceConducted=='Yes'">
                         <div class="text-left">
                           <label for="dateOfDueDiligence">Date when due diligence was done:<span class="required-indicator">*</span></label>
                           <input type="date" class="form-control" id="dateOfDueDiligence"
@@ -194,7 +191,7 @@
 
                     <div class="row">
                       <div class="col">
-                        <p>Is the concept in line with the objectives of the project?</p>
+                        <p>1. Is the concept in line with the objectives of the project?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -207,7 +204,7 @@
                       </div>
 
                       <div class="col">
-                        <p>Does it adhere to the strategic objectives of the organization?</p>
+                        <p>2. Does it adhere to the strategic objectives of the organization?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -221,7 +218,7 @@
                     </div>
                     <div class="row">
                       <div class="col">
-                        <p>Are they adhering to the purpose of the planning and learning grant?</p>
+                        <p>3. Are they adhering to the purpose of the planning and learning grant?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -235,7 +232,7 @@
                     </div>
                     <div class="row">
                       <div class="col">
-                        <p>What was the decision of the review process?</p>
+                        <p>4. What was the decision of the review process?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of decision">
                             <li>
@@ -246,9 +243,12 @@
                           </ul>
                         </div>
                       </div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+                      </div>
                     </div>
                     <div class="row" style="margin: 10px;">
-                      <label for="reviewerActionComments">Provide any comments</label>
+                      <label for="reviewerActionComments">5. Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewerActionComments"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>
@@ -276,7 +276,7 @@
               <div class="card">
                 <div class="row">
                   <div class="col-sm-9">
-                    <p>What is your recommendation?</p>
+                    <p>What is your recommendation?<span class="required-indicator">*</span></p>
                     <div class="text-left">
                       <ul style="list-style: none;" *ngFor="let item of decision2">
                         <li>
@@ -294,7 +294,7 @@
                 <div class="row" style="margin: 10px;">
                   <div class="col-sm-12">
                     <div class="row" style="margin: 10px;">
-                      <label for="approverComments">Provide any comments</label>
+                      <label for="approverComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="approverComments"
                                 [(ngModel)]="approveComments"></textarea>
                     </div>
@@ -321,13 +321,9 @@
               <h3 style="margin-left: 40px;">Finance Section</h3>
               <div class="card">
                 <div class="row">
-                  <div class="col-sm-5">
-                    <label>Grant Amount</label>
+                  <div class="col-sm-8">
+                    <label>Grant Amount<span class="required-indicator">*</span></label>
                     <input [disabled]="isReadOnly" class="form-control" type="number" [(ngModel)]="grantAmount"/>
-                  </div>
-                  <div class="col-sm-5">
-                    <label>Lead Agency</label>
-                    <input [disabled]="isReadOnly" class="form-control" type="text" [(ngModel)]="leadAgency"/>
                   </div>
                   <div class="col-sm-2 text-right">
                     <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
@@ -335,21 +331,17 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-3">
-                    <label>From:</label><input class="form-control" placeholder="From" type="date"
+                    <label>From:<span class="required-indicator">*</span></label><input class="form-control" placeholder="From" type="date"
                                                [(ngModel)]="periodFrom"/>
                   </div>
                   <div class="col-sm-3">
-                    <label>To:</label><input class="form-control" placeholder="To" type="date" [(ngModel)]="periodTo"/>
-                  </div>
-                  <div class="col-sm-4">
-                    <label>Cluster Name:</label>
-                    <input [disabled]="isReadOnly" class="form-control" type="text" [(ngModel)]="clusterName"/>
+                    <label>To:<span class="required-indicator">*</span></label><input class="form-control" placeholder="To" type="date" [(ngModel)]="periodTo"/>
                   </div>
                 </div>
                 <div class="row" style="margin: 10px;">
                   <div class="col-sm-12">
                     <div class="row" style="margin: 10px;">
-                      <label for="financeSectionComments">Provide any comments</label>
+                      <label for="financeSectionComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="financeSectionComments"
                                 [(ngModel)]="financeSectionComments"></textarea>
                     </div>
@@ -366,13 +358,18 @@
               </div>
             </div>
 
-            <div *ngIf="isSubmitReport" class="col">
+            <div *ngIf="isSubmitReport || isMakeCorrectionsOnReport" class="col">
               <organizational-information [grantId]="grantId"></organizational-information>
               <planning-learning-application [isReadOnly]="true" [grantId]="grantId"
                                              [processInstanceId]="processInstanceId"
                                              [definitionKey]="definitionKey"
                                              (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
+              <div class="col-sm-12" style="margin-left: -60px; text-align: end;">
+                <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+              </div>
               <grant-report [grantId]="grantId"
+                            [isMakeCorrections]="isMakeCorrectionsOnReport"
+                            [isReadOnly]="false"
                             [processInstanceId]="processInstanceId"
                             [definitionKey]="definitionKey"
                             (statusChanged)="statusChangedHandler($event)"></grant-report>
@@ -385,9 +382,14 @@
                                              [definitionKey]="definitionKey"
                                              (statusChanged)="statusChangedHandler($event)"></planning-learning-application>
               <grant-report [grantId]="grantId" [isReadOnly]="true"
+                            [isMakeCorrections]="false"
                             [processInstanceId]="processInstanceId"
                             [definitionKey]="definitionKey"
                             (statusChanged)="statusChangedHandler($event)"></grant-report>
+
+              <div class="col-sm-12" style="margin-left: -60px; text-align: end;">
+                <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
+              </div>
 
               <h3 style="margin-left: 40px;">Reviewer Action</h3>
               <div class="card">
@@ -396,7 +398,7 @@
 
                     <div class="row">
                       <div class="col">
-                        <p>Were the activities carried out in-line with the proposed workplan?</p>
+                        <p>Were the activities carried out in-line with the proposed work plan?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -407,9 +409,8 @@
                           </ul>
                         </div>
                       </div>
-
                       <div class="col">
-                        <p>Did they adhere to the budget?</p>
+                        <p>Did they adhere to the budget?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -420,13 +421,10 @@
                           </ul>
                         </div>
                       </div>
-                      <div class="col-sm-3">
-                        <button class="btn btn-success comment_btn" (click)="viewComments()">View Comments</button>
-                      </div>
                     </div>
                     <div class="row">
                       <div class="col">
-                        <p>Did they achieve their intended objectives?</p>
+                        <p>Did they achieve their intended objectives?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of items">
                             <li>
@@ -438,7 +436,7 @@
                         </div>
                       </div>
                       <div class="col">
-                        <p>What was the decision of the review process?</p>
+                        <p>What was the decision of the review process?<span class="required-indicator">*</span></p>
                         <div class="text-left">
                           <ul style="list-style: none;" *ngFor="let item of decision3">
                             <li>
@@ -451,7 +449,7 @@
                       </div>
                     </div>
                     <div class="row" style="margin: 10px;">
-                      <label for="reviewerActionComments">Provide any comments</label>
+                      <label for="reviewerActionComments">Provide any comments<span class="required-indicator">*</span></label>
                       <textarea [disabled]="isReadOnly" class="form-control" rows="3" id="reviewReportComments"
                                 [(ngModel)]="reviewerComments"></textarea>
                     </div>

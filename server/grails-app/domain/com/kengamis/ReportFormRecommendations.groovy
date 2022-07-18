@@ -3,7 +3,6 @@ package com.kengamis
 class ReportFormRecommendations {
 
     String id
-    String groupId
     String processInstanceId
     String taskId
     String taskDefinitionKey
@@ -15,6 +14,5 @@ class ReportFormRecommendations {
         id generator: 'uuid2'
     }
     static constraints = {
-        groupId nullable: true
     }
 }

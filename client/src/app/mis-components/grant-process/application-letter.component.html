@@ -13,7 +13,7 @@
                  [clearable]="true"
       >
         <ng-option [value]="item.id" *ngFor="let item of programs">
-          {{item.name}}
+          {{item.description}}
         </ng-option>
       </ng-select>
     </div>
@@ -25,13 +25,13 @@
   <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>1. What is the name of the organization?<span class="required-indicator">*</span></label>
+        <label>1. What is the name of the lead organization?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
               [disabled]="isReadOnly"
               class="form-control"
-              placeholder="Organisation Name"
+              placeholder="Organization Name and Acronym"
               type="text"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.name"
@@ -40,7 +40,6 @@
         </div>
 
         <label>3. Who is the contact person? <span class="required-indicator">*</span></label>
-
         <div class="col-sm-12" style="padding: 0;">
           <div class="form-group ">
             <div class=" input-group input-group-merge">
@@ -58,9 +57,17 @@
               <input
                 [disabled]="isReadOnly"
                 class="form-control"
-                placeholder="Contact"
+                placeholder="Telephone Number"
                 type="text"
-                [(ngModel)]="organisation.contact">
+                [value]="organisation.contact"
+                (ngModelChange)="validateNumber($event)"
+                [(ngModel)]="organisation.contact"
+                [ngClass]="{ 'is-invalid': inValidNumber }">
+            </div>
+            <div *ngIf="submitted && inValidNumber">
+              <div class="input-error">
+                Telephone Number is invalid
+              </div>
             </div>
           </div>
 
@@ -71,15 +78,21 @@
                 class="form-control"
                 placeholder="Email"
                 type="text"
-                [(ngModel)]="organisation.email">
+                [(ngModel)]="organisation.email"
+                [ngClass]="{ 'is-invalid': email.invalid }"
+                #email="ngModel" email>
+            </div>
+            <div *ngIf="submitted && email.invalid">
+              <div class="input-error">
+                Email must be in the format 'example@email.com'
+              </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="col-sm-6">
-        <label>2. Where is the organization located or operating area?<span class="required-indicator">*</span></label>
+        <label>2. Where is the organization located?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -100,7 +113,7 @@
             <input
               [disabled]="isReadOnly"
               class="form-control"
-              placeholder="e.g. CBO, National NGO, Network"
+              placeholder="e.g. CBO, National NGO"
               type="text"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.organizationType"
@@ -110,9 +123,92 @@
       </div>
     </div>
 
+    <div class="row" style="margin: 10px">
+      <div class="col-sm-6">
+        <label>5. Name of cluster?<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              [disabled]="isReadOnly"
+              class="form-control"
+              placeholder="Name of cluster"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.nameCluster"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>6. Area of Operation<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <input
+              [disabled]="isReadOnly"
+              class="form-control"
+              placeholder="Area of Operation"
+              type="text"
+              style="padding-left: 10px;"
+              [(ngModel)]="organisation.areaOfOperation"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 10px">
+      <div class="col-sm-6">
+        <label>7. Country<span class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <ng-select class="form-control form-control-sm"
+                       aria-controls="datatable"
+                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                       [multiple]="false"
+                       placeholder="Country"
+                       (ngModelChange)="onSelectCountry($event)"
+                       [(ngModel)]="organisation.country"
+                       [disabled]="isReadOnly"
+                       [searchable]="true"
+                       [clearable]="true"
+            >
+              <ng-option [value]="country" *ngFor="let country of countries">
+                {{country}}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label>8. City<span
+          class="required-indicator">*</span></label>
+        <div class="form-group ">
+          <div class=" input-group input-group-merge">
+            <ng-select class="form-control form-control-sm"
+                       aria-controls="datatable"
+                       style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                       [multiple]="false"
+                       placeholder="City"
+                       [(ngModel)]="organisation.city"
+                       [disabled]="isReadOnly"
+                       [searchable]="true"
+                       [clearable]="true"
+            >
+              <ng-option [value]="city" *ngFor="let city of cities">
+                {{city}}
+              </ng-option>
+            </ng-select>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>5. What inspired the formation of the organization?
+        <label>9. What inspired the formation of the organization?
           <span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -130,7 +226,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>6. What is the vision and mission of the organization?<span class="required-indicator">*</span></label>
+        <label>10. What is the vision and mission of the organization?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
               <textarea
@@ -148,7 +244,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>7. Briefly describe the leadership and governance structure of the organization?<span
+        <label>11. Briefly describe the leadership and governance structure of the organization?<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -156,9 +252,11 @@
                 [disabled]="isReadOnly"
                 class="form-control"
                 placeholder="50-75 words"
+                id="structure"
                 style="padding-left: 10px;"
                 rows="5"
                 maxlength="300"
+                (keyup)="countChars(75, 'structure')"
                 [(ngModel)]="organisation.structure"
               ></textarea>
           </div>
@@ -166,7 +264,7 @@
       </div>
 
       <div class="col-sm-6">
-        <label>8. What are the core programs implemented by the organization?<span
+        <label>12. What are the core programs implemented by the organization?<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -185,7 +283,7 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>9. Describe one program that you have implemented on prevention of violence against children.<span
+        <label>13. Describe one program that you have implemented on prevention of violence against children.<span
           class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
@@ -202,16 +300,16 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <label>10. Who is funding the current programs?<span class="required-indicator">*</span></label>
+        <label>14. Who are funding the current program?<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
-            <input
+            <textarea
               class="form-control" [disabled]="isReadOnly"
-              placeholder="Funding"
-              type="text"
+              placeholder="Source of funding"
+              rows="5"
               style="padding-left: 10px;"
               [(ngModel)]="organisation.funding"
-            >
+            ></textarea>
           </div>
         </div>
       </div>
@@ -229,67 +327,104 @@
       details for Cluster). </i>
   </div>
   <div class="card-body">
-    <div class="row" style="margin: 10px;">
-      <div class="col-sm-6">
-        <label>11. How many organizations will be involved in the cluster/Network partnership?</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
-              <textarea
-                class="form-control" [disabled]="isReadOnly"
-                placeholder="Name the organisations and their contacts"
-                style="padding-left: 10px;"
-                rows="5"
-                [(ngModel)]="ngos.partnerOrganizations"
-              ></textarea>
+    <div *ngFor="let ngo of ngos">
+      <hr *ngIf="ngo!=ngos[0]" />
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">15. </b>Name of organization involved in the cluster?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                [disabled]="isReadOnly"
+                placeholder="Name of the organisation"
+                type="text"
+                [(ngModel)]="ngo.nameOfPartnerOrganization"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">16. </b>Telephone of organization involved in the cluster?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                [disabled]="isReadOnly"
+                class="form-control"
+                placeholder="Telephone Number"
+                type="text"
+                [value]="ngo.telephoneOfPartnerOrganization"
+                (ngModelChange)="validateTelephone($event)"
+                [(ngModel)]="ngo.telephoneOfPartnerOrganization"
+                [ngClass]="{ 'is-invalid': inValidTelephone }">
+            </div>
+            <div *ngIf="submitted && inValidTelephone">
+              <div class="input-error">
+                Telephone Number is invalid
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-6">
-        <label>12. Please give a brief description of the cluster/Network members?<span
-          class="required-indicator">*</span></label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">17. </b>Please give a brief description of the cluster/Network members?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <textarea
                 class="form-control" [disabled]="isReadOnly"
                 placeholder="e.g. year of founding or registration, Vision and mission, objectives, major thematic areas / activities, governance, management, recent accomplishments, membership, geographical area of operation among others )( not more than 50 words)"
                 rows="5"
                 maxlength="300"
                 style="padding-left: 10px;"
-                [(ngModel)]="ngos.members"
+                [(ngModel)]="ngo.members"
               ></textarea>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row" style="margin: 10px;">
-      <div class="col-sm-6">
-        <label>13. Why do you want to collaborate with these organizations?</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">18. </b>Why do you want to collaborate with this organization?<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
               <textarea
                 class="form-control" [disabled]="isReadOnly"
                 placeholder="Reason"
                 style="padding-left: 10px;"
                 rows="5"
-                [(ngModel)]="ngos.whyCollaborate"
+                [(ngModel)]="ngo.whyCollaborate"
               ></textarea>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-6">
-        <label>14. Was the organization consulted or informed about the partnership.</label>
-        <div class="form-group ">
-          <div class=" input-group input-group-merge">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b *ngIf="ngo==ngos[0]">19. </b>Was the organization consulted or informed about the partnership.<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
                   <textarea
                     class="form-control" [disabled]="isReadOnly"
                     placeholder="If yes, indicate their response towards the intended cluster formation"
                     style="padding-left: 10px;"
                     rows="3"
-                    [(ngModel)]="ngos.clusterResponse"
+                    [(ngModel)]="ngo.clusterResponse"
                   ></textarea>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isReadOnly" class="col-sm-6" style="align-self: center;">
+          <div class="row" style="display: flex; justify-content: space-evenly;">
+            <button *ngIf="ngo!=ngos[0]" class="btn btn-danger" (click)="removeNgoRecord(ngo.id)"><i class="fas fa-minus-circle"></i>&nbsp;Remove Organization</button>
+            <button class="btn btn-success" (click)="addNgoRecord()"><i class="fas fa-plus-circle"></i>&nbsp;Add Organization</button>
           </div>
         </div>
       </div>
@@ -298,13 +433,14 @@
   </div>
 </div>
 
-<h3 style="margin-left: 40px;">Part III: Proposal</h3>
-<div class="card">
+<h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Part III: Proposal</h3>
+<div class="card" *ngIf="!isLongTerm">
   <div class="card-body">
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>15. Interventions/activities / strategies - What actions will you take to create change?</label>
+        <label>20. Interventions/activities / strategies - What actions will you take to create change?<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                   <textarea
@@ -319,7 +455,8 @@
       </div>
 
       <div class="col-sm-6">
-        <label>16. Suggest few geographic areas where the project will be implemented?</label>
+        <label>21. Suggest few geographic areas where the project will be implemented?<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                <textarea
@@ -336,8 +473,8 @@
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>17. Describe your organizations’ unique strength or capacity and weaknesses to implement the
-          interventions proposed.</label>
+        <label>22. Describe your organizations’ unique strength or capacity and weaknesses to implement the
+          interventions proposed.<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
                      <textarea
@@ -355,13 +492,13 @@
   </div>
 </div>
 
-<h3 style="margin-left: 40px;">Part IV: Financial Information</h3>
-<div class="card">
+<h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Part IV: Financial Information</h3>
+<div class="card" *ngIf="!isLongTerm">
   <div class="card-body">
 
     <div class="row" style="margin: 10px;">
       <div class="col-sm-6">
-        <label>18. How much funds are you requesting?</label>
+        <label>23. How much funds are you requesting? (USD)<span class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
             <input
@@ -376,15 +513,17 @@
       </div>
 
       <div class="col-sm-6">
-        <label>19. What is your organization’s current budget for this financial year?</label>
+        <label>24. What is your organization’s current budget for this financial year? (USD)<span
+          class="required-indicator">*</span></label>
         <div class="form-group ">
           <div class=" input-group input-group-merge">
-               <textarea
-                 class="form-control" [disabled]="isReadOnly"
-                 placeholder="Amount"
-                 style="padding-left: 10px;"
-                 [(ngModel)]="financial.budget"
-               ></textarea>
+            <input
+              class="form-control" [disabled]="isReadOnly"
+              placeholder="Amount"
+              type="number"
+              style="padding-left: 10px;"
+              [(ngModel)]="financial.budget"
+            >
           </div>
         </div>
       </div>
@@ -393,14 +532,16 @@
   </div>
 </div>
 
-<h3 style="margin-left: 40px;">Part V: Other documents to share (if available)</h3>
+<h3 style="margin-left: 40px;" *ngIf="isLongTerm">Part III: Other documents to share (if available)</h3>
+<h3 style="margin-left: 40px;" *ngIf="!isLongTerm">Part V: Other documents to share (if available)</h3>
 <div class="card">
   <div class="card-body">
     <div class="row" style="margin: 10px;">
       <div class="col">
         <div class="row">
           <div class="col-sm-6">
-            <label>i. A copy of financial audited reports or organizational financial report. if you have :</label>
+            <label>i. A copy of financial audited reports or organizational financial report.<span
+              class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -412,15 +553,16 @@
                   id="financialAttachment"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.financial!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.financial)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.financial)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
-            <label>ii. A copy of the registration certificate</label>
+            <label>ii. A copy of the registration certificate<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -432,17 +574,19 @@
                   id="registration"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.registration!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.registration)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.registration)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>iii. List of members of governing body their affiliations, skills and experience</label>
+            <label>iii. List of members of governing body their affiliations, skills and experience<span
+              class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -454,15 +598,17 @@
                   id="listMembersAttachment"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.listMembers!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listMembers)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listMembers)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
-            <label>iv. List of staff members and their titles as well as qualifications and experience</label>
+            <label>iv. List of staff members and their titles as well as qualifications and experience<span
+              class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -474,17 +620,18 @@
                   id="listStaffMembersAttachment"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.listStaffMembers!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.listStaffMembers)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.listStaffMembers)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>v. Organization structure/organogram</label>
+            <label>v. Organization structure/organogram<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -496,10 +643,11 @@
                   id="organizationStructure"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.organizationStructure!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.organizationStructure)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.organizationStructure)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -516,17 +664,18 @@
                   id="assessmentReport"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.assessmentReport!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.assessmentReport)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.assessmentReport)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>vii. Organization strategic plan if available </label>
+            <label>vii. Organization strategic plan if available</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -538,15 +687,16 @@
                   id="strategicPlan"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.strategicPlan!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.strategicPlan)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.strategicPlan)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
-            <label>viii. Organizational annual work plan and budget.</label>
+            <label>viii. Organizational annual work plan and budget.<span class="required-indicator">*</span></label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -558,37 +708,18 @@
                   id="annualWorkPlan"
                   (change)="handleFileInput($event)">
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.annualWorkPlan!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.annualWorkPlan)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.annualWorkPlan)}}  <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <label>ix. Draft M.O.U if application is submitted by Cluster </label>
-            <div class="form-group ">
-              <div class=" input-group input-group-merge">
-                <input
-                  *ngIf="!isReadOnly"
-                  class="form-control" [disabled]="isReadOnly"
-                  placeholder="Attachment"
-                  type="file"
-                  style="padding-left: 10px;"
-                  id="mou"
-                  (change)="handleFileInput($event)">
-                <button
-                  *ngIf="isReadOnly"
-                  type="button"
-                  (click)="fileUploadService.downloadFile(documents.mou)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i class="fas fa-download"></i></button>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <label>x. Child safe guard policy /manual if available</label>
+            <label>ix. Child safe guard policy /manual if available</label>
             <div class="form-group ">
               <div class=" input-group input-group-merge">
                 <input
@@ -600,10 +731,11 @@
                   id="childPolicy"
                   (change)="handleFileInput($event)"/>
                 <button
-                  *ngIf="isReadOnly"
+                  *ngIf="isReadOnly && documents.childPolicy!=null"
                   type="button"
                   (click)="fileUploadService.downloadFile(documents.childPolicy)"
-                  class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i class="fas fa-download"></i></button>
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.childPolicy)}} <i
+                  class="fas fa-download"></i></button>
               </div>
             </div>
           </div>
@@ -629,7 +761,10 @@
 <div class="row" *ngIf="!isReadOnly">
   <div class="col-lg-12 bottom_buttons_row"
        style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
-    <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
-    <button class="btn btn-success" type="button" (click)="submitLetter()">Submit Application</button>
+    <button [disabled]="submitted" class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+    <button [disabled]="submitted" class="btn btn-success" type="button" (click)="submitLetter()">
+      <span *ngIf="!submitted">Submit Application</span>
+      <span *ngIf="submitted">Loading ...</span>
+    </button>
   </div>
 </div>

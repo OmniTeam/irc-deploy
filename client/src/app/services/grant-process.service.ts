@@ -23,6 +23,10 @@ export class GrantProcessService {
    *   get
    */
 
+  getAllLetterOfInterest() {
+    return this.http.get(`${this.letterOfInterest}`);
+  }
+
   getLetterOfInterest(id) {
     return this.http.get(`${this.letterOfInterest}/${id}/`);
   }
@@ -126,6 +130,10 @@ export class GrantProcessService {
 
   updateProvideLearningGrant(formData, id): Observable<any> {
     return this.http.put(`${this.provideLearningGrant}/${id}`, formData);
+  }
+
+  updateGrantReport(formData, id): Observable<any> {
+    return this.http.put(`${this.grantReport}/${id}`, formData);
   }
 
   updateGrantReportReview(formData, id): Observable<any> {

@@ -5,6 +5,7 @@ import {FormService} from '../../services/form.service';
 import {ReplacePipe} from '../../pipes/replace-pipe';
 import {EntityService} from '../../services/entity.service';
 import {TitleCasePipe} from '@angular/common';
+import {Roles} from '../../models/roles';
 
 const misc: any = {
   sidebar_mini_active: true
@@ -14,9 +15,16 @@ const formsMenu: any = {
   path: 'forms/data',
   title: 'Data',
   type: 'sub',
-  icontype: 'ni-single-copy-04 text-red',
+  icontype: 'ni-single-copy-04',
   isCollapsed: true,
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_VIEWER', 'ROLE_YCD_PARTNER_DATA_VIEWER', 'ROLE_AGPP_PARTNER_DATA_VIEWER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER'],
+  roles: [
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN',
+    'ROLE_PARTNER_DATA_MANAGER',
+    'ROLE_PARTNER_DATA_VIEWER',
+    'ROLE_STAFF_DATA_MANAGER',
+    'ROLE_STAFF_DATA_VIEWER'
+  ],
   children: []
 };
 
@@ -24,10 +32,17 @@ const listsMenu: any = {
   path: 'entity/showData/',
   title: 'Lists',
   type: 'sub',
-  icontype: 'fas fa-list-alt text-maroon',
+  icontype: 'fas fa-list-alt',
   isCollapsed: true,
   children: [],
-  roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_VIEWER', 'ROLE_AGPP_PARTNER_DATA_VIEWER',  'ROLE_YCD_PARTNER_DATA_VIEWER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER' , 'ROLE_STAFF_DATA_VIEWER']
+  roles: [
+    'ROLE_SUPER_ADMIN',
+    'ROLE_ADMIN',
+    'ROLE_PARTNER_DATA_MANAGER',
+    'ROLE_PARTNER_DATA_VIEWER',
+    'ROLE_STAFF_DATA_MANAGER',
+    'ROLE_STAFF_DATA_VIEWER'
+  ]
 };
 
 
@@ -92,12 +107,15 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    // console.log('++++++++++');
     this.usersRoles = this.authService.getUserRoles();
 
     this.router.events.subscribe(event => {
       this.isCollapsed = true;
     });
+    // console.log(this.authService.isLoggedIn());
     if (this.authService.isLoggedIn()) {
+      // console.log('am being loaded');
       this.formService.getEnabledForms().subscribe(data => {
         for (const form of data) {
           const formObject = {};
@@ -105,23 +123,9 @@ export class SidebarComponent implements OnInit {
           formObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formObject['path'] = form.name.toString();
           formObject['type'] = 'link';
+          formObject['roles'] = this.usersRoles;
 
-          const currentTitle = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
-
-          if (currentTitle.includes('Parent') && (
-            this.usersRoles.includes('ROLE_SUPER_ADMIN') ||
-            this.usersRoles.includes('ROLE_ADMIN')
-            || this.usersRoles.includes('ROLE_VAC_PARTNER_DATA_MANAGER')
-            || this.usersRoles.includes('ROLE_VAC_STAFF_DATA_MANAGER')
-            || this.usersRoles.includes('ROLE_VAC_PARTNER_DATA_VIEWER')
-          )) {
-            formObject['roles'] = this.usersRoles;
-            formsMenu.children.push(formObject);
-          }
-          if (!currentTitle.includes('Parent')) {
-            formObject['roles'] = this.usersRoles;
-            formsMenu.children.push(formObject);
-          }
+          formsMenu.children.push(formObject);
 
           formSettingObject['title'] = this.titleCasePipe.transform(new ReplacePipe().transform(form.displayName, '_', ' '));
           formSettingObject['path'] = form.name.toString();
@@ -152,15 +156,9 @@ export class SidebarComponent implements OnInit {
             roles: [
               'ROLE_SUPER_ADMIN',
               'ROLE_ADMIN',
-              'ROLE_VAC_PARTNER_DATA_MANAGER',
-              'ROLE_AGPP_PARTNER_DATA_MANAGER',
-              'ROLE_YCD_PARTNER_DATA_MANAGER',
-              'ROLE_VAC_PARTNER_DATA_VIEWER',
-              'ROLE_AGPP_PARTNER_DATA_VIEWER',
-              'ROLE_YCD_PARTNER_DATA_VIEWER',
-              'ROLE_VAC_STAFF_DATA_MANAGER',
-              'ROLE_AGPP_STAFF_DATA_MANAGER',
-              'ROLE_YCD_STAFF_DATA_MANAGER',
+              'ROLE_PARTNER_DATA_MANAGER',
+              'ROLE_PARTNER_DATA_VIEWER',
+              'ROLE_STAFF_DATA_MANAGER',
               'ROLE_STAFF_DATA_VIEWER',
               'ROLE_APPLICANT',
             ]
@@ -170,8 +168,13 @@ export class SidebarComponent implements OnInit {
             path: 'archive',
             title: 'Archive',
             type: 'link',
-            icontype: 'fas fa-tasks text-pink',
-            roles: ['ROLE_SUPER_ADMIN',  'ROLE_ADMIN'],
+            icontype: 'fas fa-tasks',
+            roles: [
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER'
+            ],
           },
           {
             path: '/',
@@ -179,53 +182,93 @@ export class SidebarComponent implements OnInit {
             type: 'sub',
             icontype: 'fas fa-user-cog',
             isCollapsed: true,
-            roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER'],
+            roles: [
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER',
+              'ROLE_PARTNER_DATA_MANAGER',
+              'ROLE_PARTNER_DATA_VIEWER',
+              'ROLE_PROGRAM_OFFICER'
+            ],
             children: [
               {
                 path: 'tags',
                 title: 'Tags',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER',
+                  'ROLE_PARTNER_DATA_MANAGER',
+                  'ROLE_PARTNER_DATA_VIEWER',
+                ]
               },
               {
                 path: 'taskList',
                 title: 'Task List',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_YCD_PARTNER_DATA_MANAGER', 'ROLE_VAC_PARTNER_DATA_MANAGER', 'ROLE_AGPP_PARTNER_DATA_MANAGER', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER', 'ROLE_STAFF_DATA_VIEWER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'partnerSetupList',
                 title: 'Work Plan',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'programPartner',
                 title: 'Partner',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'mis-users',
                 title: 'Users',
                 type: 'link',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: 'issdugdata.net:3000',
                 title: 'Analytics',
                 type: 'analytics',
-                roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN',  'ROLE_VAC_STAFF_DATA_MANAGER', 'ROLE_AGPP_STAFF_DATA_MANAGER', 'ROLE_YCD_STAFF_DATA_MANAGER']
+                roles: [
+                  'ROLE_SUPER_ADMIN',
+                  'ROLE_ADMIN',
+                  'ROLE_STAFF_DATA_MANAGER',
+                  'ROLE_STAFF_DATA_VIEWER'
+                ]
               },
               {
                 path: '',
                 title: 'Grant Process',
                 type: 'sub',
                 isCollapsed: true,
-                roles: ['ROLE_SUPER_ADMIN'],
+                roles: ['ROLE_SUPER_ADMIN', 'ROLE_PROGRAM_OFFICER'],
                 children: [
-                  {path: 'grantProcess', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
-                  {path: 'grantProcess-longTerm', title: 'Long Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+                  {path: 'submitletterofinterest', title: 'Short Term', type: 'link', roles: ['ROLE_SUPER_ADMIN']},
+                  {path: 'longTermGrantApplication', title: 'Long Term Grant Application', type: 'link', roles: ['ROLE_SUPER_ADMIN', 'ROLE_PROGRAM_OFFICER']},
                 ]
               },
             ]
@@ -235,7 +278,7 @@ export class SidebarComponent implements OnInit {
             path: '/',
             title: 'Set-Up',
             type: 'sub',
-            icontype: 'fas fa-cog text-blue',
+            icontype: 'fas fa-cog',
             roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             isCollapsed: true,
             children: [
@@ -254,7 +297,7 @@ export class SidebarComponent implements OnInit {
             path: '/',
             title: 'Configuration',
             type: 'sub',
-            icontype: 'fas fa-tools text-purple',
+            icontype: 'fas fa-tools',
             isCollapsed: true,
             roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             children: [
@@ -282,7 +325,7 @@ export class SidebarComponent implements OnInit {
             path: '',
             title: 'User',
             type: 'sub',
-            icontype: 'fas fa-user-tie text-green',
+            icontype: 'fas fa-user-tie',
             roles: ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN'],
             isCollapsed: true,
             children: [

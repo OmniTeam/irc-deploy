@@ -23,6 +23,7 @@ export class GrantProcessComponent implements OnInit {
   isProvidePlanningLearningGrant: boolean;
   isSubmitReport: boolean;
   isReviewReport: boolean;
+  isMakeCorrectionsOnReport: boolean;
 
   taskRecord: any;
 
@@ -37,6 +38,7 @@ export class GrantProcessComponent implements OnInit {
   dateOfDueDiligence: any;
   attachmentDiligenceReport: any;
   reviewerComments: any;
+  reviewerRecommendations: any;
   decisionOfReviewProcess: any;
   hasDueDiligenceConducted: any;
 
@@ -54,6 +56,7 @@ export class GrantProcessComponent implements OnInit {
   ];
   decision3 = [
     {name: 'Apply for long term grant', value: 'Yes'},
+    {name: 'Ask for revisions', value: 'Changes'},
     {name: 'Do not apply for long term grant', value: 'No'}
   ];
   isConceptInline: any;
@@ -98,6 +101,7 @@ export class GrantProcessComponent implements OnInit {
     this.isProvidePlanningLearningGrant = false;
     this.isSubmitReport = false;
     this.isReviewReport = false;
+    this.isMakeCorrectionsOnReport = false;
 
     this.route.params
       .subscribe(p => {
@@ -131,6 +135,7 @@ export class GrantProcessComponent implements OnInit {
         this.dateOfDueDiligence = data.dateOfDueDiligence
         this.attachmentDiligenceReport = data.dueDiligenceReport
         this.reviewerComments = data.comments
+        this.reviewerRecommendations = data.recommendations
       })
     }
     if (data.taskDefinitionKey === "Apply_for_Learning_Planning_Grant") {
@@ -153,7 +158,7 @@ export class GrantProcessComponent implements OnInit {
     if (data.taskDefinitionKey === "Approve_Learning_Grant") {
       this.isApprovePlanningLearningGrant = true;
       this.grantProcessService.getPlanningAndLearningApprove(data.grantId).subscribe((data: any) => {
-        console.log('apply PlanningAndLearningApprove record available', data)
+        console.log('PlanningAndLearningApprove record available', data)
         this.decisionOfApproveProcess = data.decision
         this.approveComments = data.comments
       })
@@ -161,24 +166,27 @@ export class GrantProcessComponent implements OnInit {
     if (data.taskDefinitionKey === "Provide_Learning_Grant") {
       this.isProvidePlanningLearningGrant = true;
       this.grantProcessService.getProvideLearningGrant(data.grantId).subscribe((data) => {
-        console.log('apply ProvideLearningGrant record available', data)
+        console.log('ProvideLearningGrant record available', data)
       })
     }
     if (data.taskDefinitionKey === "Submit_Report") {
       this.isSubmitReport = true;
       this.grantProcessService.getGrantReport(data.grantId).subscribe((data) => {
-        console.log('apply GrantReport record available', data)
+        console.log('GrantReport record available', data)
       })
     }
-    if (data.taskDefinitionKey === "Review_Report" || data.taskDefinitionKey === "Archive_Report") {
+    if (data.taskDefinitionKey === "Review_Report") {
       this.isReviewReport = true;
-      this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data: any) => {
+      if (data.status == "draft") this.grantProcessService.getGrantReportReview(data.grantId).subscribe((data: any) => {
         this.activitiesInlineWithWorkPlan = data.activitiesInlineWithWorkPlan;
         this.adhereToBudget = data.adhereToBudget;
         this.achieveIntendedObjectives = data.achieveIntendedObjectives;
         this.decisionOfReviewProcess = data.decision;
         this.reviewerComments = data.comments;
       })
+    }
+    if (data.taskDefinitionKey === "Make_Corrections") {
+      this.isMakeCorrectionsOnReport = true
     }
     this.grantId = data.grantId;
     this.definitionKey = data.taskDefinitionKey
@@ -291,68 +299,81 @@ export class GrantProcessComponent implements OnInit {
   }
 
   submitReviewLetterOfInterest(status) {
-    if (this.decisionOfReviewProcess != undefined) {
-      let formData: { [key: string]: string } = {
-        grantId: this.grantId,
-        definitionKey: this.definitionKey,
-        processInstanceId: this.processInstanceId,
-        hasBeenReviewed: this.hasApplicationBeenReviewed,
-        dueDiligence: this.hasDueDiligenceConducted,
-        dateOfDueDiligence: this.dateOfDueDiligence,
-        dueDiligenceReport: this.attachmentDiligenceReport,
-        comments: this.reviewerComments,
-        decision: this.decisionOfReviewProcess,
-        user: this.authService.getLoggedInUsername(),
-        status: status
-      }
-
-      let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
-      const params = new HttpParams().set('id', formData.processInstanceId);
-      this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
-        if (response?.results != null) {
-          this.grantProcessService.updateLetterOfInterestReview(formData, response.results.id).subscribe((data) => {
-            console.log('response', data)
-            this.error = false;
-            this.success = true;
-            this.successMessage = "Updated";
-            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
-            this.statusChangedHandler(status)
-            this.alertService.success(this.successMessage);
-            this.router.navigate(['/home']);
-          }, error => {
-            this.error = true;
-            this.errorMessage = "Failed to update";
-            this.alertService.error(this.errorMessage);
-            this.success = false;
-            console.log(error);
-          });
-        } else {
-          this.grantProcessService.createReviewLetterOfInterest(formData).subscribe((data) => {
-            console.log('response', data)
-            this.error = false;
-            this.success = true;
-            this.successMessage = "Submitted";
-            this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
-            this.statusChangedHandler(status)
-            this.alertService.success(this.successMessage);
-            this.router.navigate(['/home']);
-          }, error => {
-            this.error = true;
-            this.errorMessage = "Failed to submit";
-            this.alertService.error(this.errorMessage);
-            this.success = false;
-            console.log(error);
-          });
-        }
-      });
-    } else {
-      this.alertService.error('Please fill in all required details');
+    if (this.decisionOfReviewProcess == undefined || this.hasDueDiligenceConducted == undefined || this.reviewerComments == undefined) {
+      this.alertService.error('Please fill in all compulsory options');
       return;
     }
+    if (this.hasDueDiligenceConducted == 'Yes' && this.dateOfDueDiligence == undefined) {
+      this.alertService.error('Please provide date of Due Diligence');
+      return;
+    }
+    if (this.hasDueDiligenceConducted == 'Yes' && this.attachmentDiligenceReport == undefined) {
+      this.alertService.error('Please provide attachment Diligence Report');
+      return;
+    }
+    let formData: { [key: string]: string } = {
+      grantId: this.grantId,
+      definitionKey: this.definitionKey,
+      processInstanceId: this.processInstanceId,
+      hasBeenReviewed: this.hasApplicationBeenReviewed,
+      dueDiligence: this.hasDueDiligenceConducted,
+      dateOfDueDiligence: this.dateOfDueDiligence,
+      dueDiligenceReport: this.attachmentDiligenceReport,
+      comments: this.reviewerComments,
+      recommendations: this.reviewerRecommendations,
+      decision: this.decisionOfReviewProcess,
+      user: this.authService.getLoggedInUsername(),
+      status: status
+    }
+
+    let apiUrl = `${this.grantProcessService.reviewLetterOfInterest}/getByProcessInstanceId`
+    const params = new HttpParams().set('id', formData.processInstanceId);
+    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+      if (response?.results != null) {
+        this.grantProcessService.updateLetterOfInterestReview(formData, response.results.id).subscribe((data) => {
+          console.log('response', data)
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Submitted";
+          this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+          this.statusChangedHandler(status)
+          this.alertService.success(this.successMessage);
+          this.router.navigate(['/home']);
+        }, error => {
+          this.error = true;
+          this.errorMessage = "Failed to submit";
+          this.alertService.error(this.errorMessage);
+          this.success = false;
+          console.log(error);
+        });
+      } else {
+        this.grantProcessService.createReviewLetterOfInterest(formData).subscribe((data) => {
+          console.log('response', data)
+          this.error = false;
+          this.success = true;
+          this.successMessage = "Submitted";
+          this.taskRecord.outputVariables = '{"reviewSuccessful": "' + this.decisionOfReviewProcess + '"}'
+          this.statusChangedHandler(status)
+          this.alertService.success(this.successMessage);
+          this.router.navigate(['/home']);
+        }, error => {
+          this.error = true;
+          this.errorMessage = "Failed to submit";
+          this.alertService.error(this.errorMessage);
+          this.success = false;
+          console.log(error);
+        });
+      }
+    });
   }
 
   planningAndLearningReview(status) {
-    if (this.decisionOfReviewProcess != undefined) {
+    if (this.decisionOfReviewProcess != undefined &&
+      this.isConceptInline != undefined &&
+      this.doesItAdhere != undefined &&
+      this.areTheyAdhering != undefined &&
+      this.reviewerComments != undefined) {
+
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
@@ -373,7 +394,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"reviewConcept": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -405,13 +426,13 @@ export class GrantProcessComponent implements OnInit {
         }
       });
     } else {
-      this.alertService.error('Please fill in all required details');
+      this.alertService.error('Please fill in all compulsory options');
       return;
     }
   }
 
   planningAndLearningApprove(status) {
-    if (this.decisionOfApproveProcess != undefined) {
+    if (this.decisionOfApproveProcess != undefined && this.approveComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
@@ -430,7 +451,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -447,7 +468,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Submitted";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"approveGrant": "' + this.decisionOfApproveProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -468,61 +489,71 @@ export class GrantProcessComponent implements OnInit {
   }
 
   provideLearningGrant(status) {
-    let formData: { [key: string]: string } = {
-      grantId: this.grantId,
-      definitionKey: this.definitionKey,
-      processInstanceId: this.processInstanceId,
-      clusterName: this.clusterName,
-      dateFrom: this.periodFrom,
-      dateTo: this.periodTo,
-      leadAgency: this.leadAgency,
-      grantAmount: this.grantAmount,
-      comments: this.financeSectionComments,
-      user: this.authService.getLoggedInUsername(),
-      status: status
-    }
-
-    let apiUrl = `${this.grantProcessService.provideLearningGrant}/getByProcessInstanceId`
-    const params = new HttpParams().set('id', formData.processInstanceId);
-    this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
-      if (response?.results != null) {
-        this.grantProcessService.updateProvideLearningGrant(formData, response.results.id).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Updated";
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.error = true;
-          this.errorMessage = "Failed to update";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
-      } else {
-        this.grantProcessService.createProvideLearningGrant(formData).subscribe((data) => {
-          console.log('response', data)
-          this.error = false;
-          this.success = true;
-          this.successMessage = "Submitted";
-          this.statusChangedHandler(status)
-          this.alertService.success(this.successMessage);
-          this.router.navigate(['/home']);
-        }, error => {
-          this.error = true;
-          this.errorMessage = "Failed to submit";
-          this.alertService.error(this.errorMessage);
-          this.success = false;
-          console.log(error);
-        });
+    if (this.grantAmount != undefined &&
+      this.periodFrom != undefined &&
+      this.periodTo != undefined &&
+      this.financeSectionComments != undefined) {
+      let formData: { [key: string]: string } = {
+        grantId: this.grantId,
+        definitionKey: this.definitionKey,
+        processInstanceId: this.processInstanceId,
+        dateFrom: this.periodFrom,
+        dateTo: this.periodTo,
+        grantAmount: this.grantAmount,
+        comments: this.financeSectionComments,
+        user: this.authService.getLoggedInUsername(),
+        status: status
       }
-    });
+
+      let apiUrl = `${this.grantProcessService.provideLearningGrant}/getByProcessInstanceId`
+      const params = new HttpParams().set('id', formData.processInstanceId);
+      this.grantProcessService.getRecordByProcessInstanceId(apiUrl, params).subscribe((response: any) => {
+        if (response?.results != null) {
+          this.grantProcessService.updateProvideLearningGrant(formData, response.results.id).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted Successfully";
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to update";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        } else {
+          this.grantProcessService.createProvideLearningGrant(formData).subscribe((data) => {
+            console.log('response', data)
+            this.error = false;
+            this.success = true;
+            this.successMessage = "Submitted Successfully";
+            this.statusChangedHandler(status)
+            this.alertService.success(this.successMessage);
+            this.router.navigate(['/home']);
+          }, error => {
+            this.error = true;
+            this.errorMessage = "Failed to submit";
+            this.alertService.error(this.errorMessage);
+            this.success = false;
+            console.log(error);
+          });
+        }
+      });
+    } else {
+      this.alertService.error('Please fill in all required details');
+      return;
+    }
   }
 
   submitGrantReportReview(status) {
-    if (this.decisionOfReviewProcess != undefined) {
+    if (this.decisionOfReviewProcess != undefined &&
+      this.activitiesInlineWithWorkPlan != undefined &&
+      this.adhereToBudget != undefined &&
+      this.achieveIntendedObjectives != undefined &&
+      this.reviewerComments != undefined) {
       let formData: { [key: string]: string } = {
         grantId: this.grantId,
         definitionKey: this.definitionKey,
@@ -544,7 +575,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Updated";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);
@@ -561,7 +592,7 @@ export class GrantProcessComponent implements OnInit {
             console.log('response', data)
             this.error = false;
             this.success = true;
-            this.successMessage = "Submitted";
+            this.successMessage = "Submitted Successfully";
             this.taskRecord.outputVariables = '{"longTermgrant": "' + this.decisionOfReviewProcess + '"}'
             this.statusChangedHandler(status)
             this.alertService.success(this.successMessage);

@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../services/alert";
-import {ModalDismissReasons, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {TagService} from "../../services/tags";
-import {HttpParams} from "@angular/common/http";
-import {GroupsService} from "../../services/groups.service";
+import {Subject} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertService} from '../../services/alert';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TagService} from '../../services/tags';
+import {HttpParams} from '@angular/common/http';
+import {GroupsService} from '../../services/groups.service';
 
 @Component({
   selector: 'app-groups',
@@ -15,7 +15,7 @@ import {GroupsService} from "../../services/groups.service";
 })
 export class GroupsComponent implements OnInit {
 
-  entries: number = 10;
+  entries = 10;
   selected: any[] = [];
   groupId = '';
   search = '';
@@ -27,13 +27,13 @@ export class GroupsComponent implements OnInit {
     orderDir: 'desc'
   };
   private searchValue = '';
-  tags: any
+  tags: any;
   closeResult: string;
   formGroup: FormGroup;
   formGp: FormGroup;
   rowData: any;
   submitted = false;
-  private selectedTags=[];
+  private selectedTags = [];
   private checkedRow: any;
   groups: any;
 
@@ -51,10 +51,10 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reloadTable()
+    this.reloadTable();
   }
 
-  addGroup(){
+  addGroup() {
     this.router.navigate(['group/create']);
   }
 
@@ -67,7 +67,7 @@ export class GroupsComponent implements OnInit {
     /*If it is checked*/
     if (event.target.checked) {
       this.checkedRow = event.target.value;
-      this.selectedTags.push(this.checkedRow)
+      this.selectedTags.push(this.checkedRow);
     } else { /*if it is not checked*/
       const x = this.selectedTags.indexOf(this.checkedRow);
       this.selectedTags.splice(x, 1);
@@ -80,22 +80,20 @@ export class GroupsComponent implements OnInit {
     deletedRow.forEach((p) => {
         this.groupsService.deleteCurrentGroup(p).subscribe((result) => {
           console.warn(result, 'Groups have been deleted');
-          this.router.navigate(['/aclsEntries']).then(() => {
-            window.location.reload();
-          });
-        })
+        });
       }
-    )
+    );
+    this.reloadTable();
   }
-  deleteGroup(row){
-    const currentId = row.id
+  deleteGroup(row) {
+    const currentId = row.id;
     this.groupsService.deleteCurrentGroup(currentId).subscribe((result) => {
       console.warn(result, 'Group has been deleted');
       this.router.navigate(['/aclsEntries']).then(() => {
         window.location.reload();
       });
-      this.alertService.warning("Group has been deleted")
-    }, error => {this.alertService.error("Failed to delete Group")})
+      this.alertService.warning('Group has been deleted');
+    }, error => {this.alertService.error('Failed to delete Group'); });
   }
 
   /*Responsible for the opening of the Modals*/
@@ -123,24 +121,24 @@ export class GroupsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    this.searchValue = event.target.value
-    if(!this.searchValue){
-      this.reloadTable()
+    console.log(event.target.value);
+    this.searchValue = event.target.value;
+    if (!this.searchValue) {
+      this.reloadTable();
     } else {
-      this.groups = this.groups.filter(a => a.name.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.groups = this.groups.filter(a => a.name.toUpperCase().includes(this.searchValue.toUpperCase()));
     }
   }
 
   reloadTable() {
     this.groupsService.getGroups( ).subscribe((data) => {
-      this.groups =data;
-      this.page.count = this.groups.length
+      this.groups = data;
+      this.page.count = this.groups.length;
     });
   }
 
   entriesChange($event) {
-    console.log($event.target.value)
+    console.log($event.target.value);
     this.entries = $event.target.value;
   }
 

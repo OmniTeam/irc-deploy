@@ -144,6 +144,7 @@ export class AclGroupMappingListsComponent implements OnInit {
 
   reloadTable() {
     this.AclGroupMappingService.listAllACLS().subscribe((data) => {
+      console.log(data);
       this.aclsEntries = data;
       this.currentGroups = [...new Set(data.map( (a) => a.group))];
       this.currentTables = [...new Set(data.map( (a) => a.table))];

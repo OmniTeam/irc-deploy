@@ -10,6 +10,7 @@ import {AlertService} from '../../../services/alert';
 import {TagService} from '../../../services/tags';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {ExportService} from '../../../services/export.service';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-entity-tables',
@@ -30,6 +31,8 @@ export class EntityTablesComponent implements OnInit {
   closeModal: string;
   formInputConfigs: any;
   editFormInputConfigs: any;
+  userRole: any;
+  userPartner: any;
   formGroup: FormGroup;
   editFormGroup: FormGroup;
   tagFormGroup: FormGroup;
@@ -55,6 +58,7 @@ export class EntityTablesComponent implements OnInit {
               private formBuilder: FormBuilder,
               private exportService: ExportService,
               private alertService: AlertService,
+              private authService: AuthService,
               private tagService: TagService) {
   }
 
@@ -106,6 +110,9 @@ export class EntityTablesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getUserPartners();
+    this.userRole = this.authService.getUserRoles();
+    this.userPartner = this.authService.retrieveUserPartners();
     this.route.params.subscribe(params => {
       this.entityId = params.id;
       this.selectedTagTypeFilter = null;
@@ -131,7 +138,7 @@ export class EntityTablesComponent implements OnInit {
       this.columns = this.columnMappings(data.headerList);
       this.formInputConfigs = this.generateFormInputConfigs(data.headerList);
       this.loading = false;
-    }, error => {console.log(error);});
+    }, error => {console.log(error); });
   }
 
   columnMappings(array) {
@@ -161,7 +168,15 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', tagTypeId);
     this.tagService.getTagsByTagType(params).subscribe((data) => {
-      this.tags = data;
+      // this.tags = data;
+      if (this.userRole.includes('ROLE_SUPER_ADMIN') || this.userRole.includes('ROLE_ADMIN') ) {
+        this.tags = data;
+      } else {
+        // tslint:disable-next-line:max-line-length
+        // console.log(this.tagFilters = data.filter(a => Object.keys(a?.partner).map(key => a?.partner[key])[0]), 'tag filter partner id');
+        // console.log(this.userPartner, 'user partner id');
+        this.tags = data.filter(a => Object.keys(a?.partner).map(key => a?.partner[key])[0] === this.userPartner);
+      }
     }, error => console.log(error));
   }
 
@@ -383,7 +398,15 @@ export class EntityTablesComponent implements OnInit {
     const params = new HttpParams()
       .set('id', tagTypeId);
     this.tagService.getTagsByTagType(params).subscribe((data) => {
-      this.tagFilters = data;
+      // console.log(data, 'tag filter values');
+      if (this.userRole.includes('ROLE_SUPER_ADMIN') || this.userRole.includes('ROLE_ADMIN') ) {
+        this.tagFilters = data;
+      } else {
+        // tslint:disable-next-line:max-line-length
+        console.log(this.tagFilters = data.filter(a => Object.keys(a?.partner).map(key => a?.partner[key])[0]), 'tag filter partner id');
+        console.log(this.userPartner, 'user partner id');
+        this.tagFilters = data.filter(a => Object.keys(a?.partner).map(key => a?.partner[key])[0] === this.userPartner);
+      }
     }, error => console.log(error));
   }
 
@@ -445,6 +468,7 @@ export class EntityTablesComponent implements OnInit {
   }
 
   importExcelFormData() {
+    // this.router.navigate(['staging-beneficiary-list']);
     this.openPopup = true;
   }
 
@@ -461,7 +485,7 @@ export class EntityTablesComponent implements OnInit {
     }, error => {
       console.log(error);
       this.uploadMessage = 'Failed to upload file, try again.';
-      setTimeout(() => {this.loading = false;}, 3000);
+      setTimeout(() => {this.loading = false; }, 3000);
     });
   }
 

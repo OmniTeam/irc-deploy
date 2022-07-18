@@ -8,13 +8,13 @@ import {environment} from '../../environments/environment';
 })
 export class AclGroupMappingService {
   baseurl = environment.serverUrl;
-  urlMapping = `${this.baseurl}/aclGroupMappings/`;
+  urlMapping = `${this.baseurl}/saveQueryToTable/`;
   urlAcl = `${this.baseurl}/kengaGroupAclEntry/`;
 
   constructor(private http: HttpClient) { }
 
   listAllACLS(): Observable<any> {
-    return this.http.get(`${this.baseurl}/listAllACLS/`);
+    return this.http.get(`${this.baseurl}/queryTable/`);
   }
 
   createGroupMapping2(formData): Observable<any> {
@@ -23,6 +23,9 @@ export class AclGroupMappingService {
 
   deleteCurrentACL(p): Observable<any> {
     return this.http.delete(`${this.urlAcl}${p}/`);
+  }
+  getCurrentQuery(id) {
+    return this.http.get(`${this.baseurl}/queryTable/${id}/`);
   }
 
 }

@@ -27,7 +27,11 @@ class ProjectMilestoneController {
             def newProjectMilestoneObject = [:]
             def categoryId = projectMilestone.programCategory.id
             def category = ProgramCategory.findById(categoryId)
-            def program = Program.findById(category.program.id)
+            def form = ""
+            if (projectMilestone.program != null) {
+                def program = Program.findById(category.program.id)
+                form = program.title
+            } else form = projectMilestone.form
             newProjectMilestoneObject['id'] = projectMilestone.id
             newProjectMilestoneObject['name'] = projectMilestone.name
             newProjectMilestoneObject['description'] = projectMilestone.description
@@ -37,7 +41,7 @@ class ProjectMilestoneController {
             newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
             newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
             newProjectMilestoneObject['category'] = category.name
-            newProjectMilestoneObject['program'] = program.title
+            newProjectMilestoneObject['program'] = form
             projectMilestones << newProjectMilestoneObject
         }
         respond projectMilestones
@@ -48,7 +52,13 @@ class ProjectMilestoneController {
         def newProjectMilestoneObject = [:]
         def categoryId = projectMilestone.programCategory.id
         def category = ProgramCategory.findById(categoryId)
-        def program = Program.findById(category.program.id)
+        def form = ""
+        def programId = ""
+        if (projectMilestone.program != null) {
+            def program = Program.findById(category.program.id)
+            form = program.title
+            programId = program.id
+        } else form = projectMilestone.form
         newProjectMilestoneObject['id'] = projectMilestone.id
         newProjectMilestoneObject['name'] = projectMilestone.name
         newProjectMilestoneObject['description'] = projectMilestone.description
@@ -58,8 +68,8 @@ class ProjectMilestoneController {
         newProjectMilestoneObject['dateCreated'] = projectMilestone.dateCreated
         newProjectMilestoneObject['lastUpdated'] = projectMilestone.lastUpdated
         newProjectMilestoneObject['category'] = category.name
-        newProjectMilestoneObject['program'] = program.title
-        newProjectMilestoneObject['programId'] = program.id
+        newProjectMilestoneObject['program'] = form
+        newProjectMilestoneObject['programId'] = programId
         respond newProjectMilestoneObject
     }
 
@@ -82,7 +92,7 @@ class ProjectMilestoneController {
             return
         }
 
-        respond projectMilestone, [status: CREATED, view:"show"]
+        respond projectMilestone, [status: CREATED, view: "show"]
     }
 
     @Transactional
@@ -104,7 +114,7 @@ class ProjectMilestoneController {
             return
         }
 
-        respond projectMilestone, [status: OK, view:"show"]
+        respond projectMilestone, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -148,21 +158,43 @@ class ProjectMilestoneController {
 
     def getMilestoneDataForReports() {
         def milestone = []
-        def projectMilestone = projectMilestoneService.get(params.id)
+        def projectMilestone = ProjectMilestone.findByName(params.name)
+        def programPartner = ProgramPartner.get(params.partnerId)
         def reportingQuery
-        if(projectMilestone!=null) reportingQuery = projectMilestone.reportingQuery
+        if (projectMilestone != null) reportingQuery = projectMilestone.reportingQuery
 
-        if(reportingQuery!=null) {
+        if (reportingQuery != null) {
             try {
                 def queryC = "${reportingQuery}".toString()
-                def clause = queryC.contains("where") ? " and" : " where"
-                def queryQ = queryC + clause + " activity_date between '${params.startDate}' and '${params.endDate}'"
+                def clause = (queryC.contains("where") || queryC.contains("WHERE")) ? " and" : " where"
 
-                println queryQ
+                def column = " activity_date "
+                if (queryC.contains("monitoring_and_learning")) column = " activity_date "
+                if (queryC.contains("good_school_environment")) column = " activity_start "
+                if (queryC.contains("economic_empowerment_activity")) column = " activity_start "
+                if (queryC.contains("parenting_skills_and_spousal_relationship")) column = " activity_start_date "
+                if (queryC.contains("safe_environment_for_adolescents")) column = " activity_start "
+                if (queryC.contains("safe_environment_for_adolescents") && queryC.contains("case_mgt")) column = " date "
 
-                def quarter = AppHolder.withMisSql { rows(queryQ) }.first()
+                def queryQ = queryC + clause + column + "between '${params.startDate}' and '${params.endDate}'"
 
-                def cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                def cumulative = [total: 0]
+                if (queryC != null) {
+                    queryC = queryC + clause + " cluster = '${programPartner.cluster}'"
+                    println "cummulative ==>"
+                    println queryC
+                    println "==============="
+                    cumulative = AppHolder.withMisSql { rows(queryC) }.first()
+                }
+
+                def quarter = [total: 0]
+                if (queryQ != null){
+                    queryQ = queryQ + " and cluster = '${programPartner.cluster}'"
+                    println "quarterly ==>"
+                    println queryQ
+                    println "==============="
+                    quarter = AppHolder.withMisSql { rows(queryQ as String) }.first()
+                }
 
                 milestone = [id: projectMilestone.id, cumulativeAchievement: cumulative.total, quaterAchievement: quarter.total]
 

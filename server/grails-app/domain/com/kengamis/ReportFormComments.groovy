@@ -3,7 +3,6 @@ package com.kengamis
 class ReportFormComments {
 
     String id
-    String groupId
     String processInstanceId
     String taskId
     String taskDefinitionKey
@@ -16,6 +15,5 @@ class ReportFormComments {
         id generator: 'uuid2'
     }
     static constraints = {
-        groupId nullable: true
     }
 }
