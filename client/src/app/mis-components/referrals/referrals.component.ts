@@ -103,7 +103,7 @@ export class ReferralsComponent implements OnInit {
     if(!this.searchValue){
       this.reloadTable()
     } else {
-      this.referrals = this.referrals.filter(a => a.name_of_client_being_referred.toUpperCase().includes(this.searchValue.toUpperCase()))
+      this.referrals = this.referrals.filter(a => a.nameOfClientBeingReferred.includes(this.searchValue))
     }
   }
 
@@ -148,7 +148,7 @@ export class ReferralsComponent implements OnInit {
   }
 
   cardsData() {
-    this.referralIRC = this.referrals.filter(a => a?.organizationReferredTo.includes("IRC")).length
+    this.referralIRC = this.referrals.filter(a => a?.internalExternal.includes("Internal")).length
     this.referralRelon = this.referrals.filter(a => a?.organizationReferredTo.includes("Relon")).length
     this.referralPlavu = this.referrals.filter(a => a?.organizationReferredTo.includes("Plavu")).length
     this.referralGabdho = this.referrals.filter(a => a?.organizationReferredTo.includes("Raising Gabdho Foundation")).length

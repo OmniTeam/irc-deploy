@@ -6,7 +6,7 @@ import {ReferralsService} from "../../../services/referrals.service";
 import {AlertService} from "../../../services/alert";
 import {CountriesService} from "../../../services/countries.service";
 import {AuthService} from "../../../services/auth.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ScheduledTasksService} from "../../../services/scheduled-tasks.service";
 import {HttpParams} from "@angular/common/http";
@@ -81,10 +81,10 @@ export class GenerateReferralComponent implements OnInit {
 
   internal = [
     {
-      'name': 'Internally'
+      'name': 'Internal'
     },
     {
-      'name': 'Externally'
+      'name': 'External'
     },
   ];
   followup_areas = [
@@ -202,18 +202,52 @@ export class GenerateReferralComponent implements OnInit {
       'name': 'Minors Pass'
     },
   ];
-  country_of_origin: any;
+  country_of_origin = [
+    {
+      'name': 'Burundian'
+    },
+    {
+      'name': 'Congolese'
+    },
+    {
+      'name': 'Eritrean'
+    },
+    {
+      'name': 'Ethiopian'
+    },
+    {
+      'name': 'Nigerian'
+    },
+    {
+      'name': 'Rwandese'
+    },
+    {
+      'name': 'Somalian'
+    },
+    {
+      'name': 'South Sudanese'
+    },
+    {
+      'name': 'Tanzanian'
+    },
+    {
+      'name': 'Ugandan'
+    },
+    {
+      'name': 'Other'
+    },
+  ];
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
-    this.CountriesService.getCountries().subscribe(data => {
-      this.country_of_origin = data
-    }, error => {
-      this.alertService.error("Failed to get Countries")
-    })
+    // this.CountriesService.getCountries().subscribe(data => {
+    //   this.country_of_origin = data
+    // }, error => {
+    //   this.alertService.error("Failed to get Countries")
+    // })
 
     this.startReferralProcess()
 
@@ -221,8 +255,8 @@ export class GenerateReferralComponent implements OnInit {
       this.loadClients();
       // this.referrals = data
       this.formGroup = this.formBuilder.group({
-        dateOfReferral: [(this.datePipe.transform('', 'yyyy-MM-dd'))],
-        nameOfReferringOfficer: [''],
+        dateOfReferral: [(this.datePipe.transform('', 'yyyy-MM-dd')),[Validators.required]],
+        nameOfReferringOfficer: ['',[Validators.required]],
         nameOfClientBeingReferred: ['' || this.clients?.caseId],
         phoneNumber: [''],
         ageCategory: ['' || this.clients?.ageCategory],
@@ -234,14 +268,14 @@ export class GenerateReferralComponent implements OnInit {
         gender: ['' || this.clients?.gender],
         identificationDocument: ['' || this.clients?.identificationDocument],
         identificationNumber: ['' || this.clients?.identificationNumber],
-        reasonForReferral: ['' ],
+        reasonForReferral: ['' ,[Validators.required]],
         organizationReferredTo: [''],
         nationalityStatus: ['' || this.clients?.nationality],
-        followupNeeded: [''],
+        followupNeeded: ['',[Validators.required]],
         disability: ['' || this.clients?.disability],
         assignee: [''],
         ircSector: [''],
-        internalExternal: [''],
+        internalExternal: ['',[Validators.required]],
         status: [''],
       });
 
@@ -336,18 +370,22 @@ export class GenerateReferralComponent implements OnInit {
   }
 
   onChangeFollowUp(event) {
-    console.log(event, "nationality")
     if (!event) {
       this.followUpValue = ''
       document.getElementById('assignee').hidden = true
+      document.getElementById('followupAreas').hidden = true
       this.formGroup.controls['assignee'].reset();
+      this.formGroup.controls['followupAreas'].reset();
     } else {
       this.followUpValue = event;
       if (this.followUpValue === "No") {
         document.getElementById('assignee').hidden = true
+        document.getElementById('followupAreas').hidden = true
         this.formGroup.controls['assignee'].reset();
+        this.formGroup.controls['followupAreas'].reset();
       } else {
         document.getElementById('assignee').hidden = false
+        document.getElementById('followupAreas').hidden = false
       }
 
     }
@@ -380,6 +418,7 @@ export class GenerateReferralComponent implements OnInit {
   }
 
   onChangeInternalUp(event) {
-    document.getElementById("ircSector").hidden = event !== 'Internally';
+    document.getElementById("ircSector").hidden = event !== 'Internal';
+    document.getElementById("orgReferredTo").hidden = event === 'Internal';
   }
 }
