@@ -2604,4 +2604,24 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "DELL (generated)", id: "1657868299212-7") {
+        addColumn(tableName: "referral") {
+            column(name: "internal_external", type: "varchar(255)") {
+                constraints(nullable: "false")
+            }
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1657868299212-8") {
+        addColumn(tableName: "referral") {
+            column(name: "irc_sector", type: "varchar(255)")
+        }
+    }
+
+    changeSet(author: "DELL (generated)", id: "1658132541558-7") {
+        addColumn(tableName: "archive") {
+            column(name: "task_start_time", type: "varchar(255)")
+        }
+    }
+
 }

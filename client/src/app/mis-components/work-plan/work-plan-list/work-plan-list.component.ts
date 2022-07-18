@@ -68,4 +68,8 @@ export class WorkPlanListComponent implements OnInit {
       this.rows = data;
     }, error => console.log(error));
   }
+
+  archiveRecord(id) {
+    this.router.navigate(['/archive/' + id]);
+  }
 }

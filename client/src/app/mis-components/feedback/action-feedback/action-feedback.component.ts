@@ -269,23 +269,23 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
               preferredChannel: [this.feedback?.preferredChannel],
               phoneNumber: [this.feedback?.phoneNumber],
               serialNumber: [this.feedback?.serialNumber],
-              feedbackCategory: [this.feedback?.feedbackCategory],
-              feedbackPriority: [this.feedback?.feedbackPriority],
-              feedbackReferredShared: [this.feedback?.feedbackReferredShared],
-              feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
-              referredPersonName: [this.feedback?.referredPersonName],
-              referredPersonPosition: [this.feedback?.referredPersonPosition],
-              referredOrganization: [this.feedback?.referredOrganization],
-              dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
-              responseTypeRequired: [this.feedback?.responseTypeRequired],
-              actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
-              inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
-              dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
-              actionTaken: [this.feedback?.actionTaken],
-              staffProvidedResponse: [this.feedback?.staffProvidedResponse],
-              responseSummary: [this.feedback?.responseSummary],
-              supervisor: [this.feedback?.supervisor],
-              dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
+              feedbackCategory: [{value:this.feedback?.feedbackCategory, disabled: this.isReadOnly}],
+              feedbackPriority: [{value:this.feedback?.feedbackPriority,disabled: this.isReadOnly}],
+              feedbackReferredShared: [{value:this.feedback?.feedbackReferredShared,disabled: this.isReadOnly}],
+              feedbackInternallyExternally: [{value:this.feedback?.feedbackInternallyExternally,disabled: this.isReadOnly}],
+              referredPersonName: [{value:this.feedback?.referredPersonName,disabled: this.isReadOnly}],
+              referredPersonPosition: [{value:this.feedback?.referredPersonPosition,disabled: this.isReadOnly}],
+              referredOrganization: [{value:this.feedback?.referredOrganization,disabled: this.isReadOnly}],
+              dateFeedbackReferredShared: [{value:this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd'),disabled: this.isReadOnly}],
+              responseTypeRequired: [{value:this.feedback?.responseTypeRequired,disabled: this.isReadOnly}],
+              actionFollowupNeeded: [{value:this.feedback?.actionFollowupNeeded,disabled: this.isReadOnly}],
+              inFeedbackRegistry: [{value:this.feedback?.inFeedbackRegistry,disabled: this.isReadOnly}],
+              dateFeedbackClient: [{value:this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd'),disabled: this.isReadOnly}],
+              actionTaken: [{value:this.feedback?.actionTaken,disabled: this.isReadOnly}],
+              staffProvidedResponse: [{value:this.feedback?.staffProvidedResponse,disabled: this.isReadOnly}],
+              responseSummary: [{value:this.feedback?.responseSummary,disabled: this.isReadOnly}],
+              supervisor: [{value:this.feedback?.supervisor,disabled: this.isReadOnly}],
+              dataEntryFocalPoint: [{value:this.feedback?.dataEntryFocalPoint,disabled: this.isReadOnly}],
               assignee:[''],
             });
 
@@ -339,7 +339,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
       console.warn(result, 'Feedback Updated Successfully');
       this.updateTask("completed")
       this.alertService.success(`Feedback has been successfully updated`)
-      this.router.navigate(['/feedback-list']);
+      this.router.navigate(['/irc-feedback-list']);
     }, error => {
       this.alertService.error(`Failed to update feedback`)
     });
@@ -357,7 +357,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
 
 
   close() {
-    this.router.navigate(['/feedback-list'])
+    this.router.navigate(['/irc-feedback-list'])
   }
 
   deleteReferral() {
@@ -366,7 +366,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
         this.feedbackService.deleteCurrentFeedback(this.route.snapshot.params.id).subscribe((result) => {
             console.warn(result, 'feedback has been deleted');
             this.alertService.warning(`feedback has been deleted`)
-            this.router.navigate(['/feedback-list']);
+            this.router.navigate(['/irc-feedback-list']);
           }, error => {
             this.alertService.error(`Failed to delete feedback`)
           }

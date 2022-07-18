@@ -458,7 +458,8 @@
                     <tr>
                       <td class='text-center' style="display: none;">1</td>
                       <td class='text-center' [id]="1">
-                        <div> {{this.peopleSurvey.total1835}}
+                        {{this.peopleSurvey.total1835}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(1, 1, 'updatePeople', this.peopleSurvey.total1835,'number')"
                           ><i
@@ -467,7 +468,8 @@
 
                       </td>
                       <td class='text-center' [id]="2">
-                        <div> {{this.peopleSurvey.total1835M}}
+                        {{this.peopleSurvey.total1835M}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(2, 2, 'updatePeople', this.peopleSurvey.total1835M,'number')"
                           ><i
@@ -475,7 +477,8 @@
                         </div>
                       </td>
                       <td class='text-center' [id]="3">
-                        <div> {{this.peopleSurvey.total36F}}
+                        {{this.peopleSurvey.total36F}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(3, 3, 'updatePeople', this.peopleSurvey.total36F,'number')"
                           ><i
@@ -484,8 +487,8 @@
 
                       </td>
                       <td class='text-center' [id]="4">
-
-                        <div> {{this.peopleSurvey.total36M}}
+                        {{this.peopleSurvey.total36M}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(4, 4, 'updatePeople', this.peopleSurvey.total36M,'number')"
                           ><i
@@ -493,7 +496,8 @@
                         </div>
                       </td>
                       <td class='text-center' [id]="5">
-                        <div> {{this.peopleSurvey.totalNationalF}}
+                        {{this.peopleSurvey.totalNationalF}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(5, 5, 'updatePeople', this.peopleSurvey.totalNationalF,'number')"
                           ><i
@@ -502,8 +506,8 @@
 
                       </td>
                       <td class='text-center' [id]="6">
-
-                        <div>{{this.peopleSurvey.totalNationalM}}
+                        {{this.peopleSurvey.totalNationalM}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(6, 6, 'updatePeople', this.peopleSurvey.totalNationalM,'number')"
                           ><i
@@ -511,7 +515,8 @@
                         </div>
                       </td>
                       <td class='text-center' [id]="7">
-                        <div> {{this.peopleSurvey.totalRefugeeF}}
+                        {{this.peopleSurvey.totalRefugeeF}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(7, 7, 'updatePeople', this.peopleSurvey.totalRefugeeF,'number')"
                           ><i
@@ -520,8 +525,8 @@
 
                       </td>
                       <td class='text-center' [id]="8">
-
-                        <div>{{this.peopleSurvey.totalRefugeeM}}
+                        {{this.peopleSurvey.totalRefugeeM}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(8, 8, 'updatePeople', this.peopleSurvey.totalRefugeeM,'number')"
                           ><i
@@ -529,7 +534,8 @@
                         </div>
                       </td>
                       <td class='text-center' [id]="9">
-                        <div>{{this.peopleSurvey.totalPwdF}}
+                        {{this.peopleSurvey.totalPwdF}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(9, 9, 'updatePeople', this.peopleSurvey.totalPwdF,'number')"
                           ><i
@@ -538,8 +544,8 @@
 
                       </td>
                       <td class='text-center' [id]="10">
-
-                        <div>{{this.peopleSurvey.totalPwdM}}
+                        {{this.peopleSurvey.totalPwdM}}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(10, 10, 'updatePeople', this.peopleSurvey.totalPwdM,'number')"
                           ><i
@@ -578,14 +584,15 @@
                     <tr *ngFor="let row of budget">
                       <td class='text-center' style="display: none;">{{row.id}}</td>
                       <td class='text-center' [id]="row.id+'-b'">
-                        <div>{{ row.budgetLine }}
+                        {{ row.budgetLine }}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(row.id, row.id+'-b', 'budget_line', row.budgetLine)"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center' [id]="row.id">{{ row.approvedAmount | number  }}
-                        <div>
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(row.id, row.id, 'approved_amt', row.approvedAmount, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
@@ -597,16 +604,20 @@
                       <!--                          class="text fas fa-plus"></i></button>-->
                       <!--                      </td>-->
                       <td class='text-center' [id]="row.id+'-d'">
-                        <div>{{ row.totalSpent | number  }}
+                        {{ row.totalSpent | number  }}
+                        <div *ngIf="!isReadOnly">
                           <button class="btn btn-link" type="button"
                                   (click)="cellEditor(row.id, row.id+'-d', 'total_spent', row.totalSpent, 'number')"><i
                             class="fas fa-pencil-alt"></i></button>
                         </div>
                       </td>
                       <td class='text-center'>
-                        <button class="btn btn-link" type="button"
-                                (click)="removeBudget(row)"><i
-                          class="text fas fa-trash-alt" style="color: red"></i></button>
+                        <div *ngIf="!isReadOnly">
+                          <button class="btn btn-link" type="button"
+                                  (click)="removeBudget(row)"><i
+                            class="text fas fa-trash-alt" style="color: red"></i></button>
+                        </div>
+
                       </td>
                     </tr>
                     </tbody>
@@ -801,7 +812,8 @@
             <div class="row">
               <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
 
-                <button class=" btn btn-danger" type="reset" (click)="onReset()">Cancel</button>
+                <button class=" btn btn-danger" type="reset" [hidden]="isReadOnly" (click)="onReset()">Cancel</button>
+                <button class=" btn btn-danger" type="reset" [hidden]="!isReadOnly" (click)="backButton()">Cancel</button>
 <!--                <button class=" btn btn-warning" type="button" (click)="saveReport()">Save For Later</button>-->
                 <button class=" btn btn-success" [hidden]="isReadOnly" type="submit">Submit</button>
               </div>

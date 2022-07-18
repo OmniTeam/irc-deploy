@@ -80,11 +80,11 @@
                   <div class="row" style="margin: 10px;">
                     <div class="col-sm-6">
                       <ul style="list-style: none; font-size: 16px">
-                        <li>Program: <b>{{organisationalInfo.program}}</b></li>
-                        <li>Email: <b>{{organisationalInfo.name}}</b></li>
-                        <li>Email of Staff: <b>{{organisationalInfo.email}}</b></li>
-                        <li>Name of Supervisor: <b>{{organisationalInfo.nameContactPerson}}</b></li>
-                        <li>Telephone: <b>{{organisationalInfo.personContact}}</b></li>
+<!--                        <li>Program: <b>{{organisationalInfo?.program}}</b></li>-->
+                        <li>Staff: <b>{{organisationalInfo?.name}}</b></li>
+                        <li>Email of Staff: <b>{{organisationalInfo?.email}}</b></li>
+<!--                        <li>Name of Supervisor: <b>{{organisationalInfo?.nameContactPerson}}</b></li>-->
+<!--                        <li>Telephone: <b>{{organisationalInfo?.personContact}}</b></li>-->
                       </ul>
                     </div>
                   </div>
@@ -442,6 +442,12 @@
                       <button class="btn btn-warning" (click)="reviewReport('revise')">Ask For Review</button>
                       <button class="btn btn-success" (click)="approveReport()">Approve Report</button>
                     </div>
+                  </div>
+                </div>
+                <div *ngIf="isReadOnly">
+                  <div class="col-lg-12 bottom_buttons_row"
+                       style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                    <button class="btn btn-danger" (click)="onBack()">Cancel</button>
                   </div>
                 </div>
 

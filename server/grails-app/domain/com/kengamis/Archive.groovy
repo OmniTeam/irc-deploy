@@ -15,6 +15,7 @@ class Archive {
     String processDefKey
     String synced
     String taskDefinitionKey
+    String taskStartTime
     Date dateCreated
     Date lastUpdated
 
@@ -23,5 +24,6 @@ class Archive {
     }
     static constraints = {
         formId nullable: true
+        taskStartTime nullable: true
     }
 }

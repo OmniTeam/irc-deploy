@@ -139,15 +139,22 @@ export class ActionReferralComponent implements OnInit {
       'name': '60 years and above'
     },
   ];
+
   organization_referred_to = [
     {
-      'name': 'AVSI FOUNDATION'
+      'name': 'IRC'
     },
     {
-      'name': 'JRS'
+      'name': 'Relon'
     },
     {
-      'name': 'REFUGEPOINT'
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
     },
   ];
   identification_document = [
@@ -275,7 +282,7 @@ export class ActionReferralComponent implements OnInit {
       console.warn(result, 'Referral Updated Successfully');
       this.updateTask("completed")
       this.alertService.success(`Referral has been successfully updated`)
-      this.router.navigate(['/referrals-list']);
+      this.router.navigate(['/referrals/list']);
     }, error => {
       this.alertService.error(`Failed to update Referral`)
     });
@@ -354,7 +361,7 @@ export class ActionReferralComponent implements OnInit {
         this.referralsService.deleteCurrentReferral(this.route.snapshot.params.id).subscribe((result) => {
             console.warn(result, 'Referral has been deleted');
             this.alertService.warning(`Referral has been deleted`)
-            this.router.navigate(['/referrals-list']);
+            this.router.navigate(['/referrals/list']);
           }, error => {
             this.alertService.error(`Failed to delete Referral`)
           }

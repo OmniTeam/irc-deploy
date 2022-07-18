@@ -15,30 +15,59 @@
     <div class=" col">
       <div class="row">
 
-        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;position: absolute">
+        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;position: relative">
           <div class=" row">
             <div class=" col">
-              <div class="card">
-
-                <div class="card-body col-sm-12">
-                  <div class="row" >
-                    <div class="card-body col-md-12" *ngFor="let arch of this.archive">
-                      <div class="card" style="width: 40%;height: 100%">
-                        <div class="card-body">
-                         <label>  Task Name :  </label> <h2 class="card-title">{{arch.taskName}}</h2>
-                          <label> Start Date: </label><p class="card-text" style="font-size: 20px">{{arch.startDate}}</p>
-                          <label> End Date  : </label><p class="card-text" style="font-size: 20px">{{arch.endDate}}</p>
-                          <label> Assignee  : </label><p class="card-text"></p>
-                          <button class="btn btn-primary" *ngIf="arch.processName=='IRC_REFERRAL' " [routerLink]="['/action-referral',this.processId, true]">View Form</button>
-                          <button class="btn btn-primary" *ngIf="arch.processName=='PROGRESS_REPORTING' " [routerLink]="['/progress-report', arch.id, true]">View Form</button>
-                          <button class="btn btn-primary" *ngIf="arch.processName=='IRC_FEEDBACK' " [routerLink]="['/action-feedback', this.processId, true]">View Form</button>
-                          <button class="btn btn-primary" *ngIf="arch.processName=='ACTIVITY_REPORTING' " [routerLink]="['/activityForm', arch.taskId,this.processId, true]">View Form</button>
-                        </div>
-                      </div>
-                    </div>
+            <div class="card">
+              <div class="card" *ngFor="let a of this.archive">
+                <div class="row" style="margin-top: 10px;">
+                  <div class="col-sm-6">
+                    <ul style="list-style: none; font-size: 18px;margin-left: -38px">
+                      <li>Task Name   : <b>{{a.taskName}}</b></li>
+                      <li>Assignee    : <b>{{a.staffId || a.assignee}}</b></li>
+                      <li [hidden]="disable">Organization: <b>{{a.organization}}</b></li>
+                      <li [hidden]="disable">Pillar      : <b>{{a.programId}}</b></li>
+                      <li [hidden]="disable">Reporting Period      : <b>{{a.reportingPeriod}}</b></li>
+                      <li [hidden]="disable">Work Plan Start Date    : <b>{{a.workPlanStartDate}}</b></li>
+                      <li [hidden]="disable">Work Plan End Date      : <b>{{a.workPlanEndDate}}</b></li>
+                      <li [hidden]="!disable">Case      : <b>{{a.case}}</b></li>
+                      <li>Start Date  : <b>{{getDate(a.startDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</b></li>
+                      <li>End Date    : <b>{{getDate(a.endDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</b></li>
+                    </ul>
+                    <button class="btn btn-primary" *ngIf="a.processName=='IRC_REFERRAL' " [routerLink]="['/action-referral',this.processId, true]">View Form</button>
+                    <button class="btn btn-primary" *ngIf="a.processName=='PROGRESS_REPORTING' " [routerLink]="['/progress-report', a.id,this.processId,a.staffId, true]">View Form</button>
+                    <button class="btn btn-primary" *ngIf="a.processName=='IRC_FEEDBACK' " [routerLink]="['/action-feedback', this.processId, true]">View Form</button>
+                    <button class="btn btn-primary" *ngIf="a.processName=='ACTIVITY_REPORTING' " [routerLink]="['/activityForm', a.id,this.processId, true]">View Form</button>
                   </div>
+                  <div class="col-sm-6"></div>
                 </div>
               </div>
+
+            </div>
+
+
+
+<!--              <div class="card">-->
+
+<!--                <div class="card-body col-sm-12">-->
+<!--                  <div class="row" >-->
+<!--                    <div class="card-body col-md-12" *ngFor="let a of this.archive">-->
+<!--                      <div class="card" style="width: 40%;height: 100%">-->
+<!--                        <ul class="card-body">-->
+<!--                          <li> Task Name :  </li> <h2 class="card-title">{{a.taskName}}</h2>-->
+<!--                          <li> Start Date: </li><p class="card-text" style="font-size: 20px">{{a.startDate}}</p>-->
+<!--                          <li> End Date  : </li><p class="card-text" style="font-size: 20px">{{a.endDate}}</p>-->
+<!--                          <li> Assignee  : </li><p class="card-text"></p>-->
+<!--                          <button class="btn btn-primary" *ngIf="a.processName=='IRC_REFERRAL' " [routerLink]="['/action-referral',this.processId, true]">View Form</button>-->
+<!--                          <button class="btn btn-primary" *ngIf="a.processName=='PROGRESS_REPORTING' " [routerLink]="['/progress-report', a.id,this.processId,a.staffId, true]">View Form</button>-->
+<!--                          <button class="btn btn-primary" *ngIf="a.processName=='IRC_FEEDBACK' " [routerLink]="['/action-feedback', this.processId, true]">View Form</button>-->
+<!--                          <button class="btn btn-primary" *ngIf="a.processName=='ACTIVITY_REPORTING' " [routerLink]="['/activityForm', a.id,this.processId, true]">View Form</button>-->
+<!--                        </ul>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </div>
         </div>

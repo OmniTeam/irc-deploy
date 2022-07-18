@@ -48,6 +48,11 @@ export class ReferralsComponent implements OnInit {
   users: any;
   referrals: any;
   userRole: any;
+  referralIRC: any;
+  referralRelon: any;
+  referralPlavu: any;
+  referralGabdho: any;
+  referralMakasi: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,6 +72,7 @@ export class ReferralsComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.authService.getUserRoles();
     this.reloadTable();
+    this.cardsData();
   }
 
   onChangePartner(event) {
@@ -113,6 +119,7 @@ export class ReferralsComponent implements OnInit {
   reloadTable() {
     this.referralsService.getReferrals().subscribe((data) => {
       this.referrals = data.filter(a => a.status);
+      this.cardsData()
       console.log(data)
     });
   }
@@ -140,7 +147,13 @@ export class ReferralsComponent implements OnInit {
     console.log(this.selectedUsers);
   }
 
-
+  cardsData() {
+    this.referralIRC = this.referrals.filter(a => a?.organizationReferredTo.includes("IRC")).length
+    this.referralRelon = this.referrals.filter(a => a?.organizationReferredTo.includes("Relon")).length
+    this.referralPlavu = this.referrals.filter(a => a?.organizationReferredTo.includes("Plavu")).length
+    this.referralGabdho = this.referrals.filter(a => a?.organizationReferredTo.includes("Raising Gabdho Foundation")).length
+    this.referralMakasi = this.referrals.filter(a => a?.organizationReferredTo.includes("Makasi Rescue Foundation")).length
+  }
 
   deleteReferral() {
     const deletedRow = this.selectedUsers;
