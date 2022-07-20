@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {AlertService} from '../services/alert';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
 
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
@@ -28,8 +28,8 @@ export class TokenInterceptor implements HttpInterceptor {
         errorMessage = 'Error: ' + error.status + '\\nMessage:' + error.message;
       }
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        // errorMessage = 'Invalid username or password or your session has expired!';
-        // this.alertService.error(errorMessage);
+        errorMessage = 'Invalid username or password. Please retry!';
+        this.alertService.error(errorMessage);
         this.authService.doLogoutUser();
         this.router.navigate(['login']);
       } else {
