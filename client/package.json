@@ -30,6 +30,7 @@
     "@types/d3": "^7.1.0",
     "@types/datatables.net": "^1.10.21",
     "@types/dc": "^0.0.29",
+    "@types/google-libphonenumber": "^7.4.23",
     "alertifyjs": "^1.13.1",
     "angular-datatables": "^11.2.0",
     "bootstrap": "4.5.2",
