@@ -90,8 +90,37 @@ class FeedbackController {
             return
         }
 
+        //deleting the feedback from the backend and from the camunda instance
+        def feedback = feedbackService.get(id)
+
+          def tasks =  TaskList.findAllByInputVariables('%' + feedback.id + '%')
+        tasks.each {
+            def deleteFromCamunda = deleteProcessInstance(it.processInstanceId)
+            if(deleteFromCamunda){
+                it.delete()
+            }
+        }
+
+
         feedbackService.delete(id)
 
         render status: NO_CONTENT
+    }
+
+    static boolean deleteProcessInstance(id) {
+        def http = new HTTPBuilder(StartCamundaInstancesJob.camundaApiUrl + "/delete/$id")
+        boolean deleted = false
+        http.request(Method.POST, ContentType.JSON) { req ->
+            headers.Accept = 'application/json'
+            requestContentType = ContentType.JSON
+            response.success = { resp, json ->
+                println("Camunda :: deleteProcessInstance() True [ " + json.text + " ]")
+                deleted = true
+            }
+            response.failure = { resp ->
+                println("Camunda :: deleteProcessInstance() False [ " + resp.status + " ]")
+            }
+        }
+        return deleted
     }
 }

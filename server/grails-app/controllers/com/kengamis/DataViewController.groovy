@@ -151,7 +151,8 @@ class DataViewController {
         def id = params.id as String
         def dataView = DataView.get(id)
         def misDb = Holders.grailsApplication.config.mis.database as String
-        def study = Study.findByCentralId('9')
+        def centralId = Holders.grailsApplication.config.server.centralId as String
+        def study = Study.findByCentralId(centralId)
         if (study) {
             def metabaseDb = "metabase_${constructFormTable(study.name)}"
             AppHolder.withMisSqlNonTx { executeUpdate("CREATE DATABASE IF NOT EXISTS ${metabaseDb}".toString()) }

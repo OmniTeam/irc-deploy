@@ -52,9 +52,6 @@ export class CreateReferralComponent implements OnInit {
     {
       'name': 'Refugee'
     },
-    {
-      'name': 'National'
-    }
   ];
   age_category = [
     {
@@ -152,31 +149,80 @@ export class CreateReferralComponent implements OnInit {
       'name': 'Minors Pass'
     },
   ];
-  country_of_origin: any;
+
+  country_of_origin = [
+    {
+      'name': 'Burundian'
+    },
+    {
+      'name': 'Congolese'
+    },
+    {
+      'name': 'Eritrean'
+    },
+    {
+      'name': 'Ethiopian'
+    },
+    {
+      'name': 'Nigerian'
+    },
+    {
+      'name': 'Rwandese'
+    },
+    {
+      'name': 'Somalian'
+    },
+    {
+      'name': 'South Sudanese'
+    },
+    {
+      'name': 'Tanzanian'
+    },
+    {
+      'name': 'Ugandan'
+    },
+    {
+      'name': 'Other'
+    },
+  ];
+
+  irc_list = [
+    {
+      'name': 'IRC'
+    },
+    {
+      'name': 'Relon'
+    },
+    {
+      'name': 'Plavu'
+    },
+    {
+      'name': 'Raising Gabdho Foundation'
+    },
+    {
+      'name': 'Makasi Rescue Foundation'
+    },
+  ];
+
 
   get f() {
     return this.formGroup.controls;
   }
 
   ngOnInit(): void {
-    this.CountriesService.getCountries().subscribe(data => {
-      this.country_of_origin = data
-    }, error => {
-      this.alertService.error("Failed to get Countries")
-    })
     this.formGroup = this.formBuilder.group({
       dateOfRegistration: [''],
       caseId: [''],
       partnerName: [''],
-      ageCategory: [null],
-      countryOfOrigin: [null],
-      identificationDocument: [null],
-      identificationNumber: [null],
-      nationality: [null],
-      district: [null],
-      division: [null],
-      parish: [null],
-      gender: [null],
+      ageCategory: [''],
+      countryOfOrigin: [''],
+      identificationDocument: [''],
+      identificationNumber: [''],
+      nationality: [''],
+      district: [''],
+      division: [''],
+      parish: [''],
+      gender: [''],
       disability: [''],
       registerStatus: [''],
     });
@@ -193,7 +239,7 @@ export class CreateReferralComponent implements OnInit {
     console.log(formData, "submitted data")
     this.clientService.createClient(formData).subscribe((result) => {
       this.alertService.success(`Client is created successfully`);
-      this.router.navigate(['/referrals-list']);
+      this.router.navigate(['/referrals/list']);
     }, error => {
       this.alertService.error("Failed to Create Client")
     });

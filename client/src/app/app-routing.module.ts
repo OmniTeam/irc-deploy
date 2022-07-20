@@ -100,7 +100,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/work-plan/work-plan-list/work-plan-list.module').then(m => m.WorkPlanListModule)
       },
       {
-        path: 'archive/:id', canActivate: [AuthGuard],
+        path: 'progressReportList', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         },
@@ -229,6 +229,11 @@ const routes: Routes = [
         },
         loadChildren: () => import('./mis-components/referrals/generate-referral/generate-referral.module').then(m => m.GenerateReferralModule)
       },
+      { path: 'referral-edit/:id/:readonly', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_REFERRALS]
+        },
+        loadChildren: () => import('./mis-components/referrals/referral-edit/referral-edit.module').then(m => m.ReferralEditModule) },
       {
         path: 'action-referral/:id/:readonly', canActivate: [AuthGuard],
         data: {
@@ -258,7 +263,7 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/activity-report/create-activity-report/create-activity-report.module').then(m => m.CreateActivityReportModule)
       },
       {
-        path: 'activityReport/edit/:id', canActivate: [AuthGuard],
+        path: 'activityReport/edit/:id/:readonly', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
         },
@@ -538,7 +543,7 @@ const routes: Routes = [
         },
         loadChildren: () => import('./mis-components/referrals/irc-activity/irc-activity-routing.module').then(m => m.IrcActivityRoutingModule)
       },
-      { path: 'feedback-edit/:id',
+      { path: 'feedback-edit/:id/:readonly',
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         }, loadChildren: () => import('./mis-components/feedback/feedback-edit/feedback-edit.module').then(m => m.FeedbackEditModule) },

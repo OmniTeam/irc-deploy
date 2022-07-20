@@ -2,6 +2,7 @@ package com.kengamis.tasks
 
 import com.kengamis.AppHolder
 import com.kengamis.Archive
+import com.kengamis.FeedbackController
 import com.kengamis.TaskList
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonBuilder

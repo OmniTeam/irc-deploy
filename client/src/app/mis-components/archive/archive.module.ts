@@ -7,6 +7,8 @@ import {FormsModule} from "@angular/forms";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {ComponentsModule} from "../../components/components.module";
 import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-view-table.module";
+import {DataTablesModule} from "angular-datatables";
+
 
 @NgModule({
   declarations: [ArchiveComponent],
@@ -17,6 +19,7 @@ import {EntityViewTableModule} from "../entity-views/entity-view-table/entity-vi
     NgxDatatableModule,
     ComponentsModule,
     EntityViewTableModule,
+    DataTablesModule
   ]
 })
 export class ArchiveModule { }

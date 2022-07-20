@@ -6,6 +6,7 @@ import com.kengamis.Role
 import com.kengamis.Study
 import com.kengamis.User
 import com.kengamis.UserRole
+import grails.util.Holders
 import groovy.util.logging.Log4j
 import static com.kengamis.RestHelper.withCentral
 
@@ -13,13 +14,15 @@ import static com.kengamis.RestHelper.withCentral
 class CentralSyncUsersJob extends Script {
 
     CentralService centralService
+    static String superPass = Holders.grailsApplication.config.server.superPass as String
+    static String centralId = Holders.grailsApplication.config.server.centralId as String
 
     @Override
     Object run() {
         try {
             centralService = AppHolder.bean('centralService')
             def token = centralService.get()
-            def study = Study.findByCentralId('9')
+            def study = Study.findByCentralId(centralId)
             syncCentralUsers(study, token)
         }
         catch (Exception e) {
@@ -50,7 +53,7 @@ class CentralSyncUsersJob extends Script {
             } else {
                 def newUser = new User(
                         username: centralUserName,
-                        password: 'omg!@mni',
+                        password: superPass,
                         names: displayName,
                         enabled: false).save(flush: true, failOnError: true)
                 if (!newUser.authorities.contains(role)) {

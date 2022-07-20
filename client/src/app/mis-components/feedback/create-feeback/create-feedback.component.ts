@@ -192,9 +192,6 @@ export class CreateFeedbackComponent implements OnInit {
     {
       'name': 'Refugee'
     },
-    {
-      'name': 'National'
-    }
   ];
   type_of_client = [
     {
@@ -727,7 +724,7 @@ export class CreateFeedbackComponent implements OnInit {
       /** save feedback */
       this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
-        this.router.navigate(['/feedback-list']);
+        this.router.navigate(['/irc-feedback-list']);
       }, error => {
         this.alertService.error("Failed to Create feedback")
       });
@@ -740,7 +737,7 @@ export class CreateFeedbackComponent implements OnInit {
     } else {
       this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
-        this.router.navigate(['/feedback-list']);
+        this.router.navigate(['/irc-feedback-list']);
       }, error => {
         this.alertService.error("Failed to Create feedback")
       });
@@ -932,7 +929,7 @@ export class CreateFeedbackComponent implements OnInit {
       /** save feedback */
       this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
-        this.router.navigate(['/feedback-list']);
+        this.router.navigate(['/irc-feedback-list']);
       }, error => {
         this.alertService.error("Failed to Create feedback")
       });
@@ -948,7 +945,7 @@ export class CreateFeedbackComponent implements OnInit {
 
       this.feedbackService.createFeedback(newFormData).subscribe((result) => {
         this.alertService.success(`feedback is created successfully`);
-        this.router.navigate(['/feedback-list']);
+        this.router.navigate(['/irc-feedback-list']);
       }, error => {
         this.alertService.error("Failed to Create feedback")
       });

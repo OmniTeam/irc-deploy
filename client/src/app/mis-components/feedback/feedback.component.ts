@@ -10,6 +10,8 @@ import * as XLSX from 'xlsx';
 import {ReferralsService} from "../../services/referrals.service";
 import {FeedbackService} from "../../services/feedback.service";
 import {AuthService} from '../../services/auth.service';
+import {HttpParams} from "@angular/common/http";
+import {TaskListService} from "../../services/task-list.service";
 
 @Component({
   selector: 'app-users',
@@ -59,6 +61,9 @@ export class FeedbackComponent implements OnInit {
   feedbackActioned: any;
   feedbackRegistered: any;
   userRole: any;
+  feedBackId: any;
+  archiveList: any;
+  disable: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,6 +71,7 @@ export class FeedbackComponent implements OnInit {
     private alertService: AlertService,
     private authService: AuthService,
     private router: Router,
+    private taskListService: TaskListService,
     private modalService: NgbModal,
     private usersService: UsersService,
     private feedbackService: FeedbackService,
@@ -171,11 +177,25 @@ export class FeedbackComponent implements OnInit {
   }
 
   editFeedback(row) {
-    this.router.navigate(['/feedback-edit/' + row]);
+    this.router.navigate(['/feedback-edit/' + row, false]);
   }
 
-  getArchiveRecords(id) {
-    this.router.navigate(['/archive/' + id]);
+  getArchiveRecords(id, archive) {
+    const params = new HttpParams().set('id', id);
+    this.feedBackId = id;
+    // this.referralsService.getCurrentReferral(this.referralId).subscribe(data => {
+    //   this.initialLists = data
+    //   console.log("archive",this.initialLists)
+    // })
+    this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
+      this.archiveList = data;
+      this.disable = true;
+    });
+    this.modalService.open(archive, {scrollable: true});
+  }
+
+  getDate(date) {
+    return new Date(date);
   }
 
   onSelected(event) {
@@ -191,15 +211,17 @@ export class FeedbackComponent implements OnInit {
 
   deleteFeedback() {
     const deletedRow = this.selectedUsers;
+    if(confirm("Are you sure you want to delete the selected records?")){
     deletedRow.forEach((p) => {
         this.feedbackService.deleteCurrentFeedback(p).subscribe((result) => {
           console.warn(result, 'Feedback has been deleted');
-          this.router.navigate(['/feedback-list']).then(() => {
+          this.router.navigate(['/irc-feedback-list']).then(() => {
             window.location.reload();
           });
         })
       }
     )
+  }
   }
 
   downloadFeedback(): void {
@@ -241,4 +263,6 @@ export class FeedbackComponent implements OnInit {
   onActivate(event) {
     this.activeRow = event.row;
   }
+
+
 }

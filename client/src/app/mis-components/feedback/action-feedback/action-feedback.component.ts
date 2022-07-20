@@ -93,13 +93,10 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   ];
   feedback_internal_external = [
     {
-      'name': 'Internally'
+      'name': 'Internal'
     },
     {
-      'name': 'Externally'
-    },
-    {
-      'name': 'I dont Know'
+      'name': 'External'
     },
   ];
   response_required = [
@@ -426,7 +423,7 @@ export class ActionFeedbackComponent implements OnInit, AfterContentInit {
   }
 
   feedbackSharedChoice(event) {
-    if (event === 'Internally') {
+    if (event === 'Internal') {
       document.getElementById("sectorName").hidden = false
       document.getElementById("organizationReferred").hidden = true
     } else {
