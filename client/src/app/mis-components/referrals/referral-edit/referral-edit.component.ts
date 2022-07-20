@@ -4,20 +4,18 @@ import {DatePipe} from "@angular/common";
 import {ProgramStaffService} from "../../../services/program-staff.service";
 import {ReferralsService} from "../../../services/referrals.service";
 import {AlertService} from "../../../services/alert";
-import {CountriesService} from "../../../services/countries.service";
+import {ScheduledTasksService} from "../../../services/scheduled-tasks.service";
 import {AuthService} from "../../../services/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ScheduledTasksService} from "../../../services/scheduled-tasks.service";
-import {HttpParams} from "@angular/common/http";
 import {ClientService} from "../../../services/client.service";
 
 @Component({
-  selector: 'app-generate-referral',
-  templateUrl: './generate-referral.component.html',
-  styleUrls: ['./generate-referral.component.css']
+  selector: 'app-referral-edit',
+  templateUrl: './referral-edit.component.html',
+  styleUrls: ['./referral-edit.component.css']
 })
-export class GenerateReferralComponent implements OnInit {
+export class ReferralEditComponent implements OnInit {
 
   referrals: any;
   nationalityValue = '';
@@ -30,12 +28,12 @@ export class GenerateReferralComponent implements OnInit {
   scheduledTasks: Object[];
   users: any;
   referralId:any;
+  isReadOnly: Boolean;
 
 
   constructor(
     private userService: UsersService,
     private datePipe: DatePipe,
-    private CountriesService: CountriesService,
     private programStaffService: ProgramStaffService,
     private referralsService: ReferralsService,
     private alertService: AlertService,
@@ -244,40 +242,41 @@ export class GenerateReferralComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.referralId = this.route.snapshot.params.id;
-    this.referralsService.getCurrentReferral(this.referralId).subscribe(data => { this.referrals = data; });
-
-    this.startReferralProcess()
-
-      this.loadProgramStaff();
-      this.loadClients();
-      // this.referrals = data
-      this.formGroup = this.formBuilder.group({
-        dateOfReferral: [(this.datePipe.transform('', 'yyyy-MM-dd')),[Validators.required]],
-        nameOfReferringOfficer: ['',[Validators.required]],
-        nameOfClientBeingReferred: ['' || this.clients?.caseId],
-        phoneNumber: [''],
-        ageCategory: ['' || this.clients?.ageCategory],
-        countryOfOrigin: ['' || this.clients?.countryOfOrigin],
-        district: ['' || this.clients?.district],
-        parish: ['' || this.clients?.parish],
-        division: ['' || this.clients?.division],
-        partnerName: ['' || this.clients?.partnerName],
-        gender: ['' || this.clients?.gender],
-        identificationDocument: ['' || this.clients?.identificationDocument],
-        identificationNumber: ['' || this.clients?.identificationNumber],
-        reasonForReferral: ['' ,[Validators.required]],
-        organizationReferredTo: [''],
-        nationalityStatus: ['' || this.clients?.nationality],
-        followupNeeded: ['',[Validators.required]],
-        disability: ['' || this.clients?.disability],
-        assignee: [''],
-        ircSector: [''],
-        internalExternal: ['',[Validators.required]],
-        status: [''],
+    this.route.params.subscribe(params => {
+      this.referralId = params['id'];
+      this.isReadOnly = params['readonly'] == 'true';
+      this.referralsService.getCurrentReferral(this.referralId).subscribe(data => {
+        this.referrals = data;
+        console.log(this.referrals);
+        this.formGroup = this.formBuilder.group({
+          dateOfReferral: [{value:(this.datePipe.transform(this.referrals.dateOfReferral, 'yyyy-MM-dd')),disabled: this.isReadOnly},[Validators.required]],
+          nameOfReferringOfficer: [{value: this.referralId?.nameOfReferringOfficer,disabled: this.isReadOnly},[Validators.required]],
+          nameOfClientBeingReferred: [{value: this.referrals?.nameOfClientBeingReferred || this.clients?.caseId, disabled: this.isReadOnly},[Validators.required]],
+          phoneNumber: [{value: this.referrals?.phoneNumber,disabled: this.isReadOnly}],
+          ageCategory: [{value: this.referrals?.ageCategory || this.clients?.ageCategory,disabled: this.isReadOnly}],
+          countryOfOrigin: [{value:this.referrals?.countryOfOrigin || this.clients?.countryOfOrigin,disabled: this.isReadOnly}],
+          district: [{value: this.referrals?.district || this.clients?.district, disabled: this.isReadOnly}],
+          parish: [{value:this.referrals?.parish  || this.clients?.parish, disabled: this.isReadOnly}],
+          division: [{value: this.referrals?.division || this.clients?.division, disabled: this.isReadOnly}],
+          partnerName: [{value: this.referrals?.partnerName || this.clients?.partnerName, disabled: this.isReadOnly}],
+          gender: [{value: this.referrals?.gender || this.clients?.gender, disabled: this.isReadOnly}],
+          identificationDocument: [{ value: this.referrals?.identificationDocument || this.clients?.identificationDocument, disabled: this.isReadOnly}],
+          identificationNumber: [{value: this.referrals?.identificationNumber || this.clients?.identificationNumber,disabled: this.isReadOnly}],
+          reasonForReferral: [{value:this.referrals?.reasonForReferral, disabled: this.isReadOnly},[Validators.required]],
+          organizationReferredTo: [{value:this.referrals?.organizationReferredTo, disabled: this.isReadOnly}],
+          nationalityStatus: [{value: this.referrals?.nationalityStatus || this.clients?.nationality, disabled: this.isReadOnly}],
+          followupNeeded: [{value: this.referrals?.followupNeeded, disabled: this.isReadOnly},[Validators.required]],
+          disability: [{value: this.referrals?.disability || this.clients?.disability, disabled: this.isReadOnly}],
+          assignee: [{value: this.referrals?.assignee, disabled: this.isReadOnly}],
+          ircSector: [{value: this.referrals?.ircSector, disabled: this.isReadOnly}],
+          internalExternal: [{value: this.referrals?.internalExternal, disabled: this.isReadOnly},[Validators.required]],
+          status: [''],
+        });
       });
-
-    // })
+    })
+    this.startReferralProcess()
+    this.loadProgramStaff();
+    this.loadClients();
   }
 
 
@@ -296,7 +295,7 @@ export class GenerateReferralComponent implements OnInit {
     const submitData = this.formGroup.value;
     submitData.status = 'Not Actioned';
     console.log("formdata",submitData)
-    this.referralsService.createReferral(submitData).subscribe((result) => {
+    this.referralsService.updateReferral(this.referralId,submitData).subscribe((result) => {
       console.warn(result, 'Referral Created Successfully');
       this.alertService.success(`Referral has been successfully created`)
       this.router.navigate(['/referrals/list']);
@@ -316,7 +315,7 @@ export class GenerateReferralComponent implements OnInit {
     //append status
     submitData.status = 'Pending'
     console.log("formdata",submitData)
-    this.referralsService.createReferral(submitData).subscribe((result) => {
+    this.referralsService.updateReferral(this.referralId,submitData).subscribe((result) => {
       console.warn(result, 'Referral Saved Successfully');
       this.alertService.success(`Referral has been successfully saved`)
       this.router.navigate(['/referrals/list']);

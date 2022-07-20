@@ -53,6 +53,12 @@ export class ReferralsComponent implements OnInit {
   referralPlavu: any;
   referralGabdho: any;
   referralMakasi: any;
+  archive: any;
+  disable: boolean;
+  archiveList: any;
+  processId: any;
+  referralId: any;
+  initialLists: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -63,6 +69,8 @@ export class ReferralsComponent implements OnInit {
     private modalService: NgbModal,
     private usersService: UsersService,
     private referralsService: ReferralsService,
+    private taskListService: TaskListService,
+    private rolesService: RolesService
   ) { }
 
   get f() {
@@ -107,13 +115,29 @@ export class ReferralsComponent implements OnInit {
     }
   }
 
-  getArchiveRecords(id) {
-    this.router.navigate(['/archive/' + id]);
+  getArchiveRecords(id, archive) {
+    const params = new HttpParams().set('id', id);
+    this.referralId = id;
+    this.referralsService.getCurrentReferral(this.referralId).subscribe(data => {
+      this.initialLists = data
+      console.log("archive",this.initialLists)
+    })
+    this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
+      this.archiveList = data;
+      this.disable = true;
+    });
+
+    this.modalService.open(archive, {scrollable: true});
+    // this.router.navigate(['/archive/' + id]);
   }
 
   entriesChange($event) {
     this.entries = $event.target.value;
     console.log(this.entries,"Entries")
+  }
+
+  getDate(date) {
+    return new Date(date);
   }
 
   reloadTable() {
@@ -157,15 +181,17 @@ export class ReferralsComponent implements OnInit {
 
   deleteReferral() {
     const deletedRow = this.selectedUsers;
-    deletedRow.forEach((p) => {
-        this.referralsService.deleteCurrentReferral(p).subscribe((result) => {
-          console.warn(result, 'Referral have been deleted');
-          this.router.navigate(['/referrals-list']).then(() => {
-            window.location.reload();
-          });
-        })
-      }
-    )
+    if (confirm('Are you sure to delete these Record?')) {
+      deletedRow.forEach((p) => {
+          this.referralsService.deleteCurrentReferral(p).subscribe((result) => {
+            console.warn(result, 'Referral have been deleted');
+            this.router.navigate(['/referrals-list']).then(() => {
+              window.location.reload();
+            });
+          })
+        }
+      )
+    }
   }
 
   downloadReferrals(): void {
@@ -209,6 +235,6 @@ export class ReferralsComponent implements OnInit {
   }
 
   editReferral(id) {
-    this.router.navigate(['/activityReport/edit/' + id]);
+    this.router.navigate(['/referral-edit/' + id,false]);
   }
 }

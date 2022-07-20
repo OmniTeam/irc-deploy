@@ -12,6 +12,7 @@ import com.omnitech.odkodata2sql.OdkOdataSlurper
 import com.omnitech.odkodata2sql.SqlSchemaGen
 import com.omnitech.odkodata2sql.model.OdkFormSource
 import com.omnitech.odkodata2sql.model.OdkTable
+import grails.util.Holders
 import groovy.json.JsonOutput
 import groovy.util.logging.Log4j
 import groovy.xml.XmlUtil
@@ -32,13 +33,14 @@ import static com.kengamis.RestHelper.*
 class CentralDataImportJob extends Script {
 
     CentralService centralService
+    static String centralId = Holders.grailsApplication.config.server.centralId as String
 
     @Override
     Object run() {
         try {
             centralService = AppHolder.bean('centralService')
             def token = centralService.get()
-            def study = Study.findByCentralId('9')
+            def study = Study.findByCentralId(centralId)
             syncCentralData(study, token)
         }
         catch (Exception e) {

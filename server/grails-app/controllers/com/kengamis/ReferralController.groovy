@@ -24,8 +24,8 @@ class ReferralController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 100, 1000)
-        respond referralService.list(params), model:[referralCount: referralService.count()]
+//        params.max = Math.min(max ?: 100, 1000)
+        respond referralService.list()
     }
 
     def show(String id) {
@@ -82,6 +82,16 @@ class ReferralController {
         if (id == null) {
             render status: NOT_FOUND
             return
+        }
+
+        def referral = referralService.get(id)
+
+        def tasks =  TaskList.findAllByInputVariables('%' + referral.id + '%')
+        tasks.each {
+            def deleteFromCamunda = FeedbackController.deleteProcessInstance(it.processInstanceId)
+            if(deleteFromCamunda){
+                it.delete()
+            }
         }
 
         referralService.delete(id)

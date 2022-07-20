@@ -19,7 +19,7 @@ class StartCamundaInstancesJob extends Script {
         ircReportingJob()
         ircActivityReportingJob()
         ircReferralJob()
-//        ircFeedbackJob()
+        ircFeedbackJob()
         return null
     }
 

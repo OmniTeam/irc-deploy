@@ -133,6 +133,7 @@ export class EditActivityReportComponent implements OnInit {
   budgetLineName: any;
   responsiblePerson: any;
   orgChosen: any;
+  isReadOnly: boolean;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -148,48 +149,54 @@ export class EditActivityReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activityId = this.route.snapshot.params.id;
+    // this.activityId = this.route.snapshot.params.id;
+    this.route.params.subscribe(p => {
+      this.activityId = p['id']
+      this.isReadOnly = p['readonly'] == 'true'
+      this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
+        this.activity = data;
+        console.log("yry",data);
+        this.getBudgetLines();
+        this.getActivityDetails(data)
+        this.choosenBudget =  this.activity?.budgetLine
+        this.budgetHolderId = this.activity?.name
+        this.orgChosen = this.activity?.organization
+        this.formGroup = this.formBuilder.group({
+          budgetLine: [{values:this.activity?.budgetLine,disabled:this.isReadOnly}, [Validators.required]],
+          name: [{value:this.activity?.name,disabled:this.isReadOnly}, [Validators.required]],
+          organization: [{value:this.activity?.organization,disabled:this.isReadOnly}, [Validators.required]],
+          startDate:[{value:this.activity?.startDate,disabled:this.isReadOnly}],
+          endDate:[{value:this.activity?.endDate,disabled:this.isReadOnly}],
+          designation: [{value:this.activity?.designation, disabled: this.isReadOnly}, [Validators.required]],
+          location: [{value:this.activity?.location,disabled: this.isReadOnly}],
+          milestone: [{value:this.activity?.milestone,disabled: this.isReadOnly}],
+          activityObjectives:[{value:this.activity?.activityObjectives,disabled: this.isReadOnly}],
+          activityResults:[{value:this.activity?.activityResults,disabled: this.isReadOnly}],
+          activityUndertaken:[{value:this.activity?.activityUndertaken,disabled: this.isReadOnly}],
+          challenges:[{value:this.activity?.challenges,disabled: this.isReadOnly}],
+          lessonsLearned:[{value:this.activity?.lessonsLearned,disabled: this.isReadOnly}],
+          keyAchievements:[{value:this.activity?.keyAchievements,disabled: this.isReadOnly}],
+          activityName:[{value:this.activity?.activityName,disabled: this.isReadOnly}],
+          peopleReached:[''],
+          costAssociated:[''],
+          budgetProgress:[''],
+          assignee:[{value:this.activity?.assignee,disabled: this.isReadOnly}],
+          attachPhoto:[{value:this.activity?.attachPhoto,disabled: this.isReadOnly}],
+          attachList:[{value:this.activity?.attachList,disabled: this.isReadOnly}],
+          attachStory:[{value:this.activity?.attachStory,disabled: this.isReadOnly}],
+          comments:[''],
+          actionRequired:[''],
+          status:['']
+        });
 
-    this.getBudgetLines();
-    this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
-      this.activity = data;
-      console.log("yry",data);
-      this.getActivityDetails(data)
-      this.choosenBudget =  this.activity?.budgetLine
-      this.budgetHolderId = this.activity?.name
-      this.orgChosen = this.activity?.organization
-      this.formGroup = this.formBuilder.group({
-        budgetLine: [this.activity?.budgetLine, [Validators.required]],
-        name: [this.activity?.name, [Validators.required]],
-        organization: [this.activity?.organization, [Validators.required]],
-        startDate:[this.activity?.startDate],
-        endDate:[this.activity?.endDate],
-        designation: [this.activity?.designation, [Validators.required]],
-        location: [this.activity?.location],
-        milestone: [this.activity?.milestone],
-        activityObjectives:[this.activity?.activityObjectives],
-        activityResults:[this.activity?.activityResults],
-        activityUndertaken:[this.activity?.activityUndertaken],
-        challenges:[this.activity?.challenges],
-        lessonsLearned:[this.activity?.lessonsLearned],
-        keyAchievements:[this.activity?.keyAchievements],
-        activityName:[this.activity?.activityName],
-        peopleReached:[''],
-        costAssociated:[''],
-        budgetProgress:[''],
-        assignee:[this.activity?.assignee],
-        attachPhoto:[this.activity?.attachPhoto],
-        attachList:[this.activity?.attachList],
-        attachStory:[this.activity?.attachStory],
-        comments:[''],
-        actionRequired:[''],
-        status:['']
-      });
-
-      this.userService.getUsers().subscribe((data) => {
-        this.staff = data;
-      });
+        this.userService.getUsers().subscribe((data) => {
+          this.staff = data;
+        });
+      })
     })
+
+
+
     this.programStaffService.getPrograms().subscribe((data) => {
       this.programs = data;
     });
@@ -576,4 +583,7 @@ export class EditActivityReportComponent implements OnInit {
 
   }
 
+  cancel() {
+    this.router.navigate(['/activity-list']);
+  }
 }

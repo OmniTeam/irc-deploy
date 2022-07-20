@@ -25,6 +25,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
   taskRecord: any;
   district_list: any;
   underReview: string;
+  isReadOnly: boolean;
 
   constructor(
     private userService: UsersService,
@@ -565,9 +566,13 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
   }
 
   ngOnInit(): void {
-    this.feedbackId = this.route.snapshot.params.id;
-    const params = new HttpParams().set('id', this.feedbackId);
-    this.loadProgramStaff()
+    this.route.params.subscribe(p =>{
+
+      this.feedbackId = p['id'];
+      this.isReadOnly = p['readonly'] == 'true';
+
+      const params = new HttpParams().set('id', this.feedbackId);
+      this.loadProgramStaff()
 
       this.feedbackService.getCurrentFeedback(this.feedbackId).subscribe((data) => {
         this.feedback = data
@@ -575,58 +580,61 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
         console.log(myDate, " this is the date formatted")
         this.formGroup = this.formBuilder.group({
           dateFeedbackReceived: [(this.datePipe.transform(this.feedback.dateFeedbackReceived, 'yyyy-MM-dd'))],
-          nameOfRegister: [this.feedback?.nameOfRegister],
-          staffDesignation: [this.feedback?.staffDesignation],
-          typeOfFeedback: [this.feedback?.typeOfFeedback],
-          currentStatusOfFeedback: [this.feedback?.currentStatusOfFeedback],
-          location: [this.feedback?.location],
-          gender: [this.feedback?.gender],
-          age: [this.feedback?.age],
-          email: [this.feedback?.email],
-          disability: [this.feedback?.disability],
-          projectSector: [this.feedback?.projectSector],
-          ircReferredTo:[this.feedback?.ircReferredTo],
-          responseType: [this.feedback?.responseType],
-          referredPerson:[this.feedback?.referredPerson],
-          subSector: [this.feedback?.subSector],
-          nameOfClient: [this.feedback?.nameOfClient],
-          remainAnonymous: [this.feedback?.remainAnonymous],
-          nationalityStatus: [this.feedback?.nationalityStatus],
-          clientType: [this.feedback?.clientType],
-          preferredChannel: [this.feedback?.preferredChannel],
-          phoneNumber: [this.feedback?.phoneNumber],
-          serialNumber: [this.feedback?.serialNumber],
-          feedbackCategory: [this.feedback?.feedbackCategory],
-          feedbackPriority: [this.feedback?.feedbackPriority],
-          feedbackReferredShared: [this.feedback?.feedbackReferredShared],
-          feedbackInternallyExternally: [this.feedback?.feedbackInternallyExternally],
-          referredPersonName: [this.feedback?.referredPersonName],
-          referredPersonPosition: [this.feedback?.referredPersonPosition],
-          referredOrganization: [this.feedback?.referredOrganization],
-          dateFeedbackReferredShared: [this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd')],
-          responseTypeRequired: [this.feedback?.responseTypeRequired],
-          actionFollowupNeeded: [this.feedback?.actionFollowupNeeded],
-          inFeedbackRegistry: [this.feedback?.inFeedbackRegistry],
-          dateFeedbackClient: [this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd')],
-          actionTaken: [this.feedback?.actionTaken],
-          staffProvidedResponse: [this.feedback?.staffProvidedResponse],
-          responseSummary: [this.feedback?.responseSummary],
-          supervisor: [this.feedback?.supervisor],
-          dataEntryFocalPoint: [this.feedback?.dataEntryFocalPoint],
-          assignee:[this.feedback?.assignee],
-          feedbackDetails:[this.feedback?.feedbackDetails],
-          feedBackResponse:[this.feedback?.feedBackResponse],
-          nameOfReferringOfficer:[this.feedback?.nameOfReferringOfficer],
-          reasonForReferral:[this.feedback?.reasonForReferral],
-          organizationReferredTo:[this.feedback?.organizationReferredTo],
-          followupNeeded:[this.feedback?.followupNeeded],
-          projectSite:[this.feedback?.projectSite],
-          district:[this.feedback?.district],
-          project:[this.feedback?.project],
-          countryOfOrigin:[this.feedback?.countryOfOrigin]
+          nameOfRegister: [{value:this.feedback?.nameOfRegister,disabled: this.isReadOnly}],
+          staffDesignation: [{value:this.feedback?.staffDesignation, disabled: this.isReadOnly}],
+          typeOfFeedback: [{value:this.feedback?.typeOfFeedback, disabled: this.isReadOnly}],
+          currentStatusOfFeedback: [{value:this.feedback?.currentStatusOfFeedback, disabled: this.isReadOnly}],
+          location: [{value:this.feedback?.location, disabled: this.isReadOnly}],
+          gender: [{value:this.feedback?.gender, disabled: this.isReadOnly}],
+          age: [{value:this.feedback?.age, disabled: this.isReadOnly}],
+          email: [{value:this.feedback?.email, disabled: this.isReadOnly}],
+          disability: [{value:this.feedback?.disability, disabled: this.isReadOnly}],
+          projectSector: [{value:this.feedback?.projectSector, disabled: this.isReadOnly}],
+          ircReferredTo:[{value:this.feedback?.ircReferredTo, disabled: this.isReadOnly}],
+          responseType: [{value:this.feedback?.responseType, disabled: this.isReadOnly}],
+          referredPerson:[{value:this.feedback?.referredPerson, disabled: this.isReadOnly}],
+          subSector: [{value:this.feedback?.subSector, disabled: this.isReadOnly}],
+          nameOfClient: [{value:this.feedback?.nameOfClient, disabled: this.isReadOnly}],
+          remainAnonymous: [{value:this.feedback?.remainAnonymous, disabled: this.isReadOnly}],
+          nationalityStatus: [{value:this.feedback?.nationalityStatus, disabled: this.isReadOnly}],
+          clientType: [{value:this.feedback?.clientType, disabled: this.isReadOnly}],
+          preferredChannel: [{value:this.feedback?.preferredChannel, disabled: this.isReadOnly}],
+          phoneNumber: [{value:this.feedback?.phoneNumber, disabled: this.isReadOnly}],
+          serialNumber: [{value:this.feedback?.serialNumber, disabled: this.isReadOnly}],
+          feedbackCategory: [{value:this.feedback?.feedbackCategory, disabled: this.isReadOnly}],
+          feedbackPriority: [{value:this.feedback?.feedbackPriority, disabled: this.isReadOnly}],
+          feedbackReferredShared: [{value:this.feedback?.feedbackReferredShared, disabled: this.isReadOnly}],
+          feedbackInternallyExternally: [{value:this.feedback?.feedbackInternallyExternally, disabled: this.isReadOnly}],
+          referredPersonName: [{value:this.feedback?.referredPersonName, disabled: this.isReadOnly}],
+          referredPersonPosition: [{value:this.feedback?.referredPersonPosition, disabled: this.isReadOnly}],
+          referredOrganization: [{value:this.feedback?.referredOrganization,disabled: this.isReadOnly}],
+          dateFeedbackReferredShared: [{value:this.datePipe.transform(this.feedback?.dateFeedbackReferredShared, 'yyyy-MM-dd'), disabled: this.isReadOnly}],
+          responseTypeRequired: [{value:this.feedback?.responseTypeRequired, disabled: this.isReadOnly}],
+          actionFollowupNeeded: [{value:this.feedback?.actionFollowupNeeded, disabled: this.isReadOnly}],
+          inFeedbackRegistry: [{value:this.feedback?.inFeedbackRegistry, disabled: this.isReadOnly}],
+          dateFeedbackClient: [{value:this.datePipe.transform(this.feedback?.dateFeedbackClient, 'yyyy-MM-dd'), disabled: this.isReadOnly}],
+          actionTaken: [{value:this.feedback?.actionTaken, disabled: this.isReadOnly}],
+          staffProvidedResponse: [{value:this.feedback?.staffProvidedResponse, disabled: this.isReadOnly}],
+          responseSummary: [{value:this.feedback?.responseSummary, disabled:this.isReadOnly}],
+          supervisor: [{value:this.feedback?.supervisor, disabled: this.isReadOnly}],
+          dataEntryFocalPoint: [{value:this.feedback?.dataEntryFocalPoint, disabled: this.isReadOnly}],
+          assignee:[{value:this.feedback?.assignee, disabled: this.isReadOnly}],
+          feedbackDetails:[{value:this.feedback?.feedbackDetails,disabled: this.isReadOnly}],
+          feedBackResponse:[{value:this.feedback?.feedBackResponse, disabled: this.isReadOnly}],
+          nameOfReferringOfficer:[{value:this.feedback?.nameOfReferringOfficer, disabled: this.isReadOnly}],
+          reasonForReferral:[{value:this.feedback?.reasonForReferral,disabled: this.isReadOnly}],
+          organizationReferredTo:[{value:this.feedback?.organizationReferredTo, disabled: this.isReadOnly}],
+          followupNeeded:[{value:this.feedback?.followupNeeded,disabled: this.isReadOnly}],
+          projectSite:[{value:this.feedback?.projectSite, disabled: this.isReadOnly}],
+          district:[{value:this.feedback?.district, disabled: this.isReadOnly}],
+          project:[{value:this.feedback?.project,disabled: this.isReadOnly}],
+          countryOfOrigin:[{value:this.feedback?.countryOfOrigin,disabled:this.isReadOnly}]
         });
 
       })
+
+    })
+
 
 
   }
@@ -681,7 +689,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       console.warn(result, 'Feedback Updated Successfully');
       this.updateTask("completed")
       this.alertService.success(`Feedback has been successfully updated`)
-      this.router.navigate(['/feedback-list']);
+      this.router.navigate(['/irc-feedback-list']);
     }, error => {
       this.alertService.error(`Failed to update feedback`)
     });
@@ -711,7 +719,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
 
 
   close() {
-    this.router.navigate(['/feedback-list'])
+    this.router.navigate(['/irc-feedback-list'])
   }
 
   deleteReferral() {
@@ -720,7 +728,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
         this.feedbackService.deleteCurrentFeedback(this.route.snapshot.params.id).subscribe((result) => {
             console.warn(result, 'feedback has been deleted');
             this.alertService.warning(`feedback has been deleted`)
-            this.router.navigate(['/feedback-list']);
+            this.router.navigate(['/irc-feedback-list']);
           }, error => {
             this.alertService.error(`Failed to delete feedback`)
           }
@@ -956,7 +964,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       /** save feedback */
       this.feedbackService.updateFeedback(this.feedbackId, newFormData).subscribe((result) => {
         this.alertService.success(`Feedback has been successfully updated`)
-        this.router.navigate(['/feedback-list']);
+        this.router.navigate(['/irc-feedback-list']);
       }, error => {
         this.alertService.error(`Failed to update feedback`)
       });
@@ -1036,7 +1044,7 @@ export class FeedbackEditComponent implements OnInit,AfterContentInit {
       /** save feedback */
       this.feedbackService.updateFeedback(this.feedbackId, newFormData).subscribe((result) => {
         this.alertService.success(`Feedback has been successfully updated`)
-        this.router.navigate(['/feedback-list']);
+        this.router.navigate(['/irc-feedback-list']);
       }, error => {
         this.alertService.error(`Failed to update feedback`)
       });

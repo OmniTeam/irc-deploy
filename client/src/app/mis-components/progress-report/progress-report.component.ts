@@ -769,6 +769,6 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
   }
 
   onBack() {
-    this.router.navigate(['/workPlanList']);
+    this.router.navigate(['/progressReportList']);
   }
 }

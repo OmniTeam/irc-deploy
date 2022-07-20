@@ -52,6 +52,11 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 grails.gorm.failOnError = false
+
+server.appName = 'IRC'
+server.centralId = '9'
+server.superPass = 'omg!@mni'
+server.superEmail = 'super@gmail.com'
 server.port = 8082
 
 

@@ -5,6 +5,8 @@ import {ProgramStaffService} from "../../services/program-staff.service";
 import {ActivityReportService} from "../../services/activity-report.service";
 import {HttpParams} from "@angular/common/http";
 import {AuthService} from '../../services/auth.service';
+import {TaskListService} from "../../services/task-list.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-activity-report',
@@ -22,6 +24,10 @@ export class ActivityReportComponent implements OnInit {
   staffs: any;
   activity: any;
   userRole: any;
+  activityId: any;
+  disable: boolean;
+  archiveList: any;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +35,9 @@ export class ActivityReportComponent implements OnInit {
     private alertService: AlertService,
     private activityReportService: ActivityReportService,
     private programStaffService: ProgramStaffService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private taskListService: TaskListService
   ) {
   }
 
@@ -121,7 +129,19 @@ export class ActivityReportComponent implements OnInit {
     this.reloadTable();
   }
 
-  getArchiveRecords(id) {
-    this.router.navigate(['/archive/' + id]);
+  getDate(date) {
+    return new Date(date);
+  }
+
+
+  getArchiveRecords(id, archive) {
+    const params = new HttpParams().set('id', id);
+    this.activityId = id;
+    this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
+      this.archiveList = data;
+      this.disable = true;
+    });
+    this.modalService.open(archive, {scrollable: true});
+    // this.router.navigate(['/archive/' + id]);
   }
 }

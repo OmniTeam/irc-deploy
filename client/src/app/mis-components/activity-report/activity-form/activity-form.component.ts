@@ -162,10 +162,6 @@ export class ActivityFormComponent implements OnInit {
         this.taskId = p['id'];
         this.processId = p['processId'];
         this.isReadOnly =  p['readOnly'] == 'true';
-
-        console.log("isReadOnly",this.isReadOnly)
-        console.log("p['readonly']",p['readOnly'])
-
         if(this.isReadOnly != true){
           const params = new HttpParams().set('id', this.taskId);
           this.taskListService.getTaskRecord(params).subscribe((data) => {
