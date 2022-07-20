@@ -12,3 +12,6 @@ out/
 .settings
 .classpath
 client/node_modules
+client/.angular/
+server/bin/
+
