@@ -421,32 +421,8 @@
                 <div class="row">
                   <div class="col-md-3">
                     <label>
-                      Disability
-<!--                      <span class="required-indicator">*</span>-->
-                    </label>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="col-md-12">
-                      <div class="form-group ">
-                        <div class=" input-group input-group-merge">
-                          <input
-                            class="form-control"
-                            placeholder="Disability"
-                            type="text"
-                            style="padding-left: 10px;"
-                            formControlName="disability"
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row" [hidden]="false">
-                  <div class="col-md-3">
-                    <label>
-                      Register Status
-<!--                      <span class="required-indicator">*</span>-->
+                     Has Disability?
+                      <span class="required-indicator">*</span>
                     </label>
                   </div>
                   <div class="col-md-9">
@@ -458,13 +434,44 @@
                                      aria-controls="datatable"
                                      style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
                                      [multiple]="false"
-                                     placeholder="Registration Status"
-                                     formControlName="registerStatus"
+                                     placeholder=""
+                                     (change)="disabilityQuestion($event)"
                                      [searchable]="true"
                                      [clearable]="true"
                           >
-                            <ng-option [value]="item.name" *ngFor="let item of register_status">
-                              {{item.name}}
+                            <ng-option [value]="item?.name" *ngFor="let item of register_status">
+                              {{item?.name}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" id="disability" [hidden]="true">
+                  <div class="col-md-3">
+                    <label>
+                      Disability
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     name="datatable_length"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Disability Status"
+                                     formControlName="disability"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="item?.name" *ngFor="let item of disability_status">
+                              {{item?.name}}
                             </ng-option>
                           </ng-select>
                         </div>

@@ -45,13 +45,33 @@ export class CreateReferralComponent implements OnInit {
       'name': 'No'
     }
   ];
+  disability_status = [
+    {
+      'name': 'Physical disability'
+    },
+    {
+      'name': 'Visual Impairment'
+    },
+    {
+      'name': 'Hearing Impairment'
+    },
+    {
+      'name': 'Speech Impairment'
+    },
+    {
+      'name': 'Mental Disability'
+    },
+  ];
   nationality_status = [
     {
       'name': 'Foreigner'
     },
     {
       'name': 'Refugee'
-    },
+    },{
+    'name' : 'National'
+    }
+
   ];
   age_category = [
     {
@@ -179,9 +199,6 @@ export class CreateReferralComponent implements OnInit {
       'name': 'Tanzanian'
     },
     {
-      'name': 'Ugandan'
-    },
-    {
       'name': 'Other'
     },
   ];
@@ -215,7 +232,7 @@ export class CreateReferralComponent implements OnInit {
       caseId: [''],
       partnerName: [''],
       ageCategory: [''],
-      countryOfOrigin: [''],
+      countryOfOrigin: ['Ugandan'],
       identificationDocument: [''],
       identificationNumber: [''],
       nationality: [''],
@@ -253,11 +270,7 @@ export class CreateReferralComponent implements OnInit {
       this.formGroup.controls['countryOfOrigin'].reset();
     } else {
       this.nationalityValue = event;
-      if(this.nationalityValue === "National"){
-        document.getElementById('country_of_origin').hidden = true
-      } else {
-        document.getElementById('country_of_origin').hidden = false
-      }
+      document.getElementById('country_of_origin').hidden = this.nationalityValue === "National";
 
     }
   }
@@ -268,4 +281,7 @@ export class CreateReferralComponent implements OnInit {
     this.submitted = false
   }
 
+  disabilityQuestion(event) {
+    document.getElementById("disability").hidden = event !== 'Yes';
+  }
 }

@@ -104,7 +104,7 @@ const routes: Routes = [
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_FEEDBACK]
         },
-        loadChildren: () => import('./mis-components/archive/archive.module').then(m => m.ArchiveModule)
+        loadChildren: () => import('./mis-components/progress-report-view/archive.module').then(m => m.ArchiveModule)
       },
       {
         path: 'progress-report/:id/:processId/:taskId/:readonly', canActivate: [AuthGuard],

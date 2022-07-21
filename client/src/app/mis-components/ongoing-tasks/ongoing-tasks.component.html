@@ -10,7 +10,7 @@
         <div class="card" style="padding: 28px;">
           <div class="card-body col-sm-12">
             <div class="row" style="margin-bottom: -30px;margin-top: -20px">
-              <div class=" col-xl-3 col-md-6">
+              <div class=" col-xl-3 col-md-6" (click)="setCardFilter('feedback')">
                 <div class="card-counter info">
                   <i class="fa fa-solid fa-clipboard-list"></i>
                   <span class="count-numbers">{{this.feedback?.length}}</span>
@@ -18,7 +18,7 @@
                 </div>
               </div>
 
-              <div class=" col-xl-3 col-md-6">
+              <div class=" col-xl-3 col-md-6" (click)="setCardFilter('referrals')">
                 <div class="card-counter primary">
                   <i class="fa fa-users"></i>
                   <span class="count-numbers">{{this.referrals?.length}}</span>
@@ -26,7 +26,7 @@
                 </div>
               </div>
 
-              <div class=" col-xl-3 col-md-6">
+              <div class=" col-xl-3 col-md-6" (click)="setCardFilter('quarterly_report')">
                 <div class="card-counter success">
                   <i class="fa fa-database"></i>
                   <span class="count-numbers">{{this.quarterly_report?.length}}</span>
@@ -34,7 +34,7 @@
                 </div>
               </div>
 
-              <div class=" col-xl-3 col-md-6">
+              <div class=" col-xl-3 col-md-6" (click)="setCardFilter('activity_report')">
                 <div class="card-counter danger">
                   <i class="fa fa-light fa-calendar-check"></i>
                   <span class="count-numbers">{{this.activity_report?.length}}</span>

@@ -199,16 +199,19 @@ export class HomeComponent implements OnInit {
     this.reportFormService.getMilestonePerformance().subscribe((data) => {
       let milestones = [];
       this.milestones = data;
+      console.log('Milestones', data);
       if (this.milestones != null) {
         this.milestones.forEach((d) => {
-          milestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement, d.percentageAchievement,
-            d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+          milestones.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+            d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage));
         });
         this.displayMilestones = milestones;
+        console.log('Milestones Display', this.displayMilestones);
         this.cardsData()
       }
     });
   }
+
 
   getBudgetLines() {
     this.workPlanService.getWorkPlan().subscribe((data) => {
@@ -230,8 +233,8 @@ export class HomeComponent implements OnInit {
     let staffMilestones = [];
     this.milestones.forEach((d) => {
       if (d.pillar === pillar) {
-        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
-          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+          d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage));
       }
     });
     this.displayMilestones = staffMilestones;
@@ -243,8 +246,8 @@ export class HomeComponent implements OnInit {
     let staffMilestones = [];
     this.milestones.forEach((d) => {
       if (d.staffId === staffId) {
-        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
-          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+          d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage));
       }
     });
     this.displayMilestones = staffMilestones;
@@ -268,27 +271,46 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: number, expenses: number, efficiency: string, endDate: string, startDate: string, progress: any, organization: string,percentage:any) {
+  getMile(milestone: any, target: any, cumulative: any, achievement: any, budget: number, expenses: number, efficiency: string, endDate: string, startDate: string, progress: any, budgetEfficiency: string,percentage:any) {
     return (
       {
         milestone: milestone,
         target: target,
         cumulative: cumulative,
-        achievement: this.getEfficiency(target, cumulative),
+        achievement: achievement,
         budget: Math.round((budget/4100)),
         expenses: Math.round((expenses/4100)),
         startDate: startDate,
         endDate: endDate,
-        efficiency: this.getEfficiency(budget, expenses),
-        progress: this.getRowProgress(startDate, endDate, target, cumulative),
-        organization: this.getBudgetProgress(target,budget,expenses,cumulative),
-        percentage: this.getActualProgress(target, cumulative),
+        efficiency: efficiency,
+        progress: progress,
+        budgetEfficiency: budgetEfficiency,
+        percentage: percentage,
       }
     );
 
   }
 
-  getEfficiency(budget, expenses) {
+  // achievement: 31
+  // approvedBudget: "61159700"
+  // budgetEfficiency: "Over Spent"
+  // categoryId: "d0a0bc17-907a-4029-84c0-e0a3447392ba"
+  // achievement: 71
+  // efficiency: 83
+  // endDate: "2022-12-31"
+  // expenseToDate: "51050000"
+  // milestone: "On the job trainings & apprenticeships"
+  // milestoneId: "e56e1a12-efb8-4c47-a1f7-821959752e86"
+  // organization: null
+  // overallTarget: "230"
+  // percentage: "Under Performance"
+  // pillar: "27b9f266-bdaf-4d5e-8edf-095918df4b12"
+  // progress: "Late"
+  // staffId: "8ad02646-2903-4a49-a960-f8a37a4749c9"
+  // startDate: "2022-01-01"
+
+
+  getEfficiency(budget: number, expenses: number) {
     if (!isNaN(Math.round((expenses / budget) * 100))) {
       return Math.round((expenses / budget) * 100);
     } else {
@@ -334,9 +356,9 @@ export class HomeComponent implements OnInit {
 
     if(calculatedPerformance > 110 ){
       return 'Over Spend';
-    } else if (calculatedPerformance > 90 && calculatedPerformance < 110) {
+    } else if (calculatedPerformance >= 90 && calculatedPerformance <= 110) {
       return 'Good Burn Rate';
-    } else if(calculatedPerformance > 50 && calculatedPerformance < 89){
+    } else if(calculatedPerformance > 50 && calculatedPerformance <= 89){
       return 'Fair Burn Rate';
     } else{
       return 'Low Burn Rate';
@@ -541,8 +563,8 @@ export class HomeComponent implements OnInit {
     let staffMilestones = [];
     this.milestones.forEach((d) => {
       if (d.categoryId === catId) {
-        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
-          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+          d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage));
       }
     });
     this.displayMilestones = staffMilestones
@@ -583,10 +605,10 @@ export class HomeComponent implements OnInit {
   clickWithinTime(progress) {
 
     let newFilter = [];
-    this.displayMilestones.filter((a) => {
-      if (a.progress != undefined && a.progress.includes(progress)) {
-        newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
-          a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, '',a.organization,''))
+    this.displayMilestones.filter((d) => {
+      if (d.progress != undefined && d.progress.includes(progress)) {
+        newFilter.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+          d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage))
       }
     });
     console.log(newFilter)
@@ -596,10 +618,10 @@ export class HomeComponent implements OnInit {
   clickPerformance(perf) {
     let newFilter = [];
     console.log("Display",this.displayMilestones)
-    this.displayMilestones.filter((a) => {
-      if (a.percentage != undefined && a.percentage.includes(perf)) {
-        newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
-          a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, '',a.organization,''))
+    this.displayMilestones.filter((d) => {
+      if (d.percentage != undefined && d.percentage.includes(perf)) {
+        newFilter.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+          d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage))
       }
     });
     this.displayMilestones = newFilter
@@ -620,8 +642,8 @@ export class HomeComponent implements OnInit {
     let staffMilestones = [];
     this.milestones.forEach((d) => {
       if (d.organization === org) {
-        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.cumulativeAchievement,
-          d.percentageAchievement, d.approvedBudget, d.expenseToDate, '', d.endDate, d.startDate, '',d.organization,''));
+        staffMilestones.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+          d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage));
         console.log(d);
       }
     });
@@ -642,12 +664,12 @@ export class HomeComponent implements OnInit {
     // filter basing on dates if both are selected
     if (startDate.value != '' && endDate.value != '') {
       let newFilter = [];
-      this.milestones.filter((a) => {
-        let startDate = new Date(a.startDate);
-        let endDate = new Date(a.endDate);
+      this.milestones.filter((d) => {
+        let startDate = new Date(d.startDate);
+        let endDate = new Date(d.endDate);
         if (startDate >= newDate && endDate <= newDate2) {
-          newFilter.push(this.getMile(a.milestone, a.overallTarget, a.cumulativeAchievement,
-            a.percentageAchievement, a.approvedBudget, a.expenseToDate, '', a.endDate, a.startDate, '',a.organization,''))
+          newFilter.push(this.getMile(d.milestone, d.overallTarget, d.achievement,
+            d.achievement, d.approvedBudget, d.expenseToDate, d.efficiency, d.endDate, d.startDate, d.progress,d.budgetEfficiency,d.percentage))
         }
       });
       this.displayMilestones = newFilter

@@ -5,6 +5,9 @@ import grails.gorm.transactions.ReadOnly
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
 import groovy.json.JsonSlurper
+import groovy.time.TimeCategory
+
+import java.text.SimpleDateFormat
 
 import static org.springframework.http.HttpStatus.*
 
@@ -138,8 +141,14 @@ class ReportFormController {
             def approvedBudget = ''
 
             financialBudget.each { f ->
-                expenseToDate = f['totalSpent']
-                approvedBudget = f['approvedAmount']
+                if(f['totalSpent'] == "NaN" || f['approvedAmount'] == "NaN") {
+                    expenseToDate  = '0'
+                    approvedBudget = '0'
+                } else {
+                    expenseToDate = f['totalSpent']
+                    approvedBudget = f['approvedAmount']
+                }
+
             }
             if (performanceIndicators != null) {
                 performanceIndicators.each { p ->
@@ -176,7 +185,11 @@ class ReportFormController {
                             organization         : it?.organization,
                             expenseToDate        : expenseToDate,
                             approvedBudget       : approvedBudget,
-
+                            progress             : getRowPerformance(p['startDate'] as String, p['endDate'] as String, p['overallTarget'] as int, cumulativeAchievement),
+                            efficiency           : getEfficiency(approvedBudget as int , expenseToDate as int),
+                            achievement          : getEfficiency(p['overallTarget'] as int,cumulativeAchievement),
+                            budgetEfficiency     : getBudgetProgress(p['overallTarget'] as int, approvedBudget as int, expenseToDate as int, cumulativeAchievement),
+                            percentage           : getPercentage(p['overallTarget'] as int,cumulativeAchievement)
                     ]
                 }
 
@@ -184,6 +197,88 @@ class ReportFormController {
 
         }
         respond milestones
+    }
+
+    //target vs Time
+
+    static def daysBetween(def startDate, def endDate) {
+        use(TimeCategory) {
+            def duration = endDate - startDate
+            return duration.days as Integer
+        }
+    }
+
+    def getRowPerformance(String start,String end,int target,achieved){
+        def pattern = "yyyy-MM-dd"
+        def startDate = new SimpleDateFormat(pattern).parse(start)
+        def endDate = new SimpleDateFormat(pattern).parse(end)
+        def today = new Date()
+
+        def duration
+
+        if (startDate != null && endDate != null) {
+            duration = daysBetween(startDate, endDate)
+        } else {
+            duration = 1
+        }
+
+        def daily = Math.round(target/duration)
+        def elapsedTime = daysBetween(startDate, today)
+
+        def expected = daily * elapsedTime
+
+        if(achieved >= expected * 0.5 && achieved <= expected * 0.7){
+            return 'Slow Progress'
+        } else if (achieved > expected * 0.7){
+            return 'Good Progress'
+        } else {
+            return 'Late'
+        }
+
+    }
+
+    //get budget progress
+
+    def getBudgetProgress(int  target, int budget , int spent , achieved){
+        def  amountPerTarget  = 0
+        if(target > 0 ) amountPerTarget = budget / target
+        def  actualPerformance = 0
+        if(achieved > 0){
+            actualPerformance = spent / achieved
+        }
+
+        def calculatedPerformance = 0
+        if(amountPerTarget > 0) calculatedPerformance = (actualPerformance * 100) / amountPerTarget
+
+        if(calculatedPerformance > 110){
+            return 'Over Spent'
+        } else if (calculatedPerformance >= 90 && calculatedPerformance <= 110){
+            return 'Good Burn Rate'
+        } else if(calculatedPerformance > 50 && calculatedPerformance <= 89){
+            return 'Low Burn Rate'
+        }
+    }
+
+    //get Efficiency Report
+    def getEfficiency(int budget, int expenses) {
+        def efficiency = 0
+        if (budget != 0) {
+            efficiency = Math.round((expenses / budget) * 100)
+        }
+        return efficiency
+    }
+
+    def getPercentage(target, achieved){
+        def percentage = ((achieved * 100) / target)
+
+        if(percentage > 75){
+            return 'Acceptable Performance'
+        } else if(percentage > 50 && percentage <= 75){
+            return 'Average Performance'
+        } else {
+            return 'Under Performance'
+        }
+
     }
 
     def getActivityReportRecord() {
