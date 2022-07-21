@@ -192,6 +192,9 @@ export class CreateFeedbackComponent implements OnInit {
     {
       'name': 'Refugee'
     },
+    {
+      'name' : 'National'
+    }
   ];
   type_of_client = [
     {
@@ -279,9 +282,6 @@ export class CreateFeedbackComponent implements OnInit {
     },
     {
       'name': 'Tanzanian'
-    },
-    {
-      'name': 'Ugandan'
     },
     {
       'name': 'Other'

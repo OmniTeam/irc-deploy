@@ -24,6 +24,7 @@ export class OngoingTasksComponent implements OnInit {
   active_div = '';
   perc: any;
   barColor: any;
+  displayRows: OngoingTask[];
 
 
   constructor(
@@ -236,6 +237,30 @@ export class OngoingTasksComponent implements OnInit {
       return Math.round((expenses / budget) * 100);
     } else {
       return 0;
+    }
+
+  }
+
+  setCardFilter(event) {
+    // //switch case
+    // this.isReferrals = false;
+    // this.isFeedback = false;
+    // this.isQuarterlyReport = false;
+    // this.isActivityReport = false;
+    switch (event) {
+      case 'referrals':
+        this.taskListRows = this.referrals
+        break;
+      case 'feedback':
+       this.taskListRows =  this.feedback;
+        break;
+      case 'quarterly_report':
+        this.isQuarterlyReport = true;
+        this.taskListRows = this.quarterly_report;
+        break;
+      case 'activity_report':
+        this.taskListRows = this.activity_report;
+        break;
     }
 
   }

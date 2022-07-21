@@ -106,7 +106,7 @@ td a {
 
 html {
   overflow:   scroll;
-  zoom: 95%;
+  zoom: 80%;
 }
 ::-webkit-scrollbar {
   width: 0px;
