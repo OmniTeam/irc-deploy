@@ -27,6 +27,7 @@ export class ActivityReportComponent implements OnInit {
   activityId: any;
   disable: boolean;
   archiveList: any;
+  activityList: any;
 
 
   constructor(
@@ -137,11 +138,15 @@ export class ActivityReportComponent implements OnInit {
   getArchiveRecords(id, archive) {
     const params = new HttpParams().set('id', id);
     this.activityId = id;
+    this.activityReportService.getCurrentActivityReport(this.activityId).subscribe(data => {
+      this.activityList = data;
+      console.log("activityList", this.activityList);
+    })
     this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
       this.archiveList = data;
       this.disable = true;
     });
-    this.modalService.open(archive, {scrollable: true});
+    this.modalService.open(archive, {scrollable: true,size: 'xl'});
     // this.router.navigate(['/archive/' + id]);
   }
 }

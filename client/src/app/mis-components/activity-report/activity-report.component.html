@@ -98,24 +98,33 @@
       <div class="card-body" >
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Task Name
-            <span class="">Create Referral</span>
+            <b>Task Name</b>
+            <span class="">Create Activity Report</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Assignee
-            <span class=""></span>
+           <b>Responsible Person</b>
+            <span class="">{{this.activityList.name}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Case
-            <span class=""></span>
+            <b>Activity Name</b>
+            <span class="">{{this.activityList.activityName}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Start Date
-            <span class=""></span>
+            <b>Budget Line</b>
+            <span class="">{{this.activityList.budgetLine}}</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <b>Location</b>
+            <span class="">{{this.activityList.location}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            End Date
-            <span class=""></span>
+            <b>Start Date</b>
+            <span class="">{{this.activityList.startDate}}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <b>End Date</b>
+            <span class="">{{this.activityList.endDate}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <button class="btn btn-primary" (click)="modal.dismiss('Cross click')"  [routerLink]="['/activityReport/edit/',this.activityId, true]">View Form</button>
@@ -123,27 +132,27 @@
         </ul>
       </div>
     </div>
-    <div class="card" style="width: 28rem;" *ngFor="let a of this.archiveList">
-      <div class="card-body" style="margin: 10px">
+    <div class="card" *ngFor="let a of this.archiveList">
+      <div class="card-body">
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Task Name
+            <b>Task Name</b>
             <span class="">{{a.taskName}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Assignee
+            <b>Assignee</b>
             <span class="">{{a.assignee}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Case
+            <b>Case</b>
             <span class="">{{a.case}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Start Date
+            <b>Start Date</b>
             <span class="">{{getDate(a.startDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            End Date
+            <b>End Date</b>
             <span class="">{{getDate(a.endDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">

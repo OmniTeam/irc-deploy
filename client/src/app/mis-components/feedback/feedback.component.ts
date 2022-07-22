@@ -64,6 +64,7 @@ export class FeedbackComponent implements OnInit {
   feedBackId: any;
   archiveList: any;
   disable: boolean;
+  initialLists: Object;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -183,15 +184,15 @@ export class FeedbackComponent implements OnInit {
   getArchiveRecords(id, archive) {
     const params = new HttpParams().set('id', id);
     this.feedBackId = id;
-    // this.referralsService.getCurrentReferral(this.referralId).subscribe(data => {
-    //   this.initialLists = data
-    //   console.log("archive",this.initialLists)
-    // })
+    this.feedbackService.getCurrentFeedback(this.feedBackId).subscribe(data => {
+      this.initialLists = data
+      console.log("feedback",this.initialLists)
+    })
     this.taskListService.getArchiveRecordDetails(params).subscribe(data => {
       this.archiveList = data;
       this.disable = true;
     });
-    this.modalService.open(archive, {scrollable: true});
+    this.modalService.open(archive, {scrollable: true,size: 'xl'});
   }
 
   getDate(date) {

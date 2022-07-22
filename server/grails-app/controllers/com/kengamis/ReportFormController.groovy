@@ -172,6 +172,7 @@ class ReportFormController {
                         }
 
                     }
+                    int overAllTarget = (p['overallTarget']!='') ? p['overallTarget'] as int : 0
                     milestones << [
                             milestoneId          : pm?.id,
                             staffId              : it.staffId,
@@ -185,11 +186,11 @@ class ReportFormController {
                             organization         : it?.organization,
                             expenseToDate        : expenseToDate,
                             approvedBudget       : approvedBudget,
-                            progress             : getRowPerformance(p['startDate'] as String, p['endDate'] as String, p['overallTarget'] as int, cumulativeAchievement),
-                            efficiency           : getEfficiency(approvedBudget as int , expenseToDate as int),
-                            achievement          : getEfficiency(p['overallTarget'] as int,cumulativeAchievement),
-                            budgetEfficiency     : getBudgetProgress(p['overallTarget'] as int, approvedBudget as int, expenseToDate as int, cumulativeAchievement),
-                            percentage           : getPercentage(p['overallTarget'] as int,cumulativeAchievement)
+                            progress             : getRowPerformance(p['startDate'] as String, p['endDate'] as String, overAllTarget, cumulativeAchievement ?: 0),
+                            efficiency           : getEfficiency((approvedBudget ?: 0) as int , (expenseToDate ?: 0) as int),
+                            achievement          : getEfficiency(overAllTarget,cumulativeAchievement),
+                            budgetEfficiency     : getBudgetProgress(overAllTarget, (approvedBudget ?: 0 ) as int, (expenseToDate ?: 0) as int, cumulativeAchievement ?: 0),
+                            percentage           : getPercentage(overAllTarget,cumulativeAchievement ?: 0)
                     ]
                 }
 
@@ -208,7 +209,7 @@ class ReportFormController {
         }
     }
 
-    def getRowPerformance(String start,String end,int target,achieved){
+    def getRowPerformance(String start,String end,int target,int achieved){
         def pattern = "yyyy-MM-dd"
         def startDate = new SimpleDateFormat(pattern).parse(start)
         def endDate = new SimpleDateFormat(pattern).parse(end)
@@ -216,23 +217,33 @@ class ReportFormController {
 
         def duration
 
-        if (startDate != null && endDate != null) {
-            duration = daysBetween(startDate, endDate)
-        } else {
-            duration = 1
-        }
+        try {
+            if (startDate != null && endDate != null) {
+                duration = daysBetween(startDate, endDate)
+            } else {
+                duration = 1
+            }
 
-        def daily = Math.round(target/duration)
-        def elapsedTime = daysBetween(startDate, today)
+            def daily
+            if(Math.round(target/duration) <= 0 ){
+                daily = 1
+            } else {
+                daily = Math.round(target/duration)
+            }
 
-        def expected = daily * elapsedTime
+            def elapsedTime = daysBetween(startDate, today)
 
-        if(achieved >= expected * 0.5 && achieved <= expected * 0.7){
-            return 'Slow Progress'
-        } else if (achieved > expected * 0.7){
-            return 'Good Progress'
-        } else {
-            return 'Late'
+            def expected = daily * elapsedTime
+
+            if(achieved >= expected * 0.5 && achieved <= expected * 0.7){
+                return 'Slow Progress'
+            } else if (achieved > expected * 0.7){
+                return 'Good Progress'
+            } else {
+                return 'Late'
+            }
+        } catch (NumberFormatException ex) {
+            return 'N/A'
         }
 
     }
@@ -269,7 +280,14 @@ class ReportFormController {
     }
 
     def getPercentage(target, achieved){
-        def percentage = ((achieved * 100) / target)
+        def percentage
+
+        if(target > 0){
+            percentage = (achieved * 100) / target
+        } else {
+            percentage  =  0
+        }
+//       = ((achieved * 100) / target)
 
         if(percentage > 75){
             return 'Acceptable Performance'

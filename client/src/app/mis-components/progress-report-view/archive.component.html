@@ -168,43 +168,43 @@
 <!--        </ul>-->
 <!--      </div>-->
 <!--    </div>-->
-    <div class="card" style="width: 28rem;" *ngFor="let a of this.archiveList">
-      <div class="card-body" style="margin: 10px">
+    <div class="card" *ngFor="let a of this.archiveList">
+      <div class="card-body">
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Task Name
+            <b>Task Name</b>
             <span class="">{{a.taskName}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Staff Name
+            <b>Staff Name</b>
             <span class="">{{a.staffId}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Organization
+            <b>Organization</b>
             <span class="">{{a.organization}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Pillar
+            <b>Pillar</b>
             <span class="">{{a.programId}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Reporting Period
+            <b>Reporting Period</b>
             <span class="">{{a.reportingPeriod}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Work Plan Start Date
+            <b>Work Plan Start Date</b>
             <span class="">{{a.workPlanStartDate}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Work Plan End Date
+            <b>Work Plan End Date</b>
             <span class="">{{a.workPlanEndDate}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Start Date
+            <b>Start Date</b>
             <span class="">{{getDate(a.startDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            End Date
+            <b>End Date</b>
             <span class="">{{getDate(a.endDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
