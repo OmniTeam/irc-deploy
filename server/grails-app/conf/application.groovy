@@ -52,7 +52,7 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 grails.gorm.failOnError = false
-server.port = 8083
+server.port = 8183
 
 
 grails.gorm.default.mapping = {

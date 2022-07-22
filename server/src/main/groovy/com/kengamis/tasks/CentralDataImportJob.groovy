@@ -58,11 +58,12 @@ class CentralDataImportJob extends Script {
             def forms = withCentral { listForms(study.centralId, token) }
             for (form in forms) {
                 try {
-                    Form.withNewTransaction {
+//                    Form.withNewTransaction {
                         syncFormSetting(study, form, token)
-                    }
+//                    }
                 }
                 catch (Exception ex) {
+                    ex.printStackTrace()
                     log.error("ERROR:::: Failed to synchronise [${form.name}] !!!", Util.sanitize(ex))
                 }
                 syncFormData(study, form, token)
@@ -73,7 +74,6 @@ class CentralDataImportJob extends Script {
         }
         log.info("=============Finished syncing data For Study [$study.name]========\n\n")
     }
-
 
     static def syncFormSetting(Study study, def form, def token) {
         def studyCentralId = study.centralId as String
@@ -90,20 +90,27 @@ class CentralDataImportJob extends Script {
 
         def misForm = Form.findByName(finalTableName) ?: new Form(name: finalTableName, study: study,
                 centralId: formCentralId, displayName: form.name)
-        Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
+//        Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
+        misForm.save(flush:true, failOnError: true)
         log.info("  -> Done Saving form[$form]")
 
-//        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
-//        for (version in versions) {
-//            log.info(version)
-//            importVersion(study, misForm, '___', token)
-//        }
-        importVersion(study, misForm, '___', token)
+        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
+        for (version in versions) {
+            log.info(version)
+            if(version.version == ""){
+                importVersion(study, misForm, "___", token)
+            }else{
+                importVersion(study, misForm, version.version, token)
+            }
+        }
+//        importVersion(study, misForm, '___', token)
+        misForm.save(flush:true, failOnError: true)
         log.info("  -> Done Importing form[$form] Settings...")
     }
 
     static def syncFormData(Study study, def form, def token) {
         log.info("======= Syncing Form Data [$study.name -> $form.name] ========================")
+
         def studyCentralId = study.centralId as String
         def formCentralId = form['xmlFormId'] as String
         def formName = form['name'] as String
@@ -281,8 +288,12 @@ class CentralDataImportJob extends Script {
             formSetting.form = misForm
             def settingAlreadyExist = misForm.hasFormSetting(misForm, formSetting.field)
             if (!settingAlreadyExist) {
-                FormSetting.withNewTransaction { formSetting.save(failOnError: true, flush: true) }
+//                FormSetting.withNewTransaction {
+                    formSetting.save(failOnError: true, flush: true)
+//                }
             }
+            formSetting.save(flush:true, failOnError: true
+            )
 
             if (qn instanceof ISelectionQuestion) {
                 mayBeAddChoiceOptions(formSetting, qn)
@@ -315,7 +326,9 @@ class CentralDataImportJob extends Script {
         choiceOptions.each { choice ->
             choice.formSetting = formSetting
             if (!formSetting.choiceOptions.any { it.choiceId == choice.choiceId }) {
-               ChoiceOption.withNewTransaction {  choice.save(failOnError: true, flush: true) }
+//               ChoiceOption.withNewTransaction {
+                   choice.save(failOnError: true, flush: true)
+//               }
             }
         }
     }
