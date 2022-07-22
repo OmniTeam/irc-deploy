@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {catchError, mapTo, tap} from 'rxjs/operators';
 import {User} from '../models/user';
 import {Roles} from '../models/roles';
@@ -28,10 +28,12 @@ export class AuthService {
       .pipe(
         tap(user => {
           this.doLoginUser(user.username, user);
+          window.location.reload()
         }),
         mapTo(true),
         catchError(error => {
-          alert(error.error);
+          alert("Server Error, please contact support");
+          console.log(error)
           return of(false);
         }));
   }
@@ -44,7 +46,8 @@ export class AuthService {
       tap(() => this.doLogoutUser()),
       mapTo(true),
       catchError(error => {
-        alert(error.error);
+        alert("Server Error, please contact support");
+        console.log(error)
         return of(false);
       }));
   }

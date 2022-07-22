@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import {AlertService} from "../services/alert";
 
 @Component({
   selector: 'app-login',
@@ -9,21 +10,19 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.css', './util.css']
 })
 export class LoginComponent implements OnInit {
-
-  wrongCredentials: boolean = false;
   loginForm: FormGroup;
   loading = false;
   submitted = false;
   showSpinner = false;
   fieldTextType: boolean;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private authService: AuthService, private alertService: AlertService, private formBuilder: FormBuilder, private router: Router) {
   }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      username: [''],
-      password: ['']
+      username: [null,[Validators.required]],
+      password: [null, [Validators.required]]
     });
   }
 
@@ -37,8 +36,8 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.submitted = true;
-    this.wrongCredentials = false;
     if (this.loginForm.invalid) {
+      this.alertService.message("Please fill in all fields")
       return;
     }
     this.loading = true;
@@ -51,16 +50,9 @@ export class LoginComponent implements OnInit {
     )
       .subscribe(success => {
         if (success) {
-          this.wrongCredentials = false;
-          this.router.navigate(['/']).then(() =>
-            window.location.reload()
-          );
-          // this.authService.isUserLoggedIn.next(true);
           this.authService.getUserPartners();
+          this.router.navigate(['/home']);
         }
-      }, error => {
-        this.wrongCredentials = true
-        console.log(error.status);
       });
   }
 }
