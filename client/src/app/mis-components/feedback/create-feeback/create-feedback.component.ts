@@ -586,7 +586,7 @@ export class CreateFeedbackComponent implements OnInit {
       nameOfRegister: [''],
       staffDesignation: [''],
       typeOfFeedback: [''],
-      currentStatusOfFeedback: ['', [Validators.required]],
+      currentStatusOfFeedback: ['Not Actioned', [Validators.required]],
       location: ['', [Validators.required]],
       district: ['', [Validators.required]],
       projectSite:[''],
@@ -745,6 +745,23 @@ export class CreateFeedbackComponent implements OnInit {
 
   }
 
+  setValidationToFalseOnSaving(){
+    console.log('setValidationToFalseOnSaving')
+    this.formGroup.get('dateFeedbackReceived').setValidators(null);
+    this.formGroup.get('dateFeedbackReceived').updateValueAndValidity();
+    this.formGroup.get('currentStatusOfFeedback').setValidators(null);
+    this.formGroup.get('currentStatusOfFeedback').updateValueAndValidity();
+    this.formGroup.get('location').setValidators(null);
+    this.formGroup.get('location').updateValueAndValidity();
+    this.formGroup.get('district').setValidators(null);
+    this.formGroup.get('district').updateValueAndValidity();
+    this.formGroup.get('preferredChannel').setValidators(null);
+    this.formGroup.get('preferredChannel').updateValueAndValidity();
+    this.formGroup.get('remainAnonymous').setValidators(null);
+    this.formGroup.get('remainAnonymous').updateValueAndValidity();
+
+  }
+
 
   resetForm() {
     this.formGroup.reset()
@@ -844,6 +861,7 @@ export class CreateFeedbackComponent implements OnInit {
   saveForm() {
     this.clicked = true;
     this.submitted = true;
+    this.setValidationToFalseOnSaving()
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;

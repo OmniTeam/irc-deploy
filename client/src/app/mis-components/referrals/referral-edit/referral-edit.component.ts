@@ -9,8 +9,10 @@ import {AuthService} from "../../../services/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ClientService} from "../../../services/client.service";
+import {GenerateReferralComponent} from "../generate-referral/generate-referral.component";
 
 @Component({
+  providers: [GenerateReferralComponent],
   selector: 'app-referral-edit',
   templateUrl: './referral-edit.component.html',
   styleUrls: ['./referral-edit.component.css']
@@ -42,7 +44,8 @@ export class ReferralEditComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private clientService: ClientService,
-    private router: Router
+    private router: Router,
+    private generateReferralComponent: GenerateReferralComponent
   ) {
   }
 
@@ -304,9 +307,25 @@ export class ReferralEditComponent implements OnInit {
     });
   }
 
+  removeValidationForSavingDraft(){
+    this.formGroup.get('nameOfReferringOfficer').setValidators(null);
+    this.formGroup.get('nameOfReferringOfficer').updateValueAndValidity();
+    this.formGroup.get('reasonForReferral').setValidators(null);
+    this.formGroup.get('reasonForReferral').updateValueAndValidity();
+    this.formGroup.get('followupNeeded').setValidators(null);
+    this.formGroup.get('followupNeeded').updateValueAndValidity();
+    this.formGroup.get('internalExternal').setValidators(null);
+    this.formGroup.get('internalExternal').updateValueAndValidity();
+    this.formGroup.get('dateOfReferral').setValidators(null);
+    this.formGroup.get('dateOfReferral').updateValueAndValidity();
+    this.formGroup.get('nameOfClientBeingReferred').setValidators(null);
+    this.formGroup.get('nameOfClientBeingReferred').updateValueAndValidity();
+  }
+
   saveReferral() {
     this.clicked = true;
     this.submitted = true;
+    this.removeValidationForSavingDraft();
     if (this.formGroup.invalid) {
       console.log('Invalid');
       return;

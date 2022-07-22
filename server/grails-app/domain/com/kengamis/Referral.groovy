@@ -34,9 +34,9 @@ class Referral {
 
     static constraints = {
         assignee nullable: true
-        dateOfReferral nullable: false
-        nameOfReferringOfficer nullable: false
-        nameOfClientBeingReferred nullable: false
+        dateOfReferral nullable: true
+        nameOfReferringOfficer nullable: true
+        nameOfClientBeingReferred nullable: true
         phoneNumber nullable: true
         dateOfBirth nullable: true
         ageCategory nullable: true
@@ -50,7 +50,7 @@ class Referral {
         receivedFeedback nullable: true
         nationalityStatus nullable: true
         ircSector nullable: true
-        internalExternal nullable: false
+        internalExternal nullable: true
         feedbackGiven nullable: true
         dateOfFeedback nullable: true
         followupNeeded nullable: true

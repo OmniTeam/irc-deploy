@@ -2624,4 +2624,50 @@ databaseChangeLog = {
         }
     }
 
+    changeSet(author: "Cris (generated)", id: "1641554948339date-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "date_of_referral", tableName: "referral")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339officer-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "name_of_referring_officer", tableName: "referral")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339client-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "name_of_client_being_referred", tableName: "referral")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339internal-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "internal_external", tableName: "referral")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339budget_line-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "budget_line", tableName: "activity_report")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339name-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "name", tableName: "activity_report")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339startDate-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "start_date", tableName: "activity_report")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339endDate-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "end_date", tableName: "activity_report")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339designation-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "designation", tableName: "activity_report")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339location-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "location", tableName: "activity_report")
+    }
+
+    changeSet(author: "cris (generated)", id: "1641554948339milestone-1") {
+        dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "milestone", tableName: "activity_report")
+    }
+
+
+
 }

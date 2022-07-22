@@ -194,7 +194,30 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     });
   }
 
-  // #fdc513 #fc1 gold hsl(45,98%,53%) rgb(253,197,19)
+  removeValidationForSavingDraft(){
+    //clear validators
+    this.formGroup.get('budgetLine').setValidators(null);
+    this.formGroup.get('name').setValidators(null);
+    this.formGroup.get('organization').setValidators(null);
+    this.formGroup.get('startDate').setValidators(null);
+    this.formGroup.get('endDate').setValidators(null);
+    this.formGroup.get('designation').setValidators(null);
+    this.formGroup.get('location').setValidators(null);
+    this.formGroup.get('activityName').setValidators(null);
+
+    //set value to form
+    this.formGroup.get('budgetLine').updateValueAndValidity();
+    this.formGroup.get('name').updateValueAndValidity();
+    this.formGroup.get('organization').updateValueAndValidity();
+    this.formGroup.get('startDate').updateValueAndValidity();
+    this.formGroup.get('endDate').updateValueAndValidity();
+    this.formGroup.get('designation').updateValueAndValidity();
+    this.formGroup.get('location').updateValueAndValidity();
+    this.formGroup.get('activityName').updateValueAndValidity();
+
+
+  }
+
   get f() {
     return this.formGroup.controls;
   }
@@ -383,17 +406,6 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   }
 
 
-  // private updateBudgetDisburse(id, newValue) {
-  //   let total: number = 0;
-  //   if (this.budget.some(x => x.id === id)) {
-  //     this.budget.forEach(function (item) {
-  //       if (item.id === id) item.approvedAmount = newValue;
-  //       total += +item.approvedAmount;
-  //     });
-  //   }
-  //   this.totalApprovedAmount = total.toString();
-  // }
-
   handleFileInput(event) {
     let files: FileList = event.target.files;
     this.uploadFile(files.item(0), event.target.id);
@@ -559,6 +571,7 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
 
   saveReport() {
 
+    this.removeValidationForSavingDraft()
     let values: { [key: string]: string } = {
       budget: this.budget,
       people: this.peopleSurvey,

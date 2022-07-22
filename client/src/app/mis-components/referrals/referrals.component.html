@@ -244,7 +244,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" prop="">
               <ng-template let-row="row" ngx-datatable-cell-template >
-                <div *ngIf="row?.status == 'Pending'">
+                <div *ngIf="row?.status == 'Pending' || ''">
                   <button class="btn btn-primary btn-sm"  (click)="editReferral(row?.id)">Edit</button>
                 </div>
                 <div *ngIf="row?.status == 'Actioned'">
