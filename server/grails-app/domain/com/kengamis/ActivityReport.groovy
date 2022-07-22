@@ -35,13 +35,13 @@ class ActivityReport {
     }
 
     static constraints = {
-         budgetLine nullable: false
-         name nullable: false
-         startDate nullable: false
-         endDate nullable: false
-         designation nullable: false
-         location nullable: false
-         milestone nullable: false
+         budgetLine nullable: true
+         name nullable: true
+         startDate nullable: true
+         endDate nullable: true
+         designation nullable: true
+         location nullable: true
+         milestone nullable: true
          activityObjectives nullable: true
          activityResults nullable: true
          activityName nullable: true

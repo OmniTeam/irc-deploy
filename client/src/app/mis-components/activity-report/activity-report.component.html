@@ -64,18 +64,18 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Action" sortable="false" [width]="250">
               <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                <button (click)="editActivityReport(row);" *ngIf="row?.status != 'Running'"   class="btn btn-default" style="padding: 1px 6px;"
+                <button (click)="editActivityReport(row);"  *ngIf="this.userRole != 'ROLE_REBUILD_DATA_VIEWER'"   class="btn btn-default" style="padding: 1px 6px;"
                 >
                   <i class="fa fa-pencil-alt"></i>
                 </button>
-                <button (click)="deleteActivityReport(row)" *ngIf="row?.status != 'Running'" class="btn btn-danger" style="padding: 1px 6px;"
+                <button (click)="deleteActivityReport(row)" *ngIf="this.userRole != 'ROLE_REBUILD_DATA_VIEWER'" class="btn btn-danger" style="padding: 1px 6px;"
                         >
                   <i class="fa fa-trash"></i>
                 </button>
                 <button
                   class="btn btn-info btn-sm"
                   (click)="getArchiveRecords(row?.id, archive)"
-                  *ngIf="row?.status == 'Running'"
+                  *ngIf="this.userRole != 'ROLE_REBUILD_DATA_VIEWER'"
                 >
                   View
                 </button>
