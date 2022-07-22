@@ -1,0 +1,128 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Request Maps</h6>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+        </div>
+        <div class=" col-lg-6 col-5 text-right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row justify-content-center">
+    <div class=" col-lg-10 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Edit Request Map</h3>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem;">
+          <form [formGroup]="formGroup" (ngSubmit)="editRequestMap()" *ngIf="formGroup">
+            <div class="row">
+              <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      URL
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="URL"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="url"
+                            [ngClass]="{ 'is-invalid': submitted && f.url.errors }"
+                          >
+                          <div *ngIf="submitted && f.url.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.url.errors.required">URL is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Config Attribute
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea
+                            class="form-control"
+                            placeholder="  Config Attribute"
+                            rows="5"
+                            style="padding-left: 10px;"
+                            formControlName="configAttribute"
+                            [ngClass]="{ 'is-invalid': submitted && f.configAttribute.errors }"
+                          ></textarea>
+                          <div *ngIf="submitted && f.configAttribute.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.configAttribute.errors.required">Config Attribute is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      HTTP Method
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   id="httpMethod"
+                                   [multiple]="false"
+                                   placeholder="  HTTP Method"
+                                   formControlName="httpMethod"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item" *ngFor="let item of httpMethods">
+                            {{item}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+                <button class=" btn btn-default" type="submit">Update</button>
+                <button class=" btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,146 @@
+<div class=" header bg-success pb-6">
+    <div class=" container-fluid">
+        <div class=" header-body">
+            <div class=" row align-items-center py-4">
+                <div class=" col-lg-6 col-7">
+                    <h6 class=" h2 text-white d-inline-block mb-0">Groups</h6>
+                    <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+                </div>
+                <div class=" col-lg-6 col-5 text-right">
+                    <a class=" btn btn-sm btn-danger" (click)="deleteGroup()" style="color: #ffffff"> Delete </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=" container-fluid mt--6">
+    <div class=" row justify-content-center">
+        <div class=" col-lg-10 card-wrapper">
+            <div class="card">
+                <div class="card-header" style="padding: 10px">
+                    <h3>Edit Group</h3>
+                </div>
+
+                <div class="card-body">
+                    <form [formGroup]="formGroup" (ngSubmit)="updateGroup()" *ngIf="formGroup" style="padding:30px">
+                      <div class="row">
+                        <div class="col-lg-12" style="padding-left: 30px;padding-top: 15px">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label>
+                                Group Name
+                                <span class="required-indicator">*</span>
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <div class=" input-group-prepend">
+                                                <span class="input-group-text" style="padding-right: 10px;">
+                                                    <i class=" fas fa-user"></i>
+                                                </span>
+                                    </div>
+                                    <input
+                                      class="form-control"
+                                      placeholder="Group Name"
+                                      type="text"
+                                      style="padding-left: 10px;"
+                                      formControlName="name"
+                                      [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                                    >
+                                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                      <div *ngIf="f.name.errors.required" class="input-error">A Group Name is required</div>
+                                    </div>
+                                  </div>
+                                  <!--<div *ngIf="f.username.hasError('alreadyExist')" >
+                                      <div class="input-error">Username is already taken</div>
+                                  </div>-->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label>
+                                Parent
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <ng-select class="form-control form-control-sm"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="false"
+                                               placeholder="Parent"
+                                               formControlName="parentGroup"
+                                               [ngClass]="{ 'is-invalid': submitted && f.parentGroup.errors }"
+                                               [searchable]="true"
+                                               [clearable]="true"
+                                    >
+                                      <ng-option [value]="item.id" *ngFor="let item of parents">
+                                        {{item.name}}
+                                      </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="submitted && f.parentGroup.errors" class="invalid-feedback">
+                                      <div *ngIf="f.parentGroup.errors.required" class="input-error">A Parent is required</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" >
+                            <div class="col-md-3">
+                              <label>
+                                Users
+                              </label>
+                            </div>
+                            <div class="col-md-9">
+                              <div class="col-md-12">
+                                <div class="form-group ">
+                                  <div class=" input-group input-group-merge">
+                                    <ng-select class="form-control form-control-sm"
+                                               name="datatable_length"
+                                               aria-controls="datatable"
+                                               style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                               [multiple]="true"
+                                               placeholder="Users"
+                                               formControlName="users"
+                                               [ngClass]="{ 'is-invalid': submitted && f.users.errors }"
+                                               [searchable]="true"
+                                               [clearable]="true"
+                                    >
+                                      <ng-option [value]="item.id" *ngFor="let item of users">
+                                        {{item.username}}
+                                      </ng-option>
+                                    </ng-select>
+                                    <div *ngIf="submitted && f.users.errors" class="invalid-feedback">
+                                      <div *ngIf="f.users.errors.required" class="input-error">A User is required</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        <div class="row">
+                            <div class="col-md-12 offset-7" style="padding-bottom: 15px;">
+                                <button class=" btn btn-default" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
