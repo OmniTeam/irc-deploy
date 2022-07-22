@@ -581,9 +581,6 @@ export class HomeComponent implements OnInit {
     this.acceptable = this.displayMilestones.filter(a => a.percentage.includes("Acceptable Performance")).length;
     this.average = this.displayMilestones.filter(a => a.percentage.includes("Average Performance")).length;
     this.under = this.displayMilestones.filter(a => a.percentage.includes("Under Performance")).length;
-
-    // this. = this.feedback.filter(a => a.currentStatusOfFeedback.includes("No Actioned Required")).length
-    // this.feedbackForwarded = this.feedback.filter(a => a.currentStatusOfFeedback.includes("Forwarded For Action")).length
   }
 
 

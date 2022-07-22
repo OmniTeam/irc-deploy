@@ -76,7 +76,7 @@ export class ArchiveComponent implements OnInit {
       this.archiveList = data;
       this.disable = true;
     });
-    this.modalService.open(archive, {scrollable: true});
+    this.modalService.open(archive, {scrollable: true,size: 'xl'});
 
   }
 

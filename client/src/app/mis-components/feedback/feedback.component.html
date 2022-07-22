@@ -285,27 +285,39 @@
     <h4 class="modal-title" style="font-size: 24px">Archived Tasks</h4>
   </div>
   <div class="modal-body">
-    <div class="card">
+    <div class="card" >
       <div class="card-body" >
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Task Name
-            <span class="">Create Referral</span>
+            <b>Task Name</b>
+            <span class="">Create Feedback</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Assignee
-            <span class=""></span>
+            <b>Name Of Client</b>
+            <span class="">{{this.initialLists.nameOfClient}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Case
-            <span class=""></span>
+            <b>Name Of Registering Officer</b>
+            <span class="">{{this.initialLists.nameOfRegister}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Start Date
-            <span class=""></span>
+            <b>Client Type</b>
+            <span class="">{{this.initialLists.clientType}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            End Date
+            <b>Country Of Origin</b>
+            <span class="">{{this.initialLists.countryOfOrigin}}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <b>Type Of Feedback</b>
+            <span class="">{{this.initialLists.typeOfFeedback}}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <b>Date Feedback Received</b>
+            <span class="">{{this.initialLists.dateFeedbackReceived}}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <b>End Date</b>
             <span class=""></span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -314,27 +326,27 @@
         </ul>
       </div>
     </div>
-    <div class="card" style="width: 28rem;" *ngFor="let a of this.archiveList">
-      <div class="card-body" style="margin: 10px">
+    <div class="card" *ngFor="let a of this.archiveList">
+      <div class="card-body">
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Task Name
+            <b>Task Name</b>
             <span class="">{{a.taskName}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Assignee
+            <b>Assignee</b>
             <span class="">{{a.assignee}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Case
+            <b>Case</b>
             <span class="">{{a.case}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            Start Date
+            <b>Start Date</b>
             <span class="">{{getDate(a.startDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            End Date
+            <b>End Date</b>
             <span class="">{{getDate(a.endDate).toLocaleDateString() | date:'yyyy-MM-dd'}}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between align-items-center">

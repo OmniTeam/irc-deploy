@@ -127,7 +127,7 @@ export class ReferralsComponent implements OnInit {
       this.disable = true;
     });
 
-    this.modalService.open(archive, {scrollable: true});
+    this.modalService.open(archive, {scrollable: true,size: 'xl'});
     // this.router.navigate(['/archive/' + id]);
   }
 
