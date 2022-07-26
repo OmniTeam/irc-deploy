@@ -45,6 +45,7 @@ class CentralDataImportJob extends Script {
             def forms = withCentral { listForms(study.centralId, token) }
             for (form in forms) {
                 try {
+                    println(">>>======================================syncing form:${form.name}")
 //                    Form.withNewTransaction {
                         syncFormSetting(study, form, token)
 //                    }
