@@ -129,7 +129,12 @@ class CentralDataImportJob extends Script {
                 }
             }
             // then create the acls from here
-            createAclsForRecords()
+            try{
+                createAclsForRecords()
+            }catch(Exception ex) {
+                ex.printStackTrace()
+            }
+
 
         } else {
             log.info(" ======= The sync mode of form (${form.name}) is not enabled =======")
