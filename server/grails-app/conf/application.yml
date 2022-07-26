@@ -103,8 +103,8 @@ environments:
     development:
         dataSource:
 #            dbCreate: create-drop
-#            url: jdbc:mysql://192.168.100.5:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
-            url: jdbc:mysql://localhost:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
+            url: jdbc:mysql://192.168.100.5:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
+#            url: jdbc:mysql://localhost:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
     test:
         dataSource:
 #            dbCreate: update
