@@ -33,7 +33,7 @@ import { BlocksComponent } from "./blocks/blocks/blocks.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { LoggedInGuard } from "./guards/loggedin.guard";
 import { Roles } from "./models/roles";
-
+import { formsDataRoute } from "./routes/Frontend";
 @NgModule({
     imports: [
         RouterModule.forRoot(
@@ -167,7 +167,7 @@ import { Roles } from "./models/roles";
                                 ).then((m) => m.MisFormsModule),
                         },
                         {
-                            path: "forms/data/:formtable",
+                            path: formsDataRoute,
                             canActivate: [AuthGuard],
                             data: {
                                 userRoles: [

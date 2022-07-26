@@ -1,102 +1,143 @@
 .hm-fieldset {
-  width: 100%;
-  border: 1px groove #ddd !important;
-  border-radius: 4px !important;
-  padding: 3px !important;
+    width: 100%;
+    border: 1px groove #ddd !important;
+    border-radius: 4px !important;
+    padding: 3px !important;
 }
 
 .hm-legend {
-  font-size: 14px;
-  font-weight: normal;
-  color: #555;
-  border-bottom: none;
-  padding: 0 10px;
-  width: auto;
+    font-size: 14px;
+    font-weight: normal;
+    color: #555;
+    border-bottom: none;
+    padding: 0 10px;
+    width: auto;
 }
 
 .fieldset-body .row {
-  margin-right: 0 !important;
-  margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
 .form-control-sm {
-  height: calc( 1.5em + 1.25rem + 5px) !important;
+    height: calc(1.5em + 1.25rem + 5px) !important;
 }
 
 .card {
-  padding: 10px !important;
+    padding: 10px !important;
 }
 
 .map-container {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 10px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 10px;
 }
 
 .map-frame {
-  height: 800px;
+    height: 800px;
 }
 
 #map {
-  height: 100%;
+    height: 100%;
 }
 .bar-chart-frame {
-  width: 100% !important;
-  height: 290px;
+    width: 100% !important;
+    height: 290px;
 }
 .line-chart-frame {
-  width: 100% !important;
-  height: 200px;
+    width: 100% !important;
+    height: 200px;
 }
 
 #form-data-bar-chart {
-  width: 95% !important;
-  height: 100%;
+    width: 95% !important;
+    height: 100%;
 }
 
 #form-data-line-chart {
-  width: 95% !important;
-  height: 100% !important;
+    width: 95% !important;
+    height: 100% !important;
 }
 
 .d3-tip {
-  line-height: 1;
-  position: absolute;
-  font-weight: bold;
-  padding: 12px;
-  background: #03A9F4;
-  color: cornsilk;
-  border-radius: 8px;
-  font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
+    line-height: 1;
+    position: absolute;
+    font-weight: bold;
+    padding: 12px;
+    background: #03a9f4;
+    color: cornsilk;
+    border-radius: 8px;
+    font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: #03A9F4;
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: #03a9f4;
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
 }
 
 /* Style northward tooltips differently */
 .d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
 }
 
 #form-data-bar-chart.dc-chart {
-  float: none !important;
-  text-align: center !important;
+    float: none !important;
+    text-align: center !important;
 }
 
 .modal-header {
-  border-bottom: 1px solid #e9ecef !important;
+    border-bottom: 1px solid #e9ecef !important;
+}
+
+.layout-dashboard .stats-box i {
+    font-size: 14px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.layout-dashboard .stats-box.sales {
+    background-color: #0ff0b3;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        from(#0ff0b3),
+        to(#036ed9)
+    );
+    background-image: -webkit-linear-gradient(to right, #0ff0b3, #036ed9);
+    background-image: -moz-linear-gradient(to right, #0ff0b3, #036ed9);
+    background-image: -ms-linear-gradient(to right, #0ff0b3, #036ed9);
+    background-image: -o-linear-gradient(to right, #0ff0b3, #036ed9);
+    background-image: linear-gradient(to right, #0ff0b3, #036ed9);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0ff0b3", endColorstr="#036ed9", gradientType="1");
+}
+.layout-dashboard .stats-box.sales .statistics-info-bg {
+    background-color: #11606b;
+}
+.layout-dashboard .stats-box.views {
+    background-color: #fad961;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        from(#fad961),
+        to(#f76b1c)
+    );
+    background-image: -webkit-linear-gradient(to right, #fad961, #f76b1c);
+    background-image: -moz-linear-gradient(to right, #fad961, #f76b1c);
+    background-image: -ms-linear-gradient(to right, #fad961, #f76b1c);
+    background-image: -o-linear-gradient(to right, #fad961, #f76b1c);
+    background-image: linear-gradient(to right, #fad961, #f76b1c);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fad961", endColorstr="#f76b1c", gradientType="1");
 }

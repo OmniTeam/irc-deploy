@@ -39,7 +39,7 @@
         "@types/google-libphonenumber": "^7.4.23",
         "alertifyjs": "^1.13.1",
         "angular-datatables": "^11.2.0",
-        "bootstrap": "4.5.2",
+        "bootstrap": "5.0.2",
         "bootstrap-select": "^1.13.10",
         "chart.js": "^3.3.2",
         "clipboard": "2.0.6",
