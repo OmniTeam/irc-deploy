@@ -583,6 +583,13 @@ const routes: Routes = [
         loadChildren: () => import('./mis-components/entity-view-filters/edit-entity-view-filters/edit-entity-view-filters.module').then(m => m.EditEntityViewFiltersModule)
       },
       {
+        path: 'dashboard', canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+        },
+        loadChildren: () => import('./mis-components/dashboard/dashboard.module').then(m => m.DashboardModule)
+      },
+      {
         path: 'dataView', canActivate: [AuthGuard],
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]

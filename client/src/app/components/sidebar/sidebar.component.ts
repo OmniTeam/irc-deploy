@@ -164,6 +164,18 @@ export class SidebarComponent implements OnInit {
           },
           formsMenu,
           {
+            path: 'dashboard',
+            title: 'Dashboard',
+            type: 'link',
+            icontype: 'fas fa-chart-bar',
+            roles: [
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER'
+            ],
+          },
+          {
             path: 'archive',
             title: 'Archive',
             type: 'link',
