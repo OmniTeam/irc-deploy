@@ -49,9 +49,9 @@ export class EditProgramCategoryComponent implements OnInit {
     this.formData = this.formGroup.value;
     this.programCategoryService.updateProgramCategory(this.programCategoryId,  this.formData).subscribe(results => {
       this.router.navigate(['/programCategory']);
-      this.alertService.success(`Program Category has been successfully updated `);
+      this.alertService.success(`Pillar Category has been successfully updated `);
     }, error => {
-      this.alertService.error(`Program Category could not be updated`);
+      this.alertService.error(`Pillar Category could not be updated`);
     });
 
     if (this.formGroup.valid) {
