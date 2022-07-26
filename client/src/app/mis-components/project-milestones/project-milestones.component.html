@@ -41,7 +41,7 @@
                   <input
                     type="search"
                     class="form-control form-control-sm"
-                    placeholder="Search Program Milestones"
+                    placeholder="Search Milestones"
                     aria-controls="datatable"
                     (keyup)="onChangeSearch($event)"
                     (search)="onSearch($event)"
@@ -66,7 +66,7 @@
             [rows]="rows"
             (activate)="onActivate($event)"
           >
-            <ngx-datatable-column name="Program" prop="program"></ngx-datatable-column>
+            <ngx-datatable-column name="Pillar" prop="program"></ngx-datatable-column>
             <ngx-datatable-column name="Category Name" prop="category"></ngx-datatable-column>
             <ngx-datatable-column name="Milestone Name" prop="name"></ngx-datatable-column>
             <ngx-datatable-column name="Description" prop="description"></ngx-datatable-column>

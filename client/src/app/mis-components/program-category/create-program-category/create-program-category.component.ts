@@ -46,9 +46,9 @@ export class CreateProgramCategoryComponent implements OnInit {
     console.log(programCategory);
     this.programCategoryService.createProgramCategory(programCategory).subscribe(results => {
       this.router.navigate(['/programCategory']);
-      this.alertService.success(`Program Category has been successfully created `);
+      this.alertService.success(`Pillar Category has been successfully created `);
     }, error => {
-      this.alertService.error(`Program Category could not be created`);
+      this.alertService.error(`Pillar Category could not be created`);
     });
 
     if (this.formGroup.valid) {
