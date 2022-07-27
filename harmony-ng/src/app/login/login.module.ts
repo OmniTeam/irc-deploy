@@ -10,6 +10,8 @@ import { AuthService } from "../services/auth.service";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { TokenInterceptor } from "../helpers/token.interceptor";
 import { AccordionModule } from "primeng/accordion";
+import { InputTextModule } from "primeng/inputtext";
+import { ButtonModule } from "primeng/button";
 
 @NgModule({
     imports: [
@@ -20,6 +22,8 @@ import { AccordionModule } from "primeng/accordion";
         LoginRoutingModule,
         ReactiveFormsModule,
         AccordionModule,
+        InputTextModule,
+        ButtonModule,
     ],
     providers: [
         AuthGuard,

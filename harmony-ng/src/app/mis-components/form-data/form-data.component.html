@@ -314,6 +314,7 @@
                                             'representative.name',
                                             'status'
                                         ]"
+                                        styleClass="p-datatable-striped"
                                         responsiveLayout="scroll"
                                         [(selection)]="selectedProducts"
                                         [rowHover]="true"
@@ -412,11 +413,33 @@
                                                     ></p-tableCheckbox>
                                                 </td>
                                                 <td align="center">
+                                                    <ng-template
+                                                        let-row="row"
+                                                        let-value="value"
+                                                        ngx-datatable-cell-template
+                                                    >
+                                                        <button
+                                                            (click)="
+                                                                viewRecord(
+                                                                    formDataModal,
+                                                                    value
+                                                                )
+                                                            "
+                                                            class="btn btn-default"
+                                                            style="
+                                                                padding: 1px 6px;
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa fa-eye"
+                                                            ></i>
+                                                        </button>
+                                                    </ng-template>
                                                     <button
                                                         (click)="
                                                             viewRecord(
                                                                 formDataModal,
-                                                                value
+                                                                record.__id
                                                             )
                                                         "
                                                         pButton
@@ -577,4 +600,90 @@
             </div>
         </div>
     </div>
+</div>
+
+<div #formDataModal>
+    <p-dialog
+        header="{{ formName }}"
+        [(visible)]="display"
+        [modal]="true"
+        [style]="{ width: '60vw' }"
+        [draggable]="false"
+        [resizable]="false"
+    >
+        <p-table [value]="formDataRecord" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Question</th>
+                    <th>Answer</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-record>
+                <tr
+                    *ngIf="
+                        !(record.xformtype == 'repeat') &&
+                        !(record.xformtype == 'select') &&
+                        !(record.xformtype == 'picture')
+                    "
+                >
+                    <td>{{ record.question }}</td>
+                    <td>{{ record.value }}</td>
+                </tr>
+
+                <tr *ngIf="record.xformtype == 'select'">
+                    <td>{{ record.question }}</td>
+                    <td>
+                        <div *ngFor="let option of record.selectOptions">
+                            <span> {{ option }} </span>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="record.xformtype == 'picture'">
+                    <td>{{ record.question }}</td>
+                    <td>
+                        <img
+                            src="{{ record.image }}"
+                            style="width: 400px; height: 400px"
+                        />
+                    </td>
+                </tr>
+
+                <tr *ngIf="record.xformtype == 'repeat'">
+                    <td>{{ record.question }}</td>
+                    <td>
+                        <ngx-datatable
+                            class="bootstrap"
+                            [columnMode]="'force'"
+                            [headerHeight]="50"
+                            [footerHeight]="50"
+                            [rowHeight]="'auto'"
+                            [limit]="5"
+                            rowHeight="auto"
+                            [rows]="record.repeatRows"
+                        >
+                            <ngx-datatable-column
+                                *ngFor="
+                                    let col of record.repeatColumns;
+                                    let i = index
+                                "
+                                name="{{ col.name }}"
+                                prop="{{ col.prop }}"
+                            >
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <ng-template pTemplate="footer">
+            <p-button
+                icon="pi pi-times"
+                (click)="display = false"
+                label="Close"
+                styleClass="p-button-text"
+            ></p-button>
+        </ng-template>
+    </p-dialog>
 </div>

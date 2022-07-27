@@ -110,6 +110,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     isExportingToExcel = false;
     isExportingToCSV = false;
     isExportingToZippedCSV = false;
+    display: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -159,6 +160,10 @@ export class FormDataComponent implements OnInit, AfterViewInit {
                 icon: "pi pi-fw pi-map",
             },
         ];
+    }
+
+    showDialog() {
+        this.display = true;
     }
 
     activateMenu() {
@@ -479,15 +484,19 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     viewRecord(modalDom, id: any) {
+        this.display = true;
+
         const params = new HttpParams()
             .set("formtable", this.formtable)
             .set("id", id);
+
         this.formService.getFormDataRecord(params).subscribe(
             (data) => {
                 this.formDataRecord = [];
+
                 if (data !== null) {
-                    document.getElementById("form-data-display").style.display =
-                        "block";
+                    // document.getElementById("form-data-display").style.display =
+                    // "block";
                     for (const record of data) {
                         let recordObject = {};
                         recordObject["question"] = record.question;
@@ -510,25 +519,27 @@ export class FormDataComponent implements OnInit, AfterViewInit {
                         this.formDataRecord.push(recordObject);
                     }
                 } else {
-                    document.getElementById("form-data-display").style.display =
-                        "none";
+                    this.display = false;
+
+                    // document.getElementById("form-data-display").style.display =
+                    // "none";
                     this.formDataRecord = [];
                 }
             },
             (error) => console.log(error)
         );
-        this.modalService
-            .open(modalDom, { ariaLabelledBy: "modal-basic-title", size: "xl" })
-            .result.then(
-                (result) => {
-                    this.closeModal = `Closed with: ${result}`;
-                },
-                (reason) => {
-                    this.closeModal = `Dismissed ${this.getDismissReason(
-                        reason
-                    )}`;
-                }
-            );
+        // this.modalService
+        //     .open(modalDom, { ariaLabelledBy: "modal-basic-title", size: "xl" })
+        //     .result.then(
+        //         (result) => {
+        //             this.closeModal = `Closed with: ${result}`;
+        //         },
+        //         (reason) => {
+        //             this.closeModal = `Dismissed ${this.getDismissReason(
+        //                 reason
+        //             )}`;
+        //         }
+        //     );
     }
 
     getDismissReason(reason: any): string {
