@@ -268,12 +268,14 @@
                                             <p-button
                                                 label=" Export to Excel"
                                                 icon="pi pi-upload"
+                                                [loading]="isExportingToExcel"
                                                 (click)="exportExcelFormData()"
                                                 styleClass="p-button-secondary"
                                             ></p-button>
                                             <p-button
                                                 label="Export to CSV"
                                                 icon="pi pi-upload"
+                                                [loading]="isExportingToCSV"
                                                 (click)="exportCSVFormData()"
                                                 styleClass="p-button-info"
                                                 class="ml-2"
@@ -281,6 +283,9 @@
                                             <p-button
                                                 label="Export to Zipped CSV"
                                                 icon="pi pi-upload"
+                                                [loading]="
+                                                    isExportingToZippedCSV
+                                                "
                                                 (click)="
                                                     exportZippedCSVFormData()
                                                 "
@@ -300,6 +305,7 @@
                                     <p-table
                                         #dt
                                         [value]="rows"
+                                        [loading]="isFectchingRecords"
                                         [rows]="10"
                                         [paginator]="true"
                                         [globalFilterFields]="[

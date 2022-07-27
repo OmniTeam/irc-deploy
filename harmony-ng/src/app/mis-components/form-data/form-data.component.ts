@@ -106,6 +106,10 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     menuActiveTab = "Forms";
     uniqueDataCollectors: any;
     tmpCordinates: any;
+    isFectchingRecords = false;
+    isExportingToExcel = false;
+    isExportingToCSV = false;
+    isExportingToZippedCSV = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -163,6 +167,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     getFormData() {
+        this.isFectchingRecords = true;
         const params = new HttpParams()
             .set("formtable", this.formtable)
             .set("dateFrom", this.dateFrom)
@@ -173,11 +178,13 @@ export class FormDataComponent implements OnInit, AfterViewInit {
         this.formService.getFormData(params).subscribe(
             (data) => {
                 console.log(data, "Data");
+
                 this.formName = new ReplacePipe().transform(
                     data.form["displayName"],
                     "_",
                     " "
                 );
+                this.isFectchingRecords = false;
                 this.rows = data.resultList;
                 this.columns = this.columnMappings(data.headerList);
                 this.users = this.userMappings(data.formDataCollectors);
@@ -642,10 +649,11 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     exportExcelFormData() {
+        this.isExportingToExcel = true;
         const params = new HttpParams().set("formtable", `${this.formtable}`);
-
         this.formService.exportFormData(params).subscribe(
             (data) => {
+                this.isExportingToExcel = false;
                 this.exportService.exportJsonToExcel(
                     data["data"],
                     data["file"]
@@ -656,9 +664,11 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     exportCSVFormData() {
+        this.isExportingToCSV = true;
         const params = new HttpParams().set("formtable", `${this.formtable}`);
         this.formService.exportFormData(params).subscribe(
             (data) => {
+                this.isExportingToCSV = false;
                 this.exportService.exportToCsv(data["data"], data["file"]);
             },
             (error) => console.log(error)
@@ -666,9 +676,13 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     exportZippedCSVFormData() {
+        this.isExportingToZippedCSV = true;
+
         const params = new HttpParams().set("formtable", `${this.formtable}`);
         this.formService.exportZippedFormData(params).subscribe(
             (data) => {
+                this.isExportingToZippedCSV = false;
+
                 this.exportService.exportToZippedFile(
                     data["data"],
                     data["file"]

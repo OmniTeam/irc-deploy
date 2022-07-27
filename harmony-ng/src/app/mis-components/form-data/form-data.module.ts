@@ -15,6 +15,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { InputTextModule } from "primeng/inputtext";
 import { TableModule } from "primeng/table";
 import { ToolbarModule } from "primeng/toolbar";
+import { ProgressBarModule } from "primeng/progressbar";
 
 @NgModule({
     declarations: [FormDataComponent],
@@ -34,6 +35,7 @@ import { ToolbarModule } from "primeng/toolbar";
         InputTextModule,
         TableModule,
         ToolbarModule,
+        ProgressBarModule,
     ],
 })
 export class FormDataModule {}
