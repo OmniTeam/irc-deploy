@@ -8,7 +8,7 @@ import {ComponentsModule} from '../components/components.module';
 import {AuthGuard} from '../guards/auth.guard';
 import {AuthService} from '../services/auth.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {TokenInterceptor} from '../helpers/token.interceptor';
+import {AuthInterceptor} from '../helpers/auth-interceptor';
 
 @NgModule({
   imports: [
@@ -18,14 +18,13 @@ import {TokenInterceptor} from '../helpers/token.interceptor';
     NgxDatatableModule,
     LoginRoutingModule,
     ReactiveFormsModule
-
   ],
   providers: [
     AuthGuard,
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: AuthInterceptor,
       multi: true
     }
   ],

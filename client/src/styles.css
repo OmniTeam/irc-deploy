@@ -1,3 +1,13 @@
+html {
+  overflow:   scroll;
+  zoom: 80%;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
 .dataTables_wrapper {
   overflow: auto;
   width: 100%;
@@ -84,7 +94,53 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody th.select
 }
 
 .alertify-notifier .ajs-message.ajs-error {
-  color: #FFFFFF;
+  font-family: "Poppins Medium", "Helvetica", sans-serif;
+  color: #FFFFFF !important;
+  background-color: #BF2A20;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.alertify-notifier .ajs-message.ajs-success {
+  font-family: "Poppins Medium", "Helvetica", sans-serif;
+  color: #FFFFFF !important;
+  background-color: #8FC849;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.alertify-notifier .ajs-message.ajs-message {
+  font-family: "Poppins Medium", "Helvetica", sans-serif;
+  color: #8FC849;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.ajs-button {
+  color: #fff;
+  background-color: #7851a9;
+  border: 0;
+  position: relative;
+  text-transform: none;
+  -webkit-transition: all 0.15s ease;
+  transition: all 0.15s ease;
+  letter-spacing: 0.025em;
+  font-size: 0.875rem;
+  will-change: transform;
+}
+
+.ajs-button:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+
+.ajs-button:hover {
+  box-shadow: 0 7px 14px rgba(50 50 93 0.1), 0 3px 6px rgba(0 0 0 0.8);
+  -webkit-transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .main-content, .sidenav {
@@ -104,12 +160,14 @@ td a {
   color: #7851a9 !important;
 }
 
-html {
-  overflow:   scroll;
-  zoom: 80%;
-}
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
+.loader {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  margin: auto;
 }
 

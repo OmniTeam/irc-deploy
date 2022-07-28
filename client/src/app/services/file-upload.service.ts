@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {environment} from "../../environments/environment";
+import {AlertService} from "./alert";
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +10,20 @@ import {environment} from "../../environments/environment";
 export class FileUploadService {
   baseApiUrl = environment.serverUrl+'/fileManager';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private alertService: AlertService) {}
 
   upload(file, folder?:string):Observable<any> {
-    const formData = new FormData();
-    formData.append("file", file, file.name);
-    if(folder!=undefined) formData.append("folder", folder);
-    return this.http.post(this.baseApiUrl+'/uploadFile', formData)
+    let maxfilesize = (1024 * 1024) * 5 //5mbs
+    let filesize = file.size
+    if (filesize > maxfilesize) {
+      this.alertService.info("File size too big. Please upload a smaller file", () => {})
+      return throwError("File size too big. Please upload a smaller file")
+    } else {
+      const formData = new FormData();
+      formData.append("file", file, file.name);
+      if (folder != undefined) formData.append("folder", folder);
+      return this.http.post(this.baseApiUrl + '/uploadFile', formData)
+    }
   }
 
   download(path):Observable<Blob> {
@@ -44,5 +52,9 @@ export class FileUploadService {
     }, error => {
       console.log(error)
     })
+  }
+
+  getFileName(path) {
+    return path?.substring(path.lastIndexOf('/') + 1)
   }
 }

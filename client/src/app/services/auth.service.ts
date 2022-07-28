@@ -26,10 +26,12 @@ export class AuthService {
       .pipe(
         tap(user => {
           this.doLoginUser(user.username, user);
+          window.location.reload()
         }),
         mapTo(true),
         catchError(error => {
-          alert(error.error);
+          alert("Server Error, please contact support");
+          console.log(error)
           return of(false);
         }));
   }

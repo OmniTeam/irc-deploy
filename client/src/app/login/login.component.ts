@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import { AlertService } from '../services/alert';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   showSpinner = false;
   fieldTextType: boolean;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private alertService: AlertService) {
   }
 
   ngOnInit(): void {
@@ -37,6 +38,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.submitted = true;
     if (this.loginForm.invalid) {
+      this.alertService.message("Please fill in all fields")
       return;
     }
     this.loading = true;
@@ -49,10 +51,8 @@ export class LoginComponent implements OnInit {
     )
       .subscribe(success => {
         if (success) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/home']);
         }
-      }, error => {
-        console.log(error.status)
       });
   }
 }
