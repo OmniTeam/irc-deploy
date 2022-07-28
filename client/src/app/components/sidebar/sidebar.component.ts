@@ -115,7 +115,7 @@ export interface ChildrenItems2 {
 // Menu Items
 export const ROUTES: RouteInfo[] = [
   {
-    path: '/',
+    path: 'home',
     title: 'Home',
     type: 'link',
     icontype: 'fas fa-home',

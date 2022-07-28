@@ -10,25 +10,24 @@ import {Roles} from './models/roles';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: 'home',
     pathMatch: 'full',
     canActivate: [AuthGuard],
     data: {
       userRoles: [] // All User Can Access but must be login
     },
   },
-
+  {
+    path: 'login', canActivate: [LoggedInGuard],
+    data: {
+      userRoles: [] // All User Can Access but must be login
+    },
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+  },
   {
     path: '',
     component: AdminLayoutComponent,
     children: [
-      {
-        path: 'login', canActivate: [LoggedInGuard],
-        data: {
-          userRoles: [] // All User Can Access but must be login
-        },
-        loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
-      },
       {
         path: 'project', canActivate: [AuthGuard],
         data: {

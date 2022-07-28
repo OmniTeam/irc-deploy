@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
@@ -153,40 +153,40 @@ export class EditActivityReportComponent implements OnInit {
     this.route.params.subscribe(p => {
       this.activityId = p['id']
       this.isReadOnly = p['readonly'] == 'true'
-      this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data =>{
+      this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data => {
         this.activity = data;
-        console.log("yry",data);
+        console.log("yry", data);
         this.getBudgetLines();
         this.getActivityDetails(data)
-        this.choosenBudget =  this.activity?.budgetLine
+        this.choosenBudget = this.activity?.budgetLine
         this.budgetHolderId = this.activity?.name
         this.orgChosen = this.activity?.organization
         this.formGroup = this.formBuilder.group({
-          budgetLine: [{values:this.activity?.budgetLine,disabled:this.isReadOnly}, [Validators.required]],
-          name: [{value:this.activity?.name,disabled:this.isReadOnly}, [Validators.required]],
-          organization: [{value:this.activity?.organization,disabled:this.isReadOnly}, [Validators.required]],
-          startDate:[{value:this.activity?.startDate,disabled:this.isReadOnly}],
-          endDate:[{value:this.activity?.endDate,disabled:this.isReadOnly}],
-          designation: [{value:this.activity?.designation, disabled: this.isReadOnly}, [Validators.required]],
-          location: [{value:this.activity?.location,disabled: this.isReadOnly}],
-          milestone: [{value:this.activity?.milestone,disabled: this.isReadOnly}],
-          activityObjectives:[{value:this.activity?.activityObjectives,disabled: this.isReadOnly}],
-          activityResults:[{value:this.activity?.activityResults,disabled: this.isReadOnly}],
-          activityUndertaken:[{value:this.activity?.activityUndertaken,disabled: this.isReadOnly}],
-          challenges:[{value:this.activity?.challenges,disabled: this.isReadOnly}],
-          lessonsLearned:[{value:this.activity?.lessonsLearned,disabled: this.isReadOnly}],
-          keyAchievements:[{value:this.activity?.keyAchievements,disabled: this.isReadOnly}],
-          activityName:[{value:this.activity?.activityName,disabled: this.isReadOnly}],
-          peopleReached:[''],
-          costAssociated:[''],
-          budgetProgress:[''],
-          assignee:[{value:this.activity?.assignee,disabled: this.isReadOnly}],
-          attachPhoto:[{value:this.activity?.attachPhoto,disabled: this.isReadOnly}],
-          attachList:[{value:this.activity?.attachList,disabled: this.isReadOnly}],
-          attachStory:[{value:this.activity?.attachStory,disabled: this.isReadOnly}],
-          comments:[''],
-          actionRequired:[''],
-          status:['']
+          budgetLine: [{values: this.activity?.budgetLine, disabled: this.isReadOnly}, [Validators.required]],
+          name: [{value: this.activity?.name, disabled: this.isReadOnly}, [Validators.required]],
+          organization: [{value: this.activity?.organization, disabled: this.isReadOnly}, [Validators.required]],
+          startDate: [{value: this.activity?.startDate, disabled: this.isReadOnly}],
+          endDate: [{value: this.activity?.endDate, disabled: this.isReadOnly}],
+          designation: [{value: this.activity?.designation, disabled: this.isReadOnly}, [Validators.required]],
+          location: [{value: this.activity?.location, disabled: this.isReadOnly}],
+          milestone: [{value: this.activity?.milestone, disabled: this.isReadOnly}],
+          activityObjectives: [{value: this.activity?.activityObjectives, disabled: this.isReadOnly}],
+          activityResults: [{value: this.activity?.activityResults, disabled: this.isReadOnly}],
+          activityUndertaken: [{value: this.activity?.activityUndertaken, disabled: this.isReadOnly}],
+          challenges: [{value: this.activity?.challenges, disabled: this.isReadOnly}],
+          lessonsLearned: [{value: this.activity?.lessonsLearned, disabled: this.isReadOnly}],
+          keyAchievements: [{value: this.activity?.keyAchievements, disabled: this.isReadOnly}],
+          activityName: [{value: this.activity?.activityName, disabled: this.isReadOnly}],
+          peopleReached: [''],
+          costAssociated: [''],
+          budgetProgress: [''],
+          assignee: [{value: this.activity?.assignee, disabled: this.isReadOnly}],
+          attachPhoto: [{value: this.activity?.attachPhoto, disabled: this.isReadOnly}],
+          attachList: [{value: this.activity?.attachList, disabled: this.isReadOnly}],
+          attachStory: [{value: this.activity?.attachStory, disabled: this.isReadOnly}],
+          comments: [''],
+          actionRequired: [''],
+          status: ['']
         });
 
         this.userService.getUsers().subscribe((data) => {
@@ -194,7 +194,6 @@ export class EditActivityReportComponent implements OnInit {
         });
       })
     })
-
 
 
     this.programStaffService.getPrograms().subscribe((data) => {
@@ -209,10 +208,10 @@ export class EditActivityReportComponent implements OnInit {
     return this.formGroup.controls;
   }
 
-  getActivityDetails(data){
+  getActivityDetails(data) {
 
-    let values =  JSON.parse(data.costAssociated)
-    console.log("Values",values)
+    let values = JSON.parse(data.costAssociated)
+    console.log("Values", values)
     this.peopleSurvey = values.people
     this.totalBalance = values.balance
     this.budget = values.budget
@@ -275,7 +274,7 @@ export class EditActivityReportComponent implements OnInit {
       status: statusSave
     };
 
-    this.activityReportService.updateActivityReport(savedActivityRecord,this.activityId).subscribe(results => {
+    this.activityReportService.updateActivityReport(savedActivityRecord, this.activityId).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully updated! `);
@@ -452,6 +451,9 @@ export class EditActivityReportComponent implements OnInit {
 
           this.loading = false; // Flag variable
         }
+      }, error => {
+        this.loading = false;
+        console.log(error)
       }
     );
   }
@@ -482,7 +484,7 @@ export class EditActivityReportComponent implements OnInit {
     }
   }
 
-  updateTotalExpensesInWorkPlan(){
+  updateTotalExpensesInWorkPlan() {
     this.budgetHolder.forEach((d) => {
       if (d.id == this.workPlanId) {
 
@@ -573,7 +575,7 @@ export class EditActivityReportComponent implements OnInit {
       status: statusSave
     };
 
-    this.activityReportService.updateActivityReport(savedActivityRecord,this.activityId).subscribe(results => {
+    this.activityReportService.updateActivityReport(savedActivityRecord, this.activityId).subscribe(results => {
       this.updateTotalExpensesInWorkPlan()
       this.router.navigate(['/activity-list']);
       this.alertService.success(`${activityReport.name} has been successfully updated! `);
