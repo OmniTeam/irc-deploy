@@ -125,7 +125,8 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       });
     }
 
-    this.setMilestones();
+    this.getMilestones();
+
     this.dtOptions = {
       pagingType: 'numbers',
       lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
@@ -266,20 +267,18 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
           console.log(this.organisationalInfo)
           this.programChosen = results.programId;
           // if (this.programChosen != undefined) {
-            // this.setMilestones(this.programChosen);
+          // this.setMilestones(this.programChosen);
           // }
         }
       });
     }
   }
 
-  setMilestones() {
+  getMilestones() {
     // const params = new HttpParams().set('program', program);
     this.projectMilestoneService.getMilestones().subscribe((data) => {
-      if (data !== null && data !== undefined) {
-        console.log('milestones', data.milestones);
-        this.milestones = data.milestones;
-      }
+      console.log('milestones', data);
+      this.milestones = data;
     });
   }
 
@@ -385,7 +384,15 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
     }
 
     const id = uuid();
-    this.indicators.push({id: id, name: '', milestoneId: '', overallTarget: '', disaggregation: [], startDate: '', endDate: ''});
+    this.indicators.push({
+      id: id,
+      name: '',
+      milestoneId: '',
+      overallTarget: '',
+      disaggregation: [],
+      startDate: '',
+      endDate: ''
+    });
   }
 
   createNewBudgetItem() {
