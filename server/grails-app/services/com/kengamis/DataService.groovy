@@ -14,7 +14,7 @@ class DataService {
 
     List<FormData> listAll(def params) {
         def q = new QueryHelper(params, springSecurityService.currentUser as User)
-        def filtered = isSuperUser()?q.data:kengaGroupsService.postFilter(q.data, Permission.READ,q.formTable)
+        def filtered = kengaGroupsService.postFilter(q.data, Permission.READ,q.formTable)
         List<FormData> formDataList = filtered.collect {
             FormData.init(it.__id, q.formTable).lazyLoad()
         }
@@ -40,8 +40,4 @@ class DataService {
         }
     }
 
-    boolean isSuperUser(){
-        def user = springSecurityService.currentUser as User
-         return user.hasAnyRole('ROLE_SUPER_ADMIN')
-    }
 }
