@@ -125,6 +125,7 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
       });
     }
 
+    this.setMilestones();
     this.dtOptions = {
       pagingType: 'numbers',
       lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
@@ -264,17 +265,17 @@ export class WorkPlanComponent implements OnInit, OnUpdateCell {
           this.organisationalInfo = results;
           console.log(this.organisationalInfo)
           this.programChosen = results.programId;
-          if (this.programChosen != undefined) {
-            this.setMilestones(this.programChosen);
-          }
+          // if (this.programChosen != undefined) {
+            // this.setMilestones(this.programChosen);
+          // }
         }
       });
     }
   }
 
-  setMilestones(program) {
-    const params = new HttpParams().set('program', program);
-    this.projectMilestoneService.getMilestonesByProgram(params).subscribe((data) => {
+  setMilestones() {
+    // const params = new HttpParams().set('program', program);
+    this.projectMilestoneService.getMilestones().subscribe((data) => {
       if (data !== null && data !== undefined) {
         console.log('milestones', data.milestones);
         this.milestones = data.milestones;
