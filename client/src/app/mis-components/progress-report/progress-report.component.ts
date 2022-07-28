@@ -427,6 +427,9 @@ export class ProgressReportComponent implements OnInit, OnUpdateCell {
         if (id === "attachment3") this.shortLink3 = data.path;
         console.log("shortlink", this.shortLink1);
         this.loading = false;
+      }, error => {
+        console.log(error)
+        this.loading = false;
       }
     );
   }

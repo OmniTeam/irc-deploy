@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 import {AlertService} from "../services/alert";
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
 
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);

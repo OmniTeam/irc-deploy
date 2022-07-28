@@ -6,7 +6,15 @@ import * as alertify from 'alertifyjs';
 })
 export class AlertService {
 
-  constructor() {
+  constructor() {}
+
+  info(message: string, okCallback: () => any) {
+    alertify.alert(message, (e: any) => {
+      if (e) {
+        okCallback();
+      } else {
+      }
+    }).set({title:"Alert!"});
   }
 
   confirm(message: string, okCallback: () => any) {

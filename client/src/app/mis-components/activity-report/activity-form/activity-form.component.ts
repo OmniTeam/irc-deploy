@@ -528,6 +528,7 @@ export class ActivityFormComponent implements OnInit {
         if (id === "attachStory") this.formGroup.patchValue({attachStory: data.path});
         this.loading = false;
       }, error => {
+        this.loading = false;
         console.log(error);
       }
     );
