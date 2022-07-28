@@ -70,10 +70,10 @@
                 </div>
                 <div class="card-body col-sm-12 home-card">
                   <div class="row" *ngFor="let row of taskListRows">
-                    <button class="btn" (click)="openForm(row.task_type, row)">
+                    <button class="btn btn-neutral" (click)="openForm(row.task_type, row)" style="margin-bottom: 20px;">
                       <div class="row">
                         <span style="border-left: 4px solid #fbca3d;"></span>
-                        <div class="col text-left" style="display: grid;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+                        <div class="col text-left" style="display: grid;">
                           <span><b>Task:  {{ row.task_name | replace: '_' : ' ' }}</b></span>
                           <span> Case  :  {{row.task_case}}</span>
                           <span>Process:  {{ row.task_type | replace: '_' : ' ' }}</span>

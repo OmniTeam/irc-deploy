@@ -156,6 +156,15 @@ button, .btn {
   border-color: #f5365c !important;
 }
 
+.btn-neutral {
+  color: #2b2b58 !important;
+}
+
+.nav-item .active {
+  color: #fbc324 !important;
+  background-color: rgba(124, 92, 20, 0.08) !important;
+}
+
 td a {
   color: #7851a9 !important;
 }
