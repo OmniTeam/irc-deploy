@@ -173,25 +173,28 @@ class ReportFormController {
 
                     }
                     int overAllTarget = (p['overallTarget']!='') ? p['overallTarget'] as int : 0
-                    milestones << [
-                            milestoneId          : pm?.id,
-                            staffId              : it.staffId,
-                            milestone            : pm?.name,
-                            categoryId           : pm?.programCategoryId,
-                            pillar               : pm?.program,
-                            overallTarget        : p['overallTarget'],
-                            cumulativeAchievement: cumulativeAchievement,
-                            startDate            : p['startDate'],
-                            endDate              : p['endDate'],
-                            organization         : it?.organization,
-                            expenseToDate        : expenseToDate,
-                            approvedBudget       : approvedBudget,
-                            progress             : getRowPerformance(p['startDate'] as String, p['endDate'] as String, overAllTarget, cumulativeAchievement ?: 0),
-                            efficiency           : getEfficiency((approvedBudget ?: 0) as int , (expenseToDate ?: 0) as int),
-                            achievement          : getEfficiency(overAllTarget,cumulativeAchievement),
-                            budgetEfficiency     : getBudgetProgress(overAllTarget, (approvedBudget ?: 0 ) as int, (expenseToDate ?: 0) as int, cumulativeAchievement ?: 0),
-                            percentage           : getPercentage(overAllTarget,cumulativeAchievement ?: 0)
-                    ]
+                    if(p['startDate'] != '' && p['endDate'] != ''){
+                        milestones << [
+                                milestoneId          : pm?.id,
+                                staffId              : it.staffId,
+                                milestone            : pm?.name,
+                                categoryId           : pm?.programCategoryId,
+                                pillar               : pm?.program,
+                                overallTarget        : p['overallTarget'],
+                                cumulativeAchievement: cumulativeAchievement,
+                                startDate            : p['startDate'],
+                                endDate              : p['endDate'],
+                                organization         : it?.organization,
+                                expenseToDate        : expenseToDate,
+                                approvedBudget       : approvedBudget,
+                                progress             : getRowPerformance(p['startDate'] as String, p['endDate'] as String, overAllTarget, cumulativeAchievement ?: 0),
+                                efficiency           : getEfficiency((approvedBudget ?: 0) as int , (expenseToDate ?: 0) as int),
+                                achievement          : getEfficiency(overAllTarget,cumulativeAchievement),
+                                budgetEfficiency     : getBudgetProgress(overAllTarget, (approvedBudget ?: 0 ) as int, (expenseToDate ?: 0) as int, cumulativeAchievement ?: 0),
+                                percentage           : getPercentage(overAllTarget,cumulativeAchievement ?: 0)
+                        ]
+                    }
+
                 }
 
             }

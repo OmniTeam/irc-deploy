@@ -19,6 +19,7 @@ import grails.gorm.transactions.Transactional
 class ReferralController {
 
     ReferralService referralService
+    TaskListService taskListService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -86,11 +87,13 @@ class ReferralController {
 
         def referral = referralService.get(id)
 
-        def tasks =  TaskList.findAllByInputVariables('%' + referral.id + '%')
-        tasks.each {
-            def deleteFromCamunda = FeedbackController.deleteProcessInstance(it.processInstanceId)
+        def query = "SELECT process_instance_id, id FROM task_list WHERE input_variables like '%${referral.id}%'"
+        def result = AppHolder.withMisSql { rows(query.toString()) }
+        def tasks =  TaskList.findAllByInputVariables('%' + id + '%')
+        result.each {
+            def deleteFromCamunda = FeedbackController.deleteProcessInstance(it.process_instance_id)
             if(deleteFromCamunda){
-                it.delete()
+                taskListService.delete(it.id)
             }
         }
 
