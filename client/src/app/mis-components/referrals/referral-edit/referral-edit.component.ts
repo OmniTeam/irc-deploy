@@ -413,7 +413,7 @@ export class ReferralEditComponent implements OnInit {
         this.referralsService.deleteCurrentReferral(this.route.snapshot.params.id).subscribe((result) => {
             console.warn(result, 'Referral has been deleted');
             this.alertService.warning(`Referral has been deleted`)
-            this.router.navigate(['/referrals-list']);
+            this.router.navigate(['/referrals/list']);
           }, error => {
             this.alertService.error(`Failed to delete Referral`)
           }

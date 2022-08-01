@@ -12,6 +12,7 @@ import static org.springframework.http.HttpStatus.*
 class ActivityReportController {
 
     ActivityReportService activityReportService
+    TaskListService taskListService
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -82,11 +83,13 @@ class ActivityReportController {
         }
         /*delete all occurrences of the deleted activity from the db*/
         def activitySetup = activityReportService.get(id)
+        def query = "SELECT process_instance_id, id FROM task_list WHERE input_variables like '%${activitySetup.id}%'"
+        def result = AppHolder.withMisSql { rows(query.toString()) }
         def tasks = TaskList.findAllByInputVariablesIlike('%' + activitySetup.id + '%')
-        tasks.each {
-            def deleteFromCamunda = WorkPlanController.deleteProcessInstance(it.processInstanceId)
+        result.each {
+            def deleteFromCamunda = WorkPlanController.deleteProcessInstance(it.process_instance_id)
             if (deleteFromCamunda) {
-                it.delete()
+                taskListService.delete(it.id)
             }
         }
         activityReportService.delete(id)

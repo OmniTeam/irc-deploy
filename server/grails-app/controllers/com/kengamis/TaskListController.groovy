@@ -49,7 +49,7 @@ class TaskListController {
             def referral = Referral.findById(referralId)
             if (referralId != null && referral != null) {
                 assignee = referral.assignee
-                taskCase = referral.organizationReferredTo
+                taskCase = referral.reasonForReferral
             }
 
             def activityReport = ActivityReport.findById(activityId)
@@ -136,9 +136,11 @@ class TaskListController {
         def taskCase = ''
 
         def referral = Referral.findById(referralId)
+        def query = "select * from referral where id = '$referralId'"
+        def result = AppHolder.withMisSql { rows(query.toString()) }
         if (referralId != null && referral != null) {
             assignee = referral.assignee
-            taskCase = referral.organizationReferredTo
+            taskCase = result.first()?.reason_for_referral
         }
 
         def activityReport = ActivityReport.findById(activityId)
