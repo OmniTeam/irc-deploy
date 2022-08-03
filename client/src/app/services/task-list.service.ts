@@ -10,8 +10,9 @@ export class TaskListService {
 
   constructor(private http: HttpClient) { }
 
-  getTaskList(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/taskList`);
+  getTaskList(params?): Observable<any> {
+    if (params == undefined) return this.http.get(`${environment.serverUrl}/taskList`);
+    else return this.http.get(`${environment.serverUrl}/taskList`, {params});
   }
 
   getTaskRecord(params: any): Observable<any> {

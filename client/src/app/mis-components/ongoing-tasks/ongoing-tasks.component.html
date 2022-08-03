@@ -208,6 +208,7 @@
                         [footerHeight]="50"
                         [rowHeight]="'auto'"
                         [limit]="entries != -1 ? entries : undefined"
+                        [loadingIndicator]="isLoading"
                         [rows]="rows">
 
                         <ngx-datatable-column name="Process" prop="task_type">
