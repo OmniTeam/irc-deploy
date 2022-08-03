@@ -18,6 +18,8 @@ import org.openxdata.markup.XformType
 import javax.servlet.http.HttpServletRequest
 import java.sql.ResultSet
 
+import static com.kengamis.AppHolder.withMisSqlNonTx
+
 @Slf4j
 class DataExporter {
     String formTable
@@ -128,12 +130,12 @@ class DataExporter {
     private Map<String, String> buildSelectSql(Boolean includeNames = true) {
         def qh = new QueryHelper(params, user)
 
-
         def allQuestions = form.findAllFirstLevelQuestionsInFormAndFirstLevelGroups(60)
 
         qh.headers = allQuestions.findAll {
-            !(it.xformType in [XformType.AUDIO.value, XformType.VIDEO.value])
+            !(it.xformType in [XformType.AUDIO.value, XformType.VIDEO.value]) && existsInDb(it)
         }.sort { it.orderOfDisplayInTable }
+
         qh.headers.add(0, form.metaUsername())
         qh.headers.add(1, form.metaDateCreated())
         qh.initBaseTable()
@@ -165,5 +167,13 @@ class DataExporter {
             map[fs] = repeatQh.query
         }
         return map
+    }
+
+    boolean existsInDb(FormSetting formSetting) {
+        def field = withMisSqlNonTx {
+            firstRow("SHOW COLUMNS FROM `_5_xxx_famerprofileisdap` LIKE ?",[formSetting.field])
+        }?.Field
+
+        return field != null
     }
 }
