@@ -10,7 +10,6 @@ import {DateAgoPipe} from '../../pipes/date-ago.pipe';
 import {WorkPlanService} from '../../services/work-plan-setup.service';
 import {ReportFormService} from '../../services/report-form.service';
 import {ProgramCategoryService} from '../../services/program-category.service';
-import {log} from 'util';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +24,7 @@ export class OngoingTasksComponent implements OnInit {
   perc: any;
   barColor: any;
   displayRows: OngoingTask[];
-
+  isLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -146,11 +145,15 @@ export class OngoingTasksComponent implements OnInit {
       if (firstTime == true) {
         this.switchRowsData('referrals');
       }
+      this.isLoading = false;
+    }, error => {
+      console.log(error)
+      this.isLoading = false;
     });
   }
 
   clickReset() {
-    this.active_div=''
+    this.active_div = ''
     this.getMilestones()
   }
 
@@ -252,7 +255,7 @@ export class OngoingTasksComponent implements OnInit {
         this.taskListRows = this.referrals
         break;
       case 'feedback':
-       this.taskListRows =  this.feedback;
+        this.taskListRows = this.feedback;
         break;
       case 'quarterly_report':
         this.isQuarterlyReport = true;
@@ -451,7 +454,7 @@ export class OngoingTasksComponent implements OnInit {
     this.filterCounter.forEach((item) => {
       if (item.filter == filterName) {
         number = item.count;
-        this.perc = Math.round((number/this.taskListRows?.length) * 100)
+        this.perc = Math.round((number / this.taskListRows?.length) * 100)
       }
     });
     if (filterName == 'All') {
@@ -463,12 +466,12 @@ export class OngoingTasksComponent implements OnInit {
   }
 
   setProgressColor(filter): any {
-    this.filterCounter.forEach((item) =>{
-      if(item.filter == '0 to 1 Week'){
+    this.filterCounter.forEach((item) => {
+      if (item.filter == '0 to 1 Week') {
         this.barColor = 'primary'
-      } else if (item.filter == '1 to 2 Week'){
+      } else if (item.filter == '1 to 2 Week') {
         this.barColor == 'success'
-      } else if (item.filter == '3 to 4 Week'){
+      } else if (item.filter == '3 to 4 Week') {
         this.barColor = 'info'
       } else if (item.filter == 'More than 4 Weeks') {
         this.barColor == 'danger'

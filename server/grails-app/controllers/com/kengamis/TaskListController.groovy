@@ -14,10 +14,18 @@ class TaskListController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        def tasks = []
+    def index() {
+        def max = 10
+        def offset = 0
+        if (params.max) max = params.max as Integer
+        if (params.offset) offset = params.offset as Integer
 
-        TaskList.findAllByStatusNotEqual('completed').each { TaskList task ->
+        def parameters = [max: max, offset: offset]
+
+        def tasks = []
+        def allTasksSize = TaskList.findAllByStatusNotEqual('completed').size()
+
+        TaskList.findAllByStatusNotEqual('completed', parameters).each { TaskList task ->
             def slurper = new JsonSlurper()
             def variables = slurper.parseText(task.inputVariables)
             def workPlanId = '', startDate = '', staffId = '', programId = '', endDate = '', groupId = '', period = '', referralId = '', activityId = '', feedbackId = ''
@@ -96,7 +104,7 @@ class TaskListController {
                           dateCreated      : task.dateCreated,
                           status           : task.status]
         }
-        respond tasks
+        if (params.max) respond data: tasks, max: allTasksSize else respond tasks
     }
 
     def getTaskRecord() {
