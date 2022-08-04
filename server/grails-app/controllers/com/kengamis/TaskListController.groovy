@@ -15,7 +15,9 @@ class TaskListController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index() {
-        def max = 10
+        def allTasksSize = TaskList.findAllByStatusNotEqual('completed').size()
+
+        def max = allTasksSize
         def offset = 0
         if (params.max) max = params.max as Integer
         if (params.offset) offset = params.offset as Integer
@@ -23,7 +25,6 @@ class TaskListController {
         def parameters = [max: max, offset: offset]
 
         def tasks = []
-        def allTasksSize = TaskList.findAllByStatusNotEqual('completed').size()
 
         TaskList.findAllByStatusNotEqual('completed', parameters).each { TaskList task ->
             def slurper = new JsonSlurper()
