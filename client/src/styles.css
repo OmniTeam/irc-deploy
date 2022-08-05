@@ -161,7 +161,7 @@ button, .btn {
 }
 
 .nav-item .active {
-  color: #fbc324 !important;
+  color: #7851a9 !important;
   background-color: rgba(124, 92, 20, 0.08) !important;
 }
 
@@ -169,14 +169,13 @@ td a {
   color: #7851a9 !important;
 }
 
-.loader {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  margin: auto;
+.fullscreen_loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform: -webkit-translate(-50%, -50%);
+  transform: -moz-translate(-50%, -50%);
+  transform: -ms-translate(-50%, -50%);
 }
 
