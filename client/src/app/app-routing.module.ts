@@ -540,7 +540,7 @@ const routes: Routes = [
         data: {
           userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_WORK_PLAN]
         },
-        loadChildren: () => import('./mis-components/referrals/irc-activity/irc-activity-routing.module').then(m => m.IrcActivityRoutingModule)
+        loadChildren: () => import('./mis-components/referrals/irc-feedback/irc-feedback-routing.module').then(m => m.IrcFeedbackRoutingModule)
       },
       { path: 'feedback-edit/:id/:readonly',
         data: {
