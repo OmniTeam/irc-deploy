@@ -28,6 +28,7 @@ export class ActivityReportComponent implements OnInit {
   disable: boolean;
   archiveList: any;
   activityList: any;
+  isLoading: boolean;
 
 
   constructor(
@@ -49,9 +50,10 @@ export class ActivityReportComponent implements OnInit {
   }
 
   reloadTable() {
+    this.isLoading = true;
     this.activityReportService.getActivityReport().subscribe((data) => {
       this.activity = data;
-      console.log(data);
+      this.isLoading = false;
     });
   }
 

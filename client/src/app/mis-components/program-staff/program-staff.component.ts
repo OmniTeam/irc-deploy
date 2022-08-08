@@ -45,7 +45,7 @@ export class ProgramStaffComponent implements OnInit {
 
   deleteProgramStaff(row) {
     const deletedRow = row.id;
-    if (confirm('Are you sure to delete this Program Staff?')) {
+    if (confirm('Are you sure to delete this Pillar Staff?')) {
       this.programStaffService.deleteProgramStaff(deletedRow).subscribe((result) => {
           this.alertService.warning(`Program Staff has been  deleted `);
           this.router.navigate(['/programStaff']);
