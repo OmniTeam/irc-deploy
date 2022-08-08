@@ -2,7 +2,7 @@
   <div class=" container-fluid">
     <div class=" header-body">
       <h1 style="color: white">
-        REFERRAL DASHBOARD
+        REFERRALS
       </h1>
       <div class=" row align-items-center py-4">
         <div class="col-md-3">
@@ -211,6 +211,7 @@
             class="bootstrap selection-cell"
             [columnMode]="'force'"
             [headerHeight]="50"
+            [loadingIndicator]="isLoading"
             [footerHeight]="50"
             [rowHeight]="'auto'"
             [rows]="referrals"

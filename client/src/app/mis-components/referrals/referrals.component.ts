@@ -59,6 +59,7 @@ export class ReferralsComponent implements OnInit {
   processId: any;
   referralId: any;
   initialLists: any;
+  isLoading: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -98,16 +99,15 @@ export class ReferralsComponent implements OnInit {
     if (!event) {
       this.statusValue = ''
       this.reloadTable()
-    }
-    else {
+    } else {
       this.statusValue = event;
-      this.referrals=this.referrals.filter(a => a.status.toUpperCase().includes(this.statusValue.toUpperCase()))
+      this.referrals = this.referrals.filter(a => a.status.toUpperCase().includes(this.statusValue.toUpperCase()))
     }
 
   }
 
   onChangeSearch(event) {
-    this.searchValue = event.target.value
+    this.searchValue = event.target.value;
     if(!this.searchValue){
       this.reloadTable()
     } else {
@@ -141,10 +141,11 @@ export class ReferralsComponent implements OnInit {
   }
 
   reloadTable() {
+    this.isLoading = true;
     this.referralsService.getReferrals().subscribe((data) => {
       this.referrals = data.filter(a => a.status);
+      this.isLoading = false;
       this.cardsData()
-      console.log(data)
     });
   }
 

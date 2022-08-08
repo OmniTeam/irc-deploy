@@ -112,6 +112,7 @@ export class OngoingTasksComponent implements OnInit {
   }
 
   reloadTable(firstTime?: boolean) {
+    this.isLoading = true;
     this.taskListService.getTaskList().subscribe(data => {
       let results = [];
       let results1 = [];
