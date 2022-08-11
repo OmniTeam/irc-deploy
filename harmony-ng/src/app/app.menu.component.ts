@@ -1,5 +1,37 @@
 import { Component, OnInit } from "@angular/core";
 import { AppMainComponent } from "./app.main.component";
+import { AuthService } from "./services/auth.service";
+import { Router } from "@angular/router";
+import { FormService } from "./services/form.service";
+import { ReplacePipe } from "./pipes/replace-pipe";
+import { TitleCasePipe } from "@angular/common";
+import { forEach } from "jszip";
+
+const formsMenu: any = {
+    path: "forms/data",
+    title: "Data",
+    type: "sub",
+    icontype: "ni-single-copy-04",
+    isCollapsed: true,
+    roles: [
+        "ROLE_SUPER_ADMIN",
+        "ROLE_ADMIN",
+        "ROLE_PARTNER_DATA_MANAGER",
+        "ROLE_PARTNER_DATA_VIEWER",
+        "ROLE_STAFF_DATA_MANAGER",
+        "ROLE_STAFF_DATA_VIEWER",
+    ],
+    children: [],
+};
+
+const formSettingsMenu: any = {
+    path: "formSettings/form",
+    title: "Form Settings",
+    type: "sub",
+    isCollapsed: true,
+    roles: ["ROLE_SUPER_ADMIN"],
+    children: [],
+};
 
 @Component({
     selector: "app-menu",
@@ -14,13 +46,75 @@ import { AppMainComponent } from "./app.main.component";
             ></li>
         </ul>
     `,
+    providers: [TitleCasePipe],
 })
 export class AppMenuComponent implements OnInit {
     model: any[];
+    public menuItems: any[];
+    public isCollapsed = true;
+    usersRoles: any;
+    my_routes = [];
+    private lengthOfChildren: number;
+    childrenArray: any;
+    formDataLinks: any;
 
-    constructor(public app: AppMainComponent) {}
+    constructor(
+        private router: Router,
+        private formService: FormService,
+        public app: AppMainComponent,
+        public authService: AuthService,
+        private titleCasePipe: TitleCasePipe
+    ) {}
 
     ngOnInit() {
+        // console.log('++++++++++');
+        this.usersRoles = this.authService.getUserRoles();
+
+        this.router.events.subscribe((event) => {
+            this.isCollapsed = true;
+        });
+        // console.log(this.authService.isLoggedIn());
+        if (this.authService.isLoggedIn()) {
+            // console.log('am being loaded');
+            this.formService.getEnabledForms().subscribe(
+                (data) => {
+                    for (const form of data) {
+                        const formObject = {};
+                        const formSettingObject = {};
+                        formObject["title"] = this.titleCasePipe.transform(
+                            new ReplacePipe().transform(
+                                form.displayName,
+                                "_",
+                                " "
+                            )
+                        );
+                        formObject["path"] = form.name.toString();
+                        formObject["type"] = "link";
+                        formObject["roles"] = this.usersRoles;
+
+                        formsMenu.children.push(formObject);
+
+                        formSettingObject["title"] =
+                            this.titleCasePipe.transform(
+                                new ReplacePipe().transform(
+                                    form.displayName,
+                                    "_",
+                                    " "
+                                )
+                            );
+                        formSettingObject["path"] = form.name.toString();
+                        formSettingObject["type"] = "link";
+                        formSettingObject["roles"] = [
+                            "ROLE_SUPER_ADMIN",
+                            "ROLE_ADMIN",
+                        ];
+                        formSettingsMenu.children.push(formSettingObject);
+                    }
+                },
+                (error) => console.log(error)
+            );
+        }
+
         this.model = [
             { label: "Dashboard", icon: "pi pi-fw pi-home", routerLink: ["/"] },
             {

@@ -36,6 +36,7 @@
                                                     placeholder="--- Select ---"
                                                     name="from_date"
                                                     type="date"
+                                                    dateFormat="mm/dd/yy"
                                                 ></p-calendar>
                                             </div>
                                             <div class="col-12 md:col-3">
@@ -53,28 +54,28 @@
                                                     name="from_date"
                                                     placeholder="--- Select ---"
                                                     type="date"
+                                                    dateFormat="mm/dd/yy"
                                                 ></p-calendar>
                                             </div>
                                             <div class="col-12 md:col-3">
                                                 <label>Select User</label>
-                                                <p>
+                                                <div>
                                                     <p-dropdown
                                                         [options]="users"
-                                                        bindLabel="name"
-                                                        bindValue="id"
                                                         [(ngModel)]="
                                                             selectedUser
                                                         "
-                                                        (change)="
+                                                        optionLabel="name"
+                                                        (onChange)="
                                                             onChangeUser()
                                                         "
-                                                        optionLabel="name"
                                                         optionValue="id"
                                                         [filter]="true"
                                                         filterBy="name"
                                                         [showClear]="true"
+                                                        placeholder="Select A User"
                                                     ></p-dropdown>
-                                                </p>
+                                                </div>
                                             </div>
                                             <div class="col-12 md:col-3">
                                                 <label>Search</label>
@@ -329,31 +330,25 @@
                                                 </th>
                                                 <th pSortableColumn="actions">
                                                     VIEW
-                                                    <p-sortIcon
-                                                        field="Actions"
-                                                    ></p-sortIcon>
                                                 </th>
-                                                <th pSortableColumn="user">
+                                                <th
+                                                    pSortableColumn="user"
+                                                    pFrozenColumn
+                                                >
                                                     USER
                                                     <p-sortIcon
                                                         field="user"
                                                     ></p-sortIcon>
                                                 </th>
-                                                <!-- <th
-                                                    pSortableColumn="dateSubmitted"
-                                                >
-                                                    DATE SUBMITTED
-                                                    <p-sortIcon
-                                                        field="dateSubmitted"
-                                                    ></p-sortIcon>
-                                                </th> -->
+
                                                 <th
                                                     pSortableColumn="submissionDate"
                                                 >
                                                     <div
                                                         class="flex justify-content-between align-items-center"
                                                     >
-                                                        Date
+                                                        DATE SUBMITTED
+
                                                         <p-sortIcon
                                                             field="date"
                                                         ></p-sortIcon>
@@ -366,38 +361,89 @@
                                                     </div>
                                                 </th>
                                                 <th pSortableColumn="cluster">
-                                                    CLUSTER
-                                                    <p-sortIcon
-                                                        field="cluster"
-                                                    ></p-sortIcon>
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        CLUSTER
+                                                        <p-sortIcon
+                                                            field="cluster"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="cluster"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
                                                 </th>
                                                 <th pSortableColumn="country">
-                                                    COUNTRY
-                                                    <p-sortIcon
-                                                        field="country"
-                                                    ></p-sortIcon>
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        COUNTRY
+                                                        <p-sortIcon
+                                                            field="country"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="country"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
                                                 </th>
+
                                                 <th pSortableColumn="program">
-                                                    PROGRAM
-                                                    <p-sortIcon
-                                                        field="program"
-                                                    ></p-sortIcon>
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        PROGRAM
+                                                        <p-sortIcon
+                                                            field="program"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="program"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
                                                 </th>
-                                                <th
-                                                    pSortableColumn="typeOfTrainees"
-                                                >
-                                                    TYPE OF TRAINEES
-                                                    <p-sortIcon
-                                                        field="typeOfTrainees"
-                                                    ></p-sortIcon>
+
+                                                <th pSortableColumn="trainees">
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        TYPE OF TRAINEES
+                                                        <p-sortIcon
+                                                            field="trainees"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="trainees"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
                                                 </th>
+
                                                 <th
-                                                    pSortableColumn="typeOfTraining"
+                                                    pSortableColumn="training_types"
                                                 >
-                                                    TYPE OF TRAINING
-                                                    <p-sortIcon
-                                                        field="typeOfTraining"
-                                                    ></p-sortIcon>
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        TYPE OF TRAINING
+                                                        <p-sortIcon
+                                                            field="training_types"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="training_types"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
                                                 </th>
                                                 <th></th>
                                             </tr>
@@ -449,7 +495,7 @@
                                                         class="p-button-rounded p-button-primary p-button-outlined"
                                                     ></button>
                                                 </td>
-                                                <td>
+                                                <td pFrozenColumn>
                                                     {{ record.submitterName }}
                                                 </td>
 
@@ -490,6 +536,38 @@
                                         </ng-template>
                                     </p-table>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- hide graph div - not needed for display but need to load -->
+                        <div class="row" hidden>
+                            <div class="bar-chart-container">
+                                <div class="bar-chart-frame">
+                                    <div id="form-data-bar-chart"></div>
+                                </div>
+                            </div>
+
+                            <div class="line-chart-container">
+                                <div class="line-chart-frame">
+                                    <div id="form-data-line-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" hidden>
+                            <div class="col-sm-12 col-md-12" id="map_div">
+                                <fieldset class="hm-fieldset">
+                                    <legend class="hm-legend">MAP</legend>
+                                    <div
+                                        class="col-sm-12 col-md-12 fieldset-body"
+                                    >
+                                        <div class="map-container">
+                                            <div class="map-frame">
+                                                <div id="map"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
                     </div>
@@ -571,7 +649,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card">
-                                    <div class="row">
+                                    <div class="row" hidden>
                                         <div
                                             class="col-sm-12 col-md-12"
                                             id="map_div"
@@ -590,6 +668,24 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" hidden>
+                                        <div class="bar-chart-container">
+                                            <div class="bar-chart-frame">
+                                                <div
+                                                    id="form-data-bar-chart"
+                                                ></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="line-chart-container">
+                                            <div class="line-chart-frame">
+                                                <div
+                                                    id="form-data-line-chart"
+                                                ></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

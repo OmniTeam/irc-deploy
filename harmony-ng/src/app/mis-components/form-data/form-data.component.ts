@@ -158,6 +158,10 @@ export class FormDataComponent implements OnInit, AfterViewInit {
             {
                 label: "Map",
                 icon: "pi pi-fw pi-map",
+                command: () => {
+                    this.resetInputs();
+                    this.getFormData();
+                },
             },
         ];
     }
@@ -182,8 +186,6 @@ export class FormDataComponent implements OnInit, AfterViewInit {
 
         this.formService.getFormData(params).subscribe(
             (data) => {
-                console.log(data, "Data");
-
                 this.formName = new ReplacePipe().transform(
                     data.form["displayName"],
                     "_",
@@ -631,6 +633,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     dateToFilter(value): void {
+        console.log(value);
         if (!value) this.dateTo = "";
         else {
             this.dateTo = value;
@@ -653,6 +656,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     onChangeUser(): void {
+        console.log("onChangeUser");
         if (this.selectedUser === null) {
             this.selectedUser = "";
         }
