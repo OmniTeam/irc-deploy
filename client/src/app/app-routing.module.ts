@@ -1,58 +1,69 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {CommonModule} from '@angular/common';
-import {BrowserModule} from '@angular/platform-browser';
-import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
-import {AuthGuard} from './guards/auth.guard';
-import {LoggedInGuard} from './guards/loggedin.guard';
-import {Roles} from './models/roles';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { BrowserModule } from "@angular/platform-browser";
+import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
+import { AuthGuard } from "./guards/auth.guard";
+import { LoggedInGuard } from "./guards/loggedin.guard";
+import { Roles } from "./models/roles";
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
-    canActivate: [AuthGuard],
+    path: "",
+    redirectTo: "home",
+    pathMatch: "full",
+    // canActivate: [AuthGuard],
     data: {
-      userRoles: [] // All User Can Access but must be login
+      userRoles: [], // All User Can Access but must be login
     },
   },
   {
-    path: 'login', canActivate: [LoggedInGuard],
+    path: "login",
+    canActivate: [LoggedInGuard],
     data: {
-      userRoles: [] // All User Can Access but must be login
+      userRoles: [], // All User Can Access but must be login
     },
-    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+    loadChildren: () =>
+      import("./login/login.module").then((m) => m.LoginModule),
   },
   {
-    path: '',
+    path: "",
     component: AdminLayoutComponent,
     children: [
       {
-        path: 'project', canActivate: [AuthGuard],
+        path: "project",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/project/project.module').then(m => m.ProjectModule)
+        loadChildren: () =>
+          import("./mis-components/project/project.module").then(
+            (m) => m.ProjectModule
+          ),
       },
       {
-        path: 'home', canActivate: [AuthGuard],
+        path: "home",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [] // All User Can Access but must be login
+          userRoles: [], // All User Can Access but must be login
         },
-        loadChildren: () => import('./mis-components/home/home.module').then(m => m.HomeModule)
+        loadChildren: () =>
+          import("./mis-components/home/home.module").then((m) => m.HomeModule),
       },
       {
-        path: 'forms', canActivate: [AuthGuard],
+        path: "forms",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [
-            Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN
-          ]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/mis-forms/mis-forms.module').then(m => m.MisFormsModule)
+        loadChildren: () =>
+          import("./mis-components/mis-forms/mis-forms.module").then(
+            (m) => m.MisFormsModule
+          ),
       },
       {
-        path: 'forms/data/:formtable', canActivate: [AuthGuard],
+        path: "forms/data/:formtable",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
@@ -60,84 +71,113 @@ const routes: Routes = [
             Roles.ROLE_PARTNER_DATA_MANAGER,
             Roles.ROLE_PARTNER_DATA_VIEWER,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/form-data/form-data.module').then(m => m.FormDataModule)
+        loadChildren: () =>
+          import("./mis-components/form-data/form-data.module").then(
+            (m) => m.FormDataModule
+          ),
       },
       {
-        path: 'formSettings/form/:formtable', canActivate: [AuthGuard],
+        path: "formSettings/form/:formtable",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/form-setting/form-setting.module').then(m => m.FormSettingModule)
+        loadChildren: () =>
+          import("./mis-components/form-setting/form-setting.module").then(
+            (m) => m.FormSettingModule
+          ),
       },
       {
-        path: 'archive', canActivate: [AuthGuard],
+        path: "archive",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/archive/archive.module').then(m => m.ArchiveModule)
+        loadChildren: () =>
+          import("./mis-components/archive/archive.module").then(
+            (m) => m.ArchiveModule
+          ),
       },
       {
-        path: 'partnerSetup', canActivate: [AuthGuard],
-        data: {
-          userRoles: [
-            Roles.ROLE_SUPER_ADMIN,
-            Roles.ROLE_ADMIN,
-            Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
-        },
-        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
-      },
-      {
-        path: 'partnerSetup/:id', canActivate: [AuthGuard],
-        data: {
-          userRoles: [
-            Roles.ROLE_SUPER_ADMIN,
-            Roles.ROLE_ADMIN,
-            Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
-
-        },
-        loadChildren: () => import('./mis-components/partner-setup/partner-setup.module').then(m => m.PartnerSetupModule)
-      },
-      {
-        path: 'partnerSetupList', canActivate: [AuthGuard],
+        path: "partnerSetup",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
-
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/partner-setup/partner-list/partner-list.module').then(m => m.PartnerListModule)
+        loadChildren: () =>
+          import("./mis-components/partner-setup/partner-setup.module").then(
+            (m) => m.PartnerSetupModule
+          ),
       },
       {
-        path: 'taskList', canActivate: [AuthGuard],
+        path: "partnerSetup/:id",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/task-list/task-list.module').then(m => m.TaskListModule)
+        loadChildren: () =>
+          import("./mis-components/partner-setup/partner-setup.module").then(
+            (m) => m.PartnerSetupModule
+          ),
       },
       {
-        path: 'submitletterofinterest',
+        path: "partnerSetupList",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: []
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/partner-setup/partner-list/partner-list.module"
+          ).then((m) => m.PartnerListModule),
       },
       {
-        path: 'grantProcess/:id/:readonly', canActivate: [AuthGuard],
+        path: "taskList",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
+        },
+        loadChildren: () =>
+          import("./mis-components/task-list/task-list.module").then(
+            (m) => m.TaskListModule
+          ),
+      },
+      {
+        path: "submitletterofinterest",
+        data: {
+          userRoles: [],
+        },
+        loadChildren: () =>
+          import("./mis-components/grant-process/grant-process.module").then(
+            (m) => m.GrantProcessModule
+          ),
+      },
+      {
+        path: "grantProcess/:id/:readonly",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
@@ -145,46 +185,61 @@ const routes: Routes = [
             Roles.ROLE_ED,
             Roles.ROLE_FINANCE,
             Roles.ROLE_PROGRAM_OFFICER,
-            Roles.ROLE_APPLICANT
-          ]
+            Roles.ROLE_APPLICANT,
+          ],
         },
-        loadChildren: () => import('./mis-components/grant-process/grant-process.module').then(m => m.GrantProcessModule)
+        loadChildren: () =>
+          import("./mis-components/grant-process/grant-process.module").then(
+            (m) => m.GrantProcessModule
+          ),
       },
       {
-        path: 'longTermGrant', canActivate: [AuthGuard],
+        path: "longTermGrant",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_ED,
             Roles.ROLE_PROGRAM_OFFICER,
-            Roles.ROLE_APPLICANT
-          ]
+            Roles.ROLE_APPLICANT,
+          ],
         },
-        loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/grant-process/long-term-grant/long-term-grant.module"
+          ).then((m) => m.LongTermGrantModule),
       },
       {
-        path: 'longTermGrant/:id/:readonly', canActivate: [AuthGuard],
+        path: "longTermGrant/:id/:readonly",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_ED,
             Roles.ROLE_PROGRAM_OFFICER,
-            Roles.ROLE_APPLICANT
-          ]
+            Roles.ROLE_APPLICANT,
+          ],
         },
-        loadChildren: () => import('./mis-components/grant-process/long-term-grant/long-term-grant.module').then(m => m.LongTermGrantModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/grant-process/long-term-grant/long-term-grant.module"
+          ).then((m) => m.LongTermGrantModule),
       },
       {
-        path: 'longTermGrantApplication',
+        path: "longTermGrantApplication",
         data: {
-          userRoles: []
+          userRoles: [],
         },
-        loadChildren: () => import('./mis-components/grant-process/long-term-grant/start-long-term-grant.module').then(m => m.StartLongTermGrantModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/grant-process/long-term-grant/start-long-term-grant.module"
+          ).then((m) => m.StartLongTermGrantModule),
       },
       {
-        path: 'reportForm/:id/:readonly', canActivate: [AuthGuard],
+        path: "reportForm/:id/:readonly",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
@@ -193,37 +248,50 @@ const routes: Routes = [
             Roles.ROLE_FINANCE,
             Roles.ROLE_ED,
             Roles.ROLE_PROGRAM_OFFICER,
-            Roles.ROLE_PARTNER_DATA_MANAGER
-          ]
+            Roles.ROLE_PARTNER_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/report-form/report-form.module').then(m => m.ReportFormModule)
+        loadChildren: () =>
+          import("./mis-components/report-form/report-form.module").then(
+            (m) => m.ReportFormModule
+          ),
       },
       {
-        path: 'entity', canActivate: [AuthGuard],
+        path: "entity",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [
-            Roles.ROLE_SUPER_ADMIN,
-            Roles.ROLE_ADMIN
-          ]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entities/entities.module').then(m => m.EntitiesModule)
+        loadChildren: () =>
+          import("./mis-components/entities/entities.module").then(
+            (m) => m.EntitiesModule
+          ),
       },
       {
-        path: 'entity/create', canActivate: [AuthGuard],
+        path: "entity/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entities/create-entities/create-entities.module').then(m => m.CreateEntitiesModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entities/create-entities/create-entities.module"
+          ).then((m) => m.CreateEntitiesModule),
       },
       {
-        path: 'entity/edit/:id', canActivate: [AuthGuard],
+        path: "entity/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entities/edit-entities/edit-entities.module').then(m => m.EditEntitiesModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entities/edit-entities/edit-entities.module"
+          ).then((m) => m.EditEntitiesModule),
       },
       {
-        path: 'entity/showData/:id', canActivate: [AuthGuard],
+        path: "entity/showData/:id",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
@@ -231,13 +299,17 @@ const routes: Routes = [
             Roles.ROLE_PARTNER_DATA_MANAGER,
             Roles.ROLE_PARTNER_DATA_VIEWER,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/entities/entity-tables/entity-tables.module').then(m => m.EntityTablesModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entities/entity-tables/entity-tables.module"
+          ).then((m) => m.EntityTablesModule),
       },
       {
-        path: 'staging-beneficiary-list', canActivate: [AuthGuard],
+        path: "staging-beneficiary-list",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
@@ -245,48 +317,72 @@ const routes: Routes = [
             Roles.ROLE_PARTNER_DATA_MANAGER,
             Roles.ROLE_PARTNER_DATA_VIEWER,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/entities/entity-tables/staging-beneficiary-list/staging-beneficiary-list.module').then(m => m.StagingBeneficiaryListModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entities/entity-tables/staging-beneficiary-list/staging-beneficiary-list.module"
+          ).then((m) => m.StagingBeneficiaryListModule),
       },
       {
-        path: 'entity/linkForm/:id', canActivate: [AuthGuard],
+        path: "entity/linkForm/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entities/link-form/link-form.module').then(m => m.LinkFormModule)
+        loadChildren: () =>
+          import("./mis-components/entities/link-form/link-form.module").then(
+            (m) => m.LinkFormModule
+          ),
       },
       {
-        path: 'entityView', canActivate: [AuthGuard],
+        path: "entityView",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entity-views/entity-views.module').then(m => m.EntityViewsModule)
+        loadChildren: () =>
+          import("./mis-components/entity-views/entity-views.module").then(
+            (m) => m.EntityViewsModule
+          ),
       },
       {
-        path: 'entityView/create/:id', canActivate: [AuthGuard],
+        path: "entityView/create/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entity-views/create-entity-views/create-entity-views.module').then(m => m.CreateEntityViewsModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entity-views/create-entity-views/create-entity-views.module"
+          ).then((m) => m.CreateEntityViewsModule),
       },
       {
-        path: 'entityView/edit/:entityId/:id', canActivate: [AuthGuard],
+        path: "entityView/edit/:entityId/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entity-views/edit-entity-views/edit-entity-views.module').then(m => m.EditEntityViewsModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entity-views/edit-entity-views/edit-entity-views.module"
+          ).then((m) => m.EditEntityViewsModule),
       },
       {
-        path: 'entityView/showData/:id', canActivate: [AuthGuard],
+        path: "entityView/showData/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entity-views/entity-view-table/entity-view-table.module').then(m => m.EntityViewTableModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entity-views/entity-view-table/entity-view-table.module"
+          ).then((m) => m.EntityViewTableModule),
       },
       {
-        path: 'tags', canActivate: [AuthGuard],
+        path: "tags",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
@@ -294,344 +390,526 @@ const routes: Routes = [
             Roles.ROLE_PARTNER_DATA_MANAGER,
             Roles.ROLE_PARTNER_DATA_VIEWER,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/tags/tags.module').then(m => m.TagsModule)
+        loadChildren: () =>
+          import("./mis-components/tags/tags.module").then((m) => m.TagsModule),
       },
       {
-        path: 'tags/edit/:id', canActivate: [AuthGuard],
+        path: "tags/edit/:id",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_PARTNER_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_MANAGER
-          ]
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/tags/edit-tags/edit-tags.module').then(m => m.EditTagsModule)
+        loadChildren: () =>
+          import("./mis-components/tags/edit-tags/edit-tags.module").then(
+            (m) => m.EditTagsModule
+          ),
       },
       {
-        path: 'tagType', canActivate: [AuthGuard],
+        path: "tagType",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/tag-type/tag-type.module').then(m => m.TagTypeModule)
+        loadChildren: () =>
+          import("./mis-components/tag-type/tag-type.module").then(
+            (m) => m.TagTypeModule
+          ),
       },
       {
-        path: 'tagType/edit/:id', canActivate: [AuthGuard],
+        path: "tagType/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/tag-type/edit-tag-type/edit-tag-type.module').then(m => m.EditTagTypeModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/tag-type/edit-tag-type/edit-tag-type.module"
+          ).then((m) => m.EditTagTypeModule),
       },
       {
-        path: 'groups', canActivate: [AuthGuard],
+        path: "groups",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/groups/groups.module').then(m => m.GroupsModule)
+        loadChildren: () =>
+          import("./mis-components/groups/groups.module").then(
+            (m) => m.GroupsModule
+          ),
       },
       {
-        path: 'group/create', canActivate: [AuthGuard],
+        path: "group/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/groups/create-group/create-group.module').then(m => m.CreateGroupModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/groups/create-group/create-group.module"
+          ).then((m) => m.CreateGroupModule),
       },
       {
-        path: 'group/edit/:id', canActivate: [AuthGuard],
+        path: "group/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/groups/edit-group/edit-group.module').then(m => m.EditGroupModule)
+        loadChildren: () =>
+          import("./mis-components/groups/edit-group/edit-group.module").then(
+            (m) => m.EditGroupModule
+          ),
       },
       {
-        path: 'users', canActivate: [AuthGuard],
+        path: "users",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [
-            Roles.ROLE_SUPER_ADMIN,
-            Roles.ROLE_ADMIN
-          ]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
+        loadChildren: () =>
+          import("./mis-components/users/users.module").then(
+            (m) => m.UsersModule
+          ),
       },
       {
-        path: 'mis-users', canActivate: [AuthGuard],
+        path: "mis-users",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/users/users.module').then(m => m.UsersModule)
+        loadChildren: () =>
+          import("./mis-components/users/users.module").then(
+            (m) => m.UsersModule
+          ),
       },
       {
-        path: 'user/create', canActivate: [AuthGuard],
+        path: "user/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/users/create-user/create-user.module').then(m => m.CreateUserModule)
+        loadChildren: () =>
+          import("./mis-components/users/create-user/create-user.module").then(
+            (m) => m.CreateUserModule
+          ),
       },
       {
-        path: 'user/edit/:id', canActivate: [AuthGuard],
+        path: "user/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER,]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/users/edit-user/edit-user.module').then(m => m.EditUserModule)
+        loadChildren: () =>
+          import("./mis-components/users/edit-user/edit-user.module").then(
+            (m) => m.EditUserModule
+          ),
       },
       {
-        path: 'roles', canActivate: [AuthGuard],
+        path: "roles",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/roles/roles.module').then(m => m.RolesModule)
+        loadChildren: () =>
+          import("./mis-components/roles/roles.module").then(
+            (m) => m.RolesModule
+          ),
       },
       {
-        path: 'role/create', canActivate: [AuthGuard],
+        path: "role/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/roles/create-role/create-role.module').then(m => m.CreateRoleModule)
+        loadChildren: () =>
+          import("./mis-components/roles/create-role/create-role.module").then(
+            (m) => m.CreateRoleModule
+          ),
       },
       {
-        path: 'role/edit/:id', canActivate: [AuthGuard],
+        path: "role/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/roles/edit-role/edit-role.module').then(m => m.EditRoleModule)
+        loadChildren: () =>
+          import("./mis-components/roles/edit-role/edit-role.module").then(
+            (m) => m.EditRoleModule
+          ),
       },
       {
-        path: 'scheduledTasks', canActivate: [AuthGuard],
+        path: "scheduledTasks",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/scheduled-tasks/scheduled-tasks.module').then(m => m.ScheduledTasksModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/scheduled-tasks/scheduled-tasks.module"
+          ).then((m) => m.ScheduledTasksModule),
       },
       {
-        path: 'acl-group-mapping-parent', canActivate: [AuthGuard],
+        path: "acl-group-mapping-parent",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/acl-group-mapping-parent/acl-group-mapping-parent.module').then(m => m.AclGroupMappingParentModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/acl-group-mapping-parent/acl-group-mapping-parent.module"
+          ).then((m) => m.AclGroupMappingParentModule),
       },
       {
-        path: 'acl-group-mapping-edit/:id', canActivate: [AuthGuard],
+        path: "acl-group-mapping-edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/acl-group-mapping-edit/acl-group-mapping-edit.module').then(m => m.AclGroupMappingEditModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/acl-group-mapping-edit/acl-group-mapping-edit.module"
+          ).then((m) => m.AclGroupMappingEditModule),
       },
       {
-        path: 'acl-group-mapping-lists', canActivate: [AuthGuard],
+        path: "acl-group-mapping-lists",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/acl-group-mapping-lists/acl-group-mapping-lists.module').then(m => m.AclGroupMappingListsModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/acl-group-mapping-lists/acl-group-mapping-lists.module"
+          ).then((m) => m.AclGroupMappingListsModule),
       },
       {
-        path: 'requestMaps', canActivate: [AuthGuard],
+        path: "requestMaps",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/request-maps/request-maps.module').then(m => m.RequestMapsModule)
+        loadChildren: () =>
+          import("./mis-components/request-maps/request-maps.module").then(
+            (m) => m.RequestMapsModule
+          ),
       },
       {
-        path: 'requestMaps/create', canActivate: [AuthGuard],
+        path: "requestMaps/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/request-maps/create-request-maps/create-request-maps.module').then(m => m.CreateRequestMapsModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/request-maps/create-request-maps/create-request-maps.module"
+          ).then((m) => m.CreateRequestMapsModule),
       },
       {
-        path: 'requestMaps/edit/:id', canActivate: [AuthGuard],
+        path: "requestMaps/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
         },
-        loadChildren: () => import('./mis-components/request-maps/edit-request-maps/edit-request-maps.module').then(m => m.EditRequestMapsModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/request-maps/edit-request-maps/edit-request-maps.module"
+          ).then((m) => m.EditRequestMapsModule),
       },
       {
-        path: 'messagePage/:type',
+        path: "messagePage/:type",
         data: {
-          userRoles: []
+          userRoles: [],
         },
-        loadChildren: () => import('./mis-components/message-pages/message-pages.module').then(m => m.MessagePagesModule)
+        loadChildren: () =>
+          import("./mis-components/message-pages/message-pages.module").then(
+            (m) => m.MessagePagesModule
+          ),
       },
       {
-        path: 'program',
+        path: "program",
         data: {
           userRoles: [
             Roles.ROLE_ADMIN,
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
             Roles.ROLE_STAFF_DATA_VIEWER,
-          ]
+          ],
         },
-        loadChildren: () => import('./mis-components/program/program.module').then(m => m.ProgramModule)
+        loadChildren: () =>
+          import("./mis-components/program/program.module").then(
+            (m) => m.ProgramModule
+          ),
       },
       {
-        path: 'program/create', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER]
-        },
-        loadChildren: () => import('./mis-components/program/create-program/create-program.module').then(m => m.CreateProgramModule)
-      },
-      {
-        path: 'program/edit/:id', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER]
-        },
-        loadChildren: () => import('./mis-components/program/edit-program/edit-program.module').then(m => m.EditProgramModule)
-      },
-      {
-        path: 'programCategory', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/program-category/program-category.module').then(m => m.ProgramCategoryModule)
-      },
-      {
-        path: 'programCategory/create', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/program-category/create-program-category/create-program-category.module').then(m => m.CreateProgramCategoryModule)
-      },
-      {
-        path: 'programCategory/edit/:id', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/program-category/edit-program-category/edit-program-category.module').then(m => m.EditProgramCategoryModule)
-      },
-      {
-        path: 'milestones', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/project-milestones/project-milestones.module').then(m => m.ProjectMilestonesModule)
-      },
-      {
-        path: 'milestones/create', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/project-milestones/create-project-milestones/create-project-milestones.module').then(m => m.CreateProjectMilestonesModule)
-      },
-      {
-        path: 'milestones/edit/:id', canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
-        },
-        loadChildren: () => import('./mis-components/project-milestones/edit-project-milestones/edit-project-milestones.module').then(m => m.EditProjectMilestonesModule)
-      },
-      {
-        path: 'programPartner', canActivate: [AuthGuard],
+        path: "program/create",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER
-          ]
+          ],
         },
-        loadChildren: () => import('./mis-components/program-partners/program-partners.module').then(m => m.ProgramPartnersModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/program/create-program/create-program.module"
+          ).then((m) => m.CreateProgramModule),
       },
       {
-        path: 'programPartner/create', canActivate: [AuthGuard],
+        path: "program/edit/:id",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
-            Roles.ROLE_STAFF_DATA_MANAGER
-          ]
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/program-partners/create-program-partners/create-program-partners.module').then(m => m.CreateProgramPartnersModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/program/edit-program/edit-program.module"
+          ).then((m) => m.EditProgramModule),
       },
       {
-        path: 'programPartner/edit/:id', canActivate: [AuthGuard],
+        path: "programCategory",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/program-category/program-category.module"
+          ).then((m) => m.ProgramCategoryModule),
+      },
+      {
+        path: "programCategory/create",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/program-category/create-program-category/create-program-category.module"
+          ).then((m) => m.CreateProgramCategoryModule),
+      },
+      {
+        path: "programCategory/edit/:id",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/program-category/edit-program-category/edit-program-category.module"
+          ).then((m) => m.EditProgramCategoryModule),
+      },
+      {
+        path: "milestones",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/project-milestones/project-milestones.module"
+          ).then((m) => m.ProjectMilestonesModule),
+      },
+      {
+        path: "milestones/create",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/project-milestones/create-project-milestones/create-project-milestones.module"
+          ).then((m) => m.CreateProjectMilestonesModule),
+      },
+      {
+        path: "milestones/edit/:id",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/project-milestones/edit-project-milestones/edit-project-milestones.module"
+          ).then((m) => m.EditProjectMilestonesModule),
+      },
+      {
+        path: "programPartner",
+        canActivate: [AuthGuard],
         data: {
           userRoles: [
             Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
-            Roles.ROLE_STAFF_DATA_MANAGER
-          ]
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/program-partners/edit-program-partners/edit-program-partners.module').then(m => m.EditProgramPartnersModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/program-partners/program-partners.module"
+          ).then((m) => m.ProgramPartnersModule),
       },
       {
-        path: 'entityViewFilter', canActivate: [AuthGuard],
+        path: "programPartner/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/entity-view-filters/entity-view-filters.module').then(m => m.EntityViewFiltersModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/program-partners/create-program-partners/create-program-partners.module"
+          ).then((m) => m.CreateProgramPartnersModule),
       },
       {
-        path: 'entityViewFilter/create/:id', canActivate: [AuthGuard],
+        path: "programPartner/edit/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
-        loadChildren: () => import('./mis-components/entity-view-filters/create-entity-view-filters/create-entity-view-filters.module').then(m => m.CreateEntityViewFiltersModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/program-partners/edit-program-partners/edit-program-partners.module"
+          ).then((m) => m.EditProgramPartnersModule),
       },
       {
-        path: 'entityViewFilter/edit/:entityViewId/:id', canActivate: [AuthGuard],
+        path: "entityViewFilter",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/entity-view-filters/edit-entity-view-filters/edit-entity-view-filters.module').then(m => m.EditEntityViewFiltersModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entity-view-filters/entity-view-filters.module"
+          ).then((m) => m.EntityViewFiltersModule),
       },
       {
-        path: 'dashboard', canActivate: [AuthGuard],
+        path: "entityViewFilter/create/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN, Roles.ROLE_STAFF_DATA_MANAGER, Roles.ROLE_STAFF_DATA_VIEWER]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entity-view-filters/create-entity-view-filters/create-entity-view-filters.module"
+          ).then((m) => m.CreateEntityViewFiltersModule),
       },
       {
-        path: 'dataView', canActivate: [AuthGuard],
+        path: "entityViewFilter/edit/:entityViewId/:id",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/data-views/data-views.module').then(m => m.DataViewsModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/entity-view-filters/edit-entity-view-filters/edit-entity-view-filters.module"
+          ).then((m) => m.EditEntityViewFiltersModule),
       },
       {
-        path: 'dataView/create', canActivate: [AuthGuard],
+        path: "dashboard",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
         },
-        loadChildren: () => import('./mis-components/data-views/create-data-views/create-data-views.module').then(m => m.CreateDataViewsModule)
+        loadChildren: () =>
+          import("./mis-components/dashboard/dashboard.module").then(
+            (m) => m.DashboardModule
+          ),
       },
       {
-        path: 'dataView/edit/:id', canActivate: [AuthGuard],
+        path: "dataView",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/data-views/edit-data-views/edit-data-views.module').then(m => m.EditDataViewsModule)
+        loadChildren: () =>
+          import("./mis-components/data-views/data-views.module").then(
+            (m) => m.DataViewsModule
+          ),
       },
       {
-        path: 'dataView/showData/:id', canActivate: [AuthGuard],
+        path: "dataView/create",
+        canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN]
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
         },
-        loadChildren: () => import('./mis-components/data-views/data-view-table/data-view-table.module').then(m => m.DataViewTableModule)
+        loadChildren: () =>
+          import(
+            "./mis-components/data-views/create-data-views/create-data-views.module"
+          ).then((m) => m.CreateDataViewsModule),
       },
-    ]
+      {
+        path: "dataView/edit/:id",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/data-views/edit-data-views/edit-data-views.module"
+          ).then((m) => m.EditDataViewsModule),
+      },
+      {
+        path: "dataView/showData/:id",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/data-views/data-view-table/data-view-table.module"
+          ).then((m) => m.DataViewTableModule),
+      },
+    ],
   },
   {
-    path: '**',
-    redirectTo: 'dashboard'
-  }
+    path: "**",
+    redirectTo: "dashboard",
+  },
 ];
 
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     BrowserModule,
     RouterModule.forRoot(routes, {
-      useHash: true
-    })],
-  exports: [RouterModule]
+      useHash: true,
+    }),
+  ],
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}
