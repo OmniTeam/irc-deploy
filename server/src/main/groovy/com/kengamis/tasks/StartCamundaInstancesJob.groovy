@@ -28,8 +28,8 @@ class StartCamundaInstancesJob extends Script {
 
     @Override
     Object run() {
-        reportingJob()
-        planningAndLearningGrantJob()
+        //reportingJob()
+        //planningAndLearningGrantJob()
         return null
     }
 

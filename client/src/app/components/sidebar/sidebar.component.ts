@@ -107,7 +107,6 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('++++++++++');
     this.usersRoles = this.authService.getUserRoles();
 
     this.router.events.subscribe(event => {
@@ -149,7 +148,7 @@ export class SidebarComponent implements OnInit {
         this.lengthOfChildren = listsMenu.children.length;
         this.my_routes.push(
           {
-            path: '/',
+            path: 'home',
             title: 'Home',
             type: 'link',
             icontype: 'fas fa-home',
@@ -164,6 +163,18 @@ export class SidebarComponent implements OnInit {
             ]
           },
           formsMenu,
+          {
+            path: 'dashboard',
+            title: 'Dashboard',
+            type: 'link',
+            icontype: 'fas fa-chart-bar',
+            roles: [
+              'ROLE_SUPER_ADMIN',
+              'ROLE_ADMIN',
+              'ROLE_STAFF_DATA_MANAGER',
+              'ROLE_STAFF_DATA_VIEWER'
+            ],
+          },
           {
             path: 'archive',
             title: 'Archive',

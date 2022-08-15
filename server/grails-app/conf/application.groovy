@@ -52,7 +52,12 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 grails.gorm.failOnError = false
-server.port = 8081
+
+server.appName = 'ISDAP'
+server.centralId = '11'
+server.superPass = 'omg!@mni'
+server.superEmail = 'super@gmail.com'
+server.port = 8083
 
 
 grails.gorm.default.mapping = {
@@ -79,4 +84,4 @@ environments {
         imageFolder = "/opt/uploads/centralImages/"
     }
 }
-mis.database = 'kengamis'
+mis.database = 'isdap'

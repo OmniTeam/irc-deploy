@@ -85,6 +85,9 @@ class FormController {
         }
 
         def form = Form.get(id)
+        FormSetting.findAllByForm(form).each {
+            it.delete()
+        }
         def repeatTableNames = form.findAllChildTables()
         def formTable = form.truncateNameForSql()
         formService.delete(id)

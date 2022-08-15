@@ -1770,10 +1770,6 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "entity_view_filters_id", baseTableName: "user_entity_view_filters", constraintName: "FKl1y77w88879q3g1di522fyby4", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "entity_view_filters", validate: "true")
     }
 
-    changeSet(author: "Bryan (generated)", id: "1647585031314-43") {
-        dropColumn(columnName: "user_id", tableName: "entity_view_filters")
-    }
-
     changeSet(author: "bruno (generated)", id: "20220901134564565-01") {
         dropNotNullConstraint(columnDataType: "varchar(255)", columnName: "group_id", tableName: "report_form")
     }

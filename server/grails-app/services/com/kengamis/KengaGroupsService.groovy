@@ -15,9 +15,15 @@ class KengaGroupsService {
     KengaGroupPermissionEvaluator kengaGroupPermissionEvaluator
 
     List<Object> postFilter(List<Object> data, Permission permission, String tableName = "") {
+        if(isSuperUser()) return data
         Authentication authentication = springSecurityService.authentication
         List<Object> accessible = data.findAll { kengaGroupPermissionEvaluator.hasPermission(authentication, it, permission, tableName) }
         return  accessible
+    }
+
+    boolean isSuperUser(){
+        def user = springSecurityService.currentUser as User
+        return user.hasAnyRole('ROLE_SUPER_ADMIN')
     }
 
 }

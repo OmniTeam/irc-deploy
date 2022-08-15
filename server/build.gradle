@@ -23,10 +23,12 @@ apply plugin:"org.grails.plugins.views-json"
 apply plugin:"org.grails.grails-gsp"
 
 repositories {
+    mavenLocal()
+    mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
     maven { url "http://omnitech.co.ug/m2/releases" }
     maven { url "http://omnitech.co.ug/m2/snapshots" }
-    maven {url "http://jitpack.io"}
+    maven { url "http://jitpack.io"}
     jcenter()
 }
 
@@ -120,13 +122,17 @@ dependencies {
     compile 'com.lowagie:itext:2.1.7'
     compile group: 'com.google.firebase', name: 'firebase-admin', version: '7.1.0'
     compile 'com.omnitech:sql-logical-ids:0.11'
-    compile 'com.omnitech:odk-central-restclient:1.27'
-    compile 'com.omnitech:odkodata2sql:1.5'
+    compile 'com.omnitech:odk-central-restclient:1.34-SNAPSHOT'
+    compile 'com.omnitech:odkodata2sql:1.34-SNAPSHOT'
     compile 'com.omnitech:oxd-jooq:0.3'
     compile 'com.omnitech:topological-sorting-directed-graph:0.1'
     compile 'com.omnitech:sql-logical-ids:0.11'
 
     compile 'org.grails.plugins:spring-security-acl:4.0.1.BUILD-SNAPSHOT'
+    compile group: 'org.openxdata', name: 'oxdmarkup-parser', version: '0.19'
+
+//    compile 'com.github.groovy-wslite:groovy-wslite:1.1.3'
+    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
 }
 
 bootRun {
@@ -151,9 +157,9 @@ jar {
     archiveName('crvpf-server.jar')
 }
 bootJar {
-    archiveBaseName = 'crvpf-server'
+    archiveBaseName = 'isdap-server'
     archiveVersion = '1.0.0'
-    archiveFileName = 'crvpf-server.jar'
+    archiveFileName = 'isdap-server.jar'
 }
 test {
     ignoreFailures = true

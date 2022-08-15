@@ -30,7 +30,7 @@ class KengaGroupAclJob extends Script {
 
     def createKengaDataTablesFrmForm() {
         def tables = AppHolder.withMisSql {
-            rows("SHOW TABLES".toString()).collect {it.Tables_in_kengamis}
+            rows("SHOW TABLES".toString()).collect {it.Tables_in_isdap}
         }
 
         tables.each {tab ->

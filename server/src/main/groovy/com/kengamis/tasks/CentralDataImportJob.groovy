@@ -1,14 +1,6 @@
 package com.kengamis.tasks
 
-import com.kengamis.AppHolder
-import com.kengamis.CentralService
-import com.kengamis.ChoiceOption
-import com.kengamis.Form
-import com.kengamis.FormSetting
-import com.kengamis.KengaGroup
-import com.kengamis.QueryTable
-import com.kengamis.Study
-import com.kengamis.Util
+import com.kengamis.*
 import com.kengamis.acl.KengaAclTableRecordIdentity
 import com.kengamis.acl.KengaDataTable
 import com.kengamis.acl.KengaGroupAclEntry
@@ -17,34 +9,29 @@ import com.omnitech.odkodata2sql.OdkOdataSlurper
 import com.omnitech.odkodata2sql.SqlSchemaGen
 import com.omnitech.odkodata2sql.model.OdkFormSource
 import com.omnitech.odkodata2sql.model.OdkTable
+import grails.util.Holders
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.util.logging.Log4j
 import groovy.xml.XmlUtil
-import org.apache.commons.validator.FormSet
-import org.openxdata.markup.Converter
-import org.openxdata.markup.IFormElement
-import org.openxdata.markup.ISelectionQuestion
-import org.openxdata.markup.MultiSelectQuestion
-import org.openxdata.markup.RepeatQuestion
-import org.openxdata.markup.XformType
+import org.openxdata.markup.*
 import org.openxdata.markup.Form as markUpForm
 
-import javax.transaction.Transactional
-
-import static com.kengamis.RestHelper.*
+import static com.kengamis.RestHelper.getCentralRestClient
+import static com.kengamis.RestHelper.withCentral
 
 @Log4j
 class CentralDataImportJob extends Script {
 
     CentralService centralService
+    static String centralId = Holders.grailsApplication.config.server.centralId as String
 
     @Override
     Object run() {
         try {
             centralService = AppHolder.bean('centralService')
             def token = centralService.auth()
-            def study = Study.findByCentralId('8')
+            def study = Study.findByCentralId(centralId)
             syncCentralData(study, token)
         }
         catch (Exception e) {
@@ -58,11 +45,13 @@ class CentralDataImportJob extends Script {
             def forms = withCentral { listForms(study.centralId, token) }
             for (form in forms) {
                 try {
-                    Form.withNewTransaction {
+                    println(">>>======================================syncing form:${form.name}")
+//                    Form.withNewTransaction {
                         syncFormSetting(study, form, token)
-                    }
+//                    }
                 }
                 catch (Exception ex) {
+                    ex.printStackTrace()
                     log.error("ERROR:::: Failed to synchronise [${form.name}] !!!", Util.sanitize(ex))
                 }
                 syncFormData(study, form, token)
@@ -73,7 +62,6 @@ class CentralDataImportJob extends Script {
         }
         log.info("=============Finished syncing data For Study [$study.name]========\n\n")
     }
-
 
     static def syncFormSetting(Study study, def form, def token) {
         def studyCentralId = study.centralId as String
@@ -90,20 +78,27 @@ class CentralDataImportJob extends Script {
 
         def misForm = Form.findByName(finalTableName) ?: new Form(name: finalTableName, study: study,
                 centralId: formCentralId, displayName: form.name)
-        Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
+//        Form.withNewTransaction { misForm.save(failOnError: true, flush: true) }
+        misForm.save(flush:true, failOnError: true)
         log.info("  -> Done Saving form[$form]")
 
-//        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
-//        for (version in versions) {
-//            log.info(version)
-//            importVersion(study, misForm, '___', token)
-//        }
-        importVersion(study, misForm, '___', token)
+        def versions = withCentral { getFormVersions(study.centralId, formCentralId, token) }
+        for (version in versions) {
+            log.info(version)
+            if(version.version == ""){
+                importVersion(study, misForm, "___", token)
+            }else{
+                importVersion(study, misForm, version.version, token)
+            }
+        }
+//        importVersion(study, misForm, '___', token)
+        misForm.save(flush:true, failOnError: true)
         log.info("  -> Done Importing form[$form] Settings...")
     }
 
     static def syncFormData(Study study, def form, def token) {
         log.info("======= Syncing Form Data [$study.name -> $form.name] ========================")
+
         def studyCentralId = study.centralId as String
         def formCentralId = form['xmlFormId'] as String
         def formName = form['name'] as String
@@ -134,7 +129,12 @@ class CentralDataImportJob extends Script {
                 }
             }
             // then create the acls from here
-            createAclsForRecords()
+            try{
+                createAclsForRecords()
+            }catch(Exception ex) {
+                ex.printStackTrace()
+            }
+
 
         } else {
             log.info(" ======= The sync mode of form (${form.name}) is not enabled =======")
@@ -145,7 +145,7 @@ class CentralDataImportJob extends Script {
     static def generateKengaAclRecordIdentities(KengaDataTable kengaDataTable, recordId) {
         try {
             // if the record doesnt exist in the table then add it
-            if (!(KengaAclTableRecordIdentity.findByDataTableRecordId(recordId))){
+            if (!(KengaAclTableRecordIdentity.findByDataTableRecordId(recordId))) {
                 new KengaAclTableRecordIdentity(
                         kengaDataTable: kengaDataTable,
                         dataTableRecordId: recordId
@@ -157,14 +157,14 @@ class CentralDataImportJob extends Script {
         }
     }
 
-    static def createAclsForRecords(){
-        QueryTable.all.each {qt ->
+    static def createAclsForRecords() {
+        QueryTable.all.each { qt ->
             def groupId = qt.kengaGroupId
             def permission = qt.permission
             def queryArray = new JsonSlurper().parseText(qt.query)
             def queryData = queryArray['queryData']
             print(queryData)
-            queryData.each{ it ->
+            queryData.each { it ->
                 def formName = it['form']
                 def grpConditionQuery = it['groupConditionQuery']
                 def kengaGroup = KengaGroup.get(groupId)
@@ -178,20 +178,20 @@ class CentralDataImportJob extends Script {
                 }
                 log.info("==============size${data.size()}")
 
-                if(data.size() > 0){
-                    def idLabel= kengaDataTable.idLabel
-                    createAcls(data, groupId,permission, idLabel)
-                    def parentGroupId = kengaGroup.parentGroup.collect{it.id}[0]
+                if (data.size() > 0) {
+                    def idLabel = kengaDataTable.idLabel
+                    createAcls(data, groupId, permission, idLabel)
+                    def parentGroupId = kengaGroup.parentGroup.collect { it.id }[0]
 
-                    while(parentGroupId !=null){
+                    while (parentGroupId != null) {
                         // getting the parent object which will be used to create the acl
                         def myCurrentObject = kengaGroup.get(parentGroupId)
 
                         // create acl for the parent
-                        createAcls(data,myCurrentObject,permission,idLabel)
+                        createAcls(data, myCurrentObject, permission, idLabel)
 
                         // update the parent ID to the new parent of the current parent
-                        parentGroupId = myCurrentObject.parentGroup.collect {it.id}[0]
+                        parentGroupId = myCurrentObject.parentGroup.collect { it.id }[0]
                     }
                 }
 
@@ -201,13 +201,14 @@ class CentralDataImportJob extends Script {
         }
 
     }
-    static def createAcls(aclRecords,groupId, permissionNumber, idLabel){
+
+    static def createAcls(aclRecords, groupId, permissionNumber, idLabel) {
         aclRecords.each { recordz ->
             def kengaAclTableRecordIdentity = KengaAclTableRecordIdentity.findByDataTableRecordId(recordz."$idLabel")
 //            to make sure that the acl for a group is not repeated
             def groupObject = KengaGroup.findById(groupId)
 
-            if( !(KengaGroupAclEntry.findByKengaAclTableRecordIdentityAndKengaGroup(kengaAclTableRecordIdentity,groupObject))){
+            if (!(KengaGroupAclEntry.findByKengaAclTableRecordIdentityAndKengaGroup(kengaAclTableRecordIdentity, groupObject))) {
                 new KengaGroupAclEntry(
                         kengaAclTableRecordIdentity: kengaAclTableRecordIdentity,
                         kengaGroup: groupId,
@@ -281,8 +282,12 @@ class CentralDataImportJob extends Script {
             formSetting.form = misForm
             def settingAlreadyExist = misForm.hasFormSetting(misForm, formSetting.field)
             if (!settingAlreadyExist) {
-                FormSetting.withNewTransaction { formSetting.save(failOnError: true, flush: true) }
+//                FormSetting.withNewTransaction {
+                    formSetting.save(failOnError: true, flush: true)
+//                }
             }
+            formSetting.save(flush:true, failOnError: true
+            )
 
             if (qn instanceof ISelectionQuestion) {
                 mayBeAddChoiceOptions(formSetting, qn)
@@ -315,7 +320,9 @@ class CentralDataImportJob extends Script {
         choiceOptions.each { choice ->
             choice.formSetting = formSetting
             if (!formSetting.choiceOptions.any { it.choiceId == choice.choiceId }) {
-               ChoiceOption.withNewTransaction {  choice.save(failOnError: true, flush: true) }
+//               ChoiceOption.withNewTransaction {
+                   choice.save(failOnError: true, flush: true)
+//               }
             }
         }
     }

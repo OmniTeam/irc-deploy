@@ -20,17 +20,17 @@ class TaskListSyncJob extends Script {
 
     @Override
     Object run() {
-        //kengaGroupAclEntryService.createAclsForRecords()
-        runUserAccountTasks()
-        handleArchiveTask()
-        startLongTermGrantJob()
+        kengaGroupAclEntryService.createAclsForRecords()
+//        runUserAccountTasks()
+        //handleArchiveTask()
+        //startLongTermGrantJob()
         //send data to workflow
-        def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
-        data.each { sendTasksToWorkflow(it as TaskList) }
+        //def data = TaskList.where { status == 'completed' && synced == 'false' }.findAll()
+        //data.each { sendTasksToWorkflow(it as TaskList) }
 
-        downloadTasks(url + '/get-tasks/CRVPF_REPORTING/', '0/50')
-        downloadTasks(url + '/get-tasks/GRANT_PROCESS/', '0/50')
-        downloadTasks(url + '/get-tasks/LONG_TERM_GRANT/', '0/50')
+        //downloadTasks(url + '/get-tasks/CRVPF_REPORTING/', '0/50')
+        //downloadTasks(url + '/get-tasks/GRANT_PROCESS/', '0/50')
+        //downloadTasks(url + '/get-tasks/LONG_TERM_GRANT/', '0/50')
 
         return null
     }

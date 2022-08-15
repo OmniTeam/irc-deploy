@@ -13,7 +13,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { TagInputModule } from 'ngx-chips';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import {TokenInterceptor} from './helpers/token.interceptor';
+import {AuthInterceptor} from './helpers/auth-interceptor';
 import {fakeBackendProvider} from './helpers/fake-backend-interceptor';
 
 @NgModule({
@@ -36,7 +36,7 @@ import {fakeBackendProvider} from './helpers/fake-backend-interceptor';
     NgxDatatableModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     fakeBackendProvider,
   ],
   bootstrap: [AppComponent]

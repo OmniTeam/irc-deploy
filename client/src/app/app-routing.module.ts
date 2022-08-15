@@ -10,36 +10,26 @@ import { Roles } from "./models/roles";
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "auth",
+    redirectTo: "home",
     pathMatch: "full",
     // canActivate: [AuthGuard],
     data: {
       userRoles: [], // All User Can Access but must be login
     },
   },
-  // {
-  //   path: "home",
-  //   pathMatch: "full",
-  //   children: [],
-  //   canActivate: [AuthGuard],
-  //   data: {
-  //     userRoles: [], // All User Can Access but must be login
-  //   },
-  // },
-
+  {
+    path: "login",
+    canActivate: [LoggedInGuard],
+    data: {
+      userRoles: [], // All User Can Access but must be login
+    },
+    loadChildren: () =>
+      import("./login/login.module").then((m) => m.LoginModule),
+  },
   {
     path: "",
     component: AdminLayoutComponent,
     children: [
-      {
-        path: "login",
-        canActivate: [LoggedInGuard],
-        data: {
-          userRoles: [], // All User Can Access but must be login
-        },
-        loadChildren: () =>
-          import("./login/login.module").then((m) => m.LoginModule),
-      },
       {
         path: "project",
         canActivate: [AuthGuard],
@@ -546,17 +536,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: "roles",
-        canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
-        },
-        loadChildren: () =>
-          import("./mis-components/roles/roles.module").then(
-            (m) => m.RolesModule
-          ),
-      },
-      {
         path: "role/create",
         canActivate: [AuthGuard],
         data: {
@@ -590,6 +569,17 @@ const routes: Routes = [
           ).then((m) => m.ScheduledTasksModule),
       },
       {
+        path: "acl-group-mapping-parent",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [Roles.ROLE_SUPER_ADMIN],
+        },
+        loadChildren: () =>
+          import(
+            "./mis-components/acl-group-mapping-parent/acl-group-mapping-parent.module"
+          ).then((m) => m.AclGroupMappingParentModule),
+      },
+      {
         path: "acl-group-mapping-edit/:id",
         canActivate: [AuthGuard],
         data: {
@@ -599,17 +589,6 @@ const routes: Routes = [
           import(
             "./mis-components/acl-group-mapping-edit/acl-group-mapping-edit.module"
           ).then((m) => m.AclGroupMappingEditModule),
-      },
-      {
-        path: "acl-group-mapping-lists",
-        canActivate: [AuthGuard],
-        data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN],
-        },
-        loadChildren: () =>
-          import(
-            "./mis-components/acl-group-mapping-parent/acl-group-mapping-parent.module"
-          ).then((m) => m.AclGroupMappingParentModule),
       },
       {
         path: "acl-group-mapping-lists",
@@ -658,12 +637,7 @@ const routes: Routes = [
       {
         path: "messagePage/:type",
         data: {
-          userRoles: [
-            Roles.ROLE_ADMIN,
-            Roles.ROLE_SUPER_ADMIN,
-            Roles.ROLE_STAFF_DATA_MANAGER,
-            Roles.ROLE_STAFF_DATA_VIEWER,
-          ],
+          userRoles: [],
         },
         loadChildren: () =>
           import("./mis-components/message-pages/message-pages.module").then(
@@ -674,9 +648,10 @@ const routes: Routes = [
         path: "program",
         data: {
           userRoles: [
-            Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_ADMIN,
+            Roles.ROLE_SUPER_ADMIN,
             Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
           ],
         },
         loadChildren: () =>
@@ -703,7 +678,11 @@ const routes: Routes = [
         path: "program/edit/:id",
         canActivate: [AuthGuard],
         data: {
-          userRoles: [Roles.ROLE_SUPER_ADMIN, Roles.ROLE_ADMIN],
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+          ],
         },
         loadChildren: () =>
           import(
@@ -854,6 +833,22 @@ const routes: Routes = [
           import(
             "./mis-components/entity-view-filters/edit-entity-view-filters/edit-entity-view-filters.module"
           ).then((m) => m.EditEntityViewFiltersModule),
+      },
+      {
+        path: "dashboard",
+        canActivate: [AuthGuard],
+        data: {
+          userRoles: [
+            Roles.ROLE_SUPER_ADMIN,
+            Roles.ROLE_ADMIN,
+            Roles.ROLE_STAFF_DATA_MANAGER,
+            Roles.ROLE_STAFF_DATA_VIEWER,
+          ],
+        },
+        loadChildren: () =>
+          import("./mis-components/dashboard/dashboard.module").then(
+            (m) => m.DashboardModule
+          ),
       },
       {
         path: "dataView",
