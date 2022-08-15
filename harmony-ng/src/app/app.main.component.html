@@ -1,14 +1,19 @@
-<div class="layout-wrapper" (click)="onLayoutClick()"
-     [ngClass]="{'layout-menu-horizontal': isHorizontal(),
-                 'layout-menu-overlay': isOverlay(),
-                 'layout-menu-static': isStatic(),
-                 'layout-menu-slim':isSlim(),
-                 'layout-menu-static-inactive': staticMenuDesktopInactive,
-                 'layout-menu-mobile-active': staticMenuMobileActive,
-                 'layout-menu-overlay-active':overlayMenuActive,
-                 'topbar-icons-active': topbarIconsActive,
-                 'p-input-filled': app.inputStyle === 'filled', 'p-ripple-disabled': !app.ripple}">
-
+<div
+    class="layout-wrapper"
+    (click)="onLayoutClick()"
+    [ngClass]="{
+        'layout-menu-horizontal': isHorizontal(),
+        'layout-menu-overlay': isOverlay(),
+        'layout-menu-static': isStatic(),
+        'layout-menu-slim': isSlim(),
+        'layout-menu-static-inactive': staticMenuDesktopInactive,
+        'layout-menu-mobile-active': staticMenuMobileActive,
+        'layout-menu-overlay-active': overlayMenuActive,
+        'topbar-icons-active': topbarIconsActive,
+        'p-input-filled': app.inputStyle === 'filled',
+        'p-ripple-disabled': !app.ripple
+    }"
+>
     <app-topbar></app-topbar>
 
     <app-rightpanel></app-rightpanel>
@@ -18,7 +23,6 @@
     </div>
 
     <div class="layout-main">
-
         <app-breadcrumb></app-breadcrumb>
 
         <div class="layout-content">
@@ -26,7 +30,10 @@
         </div>
 
         <app-footer></app-footer>
-        <div class="layout-mask" *ngIf="staticMenuMobileActive || topbarIconsActive"></div>
+        <div
+            class="layout-mask"
+            *ngIf="staticMenuMobileActive || topbarIconsActive"
+        ></div>
     </div>
 
     <app-config></app-config>
