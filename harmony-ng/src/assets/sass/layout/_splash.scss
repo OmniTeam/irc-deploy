@@ -3,7 +3,7 @@
     height: 100%;
     min-height: 100%;
     position: absolute;
-    background-color:#2d3f47;
+    background-color: #87a261;
 }
 
 .splash-screen {
@@ -24,48 +24,63 @@
 }
 .splash-screen .splash-cube1 {
     -webkit-animation-delay: 0.2s;
-    animation-delay: 0.2s; }
+    animation-delay: 0.2s;
+}
 .splash-screen .splash-cube2 {
     -webkit-animation-delay: 0.3s;
-    animation-delay: 0.3s; }
+    animation-delay: 0.3s;
+}
 .splash-screen .splash-cube3 {
     -webkit-animation-delay: 0.4s;
-    animation-delay: 0.4s; }
+    animation-delay: 0.4s;
+}
 .splash-screen .splash-cube4 {
     -webkit-animation-delay: 0.1s;
-    animation-delay: 0.1s; }
+    animation-delay: 0.1s;
+}
 .splash-screen .splash-cube5 {
     -webkit-animation-delay: 0.2s;
-    animation-delay: 0.2s; }
+    animation-delay: 0.2s;
+}
 .splash-screen .splash-cube6 {
     -webkit-animation-delay: 0.3s;
-    animation-delay: 0.3s; }
+    animation-delay: 0.3s;
+}
 .splash-screen .splash-cube7 {
     -webkit-animation-delay: 0s;
-    animation-delay: 0s; }
+    animation-delay: 0s;
+}
 .splash-screen .splash-cube8 {
     -webkit-animation-delay: 0.1s;
-    animation-delay: 0.1s; }
+    animation-delay: 0.1s;
+}
 .splash-screen .splash-cube9 {
     -webkit-animation-delay: 0.2s;
-    animation-delay: 0.2s; }
+    animation-delay: 0.2s;
+}
 
 @-webkit-keyframes splash-cubeGridScaleDelay {
-    0%, 70%, 100% {
+    0%,
+    70%,
+    100% {
         -webkit-transform: scale3D(1, 1, 1);
         transform: scale3D(1, 1, 1);
-    } 35% {
-          -webkit-transform: scale3D(0, 0, 1);
-          transform: scale3D(0, 0, 1);
-      }
+    }
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
 }
 
 @keyframes splash-cubeGridScaleDelay {
-    0%, 70%, 100% {
+    0%,
+    70%,
+    100% {
         -webkit-transform: scale3D(1, 1, 1);
         transform: scale3D(1, 1, 1);
-    } 35% {
-          -webkit-transform: scale3D(0, 0, 1);
-          transform: scale3D(0, 0, 1);
-      }
+    }
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
 }
