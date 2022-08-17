@@ -1,6 +1,5 @@
 <nav
-  class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light"
-  style="background-color: white"
+  class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white"
   id="sidenav-main"
   *ngIf="authService.isLoggedIn()"
   (mouseover)="onMouseEnterSidenav()"
@@ -9,9 +8,9 @@
   <perfect-scrollbar *ngIf="this.authService.isLoggedIn()">
     <div class="scrollbar-inner">
       <div class="sidenav-header d-flex align-items-center">
-        <a class="navbar-brand" [routerLink]="'home'">
+        <a class="navbar-brand" [routerLink]="['/home']">
           <img
-            src="../../../assets/img/brand/isdap_logo.png"
+            src="../../../assets/img/brand/crvpf_logo.png"
             class="navbar-brand-img"
             alt="..."
           />

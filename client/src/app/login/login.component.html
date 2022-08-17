@@ -1,51 +1,74 @@
-<div class="wrapper">
-  <div class="container">
-
-    <div class="card">
-      <br/>
-      <span><img src="assets/img/brand/isdap_logo.png" alt="Logo"></span>
-      <h1>Welcome</h1>
-      <form class="form" [formGroup]="loginForm" (ngSubmit)="login()">
-        <div *ngIf="submitted && f.username.errors">
-          <div *ngIf="f.username.errors.required"  class="input-error">Username is required</div>
-        </div>
-        <div class=" input-group input-group-merge" style="padding: 0 25px 0 25px;">
-          <input placeholder="Username"
-                 class="form-control"
-                 type="text"
-                 formControlName="username"
-                 [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
-        </div>
-
-        <div class=" input-group input-group-merge" style="padding: 0 25px 0 25px;">
-          <input placeholder="Password"
-                 class="form-control"
-                 type="password"
-                 formControlName="password"
-                 required
-                 [type]="fieldTextType ? 'text' : 'password'"
-                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
-          <div class="input-group-append">
-            <span class="input-group-text" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
-                <i
-                  class="fa"
-                  [ngClass]="{
-                        'fa-eye-slash':!fieldTextType,
-                        'fa-eye':fieldTextType
-                        }"
-                  (click)="toggleFieldTextType()">
-                </i>
-            </span>
-          </div>
-        </div>
-        <div *ngIf="submitted && f.password.errors">
-          <div *ngIf="f.password.errors.required"  class="input-error">Password is required</div>
-        </div>
-        <br/>
-        <button type="submit" id="login-button">Login</button>
-
-      </form>
+<div class="login-body">
+    <div class="logo">
+        <img src="assets/layout/images/crvpf-logo.png" alt="harmony-layout" />
+        <span class="app-name">CRVPF</span>
     </div>
+    <div class="login-panel">
+        <img
+            src="assets/layout/images/template/image-login-mobile.jpg"
+            alt="harmony-layout"
+            class="mobile"
+        />
+        <div class="left-part">
+            <form
+                class="login100-form flex-sb flex-w"
+                [formGroup]="loginForm"
+                (ngSubmit)="login()"
+            >
+                <span class="login-panel-header">Sign in To CRVPF</span>
+                <span class="login-panel-subheader"
+                    >Welcome, please use the form to sign-in CRVPF MIS
+                </span>
 
-  </div>
+                <div style="margin-top: 32px">
+                    <div class="col-12">
+                        <label>Enter Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            formControlName="username"
+                            class="form-control form-control-user"
+                            autocomplete="off"
+                            pInputText
+                        />
+                    </div>
+                    <div class="col-12">
+                        <label>Enter password</label>
+                        <input
+                            id="password"
+                            type="password"
+                            formControlName="password"
+                            class="form-control form-control-user"
+                            [ngClass]="{ 'is-invalid': wrongCredentials }"
+                            required
+                            [type]="fieldTextType ? 'text' : 'password'"
+                            autocomplete="off"
+                            pInputText
+                            feedback="false"
+                        />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <!-- <button type="button" pButton label="Login" class="p-button-raised"[routerLink]="['/']"></button> -->
+
+                    <button
+                        [disabled]="!loginForm.valid"
+                        class="login100-form-btn"
+                    >
+                        <i
+                            class="fa fa-sign-in-alt"
+                            style="margin-right: 10px"
+                        ></i>
+                        LOGIN
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="right-part">
+            <img
+                src="assets/layout/images/template/login-bg.jpg"
+                alt="harmony-layout"
+            />
+        </div>
+    </div>
 </div>

@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit {
            // Hide loading indicator
 
            // Present error to user
-           alert("Server error, please contact support");
+           console.log(event.error);
        }
    });
 
