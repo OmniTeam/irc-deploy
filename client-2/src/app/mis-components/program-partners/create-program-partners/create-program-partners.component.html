@@ -1,0 +1,413 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-12 text-center">
+          <h2 class=" h2 text-white d-inline-block mb-0">PROGRAM PARTNER</h2>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+        </div>
+        <div class=" col-lg-6 col-5 text-right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row justify-content-center">
+    <div class=" col-lg-10 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Program Partner</h3>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem;">
+          <form [formGroup]="formGroup" (ngSubmit)="createProgramPartner()" *ngIf="formGroup">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Program
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <ng-select class="form-control form-control-sm"
+                                   aria-controls="datatable"
+                                   style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                   [multiple]="false"
+                                   placeholder="Program"
+                                   formControlName="program"
+                                   [ngClass]="{ 'is-invalid': submitted && f.program.errors }"
+                                   [searchable]="true"
+                                   [clearable]="true">
+                          <ng-option [value]="item.id" *ngFor="let item of programs">
+                            {{item.description}}
+                          </ng-option>
+                        </ng-select>
+                        <div *ngIf="submitted && f.program.errors" class="invalid-feedback">
+                          <div *ngIf="f.program.errors.required">Program Name is required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Cluster
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Cluster"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="cluster"
+                            [ngClass]="{ 'is-invalid': submitted && f.cluster.errors }"
+                          >
+                          <div *ngIf="submitted && f.cluster.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.cluster.errors.required">Cluster is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      What is the name of the lead organization?
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Organization Name"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="organisation"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Where is the organization located?
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder=" Physical Address"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="physicalAddress"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Type of Organisation
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Type of Organisation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="organisationType"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Area of Operation
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Area of Operation"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="areaOfOperation"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Name of Contact Person
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Name of Contact Person"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="nameContactPerson"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Telephone number of contact person
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Telephone Number"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="telephoneContactPerson"
+                            (ngModelChange)="validateNumber($event)"
+                            [ngClass]="{ 'is-invalid': inValidNumber }"
+                          >
+                        </div>
+                        <div *ngIf="submitted && inValidNumber">
+                          <div class="input-error">Please put a valid PhoneNumber
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Email address of contact person
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder=" Email"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="emailContactPerson"
+                            [ngClass]="{ 'is-invalid': submitted && f.emailContactPerson.errors }"
+                            email>
+                        </div>
+                        <div *ngIf="submitted && (f.emailContactPerson.errors || f.emailContactPerson.invalid)">
+                          <div class="input-error">Email must be in the format 'example@email.com'
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Country
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="Country"
+                                     formControlName="country"
+                                     (ngModelChange)="onSelectCountry($event)"
+                                     [ngClass]="{ 'is-invalid': submitted && f.country.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="country" *ngFor="let country of countries">
+                              {{country}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      City
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <ng-select class="form-control form-control-sm"
+                                     aria-controls="datatable"
+                                     style="height: auto!important;padding: 0; border: 1px solid #f7fafc;"
+                                     [multiple]="false"
+                                     placeholder="City"
+                                     formControlName="city"
+                                     [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                                     [searchable]="true"
+                                     [clearable]="true"
+                          >
+                            <ng-option [value]="city" *ngFor="let city of cities">
+                              {{city}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Data Collector
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="dataCollector"
+                            [value]="username"
+                            disabled>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="col-md-3" style="padding-top: 10px;">
+                    <label>
+                      Organizations involved in the cluster
+                    </label>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="form-group ">
+                      <div class=" input-group input-group-merge">
+                        <div class="col">
+                          <table class="table table-striped table-bordered hover" style="display: table">
+                            <thead>
+                            <tr>
+                              <th class='text-center'>Name of organization</th>
+                              <th class='text-center'>Telephone Number</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let org of organisationsInvolved">
+                              <td class='text-center' style="display: none;">{{org.id}}</td>
+                              <td class='text-center' [id]="org.id">{{org.name}}
+                                <div>
+                                  <button class="btn btn-link" type="button"
+                                          (click)="cellEditor(org.id, org.id, 'orgName', org.name)"><i
+                                    class="fas fa-pencil-alt"></i></button>
+                                </div>
+                              </td>
+                              <td class="text-center" [id]="org.id+'-d'">{{org.contact}}
+                                <div>
+                                  <button class="btn btn-link" type="button"
+                                          (click)="cellEditor(org.id,org.id+'-d', 'orgContact', org.contact, 'telephone')"><i
+                                    class="fas fa-pencil-alt"></i></button>
+                                </div>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-default"
+                            type="button"
+                            style="height: 37px;
+                                  width: 90px;
+                                  padding: revert;
+                                  font-size: 12px;"
+                            (click)="addOrganization()">
+                      <i class="fas fa-plus"></i>&nbsp;Add
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 bottom_buttons_row"
+                   style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+                <button class="btn btn-danger" type="button" (click)="onReset()">Cancel</button>
+                <button class="btn btn-success" type="submit">Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

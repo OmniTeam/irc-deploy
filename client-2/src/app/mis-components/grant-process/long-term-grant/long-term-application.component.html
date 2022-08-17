@@ -1,0 +1,669 @@
+<form [formGroup]="formGroupLT" (ngSubmit)="submitLetter()" *ngIf="formGroupLT">
+
+  <h3 style="margin-left: 40px;">A. The Proposed Project</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col">
+
+          <div class="row">
+            <div class="col-sm-6">
+              <label>1. Title of the project:<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+
+                    class="form-control"
+                    placeholder="Title"
+                    type="text"
+                    style="padding-left: 10px;"
+                    formControlName="projectTitle"
+                    [ngClass]="{ 'is-invalid': submitted && f.projectTitle.errors }"
+                  >
+                </div>
+                <div *ngIf="submitted && f.projectTitle.errors">
+                  <div *ngIf="f.projectTitle.errors.required" class="input-error">This value is
+                    required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label>2. Proposed duration of the project:<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+
+                    class="form-control"
+                    placeholder="Project Duration"
+                    type="text"
+                    style="padding-left: 10px;"
+                    formControlName="projectDuration"
+                    [ngClass]="{ 'is-invalid': submitted && f.projectDuration.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <label>3. Project proposed start date:<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    class="form-control"
+
+                    placeholder="Project proposed"
+                    type="date"
+                    style="padding-left: 10px;"
+                    formControlName="projectProposed"
+                    [ngClass]="{ 'is-invalid': submitted && f.projectProposed.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <label>4. Total project amount (USD)<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+
+                    class="form-control"
+                    placeholder="Amount"
+                    type="number"
+                    style="padding-left: 10px;"
+                    formControlName="projectAmount"
+                    [ngClass]="{ 'is-invalid': submitted && f.projectAmount.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <label>5. Amount requested from CRVPF (USD)<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+
+                    class="form-control"
+                    placeholder="Amount"
+                    type="number"
+                    style="padding-left: 10px;"
+                    formControlName="amountRequested"
+                    [ngClass]="{ 'is-invalid': submitted && f.amountRequested.errors }"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <label>6. Other sources and amount of funding on this particular Project if any:<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <textarea
+
+                    class="form-control"
+                    placeholder="Funding"
+                    style="padding-left: 10px;"
+                    formControlName="funding"
+                    [ngClass]="{ 'is-invalid': submitted && f.funding.errors }"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <label>7. Name of authorized Signatory(ies):<span
+                class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <textarea
+                    class="form-control"
+                    placeholder="Name"
+                    rows="3"
+                    style="padding-left: 10px;"
+                    formControlName="nameAuthorizedSignatory"
+                    [ngClass]="{ 'is-invalid': submitted && f.nameAuthorizedSignatory.errors }"
+                  ></textarea>
+                  <div *ngIf="submitted && f.nameAuthorizedSignatory.errors" class="invalid-feedback">
+                    <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
+                      Signatory is
+                      required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label>8. Contact details of authorized signatory(ies):<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+
+                    class="form-control"
+                    placeholder="Contact details"
+                    type="text"
+                    style="padding-left: 10px;"
+                    formControlName="contactAuthorizedSignatory"
+                    (ngModelChange)="validateNumber($event)"
+                    [ngClass]="{ 'is-invalid': inValidNumber }"
+                  >
+                </div>
+                <div *ngIf="submitted && inValidNumber">
+                  <div class="input-error">Please put valid number
+                  </div>
+                </div>
+                <div *ngIf="submitted && f.projectTitle.errors">
+                  <div *ngIf="f.projectTitle.errors.required" class="input-error">This value is
+                    required
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <label>9. Bank Details<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="Name of the Bank:&#10;Bank Address:&#10;Title of the Account:&#10;Account Number:&#10;SWIFT CODE:"
+                formControlName="bankDetails"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.bankDetails.errors }"
+              ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">B. Background and Problem Statement</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>10. Briefly describe the social, economic, political context related to the project area.<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="problemBackground"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.problemBackground.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>11. What specific problem will your proposed project address?<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="problemAddressed"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.problemAddressed.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">C. Project Description</h3>
+  <div class="card">
+    <div class="card-body">
+      <div style="margin: 20px;">
+        <div class="row">
+          <div class="col-sm-6">
+            <label>12. Who are your target population?<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="targetPopulation"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.targetPopulation.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>13. Why them?<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="Rational for why you will focus on the specified target groups above"
+                formControlName="reasonForTargetPopulation"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.reasonForTargetPopulation.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>14. What will change in their lives?<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="What will be the tangible difference for them because of the program"
+                formControlName="whatChangeExpected"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.whatChangeExpected.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>15. What is your overall goal?<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="The long term change you want to see in one sentence"
+                formControlName="overallGoal"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.overallGoal.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>16. List at least 3 major mid-term changes you want to see (above 1 year)<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="midtermChanges"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.midtermChanges.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label>17. List at least 5 immediate changes you want to see after activity implementation<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="immediateChanges"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.immediateChanges.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label>18. What activities will you undertake to achieve the above changes?<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="activities"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.activities.errors }"
+              ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">D. Risks and challenges</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-12">
+          <label>19. What are some of the challenges (both internal and external) that are likely to be experienced and
+            hinder the implementation this project and how will you address them?<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="risksAndChallenges"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.risksAndChallenges.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">E. Partnerships and networks</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-12">
+          <label>20. Who are the key strategic partners, whether institutions or individuals, in the broader field in which
+            you work?<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="Please include both those you work with or not. State the need for collaborating with these organizations"
+                formControlName="partnershipsAndNetworks"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.partnershipsAndNetworks.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">F. Sustainability</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>21. Please describe how the change envisioned by your project will be sustained in the future<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="changeEnvisioned"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.changeEnvisioned.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label>22. What structures and plans are in place to ensure your organization’s sustainability in the future –
+            including plans to strengthen the organization’s leadership, management and financial health – over
+            time?<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="structuresAndPlans"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.structuresAndPlans.errors }"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-left: 40px;">G. Cost of the project</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>23. Provide the total project cost in local currency<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+            <input
+              class="form-control"
+              placeholder="Amount"
+              formControlName="totalProjectCostLocalCurrency"
+              type="number"
+              [ngClass]="{ 'is-invalid': submitted && f.totalProjectCostLocalCurrency.errors }"
+            />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>24. Provide the total project cost in US dollars<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                formControlName="totalProjectCostDollars"
+                type="number"
+                [ngClass]="{ 'is-invalid': submitted && f.totalProjectCostDollars.errors }"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <h3 style="margin-left: 40px;">H. Attachments</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row" style="margin: 10px;">
+        <div class="col">
+          <div class="row">
+            <div class="col-sm-6">
+              <label>i. Detailed Budget.<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    *ngIf="!isReadOnly"
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    id="detailedBudget"
+                    (change)="handleFileInput($event)">
+                </div>
+                <button
+                  *ngIf="!isReadOnly"
+                  type="button"
+                  (click)="fileUploadService.downloadFile('Copy of BUDGET Templete.xls')"
+                  class="btn btn-link">Download Template Here <i class="fas fa-download"></i></button>
+                <button
+                  *ngIf="documents.detailedBudget!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.detailedBudget)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.detailedBudget)}}  <i
+                  class="fas fa-download"></i></button>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label>ii. Work plan<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    *ngIf="!isReadOnly"
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    id="workplan"
+                    (change)="handleFileInput($event)">
+                </div>
+                <button
+                  *ngIf="documents.workplan!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.workplan)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.workplan)}}  <i
+                  class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label>iii. Monitoring, Evaluation and learning framework<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    *ngIf="!isReadOnly"
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    id="framework"
+                    (change)="handleFileInput($event)">
+                </div>
+                <button
+                  *ngIf="documents.framework!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.framework)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.framework)}}  <i
+                  class="fas fa-download"></i></button>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label>iv. Signed cluster guideline<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    *ngIf="!isReadOnly"
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    id="clusterGuideline"
+                    (change)="handleFileInput($event)">
+                </div>
+                <button
+                  *ngIf="documents.clusterGuideline!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.clusterGuideline)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.clusterGuideline)}}  <i
+                  class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <label>v. Draft M.O.U if application is submitted by Cluster<span class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    *ngIf="!isReadOnly"
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    id="mou"
+                    (change)="handleFileInput($event)">
+                </div>
+                <button
+                  *ngIf="documents.mou!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.mou)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.mou)}}  <i
+                  class="fas fa-download"></i></button>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label>vi. List of staff members and their titles as well as qualifications and experience.<span
+                class="required-indicator">*</span></label>
+              <div class="form-group ">
+                <div class=" input-group input-group-merge">
+                  <input
+                    *ngIf="!isReadOnly"
+                    class="form-control" [disabled]="isReadOnly"
+                    placeholder="Attachment"
+                    type="file"
+                    style="padding-left: 10px;"
+                    id="staffMembers"
+                    (change)="handleFileInput($event)">
+                </div>
+                <button
+                  *ngIf="documents.staffMembers!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(documents.staffMembers)"
+                  class="btn btn-link">{{fileUploadService.getFileName(documents.staffMembers)}}  <i
+                  class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input class="form-control" type="hidden" formControlName="grantId" [ngModel]="grantId">
+  <input class="form-control" type="hidden" formControlName="processInstanceId" [ngModel]="processInstanceId">
+  <input class="form-control" type="hidden" formControlName="definitionKey" [ngModel]="definitionKey">
+  <input class="form-control" type="hidden" formControlName="status" [ngModel]="status">
+
+  <div *ngIf="error || success" class="row align-items-center text-center"
+       style="display: flex; justify-content: center;">
+    <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+      <strong>Error:</strong> {{errorMessage}}
+    </div>
+    <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+      <strong>Success:</strong> {{successMessage}}
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!isReadOnly">
+    <div class="col-lg-12 bottom_buttons_row"
+         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+      <button [disabled]="submitted" class="btn btn-warning" type="submit" (click)="updateStatus('draft')">Save For Later</button>
+      <button *ngIf="isMakeCorrectionsED" [disabled]="submitted" class="btn btn-default" (click)="updateOutputVariables('reject')" type="submit">
+        <span *ngIf="!submitted">Reject Application</span>
+        <span *ngIf="submitted">Loading ...</span></button>
+      <button [disabled]="submitted" class="btn btn-success" type="submit" (click)="updateOutputVariables('submit')">
+        <span *ngIf="!submitted">Submit Application</span>
+        <span *ngIf="submitted">Loading ...</span></button>
+    </div>
+  </div>
+
+</form>

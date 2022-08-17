@@ -1,0 +1,785 @@
+<div class="grid p-fluid">
+    <div class="col-12">
+        <div class="card card-w-title">
+            <div class="col-md-12 col-sm-12">
+                <div class="row">
+                    <div class="col p-0">
+                        <div class="card">
+                            <div class="col-sm-12 col-md-12 bg-success">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h3 class="fs-3">
+                                            Form: {{ formName }}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <fieldset class="hm-fieldset">
+                                <legend class="hm-legend">Filters</legend>
+                                <div
+                                    class="col-sm-12 col-md-12 fieldset-body p-5"
+                                >
+                                    <div class="row">
+                                        <div class="grid p-fluid">
+                                            <div class="col-12 md:col-3">
+                                                <label>Form Date</label>
+
+                                                <p-calendar
+                                                    [(ngModel)]="dateFrom"
+                                                    (ngModelChange)="
+                                                        dateFromFilter($event)
+                                                    "
+                                                    [showIcon]="true"
+                                                    inputId="icon"
+                                                    id="from_date"
+                                                    placeholder="--- Select ---"
+                                                    name="from_date"
+                                                    type="date"
+                                                    dateFormat="mm/dd/yy"
+                                                ></p-calendar>
+                                            </div>
+                                            <div class="col-12 md:col-3">
+                                                <label>To Date</label>
+
+                                                <p-calendar
+                                                    id="to_date"
+                                                    [(ngModel)]="dateTo"
+                                                    (ngModelChange)="
+                                                        dateToFilter($event)
+                                                    "
+                                                    [showIcon]="true"
+                                                    id="to_date"
+                                                    inputId="icon"
+                                                    name="from_date"
+                                                    placeholder="--- Select ---"
+                                                    type="date"
+                                                    dateFormat="mm/dd/yy"
+                                                ></p-calendar>
+                                            </div>
+                                            <div class="col-12 md:col-3">
+                                                <label>Select User</label>
+                                                <div>
+                                                    <p-dropdown
+                                                        [options]="users"
+                                                        [(ngModel)]="
+                                                            selectedUser
+                                                        "
+                                                        optionLabel="name"
+                                                        (onChange)="
+                                                            onChangeUser()
+                                                        "
+                                                        optionValue="id"
+                                                        [filter]="true"
+                                                        filterBy="name"
+                                                        [showClear]="true"
+                                                        placeholder="Select A User"
+                                                    ></p-dropdown>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 md:col-3">
+                                                <label>Search</label>
+                                                <p>
+                                                    <span
+                                                        class="p-input-icon-left"
+                                                    >
+                                                        <i
+                                                            class="pi pi-search"
+                                                        ></i>
+                                                        <input
+                                                            type="search"
+                                                            pInputText
+                                                            (search)="
+                                                                onSearchFormData(
+                                                                    $event
+                                                                )
+                                                            "
+                                                            [(ngModel)]="
+                                                                searchValue
+                                                            "
+                                                            placeholder="Search"
+                                                        />
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="grid p-fluid">
+                                            <div class="col-12 md:col-1">
+                                                <p-button
+                                                    label="Reset"
+                                                    (click)="resetInputs()"
+                                                    icon="pi pi-times"
+                                                    iconPos="left"
+                                                    class="p-button-danger"
+                                                ></p-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 ml-3 mr-3 mt-5">
+                <p-tabMenu
+                    #menuItems
+                    [model]="items"
+                    [activeItem]="items[0]"
+                    (click)="activateMenu()"
+                ></p-tabMenu>
+            </div>
+
+            <div>
+                <div *ngIf="menuActiveTab === 'Forms'">
+                    <!-- <div class="col-md-12 col-sm-12" style="margin-top: 5px">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <fieldset class="hm-fieldset">
+                                        <legend class="hm-legend">
+                                            Key Stats
+                                        </legend>
+                                        <div
+                                            class="col-sm-12 col-md-12 fieldset-body"
+                                        >
+                                            <div class="row">
+                                                <div class="col-sm-4 col-md-4">
+                                                    <div
+                                                        class="card card-stats"
+                                                        style="
+                                                            background: lightblue !important;
+                                                        "
+                                                    >
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col"
+                                                                >
+                                                                    <span
+                                                                        class="h4 font-weight-bold mb-0"
+                                                                    >
+                                                                        {{
+                                                                            numberOfRecords
+                                                                        }}
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    class="col-auto"
+                                                                >
+                                                                    <h5
+                                                                        class="card-title text-uppercase mb-0 h4 font-weight-bold"
+                                                                    >
+                                                                        Records
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 col-md-4">
+                                                    <div
+                                                        class="card card-stats"
+                                                        style="
+                                                            background: lightblue !important;
+                                                        "
+                                                    >
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col"
+                                                                >
+                                                                    <span
+                                                                        class="h4 font-weight-bold mb-0"
+                                                                    >
+                                                                        {{
+                                                                            numberOfQuestions
+                                                                        }}
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    class="col-auto"
+                                                                >
+                                                                    <h5
+                                                                        class="card-title text-uppercase mb-0 h4 font-weight-bold"
+                                                                    >
+                                                                        Questions
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 col-md-4">
+                                                    <div
+                                                        class="card card-stats"
+                                                        style="
+                                                            background: lightblue !important;
+                                                        "
+                                                    >
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col"
+                                                                >
+                                                                    <span
+                                                                        class="h4 font-weight-bold mb-0"
+                                                                    >
+                                                                        {{
+                                                                            numberOfDataCollectors
+                                                                        }}
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    class="col-auto"
+                                                                >
+                                                                    <h5
+                                                                        class="card-title text-uppercase mb-0 h4 font-weight-bold"
+                                                                    >
+                                                                        Data
+                                                                        Collectors
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="col-md-12 col-sm-12" style="margin-top: 5px">
+                        <div class="row">
+                            <div class="col">
+                                <!-- datatables -->
+
+                                <div class="card">
+                                    <p-toolbar class="mb-4">
+                                        <div class="p-toolbar-group-left"></div>
+
+                                        <div class="p-toolbar-group-right">
+                                            <p-button
+                                                label=" Export to Excel"
+                                                icon="pi pi-upload"
+                                                [loading]="isExportingToExcel"
+                                                (click)="exportExcelFormData()"
+                                                styleClass="p-button-secondary"
+                                            ></p-button>
+                                            <p-button
+                                                label="Export to CSV"
+                                                icon="pi pi-upload"
+                                                [loading]="isExportingToCSV"
+                                                (click)="exportCSVFormData()"
+                                                styleClass="p-button-info"
+                                                class="ml-2"
+                                            ></p-button>
+                                            <p-button
+                                                label="Export to Zipped CSV"
+                                                icon="pi pi-upload"
+                                                [loading]="
+                                                    isExportingToZippedCSV
+                                                "
+                                                (click)="
+                                                    exportZippedCSVFormData()
+                                                "
+                                                styleClass="p-button-success"
+                                                class="ml-2"
+                                            ></p-button>
+                                        </div>
+                                    </p-toolbar>
+                                </div>
+                                <!-- close datatables -->
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <p-table
+                                        #dt
+                                        [value]="rows"
+                                        [loading]="isFectchingRecords"
+                                        [rows]="10"
+                                        [paginator]="true"
+                                        [globalFilterFields]="[
+                                            'name',
+                                            'country.name',
+                                            'representative.name',
+                                            'status'
+                                        ]"
+                                        styleClass="p-datatable-striped"
+                                        responsiveLayout="scroll"
+                                        [(selection)]="selectedProducts"
+                                        [rowHover]="true"
+                                        dataKey="id"
+                                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                                        [showCurrentPageReport]="true"
+                                    >
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="width: 3rem">
+                                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                                </th>
+                                                <th pSortableColumn="actions">
+                                                    VIEW
+                                                </th>
+                                                <th
+                                                    pSortableColumn="user"
+                                                    pFrozenColumn
+                                                >
+                                                    USER
+                                                    <p-sortIcon
+                                                        field="user"
+                                                    ></p-sortIcon>
+                                                </th>
+
+                                                <th
+                                                    pSortableColumn="submissionDate"
+                                                >
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        DATE SUBMITTED
+
+                                                        <p-sortIcon
+                                                            field="date"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="date"
+                                                            field="submissionDate"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
+                                                </th>
+                                                <th pSortableColumn="cluster">
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        CLUSTER
+                                                        <p-sortIcon
+                                                            field="cluster"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="cluster"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
+                                                </th>
+                                                <th pSortableColumn="country">
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        COUNTRY
+                                                        <p-sortIcon
+                                                            field="country"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="country"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
+                                                </th>
+
+                                                <th pSortableColumn="program">
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        PROGRAM
+                                                        <p-sortIcon
+                                                            field="program"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="program"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
+                                                </th>
+
+                                                <th pSortableColumn="trainees">
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        TYPE OF TRAINEES
+                                                        <p-sortIcon
+                                                            field="trainees"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="trainees"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
+                                                </th>
+
+                                                <th
+                                                    pSortableColumn="training_types"
+                                                >
+                                                    <div
+                                                        class="flex justify-content-between align-items-center"
+                                                    >
+                                                        TYPE OF TRAINING
+                                                        <p-sortIcon
+                                                            field="training_types"
+                                                        ></p-sortIcon>
+                                                        <p-columnFilter
+                                                            type="text"
+                                                            field="training_types"
+                                                            display="menu"
+                                                            class="ml-auto"
+                                                        ></p-columnFilter>
+                                                    </div>
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template
+                                            pTemplate="body"
+                                            let-record
+                                        >
+                                            <tr>
+                                                <td>
+                                                    <p-tableCheckbox
+                                                        [value]="record"
+                                                    ></p-tableCheckbox>
+                                                </td>
+                                                <td align="center">
+                                                    <ng-template
+                                                        let-row="row"
+                                                        let-value="value"
+                                                        ngx-datatable-cell-template
+                                                    >
+                                                        <button
+                                                            (click)="
+                                                                viewRecord(
+                                                                    formDataModal,
+                                                                    value
+                                                                )
+                                                            "
+                                                            class="btn btn-default"
+                                                            style="
+                                                                padding: 1px 6px;
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa fa-eye"
+                                                            ></i>
+                                                        </button>
+                                                    </ng-template>
+                                                    <button
+                                                        (click)="
+                                                            viewRecord(
+                                                                formDataModal,
+                                                                record.__id
+                                                            )
+                                                        "
+                                                        pButton
+                                                        pRipple
+                                                        type="button"
+                                                        icon="pi pi-eye"
+                                                        class="p-button-rounded p-button-primary p-button-outlined"
+                                                    ></button>
+                                                </td>
+                                                <td pFrozenColumn>
+                                                    {{ record.submitterName }}
+                                                </td>
+
+                                                <td>
+                                                    {{
+                                                        record.submissionDate
+                                                            | date
+                                                                : "yyyy-MM-dd h:mm a"
+                                                    }}
+                                                </td>
+                                                <td>
+                                                    {{ record.cluster }}
+                                                </td>
+                                                <td>
+                                                    {{ record.country }}
+                                                </td>
+                                                <td>
+                                                    {{ record.program }}
+                                                </td>
+                                                <td>
+                                                    {{ record.trainees }}
+                                                </td>
+                                                <td>
+                                                    {{ record.training_types }}
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary">
+                                            <div
+                                                class="flex align-items-center justify-content-between"
+                                            >
+                                                In total there are
+                                                {{
+                                                    records ? records.length : 0
+                                                }}
+                                                products.
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- hide graph div - not needed for display but need to load -->
+                        <div class="row" hidden>
+                            <div class="bar-chart-container">
+                                <div class="bar-chart-frame">
+                                    <div id="form-data-bar-chart"></div>
+                                </div>
+                            </div>
+
+                            <div class="line-chart-container">
+                                <div class="line-chart-frame">
+                                    <div id="form-data-line-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" hidden>
+                            <div class="col-sm-12 col-md-12" id="map_div">
+                                <fieldset class="hm-fieldset">
+                                    <legend class="hm-legend">MAP</legend>
+                                    <div
+                                        class="col-sm-12 col-md-12 fieldset-body"
+                                    >
+                                        <div class="map-container">
+                                            <div class="map-frame">
+                                                <div id="map"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="menuActiveTab === 'Stats'">
+                    <div class="col-md-12 col-sm-12" style="margin-top: 5px">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="row">
+                                                <div
+                                                    class="col-sm-12 col-md-12"
+                                                >
+                                                    <fieldset
+                                                        class="hm-fieldset"
+                                                    >
+                                                        <legend
+                                                            class="hm-legend"
+                                                        >
+                                                            Users / Groups
+                                                        </legend>
+                                                        <div
+                                                            class="col-sm-12 col-md-12 fieldset-body"
+                                                        >
+                                                            <div
+                                                                class="bar-chart-container"
+                                                            >
+                                                                <div
+                                                                    class="bar-chart-frame"
+                                                                >
+                                                                    <div
+                                                                        id="form-data-bar-chart"
+                                                                    ></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div
+                                                    class="col-sm-12 col-md-12"
+                                                >
+                                                    <fieldset
+                                                        class="hm-fieldset"
+                                                    >
+                                                        <legend
+                                                            class="hm-legend"
+                                                        >
+                                                            Timeline
+                                                        </legend>
+                                                        <div
+                                                            class="col-sm-12 col-md-12 fieldset-body"
+                                                        >
+                                                            <div
+                                                                class="line-chart-container"
+                                                            >
+                                                                <div
+                                                                    class="line-chart-frame"
+                                                                >
+                                                                    <div
+                                                                        id="form-data-line-chart"
+                                                                    ></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="menuActiveTab === 'Map'">
+                    <div class="col-md-12 col-sm-12" style="margin-top: 5px">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="row" hidden>
+                                        <div
+                                            class="col-sm-12 col-md-12"
+                                            id="map_div"
+                                        >
+                                            <fieldset class="hm-fieldset">
+                                                <legend class="hm-legend">
+                                                    MAP
+                                                </legend>
+                                                <div
+                                                    class="col-sm-12 col-md-12 fieldset-body"
+                                                >
+                                                    <div class="map-container">
+                                                        <div class="map-frame">
+                                                            <div id="map"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" hidden>
+                                        <div class="bar-chart-container">
+                                            <div class="bar-chart-frame">
+                                                <div
+                                                    id="form-data-bar-chart"
+                                                ></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="line-chart-container">
+                                            <div class="line-chart-frame">
+                                                <div
+                                                    id="form-data-line-chart"
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div #formDataModal>
+    <p-dialog
+        header="{{ formName }}"
+        [(visible)]="display"
+        [modal]="true"
+        [style]="{ width: '60vw' }"
+        [draggable]="false"
+        [resizable]="false"
+    >
+        <p-table [value]="formDataRecord" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Question</th>
+                    <th>Answer</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-record>
+                <tr
+                    *ngIf="
+                        !(record.xformtype == 'repeat') &&
+                        !(record.xformtype == 'select') &&
+                        !(record.xformtype == 'picture')
+                    "
+                >
+                    <td>{{ record.question }}</td>
+                    <td>{{ record.value }}</td>
+                </tr>
+
+                <tr *ngIf="record.xformtype == 'select'">
+                    <td>{{ record.question }}</td>
+                    <td>
+                        <div *ngFor="let option of record.selectOptions">
+                            <span> {{ option }} </span>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="record.xformtype == 'picture'">
+                    <td>{{ record.question }}</td>
+                    <td>
+                        <img
+                            src="{{ record.image }}"
+                            style="width: 400px; height: 400px"
+                        />
+                    </td>
+                </tr>
+
+                <tr *ngIf="record.xformtype == 'repeat'">
+                    <td>{{ record.question }}</td>
+                    <td>
+                        <ngx-datatable
+                            class="bootstrap"
+                            [columnMode]="'force'"
+                            [headerHeight]="50"
+                            [footerHeight]="50"
+                            [rowHeight]="'auto'"
+                            [limit]="5"
+                            rowHeight="auto"
+                            [rows]="record.repeatRows"
+                        >
+                            <ngx-datatable-column
+                                *ngFor="
+                                    let col of record.repeatColumns;
+                                    let i = index
+                                "
+                                name="{{ col.name }}"
+                                prop="{{ col.prop }}"
+                            >
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <ng-template pTemplate="footer">
+            <p-button
+                icon="pi pi-times"
+                (click)="display = false"
+                label="Close"
+                styleClass="p-button-text"
+            ></p-button>
+        </ng-template>
+    </p-dialog>
+</div>

@@ -1,0 +1,27 @@
+<div class="header bg-success pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row">
+    <div class=" col">
+      <div class=" card">
+        <div class="row">
+
+          <div class="card-header" style="width: 100%; text-align: -webkit-center;">
+            <div><h6
+              class="h2 d-inline-block mb-0">SEND REQUEST FOR GRANT APPLICATION</h6></div>
+          </div>
+
+          <application-letter [isReadOnly]="false" [isLongTerm]="true" (triggerNextProcess)="triggerStartInstances($event)">></application-letter>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

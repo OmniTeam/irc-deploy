@@ -1,0 +1,327 @@
+<div class=" header bg-success pb-6">
+  <div class=" container-fluid">
+    <div class=" header-body">
+      <div class=" row align-items-center py-4">
+        <div class=" col-lg-6 col-7">
+          <h6 class=" h2 text-white d-inline-block mb-0">Create Entity View</h6>
+          <nav aria-label="breadcrumb" class=" d-none d-md-inline-block ml-md-4"></nav>
+        </div>
+        <div class=" col-lg-6 col-5 text-right">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class=" container-fluid mt--6">
+  <div class=" row justify-content-center">
+    <div class=" col-lg-11 card-wrapper">
+      <div class="card">
+        <div class="card-header" style="padding: 10px">
+          <h3 style="font-family: Open Sans, sans-serif; text-align: center">Add New Entity View</h3>
+        </div>
+        <div class="card-body" style="font-size: 0.9rem;">
+          <form [formGroup]="formGroup" (ngSubmit)="createEntityView()" *ngIf="formGroup">
+            <div class="row">
+              <div class="col-md-12" style="padding-left: 30px;padding-top: 15px">
+                <div class="row">
+                  <div class="col-md-4" style="padding-top: 5px;">
+                    <label>
+                      Name
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Name"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="name"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                          >
+                          <div *ngIf="submitted && f.name.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.name.errors.required">Name is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4" style="padding-top: 5px;">
+                    <label>
+                      Description
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="Description"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="description"
+                            [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+                          >
+                          <div *ngIf="submitted && f.description.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.description.errors.required">Description is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4" style="padding-top: 5px;">
+                    <label>
+                      View Table Name(should end with `view')
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <input
+                            class="form-control"
+                            placeholder="View Table Name"
+                            type="text"
+                            style="padding-left: 10px;"
+                            formControlName="tableName"
+                            [ngClass]="{ 'is-invalid': submitted && f.tableName.errors }"
+                          >
+                          <div *ngIf="submitted && f.tableName.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.tableName.errors.required">View Table Name is
+                              required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4" style="padding-top: 5px;">
+                    <label>
+                      View Query
+                      <span class="required-indicator">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="col-md-12">
+                      <div class="form-group ">
+                        <div class=" input-group input-group-merge">
+                          <textarea class="form-control"
+                                    id="queryTextArea"
+                                    rows="5"
+                                    formControlName="viewQuery"
+                                    [ngClass]="{ 'is-invalid': submitted && f.viewQuery.errors }"></textarea>
+                          <div *ngIf="submitted && f.viewQuery.errors"
+                               class="invalid-feedback">
+                            <div *ngIf="f.viewQuery.errors.required">View Query is required
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="padding-left: 30px;padding-top: 15px">
+                <form [formGroup]="formGroupField" (ngSubmit)="addNewEntityField();" *ngIf="formGroupField">
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <label>Field Name <span class="required-indicator">*</span> </label>
+                      <input type="text"
+                             class="form-control"
+                             placeholder="Field Name"
+                             formControlName="name"
+                             [ngClass]="{ 'is-invalid': submitFields && fFields.name.errors }">
+                      <div *ngIf="submitFields && fFields.name.errors"
+                           class="invalid-feedback">
+                        <div *ngIf="fFields.name.errors.required">Display Order is
+                          required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label>Field Type <span class="required-indicator">*</span> </label>
+                      <ng-select class="form-control form-control-sm"
+                                 aria-controls="datatable"
+                                 style="height: auto !important; padding: 0; border: 1px solid #f7fafc;"
+                                 [multiple]="true"
+                                 placeholder=" Field Type"
+                                 formControlName="fieldType"
+                                 [ngClass]="{ 'is-invalid': submitFields && fFields.fieldType.errors }"
+                                 [searchable]="true"
+                                 [clearable]="true">
+                        <ng-option [value]="item.value" *ngFor="let item of fieldTypes">
+                          {{item.name}}
+                        </ng-option>
+                      </ng-select>
+                      <div *ngIf="submitFields && fFields.fieldType.errors" class="invalid-feedback">
+                        <div *ngIf="fFields.fieldType.errors.required">Field Type is required</div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label>Display Order <span class="required-indicator">*</span> </label>
+                      <input type="number"
+                             class="form-control"
+                             placeholder="Display Order"
+                             formControlName="orderOfDisplay"
+                             [ngClass]="{ 'is-invalid': submitFields && fFields.orderOfDisplay.errors }">
+                      <div *ngIf="submitFields && fFields.orderOfDisplay.errors"
+                           class="invalid-feedback">
+                        <div *ngIf="fFields.orderOfDisplay.errors.required">Field Name is
+                          required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label>Filter Order <span class="required-indicator">*</span> </label>
+                      <input type="number"
+                             class="form-control"
+                             placeholder="Filter Order"
+                             formControlName="filterOrder"
+                             [ngClass]="{ 'is-invalid': submitFields && fFields.filterOrder.errors }">
+                      <div *ngIf="submitFields && fFields.filterOrder.errors"
+                           class="invalid-feedback">
+                        <div *ngIf="fFields.filterOrder.errors.required">Filter Order is
+                          required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2 text-left">
+                      <button class=" btn btn-default" type="submit" style="margin-top: 30px;">Add Field</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-12" style="padding: 20px;">
+                <ngx-datatable
+                  class="bootstrap selection-cell"
+                  [columnMode]="'force'"
+                  [headerHeight]="50"
+                  [footerHeight]="50"
+                  [rowHeight]="'auto'"
+                  [limit]="entries != -1 ? entries : undefined"
+                  [rows]="rows"
+                  (activate)="onActivate($event)"
+                >
+                  <ngx-datatable-column name="Field Name" prop="name">
+                    <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                           <span
+                             title="Double click to edit"
+                             (dblclick)="editing[rowIndex + '-name'] = true"
+                             *ngIf="!editing[rowIndex + '-name']"
+                           >
+                               {{ value }} ...
+                           </span>
+                      <input
+                        class="form-control"
+                        autofocus
+                        (blur)="updateValue($event, 'name', rowIndex)"
+                        *ngIf="editing[rowIndex + '-name']"
+                        type="text"
+                        [value]="value"
+                      />
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Field Type" prop="fieldType">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row"
+                                 let-value="value">
+                            <span
+                              title="Double click to edit"
+                              (dblclick)="editing[rowIndex + '-fieldType'] = true"
+                              *ngIf="!editing[rowIndex + '-fieldType']"
+                            >
+                                       {{ value }} ...
+                            </span>
+                      <select
+                        class="browser-default custom-select"
+                        *ngIf="editing[rowIndex + '-fieldType']"
+                        (blur)="editing[rowIndex + '-fieldType'] = false"
+                        (change)="updateValue($event, 'fieldType', rowIndex)"
+                        [value]="value"
+                      >
+                        <option value="Display Field">Display Field</option>
+                        <option value="Filter Field">Filter Field</option>
+                        <option value="Key Field">Key Field</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Display Order" prop="orderOfDisplay">
+                    <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                           <span
+                             title="Double click to edit"
+                             (dblclick)="editing[rowIndex + '-orderOfDisplay'] = true"
+                             *ngIf="!editing[rowIndex + '-orderOfDisplay']"
+                           >
+                               {{ value }} ...
+                           </span>
+                      <input
+                        class="form-control"
+                        autofocus
+                        (blur)="updateValue($event, 'orderOfDisplay', rowIndex)"
+                        *ngIf="editing[rowIndex + '-orderOfDisplay']"
+                        type="number"
+                        [value]="value"
+                      />
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Filter Order" prop="filterOrder">
+                    <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                           <span
+                             title="Double click to edit"
+                             (dblclick)="editing[rowIndex + '-filterOrder'] = true"
+                             *ngIf="!editing[rowIndex + '-filterOrder']"
+                           >
+                               {{ value }} ...
+                           </span>
+                      <input
+                        class="form-control"
+                        autofocus
+                        (blur)="updateValue($event, 'filterOrder', rowIndex)"
+                        *ngIf="editing[rowIndex + '-filterOrder']"
+                        type="number"
+                        [value]="value"
+                      />
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Action" sortable="false">
+                    <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                      <button (click)="deleteField(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 offset-5" style="padding-bottom: 15px; padding-left: 0px">
+                <button class=" btn btn-default" type="submit">Save</button>
+                <button class=" btn btn-danger" type="reset" (click)="onReset()">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
