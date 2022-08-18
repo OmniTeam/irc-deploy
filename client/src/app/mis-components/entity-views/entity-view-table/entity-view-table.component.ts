@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Subject} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {EntityService} from "../../../services/entity.service";
-import {HttpParams} from "@angular/common/http";
+import {Subject} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {EntityService} from '../../../services/entity.service';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-entity-view-table',
@@ -17,6 +17,7 @@ export class EntityViewTableComponent implements OnInit {
   entityViewId: any;
   columns = [];
   checkIfTableHasData = true;
+  entityViewName: any;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -32,12 +33,13 @@ export class EntityViewTableComponent implements OnInit {
 
     this.entityService.getEntityViewData(params).subscribe((data) => {
       if (data['headers'].length > 0) {
+        this.entityViewName = data['entity']['name'];
         this.columns = data['headers'];
         this.rows = data['dataList'];
         this.checkIfTableHasData = true;
         this.dtOptions = {
-          pagingType: "numbers",
-          lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+          pagingType: 'numbers',
+          lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
           processing: true,
           responsive: true,
           dom: 'lfBrtip',
@@ -55,8 +57,7 @@ export class EntityViewTableComponent implements OnInit {
           ]
         };
         this.dtTrigger.next();
-      }
-      else {
+      } else {
         this.checkIfTableHasData = false;
         this.dtOptions = {};
       }

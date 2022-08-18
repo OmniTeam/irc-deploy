@@ -1,31 +1,25 @@
 import { Component } from '@angular/core';
-import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
 })
 export class AppComponent {
 
-  constructor(private router: Router) {
+    menuMode = 'static';
 
-    this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationStart) {
-        // Show loading indicator
-        window.scrollTo(0,0);
-      }
+    theme = 'absolution';
 
-      if (event instanceof NavigationEnd) {
-        // Hide loading indicator
-      }
+    inputStyle = 'outlined';
 
-      if (event instanceof NavigationError) {
-        // Hide loading indicator
+    ripple: boolean;
+    
+    constructor(private primengConfig: PrimeNGConfig) {
+    }
 
-        // Present error to user
-        console.log(event.error);
-      }
-    });
-  }
+    ngOnInit() {
+        this.primengConfig.ripple = true;
+        this.ripple = true;
+    }
 }

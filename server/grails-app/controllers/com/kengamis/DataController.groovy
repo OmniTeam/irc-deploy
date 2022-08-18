@@ -6,15 +6,14 @@ import com.kengamis.query.FormDataValue
 import com.kengamis.query.QueryHelper
 import com.kengamis.query.security.Permission
 import grails.core.GrailsApplication
-import grails.rest.*
+import grails.io.IOUtils
 import grails.converters.*
-import groovy.sql.Sql
+import grails.util.Holders
 import org.openxdata.markup.XformType
 
 import static com.kengamis.AppHolder.withMisSql
 import static com.kengamis.Util.constructFormTable
 import static com.kengamis.Util.escapeField
-import static fuzzycsv.FuzzyCSVTable.toCSV
 
 class DataController {
     static responseFormats = ['json', 'xml']
@@ -27,7 +26,7 @@ class DataController {
     def index(Integer max) {
         def formData = []
         try {
-            def dataList = kengaGroupsService.postFilter(dataService.listAll(params), Permission.READ)
+            def dataList = dataService.listAll(params)
             def q = new QueryHelper(params, springSecurityService.currentUser as User)
             def resultList = []
             dataList.each { form_data ->
@@ -44,8 +43,8 @@ class DataController {
         } catch (Exception e) {
             flash.error = "Data Might Not Be Available For This Form."
             log.error("Error fetching data", e)
-            formData = [headerList: [], resultList: [], resultListCount: 0, formtable: params.formtable,
-                        filters: [], form: Form.findByName(params.formtable), gpsCoordinates: [], formDataCollectors: [],
+            formData = [headerList   : [], resultList: [], resultListCount: 0, formtable: params.formtable,
+                        filters      : [], form: Form.findByName(params.formtable), gpsCoordinates: [], formDataCollectors: [],
                         formGraphData: []]
         }
         respond formData
@@ -61,33 +60,16 @@ class DataController {
             if (formDataValue.humanReadableValue) {
                 if (!formDataValue.isMetaColumn()) {
                     if (formDataValue.formSetting.xformType == XformType.SELECT.value) {
-                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.options]
+                        if (formDataValue.multiSelectOptions.size() > 0) {
+                            formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.multiSelectOptions]
+                        }
                     }
                     else if (formDataValue.formSetting.xformType == XformType.REPEAT.value) {
-                        def repeatFormData = formDataValue.value as List<FormData>
-                        def repeatFirstRecord = repeatFormData.first().allFormDataValues
-                        def headers = []
-                        headers << [field: 'increment', questionText: '#']
-                        repeatFirstRecord.each {header ->
-                            if (header.humanReadableValue) {
-                                if (!header.isMetaColumn()) {
-                                    headers << [field: header.field, questionText: header.label]
-                                }
-                            }
+                        def headers = formDataValue.repeatHeaders
+                        def resultList = formDataValue.repeatData
+                        if (headers.size() > 0) {
+                            formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
                         }
-                        def resultList = []
-                        def counter = 1
-                        repeatFormData.collect {
-                            def formDataValues = it.allFormDataValues
-                            def record = [:]
-                            record["increment"] = counter
-                            formDataValues.each {
-                                record["${it.field}"] = it.humanReadableValue
-                            }
-                            resultList << record
-                            counter++
-                        }
-                        formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: [headerList: headers, resultList: resultList]]
                     }
                     else {
                         formDataRecord << [xformtype: formDataValue.formSetting.xformType, question: formDataValue.label, value: formDataValue.humanReadableValue]
@@ -116,7 +98,7 @@ class DataController {
         }
 
         if (log.traceEnabled) log.trace(points)
-        return points.collect { [__id: it['__id'], point: it['point'].toString().split(",")] }
+        return kengaGroupsService.postFilter(points.collect { [id: it['__id'], point: it['point'].toString().split(",")] },Permission.READ)
     }
 
     def getPointDetails() {
@@ -133,10 +115,13 @@ class DataController {
 
         def fd = FormData.init(id, form)
 
-        Map<String, Object> data = [:]
-
+        def data = []
         for (mf in mapFields) {
-            data[mf.displayName] = fd.getDataFor(mf.field).humanReadableValue
+            def map = [:]
+            map['question'] = mf.displayName
+            map['answer'] = fd.getDataFor(mf.field).humanReadableValue
+            map['xformtype'] = mf.xformType
+            data << map
         }
         respond data
     }
@@ -156,12 +141,35 @@ class DataController {
         return records
     }
 
-    def getExportFormData() {
+    def getExportedFormData() {
         def formtable = params.formtable as String
         def dataExporter = new DataExporter(formtable, params)
         def exportedData = dataExporter.exportToExcel()
         def fileName = dataExporter.setFileName()
         def response = [data: exportedData, file: fileName]
         respond response
+    }
+
+    def getExportedZippedFormData() {
+        def formtable = params.formtable as String
+        def dataExporter = new DataExporter(formtable, params)
+        def exportedData = dataExporter.exportToZipped()
+        def fileName = dataExporter.setFileName()
+        def response = [data: exportedData, file: fileName]
+        respond response
+    }
+
+    def getFormDataImage() {
+        def path = params.path
+        def baseFolder = Holders.grailsApplication.config.imageFolder
+        def imageFilePath = (baseFolder + path) as String
+        def file = new File(imageFilePath)
+        if (file.exists()) {
+            IOUtils.copy(file.newDataInputStream(), response.outputStream)
+            response.outputStream.flush()
+        }
+        else {
+            render([msg: "File doesnt exist", status: 500] as JSON)
+        }
     }
 }

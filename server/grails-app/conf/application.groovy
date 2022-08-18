@@ -52,7 +52,12 @@ grails.plugin.databasemigration.dropOnStart = false
 grails.plugin.databasemigration.updateOnStart = true
 //grails.plugin.databasemigration.updateOnStartFileName = 'changelog.groovy'
 grails.gorm.failOnError = false
-server.port = 8080
+
+server.appName = 'ISDAP'
+server.centralId = '11'
+server.superPass = 'omg!@mni'
+server.superEmail = 'super@gmail.com'
+server.port = 8083
 
 
 grails.gorm.default.mapping = {
@@ -67,10 +72,16 @@ grails.gorm.default.constraints = {
 }
 environments {
     development {
+        camundaUrl = "http://192.168.100.5:8181/mis/rest"
+//        camundaUrl = "http://206.189.209.21:8090/mis/rest"
         uploadFolder = "D:/uploads/"
         uploadDocsFolder = "D:/uploads/"
+        imageFolder = "D:/uploads/centralImages/"
     }
     production {
+        camundaUrl = "http://206.189.209.21:8090/mis/rest"
         uploadFolder = "/opt/uploads/"
+        imageFolder = "/opt/uploads/centralImages/"
     }
 }
+mis.database = 'isdap'

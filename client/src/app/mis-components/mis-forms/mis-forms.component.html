@@ -35,15 +35,16 @@
                 </label>
               </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-3">
               <div id="datatable_filter" class="dataTables_filter">
                 <label>
                   <input
                     type="search"
                     class="form-control form-control-sm"
-                    placeholder="Search forms"
+                    placeholder="Search Forms"
                     aria-controls="datatable"
-                    (keyup)="filterTable($event)"
+                    (keyup)="onChangeSearch($event)"
+                    (search)="onSearch($event)"
                   />
                 </label>
               </div>
@@ -60,7 +61,25 @@
             [rows]="rows"
             (activate)="onActivate($event)"
           >
-            <ngx-datatable-column name="Name" prop="displayName"></ngx-datatable-column>
+            <ngx-datatable-column name="Name" prop="displayName">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                           <span
+                             title="Double click to edit"
+                             (dblclick)="editing[rowIndex + '-displayName'] = true"
+                             *ngIf="!editing[rowIndex + '-displayName']"
+                           >
+                               {{ value }} ...
+                           </span>
+                <input
+                  class="form-control"
+                  autofocus
+                  (blur)="updateValue($event, 'displayName', rowIndex)"
+                  *ngIf="editing[rowIndex + '-displayName']"
+                  type="text"
+                  [value]="value"
+                />
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Form ID" prop="centralId"></ngx-datatable-column>
             <ngx-datatable-column name="Syncable" prop="syncMode">
               <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
@@ -69,9 +88,10 @@
                   (dblclick)="editing[rowIndex + '-syncMode'] = true"
                   *ngIf="!editing[rowIndex + '-syncMode']"
                 >
-                  {{ value }}
+                  {{ value }} ...
                 </span>
                 <select
+                  class="browser-default custom-select"
                   *ngIf="editing[rowIndex + '-syncMode']"
                   (blur)="editing[rowIndex + '-syncMode'] = false"
                   (change)="updateValue($event, 'syncMode', rowIndex)"
@@ -89,9 +109,10 @@
                   (dblclick)="editing[rowIndex + '-enabled'] = true"
                   *ngIf="!editing[rowIndex + '-enabled']"
                 >
-                  {{ value }}
+                  {{ value }} ...
                 </span>
                 <select
+                  class="browser-default custom-select"
                   *ngIf="editing[rowIndex + '-enabled']"
                   (blur)="editing[rowIndex + '-enabled'] = false"
                   (change)="updateValue($event, 'enabled', rowIndex)"
@@ -110,6 +131,13 @@
             <ngx-datatable-column name="Last Updated" prop="lastUpdated">
               <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
                 {{ value | date }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Action" sortable="false">
+              <ng-template let-rowIndex="rowIndex" let-value="value" let-row="row" ngx-datatable-cell-template>
+                <button (click)="deleteForm(row)" class="btn btn-danger" style="padding: 1px 6px;">
+                  <i class="fa fa-trash"></i>
+                </button>
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>

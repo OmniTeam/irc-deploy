@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {FormService} from "../../services/form.service";
-import {Project} from "../../models/project";
-import {Subject} from "rxjs";
-import {Form} from "../../models/form";
+import {AlertService} from "../../services/alert";
 
 @Component({
   selector: 'app-mis-forms',
@@ -16,20 +14,24 @@ export class MisFormsComponent implements OnInit {
   selected: any[] = [];
   activeRow: any;
   rows: Object[];
+  temp: Object[];
   editing = {};
   formData: any;
 
-  constructor( private router: Router, private formService: FormService) {
+  constructor( private router: Router,
+               private alertService: AlertService,
+               private formService: FormService) {
   }
 
   entriesChange($event) {
     this.entries = $event.target.value;
   }
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function(d) {
-      for (var key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
+  onChangeSearch(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
           return true;
         }
       }
@@ -45,7 +47,12 @@ export class MisFormsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.reloadTable();
+  }
+
+  reloadTable() {
     this.formService.getForms().subscribe(data => {
+      this.temp = [...data];
       this.rows = data;
     }, error => console.log(error));
   }
@@ -59,5 +66,23 @@ export class MisFormsComponent implements OnInit {
     this.formService.updateForm(formId, this.formData).subscribe((data) => {
       console.log(data);
     }, error => console.log(error));
+  }
+
+  deleteForm(row) {
+    const deletedRow = row.id;
+    if (confirm('Are you sure to delete this Form?')) {
+      this.formService.deleteForm(deletedRow).subscribe((result) => {
+          this.alertService.warning(`Form has been  deleted `);
+          this.router.navigate(['/forms']);
+          this.reloadTable();
+        }, error => {
+          this.alertService.error(`Form could not be deleted`);
+        }
+      );
+    }
+  }
+
+  onSearch(event) {
+    this.reloadTable();
   }
 }

@@ -1,9 +1,11 @@
 import { Injectable, ElementRef } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import * as JSZip from "jszip";
 
 const EXCEL_EXTENSION = '.xlsx';
 const CSV_EXTENSION = '.csv';
+const ZIPPED_EXTENSION = '.zip';
 const CSV_TYPE = 'text/plain;charset=utf-8';
 
 @Injectable({
@@ -79,6 +81,11 @@ export class ExportService {
     FileSaver.saveAs(data, fileName);
   }
 
+  private saveZippedFile(buffer: any, fileName: string, fileType: string): void {
+    const data: Blob = new Blob([buffer], { type: fileType });
+    FileSaver.saveAs(data, fileName);
+  }
+
   /**
    * Creates an array of data to csv. It will automatically generate title row based on object keys.
    *
@@ -88,13 +95,29 @@ export class ExportService {
    */
   public exportToCsv(rows: object[], fileName: string): void {
     const replacer = (key, value) => value === null ? '' : value;
-    console.log(replacer);
     const header = Object.keys(rows[0]);
-    console.log(header);
     let csv = rows.map(row => header.map(fieldName => JSON.stringify(row[fieldName],replacer)).join(','));
     csv.unshift(header.join(','));
     let csvArray = csv.join('\r\n');
     let blob = new Blob([csvArray], {type: 'text/csv' });
     this.saveAsFile(blob, `${fileName}${CSV_EXTENSION}`, CSV_TYPE);
+  }
+
+  exportToZippedFile(data: [], fileName: string): void {
+    const jszip = new JSZip();
+    for (let file of data) {
+      let rows: object[] = file['data'];
+      let fileName = file['file'];
+      const replacer = (key, value) => value === null ? '' : value;
+      const header = Object.keys(rows[0]);
+      let csv = rows.map(row => header.map(fieldName => JSON.stringify(row[fieldName],replacer)).join(','));
+      csv.unshift(header.join(','));
+      let csvArray = csv.join('\r\n');
+      let blob = new Blob([csvArray], {type: 'text/csv' });
+      jszip.file(`${fileName}${CSV_EXTENSION}`, blob);
+    }
+    jszip.generateAsync({ type: 'blob' }).then((content) => {
+      this.saveZippedFile(content, `${fileName}${ZIPPED_EXTENSION}`, 'blob');
+    });
   }
 }

@@ -67,6 +67,9 @@ grails:
             maxsize: 1000
     controllers:
         defaultScope: singleton
+        upload:
+            maxFileSize: 20000000
+            maxRequestSize: 20000000
     converters:
         encoding: UTF-8
 
@@ -78,7 +81,7 @@ grails:
 ---
 server:
     servlet:
-        context-path: /crvpf
+        context-path: /isdapmis
 ---
 hibernate:
     cache:
@@ -100,15 +103,16 @@ environments:
     development:
         dataSource:
 #            dbCreate: create-drop
-            url: jdbc:mysql://localhost:3306/kengamis?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
+            url: jdbc:mysql://192.168.100.5:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
+#            url: jdbc:mysql://localhost:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
     test:
         dataSource:
 #            dbCreate: update
-            url: jdbc:mysql://localhost:3306/kengamis?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
+            url: jdbc:mysql://localhost:3306/isdap?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
     production:
         dataSource:
             dbCreate: none
-            url: jdbc:mysql://localhost:3306/kengamis?verifyServerCertificate=false&useSSL=true&sessionVariables=sql_mode=''
+            url: jdbc:mysql://localhost:3306/isdap?verifyServerCertificate=false&useSSL=true&sessionVariables=sql_mode=''
             properties:
                 jmxEnabled: true
                 initialSize: 5

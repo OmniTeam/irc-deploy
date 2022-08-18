@@ -14,22 +14,24 @@ export class FormService {
   getForms(): Observable<any> {
     return this.http.get(`${environment.serverUrl}/form`);
   }
-
-  getEnabledForms(): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/form/enabled_forms`);
+  getTableNames(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/api/v1/aclGroupMapping/tables`);
   }
 
+  getEnabledForms(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/form/getEnabledForms`);
+  }
 
   getFormData(params: any): Observable<any> {
     return this.http.get(`${environment.serverUrl}/data`, {params});
   }
 
   getFormDataRecord(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/data/get_form_data_record`, {params});
+    return this.http.get(`${environment.serverUrl}/data/getFormDataRecord`, {params});
   }
 
   getPointDetails(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/data/get_point_details`, {params});
+    return this.http.get(`${environment.serverUrl}/data/getPointDetails`, {params});
   }
 
   updateForm(id, formData): Observable<any> {
@@ -37,6 +39,14 @@ export class FormService {
   }
 
   exportFormData(params: any): Observable<any> {
-    return this.http.get(`${environment.serverUrl}/data/get_export_form_data`, {params});
+    return this.http.get(`${environment.serverUrl}/data/exportFormData`, {params});
+  }
+
+  exportZippedFormData(params: any): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/data/exportZippedFormData`, {params});
+  }
+
+  deleteForm(deletedRow): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/form/${deletedRow}`);
   }
 }

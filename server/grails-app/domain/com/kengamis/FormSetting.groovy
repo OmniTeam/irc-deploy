@@ -10,6 +10,7 @@ class FormSetting {
 
     final static SETTING_TEXT = 'text'
     final static SETTING_MULT_SELECT = 'multi-select'
+    final static SETTING_PICTURE = 'picture'
     final static SETTING_REPEAT = 'repeat'
     final static SETTING_GROUP = 'group'
     final static GROUP_QUESTION_TYPES = [XformType.REPEAT.value, XformType.GROUP.value]

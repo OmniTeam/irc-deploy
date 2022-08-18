@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {EntityService} from "../../services/entity.service";
 import {AlertService} from "../../services/alert";
-import {HttpParams} from "@angular/common/http";
 import {SelectionType} from '@swimlane/ngx-datatable';
 
 @Component({
@@ -13,22 +12,16 @@ import {SelectionType} from '@swimlane/ngx-datatable';
 export class EntitiesComponent implements OnInit {
 
   rows: Object[];
+  temp: Object[];
   submitted = false;
   private searchValue = '';
   enableLinkToForm = false;
   enableAddNewView = false;
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   activeRow: any;
   SelectionType = SelectionType;
   search = '';
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 50,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
   entityId: any;
   constructor(private router: Router,
               private entityService: EntityService,
@@ -36,7 +29,7 @@ export class EntitiesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 50});
+    this.reloadTable();
   }
 
   onCheckboxChangeFn(event) {
@@ -44,15 +37,21 @@ export class EntitiesComponent implements OnInit {
   }
 
   createNewEntity() {
-    this.router.navigate(['/createEntity']);
-  }
-
-  linkToForm(entityId: any) {
-    this.router.navigate(['/linkForm', entityId]);
+    this.router.navigate(['/entity/create']);
   }
 
   createNewView() {
-    this.router.navigate(['/createEntityView', this.entityId]);
+    this.router.navigate(['entityView/create/' + this.entityId]);
+  }
+
+  editEntityData(row) {
+    let entityId = row.id;
+    this.router.navigate(['/entity/edit/' + entityId]);
+  }
+
+  showEntityData(row) {
+    let entityId = row.id;
+    this.router.navigate(['/entity/showData/' + entityId]);
   }
 
   getGroupEntityViews(entityViews): string {
@@ -79,21 +78,19 @@ export class EntitiesComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.page.offset}`)
-      .set('search', `${this.searchValue}`);
-
     this.entityService.getEntities().subscribe((data) => {
       let rowData = []
       for (let record of data) {
@@ -106,13 +103,13 @@ export class EntitiesComponent implements OnInit {
         rowRecord['entityViews'] = this.getGroupEntityViews(record.entityViews);
         rowData.push(rowRecord);
       }
+      this.temp = [...rowData];
       this.rows = rowData;
     }, error => console.log(error));
   }
 
   entriesChange($event) {
     this.entries = $event.target.value;
-    this.reloadTable();
   }
 
   onActivate(event) {
@@ -120,8 +117,15 @@ export class EntitiesComponent implements OnInit {
   }
 
   filterTable($event) {
-    this.search = $event.target.value;
-    this.reloadTable();
+    let val = $event.target.value;
+    this.rows = this.rows.filter(function (d) {
+      for (const key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   onSelect({selected}) {
@@ -132,15 +136,7 @@ export class EntitiesComponent implements OnInit {
     }
   }
 
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
+  onSearch(event) {
     this.reloadTable();
   }
 }

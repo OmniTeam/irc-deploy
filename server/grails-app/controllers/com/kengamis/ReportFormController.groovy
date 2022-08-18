@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
+import groovy.json.JsonSlurper
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY
 
 import grails.gorm.transactions.ReadOnly
@@ -21,16 +22,15 @@ class ReportFormController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond reportFormService.list(params), model:[reportFormCount: reportFormService.count()]
+        respond reportFormService.list(params), model: [reportFormCount: reportFormService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond reportFormService.get(id)
     }
 
     @Transactional
     def save(ReportForm reportForm) {
-        print "Report Errors: ${reportForm.errors}"
         if (reportForm == null) {
             render status: NOT_FOUND
             return
@@ -48,12 +48,11 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: CREATED, view:"show"]
+        respond reportForm, [status: CREATED, view: "show"]
     }
 
     @Transactional
     def update(ReportForm reportForm) {
-        print "Report Errors: ${reportForm.errors}"
         if (reportForm == null) {
             render status: NOT_FOUND
             return
@@ -71,7 +70,7 @@ class ReportFormController {
             return
         }
 
-        respond reportForm, [status: OK, view:"show"]
+        respond reportForm, [status: OK, view: "show"]
     }
 
     @Transactional
@@ -87,7 +86,54 @@ class ReportFormController {
     }
 
     def getReportForTask() {
-        def reportData = [report: ReportForm.findByTaskId(params.taskId)]
+        def report = ReportForm.findByProcessInstanceId(params.processInstanceId)
+        def reportData = [report: null]
+        if (report != null) {
+            reportData = [report: [
+                    id               : report.id,
+                    groupId          : report.groupId,
+                    processInstanceId: report.processInstanceId,
+                    partnerSetupId   : report.partnerSetupId,
+                    partnerId        : report.partnerId,
+                    taskId           : report.taskId,
+                    taskDefinitionKey: report.taskDefinitionKey,
+                    userId           : report.userId,
+                    reportValues     : report.reportValues,
+                    status           : report.status
+            ]]
+        }
         respond reportData
+    }
+
+    def getMilestonePerformance() {
+        def milestones = []
+
+        ReportForm.all.each {
+            def performanceReport = ReportFormPerformance.findByReportId(it.id)
+            def financialReport = ReportFormFinancial.findByReportId(it.id)
+            if (performanceReport != null && financialReport != null) {
+                ProjectMilestone pm = ProjectMilestone.findById(performanceReport.milestoneId)
+                def expenseToDate = ''
+                def approvedBudget = ''
+
+                if (financialReport.budgetLine == pm?.name) {
+                    expenseToDate = financialReport.expenseToDate
+                    approvedBudget = financialReport.approvedBudget
+                }
+
+                milestones << [
+                        milestoneId          : pm?.id,
+                        partnerId            : it.partnerId,
+                        milestone            : pm?.name,
+                        overallTarget        : performanceReport.overallTarget,
+                        cumulativeAchievement: performanceReport.cumulativeAchievement,
+                        percentageAchievement: performanceReport.percentageAchievement,
+                        expenseToDate        : expenseToDate,
+                        approvedBudget       : approvedBudget,
+
+                ]
+            }
+        }
+        respond milestones
     }
 }

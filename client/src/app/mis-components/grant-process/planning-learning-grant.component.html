@@ -1,0 +1,417 @@
+<form [formGroup]="formGp" (ngSubmit)="submitLetter()" *ngIf="formGp">
+  <h3 style="margin-left: 20px;">GRANT APPLICATION DETAILS</h3>
+  <div class="card">
+    <div class="card-body">
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>1. Title of the Planning and Learning grant: <span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Title"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="title"
+                [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.title.errors">
+              <div *ngIf="f.title.errors.required" class="input-error">Title is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>2. Proposed duration (Months):<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Duration"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="proposedDuration"
+                [ngClass]="{ 'is-invalid': submitted && f.proposedDuration.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.proposedDuration.errors" >
+              <div *ngIf="f.proposedDuration.errors.required" class="input-error">Proposed Duration is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>3. Proposed start date (DD MM YEAR)<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Date"
+                type="date"
+                style="padding-left: 10px;"
+                formControlName="proposedStartDate"
+                [ngClass]="{ 'is-invalid': submitted && f.proposedStartDate.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.proposedStartDate.errors" >
+              <div *ngIf="f.proposedStartDate.errors.required" class="input-error">Proposed Start Date is
+                required
+              </div>
+            </div>
+          </div>
+          <label>5. Amount requested from CRVP-Fund:<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="amountRequested"
+                [ngClass]="{ 'is-invalid': submitted && f.amountRequested.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.amountRequested.errors" >
+              <div *ngIf="f.amountRequested.errors.required" class="input-error">Amount Requested is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>4. Other sources and amount of funding on this particular Project if any:<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Other sources"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="otherSources"
+                [ngClass]="{ 'is-invalid': submitted && f.otherSources.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.otherSources.errors">
+              <div *ngIf="f.otherSources.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+          <label>6. Total Budget amount:<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Amount"
+                type="number"
+                style="padding-left: 10px;"
+                formControlName="totalBudgetAmt"
+                [ngClass]="{ 'is-invalid': submitted && f.totalBudgetAmt.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.totalBudgetAmt.errors" >
+              <div *ngIf="f.totalBudgetAmt.errors.required" class="input-error">Total Budget Amount is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>7. Name of authorized Signatory(ies):<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Name"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="nameAuthorizedSignatory"
+                [ngClass]="{ 'is-invalid': submitted && f.nameAuthorizedSignatory.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.nameAuthorizedSignatory.errors">
+              <div *ngIf="f.nameAuthorizedSignatory.errors.required" class="input-error">Name of Authorized
+                Signatory is required
+              </div>
+            </div>
+          </div>
+          <label>9. Contact details of authorized signatory(ies):<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                placeholder="Contact details"
+                type="text"
+                style="padding-left: 10px;"
+                formControlName="contactAuthorizedSignatory"
+                (ngModelChange)="validateNumber($event)"
+                [ngClass]="{ 'is-invalid': inValidNumber || (submitted && f.contactAuthorizedSignatory.errors) }"
+              >
+            </div>
+            <div *ngIf="submitted && inValidNumber">
+              <div class="input-error">Please put valid number
+              </div>
+            </div>
+            <div *ngIf="submitted && f.contactAuthorizedSignatory.errors" >
+              <div *ngIf="f.contactAuthorizedSignatory.errors.required" class="input-error">This value is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>8. Bank Details<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="Name of the Bank:&#10;Bank Address:&#10;Title of the Account:&#10;Account Number:&#10;SWIFT CODE:"
+                formControlName="bankDetails"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.bankDetails.errors }"
+              ></textarea>
+            </div>
+            <div *ngIf="submitted && f.bankDetails.errors">
+              <div *ngIf="f.bankDetails.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>10. Describe how the six months planning and learning grant will be managed in the cluster<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="Both in terms of  program activities and finance"
+                formControlName="sixMonthsManaged"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.sixMonthsManaged.errors }"
+              ></textarea>
+            </div>
+            <div *ngIf="submitted && f.sixMonthsManaged.errors">
+              <div *ngIf="f.sixMonthsManaged.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>11. List activities and describe strategies you are going to use to achieve the objectives in the
+            instructions above<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="List here"
+                formControlName="activitiesAndStrategies"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.activitiesAndStrategies.errors }"
+              ></textarea>
+            </div>
+            <div *ngIf="submitted && f.activitiesAndStrategies.errors">
+              <div *ngIf="f.activitiesAndStrategies.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label><b>Risks and challenges</b><br>
+            12. What challenges do you foresee during this period in relation to the following:<span
+              class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="•	Cluster members working relationship&#10;•	Joint planning and implementation&#10;•	Financial management"
+                formControlName="risksAndChallenges"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.risksAndChallenges.errors }"
+              ></textarea>
+            </div>
+            <div *ngIf="submitted && f.risksAndChallenges.errors">
+              <div *ngIf="f.risksAndChallenges.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label><b>Learning and documentation</b><br>
+            13. Learning is crucial in this stage. How will you ensure there is learning , how will you document your
+            learning<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <textarea
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder="•	Cluster partnership working relationship&#10;•	What do we learn from listening from target communities&#10;•	Understanding the available resources and how to utilize them"
+                formControlName="learningAndDocumentation"
+                rows="5"
+                [ngClass]="{ 'is-invalid': submitted && f.learningAndDocumentation.errors }"
+              ></textarea>
+            </div>
+            <div *ngIf="submitted && f.learningAndDocumentation.errors">
+              <div *ngIf="f.learningAndDocumentation.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>14. Cost of the project in local currency<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="costOfProjectLocalCurrency"
+                type="number"
+                [ngClass]="{ 'is-invalid': submitted && f.costOfProjectLocalCurrency.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.costOfProjectLocalCurrency.errors">
+              <div *ngIf="f.costOfProjectLocalCurrency.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label>15. Cost of the project in US dollars<span class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                class="form-control"
+                style="padding-left: 10px;"
+                placeholder=""
+                formControlName="costOfProjectDollars"
+                type="number"
+                [ngClass]="{ 'is-invalid': submitted && f.costOfProjectDollars.errors }"
+              >
+            </div>
+            <div *ngIf="submitted && f.costOfProjectDollars.errors">
+              <div *ngIf="f.costOfProjectDollars.errors.required" class="input-error">This value is
+                required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-sm-6">
+          <label>16. Detailed Work plan and Budget (Use formats provided by CRVPF)<span
+            class="required-indicator">*</span></label>
+          <div class="form-group ">
+            <div class=" input-group input-group-merge">
+              <input
+                *ngIf="!isReadOnly"
+                class="form-control" [disabled]="isReadOnly"
+                placeholder="Attachment"
+                type="file"
+                style="padding-left: 10px;"
+                id="attachment"
+                (change)="handleFileInput($event)"/>
+            </div>
+            <div *ngIf="submitted && f.attachment.errors">
+              <div *ngIf="f.attachment.errors.required" class="input-error">Attachment is
+                required
+              </div>
+            </div>
+          </div>
+          <button
+            *ngIf="!isReadOnly"
+            type="button"
+            (click)="fileUploadService.downloadFile('Copy of BUDGET Templete.xls')"
+            class="btn btn-link">Download Template Here <i class="fas fa-download"></i></button>
+          <button
+            *ngIf="(isReadOnly && f.attachment.value!=null) || taskStatus=='draft'"
+            type="button"
+            (click)="fileUploadService.downloadFile(f.attachment.value)"
+            class="btn btn-link">{{fileUploadService.getFileName(f.attachment.value)}} <i class="fas fa-download"></i>
+          </button>
+        </div>
+          <div class="col-sm-6">
+            <label>17. Draft M.O.U<span class="required-indicator">*</span></label>
+            <div class="form-group ">
+              <div class=" input-group input-group-merge">
+                <input
+                  *ngIf="!isReadOnly"
+                  class="form-control" [disabled]="isReadOnly"
+                  placeholder="Attachment"
+                  type="file"
+                  style="padding-left: 10px;"
+                  id="mou_attachment"
+                  (change)="handleFileInput($event)">
+                <button
+                  *ngIf="isReadOnly && f.mou_attachment.value!=null"
+                  type="button"
+                  (click)="fileUploadService.downloadFile(f.mou_attachment.value)"
+                  class="btn btn-link">{{fileUploadService.getFileName(f.mou_attachment.value)}}  <i class="fas fa-download"></i>
+                </button>
+              </div>
+              <div *ngIf="submitted && f.mou_attachment.errors">
+                <div *ngIf="f.mou_attachment.errors.required" class="input-error">Attachment is
+                  required
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <input class="form-control" type="hidden" formControlName="grantId" ngModel="{{grantId}}">
+  <input class="form-control" type="hidden" formControlName="processInstanceId" ngModel="{{processInstanceId}}">
+  <input class="form-control" type="hidden" formControlName="definitionKey" ngModel="{{definitionKey}}">
+  <input class="form-control" type="hidden" formControlName="status" ngModel="{{status}}">
+
+  <div *ngIf="error || success" class="row align-items-center text-center"
+       style="display: flex; justify-content: center;">
+    <div class="alert alert-danger" style="width: 40%;" *ngIf="error">
+      <strong>Error:</strong> {{errorMessage}}
+    </div>
+    <div class="alert" style="width: 40%; color: saddlebrown; background-color: white;" *ngIf="success">
+      <strong>Success:</strong> {{successMessage}}
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!isReadOnly">
+    <div class="col-lg-12 bottom_buttons_row"
+         style="text-align: -webkit-center; display: flex; justify-content: space-evenly;">
+      <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
+      <button class="btn btn-warning" type="button" (click)="saveDraft()">Save Current Version</button>
+      <button class="btn btn-success" type="submit">Submit Application</button>
+    </div>
+  </div>
+</form>

@@ -7,18 +7,20 @@ import {DataTablesModule} from "angular-datatables";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 
 @NgModule({
   declarations: [CreateEntityViewsComponent],
-  imports: [
-    CommonModule,
-    CreateEntityViewsRoutingModule,
-    DataTablesModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgSelectModule
-  ]
+    imports: [
+        CommonModule,
+        CreateEntityViewsRoutingModule,
+        DataTablesModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        NgSelectModule,
+        NgxDatatableModule
+    ]
 })
 export class CreateEntityViewsModule { }

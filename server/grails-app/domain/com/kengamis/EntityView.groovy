@@ -14,7 +14,7 @@ class EntityView {
     Date lastUpdated
 
     static belongsTo = [misEntity: MisEntity]
-    static hasMany = [viewFields: EntityViewFields]
+    static hasMany = [viewFields: EntityViewFields, filters: EntityViewFilters]
 
     static mapping = {
         id generator: 'uuid2'

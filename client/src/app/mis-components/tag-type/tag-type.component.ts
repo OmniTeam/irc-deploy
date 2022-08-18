@@ -14,18 +14,11 @@ import {EntityService} from "../../services/entity.service";
 })
 export class TagTypeComponent implements OnInit {
 
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   activeRow: any;
   tagTypeId = '';
   search = '';
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 50,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
   private searchValue = '';
   tagTypes: Object[];
   closeResult: string;
@@ -34,6 +27,8 @@ export class TagTypeComponent implements OnInit {
   rowData: any;
   submitted = false;
   misEntities = [];
+  rows: Object[];
+  temp: Object[];
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -45,7 +40,7 @@ export class TagTypeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 50});
+    this.reloadTable();
     this.formGroup = this.formBuilder.group({
       name: ['', Validators.required],
       misEntity: ['', Validators.required]
@@ -85,8 +80,8 @@ export class TagTypeComponent implements OnInit {
   }
 
   editTagType(row) {
-    const editedRow = row.id;
-    console.log(row);
+    const id = row.id;
+    this.router.navigate(['/tagType/edit/'+ id]);
   }
 
   deleteTagType(row) {
@@ -128,24 +123,22 @@ export class TagTypeComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.page.offset}`)
-      .set('search', `${this.searchValue}`);
-
-    this.tagService.getTagTypes(params).subscribe((data) => {
-      console.log(data);
-      this.tagTypes = data;
+    this.tagService.getTagTypes().subscribe((data) => {
+      this.temp = [...data];
+      this.rows = data;
     });
   }
 
@@ -168,15 +161,7 @@ export class TagTypeComponent implements OnInit {
     this.selected.push(...selected);
   }
 
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
+  onSearch(event) {
     this.reloadTable();
   }
 }

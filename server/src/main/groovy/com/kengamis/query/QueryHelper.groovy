@@ -64,10 +64,6 @@ class QueryHelper {
             initBaseTable()
         }
         this.currentUser = currentUser
-        if (Config.CHECK_TABLE_SECURITY in config) {
-            ensureHasAccess()
-        }
-
         if(!(Config.NO_DB_PREFIX in config)){
             initDbPrefix()
         }
@@ -83,12 +79,6 @@ class QueryHelper {
 
     boolean useDbPrefix() {
         return (params.dbPrefix != null)
-    }
-
-    void ensureHasAccess() {
-        if (!getForm()) return
-        def hasAccess = AppHolder.bean(DataService).hasAccessToTable(currentUser, getForm()?.name)
-        if (!hasAccess) throw new AccessDeniedException("Access Denied To Form:${getForm()?.name}")
     }
 
     void initDbPrefix(){
@@ -349,7 +339,7 @@ class QueryHelper {
 
     List<Map> getData() {
         log.trace("Query: Fetching Data: [$query]")
-        withMisSqlNonTx { rows("$query  limit $maxRows offset $offset".toString()) }
+        withMisSqlNonTx { rows("$query".toString()) }
     }
 
     List<Map> getFormDataCollectors() {

@@ -17,7 +17,9 @@ class KengaGroupAclJob extends Script {
         log.info("starting job for KengaGroupAclJob===============")
         createKengaDataTablesFrmForm()
         KengaDataTable.list().each { kengaDataTable ->
-            generateKengaAclRecordIdentities(kengaDataTable)
+            if(kengaDataTable.tableName != 'kenga_data_table'){
+                generateKengaAclRecordIdentities(kengaDataTable)
+            }
         }
         Form.list().each { form ->
             def tableName = form.name
@@ -27,23 +29,43 @@ class KengaGroupAclJob extends Script {
     }
 
     def createKengaDataTablesFrmForm() {
-        Form.list().each { form ->
-            def tableName = form.name
-            if(tableExists(tableName)){
-                KengaDataTable.findByTableName(form.name)?:new KengaDataTable(tableName: tableName, idLabel: '__id').save(flush: true, failOnError: true)
-            }
+        def tables = AppHolder.withMisSql {
+            rows("SHOW TABLES".toString()).collect {it.Tables_in_isdap}
         }
+
+        tables.each {tab ->
+                if (tableExists(tab.toString())) {
+                    String idLabel = "id"
+                    if(tab.toString().startsWith("__")){
+                        idLabel = "__id"
+                    }
+                    def dataTable = KengaDataTable.findByTableName(tab.toString()) ?: new KengaDataTable(tableName: tab, idLabel: idLabel)
+                    dataTable.idLabel = idLabel
+                    dataTable.save(flush: true, failOnError: true)
+                }
+        }
+
     }
 
     def generateKengaAclRecordIdentities(KengaDataTable kengaDataTable) {
-        def records = AppHolder.withMisSqlNonTx {
-            rows("select __id from ${kengaDataTable.tableName}".toString())
-        }
-        records.each { record ->
-            KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel") ?: new KengaAclTableRecordIdentity(
-                    kengaDataTable: kengaDataTable,
-                    dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
-            ).save(flush: true, failOnError: true)
+        try {
+            def records = AppHolder.withMisSqlNonTx {
+                def query = "select $kengaDataTable.idLabel from ${kengaDataTable.tableName}"
+                log.info(query)
+                rows(query.toString())
+            }
+
+            records.each { record ->
+                if (!(KengaAclTableRecordIdentity.findByDataTableRecordId(record."$kengaDataTable.idLabel"))){
+                   def createdAcl = new KengaAclTableRecordIdentity(
+                            kengaDataTable: kengaDataTable,
+                            dataTableRecordId: record."$kengaDataTable.idLabel"?:"__id"
+                    ).save(flush: true, failOnError: true)
+//
+                }
+            }
+        } catch (Exception ex) {
+            log.error(ex.getMessage())
         }
     }
 

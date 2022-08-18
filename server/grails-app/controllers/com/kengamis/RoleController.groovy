@@ -19,12 +19,19 @@ class RoleController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 1000, 1000)
         respond roleService.list(params), model:[roleCount: roleService.count()]
     }
 
-    def show(Long id) {
+    def show(String id) {
         respond roleService.get(id)
+    }
+
+    def getUserRoles() {
+        def username = params.username as String
+        def user = User.findByUsername(username)
+        def roles = user.authorities.collect { it.authority }
+        respond roles
     }
 
     @Transactional
@@ -72,7 +79,7 @@ class RoleController {
     }
 
     @Transactional
-    def delete(Long id) {
+    def delete(String id) {
         if (id == null) {
             render status: NOT_FOUND
             return

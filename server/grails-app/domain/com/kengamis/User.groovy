@@ -4,8 +4,6 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-@EqualsAndHashCode(includes = 'username')
-@ToString(includes = 'username', includeNames = true, includePackage = false)
 class User {
 
     transient springSecurityService
@@ -24,13 +22,12 @@ class User {
 
     static transients = ['springSecurityService']
 
-    static hasMany = [userRoles: UserRole]
+    static hasMany = [userRoles: UserRole, userEntityViewFilters: UserEntityViewFilters, kengaUserGroup: KengaUserGroup]
+
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true
         email nullable: true
-        names nullable: true
-
     }
 
     static mapping = {
@@ -38,8 +35,29 @@ class User {
         password column: '`password`'
     }
 
+    /*
+    * Methods of the Domain Class
+    */
+    @Override	// Override toString for a nicer / more descriptive UI
+    public String toString() {
+        return "${names}"
+    }
+
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
+
+    ProgramPartner getPartner() {
+        def pp = (UserPartner.findByUser(this) as UserPartner)
+        pp ? pp.programPartner as ProgramPartner : null
+    }
+
+    Set<EntityViewFilters> getEntityViewFilters() {
+        (UserEntityViewFilters.findAllByUser(this) as List<UserEntityViewFilters>)*.entityViewFilters as Set<EntityViewFilters>
+    }
+
+    Set<KengaGroup> getKengaGroups() {
+        (KengaUserGroup.findAllByUser(this) as List<KengaUserGroup>)*.kengaGroup as Set<KengaGroup>
     }
 
     def roles() {
@@ -56,22 +74,6 @@ class User {
         roleNames.any { role -> authorities?.any { role == it.authority } }
     }
 
-    boolean hasStudy(Study study) {
-        if (study == null || id == null)
-            return false
-        return studies.any { study.id == it.id }
-    }
-
-    boolean hasForm(Form form) {
-        if (form == null || id == null)
-            return false
-        return forms.any { form.id == it.id }
-    }
-
-    Set<Form> getForms() {
-        UserForm.findAllByUser(this).collect { it.form } as Set
-    }
-
     Set<Study> getStudies() {
         UserStudy.findAllByUser(this).collect { it.study } as Set
     }
@@ -80,41 +82,12 @@ class User {
         UserGroup.findAllByUser(this).collect { it.group } as Set
     }
 
-    Set<KengaGroup> getGroups(String role) {
-        UserGroup.findAllByUserAndGroupRole(this, role).collect { it.group } as Set
-    }
-
-    List<User> findFellowUsers() {
-        def groupIds = getGroups(KengaGroup.ROLE_SUPERVISOR).collect { it.id }
-        if (!groupIds) return [this]
-        return executeQuery("select distinct upg.user from UserGroup upg where upg.group.id in (:ids) ", [ids: groupIds])
-    }
-
-    Set<Form> getLoggedInUserForms() {
-        if (SpringSecurityUtils.ifAnyGranted('ROLE_SUPER_ADMIN,ROLE_ADMIN')) {
-            return Form.list() as Set
-        } else {
-            UserForm.findAllByUser(this).collect { it.form } as Set
-        }
-    }
-
     Set<Study> getLoggedInUserStudies() {
         if (SpringSecurityUtils.ifAnyGranted('ROLE_SUPER_ADMIN,ROLE_ADMIN')) {
             return Study.list(sort: 'name',order: 'asc') as Set
         } else {
             UserStudy.findAllByUser(this).collect { it.study }.sort {it.name} as Set
         }
-    }
-
-    boolean hasAnyFormPermissions(Study study) {
-        if(isAdmin()) return true
-        return !UserForm.getUserStudyForms(study,this).isEmpty()
-    }
-
-    boolean hasAccessToForm(Form form) {
-        if (id == null)
-            return false
-        return loggedInUserForms.any { form.id == it.id }
     }
 
     boolean isAdmin(){

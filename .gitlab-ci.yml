@@ -1,0 +1,74 @@
+image: java:8
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_VERSION: "5.1.1"
+  # GRAILS_VERSION: "4.0.3"
+  ISDAP_SERVER_HOST: "157.230.227.3"
+  ISDAP_WEBAPP_FOLDER: "/opt/runnable-jars/isdap-server/"
+
+before_script:
+  - apt-get update -qq && apt-get install -y -qq unzip
+  - apt-get install zip
+  - curl -sSL https://get.sdkman.io | bash
+  - echo sdkman_auto_answer=true > /root/.sdkman/etc/config
+  - source /root/.sdkman/bin/sdkman-init.sh
+
+  - sdk install gradle $GRADLE_VERSION < /dev/null
+  - sdk use gradle $GRADLE_VERSION
+  - apt-get install sshpass
+
+  # - echo grailsVersion=$GRAILS_VERSION > gradle.properties
+  # - echo gradleWrapperVersion=2.14 >> gradle.properties
+  # - chmod +x gradlew
+  # - ./gradlew --refresh-dependencies
+
+# test:
+#   stage: test
+#   script: 
+#     - grails test-app -integration server/src/integration-test/groovy/com/isdap/DbConnectionSpec.groovy
+
+deploy:
+  stage: deploy
+  artifacts:
+    paths:
+      - server/build/libs/isdap-server.jar
+  only:
+    - isdap
+  script:
+    - gradle build -x test -x integrationTest
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no -r server/build/libs/isdap-server.jar root@$ISDAP_SERVER_HOST:$ISDAP_WEBAPP_FOLDER
+    - sshpass -e ssh root@$ISDAP_SERVER_HOST "cd $ISDAP_WEBAPP_FOLDER; ./start-isdap.sh"
+    - echo "Done Deploying isdap server :)" 
+
+#build:client:
+#  image: node:12
+#
+#  variables:
+#    SERVER_HOST: "157.230.227.3"
+#    WEBAPP_FOLDER: "/var/www/kengamis/"
+#
+#  before_script:
+#    - apt-get update -qq && apt-get install -y -qq unzip
+#    - apt-get install zip
+#    - apt-get install sshpass
+#    - cd client
+#    - npm install
+#    - npm install -g @angular/cli
+#
+#  artifacts:
+#    paths:
+#      - dist/
+#  stage: deploy
+#  only:
+#    - crvpf
+#  script:
+#    - ng build --prod --base-href kengamis
+#    - cd dist/kenga_mis/
+#    - sshpass -V
+#    - export SSHPASS=$USER_PASS
+#    - echo "Copying to server..."
+#    - sshpass -e scp -o stricthostkeychecking=no -r * root@$SERVER_HOST:$WEBAPP_FOLDER
+#    - echo "Done Deploying crvpf client :)"

@@ -3,184 +3,347 @@
     <div class=" header-body">
       <div class=" row align-items-center py-4">
         <div class=" col-lg-6 col-7">
-          <h6 class=" h2 text-white d-inline-block mb-0">HOME</h6>
+          <h5 class=" h2 text-white d-inline-block mb-0">PERFORMANCE SUMMARY</h5>
         </div>
       </div>
+      <div class="container-fluid">
+        <div class=" row">
+          <div class=" col-xl-3 col-md-6">
+            <div class=" card card-stats">
+              <div>
+                <div class=" row">
+                  <div class=" col">
+                    <h3 class=" card-title text-uppercase text-muted mb-0">
+                      Reporting
+                    </h3>
 
-      <div class=" row">
+                    <span class=" h2 font-weight-bold mb-0"> {{this.reporting?.length}} </span>
+                  </div>
 
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Forms
-                  </h5>
-
-                  <span class=" h2 font-weight-bold mb-0"> 5 </span>
-                </div>
-
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-bell-55"> </i>
+                  <div class=" col-auto">
+                    <div class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                      <i class=" ni ni-like-2"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Users
-                  </h5>
+          <div class=" col-xl-3 col-md-6">
+            <div class=" card card-stats">
+              <div>
+                <div class=" row">
+                  <div class=" col">
+                    <h3 class=" card-title text-uppercase text-muted mb-0">
+                      Short Term Grant
+                    </h3>
 
-                  <span class=" h2 font-weight-bold mb-0"> 23 </span>
-                </div>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.grantProcess?.length}} </span>
+                  </div>
 
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-favourite-28"> </i>
+                  <div class=" col-auto">
+                    <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                      <i class=" ni ni-tag"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Approved
-                  </h5>
+          <div class=" col-xl-3 col-md-6">
+            <div class=" card card-stats">
+              <div>
+                <div class=" row">
+                  <div class=" col">
+                    <h3 class=" card-title text-uppercase text-muted mb-0">
+                      Long Term Grant
+                    </h3>
 
-                  <span class=" h2 font-weight-bold mb-0"> 100 </span>
-                </div>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.longTermProcess?.length}} </span>
+                  </div>
 
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-like-2"> </i>
+                  <div class=" col-auto">
+                    <div class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                      <i class=" ni ni-favourite-28"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Flagged
-                  </h5>
+          <div class=" col-xl-3 col-md-6">
+            <div class=" card card-stats">
+              <div>
+                <div class=" row">
+                  <div class=" col">
+                    <h3 class=" card-title text-uppercase text-muted mb-0">
+                      All tasks
+                    </h3>
 
-                  <span class=" h2 font-weight-bold mb-0"> 17 </span>
-                </div>
+                    <span class=" h2 font-weight-bold mb-0"> {{this.taskListRows?.length}} </span>
+                  </div>
 
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-tag"> </i>
+                  <div class=" col-auto">
+                    <div class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                      <i class=" ni ni-bell-55"> </i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class=" row">
-
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Resolved
-                  </h5>
-
-                  <span class=" h2 font-weight-bold mb-0"> 94 </span>
-                </div>
-
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-basket"> </i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Rejected
-                  </h5>
-
-                  <span class=" h2 font-weight-bold mb-0"> 56 </span>
-                </div>
-
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-red text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-fat-delete"> </i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class=" col-xl-3 col-md-6">
-          <div class=" card card-stats">
-            <div class=" card-body">
-              <div class=" row">
-                <div class=" col">
-                  <h5 class=" card-title text-uppercase text-muted mb-0">
-                    Not Actioned
-                  </h5>
-
-                  <span class=" h2 font-weight-bold mb-0"> 17 </span>
-                </div>
-
-                <div class=" col-auto">
-                  <div
-                    class=" icon icon-shape bg-gradient-green text-white rounded-circle shadow"
-                  >
-                    <i class=" ni ni-tag"> </i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class=" container-fluid mt--6">
+  <div class=" row">
+    <div class=" col">
+      <div class="row">
+
+        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;">
+          <div class=" row">
+            <div class=" col">
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <h3 style="margin-left: 40px;">TO DO LIST ({{taskListRows?.length}})</h3>
+                  </div>
+                </div>
+                <div class="card-body col-sm-12 home-card">
+                  <div class="row" *ngFor="let row of taskListRows">
+                    <button class="btn" (click)="openForm(row.task_type, row)">
+                      <div class="row">
+                        <span style="border-left: 4px solid #2dce89;"></span>
+                        <div class="col text-left" style="display: grid">
+                          <span>{{row.task_case}}</span>
+                          <span>{{ row.task_type | replace: '_' : ' ' }}</span>
+                          <span><b>{{ row.task_name | replace: '_' : ' ' }}</b></span>
+                          <span><i>{{ row.date_assigned | date: 'mediumDate' }}</i></span>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class=" col">
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <h3 style="margin-left: 40px;">PROGRESS TRACK</h3>
+                  </div>
+                </div>
+                <div class="card-body col-sm-12 home-card">
+                  <div class="row" *ngFor="let filter of filters">
+                    <button class="btn" (click)="setFilters(filter)">
+                      <div class="row">
+                        <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                          <i class="ni ni-time-alarm"> </i>
+                        </div>
+                        <div style="margin-left: 20px; display: flex; align-items: center;"><h3>{{filter.name}}
+                          ({{getNumberOfRecordsForFilter(filter.name)}})</h3></div>
+                        <span style="margin-left: 60px;margin-bottom: -10px; width: 80%; border-bottom: 4px">
+                          <div class="progress-wrapper" style="margin-top: -50px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{this.perc}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" [attr.aria-valuenow]="perc"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="perc+'%'"></div>
+                        </div>
+                      </div>
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class=" col-md-12 col-sm-12" style="margin-top: 40px;"
+             *hasRole="['ROLE_STAFF_DATA_VIEWER', 'ROLE_PROGRAM_OFFICER', 'ROLE_SUPER_ADMIN']">
+          <div class=" row">
+            <div class=" col">
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <h3 style="margin-left: 40px;">PROGRESS AGAINST WORKPLAN</h3><br>
+                      <h4 style="margin-left: 40px;align-items: center">The Following milestones have been computed
+                        based on the logs for the reporting period.
+                        You should review them and provide any comments on these activities.</h4>
+                    </div>
+                    <div class="col-md-2 text-right" (click)="clickReset()">
+                      <div
+                        class=" icon icon-shape bg-gradient-default text-white rounded-circle shadow"
+                      >
+                        <i class=" fa fa-eraser"> </i>
+
+                      </div>
+                      <h3 style="color: black">
+                        Reset
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body col-sm-12">
+                  <div class="row">
+
+                    <div class="dataTables_wrapper py-4">
+                      <div class="row" style="display: flex; width: 100%">
+                        <div class="col-sm-4">
+                          <div class="dataTables_length" id="datatable_length">
+                            <label>
+                              Show
+                              <select
+                                name="datatable_length"
+                                aria-controls="datatable"
+                                class="form-control form-control-sm"
+                                (change)="entriesChange($event)"
+                                style="width: 200%;"
+                              >
+                                <option value="10" [selected]="entries == 10">10</option>
+                                <option value="25" [selected]="entries == 25">25</option>
+                                <option value="50" [selected]="entries == 50">50</option>
+                                <option value="-1" [selected]="entries == -1">All</option>
+                              </select>
+                              entries
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div id="datatable_filter" class="dataTables_filter">
+                            <label>
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Select cluster to filter.."
+                                         [searchable]="true"
+                                         (change)="filterMilestonesList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.id" *ngFor="let item of budgetHolders">
+                                  {{item.partner}}
+                                </ng-option>
+                              </ng-select>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                          <div id="datatable_filter2" class="dataTables_filter">
+                            <label>
+                              <ng-select class="form-control form-control-sm"
+                                         aria-controls="datatable"
+                                         style="height: auto !important; width: 200%; padding: 0; border: 1px solid #f7fafc;"
+                                         [multiple]="false"
+                                         placeholder="Filter outcome.."
+                                         [searchable]="true"
+                                         (change)="filterOutcomeList($event)"
+                                         [clearable]="true">
+                                <ng-option [value]="item.id" *ngFor="let item of progress">
+                                  {{item.name}}
+                                </ng-option>
+                              </ng-select>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!--              -->
+
+                      <ngx-datatable
+                        class="bootstrap selection-cell"
+                        [columnMode]="'force'"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        [rowHeight]="'auto'"
+                        [limit]="entries != -1 ? entries : undefined"
+                        [rows]="displayMilestones">
+
+                        <ngx-datatable-column name="Milestone" prop="milestone">
+
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Overall Target" prop="target">
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Cumulative" prop="cumulative"></ngx-datatable-column>
+                        <ngx-datatable-column name="Percentage Achievement" prop="achievement">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>
+                              <div class="progress-wrapper" style="margin-top: -10px">
+                        <div class="progress-info">
+                          <div class="progress-label">
+<!--                            <span>Pending</span>-->
+                          </div>
+                          <div class="progress-percentage">
+                            <span>{{row.achievement}}%</span>
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar " [style.background-color]="getColor(row.achievement)"
+                               role="progressbar" [attr.aria-valuenow]="row.achievement"
+                               aria-valuemin="0" aria-valuemax="100" [style.width]="row.achievement+'%'"></div>
+                        </div>
+                      </div>
+                            </span>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Budget" prop="budget">
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Expenses to date" prop="expenses"></ngx-datatable-column>
+                        <ngx-datatable-column name="Efficiency (%)" prop="efficiency">
+                          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <span>
+                              <div class="progress-wrapper" style="margin-top: -10px">
+                                <div class="progress-info">
+                                  <div class="progress-label">
+
+                                  </div>
+                                  <div class="progress-percentage">
+                                    <span>({{row.expenses | number}}) {{row.efficiency}}%</span>
+                                  </div>
+                                </div>
+                                <div class="progress">
+                                  <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="row.efficiency"
+                                       aria-valuemin="0" aria-valuemax="100"
+                                       [style.background-color]="getColor(row.efficiency)"
+                                       [style.width]="row.efficiency+'%'"></div>
+                                </div>
+                              </div>
+                            </span>
+                          </ng-template>
+                        </ngx-datatable-column>
+                      </ngx-datatable>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>

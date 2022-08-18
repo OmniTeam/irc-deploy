@@ -3,7 +3,6 @@ import {SelectionType} from '@swimlane/ngx-datatable';
 import {ActivatedRoute, Router} from "@angular/router";
 import {EntityService} from "../../services/entity.service";
 import {AlertService} from "../../services/alert";
-import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-entity-views',
@@ -13,27 +12,42 @@ import {HttpParams} from "@angular/common/http";
 export class EntityViewsComponent implements OnInit {
 
   rows: Object[];
+  temp: Object[];
   private searchValue = '';
-  entries: number = 500;
+  entries: number = 10;
   selected: any[] = [];
   activeRow: any;
   SelectionType = SelectionType;
   search = '';
-  page = {
-    limit: this.entries,
-    count: 0,
-    offset: 50,
-    orderBy: 'title',
-    orderDir: 'desc'
-  };
+  enableAddNewViewFilter = false;
+  entityViewId: any;
+  entityId: any;
   constructor(private route: ActivatedRoute,
               private router: Router,
               private entityService: EntityService,
               private alertService: AlertService) { }
 
   ngOnInit(): void {
-    this.pageCallback({offset: 50});
+    this.reloadTable();
   }
+  onCheckboxChangeFn(event) {
+    this.enableAddNewViewFilter = !!event.target.checked;
+  }
+
+  createNewViewFilter() {
+    this.router.navigate(['/entityViewFilter/create/' + this.entityViewId]);
+  }
+
+  editEntityView(row) {
+    let entityViewId = row.id;
+    this.router.navigate(['/entityView/edit/' + this.entityId + '/' + entityViewId]);
+  }
+
+  showEntityView(row) {
+    let entityViewId = row.id;
+    this.router.navigate(['/entityView/showData/' + entityViewId]);
+  }
+
 
   deleteEntityView(row) {
     let entityViewId = row.id
@@ -50,54 +64,73 @@ export class EntityViewsComponent implements OnInit {
   }
 
   onChangeSearch(event) {
-    console.log(event.target.value)
-    if (!event.target.value)
-      this.searchValue = ''
-    else {
-      this.searchValue = event.target.value;
-    }
-    this.reloadTable();
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key]?.toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   reloadTable() {
-    // NOTE: those params key values depends on your API!
-    const params = new HttpParams()
-      .set('max', `${this.page.offset}`)
-      .set('search', `${this.searchValue}`);
-
     this.entityService.getEntityViews().subscribe((data) => {
-      this.rows = data;
+      let rowData = []
+      for (let record of data) {
+        let rowRecord = {};
+        rowRecord['id'] = record.id;
+        rowRecord['name'] = record.name;
+        rowRecord['tableName'] = record.tableName;
+        rowRecord['description'] = record.description;
+        rowRecord['dateCreated'] = record.dateCreated;
+        rowRecord['entityId'] = record.entityId;
+        rowRecord['entityViewFilters'] = this.groupEntityViewFilters(record.entityViewFilters);
+        rowData.push(rowRecord);
+        this.entityId = record.entityId;
+      }
+      this.temp = [...rowData];
+      this.rows = rowData;
     }, error => console.log(error));
   }
 
-  entriesChange($event) {
-    this.entries = $event.target.value;
-    this.reloadTable();
+  groupEntityViewFilters(entityViewFilters): string {
+    let d = [];
+    for (let view of entityViewFilters) {
+      let viewName = view.name;
+      d.push(viewName);
+    }
+    return d.join(", ");
+  }
+
+  entriesChange(event) {
+    let val = event.target.value.toLowerCase();
+    // update the rows
+    this.rows = this.temp.filter(function (d) {
+      for (const key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
   }
 
   onActivate(event) {
     this.activeRow = event.row;
   }
 
-  filterTable($event) {
-    this.search = $event.target.value;
-    this.reloadTable();
-  }
-
   onSelect({selected}) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    if (selected) {
+      this.entityViewId = this.selected[0].id
+    }
   }
 
-  pageCallback(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
-    this.page.offset = pageInfo.offset;
-    this.reloadTable();
-  }
-
-  sortCallback(sortInfo: { sorts: { dir: string, prop: string }[], column: {}, prevValue: string, newValue: string }) {
-    // there will always be one "sort" object if "sortType" is set to "single"
-    this.page.orderDir = sortInfo.sorts[0].dir;
-    this.page.orderBy = sortInfo.sorts[0].prop;
+  onSearch(event) {
     this.reloadTable();
   }
 

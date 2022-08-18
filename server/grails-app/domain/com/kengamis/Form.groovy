@@ -18,7 +18,7 @@ class Form {
     boolean syncMode = true
     String centralId
 
-    static hasMany = [formSettings: FormSetting, userForms:UserForm]
+    static hasMany = [formSettings: FormSetting]
     static belongsTo = [study: Study]
 
     static mapping = {
@@ -82,29 +82,6 @@ class Form {
         return Collections.EMPTY_LIST
     }
 
-    static List<Form> listAllUserForms(User user) {
-        if (user.hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')) {
-            return findAll()
-        }
-        def forms = UserForm.findAllByUser(user).form
-        return forms
-    }
-
-    /**
-     * To Note:
-     *   Sometimes users who access the whole study may not have specific form permissions
-     */
-    static List<Form> getMisUserForms(String studyId, User user) {
-        def userForms = []
-        getMisForms(studyId).each { form ->
-            if (user.hasAnyFormPermissions(form.study)) {
-                if (user.hasAccessToForm(form))
-                    userForms << form
-            }
-        }
-        return userForms
-    }
-
     String getRepeatTablePrefix() {
         if ((study.syncMode == Study.SYNC_MODE_NEW)) {
             return "__${centralId}__"
@@ -160,26 +137,17 @@ class Form {
         return getMisForms(studyId).collect { it.name }
     }
 
-    static Map getMisFormNameMaps(String studyId, User user) {
-        return getMisUserForms(studyId, user).collectEntries { [(it.name): it.displayName] }
-    }
-
-    static List<Map> getMisFormNameMapsCollated(String studyId, int partitions, String userId) {
-        def result = []
-        def user = User.get(userId)
-        def formNameMaps = getMisFormNameMaps(studyId, user)
-        def keySet = formNameMaps.keySet()
-        (keySet as List).collate((keySet.size() / partitions as int)).each {
-            result << formNameMaps.subMap(it)
-        }
-        return result
-    }
-
     List<String> findAllChildTables() {
         List<FormSetting> formSettingList = formSettings.findAll { it.xformType in [XformType.REPEAT.value, XformType.GROUP.value, XformType.SELECT.value, XformType.SELECT1.value] } as List
         return formSettingList.collect {
             resolveGroupTableName(it.field)
         }
+    }
+
+    String truncateNameForSql() {
+        if(name.size() > 63)
+            return name.substring(0,63)
+        return name
     }
 
     /**

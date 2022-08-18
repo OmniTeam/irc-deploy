@@ -1,10 +1,13 @@
 package com.kengamis
 
+import com.kengamis.query.MetabaseHelper
 import com.kengamis.query.QueryHelper
 import com.kengamis.query.security.Permission
+import grails.util.Holders
 import grails.validation.ValidationException
 import org.springframework.security.acls.domain.BasePermission
 
+import static com.kengamis.Util.constructFormTable
 import static fuzzycsv.FuzzyCSVTable.tbl
 import static fuzzycsv.FuzzyCSVTable.toCSV
 import static org.springframework.http.HttpStatus.CREATED
@@ -27,7 +30,8 @@ class DataViewController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond dataViewService.list(params), model: [dataViewCount: dataViewService.count()]
+        respond dataViewService.list(params),
+                model: [dataViewCount: dataViewService.count()]
     }
 
     def show(String id) {
@@ -144,4 +148,35 @@ class DataViewController {
         }
         respond dataViewData
     }
+
+    def syncViewToMetabase() {
+        def message = ["Data View Successfully Synced to Metabase"]
+        def id = params.id as String
+        def dataView = DataView.get(id)
+        def misDb = Holders.grailsApplication.config.mis.database as String
+        def centralId = Holders.grailsApplication.config.server.centralId as String
+        def study = Study.findByCentralId(centralId)
+        if (study) {
+            def metabaseDb = "metabase_${constructFormTable(study.name)}"
+            AppHolder.withMisSqlNonTx { executeUpdate("CREATE DATABASE IF NOT EXISTS ${metabaseDb}".toString()) }
+            exportDataView(misDb, metabaseDb, dataView)
+        }
+        respond message
+    }
+
+    def exportDataView(def misDb, def metabaseDb, DataView dataView) {
+        MetabaseHelper metabaseHelper = new MetabaseHelper()
+        def tableName = dataView.tableName as String
+        def query = """
+                           SHOW COLUMNS FROM $tableName
+                        """
+        log.info("query view definition: ${query}")
+        def tableStructure = AppHolder.withMisSqlNonTx {
+            rows(query.toString())
+        }
+        println(tableStructure)
+        metabaseHelper.createTable(metabaseDb, tableName, tableStructure)
+        metabaseHelper.insertDataIntoTable(misDb, metabaseDb, tableName)
+    }
+
 }

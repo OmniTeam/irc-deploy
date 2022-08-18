@@ -42,6 +42,7 @@ export class CommentsComponent implements OnInit {
   @Input() isRecommendation: boolean = false;
 
   @Output() commentsChanged: EventEmitter<CommentNode[]> = new EventEmitter();
+  @Output() onNewComment: EventEmitter<CommentNode> = new EventEmitter();
 
   text:string;
   numberOfLikes:number;
@@ -56,6 +57,7 @@ export class CommentsComponent implements OnInit {
     comment.addAnswer(new CommentNode(uuid(), this.text, this.authService.getLoggedInUsername(),[], [], new Date()));
     comment.isOpen = false;
     this.text="";
+    this.onNewComment.emit(comment);
     this.commentsChanged.emit(this.comments);
   }
 
@@ -94,6 +96,7 @@ export class CommentsComponent implements OnInit {
     if (index !== -1) {
       this.comments[index] = newComment;
     }
+    this.onNewComment.emit(newComment);
     this.commentsChanged.emit(this.comments);
   }
 }

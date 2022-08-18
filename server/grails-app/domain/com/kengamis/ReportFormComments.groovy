@@ -3,8 +3,7 @@ package com.kengamis
 class ReportFormComments {
 
     String id
-    String groupId
-    String processId
+    String processInstanceId
     String taskId
     String taskDefinitionKey
     String userId
@@ -12,6 +11,9 @@ class ReportFormComments {
     String children
     Date dateCreated
 
+    static mapping = {
+        id generator: 'uuid2'
+    }
     static constraints = {
     }
 }

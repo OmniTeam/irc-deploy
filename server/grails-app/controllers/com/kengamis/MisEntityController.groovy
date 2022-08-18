@@ -1,6 +1,8 @@
 package com.kengamis
 
+import com.kengamis.exporter.EntityDataExporter
 import com.kengamis.query.EntityQueryHelper
+import com.kengamis.query.security.Permission
 import grails.converters.JSON
 import grails.validation.ValidationException
 import groovy.json.JsonSlurper
@@ -24,6 +26,8 @@ class MisEntityController {
 
     MisEntityService misEntityService
     def springSecurityService
+    def kengaGroupsService
+
 
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -31,19 +35,17 @@ class MisEntityController {
     def index(Integer max) {
         params.max = Math.min(max ?: 100, 100)
         def misEntity = MisEntity.findAll().collect { entity ->
-            def entityViews = entity.entityViews.collect { [id: it.id, name: it.name] }
+            def entityViews = entity.entityViews.collect { [id: it.id, name: it.name]}
             [id: entity.id, name: entity.name, tableName: entity.tableName, prefix: entity.prefix, dateCreated: entity.dateCreated, entityViews: entityViews]
         }
         respond misEntity
     }
 
     def show(String id) {
-        respond misEntityService.get(id)
-    }
-
-    def getEntityRecord() {
-        def misEntity = MisEntity.get(params.id)
-        respond misEntity
+        def misEntity = MisEntity.get(id)
+        def entityFields = misEntity.entityFields
+        def misEntityReturned = [id: misEntity.id, name: misEntity.name, tableName: misEntity.tableName, prefix: misEntity.prefix, enableTagging: misEntity.enableTagging, entityFields: entityFields]
+        respond misEntityReturned
     }
 
     @Transactional
@@ -62,7 +64,9 @@ class MisEntityController {
             misEntityService.save(misEntity)
             createEntityTable(misEntity)
             createEntityPrefixTable(misEntity)
-            createEntityTagTable(misEntity)
+            if (misEntity.enableTagging) {
+                createEntityTagTable(misEntity)
+            }
         } catch (ValidationException e) {
             respond misEntity.errors
             return
@@ -114,7 +118,8 @@ class MisEntityController {
             }
         }
 
-        def deleteTablesQuery = """ DROP TABLE ${entityTable}, ${prefixTable}, ${taggingTable}""".toString()
+        def tables = [entityTable?:null, prefixTable?:null, taggingTable?:null].findAll { it != null }.join(", ")
+        def deleteTablesQuery = """ DROP TABLE ${tables}""".toString()
         def results = AppHolder.withMisSqlNonTx { execute(deleteTablesQuery) }
         if (!results) {
             log.info("Tables successfully deleted")
@@ -179,8 +184,14 @@ class MisEntityController {
         def entityData = []
         try {
             def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
-            entityData = [headerList : q.headers, resultList: q.data, resultListCount: q.count, entity: q.misEntity,
-                          tagTypeList: q.tagTypes, enableTagging: q.misEntity.enableTagging]
+            entityData = [
+                    headerList : q.headers,
+                    resultList: q.data,
+                    resultListCount: q.count,
+                    entity: q.misEntity,
+                    tagTypeList: q.tagTypes,
+                    enableTagging: q.misEntity.enableTagging
+            ]
         }
         catch (Exception e) {
             flash.error = "Data Might Not Be Available For This entity."
@@ -242,6 +253,34 @@ class MisEntityController {
         respond message
     }
 
+    @Transactional
+    def updateEntityRecord() {
+        def message = ["Entity Record Updated"]
+        try {
+            def misEntity = MisEntity.get(params.entityId)
+            def recordId = params.id as String
+            def postRequest = request.JSON
+            def updateQuery = "UPDATE ${escapeField misEntity.tableName} set "
+            def setConditions = []
+            if (postRequest) {
+                postRequest.each { key, value ->
+                    setConditions << "${key}='${value}'"
+                }
+            }
+            updateQuery += setConditions.join(", ") + " where id='${recordId}'"
+            // Update into Entity Table
+            log.trace(updateQuery)
+            def result = AppHolder.withMisSql { execute(updateQuery.toString()) }
+            if (!result) {
+                log.trace("Table ${misEntity.tableName} successfully updated a record")
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace()
+        }
+        respond message
+    }
+
     def getEntityFields() {
         def entityFields = []
         try {
@@ -283,4 +322,44 @@ class MisEntityController {
         }
         return increment_value
     }
+
+    @Transactional
+    def deleteEntityRecord() {
+        def recordId  = params.id as String
+        def entityId = params.entityId as String
+        def misEntity = MisEntity.findById(entityId)
+
+        def deleteTagRecord = "delete from ${escapeField misEntity.entityTagTable} where record_id='${recordId}'"
+        def result = AppHolder.withMisSql { execute(deleteTagRecord.toString()) }
+        if (!result) {
+            log.info("Table ${misEntity.entityTagTable} successfully deleted a record")
+        }
+
+        def deleteEntityRecord = "delete from ${escapeField misEntity.tableName} where id='${recordId}'"
+        def resultQuery = AppHolder.withMisSql { execute(deleteEntityRecord.toString()) }
+        if (!resultQuery) {
+            log.info("Table ${misEntity.tableName} successfully deleted a record")
+        }
+        def message = ["Entity Record Deleted"]
+        respond message
+    }
+
+    def exportEntityData() {
+        def entityData = []
+        def id = params.id as String
+        try {
+            def q = new EntityQueryHelper(params, springSecurityService.currentUser as User)
+            def dataExporter = new EntityDataExporter(id, params)
+            def exportedData = dataExporter.exportToExcel(q.data)
+            def fileName = dataExporter.setFileName()
+            entityData = [data: exportedData, file: fileName]
+        }
+        catch (Exception e) {
+            flash.error = "Data Might Not Be Available For This entity."
+            log.error("Error fetching data", e)
+            entityData = [data: [], file: MisEntity.findById(id).name]
+        }
+        respond entityData
+    }
+
 }

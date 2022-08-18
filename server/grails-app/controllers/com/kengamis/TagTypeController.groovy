@@ -18,8 +18,7 @@ class TagTypeController {
     static responseFormats = ['json', 'xml']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index() {
         def tagTypes = []
         tagTypeService.list(params).each { tagType ->
             def newTagTypeObject = [:]
@@ -31,13 +30,25 @@ class TagTypeController {
             newTagTypeObject['dateCreated'] = tagType.dateCreated
             newTagTypeObject['lastUpdated'] = tagType.lastUpdated
             newTagTypeObject['misEntityName'] = misEntity.name
+            newTagTypeObject['misEntityId'] = misEntity.id
             tagTypes << newTagTypeObject
         }
         respond tagTypes
     }
 
-    def show(Long id) {
-        respond tagTypeService.get(id)
+    def show(String id) {
+        def tagType = tagTypeService.get(id)
+        def newTagTypeObject = [:]
+        def misEntityId = tagType.misEntity.id
+        def misEntity = MisEntity.findById(misEntityId)
+        newTagTypeObject['id'] = tagType.id
+        newTagTypeObject['name'] = tagType.name
+        newTagTypeObject['misEntity'] = misEntityId
+        newTagTypeObject['dateCreated'] = tagType.dateCreated
+        newTagTypeObject['lastUpdated'] = tagType.lastUpdated
+        newTagTypeObject['misEntityName'] = misEntity.name
+        newTagTypeObject['misEntityId'] = misEntity.id
+        respond newTagTypeObject
     }
 
     @Transactional

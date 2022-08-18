@@ -1,6 +1,7 @@
 package com.kengamis
 
 import grails.gorm.transactions.Transactional
+import grails.util.Holders
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 class BootStrap {
@@ -29,7 +30,12 @@ class BootStrap {
     @Transactional
     def initData() {
         //Initial Study
-        def study = Study.findByCentralId('8') ?: new Study(name: 'CRVPF', centralId: '8')
+        String centralId = Holders.grailsApplication.config.server.centralId as String
+        String appName = Holders.grailsApplication.config.server.appName as String
+        String superPass = Holders.grailsApplication.config.server.superPass as String
+        String superEmail = Holders.grailsApplication.config.server.superEmail as String
+
+        def study = Study.findByCentralId(centralId) ?: new Study(name: appName, centralId: centralId)
         study.save(failOnError: true, flush: true)
 
         // Initial User and Roles
@@ -40,16 +46,16 @@ class BootStrap {
 
         def superAdminUser = User.findByUsername('super') ?: new User(
                 names: "Super User",
-                email: "super@gmail.com",
+                email: superEmail,
                 username: 'super',
-                password: 'pass',
+                password: superPass,
                 enabled: true).save(failOnError: true)
 
         def adminUser = User.findByUsername('root') ?: new User(
                 names: "Root User",
                 email: "root@gmail.com",
                 username: 'root',
-                password: 'pass',
+                password: superPass,
                 enabled: true).save(failOnError: true)
 
         if (!superAdminUser.authorities.contains(superAdminRole)) {

@@ -66,6 +66,16 @@ class KengaUserGroup implements Serializable{
         kengaGroup == null ? 0 : where { kengaGroup == kengaGroup }.deleteAll() as int
     }
 
+    static void deleteOldRecords(KengaGroup e){
+        def filters = findAllByKengaGroup(e)
+        print(filters)
+        filters.each { it.delete(flush: true, failOnError: true) }
+    }
+    static void deleteOldRecordsUser(User e){
+        def filters = findAllByUser(e)
+        filters.each { it.delete(flush: true, failOnError: true) }
+    }
+
     static int removeAll(User u) {
         u == null ? 0 : where { user == u }.deleteAll() as int
     }

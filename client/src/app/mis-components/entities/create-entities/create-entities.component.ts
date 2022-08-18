@@ -37,31 +37,6 @@ export class CreateEntitiesComponent implements OnInit {
   enableButtons: true;
   editing = {};
 
-  entriesChange($event) {
-    this.entries = $event.target.value;
-  }
-
-  filterTable($event) {
-    let val = $event.target.value;
-    this.rows = this.rows.filter(function (d) {
-      for (let key in d) {
-        if (d[key].toLowerCase().indexOf(val) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-
-  onSelect({selected}) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-  }
-
-  onActivate(event) {
-    this.activeRow = event.row;
-  }
-
   constructor(private formBuilder: FormBuilder,
               private router: Router,
               private entityService: EntityService,
@@ -166,20 +141,21 @@ export class CreateEntitiesComponent implements OnInit {
 
   }
 
-  deleteField() {
-
+  deleteField(deletedRow) {
+    this.rows = this.removeElementFormArray(this.rows, deletedRow.fieldName);
+    this.rows = [...this.rows];
   }
 
   generateEntityTableName(entityName: string): string {
-    return this.replaceAll(entityName.toLowerCase(), ' ', '_');
+    return 'entity_' + this.replaceAll(entityName.toLowerCase(), ' ', '_');
   }
 
   generateEntityPrefixIncrementTableName(entityName: string): string {
-    return this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_prefix_increment';
+    return 'entity_' + this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_prefix_increment';
   }
 
   generateEntityTagTableName(entityName: string): string {
-    return this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_tagging';
+    return 'entity_' + this.replaceAll(entityName.toLowerCase(), ' ', '_') + '_tagging';
   }
 
   generateSqlDataType(dataType: string): string {
@@ -218,6 +194,37 @@ export class CreateEntitiesComponent implements OnInit {
 
   replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
+  }
+
+  removeElementFormArray(array, rowName) {
+    return array.filter(function(element){
+      return element.fieldName != rowName;
+    });
+  }
+
+  entriesChange($event) {
+    this.entries = $event.target.value;
+  }
+
+  filterTable($event) {
+    let val = $event.target.value;
+    this.rows = this.rows.filter(function (d) {
+      for (let key in d) {
+        if (d[key].toLowerCase().indexOf(val) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  onSelect({selected}) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+  }
+
+  onActivate(event) {
+    this.activeRow = event.row;
   }
 
 }
