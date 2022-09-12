@@ -116,6 +116,7 @@
                             type="text"
                             style="padding-left: 10px;"
                             formControlName="designation"
+                            [readOnly]="true"
                           >
                           <div *ngIf="submitted && f.designation.errors" class="invalid-feedback">
                             <div *ngIf="f.designation.errors.required">Designation is

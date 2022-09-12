@@ -364,16 +364,16 @@ export class OngoingTasksComponent implements OnInit {
   openForm(processDefKey: any, row) {
     switch (processDefKey) {
       case 'IRC_REFERRAL':
-        this.router.navigate(['/action-referral/' + row.id]);
+        this.router.navigate(['/action-referral/' + row.id+ '/' + row.id + false]);
         break;
       case 'PROGRESS_REPORTING':
-        this.router.navigate(['/progress-report/' + row.id + '/' + false]);
+        this.router.navigate(['/progress-report/' + row.id + '/' + row.id + '/' + row.id + '/' + false]);
         break;
       case 'IRC_FEEDBACK':
-        this.router.navigate(['/action-feedback/' + row.id]);
+        this.router.navigate(['/action-feedback/' + row.id+ '/' + false]);
         break;
       case 'ACTIVITY_REPORTING':
-        this.router.navigate(['/activityForm/' + row.id]);
+        this.router.navigate(['/activityForm/' + row.id + '/' + row.id + '/' + false]);
         break;
     }
   }
