@@ -78,7 +78,7 @@ environments {
         imageFolder = "D:/uploads/centralImages/"
     }
     production {
-        camundaUrl = "http://206.189.209.21:8090/mis/rest"
+        camundaUrl = "http://157.230.227.3:8100/mis/rest"
         uploadFolder = "/opt/uploads/"
         imageFolder = "/opt/uploads/centralImages/"
     }
