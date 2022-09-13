@@ -87,7 +87,7 @@ export class ActivityReportComponent implements OnInit {
 
   editActivityReport(row) {
     const id = row.id;
-      this.router.navigate(['/activityReport/edit/' + id]);
+      this.router.navigate(['/activityReport/edit/' + id +'/'+ false]);
   }
 
   deleteActivityReport(row) {
