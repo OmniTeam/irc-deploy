@@ -72,6 +72,11 @@ class ActivityReportController {
             return
         }
 
+        if(activityReport.id != null) {
+
+            parseActivityTableJson(activityReport)
+        }
+
         respond activityReport, [status: OK, view: "show"]
     }
 
