@@ -106,7 +106,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     menuActiveTab = "Forms";
     uniqueDataCollectors: any;
     tmpCordinates: any;
-    isFectchingRecords = false;
+    isLoading = false;
     isExportingToExcel = false;
     isExportingToCSV = false;
     isExportingToZippedCSV = false;
@@ -176,7 +176,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
     }
 
     getFormData() {
-        this.isFectchingRecords = true;
+        this.isLoading = true;
         const params = new HttpParams()
             .set("formtable", this.formtable)
             .set("dateFrom", this.dateFrom)
@@ -191,7 +191,7 @@ export class FormDataComponent implements OnInit, AfterViewInit {
                     "_",
                     " "
                 );
-                this.isFectchingRecords = false;
+                this.isLoading = false;
                 this.rows = data.resultList;
                 this.columns = this.columnMappings(data.headerList);
                 this.users = this.userMappings(data.formDataCollectors);
