@@ -59,9 +59,13 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
     },
     {
       'name': 'KABALAGALA'
-    }, {
+    },
+    {
       'name': 'KAMPALA_CENTRAL'
-    }, {
+    },{
+      'name': 'KAMPALA'
+    },
+    {
       'name': 'KAMWOKYA'
     }, {
       'name': 'KANSANGA'
@@ -162,15 +166,15 @@ export class CreateActivityReportComponent implements OnInit, OnUpdateCell {
   ngOnInit(): void {
     this.getBudgetLines();
     this.formGroup = this.formBuilder.group({
-      budgetLine: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      organization: ['', [Validators.required]],
-      startDate: ['',[Validators.required]],
-      endDate: ['',[Validators.required]],
-      designation: ['', [Validators.required]],
-      location: ['',[Validators.required]],
+      budgetLine: [null, [Validators.required]],
+      name: [null, [Validators.required]],
+      organization: [null, [Validators.required]],
+      startDate: [null,[Validators.required]],
+      endDate: [null,[Validators.required]],
+      designation: [null, [Validators.required]],
+      location: [null,[Validators.required]],
       milestone: [''],
-      activityName: ['',[Validators.required]],
+      activityName: [null,[Validators.required]],
       activityObjectives: [''],
       activityResults: [''],
       activityUndertaken: [''],

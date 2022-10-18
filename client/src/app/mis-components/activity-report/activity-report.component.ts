@@ -7,6 +7,7 @@ import {HttpParams} from "@angular/common/http";
 import {AuthService} from '../../services/auth.service';
 import {TaskListService} from "../../services/task-list.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-activity-report',
@@ -102,6 +103,18 @@ export class ActivityReportComponent implements OnInit {
         }
       );
     }
+  }
+
+  downloadActivityReports(): void {
+    const fileName = 'Activity_Reports.xlsx';
+    const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(this.activity);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, fileName);
   }
 
   entriesChange($event) {

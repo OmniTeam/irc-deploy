@@ -59,6 +59,8 @@ export class EditActivityReportComponent implements OnInit {
     {
       'name': 'KABALAGALA'
     }, {
+      'name': 'KAMPALA'
+    },{
       'name': 'KAMPALA_CENTRAL'
     }, {
       'name': 'KAMWOKYA'
@@ -155,7 +157,6 @@ export class EditActivityReportComponent implements OnInit {
       this.isReadOnly = p['readonly'] == 'true'
       this.activityReport.getCurrentActivityReport(this.activityId).subscribe(data => {
         this.activity = data;
-        console.log("yry", data);
         this.getBudgetLines();
         this.getActivityDetails(data)
         this.choosenBudget = this.activity?.budgetLine
