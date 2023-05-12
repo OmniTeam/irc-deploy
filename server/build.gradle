@@ -12,6 +12,24 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.microsoft.azure.azurewebapp" version "1.1.0"
+}
+
+azurewebapp {
+    subscription = '0b0e127d-c56b-4722-bd04-e556760b72f1'
+    resourceGroup = 'isdapbackend_group'
+    appName = 'isdapbackend'
+    pricingTier = 'P1v3'
+    region = 'southafricanorth'
+    runtime {
+        os = 'Linux'
+        webContainer = 'Tomcat 9.0' // or 'Java SE' if you want to run an executable jar
+        javaVersion = 'Java 11'
+    }
+}
+
+
 version "0.1"
 group "com.kengamis"
 
