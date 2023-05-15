@@ -17,15 +17,15 @@ plugins {
 }
 
 azurewebapp {
-    subscription = '0b0e127d-c56b-4722-bd04-e556760b72f1'
-    resourceGroup = 'isdapbackend_group'
-    appName = 'isdapbackend'
+    subscription = '68213ecc-42b9-4775-ad55-33ca8b5a5ba0'
+    resourceGroup = 'myresourcegroup'
+    appName = 'demo-irc'
     pricingTier = 'P1v3'
     region = 'southafricanorth'
     runtime {
         os = 'Linux'
         webContainer = 'Tomcat 9.0' // or 'Java SE' if you want to run an executable jar
-        javaVersion = 'Java 11'
+        javaVersion = 'Java 8'
     }
 }
 
@@ -35,7 +35,7 @@ group "com.kengamis"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
-//apply plugin:"war"
+apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.plugins.views-json"
 apply plugin:"org.grails.grails-gsp"
