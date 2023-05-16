@@ -57,5 +57,5 @@ jobs:
         with:
           app-name: 'irc-demo'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A5C935230214E7AAA5ECA11AFB8D242 }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: '*.war'
