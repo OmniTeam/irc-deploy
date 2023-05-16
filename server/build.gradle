@@ -169,17 +169,17 @@ dependencies {
 jar {
     archiveName('crvpf-server.jar')
 }
-bootJar {
-    archiveBaseName = 'irc-server'
-    archiveVersion = '1.0.0'
-    archiveFileName = 'irc-server.jar'
-}
+//bootJar {
+//    archiveBaseName = 'irc-server'
+//    archiveVersion = '1.0.0'
+//    archiveFileName = 'irc-server.jar'
+//}
 test {
     ignoreFailures = true
 }
-grails {
-    pathingJar = true
-}
+//grails {
+  //  pathingJar = true
+//}
 tasks.withType(GroovyCompile) {
     configure(groovyOptions) {
         forkOptions.jvmArgs = ['-Xmx1024m']
