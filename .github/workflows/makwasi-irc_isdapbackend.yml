@@ -28,7 +28,7 @@ jobs:
           gradle-version: 5.1.1
         
       - name: Build artifact
-        run: gradle build -x test -x integrationTest
+        run: gradle assemble -x test -x integrationTest
 
         
 
@@ -58,4 +58,4 @@ jobs:
           app-name: 'irc-demo'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84DE8098FD6D40F9892E4B011B66720F }}
-          package: '*.jar'
+          package: '*.war'
