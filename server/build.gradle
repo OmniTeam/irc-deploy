@@ -148,34 +148,39 @@ dependencies {
     compile group: 'com.github.groovy-wslite', name: 'groovy-wslite', version: '1.1.3'
 }
 
-bootRun {
-    ignoreExitValue true
-  jvmArgs(
-      '-Dspring.output.ansi.enabled=always',
-      '-noverify',
-      '-XX:TieredStopAtLevel=1',
-        '-Xmx1024m')
-    sourceResources sourceSets.main
-  String springProfilesActive = 'spring.profiles.active'
-  systemProperty springProfilesActive, System.getProperty(springProfilesActive)
-}
-//Enable the executable jar:
-springBoot {
-    executable = true
-mainClassName = 'com.kengamis.Application'
-}
+//bootRun {
+//    ignoreExitValue true
+//  jvmArgs(
+//      '-Dspring.output.ansi.enabled=always',
+//      '-noverify',
+//      '-XX:TieredStopAtLevel=1',
+//        '-Xmx1024m')
+//    sourceResources sourceSets.main
+//  String springProfilesActive = 'spring.profiles.active'
+//  systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+//}
+// Enable the executable jar:
+//springBoot {
+//    executable = true
+//mainClassName = 'com.kengamis.Application'
+//}
 // Optional: Customize the jar properties:
 //  https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html
 jar {
-    archiveName('app.jar')
+    archiveName('crvpf-server.jar')
 }
-bootJar {
-    archiveBaseName = 'irc-server'
-    archiveVersion = '1.0.0'
-    archiveFileName = 'irc.jar'
-}
+//bootJar {
+//    archiveBaseName = 'irc-server'
+//    archiveVersion = '1.0.0'
+//    archiveFileName = 'irc-server.jar'
+//}
 test {
     ignoreFailures = true
+}
+
+war {
+    archiveName = 'app.war'
+    version = '1.0.0'
 }
 
 //grails {
