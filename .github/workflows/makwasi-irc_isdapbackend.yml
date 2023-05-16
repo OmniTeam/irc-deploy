@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: java-app
-          path: 'app.war'
+          path: '/home/runner/work/irc-deploy/irc-deploy/build/libs/my-app.war'
 
   deploy:
     runs-on: ubuntu-latest
