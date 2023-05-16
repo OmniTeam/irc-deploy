@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: java-app
-          path: /server/build/tmp/*.war
+          path: server/build/tmp/*.war
 
   deploy:
     runs-on: ubuntu-latest
