@@ -24,6 +24,10 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         
+      - name: Build artifact
+        run: gradle build -x test -x integrationTest
+
+        
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
