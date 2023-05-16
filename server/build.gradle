@@ -177,6 +177,12 @@ jar {
 test {
     ignoreFailures = true
 }
+
+war {
+    archiveName = 'app.war'
+    version = '1.0.0'
+}
+
 //grails {
   //  pathingJar = true
 //}
