@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: java-app
-          path: build/libs/app.war
+          path: /server/build/tmp/*.war
 
   deploy:
     runs-on: ubuntu-latest
@@ -58,4 +58,4 @@ jobs:
           app-name: 'irc-demo'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84DE8098FD6D40F9892E4B011B66720F }}
-          package: 'app.war'
+          package: '*.war'
