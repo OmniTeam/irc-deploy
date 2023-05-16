@@ -179,6 +179,7 @@ test {
 }
 
 war {
+    enabled = true
     archiveName = 'app.war'
     version = '1.0.0'
 }
