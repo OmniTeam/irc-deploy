@@ -93,8 +93,8 @@ dataSource:
     pooled: true
     jmxExport: true
     driverClassName: com.mysql.jdbc.Driver
-    username: root
-    password:
+    username: cris
+    password: omg!@mni
 #omnitech2020!A
 environments:
     development:
@@ -109,7 +109,7 @@ environments:
     production:
         dataSource:
             dbCreate: none
-            url: jdbc:sqlserver://irc-demo.database.windows.net:1433;database=irc;user=cris@irc-demo;password=omg!@mni;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+            url: jdbc:mysql://demo-irc.mysql.database.azure.com:3306/irc_demo?useSSL=true
             properties:
                 jmxEnabled: true
                 initialSize: 5
