@@ -160,10 +160,10 @@ dependencies {
 //  systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 //}
 // Enable the executable jar:
-springBoot {
+//springBoot {
 //    executable = true
-mainClassName = 'com.kengamis.Application'
-}
+//mainClassName = 'com.kengamis.Application'
+//}
 // Optional: Customize the jar properties:
 //  https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html
 jar {
