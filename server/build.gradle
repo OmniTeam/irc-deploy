@@ -100,7 +100,7 @@ dependencies {
     compile 'com.itextpdf:html2pdf:3.0.3'
     //    mine own dependencies
     compile 'org.grails.plugins:spring-security-rest:3.0.0.RC1'
-    runtime 'mysql:mysql-connector-java:8.0.28'
+    runtime 'mysql:mysql-connector-java:5.1.46'
     compile 'com.github.kayr:fuzzy-csv:1.6.40'
     compile "org.codehaus.groovy:groovy-dateutil:2.5.0"
     compile 'org.codehaus.groovy:groovy-all:3.0.14'
