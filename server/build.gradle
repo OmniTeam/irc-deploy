@@ -17,9 +17,9 @@ plugins {
 }
 
 azurewebapp {
-    subscription = '68213ecc-42b9-4775-ad55-33ca8b5a5ba0'
-    resourceGroup = 'myresourcegroup'
-    appName = 'demo-irc'
+    subscription = '73813dd1-c19d-4335-b65b-c32aa3f6aa06'
+    resourceGroup = 'Uganda'
+    appName = 'server'
     pricingTier = 'P1v3'
     region = 'southafricanorth'
     runtime {
