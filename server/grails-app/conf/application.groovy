@@ -57,7 +57,6 @@ server.appName = 'IRC'
 server.centralId = '9'
 server.superPass = 'omg!@mni'
 server.superEmail = 'super@gmail.com'
-server.port = 8082
 
 
 grails.gorm.default.mapping = {
