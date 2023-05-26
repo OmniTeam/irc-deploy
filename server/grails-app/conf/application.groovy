@@ -57,7 +57,7 @@ server.appName = 'IRC'
 server.centralId = '9'
 server.superPass = 'omg!@mni'
 server.superEmail = 'super@gmail.com'
-
+server.port = 80
 
 grails.gorm.default.mapping = {
 //    id generator: 'uuid2'
