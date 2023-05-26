@@ -93,15 +93,18 @@ dataSource:
     pooled: true
     jmxExport: true
     driverClassName: com.mysql.jdbc.Driver
-    username: cris
-    password: omg!@mni
+    tomcat.ssl: true
+    tomcat.ssl-protocal: TLSv1.2
+    username: ircadmin
+    password: g8lU$4bKO2Ug
+
 #omnitech2020!A
 environments:
     development:
         dataSource:
 #            dbCreate: create-drop
 #            url: jdbc:mysql://localhost:3306/ircmis?verifyServerCertificate=false&useSSL=false&sessionVariables=sql_mode=''
-            url: jdbc:sqlserver://irc-demo.database.windows.net:1433;database=irc;user=cris@irc-demo;password=omg!@mni;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+            url: jdbc:mysql://uganda-mealis-mysqlserver.mysql.database.azure.com:3306/ircmis?useSSL=true
     test:
         dataSource:
             dbCreate: update
@@ -109,7 +112,7 @@ environments:
     production:
         dataSource:
             dbCreate: none
-            url: jdbc:mysql://demo-irc.mysql.database.azure.com:3306/irc_demo?useSSL=true
+            url: jdbc:mysql://uganda-mealis-mysqlserver.mysql.database.azure.com:3306/ircmis?useSSL=true
             properties:
                 jmxEnabled: true
                 initialSize: 5
