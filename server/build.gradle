@@ -103,7 +103,7 @@ dependencies {
     runtime 'mysql:mysql-connector-java:8.0.28'
     compile 'com.github.kayr:fuzzy-csv:1.6.40'
     compile "org.codehaus.groovy:groovy-dateutil:2.5.0"
-    compile "org.codehaus.groovy:groovy-all:2.4.17"
+    compile 'org.codehaus.groovy:groovy-all:3.0.14'
 
     compile "org.hibernate:hibernate-ehcache"
 
