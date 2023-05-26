@@ -92,7 +92,7 @@ dataSource:
     dialect: org.hibernate.dialect.MySQLInnoDBDialect
     pooled: true
     jmxExport: true
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     tomcat.ssl: true
     tomcat.ssl-protocal: TLSv1.2
     username: ircadmin
