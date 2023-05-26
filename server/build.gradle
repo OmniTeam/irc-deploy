@@ -33,18 +33,18 @@ azurewebapp {
 version "0.1"
 group "com.kengamis"
 
-apply plugin:"eclipse"
-apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
-apply plugin:"org.grails.plugins.views-json"
-apply plugin:"org.grails.grails-gsp"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "war"
+apply plugin: "org.grails.grails-web"
+apply plugin: "org.grails.plugins.views-json"
+apply plugin: "org.grails.grails-gsp"
 
 repositories {
     maven { url "https://repo.grails.org/grails/core" }
     maven { url "http://omnitech.co.ug/m2/releases" }
     maven { url "http://omnitech.co.ug/m2/snapshots" }
-    maven {url "http://jitpack.io"}
+    maven { url "http://jitpack.io" }
     jcenter()
 }
 
@@ -103,6 +103,7 @@ dependencies {
     runtime 'mysql:mysql-connector-java:8.0.28'
     compile 'com.github.kayr:fuzzy-csv:1.6.40'
     compile "org.codehaus.groovy:groovy-dateutil:2.5.0"
+    compile "org.codehaus.groovy:groovy-all:2.4.17"
 
     compile "org.hibernate:hibernate-ehcache"
 
@@ -148,32 +149,22 @@ dependencies {
     compile group: 'com.github.groovy-wslite', name: 'groovy-wslite', version: '1.1.3'
 }
 
-//bootRun {
-//    ignoreExitValue true
-//  jvmArgs(
-//      '-Dspring.output.ansi.enabled=always',
-//      '-noverify',
-//      '-XX:TieredStopAtLevel=1',
-//        '-Xmx1024m')
-//    sourceResources sourceSets.main
-//  String springProfilesActive = 'spring.profiles.active'
-//  systemProperty springProfilesActive, System.getProperty(springProfilesActive)
-//}
-// Enable the executable jar:
-//springBoot {
-//    executable = true
-//mainClassName = 'com.kengamis.Application'
-//}
-// Optional: Customize the jar properties:
-//  https://docs.gradle.org/current/dsl/org.gradle.api.tasks.bundling.Jar.html
-jar {
-    archiveName('crvpf-server.jar')
+bootRun {
+    ignoreExitValue true
+    jvmArgs(
+            '-Dspring.output.ansi.enabled=always',
+            '-noverify',
+            '-XX:TieredStopAtLevel=1',
+            '-Xmx1024m')
+    sourceResources sourceSets.main
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
-//bootJar {
-//    archiveBaseName = 'irc-server'
-//    archiveVersion = '1.0.0'
-//    archiveFileName = 'irc-server.jar'
-//}
+
+springBoot {
+    mainClassName = 'com.kengamis.Application'
+}
+
 test {
     ignoreFailures = true
 }
@@ -184,9 +175,6 @@ war {
     version = '1.0.0'
 }
 
-//grails {
-  //  pathingJar = true
-//}
 tasks.withType(GroovyCompile) {
     configure(groovyOptions) {
         forkOptions.jvmArgs = ['-Xmx1024m']
