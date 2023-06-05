@@ -16,11 +16,6 @@ plugins {
     id "com.microsoft.azure.azurewebapp" version "1.1.0"
 }
 
-tomcat {
-    httpPort = 8080
-    warFile = file('server/build/libs/app.war') 
-}
-
 azurewebapp {
     subscription = '73813dd1-c19d-4335-b65b-c32aa3f6aa06'
     resourceGroup = 'Uganda'
